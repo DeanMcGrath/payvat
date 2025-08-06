@@ -2,8 +2,9 @@
 
 ## 🎉 Deployment Status: SUCCESS!
 
-Your VAT PAY application has been successfully deployed to Vercel:
-**🔗 https://vat-pay-ireland-illu18wg5-deans-projects-cdf015cf.vercel.app**
+Your VAT PAY application has been successfully deployed to Vercel with custom domain:
+**🔗 https://payvat.ie** (Production Domain)
+**📋 Legacy**: https://vat-pay-ireland-illu18wg5-deans-projects-cdf015cf.vercel.app
 
 However, the application needs production database and environment variables to function properly.
 
@@ -48,10 +49,10 @@ DATABASE_URL=postgresql://user:password@host:5432/database
 # Authentication (generate secure values)
 JWT_SECRET=your_64_character_random_jwt_secret_here
 NEXTAUTH_SECRET=your_32_character_random_secret_here
-NEXTAUTH_URL=https://vat-pay-ireland-illu18wg5-deans-projects-cdf015cf.vercel.app
+NEXTAUTH_URL=https://payvat.ie
 
 # API Configuration
-NEXT_PUBLIC_API_URL=https://vat-pay-ireland-illu18wg5-deans-projects-cdf015cf.vercel.app/api
+NEXT_PUBLIC_API_URL=https://payvat.ie/api
 API_SECRET_KEY=your_32_character_api_secret_here
 
 # Stripe (Production Keys - GET FROM STRIPE DASHBOARD)

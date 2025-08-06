@@ -32,10 +32,10 @@ vercel env add NEXTAUTH_SECRET
 # Paste: CyeTOxJs4gXC/Z06tGtoQFXac/SDXTXCM0IWIsvBRaM=
 
 vercel env add NEXTAUTH_URL
-# Paste: https://vat-pay-ireland-illu18wg5-deans-projects-cdf015cf.vercel.app
+# Paste: https://payvat.ie
 
 vercel env add NEXT_PUBLIC_API_URL
-# Paste: https://vat-pay-ireland-illu18wg5-deans-projects-cdf015cf.vercel.app/api
+# Paste: https://payvat.ie/api
 
 vercel env add ENCRYPTION_KEY
 # Paste: 3cc8c1b586363fa66d7df8e5658e3114
@@ -70,8 +70,8 @@ Copy this list and configure in [Vercel Dashboard](https://vercel.com/deans-proj
 ```
 ✅ JWT_SECRET (generated above)
 ✅ NEXTAUTH_SECRET (generated above)  
-✅ NEXTAUTH_URL (your Vercel URL)
-✅ NEXT_PUBLIC_API_URL (your Vercel URL + /api)
+✅ NEXTAUTH_URL (https://payvat.ie)
+✅ NEXT_PUBLIC_API_URL (https://payvat.ie/api)
 ✅ ENCRYPTION_KEY (generated above)
 
 ❌ DATABASE_URL (need PostgreSQL database)
@@ -97,9 +97,10 @@ Optional (can set later):
 
 ## 🔗 Your Production URLs
 
-- **Application**: https://vat-pay-ireland-illu18wg5-deans-projects-cdf015cf.vercel.app
-- **Admin Dashboard**: https://vat-pay-ireland-illu18wg5-deans-projects-cdf015cf.vercel.app/admin
-- **API**: https://vat-pay-ireland-illu18wg5-deans-projects-cdf015cf.vercel.app/api
+- **Application**: https://payvat.ie
+- **Admin Dashboard**: https://payvat.ie/admin
+- **API**: https://payvat.ie/api
 - **Vercel Dashboard**: https://vercel.com/deans-projects-cdf015cf/vat-pay-ireland
+- **Legacy URL**: https://vat-pay-ireland-illu18wg5-deans-projects-cdf015cf.vercel.app (will redirect)
 
 Your application is **deployed and ready** - just needs database and Stripe configuration! 🚀
