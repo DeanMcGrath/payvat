@@ -1,0 +1,220 @@
+// VAT PAY Database Schema
+// Comprehensive schema for VAT return submission and payment system
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  password          String
+  role              UserRole @default(USER)
+  
+  // Business Information
+  businessName      String
+  vatNumber         String   @unique
+  
+  // Profile
+  firstName         String?
+  lastName          String?
+  phone             String?
+  address           String?
+  
+  // Security
+  emailVerified     DateTime?
+  lastLoginAt       DateTime?
+  passwordResetToken String?
+  passwordResetExpires DateTime?
+  
+  // Timestamps
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // Relations
+  vatReturns        VATReturn[]
+  documents         Document[]
+  payments          Payment[]
+  auditLogs         AuditLog[]
+  
+  @@map("users")
+}
+
+model VATReturn {
+  id                String        @id @default(cuid())
+  userId            String
+  
+  // VAT Period Information
+  periodStart       DateTime
+  periodEnd         DateTime
+  dueDate           DateTime
+  
+  // VAT Calculations
+  salesVAT          Decimal
+  purchaseVAT       Decimal
+  netVAT            Decimal
+  
+  // Status and Submission
+  status            VATStatus     @default(DRAFT)
+  submittedAt       DateTime?
+  paidAt            DateTime?
+  
+  // Revenue Integration
+  revenueRefNumber  String?
+  revenueResponse   Json?
+  
+  // Timestamps
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relations
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documents         Document[]
+  payment           Payment?
+  
+  @@map("vat_returns")
+}
+
+model Document {
+  id              String       @id @default(cuid())
+  userId          String
+  vatReturnId     String?
+  
+  // File Information
+  fileName        String
+  originalName    String
+  filePath        String
+  fileSize        Int
+  mimeType        String
+  fileHash        String       // For integrity verification
+  
+  // Document Classification
+  documentType    DocumentType
+  category        DocumentCategory
+  
+  // Security
+  isScanned       Boolean      @default(false)
+  scanResult      String?      // Virus scan result
+  
+  // Timestamps
+  uploadedAt      DateTime     @default(now())
+  
+  // Relations
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vatReturn       VATReturn?   @relation(fields: [vatReturnId], references: [id], onDelete: SetNull)
+  
+  @@map("documents")
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  userId            String
+  vatReturnId       String        @unique
+  
+  // Payment Details
+  amount            Decimal
+  currency          String        @default("EUR")
+  
+  // Payment Status
+  status            PaymentStatus @default(PENDING)
+  paymentMethod     String?       // card, bank_transfer, etc.
+  
+  // Stripe Integration
+  stripePaymentId   String?
+  stripeClientSecret String?
+  
+  // Payment Processing
+  processedAt       DateTime?
+  failedAt          DateTime?
+  failureReason     String?
+  
+  // Receipt Information
+  receiptNumber     String?       @unique
+  receiptUrl        String?
+  
+  // Timestamps
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  
+  // Relations
+  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vatReturn         VATReturn     @relation(fields: [vatReturnId], references: [id], onDelete: Cascade)
+  
+  @@map("payments")
+}
+
+model AuditLog {
+  id              String      @id @default(cuid())
+  userId          String?
+  
+  // Action Information
+  action          String      // LOGIN, UPLOAD_DOCUMENT, SUBMIT_VAT, etc.
+  entityType      String?     // USER, VAT_RETURN, DOCUMENT, PAYMENT
+  entityId        String?
+  
+  // Request Information
+  ipAddress       String?
+  userAgent       String?
+  
+  // Additional Context
+  metadata        Json?
+  oldValues       Json?
+  newValues       Json?
+  
+  // Timestamps
+  createdAt       DateTime    @default(now())
+  
+  // Relations
+  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@map("audit_logs")
+}
+
+// Enums
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum VATStatus {
+  DRAFT
+  SUBMITTED
+  PROCESSING
+  APPROVED
+  REJECTED
+  PAID
+}
+
+enum DocumentType {
+  PDF
+  EXCEL
+  CSV
+  IMAGE
+}
+
+enum DocumentCategory {
+  SALES_INVOICE
+  SALES_RECEIPT
+  SALES_REPORT
+  PURCHASE_INVOICE
+  PURCHASE_RECEIPT
+  PURCHASE_REPORT
+  BANK_STATEMENT
+  OTHER
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
+}

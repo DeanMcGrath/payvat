@@ -1,0 +1,422 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { 
+  Users, 
+  Search, 
+  Filter,
+  ChevronLeft,
+  ChevronRight,
+  Mail,
+  Building,
+  CreditCard,
+  FileText,
+  Clock,
+  CheckCircle,
+  AlertCircle
+} from 'lucide-react'
+import Link from 'next/link'
+
+interface User {
+  id: string
+  email: string
+  role: string
+  businessName: string
+  vatNumber: string
+  firstName: string | null
+  lastName: string | null
+  phone: string | null
+  emailVerified: boolean
+  lastLoginAt: Date | null
+  createdAt: Date
+  updatedAt: Date
+  stats: {
+    totalVATReturns: number
+    totalDocuments: number
+    totalPayments: number
+    totalVATPaid: number
+    pendingPayments: number
+    lastVATReturn: {
+      id: string
+      status: string
+      periodEnd: Date
+      netVAT: number
+      submittedAt: Date | null
+    } | null
+  }
+}
+
+interface UsersResponse {
+  success: boolean
+  users: User[]
+  pagination: {
+    page: number
+    limit: number
+    totalCount: number
+    totalPages: number
+  }
+}
+
+export default function AdminUsers() {
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
+  const [roleFilter, setRoleFilter] = useState('')
+  const [statusFilter, setStatusFilter] = useState('')
+  const [page, setPage] = useState(1)
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 20,
+    totalCount: 0,
+    totalPages: 0
+  })
+
+  useEffect(() => {
+    fetchUsers()
+  }, [search, roleFilter, statusFilter, page])
+
+  const fetchUsers = async () => {
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: '20'
+      })
+      
+      if (search) params.append('search', search)
+      if (roleFilter) params.append('role', roleFilter)
+      if (statusFilter) params.append('status', statusFilter)
+
+      const response = await fetch(`/api/admin/users?${params}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch users')
+      }
+      
+      const data: UsersResponse = await response.json()
+      setUsers(data.users)
+      setPagination(data.pagination)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load users')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-IE', {
+      style: 'currency',
+      currency: 'EUR'
+    }).format(amount)
+  }
+
+  const formatDate = (date: Date | string | null) => {
+    if (!date) return 'Never'
+    return new Date(date).toLocaleDateString('en-IE', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    })
+  }
+
+  const getRoleColor = (role: string) => {
+    switch (role.toLowerCase()) {
+      case 'super_admin':
+        return 'bg-red-100 text-red-800'
+      case 'admin':
+        return 'bg-purple-100 text-purple-800'
+      case 'user':
+        return 'bg-blue-100 text-blue-800'
+      default:
+        return 'bg-gray-100 text-gray-800'
+    }
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'completed':
+      case 'paid':
+      case 'approved':
+        return 'bg-green-100 text-green-800'
+      case 'pending':
+      case 'processing':
+        return 'bg-yellow-100 text-yellow-800'
+      case 'failed':
+      case 'rejected':
+        return 'bg-red-100 text-red-800'
+      case 'draft':
+        return 'bg-gray-100 text-gray-800'
+      default:
+        return 'bg-blue-100 text-blue-800'
+    }
+  }
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value)
+    setPage(1) // Reset to first page on search
+  }
+
+  const handleFilterChange = (filterType: 'role' | 'status', value: string) => {
+    if (filterType === 'role') {
+      setRoleFilter(value)
+    } else {
+      setStatusFilter(value)
+    }
+    setPage(1) // Reset to first page on filter change
+  }
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="text-center">
+          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2">Error Loading Users</h2>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <Button onClick={fetchUsers}>Try Again</Button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="container mx-auto p-6 space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
+          <p className="text-gray-600">Manage and monitor user accounts</p>
+        </div>
+        <Link href="/admin">
+          <Button variant="outline">
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Button>
+        </Link>
+      </div>
+
+      {/* Filters */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Filter className="h-5 w-5 mr-2" />
+            Filters
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-4">
+            <div className="flex-1 min-w-[200px]">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search by name, email, business, or VAT number..."
+                  value={search}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            <Select value={roleFilter} onValueChange={(value) => handleFilterChange('role', value)}>
+              <SelectTrigger className="w-[150px]">
+                <SelectValue placeholder="All Roles" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All Roles</SelectItem>
+                <SelectItem value="USER">User</SelectItem>
+                <SelectItem value="ADMIN">Admin</SelectItem>
+                <SelectItem value="SUPER_ADMIN">Super Admin</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={statusFilter} onValueChange={(value) => handleFilterChange('status', value)}>
+              <SelectTrigger className="w-[150px]">
+                <SelectValue placeholder="All Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All Status</SelectItem>
+                <SelectItem value="active">Active (30 days)</SelectItem>
+                <SelectItem value="inactive">Inactive</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Users List */}
+      <Card>
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <CardTitle>
+              Users ({pagination.totalCount})
+            </CardTitle>
+            <div className="text-sm text-gray-500">
+              Page {pagination.page} of {pagination.totalPages}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {users.length === 0 ? (
+              <div className="text-center py-8">
+                <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-500">No users found</p>
+              </div>
+            ) : (
+              users.map((user) => (
+                <div key={user.id} className="border rounded-lg p-4 hover:bg-gray-50">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    {/* User Info */}
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <div>
+                          <div className="flex items-center space-x-2">
+                            <h3 className="font-semibold text-lg">
+                              {user.firstName && user.lastName 
+                                ? `${user.firstName} ${user.lastName}` 
+                                : user.businessName}
+                            </h3>
+                            <Badge className={getRoleColor(user.role)}>
+                              {user.role.toLowerCase().replace('_', ' ')}
+                            </Badge>
+                            {user.emailVerified ? (
+                              <CheckCircle className="h-4 w-4 text-green-500" />
+                            ) : (
+                              <AlertCircle className="h-4 w-4 text-yellow-500" />
+                            )}
+                          </div>
+                          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                            <span className="flex items-center">
+                              <Mail className="h-4 w-4 mr-1" />
+                              {user.email}
+                            </span>
+                            <span className="flex items-center">
+                              <Building className="h-4 w-4 mr-1" />
+                              {user.businessName}
+                            </span>
+                            <span>VAT: {user.vatNumber}</span>
+                            <span className="flex items-center">
+                              <Clock className="h-4 w-4 mr-1" />
+                              Last login: {formatDate(user.lastLoginAt)}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="flex flex-wrap gap-4 text-sm">
+                      <div className="text-center">
+                        <div className="font-semibold flex items-center">
+                          <FileText className="h-4 w-4 mr-1" />
+                          {user.stats.totalVATReturns}
+                        </div>
+                        <div className="text-gray-500">VAT Returns</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="font-semibold flex items-center">
+                          <CreditCard className="h-4 w-4 mr-1" />
+                          {user.stats.totalPayments}
+                        </div>
+                        <div className="text-gray-500">Payments</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="font-semibold">
+                          {formatCurrency(user.stats.totalVATPaid)}
+                        </div>
+                        <div className="text-gray-500">VAT Paid</div>
+                      </div>
+                    </div>
+
+                    {/* Last VAT Return */}
+                    {user.stats.lastVATReturn && (
+                      <div className="min-w-[200px]">
+                        <div className="text-sm">
+                          <div className="font-medium">Last VAT Return</div>
+                          <div className="flex items-center space-x-2">
+                            <Badge className={getStatusColor(user.stats.lastVATReturn.status)}>
+                              {user.stats.lastVATReturn.status}
+                            </Badge>
+                            <span className="text-gray-500">
+                              {formatDate(user.stats.lastVATReturn.periodEnd)}
+                            </span>
+                          </div>
+                          <div className="text-gray-600">
+                            {formatCurrency(user.stats.lastVATReturn.netVAT)}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Pending Payments Warning */}
+                  {user.stats.pendingPayments > 0 && (
+                    <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded text-sm">
+                      <div className="flex items-center">
+                        <AlertCircle className="h-4 w-4 text-yellow-600 mr-2" />
+                        <span className="text-yellow-800">
+                          {user.stats.pendingPayments} pending payment(s)
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Account Created */}
+                  <div className="mt-2 text-xs text-gray-500">
+                    Account created: {formatDate(user.createdAt)}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Pagination */}
+      {pagination.totalPages > 1 && (
+        <div className="flex justify-between items-center">
+          <div className="text-sm text-gray-500">
+            Showing {((page - 1) * pagination.limit) + 1} to {Math.min(page * pagination.limit, pagination.totalCount)} of {pagination.totalCount} users
+          </div>
+          <div className="flex space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(page - 1)}
+              disabled={page === 1}
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setPage(page + 1)}
+              disabled={page >= pagination.totalPages}
+            >
+              Next
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
