@@ -1,5 +1,5 @@
-// VAT PAY Database Schema
-// Comprehensive schema for VAT return submission and payment system
+// VAT PAY Database Schema - Simplified for Multi-tenant Database
+// Uses string constants instead of enums to avoid conflicts
 
 generator client {
   provider = "prisma-client-js"
@@ -11,11 +11,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// Existing system table - do not modify
+model tenants {
+  id         String    @id @default(dbgenerated("public.uuid_generate_v7()")) @db.Uuid
+  name       String?
+  created    DateTime  @default(dbgenerated("LOCALTIMESTAMP")) @db.Timestamp(6)
+  updated    DateTime  @default(dbgenerated("LOCALTIMESTAMP")) @db.Timestamp(6)
+  deleted    DateTime? @db.Timestamp(6)
+  compute_id String?   @db.Uuid
+}
+
 model User {
   id                String   @id @default(cuid())
   email             String   @unique
   password          String
-  role              UserRole @default(USER)
+  role              String   @default("USER") // USER, ADMIN, SUPER_ADMIN
   
   // Business Information
   businessName      String
@@ -43,7 +53,7 @@ model User {
   payments          Payment[]
   auditLogs         AuditLog[]
   
-  @@map("users")
+  @@map("vat_users")
 }
 
 model VATReturn {
@@ -61,7 +71,7 @@ model VATReturn {
   netVAT            Decimal
   
   // Status and Submission
-  status            VATStatus     @default(DRAFT)
+  status            String        @default("DRAFT") // DRAFT, SUBMITTED, PROCESSING, APPROVED, REJECTED, PAID
   submittedAt       DateTime?
   paidAt            DateTime?
   
@@ -89,14 +99,15 @@ model Document {
   // File Information
   fileName        String
   originalName    String
-  filePath        String
+  filePath        String?      // Optional for serverless compatibility
+  fileData        String?      // Base64 encoded file data for serverless storage
   fileSize        Int
   mimeType        String
   fileHash        String       // For integrity verification
   
   // Document Classification
-  documentType    DocumentType
-  category        DocumentCategory
+  documentType    String       // PDF, EXCEL, CSV, IMAGE
+  category        String       // SALES_INVOICE, SALES_RECEIPT, etc.
   
   // Security
   isScanned       Boolean      @default(false)
@@ -109,7 +120,7 @@ model Document {
   user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   vatReturn       VATReturn?   @relation(fields: [vatReturnId], references: [id], onDelete: SetNull)
   
-  @@map("documents")
+  @@map("vat_documents")
 }
 
 model Payment {
@@ -122,7 +133,7 @@ model Payment {
   currency          String        @default("EUR")
   
   // Payment Status
-  status            PaymentStatus @default(PENDING)
+  status            String        @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED, CANCELLED, REFUNDED
   paymentMethod     String?       // card, bank_transfer, etc.
   
   // Stripe Integration
@@ -146,7 +157,7 @@ model Payment {
   user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   vatReturn         VATReturn     @relation(fields: [vatReturnId], references: [id], onDelete: Cascade)
   
-  @@map("payments")
+  @@map("vat_payments")
 }
 
 model AuditLog {
@@ -173,48 +184,5 @@ model AuditLog {
   // Relations
   user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
   
-  @@map("audit_logs")
-}
-
-// Enums
-enum UserRole {
-  USER
-  ADMIN
-  SUPER_ADMIN
-}
-
-enum VATStatus {
-  DRAFT
-  SUBMITTED
-  PROCESSING
-  APPROVED
-  REJECTED
-  PAID
-}
-
-enum DocumentType {
-  PDF
-  EXCEL
-  CSV
-  IMAGE
-}
-
-enum DocumentCategory {
-  SALES_INVOICE
-  SALES_RECEIPT
-  SALES_REPORT
-  PURCHASE_INVOICE
-  PURCHASE_RECEIPT
-  PURCHASE_REPORT
-  BANK_STATEMENT
-  OTHER
-}
-
-enum PaymentStatus {
-  PENDING
-  PROCESSING
-  COMPLETED
-  FAILED
-  CANCELLED
-  REFUNDED
+  @@map("vat_audit_logs")
 }

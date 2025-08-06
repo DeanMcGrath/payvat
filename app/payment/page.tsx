@@ -1,5 +1,5 @@
 import ProtectedRoute from "../../components/protected-route"
-import PaymentPage from "../../page-4-payment"
+import PaymentPage from "../../page-5-payment"
 
 export default function PaymentPageRoute() {
   return (

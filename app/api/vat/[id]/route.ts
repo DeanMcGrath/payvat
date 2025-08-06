@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { AuthUser } from '@/lib/auth'
 
 // GET /api/vat/[id] - Get specific VAT return
-async function getVATReturn(request: NextRequest, user: AuthUser) {
+async function getvATReturn(request: NextRequest, user: AuthUser) {
   try {
     const url = new URL(request.url)
     const id = url.pathname.split('/').pop()
@@ -73,7 +73,7 @@ async function getVATReturn(request: NextRequest, user: AuthUser) {
 }
 
 // DELETE /api/vat/[id] - Delete draft VAT return
-async function deleteVATReturn(request: NextRequest, user: AuthUser) {
+async function deletevATReturn(request: NextRequest, user: AuthUser) {
   try {
     const url = new URL(request.url)
     const id = url.pathname.split('/').pop()
@@ -146,5 +146,5 @@ async function deleteVATReturn(request: NextRequest, user: AuthUser) {
   }
 }
 
-export const GET = createProtectedRoute(getVATReturn)
-export const DELETE = createProtectedRoute(deleteVATReturn)
+export const GET = createProtectedRoute(getvATReturn)
+export const DELETE = createProtectedRoute(deletevATReturn)

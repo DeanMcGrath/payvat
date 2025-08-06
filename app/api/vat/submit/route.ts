@@ -136,7 +136,7 @@ async function submitVAT(request: NextRequest, user: AuthUser) {
     }
     
     // Update VAT return status
-    const submittedVATReturn = await prisma.vATReturn.update({
+    const submittedvATReturn = await prisma.vATReturn.update({
       where: { id: vatReturn.id },
       data: {
         status: 'SUBMITTED',
@@ -189,12 +189,12 @@ async function submitVAT(request: NextRequest, user: AuthUser) {
       success: true,
       message: 'VAT return submitted successfully',
       vatReturn: {
-        id: submittedVATReturn.id,
-        status: submittedVATReturn.status,
-        submittedAt: submittedVATReturn.submittedAt,
-        revenueRefNumber: submittedVATReturn.revenueRefNumber,
-        netVAT: submittedVATReturn.netVAT,
-        dueDate: submittedVATReturn.dueDate
+        id: submittedvATReturn.id,
+        status: submittedvATReturn.status,
+        submittedAt: submittedvATReturn.submittedAt,
+        revenueRefNumber: submittedvATReturn.revenueRefNumber,
+        netVAT: submittedvATReturn.netVAT,
+        dueDate: submittedvATReturn.dueDate
       },
       payment: paymentRecord ? {
         id: paymentRecord.id,

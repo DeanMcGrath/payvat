@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { createProtectedRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { deleteFile } from '@/lib/fileUtils'
+import { base64ToBuffer } from '@/lib/serverlessFileUtils'
 import { AuthUser } from '@/lib/auth'
 import fs from 'fs/promises'
 import path from 'path'
@@ -104,8 +105,10 @@ async function deleteDocument(request: NextRequest, user: AuthUser) {
       }
     }
     
-    // Delete file from disk
-    await deleteFile(document.filePath)
+    // Delete file from disk (only if filePath exists for legacy documents)
+    if (document.filePath) {
+      await deleteFile(document.filePath)
+    }
     
     // Delete document from database
     await prisma.document.delete({
@@ -175,11 +178,23 @@ async function downloadDocument(request: NextRequest, user: AuthUser) {
       )
     }
     
-    // Read file from disk
-    const fullPath = path.resolve(process.cwd(), document.filePath)
+    // Get file data (either from disk for legacy or from base64)
+    let fileBuffer: Buffer
     
     try {
-      const fileBuffer = await fs.readFile(fullPath)
+      if (document.fileData) {
+        // New base64 storage
+        fileBuffer = base64ToBuffer(document.fileData)
+      } else if (document.filePath) {
+        // Legacy file storage
+        const fullPath = path.resolve(process.cwd(), document.filePath)
+        fileBuffer = await fs.readFile(fullPath)
+      } else {
+        return NextResponse.json(
+          { error: 'File data not found' },
+          { status: 404 }
+        )
+      }
       
       // Create audit log for download
       await prisma.auditLog.create({

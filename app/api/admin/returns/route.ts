@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { AuthUser } from '@/lib/auth'
 
 // GET /api/admin/returns - View all VAT returns (admin only)
-async function getVATReturns(request: NextRequest, user: AuthUser) {
+async function getvATReturns(request: NextRequest, user: AuthUser) {
   try {
     const { searchParams } = new URL(request.url)
     const userId = searchParams.get('userId')
@@ -181,4 +181,4 @@ async function getVATReturns(request: NextRequest, user: AuthUser) {
   }
 }
 
-export const GET = createAdminRoute(getVATReturns)
+export const GET = createAdminRoute(getvATReturns)

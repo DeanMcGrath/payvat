@@ -63,3 +63,4 @@ prisma/dev.db*
 # Build files
 *.tsbuildinfo
 tsconfig.tsbuildinfo
+.env*.local

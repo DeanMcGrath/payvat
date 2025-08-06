@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { createProtectedRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
-import { validateFile, saveFile, getDocumentType } from '@/lib/fileUtils'
+import { validateFile, processFileForServerless, getDocumentType } from '@/lib/serverlessFileUtils'
 import { AuthUser } from '@/lib/auth'
 
 async function uploadFile(request: NextRequest, user: AuthUser) {
@@ -80,21 +80,22 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
       }
     }
     
-    // Save file to disk
-    const savedFile = await saveFile(file, user.id)
+    // Process file for serverless environment
+    const processedFile = await processFileForServerless(file, user.id)
     
     // Save document metadata to database
     const document = await prisma.document.create({
       data: {
         userId: user.id,
         vatReturnId: vatReturnId || null,
-        fileName: savedFile.fileName,
-        originalName: savedFile.originalName,
-        filePath: savedFile.filePath,
-        fileSize: savedFile.fileSize,
-        mimeType: savedFile.mimeType,
-        fileHash: savedFile.fileHash,
-        documentType: getDocumentType(savedFile.extension) as any,
+        fileName: processedFile.fileName,
+        originalName: processedFile.originalName,
+        filePath: null, // Not used in serverless
+        fileData: processedFile.fileData,
+        fileSize: processedFile.fileSize,
+        mimeType: processedFile.mimeType,
+        fileHash: processedFile.fileHash,
+        documentType: getDocumentType(processedFile.extension) as any,
         category: category as any,
         isScanned: false, // Will be updated by virus scanning service
       }
@@ -110,8 +111,8 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
         ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
         userAgent: request.headers.get('user-agent') || 'unknown',
         metadata: {
-          fileName: savedFile.originalName,
-          fileSize: savedFile.fileSize,
+          fileName: processedFile.originalName,
+          fileSize: processedFile.fileSize,
           category,
           vatReturnId,
           timestamp: new Date().toISOString()
