@@ -6,9 +6,9 @@ import { hashPassword, createJWTToken, toAuthUser } from '@/lib/auth'
 // Input validation schema
 const registerSchema = z.object({
   email: z.string().email('Invalid email format'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: z.string().min(6, 'Password must be at least 6 characters'), // Reduced from 8 to 6
   businessName: z.string().min(2, 'Business name must be at least 2 characters'),
-  vatNumber: z.string().regex(/^IE[0-9]{7}[A-Z]{1,2}$/, 'Invalid Irish VAT number format (IE1234567A)'),
+  vatNumber: z.string().optional(), // Made optional and removed strict format validation
   firstName: z.string().optional(),
   lastName: z.string().optional(),
   phone: z.string().optional(),
@@ -32,29 +32,18 @@ export async function POST(request: NextRequest) {
     
     const { email, password, businessName, vatNumber, firstName, lastName, phone } = validationResult.data
     
-    // Check if user already exists
+    // Check if user already exists (only check email since VAT number is now optional)
     const existingUser = await prisma.user.findFirst({
       where: {
-        OR: [
-          { email: email.toLowerCase() },
-          { vatNumber: vatNumber.toUpperCase() }
-        ]
+        email: email.toLowerCase()
       }
     })
     
     if (existingUser) {
-      if (existingUser.email === email.toLowerCase()) {
-        return NextResponse.json(
-          { error: 'User with this email already exists' },
-          { status: 409 }
-        )
-      }
-      if (existingUser.vatNumber === vatNumber.toUpperCase()) {
-        return NextResponse.json(
-          { error: 'User with this VAT number already exists' },
-          { status: 409 }
-        )
-      }
+      return NextResponse.json(
+        { error: 'User with this email already exists' },
+        { status: 409 }
+      )
     }
     
     // Hash password
@@ -66,7 +55,7 @@ export async function POST(request: NextRequest) {
         email: email.toLowerCase(),
         password: hashedPassword,
         businessName,
-        vatNumber: vatNumber.toUpperCase(),
+        vatNumber: vatNumber ? vatNumber.toUpperCase() : '',
         firstName,
         lastName,
         phone,
@@ -89,7 +78,7 @@ export async function POST(request: NextRequest) {
         userAgent: request.headers.get('user-agent') || 'unknown',
         metadata: {
           businessName,
-          vatNumber: vatNumber.toUpperCase(),
+          vatNumber: vatNumber ? vatNumber.toUpperCase() : '',
           timestamp: new Date().toISOString()
         }
       }

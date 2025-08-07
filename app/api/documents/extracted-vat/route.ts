@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createProtectedRoute } from '@/lib/middleware'
+import { createGuestFriendlyRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { AuthUser } from '@/lib/auth'
 
@@ -31,11 +31,31 @@ interface ExtractedVATSummary {
 /**
  * GET /api/documents/extracted-vat - Get aggregated VAT data from user's documents
  */
-async function getExtractedVAT(request: NextRequest, user: AuthUser) {
+async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
   try {
     const { searchParams } = new URL(request.url)
     const vatReturnId = searchParams.get('vatReturnId')
     const category = searchParams.get('category') // 'SALES', 'PURCHASES', or null for all
+    
+    // For guest users, return empty data since they don't persist documents
+    if (!user) {
+      console.log('Getting extracted VAT data for guest user - returning empty')
+      const emptySummary: ExtractedVATSummary = {
+        totalSalesVAT: 0,
+        totalPurchaseVAT: 0,
+        totalNetVAT: 0,
+        documentCount: 0,
+        processedDocuments: 0,
+        averageConfidence: 0,
+        salesDocuments: [],
+        purchaseDocuments: []
+      }
+      
+      return NextResponse.json({
+        success: true,
+        extractedVAT: emptySummary
+      })
+    }
     
     console.log(`Getting extracted VAT data for user ${user.id}`, { vatReturnId, category })
     
@@ -177,4 +197,4 @@ async function getExtractedVAT(request: NextRequest, user: AuthUser) {
   }
 }
 
-export const GET = createProtectedRoute(getExtractedVAT)
+export const GET = createGuestFriendlyRoute(getExtractedVAT)

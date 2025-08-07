@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createProtectedRoute } from '@/lib/middleware'
+import { createGuestFriendlyRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { processDocument } from '@/lib/documentProcessor'
 import { AuthUser } from '@/lib/auth'
@@ -12,7 +12,7 @@ interface ProcessDocumentRequest {
 /**
  * POST /api/documents/process - Process a document for VAT extraction
  */
-async function processDocumentEndpoint(request: NextRequest, user: AuthUser) {
+async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
   try {
     const body: ProcessDocumentRequest = await request.json()
     const { documentId, forceReprocess = false } = body
@@ -24,12 +24,14 @@ async function processDocumentEndpoint(request: NextRequest, user: AuthUser) {
       )
     }
     
-    // Find the document and verify ownership
+    // Find the document and verify ownership (for authenticated users) or allow guest access
+    const whereClause: any = { id: documentId }
+    if (user) {
+      whereClause.userId = user.id
+    }
+    
     const document = await prisma.document.findFirst({
-      where: {
-        id: documentId,
-        userId: user.id
-      }
+      where: whereClause
     })
     
     if (!document) {
@@ -71,7 +73,7 @@ async function processDocumentEndpoint(request: NextRequest, user: AuthUser) {
       document.mimeType,
       document.originalName,
       document.category,
-      user.id // Pass user ID for AI usage tracking
+      user?.id // Pass user ID for AI usage tracking
     )
     
     if (!result.success) {
@@ -93,8 +95,8 @@ async function processDocumentEndpoint(request: NextRequest, user: AuthUser) {
       }
     })
     
-    // Store extracted VAT data in a separate table for easy querying
-    if (result.extractedData && (result.extractedData.salesVAT.length > 0 || result.extractedData.purchaseVAT.length > 0)) {
+    // Store extracted VAT data in a separate table for easy querying (skip for guests)
+    if (user && result.extractedData && (result.extractedData.salesVAT.length > 0 || result.extractedData.purchaseVAT.length > 0)) {
       await prisma.auditLog.create({
         data: {
           userId: user.id,
@@ -135,4 +137,4 @@ async function processDocumentEndpoint(request: NextRequest, user: AuthUser) {
   }
 }
 
-export const POST = createProtectedRoute(processDocumentEndpoint)
+export const POST = createGuestFriendlyRoute(processDocumentEndpoint)

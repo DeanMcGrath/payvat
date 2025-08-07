@@ -1,5 +1,6 @@
 import { SubscriptionProvider } from '@/contexts/subscription-context'
 import { ErrorBoundary } from '@/components/error-boundary'
+import { Toaster } from '@/components/ui/sonner'
 import '@/lib/env-validation' // Validate environment on startup
 import './globals.css'
 
@@ -15,6 +16,7 @@ export default function RootLayout({
           <SubscriptionProvider>
             {children}
           </SubscriptionProvider>
+          <Toaster />
         </ErrorBoundary>
       </body>
     </html>

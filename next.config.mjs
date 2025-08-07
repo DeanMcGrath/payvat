@@ -6,6 +6,17 @@ const nextConfig = {
     // Only run ESLint on specific directories to avoid external dependencies
     dirs: ['app', 'components', 'lib', 'hooks', 'contexts']
   },
+  webpack: (config, { dev, isServer }) => {
+    // Remove console.log statements in production builds
+    if (!dev && !isServer) {
+      config.optimization.minimizer.forEach((minimizer) => {
+        if (minimizer.constructor.name === 'TerserPlugin') {
+          minimizer.options.terserOptions.compress.drop_console = true
+        }
+      })
+    }
+    return config
+  },
   // Security: Enable TypeScript checks during builds for better type safety
   typescript: {
     ignoreBuildErrors: false,

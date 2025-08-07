@@ -15,7 +15,7 @@ interface ProtectedRouteProps {
 
 export default function ProtectedRoute({ 
   children, 
-  requiresSubscription = true,
+  requiresSubscription = false, // Changed default to false for free access
   requiresAuth = true 
 }: ProtectedRouteProps) {
   const { hasAccess, subscribe, activateFreeTrial } = useSubscription()

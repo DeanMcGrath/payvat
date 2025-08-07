@@ -18,17 +18,20 @@ async function getAnalytics(request: NextRequest, user: AuthUser) {
     const yearStart = new Date(currentYear, 0, 1)
     
     if (metric === 'overview' || metric === 'all') {
-      // System overview statistics
-      const [
-        totalUsers,
-        activeUsers,
-        totalVATReturns,
-        totalPayments,
-        totalDocuments,
-        recentUsers,
-        recentReturns,
-        recentPayments
-      ] = await Promise.all([
+      console.log('Fetching admin analytics overview...')
+      
+      // System overview statistics with individual error handling
+      let totalUsers = 0
+      let activeUsers = 0
+      let totalVATReturns = 0
+      let totalPayments: any = { _count: { id: 0 }, _sum: { amount: 0 } }
+      let totalDocuments = 0
+      let recentUsers = 0
+      let recentReturns = 0
+      let recentPayments = 0
+      
+      try {
+        const results = await Promise.all([
         // Total users
         prisma.user.count(),
         
@@ -75,8 +78,34 @@ async function getAnalytics(request: NextRequest, user: AuthUser) {
         })
       ])
       
+      // Destructure results
+      totalUsers = results[0]
+      activeUsers = results[1]
+      totalVATReturns = results[2]
+      totalPayments = results[3]
+      totalDocuments = results[4]
+      recentUsers = results[5]
+      recentReturns = results[6]
+      recentPayments = results[7]
+      
+      console.log('Basic analytics fetched successfully:', { 
+        totalUsers, 
+        activeUsers, 
+        totalVATReturns, 
+        totalPayments: totalPayments._count.id,
+        totalDocuments 
+      })
+      
+      } catch (basicQueryError) {
+        console.error('Error in basic analytics queries:', basicQueryError)
+        const errorMessage = basicQueryError instanceof Error ? basicQueryError.message : 'Unknown database error'
+        throw new Error(`Database query failed: ${errorMessage}`)
+      }
+      
       // Monthly growth data for the current year
-      const monthlyData = await Promise.all(
+      let monthlyData = []
+      try {
+        monthlyData = await Promise.all(
         Array.from({ length: 12 }, async (_, monthIndex) => {
           const monthStart = new Date(currentYear, monthIndex, 1)
           const monthEnd = new Date(currentYear, monthIndex + 1, 0)
@@ -112,80 +141,129 @@ async function getAnalytics(request: NextRequest, user: AuthUser) {
         })
       )
       
+      console.log('Monthly data fetched successfully')
+      } catch (monthlyDataError) {
+        console.error('Error fetching monthly data:', monthlyDataError)
+        // Continue with empty monthly data
+        monthlyData = Array.from({ length: 12 }, (_, i) => ({
+          month: new Date(currentYear, i, 1).toLocaleDateString('en-IE', { month: 'short' }),
+          newUsers: 0,
+          newReturns: 0,
+          completedPayments: 0,
+          paymentVolume: 0
+        }))
+      }
+      
       // User role distribution
-      const userRoles = await prisma.user.groupBy({
-        by: ['role'],
-        _count: { role: true }
-      })
+      let userRoles: any[] = []
+      let returnStatus: any[] = []
+      let paymentMethods: any[] = []
       
-      // VAT return status distribution
-      const returnStatus = await prisma.vATReturn.groupBy({
-        by: ['status'],
-        _count: { status: true },
-        _sum: { netVAT: true }
-      })
-      
-      // Payment method distribution
-      const paymentMethods = await prisma.payment.groupBy({
-        by: ['paymentMethod'],
-        _count: { paymentMethod: true },
-        _sum: { amount: true },
-        where: { status: 'COMPLETED' }
-      })
+      try {
+        [userRoles, returnStatus, paymentMethods] = await Promise.all([
+          prisma.user.groupBy({
+            by: ['role'],
+            _count: { role: true }
+          }),
+          
+          prisma.vATReturn.groupBy({
+            by: ['status'],
+            _count: { status: true },
+            _sum: { netVAT: true }
+          }),
+          
+          prisma.payment.groupBy({
+            by: ['paymentMethod'],
+            _count: { paymentMethod: true },
+            _sum: { amount: true },
+            where: { status: 'COMPLETED' }
+          })
+        ])
+        
+        console.log('Distribution data fetched successfully')
+      } catch (distributionError) {
+        console.error('Error fetching distribution data:', distributionError)
+        // Continue with empty distributions
+        userRoles = []
+        returnStatus = []
+        paymentMethods = []
+      }
       
       // Top businesses by VAT paid
-      const topBusinesses = await prisma.user.findMany({
-        select: {
-          id: true,
-          businessName: true,
-          vatNumber: true,
-          _count: {
-            select: {
-              vatReturns: true,
-              payments: true
-            }
-          }
-        },
-        orderBy: {
-          payments: {
-            _count: 'desc'
-          }
-        },
-        take: 10
-      })
+      let topBusinessesWithStats: any[] = []
       
-      const topBusinessesWithStats = await Promise.all(
-        topBusinesses.map(async (business) => {
-          const totalPaid = await prisma.payment.aggregate({
-            where: {
-              userId: business.id,
-              status: 'COMPLETED'
-            },
-            _sum: { amount: true }
-          })
-          
-          return {
-            ...business,
-            totalVATPaid: Number(totalPaid._sum.amount || 0)
-          }
+      try {
+        const topBusinesses = await prisma.user.findMany({
+          select: {
+            id: true,
+            businessName: true,
+            vatNumber: true,
+            _count: {
+              select: {
+                vatReturns: true,
+                payments: true
+              }
+            }
+          },
+          orderBy: {
+            payments: {
+              _count: 'desc'
+            }
+          },
+          take: 10
         })
-      )
+        
+        topBusinessesWithStats = await Promise.all(
+          topBusinesses.map(async (business) => {
+            try {
+              const totalPaid = await prisma.payment.aggregate({
+                where: {
+                  userId: business.id,
+                  status: 'COMPLETED'
+                },
+                _sum: { amount: true }
+              })
+              
+              return {
+                ...business,
+                totalVATPaid: Number(totalPaid._sum.amount || 0)
+              }
+            } catch (businessError) {
+              console.error(`Error fetching stats for business ${business.id}:`, businessError)
+              return {
+                ...business,
+                totalVATPaid: 0
+              }
+            }
+          })
+        )
+        
+        console.log('Top businesses data fetched successfully')
+      } catch (topBusinessesError) {
+        console.error('Error fetching top businesses:', topBusinessesError)
+        topBusinessesWithStats = []
+      }
       
       // Create admin audit log for overview analytics
-      await prisma.auditLog.create({
-        data: {
-          userId: user.id,
-          action: 'ADMIN_VIEW_ANALYTICS',
-          entityType: 'SYSTEM',
-          ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-          userAgent: request.headers.get('user-agent') || 'unknown',
-          metadata: {
-            metric,
-            period: periodDays,
-            timestamp: new Date().toISOString()
+      try {
+        await prisma.auditLog.create({
+          data: {
+            userId: user.id,
+            action: 'ADMIN_VIEW_ANALYTICS',
+            entityType: 'SYSTEM',
+            ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+            userAgent: request.headers.get('user-agent') || 'unknown',
+            metadata: {
+              metric,
+              period: periodDays,
+              timestamp: new Date().toISOString()
+            }
           }
-        }
-      })
+        })
+      } catch (auditError) {
+        console.error('Error creating audit log:', auditError)
+        // Continue without failing the entire request
+      }
 
       return NextResponse.json({
         success: true,

@@ -101,8 +101,54 @@ export default function FileUpload({
       if (response.ok && result.success) {
         const newDocument: UploadedDocument = result.document
         setUploadedFiles(prev => [...prev, newDocument])
-        onUploadSuccess?.(newDocument)
         toast.success('File uploaded successfully')
+        
+        // Trigger AI document processing automatically
+        try {
+          const processResponse = await fetch('/api/documents/process', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              documentId: newDocument.id,
+              fileName: newDocument.fileName,
+              category: newDocument.category
+            })
+          })
+          
+          const processResult = await processResponse.json()
+          
+          if (processResponse.ok && processResult.success) {
+            // Update the document with processing results
+            const updatedDocument = {
+              ...newDocument,
+              isScanned: true,
+              scanResult: processResult.scanResult || 'Processed with AI'
+            }
+            
+            setUploadedFiles(prev => prev.map(doc => 
+              doc.id === newDocument.id ? updatedDocument : doc
+            ))
+            
+            if (processResult.extractedData?.salesVAT?.length > 0 || processResult.extractedData?.purchaseVAT?.length > 0) {
+              const vatAmount = processResult.extractedData.salesVAT?.reduce((sum: number, val: number) => sum + val, 0) || 
+                               processResult.extractedData.purchaseVAT?.reduce((sum: number, val: number) => sum + val, 0) || 0
+              if (vatAmount > 0) {
+                toast.success(`🤖 AI extracted €${vatAmount.toFixed(2)} VAT from document`)
+              }
+            }
+            
+            onUploadSuccess?.(updatedDocument)
+          } else {
+            console.warn('AI processing failed, document uploaded but not processed:', processResult.error)
+            onUploadSuccess?.(newDocument)
+          }
+        } catch (processError) {
+          console.warn('AI processing error:', processError)
+          toast.success('File uploaded (AI processing unavailable)')
+          onUploadSuccess?.(newDocument)
+        }
       } else {
         toast.error(result.error || 'Upload failed')
       }
@@ -161,7 +207,7 @@ export default function FileUpload({
           onClick={handleFileSelect}
           disabled={isUploading}
         >
-          {isUploading ? 'Uploading...' : `Choose ${category === 'SALES' ? 'Sales' : 'Purchase'} Files`}
+          {isUploading ? '🤖 Processing with AI...' : `Choose ${category === 'SALES' ? 'Sales' : 'Purchase'} Files`}
         </Button>
         
         <input

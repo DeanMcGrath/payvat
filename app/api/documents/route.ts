@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { createProtectedRoute } from '@/lib/middleware'
+import { createGuestFriendlyRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { AuthUser } from '@/lib/auth'
 
 // GET /api/documents - List user's documents
-async function getDocuments(request: NextRequest, user: AuthUser) {
+async function getDocuments(request: NextRequest, user?: AuthUser) {
   try {
     const { searchParams } = new URL(request.url)
     const vatReturnId = searchParams.get('vatReturnId')
@@ -13,9 +13,20 @@ async function getDocuments(request: NextRequest, user: AuthUser) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50) // Max 50 per page
     
-    // Build where clause
-    const where: any = {
-      userId: user.id
+    // Build where clause - for guests, return empty or session-based results
+    const where: any = {}
+    
+    if (user) {
+      where.userId = user.id
+    } else {
+      // For guest users, return no documents (they get session-based storage)
+      return NextResponse.json({
+        success: true,
+        documents: [],
+        totalCount: 0,
+        totalPages: 0,
+        currentPage: page
+      })
     }
     
     if (vatReturnId) {
@@ -72,4 +83,4 @@ async function getDocuments(request: NextRequest, user: AuthUser) {
   }
 }
 
-export const GET = createProtectedRoute(getDocuments)
+export const GET = createGuestFriendlyRoute(getDocuments)

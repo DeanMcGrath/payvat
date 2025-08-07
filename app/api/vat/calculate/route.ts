@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createProtectedRoute } from '@/lib/middleware'
+import { createGuestFriendlyRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { performVATCalculation, vatCalculationSchema } from '@/lib/vatUtils'
 import { AuthUser } from '@/lib/auth'
 import { analyzeVATCalculation, VATCalculationInput } from '@/lib/ai/vatAdvice'
 import { isAIEnabled } from '@/lib/ai/openai'
+import { logger } from '@/lib/logger'
 
-async function calculateVAT(request: NextRequest, user: AuthUser) {
+async function calculateVAT(request: NextRequest, user?: AuthUser) {
   try {
     const body = await request.json()
     
@@ -38,21 +39,24 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
     let documentExtractedVAT = { salesVAT: 0, purchaseVAT: 0, documentCount: 0 }
     
     try {
-      // Get extracted VAT data from documents for this user
-      const auditLogs = await prisma.auditLog.findMany({
-        where: {
-          userId: user.id,
-          action: 'VAT_DATA_EXTRACTED',
-          entityType: 'DOCUMENT',
-          createdAt: {
-            gte: startDate,
-            lte: endDate
+      // Get extracted VAT data from documents for this user (skip for guests)
+      let auditLogs: any[] = []
+      if (user) {
+        auditLogs = await prisma.auditLog.findMany({
+          where: {
+            userId: user.id,
+            action: 'VAT_DATA_EXTRACTED',
+            entityType: 'DOCUMENT',
+            createdAt: {
+              gte: startDate,
+              lte: endDate
           }
         },
         orderBy: {
           createdAt: 'desc'
         }
       })
+      }
       
       // Aggregate extracted VAT amounts from documents
       for (const log of auditLogs) {
@@ -68,9 +72,9 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
         }
       }
       
-      console.log('Extracted VAT from documents:', documentExtractedVAT)
+      logger.info('Extracted VAT from documents', documentExtractedVAT, 'VAT_CALCULATE_API')
     } catch (error) {
-      console.warn('Failed to get extracted VAT data:', error)
+      logger.warn('Failed to get extracted VAT data', error, 'VAT_CALCULATE_API')
       // Continue with manual calculation if document extraction fails
     }
     
@@ -92,18 +96,21 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
       )
     }
     
-    // Check if user has an existing draft for this period
-    let existingReturn = await prisma.vATReturn.findFirst({
-      where: {
-        userId: user.id,
-        periodStart: startDate,
-        periodEnd: endDate,
-        status: 'DRAFT'
-      }
-    })
+    // Check if user has an existing draft for this period (skip for guests)
+    let existingReturn = null
+    if (user) {
+      existingReturn = await prisma.vATReturn.findFirst({
+        where: {
+          userId: user.id,
+          periodStart: startDate,
+          periodEnd: endDate,
+          status: 'DRAFT'
+        }
+      })
+    }
     
-    // Create or update draft VAT return
-    if (existingReturn) {
+    // Create or update draft VAT return (skip for guests)
+    if (existingReturn && user) {
       existingReturn = await prisma.vATReturn.update({
         where: { id: existingReturn.id },
         data: {
@@ -114,7 +121,7 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
           updatedAt: new Date()
         }
       })
-    } else {
+    } else if (user) {
       existingReturn = await prisma.vATReturn.create({
         data: {
           userId: user.id,
@@ -139,10 +146,10 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
           netVAT: calculation.netVAT,
           periodStart: startDate.toISOString(),
           periodEnd: endDate.toISOString(),
-          businessType: user.businessName || 'General Business'
+          businessType: user?.businessName || 'General Business'
         }
         
-        const analysisResult = await analyzeVATCalculation(analysisInput, user.id)
+        const analysisResult = await analyzeVATCalculation(analysisInput, user?.id)
         
         if (analysisResult.success && analysisResult.analysis) {
           aiAnalysis = {
@@ -153,38 +160,40 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
             suggestions: analysisResult.suggestions
           }
           
-          console.log(`AI VAT analysis: ${analysisResult.analysis.status} (${analysisResult.analysis.riskLevel} risk)`)
+          logger.info('AI VAT analysis completed', { status: analysisResult.analysis.status, riskLevel: analysisResult.analysis.riskLevel }, 'VAT_CALCULATE_API')
         }
       } catch (aiError) {
-        console.warn('AI analysis failed, continuing without:', aiError)
+        logger.warn('AI analysis failed, continuing without', aiError, 'VAT_CALCULATE_API')
       }
     }
 
-    // Create audit log
-    await prisma.auditLog.create({
-      data: {
-        userId: user.id,
-        action: 'CALCULATE_VAT',
-        entityType: 'VAT_RETURN',
-        entityId: existingReturn.id,
-        ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-        userAgent: request.headers.get('user-agent') || 'unknown',
-        metadata: {
-          salesVAT: calculation.salesVAT,
-          purchaseVAT: calculation.purchaseVAT,
-          netVAT: calculation.netVAT,
-          period: `${startDate.toISOString()} to ${endDate.toISOString()}`,
-          warnings: calculation.warnings,
-          aiAnalysis: aiAnalysis,
-          timestamp: new Date().toISOString()
+    // Create audit log (only for authenticated users)
+    if (user && existingReturn) {
+      await prisma.auditLog.create({
+        data: {
+          userId: user.id,
+          action: 'CALCULATE_VAT',
+          entityType: 'VAT_RETURN',
+          entityId: existingReturn.id,
+          ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+          userAgent: request.headers.get('user-agent') || 'unknown',
+          metadata: {
+            salesVAT: calculation.salesVAT,
+            purchaseVAT: calculation.purchaseVAT,
+            netVAT: calculation.netVAT,
+            period: `${startDate.toISOString()} to ${endDate.toISOString()}`,
+            warnings: calculation.warnings,
+            aiAnalysis: aiAnalysis,
+            timestamp: new Date().toISOString()
+          }
         }
-      }
-    })
+      })
+    }
     
     return NextResponse.json({
       success: true,
       calculation: {
-        vatReturnId: existingReturn.id,
+        vatReturnId: existingReturn?.id || null,
         salesVAT: calculation.salesVAT,
         purchaseVAT: calculation.purchaseVAT,
         netVAT: calculation.netVAT,
@@ -203,7 +212,7 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
     })
     
   } catch (error) {
-    console.error('VAT calculation error:', error)
+    logger.error('VAT calculation error', error, 'VAT_CALCULATE_API')
     return NextResponse.json(
       { error: 'VAT calculation failed' },
       { status: 500 }
@@ -211,4 +220,4 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
   }
 }
 
-export const POST = createProtectedRoute(calculateVAT)
+export const POST = createGuestFriendlyRoute(calculateVAT)

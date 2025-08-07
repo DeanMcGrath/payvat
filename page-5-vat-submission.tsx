@@ -6,9 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Upload, Calculator, FileText, CheckCircle, Sparkles, RefreshCw } from 'lucide-react'
+import { ArrowLeft, Upload, Calculator, FileText, CheckCircle, Sparkles, RefreshCw, X, AlertCircle } from 'lucide-react'
 import LiveChat from "@/components/live-chat"
 import FileUpload from "@/components/file-upload"
+import { toast } from "sonner"
+import { logger } from "@/lib/logger"
 
 export default function VATReturnSubmission() {
   const [salesVAT, setSalesVAT] = useState("9450.00")
@@ -17,15 +19,72 @@ export default function VATReturnSubmission() {
   const [extractedVATData, setExtractedVATData] = useState<any>(null)
   const [loadingExtractedData, setLoadingExtractedData] = useState(false)
   const [useExtractedData, setUseExtractedData] = useState(false)
+  const [uploadedDocuments, setUploadedDocuments] = useState<any[]>([])
+  const [loadingDocuments, setLoadingDocuments] = useState(false)
 
   // Mock selected period data (would come from previous page)
   const selectedPeriod = "November - December 2024"
   const dueDate = "15 Jan 2025"
 
-  // Load extracted VAT data from documents on component mount
+  // Load data on component mount
   useEffect(() => {
     loadExtractedVATData()
+    loadUploadedDocuments()
   }, [])
+  
+  const loadUploadedDocuments = async () => {
+    try {
+      setLoadingDocuments(true)
+      const response = await fetch('/api/documents')
+      
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success && result.documents) {
+          setUploadedDocuments(result.documents)
+          logger.info('Loaded uploaded documents', { count: result.documents.length }, 'VAT_SUBMISSION')
+        }
+      }
+    } catch (error) {
+      logger.error('Failed to load uploaded documents', error, 'VAT_SUBMISSION')
+    } finally {
+      setLoadingDocuments(false)
+    }
+  }
+  
+  const removeDocument = async (documentId: string) => {
+    try {
+      const response = await fetch(`/api/documents/${documentId}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        // Remove from local state
+        setUploadedDocuments(prev => prev.filter(doc => doc.id !== documentId))
+        
+        // Refresh VAT data since document was removed
+        setTimeout(() => {
+          loadExtractedVATData()
+          // Reset calculator if no more documents with VAT data
+          if (uploadedDocuments.length <= 1) {
+            setSalesVAT("0.00")
+            setPurchaseVAT("0.00") 
+            setNetVAT("0.00")
+            setUseExtractedData(false)
+          }
+        }, 500)
+        
+        toast.success('Document removed successfully')
+        logger.info('Document removed successfully', { documentId }, 'VAT_SUBMISSION')
+      } else {
+        const result = await response.json()
+        toast.error('Failed to remove document: ' + (result.error || 'Unknown error'))
+        logger.error('Failed to remove document', result.error, 'VAT_SUBMISSION')
+      }
+    } catch (error) {
+      toast.error('Network error occurred while removing document')
+      logger.error('Delete error', error, 'VAT_SUBMISSION')
+    }
+  }
 
   const loadExtractedVATData = async () => {
     try {
@@ -36,11 +95,11 @@ export default function VATReturnSubmission() {
         const result = await response.json()
         if (result.success && result.extractedVAT) {
           setExtractedVATData(result.extractedVAT)
-          console.log('Loaded extracted VAT data:', result.extractedVAT)
+          logger.info('Loaded extracted VAT data', { totalSalesVAT: result.extractedVAT.totalSalesVAT, totalPurchaseVAT: result.extractedVAT.totalPurchaseVAT }, 'VAT_SUBMISSION')
         }
       }
     } catch (error) {
-      console.error('Failed to load extracted VAT data:', error)
+      logger.error('Failed to load extracted VAT data', error, 'VAT_SUBMISSION')
     } finally {
       setLoadingExtractedData(false)
     }
@@ -86,17 +145,17 @@ export default function VATReturnSubmission() {
         // Show warnings if any
         if (result.calculation.warnings) {
           result.calculation.warnings.forEach((warning: string) => {
-            console.warn('VAT Calculation Warning:', warning)
+            logger.warn('VAT Calculation Warning', warning, 'VAT_SUBMISSION')
           })
         }
       } else {
-        console.error('VAT calculation failed:', result.error)
+        logger.error('VAT calculation failed', result.error, 'VAT_SUBMISSION')
         // Fallback to client-side calculation
         const net = (sales - purchases).toFixed(2)
         setNetVAT(net)
       }
     } catch (error) {
-      console.error('VAT calculation error:', error)
+      logger.error('VAT calculation error', error, 'VAT_SUBMISSION')
       // Fallback to client-side calculation
       const sales = parseFloat(salesVAT) || 0
       const purchases = parseFloat(purchaseVAT) || 0
@@ -108,32 +167,32 @@ export default function VATReturnSubmission() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
+      <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-2xl font-bold text-gray-800">
+            <h1 className="text-xl md:text-2xl font-bold text-gray-800">
               PAY <span className="text-emerald-500">VAT</span>
             </h1>
           </div>
           <div className="text-right">
-            <h3 className="text-lg font-bold text-gray-800">Brian Cusack Trading Ltd</h3>
-            <p className="text-emerald-600 font-mono text-sm">VAT: IE0352440A</p>
+            <h3 className="text-sm md:text-lg font-bold text-gray-800 hidden sm:block">Brian Cusack Trading Ltd</h3>
+            <p className="text-emerald-600 font-mono text-xs md:text-sm">VAT: IE0352440A</p>
           </div>
         </div>
       </header>
 
-      <div className="p-6 max-w-6xl mx-auto">
-        <div className="mb-8">
+      <div className="p-4 md:p-6 max-w-6xl mx-auto">
+        <div className="mb-6 md:mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="inline-flex items-center justify-center w-10 h-10 bg-emerald-100 rounded-full">
-              <FileText className="h-5 w-5 text-emerald-600" />
+            <div className="inline-flex items-center justify-center w-8 md:w-10 h-8 md:h-10 bg-emerald-100 rounded-full">
+              <FileText className="h-4 md:h-5 w-4 md:w-5 text-emerald-600" />
             </div>
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">VAT Return Submission</h2>
-              <p className="text-gray-600">Complete your VAT calculations and submit your return</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">VAT Return Submission</h2>
+              <p className="text-sm md:text-base text-gray-600">Complete your VAT calculations and submit your return</p>
             </div>
           </div>
         </div>
@@ -293,9 +352,22 @@ export default function VATReturnSubmission() {
                   description="Upload sales-related documents"
                   acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
                   onUploadSuccess={(doc) => {
-                    console.log('Sales document uploaded:', doc)
+                    logger.info('Sales document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
+                    // Add to uploaded documents list
+                    setUploadedDocuments(prev => [...prev, doc])
+                    
                     // Refresh extracted VAT data when new documents are uploaded
-                    setTimeout(() => loadExtractedVATData(), 1000) // Small delay to allow processing
+                    setTimeout(() => {
+                      loadExtractedVATData().then(() => {
+                        // Auto-populate calculator if we have extracted data
+                        if (extractedVATData && extractedVATData.processedDocuments > 0) {
+                          setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
+                          setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
+                          setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
+                          setUseExtractedData(true)
+                        }
+                      })
+                    }, 2000) // Allow time for AI processing
                   }}
                 />
 
@@ -306,13 +378,98 @@ export default function VATReturnSubmission() {
                   description="Upload purchase-related documents"
                   acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
                   onUploadSuccess={(doc) => {
-                    console.log('Purchase document uploaded:', doc)
+                    logger.info('Purchase document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
+                    // Add to uploaded documents list
+                    setUploadedDocuments(prev => [...prev, doc])
+                    
                     // Refresh extracted VAT data when new documents are uploaded
-                    setTimeout(() => loadExtractedVATData(), 1000) // Small delay to allow processing
+                    setTimeout(() => {
+                      loadExtractedVATData().then(() => {
+                        // Auto-populate calculator if we have extracted data
+                        if (extractedVATData && extractedVATData.processedDocuments > 0) {
+                          setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
+                          setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
+                          setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
+                          setUseExtractedData(true)
+                        }
+                      })
+                    }, 2000) // Allow time for AI processing
                   }}
                 />
               </CardContent>
             </Card>
+
+            {/* Uploaded Documents Display */}
+            {uploadedDocuments.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
+                    <FileText className="h-5 w-5 mr-2 text-emerald-600" />
+                    Uploaded Documents ({uploadedDocuments.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {uploadedDocuments.map((document) => (
+                      <div key={document.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
+                        <div className="flex items-center space-x-4">
+                          <div className="flex-shrink-0">
+                            {document.mimeType?.includes('pdf') ? (
+                              <FileText className="h-8 w-8 text-red-500" />
+                            ) : document.mimeType?.includes('image') ? (
+                              <FileText className="h-8 w-8 text-blue-500" />
+                            ) : (
+                              <FileText className="h-8 w-8 text-green-500" />
+                            )}
+                          </div>
+                          
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-gray-900 truncate">
+                              {document.originalName || document.fileName}
+                            </p>
+                            <div className="flex items-center space-x-4 mt-1">
+                              <p className="text-xs text-gray-500">
+                                {Math.round(document.fileSize / 1024)}KB • {document.category?.replace('_', ' ')}
+                              </p>
+                              {document.isScanned && (
+                                <div className="flex items-center text-xs">
+                                  {document.scanResult?.includes('€') ? (
+                                    <span className="inline-flex items-center text-emerald-600">
+                                      <CheckCircle className="h-3 w-3 mr-1" />
+                                      <span className="font-medium">{document.scanResult}</span>
+                                    </span>
+                                  ) : (
+                                    <span className="inline-flex items-center text-green-600">
+                                      <CheckCircle className="h-3 w-3 mr-1" />
+                                      AI Processed
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                              {!document.isScanned && (
+                                <span className="inline-flex items-center text-yellow-600 text-xs">
+                                  <AlertCircle className="h-3 w-3 mr-1" />
+                                  Processing...
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeDocument(document.id)}
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
 
           {/* Summary Sidebar */}

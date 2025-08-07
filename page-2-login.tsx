@@ -6,11 +6,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import LiveChat from "./components/live-chat"
 import { z } from "zod"
+import { toast } from "sonner"
 
 // Security: Input validation schema
 const loginSchema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
-  password: z.string().min(8, "Password must be at least 8 characters").max(128, "Password is too long")
+  password: z.string().min(6, "Password must be at least 6 characters").max(128, "Password is too long") // Reduced from 8 to 6
 })
 
 // Security: Sanitize input
@@ -77,12 +78,19 @@ export default function LoginPage() {
 
       if (response.ok) {
         // Success - redirect to dashboard
-        window.location.href = '/dashboard'
+        toast.success('Login successful! Redirecting to dashboard...')
+        setTimeout(() => {
+          window.location.href = '/dashboard'
+        }, 1000)
       } else {
-        setErrors({ general: "Invalid email or password" })
+        const errorMessage = "Invalid email or password"
+        setErrors({ general: errorMessage })
+        toast.error(errorMessage)
       }
     } catch (error) {
-      setErrors({ general: "Invalid email or password" })
+      const errorMessage = "Network error occurred. Please try again."
+      setErrors({ general: errorMessage })
+      toast.error(errorMessage)
     } finally {
       setIsLoading(false)
     }
@@ -106,10 +114,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="flex items-center justify-center">
-        <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-8 w-full max-w-md">
+        <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-6 md:p-8 w-full max-w-md">
           <div className="text-center mb-8">
             <div className="inline-flex flex-col items-center">
-              <h1 className="text-4xl font-bold text-gray-800 mb-1">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-1">
                 PAY <span className="text-emerald-500">VAT</span>
               </h1>
               <div className="w-16 h-0.5 bg-emerald-500 mt-3"></div>

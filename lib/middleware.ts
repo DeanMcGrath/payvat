@@ -78,3 +78,18 @@ export function createAdminRoute(
     return withRole(request, 'ADMIN', handler)
   }
 }
+
+// Helper function to create guest-friendly API routes (optional auth)
+export function createGuestFriendlyRoute(
+  handler: (request: NextRequest, user?: AuthUser) => Promise<NextResponse>
+) {
+  return async (request: NextRequest) => {
+    try {
+      const user = await getUserFromRequest(request)
+      return await handler(request, user || undefined)
+    } catch (error) {
+      // Allow guest access - continue without user
+      return await handler(request, undefined)
+    }
+  }
+}

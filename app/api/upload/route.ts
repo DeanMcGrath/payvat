@@ -1,12 +1,13 @@
 import { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { createProtectedRoute } from '@/lib/middleware'
+import { createGuestFriendlyRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { validateFile, processFileForServerless, getDocumentType } from '@/lib/serverlessFileUtils'
 import { processDocument } from '@/lib/documentProcessor'
 import { AuthUser } from '@/lib/auth'
+import { logger } from '@/lib/logger'
 
-async function uploadFile(request: NextRequest, user: AuthUser) {
+async function uploadFile(request: NextRequest, user?: AuthUser) {
   try {
     // Check if request has multipart form data
     const contentType = request.headers.get('content-type')
@@ -64,8 +65,11 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
       )
     }
     
-    // Validate VAT return ownership if provided
-    if (vatReturnId) {
+    // Generate session-based user ID for guests
+    const userId = user?.id || `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    
+    // Validate VAT return ownership if provided and user is authenticated
+    if (vatReturnId && user) {
       const vatReturn = await prisma.vATReturn.findFirst({
         where: {
           id: vatReturnId,
@@ -82,12 +86,12 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
     }
     
     // Process file for serverless environment
-    const processedFile = await processFileForServerless(file, user.id)
+    const processedFile = await processFileForServerless(file, userId)
     
     // Save document metadata to database
     const document = await prisma.document.create({
       data: {
-        userId: user.id,
+        userId: userId,
         vatReturnId: vatReturnId || null,
         fileName: processedFile.fileName,
         originalName: processedFile.originalName,
@@ -103,7 +107,7 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
     })
     
     // Process document immediately after upload for VAT extraction
-    console.log(`Starting document processing for: ${processedFile.originalName}`)
+    logger.info('Starting document processing', { fileName: processedFile.originalName }, 'UPLOAD_API')
     
     try {
       const processingResult = await processDocument(
@@ -123,8 +127,8 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
           }
         })
         
-        // Log extracted VAT data for audit trail
-        if (processingResult.extractedData && 
+        // Log extracted VAT data for audit trail (skip for guests)
+        if (user && processingResult.extractedData && 
             (processingResult.extractedData.salesVAT.length > 0 || 
              processingResult.extractedData.purchaseVAT.length > 0)) {
           await prisma.auditLog.create({
@@ -146,9 +150,9 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
           })
         }
         
-        console.log(`Document processing completed: ${processingResult.scanResult}`)
+        logger.info('Document processing completed', { scanResult: processingResult.scanResult }, 'UPLOAD_API')
       } else {
-        console.warn(`Document processing failed: ${processingResult.error}`)
+        logger.warn('Document processing failed', { error: processingResult.error }, 'UPLOAD_API')
         // Update with failed status
         await prisma.document.update({
           where: { id: document.id },
@@ -159,7 +163,7 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
         })
       }
     } catch (processingError) {
-      console.error('Document processing error:', processingError)
+      logger.error('Document processing error', processingError, 'UPLOAD_API')
       // Update with error status
       await prisma.document.update({
         where: { id: document.id },
@@ -170,24 +174,26 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
       })
     }
     
-    // Create audit log
-    await prisma.auditLog.create({
-      data: {
-        userId: user.id,
-        action: 'UPLOAD_DOCUMENT',
-        entityType: 'DOCUMENT',
-        entityId: document.id,
-        ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-        userAgent: request.headers.get('user-agent') || 'unknown',
-        metadata: {
-          fileName: processedFile.originalName,
-          fileSize: processedFile.fileSize,
-          category,
-          vatReturnId,
-          timestamp: new Date().toISOString()
+    // Create audit log (skip for guests)
+    if (user) {
+      await prisma.auditLog.create({
+        data: {
+          userId: user.id,
+          action: 'UPLOAD_DOCUMENT',
+          entityType: 'DOCUMENT',
+          entityId: document.id,
+          ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+          userAgent: request.headers.get('user-agent') || 'unknown',
+          metadata: {
+            fileName: processedFile.originalName,
+            fileSize: processedFile.fileSize,
+            category,
+            vatReturnId,
+            timestamp: new Date().toISOString()
+          }
         }
-      }
-    })
+      })
+    }
     
     // Fetch updated document status
     const updatedDocument = await prisma.document.findUnique({
@@ -208,7 +214,7 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
     })
     
   } catch (error) {
-    console.error('File upload error:', error)
+    logger.error('File upload error', error, 'UPLOAD_API')
     return NextResponse.json(
       { error: 'File upload failed' },
       { status: 500 }
@@ -216,4 +222,4 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
   }
 }
 
-export const POST = createProtectedRoute(uploadFile)
+export const POST = createGuestFriendlyRoute(uploadFile)

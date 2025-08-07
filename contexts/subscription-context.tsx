@@ -36,9 +36,12 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const hasAccess = () => {
-    if (isSubscribed) return true
-    if (trialEndsAt && new Date() < trialEndsAt) return true
-    return false
+    // For now, give everyone free access to the platform
+    return true
+    // Original logic (commented out for free access):
+    // if (isSubscribed) return true
+    // if (trialEndsAt && new Date() < trialEndsAt) return true
+    // return false
   }
 
   const subscribe = (plan: 'monthly' | 'annual') => {
