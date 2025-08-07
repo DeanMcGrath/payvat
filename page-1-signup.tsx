@@ -99,29 +99,32 @@ export default function SignupPage() {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-thin">PayVAT</h1>
+            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
             
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 sm:space-x-6">
+              <div className="hidden md:flex items-center space-x-2">
                 <Input
                   placeholder="Search"
-                  className="w-64 bg-white text-gray-900 border-0"
+                  className="w-32 sm:w-40 lg:w-48 xl:w-64 bg-white text-gray-900 border-0"
                 />
                 <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
                   <Search className="h-4 w-4" />
                 </Button>
               </div>
               
-              <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 md:hidden p-2 min-w-[44px] min-h-[44px]">
+                  <Search className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
                   <Bell className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
                   <Settings className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
                   <LogOut className="h-4 w-4" />
                 </Button>
               </div>
@@ -130,7 +133,7 @@ export default function SignupPage() {
         </div>
         
         {/* Navigation */}
-        <div className="bg-teal-600 px-6 py-3">
+        <div className="bg-teal-600 px-4 sm:px-6 py-3">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center space-x-2 text-sm">
               <span className="text-white">Sign Up</span>
@@ -139,11 +142,11 @@ export default function SignupPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
         <div className="flex items-center justify-center">
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-sm sm:max-w-md mx-2 sm:mx-4 bg-white rounded-xl shadow-lg p-4 sm:p-6">
             {/* Header */}
-            <div className="text-center mb-12">
+            <div className="text-center mb-6 sm:mb-12">
               <p className="text-gray-600 text-lg">
                 Create your account to get started.
               </p>
@@ -164,7 +167,7 @@ export default function SignupPage() {
           )}
           
           {/* Form */}
-          <div className="space-y-6">
+          <div className="space-y-3 sm:space-y-4 md:space-y-6">
             <div>
               <Label htmlFor="businessName" className="block text-sm font-medium text-gray-700 mb-2">
                 Business Name *
@@ -174,7 +177,7 @@ export default function SignupPage() {
                 type="text"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
-                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.businessName ? 'border-red-500' : ''}`}
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.businessName ? 'border-red-500' : ''}`}
                 placeholder="Enter your business name"
                 disabled={isLoading}
               />
@@ -192,7 +195,7 @@ export default function SignupPage() {
                 type="text"
                 value={vatNumber}
                 onChange={(e) => setVatNumber(e.target.value)}
-                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.vatNumber ? 'border-red-500' : ''}`}
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.vatNumber ? 'border-red-500' : ''}`}
                 placeholder="Enter your VAT number (optional)"
                 disabled={isLoading}
               />
@@ -210,7 +213,7 @@ export default function SignupPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.email ? 'border-red-500' : ''}`}
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.email ? 'border-red-500' : ''}`}
                 placeholder="Enter your email address"
                 disabled={isLoading}
               />
@@ -228,7 +231,7 @@ export default function SignupPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.password ? 'border-red-500' : ''}`}
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.password ? 'border-red-500' : ''}`}
                 placeholder="Create a secure password"
                 disabled={isLoading}
               />
@@ -246,7 +249,7 @@ export default function SignupPage() {
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.confirmPassword ? 'border-red-500' : ''}`}
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.confirmPassword ? 'border-red-500' : ''}`}
                 placeholder="Confirm your password"
                 disabled={isLoading}
               />
@@ -255,9 +258,9 @@ export default function SignupPage() {
               )}
             </div>
             
-            <div className="pt-4">
+            <div className="pt-3 sm:pt-4">
               <Button 
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-3 px-4 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleRegister}
                 disabled={isLoading || success}
               >

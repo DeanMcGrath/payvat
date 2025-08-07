@@ -119,5 +119,56 @@
   }
   body {
     @apply bg-background text-foreground;
+    /* Ensure proper mobile scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent horizontal scrolling on mobile */
+    overflow-x: hidden;
+    /* Improve text rendering on mobile */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Mobile-friendly tap targets */
+  button, input, select, textarea, a {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Ensure inputs don't zoom on iOS Safari */
+  input[type="email"], 
+  input[type="password"], 
+  input[type="text"], 
+  input[type="number"],
+  input[type="tel"],
+  input[type="search"],
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  
+  /* Improve mobile form styling */
+  @media (max-width: 767px) {
+    input, select, textarea {
+      font-size: 16px !important;
+      border-radius: 0.375rem;
+    }
+    
+    /* Better mobile font sizes */
+    h1 { font-size: 1.5rem !important; }
+    h2 { font-size: 1.25rem !important; }
+    h3 { font-size: 1.125rem !important; }
+    
+    /* Ensure no element causes horizontal scroll */
+    * {
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  
+  /* Extra small devices */
+  @media (max-width: 374px) {
+    body {
+      font-size: 14px;
+    }
   }
 }

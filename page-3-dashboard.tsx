@@ -108,34 +108,37 @@ export default function HomePage() {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-thin">PayVAT</h1>
+            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
             
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 sm:space-x-6">
+              <div className="hidden lg:flex items-center space-x-2">
                 <Input
                   placeholder="Search"
-                  className="w-64 bg-white text-gray-900 border-0"
+                  className="w-32 xl:w-48 2xl:w-64 bg-white text-gray-900 border-0"
                 />
                 <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
                   <Search className="h-4 w-4" />
                 </Button>
               </div>
               
-              <div className="text-right">
-                <h3 className="text-lg font-bold text-white">{user.businessName}</h3>
-                <p className="text-teal-100 font-mono text-sm">VAT: {user.vatNumber}</p>
+              <div className="text-right hidden sm:block max-w-48 lg:max-w-none">
+                <h3 className="text-sm lg:text-base font-bold text-white truncate">{user.businessName}</h3>
+                <p className="text-teal-100 font-mono text-xs">VAT: {user.vatNumber}</p>
               </div>
               
-              <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 lg:hidden p-2 min-w-[44px] min-h-[44px]">
+                  <Search className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
                   <Bell className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
                   <Settings className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600" onClick={handleLogout} title="Logout">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]" onClick={handleLogout} title="Logout">
                   <LogOut className="h-4 w-4" />
                 </Button>
               </div>
@@ -144,16 +147,22 @@ export default function HomePage() {
         </div>
         
         {/* Navigation */}
-        <div className="bg-teal-600 px-6 py-3">
+        <div className="bg-teal-600 px-4 sm:px-6 py-3">
           <div className="max-w-7xl mx-auto">
-            <div className="flex items-center space-x-2 text-sm">
-              <span className="text-white">Dashboard</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2 text-sm">
+                <span className="text-white">Dashboard</span>
+              </div>
+              <div className="sm:hidden text-right max-w-40">
+                <p className="text-xs text-teal-100 font-mono truncate">{user.businessName}</p>
+                <p className="text-xs text-teal-200 font-mono">{user.vatNumber}</p>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
@@ -163,7 +172,7 @@ export default function HomePage() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">VAT Due</CardTitle>
@@ -223,7 +232,7 @@ export default function HomePage() {
         )}
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-gray-900">Quick Actions</CardTitle>

@@ -11,9 +11,9 @@ export default function Footer() {
   return (
     <>
       {/* Utility Section */}
-      <div className="bg-gray-100 py-4 mt-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex justify-between items-center">
+      <div className="bg-gray-100 py-4 mt-8 sm:mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
             <Link 
               href="/" 
               className="text-gray-600 hover:text-gray-800 text-sm underline transition-colors"
@@ -31,9 +31,9 @@ export default function Footer() {
       </div>
 
       {/* Main Footer */}
-      <footer className="bg-teal-700 text-white py-12">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <footer className="bg-teal-700 text-white py-8 sm:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {/* Column 1 - Company & Services */}
             <div>
               <h4 className="font-semibold text-white mb-4">Company & Services</h4>
@@ -186,12 +186,12 @@ export default function Footer() {
           {/* Bottom Section */}
           <hr className="border-teal-600 my-8" />
           
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-teal-100 text-sm">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
+            <p className="text-teal-100 text-sm text-center sm:text-left">
               © 2024 PayVAT. All rights reserved.
             </p>
-            <div className="flex items-center space-x-4 mt-4 md:mt-0">
-              <span className="text-teal-100 text-sm">Irish VAT compliance made simple</span>
+            <div className="flex items-center space-x-4">
+              <span className="text-teal-100 text-sm text-center sm:text-right">Irish VAT compliance made simple</span>
             </div>
           </div>
         </div>

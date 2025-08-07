@@ -12,29 +12,32 @@ export default function LandingPage() {
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-thin">PayVAT</h1>
+            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
             
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 sm:space-x-6">
+              <div className="hidden md:flex items-center space-x-2">
                 <Input
                   placeholder="Search"
-                  className="w-64 bg-white text-gray-900 border-0"
+                  className="w-32 sm:w-40 lg:w-48 xl:w-64 bg-white text-gray-900 border-0"
                 />
                 <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
                   <Search className="h-4 w-4" />
                 </Button>
               </div>
               
-              <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 md:hidden p-2 min-w-[44px] min-h-[44px]">
+                  <Search className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
                   <Bell className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
                   <Settings className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
                   <LogOut className="h-4 w-4" />
                 </Button>
               </div>
@@ -43,7 +46,7 @@ export default function LandingPage() {
         </div>
         
         {/* Navigation */}
-        <div className="bg-teal-600 px-6 py-3">
+        <div className="bg-teal-600 px-4 sm:px-6 py-3">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center space-x-2 text-sm">
               <span className="text-white">Home</span>
@@ -52,7 +55,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Simplify Your VAT Submission and Payments
@@ -65,7 +68,7 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
           <Card className="bg-white border border-gray-200 shadow-lg">
             <CardContent className="p-6 text-center">
               <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -113,16 +116,16 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Button 
-              className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
+              className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 sm:px-8 text-base sm:text-lg"
               onClick={() => window.location.href = '/signup'}
             >
               Sign Up Now
             </Button>
             <Button 
               variant="outline"
-              className="border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-3 px-8 text-lg"
+              className="border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-3 px-6 sm:px-8 text-base sm:text-lg"
               onClick={() => window.location.href = '/login'}
             >
               Login to Your Account
@@ -134,7 +137,7 @@ export default function LandingPage() {
           <h4 className="font-semibold text-teal-800 mb-4 text-center">
             Why Choose PayVAT?
           </h4>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
             <div className="flex items-center gap-3">
               <CheckCircle className="h-5 w-5 text-teal-700 flex-shrink-0" />
               <span className="text-teal-700 text-sm">Revenue approved platform</span>
@@ -165,7 +168,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
             <div className="text-center">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Mail className="h-6 w-6 text-blue-600" />
