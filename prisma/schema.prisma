@@ -39,6 +39,7 @@ model User {
   documents            Document[]
   payments             Payment[]
   vatReturns           VATReturn[]
+  chatSessions         ChatSession[]
 
   @@map("vat_users")
 }
@@ -126,4 +127,68 @@ model AuditLog {
   user       User?    @relation(fields: [userId], references: [id])
 
   @@map("vat_audit_logs")
+}
+
+model ChatSession {
+  id              String        @id @default(cuid())
+  userId          String?       // Optional - for anonymous users
+  sessionId       String        @unique // Anonymous session identifier
+  
+  // Session Information
+  isActive        Boolean       @default(true)
+  isResolved      Boolean       @default(false)
+  resolvedAt      DateTime?
+  resolvedBy      String?       // Admin user ID who resolved
+  
+  // User Information (for anonymous users)
+  userEmail       String?
+  userName        String?
+  userCompany     String?
+  
+  // Session Context
+  ipAddress       String?
+  userAgent       String?
+  referrerUrl     String?
+  
+  // Timestamps
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  lastMessageAt   DateTime      @default(now())
+  
+  // Relations
+  user            User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  messages        ChatMessage[]
+  
+  @@map("vat_chat_sessions")
+}
+
+model ChatMessage {
+  id            String      @id @default(cuid())
+  sessionId     String
+  
+  // Message Content
+  message       String
+  messageType   String      @default("text") // text, file, system
+  
+  // Sender Information
+  senderType    String      // user, admin, system
+  senderId      String?     // User ID or Admin ID
+  senderName    String?     // Display name
+  
+  // Message Status
+  isRead        Boolean     @default(false)
+  readAt        DateTime?
+  
+  // File Attachment (optional)
+  fileName      String?
+  fileUrl       String?
+  fileSize      Int?
+  
+  // Timestamps
+  createdAt     DateTime    @default(now())
+  
+  // Relations
+  session       ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  @@map("vat_chat_messages")
 }

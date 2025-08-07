@@ -16,7 +16,8 @@ import {
   Clock,
   Euro,
   Activity,
-  BarChart3
+  BarChart3,
+  MessageCircle
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -153,6 +154,12 @@ function AdminDashboardContent() {
             <Button variant="outline" size="sm">
               <Users className="h-4 w-4 mr-2" />
               Manage Users
+            </Button>
+          </Link>
+          <Link href="/admin/chat">
+            <Button variant="outline" size="sm">
+              <MessageCircle className="h-4 w-4 mr-2" />
+              Live Chat
             </Button>
           </Link>
           <Link href="/admin/analytics">
