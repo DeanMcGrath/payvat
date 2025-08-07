@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Bell, Settings, LogOut, Search, HelpCircle, CreditCard, Shield, Clock, Euro, FileText } from 'lucide-react'
 import LiveChat from "@/components/live-chat"
-import Footer from "@/components/footer"
 
 export default function FAQPage() {
   return (
@@ -14,7 +13,7 @@ export default function FAQPage() {
       <header className="bg-teal-700 text-white">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-thin">PAY <span className="text-teal-200">VAT</span></h1>
+            <h1 className="text-2xl font-thin">PayVAT</h1>
             
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
@@ -56,7 +55,7 @@ export default function FAQPage() {
         {/* Hero Section */}
         <div className="mb-8 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Frequently Asked Questions</h2>
-          <p className="text-gray-600">Everything you need to know about PayVat</p>
+          <p className="text-gray-600">Everything you need to know about PayVAT</p>
         </div>
 
         {/* FAQ Items */}
@@ -65,12 +64,12 @@ export default function FAQPage() {
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
                 <HelpCircle className="h-5 w-5 text-teal-500 mr-2" />
-                What is PayVat?
+                What is PayVAT?
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-gray-600">
-                PayVat is an online platform that lets Irish businesses complete their VAT submissions and make payments directly to the Revenue Commissioners—without paying hefty third-party fees.
+                PayVAT is an online platform that lets Irish businesses complete their VAT submissions and make payments directly to the Revenue Commissioners—without paying hefty third-party fees.
               </p>
             </CardContent>
           </Card>
@@ -79,12 +78,12 @@ export default function FAQPage() {
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
                 <FileText className="h-5 w-5 text-teal-500 mr-2" />
-                Who can use PayVat?
+                Who can use PayVAT?
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-gray-600">
-                Any Irish-registered business required to file VAT returns can use PayVat. Whether you&apos;re a micro-enterprise, an SME, or a growing startup, our platform scales to suit your needs.
+                Any Irish-registered business required to file VAT returns can use PayVAT. Whether you&apos;re a micro-enterprise, an SME, or a growing startup, our platform scales to suit your needs.
               </p>
             </CardContent>
           </Card>
@@ -98,7 +97,7 @@ export default function FAQPage() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2 text-gray-600">
-                <p>1. Go to PayVat.ie/signup</p>
+                <p>1. Go to PayVAT.ie/signup</p>
                 <p>2. Choose your plan (monthly or annual)</p>
                 <p>3. Enter your company details and create a password</p>
                 <p>4. Verify your email, and you&apos;re ready to file your first VAT return!</p>
@@ -115,7 +114,7 @@ export default function FAQPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600">
-                After you submit your VAT return through PayVat, you can initiate your VAT payment via Revenue&apos;s Online Service (ROS) with one click—no need to log in separately.
+                After you submit your VAT return through PayVAT, you can initiate your VAT payment via Revenue&apos;s Online Service (ROS) with one click—no need to log in separately.
               </p>
             </CardContent>
           </Card>
@@ -164,7 +163,7 @@ export default function FAQPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600">
-                PayVat will send you automated reminders well before your filing and payment deadlines. If you do miss a deadline, you&apos;ll need to contact Revenue directly for extensions or penalties.
+                PayVAT will send you automated reminders well before your filing and payment deadlines. If you do miss a deadline, you&apos;ll need to contact Revenue directly for extensions or penalties.
               </p>
             </CardContent>
           </Card>
@@ -202,7 +201,7 @@ export default function FAQPage() {
         <Card className="text-center mt-12">
           <CardContent className="p-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Still Have Questions?</h3>
-            <p className="text-gray-600 mb-6">Our support team is here to help you get started with PayVat</p>
+            <p className="text-gray-600 mb-6">Our support team is here to help you get started with PayVAT</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg">
                 Contact Support
@@ -223,7 +222,11 @@ export default function FAQPage() {
       <LiveChat />
 
       {/* Footer */}
-      <Footer />
+      <footer className="bg-gray-800 text-white py-8 mt-12">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-sm">© PayVAT</p>
+        </div>
+      </footer>
     </div>
   )
 }

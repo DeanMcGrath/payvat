@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Bell, Settings, LogOut, Search, BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock } from 'lucide-react'
 import LiveChat from "@/components/live-chat"
-import Footer from "@/components/footer"
 
 export default function VATGuidePage() {
   return (
@@ -14,7 +13,7 @@ export default function VATGuidePage() {
       <header className="bg-teal-700 text-white">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-thin">PAY <span className="text-teal-200">VAT</span></h1>
+            <h1 className="text-2xl font-thin">PayVAT</h1>
             
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
@@ -237,7 +236,7 @@ export default function VATGuidePage() {
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-teal-800 flex items-center">
               <CheckCircle className="h-5 w-5 text-teal-600 mr-2" />
-              7. How PayVat Simplifies VAT
+              7. How PayVAT Simplifies VAT
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -246,7 +245,7 @@ export default function VATGuidePage() {
                 <Calculator className="h-5 w-5 text-teal-600 flex-shrink-0" />
                 <div>
                   <span className="font-medium text-teal-800">Automatic Calculations</span>
-                  <p className="text-teal-700 text-sm">Upload or enter invoices and let PayVat compute net VAT</p>
+                  <p className="text-teal-700 text-sm">Upload or enter invoices and let PayVAT compute net VAT</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -301,7 +300,7 @@ export default function VATGuidePage() {
               <div className="flex items-center gap-3 p-3 border border-teal-200 rounded-lg bg-teal-50">
                 <CheckCircle className="h-4 w-4 text-teal-600" />
                 <div>
-                  <span className="font-medium text-teal-800">PayVat Help Center</span>
+                  <span className="font-medium text-teal-800">PayVAT Help Center</span>
                   <p className="text-teal-700 text-sm">Accessible once you register</p>
                 </div>
               </div>
@@ -313,7 +312,7 @@ export default function VATGuidePage() {
         <Card className="text-center">
           <CardContent className="p-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Simplify Your VAT?</h3>
-            <p className="text-gray-600 mb-6">Let PayVat handle the complexity while you focus on growing your business</p>
+            <p className="text-gray-600 mb-6">Let PayVAT handle the complexity while you focus on growing your business</p>
             <Button 
               className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
               onClick={() => window.location.href = '/signup'}
@@ -328,7 +327,11 @@ export default function VATGuidePage() {
       <LiveChat />
 
       {/* Footer */}
-      <Footer />
+      <footer className="bg-gray-800 text-white py-8 mt-12">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-sm">© PayVAT</p>
+        </div>
+      </footer>
     </div>
   )
 }

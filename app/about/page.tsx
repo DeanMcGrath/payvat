@@ -5,16 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Bell, Settings, LogOut, Search, Shield, Clock, Users, Target, CheckCircle, Euro } from 'lucide-react'
 import LiveChat from "@/components/live-chat"
-import Footer from "@/components/footer"
 
-export default function AboutPayVat() {
+export default function AboutPayVAT() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-teal-700 text-white">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-thin">PAY <span className="text-teal-200">VAT</span></h1>
+            <h1 className="text-2xl font-thin">PayVAT</h1>
             
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
@@ -46,7 +45,7 @@ export default function AboutPayVat() {
         <div className="bg-teal-600 px-6 py-3">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center space-x-2 text-sm">
-              <span className="text-white">About PayVat</span>
+              <span className="text-white">About PayVAT</span>
             </div>
           </div>
         </div>
@@ -55,7 +54,7 @@ export default function AboutPayVat() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Hero Section */}
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">About PayVat</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">About PayVAT</h2>
           <p className="text-gray-600">Putting control of VAT submissions back in the hands of Irish businesses</p>
         </div>
 
@@ -69,7 +68,7 @@ export default function AboutPayVat() {
           </CardHeader>
           <CardContent>
             <p className="text-gray-600 mb-4">
-              PayVat is an Irish fintech company on a mission to put control of VAT submissions and payments back in the hands of Irish businesses. Founded by accountants and technologists, we grew frustrated watching small and medium-sized enterprises (SMEs) pay exorbitant fees to solicitors or third-party accountants, simply to file their VAT returns.
+              PayVAT is an Irish fintech company on a mission to put control of VAT submissions and payments back in the hands of Irish businesses. Founded by accountants and technologists, we grew frustrated watching small and medium-sized enterprises (SMEs) pay exorbitant fees to solicitors or third-party accountants, simply to file their VAT returns.
             </p>
             <p className="text-gray-600">
               The old way is costly, slow, and opaque—so we built a better solution.
@@ -104,7 +103,7 @@ export default function AboutPayVat() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800 mb-2">Self-Service VAT Filing</h4>
-                    <p className="text-gray-600 text-sm">Create your account on PayVat.ie and submit returns directly to the Revenue Commissioners.</p>
+                    <p className="text-gray-600 text-sm">Create your account on PayVAT.ie and submit returns directly to the Revenue Commissioners.</p>
                   </div>
                 </div>
               </CardContent>
@@ -157,7 +156,7 @@ export default function AboutPayVat() {
         {/* Why Choose Us */}
         <div className="bg-teal-50 rounded-xl p-6 border border-teal-200 mb-8">
           <h4 className="font-semibold text-teal-800 mb-4 text-center text-xl">
-            Why Choose PayVat?
+            Why Choose PayVAT?
           </h4>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
@@ -195,7 +194,7 @@ export default function AboutPayVat() {
         <Card className="text-center">
           <CardContent className="p-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Take Control?</h3>
-            <p className="text-gray-600 mb-6">Get back to focusing on growing your business. Sign up at PayVat.ie today and experience VAT the easy way.</p>
+            <p className="text-gray-600 mb-6">Get back to focusing on growing your business. Sign up at PayVAT.ie today and experience VAT the easy way.</p>
             <Button 
               className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
               onClick={() => window.location.href = '/signup'}
@@ -210,7 +209,11 @@ export default function AboutPayVat() {
       <LiveChat />
 
       {/* Footer */}
-      <Footer />
+      <footer className="bg-gray-800 text-white py-8 mt-12">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-sm">© PayVAT</p>
+        </div>
+      </footer>
     </div>
   )
 }

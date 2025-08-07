@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Bell, Settings, LogOut, Search, Euro, CheckCircle, Calendar, CreditCard, Shield, Clock, HelpCircle } from 'lucide-react'
 import LiveChat from "@/components/live-chat"
-import Footer from "@/components/footer"
 
 export default function PricingPage() {
   return (
@@ -14,7 +13,7 @@ export default function PricingPage() {
       <header className="bg-teal-700 text-white">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-thin">PAY <span className="text-teal-200">VAT</span></h1>
+            <h1 className="text-2xl font-thin">PayVAT</h1>
             
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
@@ -219,7 +218,7 @@ export default function PricingPage() {
 
         {/* Features Grid */}
         <div className="mb-12">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Why Choose PayVat?</h3>
+          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Why Choose PayVAT?</h3>
           <div className="grid md:grid-cols-3 gap-6">
             <Card>
               <CardContent className="p-6 text-center">
@@ -290,7 +289,7 @@ export default function PricingPage() {
         <Card className="text-center">
           <CardContent className="p-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Get Started?</h3>
-            <p className="text-gray-600 mb-6">Join thousands of Irish businesses who trust PayVat for their VAT compliance</p>
+            <p className="text-gray-600 mb-6">Join thousands of Irish businesses who trust PayVAT for their VAT compliance</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
@@ -313,7 +312,11 @@ export default function PricingPage() {
       <LiveChat />
 
       {/* Footer */}
-      <Footer />
+      <footer className="bg-gray-800 text-white py-8 mt-12">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-sm">© PayVAT</p>
+        </div>
+      </footer>
     </div>
   )
 }

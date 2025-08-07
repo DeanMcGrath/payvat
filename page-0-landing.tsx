@@ -2,24 +2,62 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin } from 'lucide-react'
+import { Input } from "@/components/ui/input"
+import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search } from 'lucide-react'
 import LiveChat from "./components/live-chat"
-import Footer from "./components/footer"
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gray-100">
+      {/* Header */}
+      <header className="bg-teal-700 text-white">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-thin">PayVAT</h1>
+            
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-2">
+                <Input
+                  placeholder="Search"
+                  className="w-64 bg-white text-gray-900 border-0"
+                />
+                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
+                  <Search className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <Bell className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <Settings className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Navigation */}
+        <div className="bg-teal-600 px-6 py-3">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center space-x-2 text-sm">
+              <span className="text-white">Home</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="text-center mb-12">
-          <h1 className="text-2xl font-thin text-gray-800 mb-4">
-            PAY <span className="text-teal-600">VAT</span>
-          </h1>
-          
-          <div className="w-20 h-0.5 bg-teal-600 mx-auto mb-8"></div>
-          
-          <h2 className="text-2xl text-gray-700 mb-4">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Simplify Your VAT Submission and Payments
           </h2>
+          
+          <div className="w-20 h-0.5 bg-teal-600 mx-auto mb-8"></div>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Fast, secure, and compliant VAT return submission and payment processing for Irish businesses. 
             Get your VAT obligations sorted in minutes, not hours.
@@ -70,7 +108,7 @@ export default function LandingPage() {
               Ready to Get Started?
             </h3>
             <p className="text-gray-600">
-              Join thousands of Irish businesses who trust PAY VAT for their compliance needs
+              Join thousands of Irish businesses who trust PayVAT for their compliance needs
             </p>
           </div>
 
@@ -93,7 +131,7 @@ export default function LandingPage() {
 
         <div className="bg-teal-50 rounded-xl p-6 border border-teal-200 mb-12">
           <h4 className="font-semibold text-teal-800 mb-4 text-center">
-            Why Choose PAY VAT?
+            Why Choose PayVAT?
           </h4>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
@@ -169,8 +207,13 @@ export default function LandingPage() {
         </div>
         {/* Live Chat */}
         <LiveChat />
+        
         {/* Footer */}
-        <Footer />
+        <footer className="bg-gray-800 text-white py-8 mt-12">
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <p className="text-sm">© PayVAT</p>
+          </div>
+        </footer>
       </div>
     </div>
   )
