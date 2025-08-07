@@ -234,6 +234,7 @@ export default function LoginPage() {
 
           {/* Live Chat */}
           <LiveChat />
+          </div>
         </div>
       </div>
       

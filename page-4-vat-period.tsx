@@ -4,9 +4,11 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { ArrowLeft, ArrowRight, Calendar } from 'lucide-react'
+import { Input } from "@/components/ui/input"
+import { ArrowLeft, ArrowRight, Calendar, Bell, Settings, LogOut, Search } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import LiveChat from "./components/live-chat"
+import Footer from "./components/footer"
 
 export default function VATReturnPeriod() {
   const [selectedYear, setSelectedYear] = useState("2025")
@@ -222,6 +224,7 @@ export default function VATReturnPeriod() {
           <p className="text-sm text-gray-500">
             Need help? <a href="#" className="text-teal-600 hover:text-teal-700">View VAT submission guide</a>
           </p>
+        </div>
         </div>
       </div>
       
