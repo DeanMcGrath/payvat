@@ -74,24 +74,63 @@ export default function VATReturnPeriod() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <h1 className="text-2xl font-thin text-gray-800">
-              PAY <span className="text-teal-600">VAT</span>
-            </h1>
+      <header className="bg-teal-700 text-white">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-thin">PayVAT</h1>
+            
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-2">
+                <Input
+                  placeholder="Search"
+                  className="w-64 bg-white text-gray-900 border-0"
+                />
+                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
+                  <Search className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="text-right">
+                <h3 className="text-lg font-bold text-white">Brian Cusack Trading Ltd</h3>
+                <p className="text-teal-100 font-mono text-sm">VAT: IE0352440A</p>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <Bell className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <Settings className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
-          <div className="text-right">
-            <h3 className="text-lg font-bold text-gray-800">Brian Cusack Trading Ltd</h3>
-            <p className="text-teal-600 font-mono text-sm">VAT: IE0352440A</p>
+        </div>
+        
+        {/* Navigation */}
+        <div className="bg-teal-600 px-6 py-3">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center space-x-2 text-sm">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => window.location.href = '/dashboard'}
+                className="flex items-center space-x-1 text-white hover:bg-teal-500"
+              >
+                <ArrowLeft className="h-3 w-3" />
+                <span>Dashboard</span>
+              </Button>
+              <span className="text-white"> / VAT Return Period</span>
+            </div>
           </div>
         </div>
       </header>
 
-      <div className="p-6 max-w-2xl mx-auto">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="max-w-2xl mx-auto">
         <div className="mb-8 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-100 rounded-full mb-4">
             <Calendar className="h-8 w-8 text-teal-600" />
@@ -185,14 +224,12 @@ export default function VATReturnPeriod() {
           </p>
         </div>
       </div>
-
+      
       {/* Live Chat */}
       <LiveChat />
-
+      
       {/* Footer */}
-      <footer className="mt-8 py-6 text-center border-t border-gray-200">
-        <p className="text-gray-500 text-sm">payvat.ie</p>
-      </footer>
+      <Footer />
     </div>
   )
 }

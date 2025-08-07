@@ -4,7 +4,9 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Bell, Settings, LogOut, Search } from 'lucide-react'
 import LiveChat from "./components/live-chat"
+import Footer from "./components/footer"
 import { z } from "zod"
 import { toast } from "sonner"
 
@@ -94,15 +96,58 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="flex items-center justify-center min-h-screen px-4">
-        <div className="w-full max-w-md">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <p className="text-gray-600 text-lg">
-              Create your account to get started.
-            </p>
+    <div className="min-h-screen bg-gray-100">
+      {/* Header */}
+      <header className="bg-teal-700 text-white">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-thin">PayVAT</h1>
+            
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-2">
+                <Input
+                  placeholder="Search"
+                  className="w-64 bg-white text-gray-900 border-0"
+                />
+                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
+                  <Search className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <Bell className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <Settings className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
+        </div>
+        
+        {/* Navigation */}
+        <div className="bg-teal-600 px-6 py-3">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center space-x-2 text-sm">
+              <span className="text-white">Sign Up</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="flex items-center justify-center">
+          <div className="w-full max-w-md">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <p className="text-gray-600 text-lg">
+                Create your account to get started.
+              </p>
+            </div>
           
           {/* Success Message */}
           {success && (
@@ -236,15 +281,12 @@ export default function SignupPage() {
           {/* Live Chat */}
           <LiveChat />
           
-          {/* Footer */}
-          <div className="mt-16 text-center border-t border-gray-200 pt-8">
-            <p className="text-gray-500 text-sm">payvat.ie</p>
-            <p className="text-xs text-gray-400 mt-2">
-              Secure VAT submission and payment processing
-            </p>
           </div>
         </div>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }

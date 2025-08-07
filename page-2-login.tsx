@@ -4,7 +4,9 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Bell, Settings, LogOut, Search } from 'lucide-react'
 import LiveChat from "./components/live-chat"
+import Footer from "./components/footer"
 import { z } from "zod"
 import { toast } from "sonner"
 
@@ -112,17 +114,52 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <div className="flex items-center justify-center">
-        <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-6 md:p-8 w-full max-w-md">
-          <div className="text-center mb-8">
-            <div className="inline-flex flex-col items-center">
-              <h1 className="text-2xl font-thin text-gray-800 mb-1">
-                PAY <span className="text-teal-600">VAT</span>
-              </h1>
-              <div className="w-16 h-0.5 bg-teal-600 mt-3"></div>
+    <div className="min-h-screen bg-gray-100">
+      {/* Header */}
+      <header className="bg-teal-700 text-white">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-thin">PayVAT</h1>
+            
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-2">
+                <Input
+                  placeholder="Search"
+                  className="w-64 bg-white text-gray-900 border-0"
+                />
+                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
+                  <Search className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <Bell className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <Settings className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
+        </div>
+        
+        {/* Navigation */}
+        <div className="bg-teal-600 px-6 py-3">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center space-x-2 text-sm">
+              <span className="text-white">Login</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="flex items-center justify-center">
+          <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-6 md:p-8 w-full max-w-md">
           
           <h2 className="text-gray-800 text-lg font-semibold mb-6 text-center">Login to Your Account</h2>
           
@@ -197,13 +234,11 @@ export default function LoginPage() {
 
           {/* Live Chat */}
           <LiveChat />
-
-          {/* Footer */}
-          <footer className="mt-8 py-6 text-center border-t border-gray-200">
-            <p className="text-gray-500 text-sm">payvat.ie</p>
-          </footer>
         </div>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }

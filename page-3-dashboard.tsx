@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Bell, FileText, CreditCard, Settings, LogOut, TrendingUp, Calendar, Euro, AlertCircle, Loader2 } from 'lucide-react'
+import { Bell, FileText, CreditCard, Settings, LogOut, TrendingUp, Calendar, Euro, AlertCircle, Loader2, Search } from 'lucide-react'
+import { Input } from "@/components/ui/input"
 import LiveChat from "./components/live-chat"
+import Footer from "./components/footer"
 import { useSubscription } from "./contexts/subscription-context"
 
 interface UserProfile {
@@ -105,34 +107,53 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-thin text-gray-800">
-              PAY <span className="text-teal-700">VAT</span>
-            </h1>
-          </div>
-          <div className="flex items-center space-x-6">
-            <div className="text-right">
-              <h3 className="text-lg font-bold text-teal-700">{user.businessName}</h3>
-              <p className="text-teal-700 font-mono text-sm">VAT: {user.vatNumber}</p>
+      <header className="bg-teal-700 text-white">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-thin">PayVAT</h1>
+            
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-2">
+                <Input
+                  placeholder="Search"
+                  className="w-64 bg-white text-gray-900 border-0"
+                />
+                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
+                  <Search className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="text-right">
+                <h3 className="text-lg font-bold text-white">{user.businessName}</h3>
+                <p className="text-teal-100 font-mono text-sm">VAT: {user.vatNumber}</p>
+              </div>
+              
+              <div className="flex items-center space-x-4">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <Bell className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
+                  <Settings className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600" onClick={handleLogout} title="Logout">
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm">
-                <Bell className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Settings className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="sm" onClick={handleLogout} title="Logout">
-                <LogOut className="h-4 w-4" />
-              </Button>
+          </div>
+        </div>
+        
+        {/* Navigation */}
+        <div className="bg-teal-600 px-6 py-3">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center space-x-2 text-sm">
+              <span className="text-white">Dashboard</span>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="p-4 md:p-6">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
@@ -265,9 +286,7 @@ export default function HomePage() {
       <LiveChat />
 
       {/* Footer */}
-      <footer className="mt-8 py-6 text-center border-t border-gray-200">
-        <p className="text-gray-500 text-sm">payvat.ie</p>
-      </footer>
+      <Footer />
     </div>
   )
 }
