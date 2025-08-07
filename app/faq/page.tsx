@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Bell, Settings, LogOut, Search, HelpCircle, CreditCard, Shield, Clock, Euro, FileText } from 'lucide-react'
 import LiveChat from "@/components/live-chat"
+import Footer from "@/components/footer"
 
 export default function FAQPage() {
   return (
@@ -222,11 +223,7 @@ export default function FAQPage() {
       <LiveChat />
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 mt-12">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-sm">© PayVAT</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
