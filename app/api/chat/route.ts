@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getUserFromRequest } from '@/lib/auth'
 import { z } from 'zod'
+import DOMPurify from 'isomorphic-dompurify'
+import { checkChatRateLimit } from '@/lib/chat-rate-limiter'
 
 // Validation schemas
 const createSessionSchema = z.object({
@@ -30,7 +32,7 @@ export async function POST(request: NextRequest) {
       const { userEmail, userName, userCompany } = createSessionSchema.parse(body)
       
       const user = await getUserFromRequest(request)
-      const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      const sessionId = `session_${crypto.randomUUID()}`
       
       const session = await prisma.chatSession.create({
         data: {
@@ -85,11 +87,30 @@ export async function POST(request: NextRequest) {
         )
       }
 
+      // Check rate limiting
+      const rateCheck = checkChatRateLimit(sessionId)
+      if (!rateCheck.allowed) {
+        return NextResponse.json(
+          { 
+            error: 'Rate limit exceeded',
+            message: rateCheck.message,
+            resetIn: rateCheck.resetIn
+          },
+          { status: 429 }
+        )
+      }
+
+      // Sanitize message content
+      const sanitizedMessage = DOMPurify.sanitize(message, { 
+        ALLOWED_TAGS: [],  // Strip all HTML tags
+        ALLOWED_ATTR: []   // Strip all attributes
+      })
+
       // Create message
       const newMessage = await prisma.chatMessage.create({
         data: {
           sessionId: session.id,
-          message,
+          message: sanitizedMessage,
           messageType,
           senderType: user ? 'user' : 'user', // Could be 'admin' if admin is sending
           senderId: user?.id,

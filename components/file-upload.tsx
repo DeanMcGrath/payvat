@@ -12,6 +12,7 @@ interface UploadedDocument {
   category: string
   uploadedAt: string
   isScanned: boolean
+  scanResult?: string
 }
 
 interface FileUploadProps {
@@ -183,19 +184,25 @@ export default function FileUpload({
                   <p className="text-sm font-medium text-gray-900">{file.fileName}</p>
                   <p className="text-xs text-gray-500">
                     {formatFileSize(file.fileSize)} • {file.category.replace('_', ' ')}
+                  </p>
+                  <div className="text-xs mt-1">
                     {file.isScanned && (
-                      <span className="ml-2 inline-flex items-center">
-                        <CheckCircle className="h-3 w-3 text-green-500 mr-1" />
-                        Scanned
+                      <span className="inline-flex items-center text-green-600">
+                        <CheckCircle className="h-3 w-3 mr-1" />
+                        {file.scanResult?.includes('€') ? (
+                          <span className="font-medium">{file.scanResult}</span>
+                        ) : (
+                          'Processed'
+                        )}
                       </span>
                     )}
                     {!file.isScanned && (
-                      <span className="ml-2 inline-flex items-center">
-                        <AlertCircle className="h-3 w-3 text-yellow-500 mr-1" />
-                        Pending scan
+                      <span className="inline-flex items-center text-yellow-600">
+                        <AlertCircle className="h-3 w-3 mr-1" />
+                        Processing document...
                       </span>
                     )}
-                  </p>
+                  </div>
                 </div>
               </div>
               <Button

@@ -1,5 +1,5 @@
-import ProtectedRoute from "../../components/protected-route"
-import VATSubmission from "../../page-4-vat-submission"
+import ProtectedRoute from "@/components/protected-route"
+import VATSubmission from "@/page-5-vat-submission"
 
 export default function VATSubmissionPage() {
   return (

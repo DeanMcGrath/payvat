@@ -87,7 +87,7 @@ function AdminChatPage() {
   const loadMessages = async (sessionId: string) => {
     setIsLoadingMessages(true)
     try {
-      const response = await fetch(`/api/chat?sessionId=${sessionId}`)
+      const response = await fetch(`/api/admin/chat?sessionId=${sessionId}`)
       if (response.ok) {
         const data = await response.json()
         if (data.success) {

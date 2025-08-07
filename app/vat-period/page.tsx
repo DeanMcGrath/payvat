@@ -1,5 +1,5 @@
-import ProtectedRoute from "../../components/protected-route"
-import VATPeriod from "../../page-3-vat-period"
+import ProtectedRoute from "@/components/protected-route"
+import VATPeriod from "@/page-4-vat-period"
 
 export default function VATPeriodPage() {
   return (

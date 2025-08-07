@@ -3,6 +3,7 @@ import { createAdminRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { AuthUser } from '@/lib/auth'
 import { z } from 'zod'
+import DOMPurify from 'isomorphic-dompurify'
 
 const sendAdminMessageSchema = z.object({
   sessionId: z.string().min(1),
@@ -18,10 +19,53 @@ const updateSessionSchema = z.object({
   isActive: z.boolean().optional(),
 })
 
-// GET /api/admin/chat - List all active chat sessions
+// GET /api/admin/chat - List all active chat sessions OR get messages for specific session
 async function getAdminChats(request: NextRequest, user: AuthUser) {
   try {
     const { searchParams } = new URL(request.url)
+    const sessionId = searchParams.get('sessionId')
+    
+    // If sessionId is provided, return messages for that session
+    if (sessionId) {
+      const session = await prisma.chatSession.findUnique({
+        where: { sessionId },
+        include: {
+          messages: {
+            orderBy: { createdAt: 'asc' }
+          }
+        }
+      })
+
+      if (!session) {
+        return NextResponse.json(
+          { error: 'Chat session not found' },
+          { status: 404 }
+        )
+      }
+
+      return NextResponse.json({
+        success: true,
+        session: {
+          id: session.id,
+          sessionId: session.sessionId,
+          isActive: session.isActive,
+          isResolved: session.isResolved,
+          createdAt: session.createdAt,
+        },
+        messages: session.messages.map(msg => ({
+          id: msg.id,
+          message: msg.message,
+          messageType: msg.messageType,
+          senderType: msg.senderType,
+          senderName: msg.senderName,
+          isRead: msg.isRead,
+          createdAt: msg.createdAt,
+          fileName: msg.fileName,
+          fileUrl: msg.fileUrl,
+        }))
+      })
+    }
+    
     const status = searchParams.get('status') || 'active' // active, resolved, all
     const page = parseInt(searchParams.get('page') || '1')
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 50)
@@ -134,11 +178,17 @@ async function adminChatAction(request: NextRequest, user: AuthUser) {
         )
       }
 
+      // Sanitize admin message content
+      const sanitizedMessage = DOMPurify.sanitize(message, { 
+        ALLOWED_TAGS: [],  // Strip all HTML tags
+        ALLOWED_ATTR: []   // Strip all attributes
+      })
+
       // Create admin message
       const newMessage = await prisma.chatMessage.create({
         data: {
           sessionId: session.id,
-          message,
+          message: sanitizedMessage,
           messageType,
           senderType: 'admin',
           senderId: user.id,

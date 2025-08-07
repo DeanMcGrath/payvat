@@ -1,5 +1,6 @@
-import { SubscriptionProvider } from '../contexts/subscription-context'
-import { ErrorBoundary } from '../components/error-boundary'
+import { SubscriptionProvider } from '@/contexts/subscription-context'
+import { ErrorBoundary } from '@/components/error-boundary'
+import '@/lib/env-validation' // Validate environment on startup
 import './globals.css'
 
 export default function RootLayout({

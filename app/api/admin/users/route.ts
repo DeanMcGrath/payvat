@@ -82,7 +82,7 @@ async function getUsers(request: NextRequest, user: AuthUser) {
     // Get additional statistics for each user
     const usersWithStats = await Promise.all(
       users.map(async (user) => {
-        const [totalVATPaid, pendingPayments, lastvATReturn] = await Promise.all([
+        const [totalVATPaid, pendingPayments, lastVATReturn] = await Promise.all([
           // Total VAT paid
           prisma.payment.aggregate({
             where: {
@@ -115,12 +115,12 @@ async function getUsers(request: NextRequest, user: AuthUser) {
         return {
           ...user,
           stats: {
-            totalvATReturns: user._count.vatReturns,
+            totalVATReturns: user._count.vatReturns,
             totalDocuments: user._count.documents,
             totalPayments: user._count.payments,
             totalVATPaid: Number(totalVATPaid._sum.amount || 0),
             pendingPayments,
-            lastvATReturn
+            lastVATReturn
           }
         }
       })

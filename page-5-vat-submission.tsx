@@ -1,12 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Upload, Calculator, FileText, CheckCircle } from 'lucide-react'
+import { ArrowLeft, Upload, Calculator, FileText, CheckCircle, Sparkles, RefreshCw } from 'lucide-react'
 import LiveChat from "@/components/live-chat"
 import FileUpload from "@/components/file-upload"
 
@@ -14,10 +14,46 @@ export default function VATReturnSubmission() {
   const [salesVAT, setSalesVAT] = useState("9450.00")
   const [purchaseVAT, setPurchaseVAT] = useState("2100.00")
   const [netVAT, setNetVAT] = useState("7350.00")
+  const [extractedVATData, setExtractedVATData] = useState<any>(null)
+  const [loadingExtractedData, setLoadingExtractedData] = useState(false)
+  const [useExtractedData, setUseExtractedData] = useState(false)
 
   // Mock selected period data (would come from previous page)
   const selectedPeriod = "November - December 2024"
   const dueDate = "15 Jan 2025"
+
+  // Load extracted VAT data from documents on component mount
+  useEffect(() => {
+    loadExtractedVATData()
+  }, [])
+
+  const loadExtractedVATData = async () => {
+    try {
+      setLoadingExtractedData(true)
+      const response = await fetch('/api/documents/extracted-vat')
+      
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success && result.extractedVAT) {
+          setExtractedVATData(result.extractedVAT)
+          console.log('Loaded extracted VAT data:', result.extractedVAT)
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load extracted VAT data:', error)
+    } finally {
+      setLoadingExtractedData(false)
+    }
+  }
+
+  const useExtractedVATData = () => {
+    if (extractedVATData) {
+      setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
+      setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
+      setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
+      setUseExtractedData(true)
+    }
+  }
 
   const calculateNetVAT = async () => {
     try {
@@ -105,11 +141,82 @@ export default function VATReturnSubmission() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Form */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Extracted VAT Data Card */}
+            {extractedVATData && extractedVATData.processedDocuments > 0 && (
+              <Card className="border-emerald-200 bg-emerald-50">
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold text-emerald-900 flex items-center">
+                    <Sparkles className="h-5 w-5 mr-2 text-emerald-600" />
+                    VAT Data Extracted from Documents
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-white p-3 rounded-lg border border-emerald-200">
+                      <div className="text-sm text-gray-600">Sales VAT</div>
+                      <div className="text-lg font-semibold text-emerald-600">
+                        €{extractedVATData.totalSalesVAT.toFixed(2)}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {extractedVATData.salesDocuments.length} document(s)
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white p-3 rounded-lg border border-emerald-200">
+                      <div className="text-sm text-gray-600">Purchase VAT</div>
+                      <div className="text-lg font-semibold text-emerald-600">
+                        €{extractedVATData.totalPurchaseVAT.toFixed(2)}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {extractedVATData.purchaseDocuments.length} document(s)
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white p-3 rounded-lg border border-emerald-200">
+                      <div className="text-sm text-gray-600">Confidence</div>
+                      <div className="text-lg font-semibold text-emerald-600">
+                        {extractedVATData.averageConfidence.toFixed(0)}%
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {extractedVATData.processedDocuments} processed
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex space-x-2">
+                    <Button 
+                      onClick={useExtractedVATData}
+                      className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                      disabled={useExtractedData}
+                    >
+                      <Calculator className="h-4 w-4 mr-2" />
+                      {useExtractedData ? 'Using Extracted Data' : 'Use Extracted Amounts'}
+                    </Button>
+                    
+                    <Button 
+                      onClick={loadExtractedVATData}
+                      variant="outline" 
+                      className="border-emerald-200 text-emerald-700"
+                      disabled={loadingExtractedData}
+                    >
+                      <RefreshCw className={`h-4 w-4 mr-2 ${loadingExtractedData ? 'animate-spin' : ''}`} />
+                      Refresh
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
                   <Calculator className="h-5 w-5 mr-2 text-emerald-600" />
                   VAT Calculation
+                  {useExtractedData && (
+                    <Badge className="ml-2 bg-emerald-100 text-emerald-800">
+                      From Documents
+                    </Badge>
+                  )}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -185,7 +292,11 @@ export default function VATReturnSubmission() {
                   title="Section 1: VAT on Sales Documents"
                   description="Upload sales-related documents"
                   acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
-                  onUploadSuccess={(doc) => console.log('Sales document uploaded:', doc)}
+                  onUploadSuccess={(doc) => {
+                    console.log('Sales document uploaded:', doc)
+                    // Refresh extracted VAT data when new documents are uploaded
+                    setTimeout(() => loadExtractedVATData(), 1000) // Small delay to allow processing
+                  }}
                 />
 
                 {/* VAT on Purchases Documents */}
@@ -194,7 +305,11 @@ export default function VATReturnSubmission() {
                   title="Section 2: VAT on Purchases Documents"
                   description="Upload purchase-related documents"
                   acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
-                  onUploadSuccess={(doc) => console.log('Purchase document uploaded:', doc)}
+                  onUploadSuccess={(doc) => {
+                    console.log('Purchase document uploaded:', doc)
+                    // Refresh extracted VAT data when new documents are uploaded
+                    setTimeout(() => loadExtractedVATData(), 1000) // Small delay to allow processing
+                  }}
                 />
               </CardContent>
             </Card>

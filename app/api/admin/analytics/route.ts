@@ -22,7 +22,7 @@ async function getAnalytics(request: NextRequest, user: AuthUser) {
       const [
         totalUsers,
         activeUsers,
-        totalvATReturns,
+        totalVATReturns,
         totalPayments,
         totalDocuments,
         recentUsers,
@@ -177,7 +177,7 @@ async function getAnalytics(request: NextRequest, user: AuthUser) {
           overview: {
             totalUsers,
             activeUsers,
-            totalvATReturns,
+            totalVATReturns,
             totalPayments: totalPayments._count.id,
             totalPaymentVolume: Number(totalPayments._sum.amount || 0),
             totalDocuments,

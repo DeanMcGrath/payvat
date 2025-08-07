@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { useSubscription } from '../contexts/subscription-context'
+import { useSubscription } from '@/contexts/subscription-context'
 import PaywallPopup from './paywall-popup'
 
 interface ProtectedRouteProps {

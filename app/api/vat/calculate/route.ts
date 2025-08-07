@@ -32,6 +32,46 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
     const startDate = new Date(periodStart)
     const endDate = new Date(periodEnd)
     
+    // Get VAT data extracted from documents (optional enhancement)
+    let documentExtractedVAT = { salesVAT: 0, purchaseVAT: 0, documentCount: 0 }
+    
+    try {
+      // Get extracted VAT data from documents for this user
+      const auditLogs = await prisma.auditLog.findMany({
+        where: {
+          userId: user.id,
+          action: 'VAT_DATA_EXTRACTED',
+          entityType: 'DOCUMENT',
+          createdAt: {
+            gte: startDate,
+            lte: endDate
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      })
+      
+      // Aggregate extracted VAT amounts from documents
+      for (const log of auditLogs) {
+        if (log.metadata && (log.metadata as any).extractedData) {
+          const extractedData = (log.metadata as any).extractedData
+          if (extractedData.salesVAT && Array.isArray(extractedData.salesVAT)) {
+            documentExtractedVAT.salesVAT += extractedData.salesVAT.reduce((sum: number, amount: number) => sum + amount, 0)
+          }
+          if (extractedData.purchaseVAT && Array.isArray(extractedData.purchaseVAT)) {
+            documentExtractedVAT.purchaseVAT += extractedData.purchaseVAT.reduce((sum: number, amount: number) => sum + amount, 0)
+          }
+          documentExtractedVAT.documentCount++
+        }
+      }
+      
+      console.log('Extracted VAT from documents:', documentExtractedVAT)
+    } catch (error) {
+      console.warn('Failed to get extracted VAT data:', error)
+      // Continue with manual calculation if document extraction fails
+    }
+    
     // Perform VAT calculation
     const calculation = performVATCalculation({
       salesVAT,
@@ -117,7 +157,13 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
         periodStart: calculation.periodStart.toISOString(),
         periodEnd: calculation.periodEnd.toISOString(),
         dueDate: calculation.dueDate.toISOString(),
-        warnings: calculation.warnings
+        warnings: calculation.warnings,
+        documentExtracted: {
+          salesVAT: Math.round(documentExtractedVAT.salesVAT * 100) / 100,
+          purchaseVAT: Math.round(documentExtractedVAT.purchaseVAT * 100) / 100,
+          documentCount: documentExtractedVAT.documentCount,
+          hasData: documentExtractedVAT.documentCount > 0
+        }
       }
     })
     

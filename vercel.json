@@ -28,7 +28,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "*"
+          "value": "https://payvat.ie"
         },
         {
           "key": "Access-Control-Allow-Methods", 

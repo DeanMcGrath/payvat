@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { createProtectedRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { validateFile, processFileForServerless, getDocumentType } from '@/lib/serverlessFileUtils'
+import { processDocument } from '@/lib/documentProcessor'
 import { AuthUser } from '@/lib/auth'
 
 async function uploadFile(request: NextRequest, user: AuthUser) {
@@ -97,9 +98,77 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
         fileHash: processedFile.fileHash,
         documentType: getDocumentType(processedFile.extension) as any,
         category: category as any,
-        isScanned: false, // Will be updated by virus scanning service
+        isScanned: false, // Will be updated by document processing
       }
     })
+    
+    // Process document immediately after upload for VAT extraction
+    console.log(`Starting document processing for: ${processedFile.originalName}`)
+    
+    try {
+      const processingResult = await processDocument(
+        processedFile.fileData,
+        processedFile.mimeType,
+        processedFile.originalName,
+        category
+      )
+      
+      if (processingResult.success) {
+        // Update document with processing results
+        await prisma.document.update({
+          where: { id: document.id },
+          data: {
+            isScanned: true,
+            scanResult: processingResult.scanResult,
+          }
+        })
+        
+        // Log extracted VAT data for audit trail
+        if (processingResult.extractedData && 
+            (processingResult.extractedData.salesVAT.length > 0 || 
+             processingResult.extractedData.purchaseVAT.length > 0)) {
+          await prisma.auditLog.create({
+            data: {
+              userId: user.id,
+              action: 'VAT_DATA_EXTRACTED',
+              entityType: 'DOCUMENT',
+              entityId: document.id,
+              ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+              userAgent: request.headers.get('user-agent') || 'unknown',
+              metadata: {
+                extractedData: JSON.parse(JSON.stringify(processingResult.extractedData)),
+                fileName: processedFile.originalName,
+                category,
+                confidence: processingResult.extractedData.confidence,
+                timestamp: new Date().toISOString()
+              }
+            }
+          })
+        }
+        
+        console.log(`Document processing completed: ${processingResult.scanResult}`)
+      } else {
+        console.warn(`Document processing failed: ${processingResult.error}`)
+        // Update with failed status
+        await prisma.document.update({
+          where: { id: document.id },
+          data: {
+            isScanned: false,
+            scanResult: processingResult.scanResult || 'Processing failed',
+          }
+        })
+      }
+    } catch (processingError) {
+      console.error('Document processing error:', processingError)
+      // Update with error status
+      await prisma.document.update({
+        where: { id: document.id },
+        data: {
+          isScanned: false,
+          scanResult: 'Processing failed due to technical error',
+        }
+      })
+    }
     
     // Create audit log
     await prisma.auditLog.create({
@@ -120,6 +189,11 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
       }
     })
     
+    // Fetch updated document status
+    const updatedDocument = await prisma.document.findUnique({
+      where: { id: document.id }
+    })
+
     return NextResponse.json({
       success: true,
       document: {
@@ -128,7 +202,8 @@ async function uploadFile(request: NextRequest, user: AuthUser) {
         fileSize: document.fileSize,
         category: document.category,
         uploadedAt: document.uploadedAt,
-        isScanned: document.isScanned
+        isScanned: updatedDocument?.isScanned || false,
+        scanResult: updatedDocument?.scanResult
       }
     })
     
