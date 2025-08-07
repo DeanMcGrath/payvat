@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { MessageCircle, X, Send, Loader2 } from 'lucide-react'
+import { MessageCircle, X, Send, Loader2, Bot, ThumbsUp, ThumbsDown } from 'lucide-react'
 
 interface ChatMessage {
   id: string
@@ -126,7 +126,19 @@ export default function LiveChat() {
           // Add the sent message to the chat
           setMessages(prev => [...prev, data.message])
           
-          // Poll for admin response after a short delay
+          // If there's an AI response, add it immediately
+          if (data.aiResponse) {
+            setMessages(prev => [...prev, {
+              id: data.aiResponse.id,
+              message: data.aiResponse.message,
+              senderType: 'admin', // Treat AI as admin for styling
+              senderName: data.aiResponse.senderName,
+              createdAt: data.aiResponse.createdAt,
+              messageType: 'text'
+            }])
+          }
+          
+          // Still poll for any additional responses after a short delay
           setTimeout(() => {
             loadMessages(session.sessionId)
           }, 1000)
@@ -189,29 +201,60 @@ export default function LiveChat() {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {messages.map((msg) => (
-                      <div
-                        key={msg.id}
-                        className={`rounded-lg p-3 max-w-[85%] ${
-                          msg.senderType === 'user'
-                            ? 'bg-emerald-500 text-white ml-auto'
-                            : msg.senderType === 'admin'
-                            ? 'bg-blue-100 text-gray-800'
-                            : 'bg-gray-100 text-gray-800'
-                        }`}
-                      >
-                        <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
-                        <div className="mt-1 text-xs opacity-75">
-                          <span>{msg.senderName}</span>
-                          <span className="ml-2">
-                            {new Date(msg.createdAt).toLocaleTimeString('en-IE', { 
-                              hour: '2-digit', 
-                              minute: '2-digit' 
-                            })}
-                          </span>
+                    {messages.map((msg) => {
+                      const isAI = msg.senderName?.includes('🤖') || msg.senderName?.includes('Assistant')
+                      
+                      return (
+                        <div
+                          key={msg.id}
+                          className={`rounded-lg p-3 max-w-[85%] ${
+                            msg.senderType === 'user'
+                              ? 'bg-emerald-500 text-white ml-auto'
+                              : msg.senderType === 'admin'
+                              ? isAI 
+                                ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-gray-800 border border-blue-200'
+                                : 'bg-blue-100 text-gray-800'
+                              : 'bg-gray-100 text-gray-800'
+                          }`}
+                        >
+                          <div className="flex items-start space-x-2">
+                            {isAI && (
+                              <Bot className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                            )}
+                            <div className="flex-1">
+                              <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                              <div className="mt-1 text-xs opacity-75 flex items-center justify-between">
+                                <div>
+                                  <span>{msg.senderName}</span>
+                                  <span className="ml-2">
+                                    {new Date(msg.createdAt).toLocaleTimeString('en-IE', { 
+                                      hour: '2-digit', 
+                                      minute: '2-digit' 
+                                    })}
+                                  </span>
+                                </div>
+                                {isAI && msg.senderType !== 'user' && (
+                                  <div className="flex space-x-1 ml-2">
+                                    <button 
+                                      className="text-green-600 hover:text-green-700 transition-colors"
+                                      title="Helpful response"
+                                    >
+                                      <ThumbsUp className="h-3 w-3" />
+                                    </button>
+                                    <button 
+                                      className="text-red-600 hover:text-red-700 transition-colors"
+                                      title="Not helpful"
+                                    >
+                                      <ThumbsDown className="h-3 w-3" />
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                     <div ref={messagesEndRef} />
                   </div>
                 )}

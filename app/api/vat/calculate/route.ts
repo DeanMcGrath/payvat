@@ -3,6 +3,8 @@ import { createProtectedRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { performVATCalculation, vatCalculationSchema } from '@/lib/vatUtils'
 import { AuthUser } from '@/lib/auth'
+import { analyzeVATCalculation, VATCalculationInput } from '@/lib/ai/vatAdvice'
+import { isAIEnabled } from '@/lib/ai/openai'
 
 async function calculateVAT(request: NextRequest, user: AuthUser) {
   try {
@@ -127,6 +129,37 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
       })
     }
     
+    // AI-powered VAT analysis (if available)
+    let aiAnalysis = null
+    if (isAIEnabled()) {
+      try {
+        const analysisInput: VATCalculationInput = {
+          salesVAT: calculation.salesVAT,
+          purchaseVAT: calculation.purchaseVAT,
+          netVAT: calculation.netVAT,
+          periodStart: startDate.toISOString(),
+          periodEnd: endDate.toISOString(),
+          businessType: user.businessName || 'General Business'
+        }
+        
+        const analysisResult = await analyzeVATCalculation(analysisInput, user.id)
+        
+        if (analysisResult.success && analysisResult.analysis) {
+          aiAnalysis = {
+            status: analysisResult.analysis.status,
+            riskLevel: analysisResult.analysis.riskLevel,
+            recommendations: analysisResult.analysis.recommendations,
+            issues: analysisResult.analysis.issues,
+            suggestions: analysisResult.suggestions
+          }
+          
+          console.log(`AI VAT analysis: ${analysisResult.analysis.status} (${analysisResult.analysis.riskLevel} risk)`)
+        }
+      } catch (aiError) {
+        console.warn('AI analysis failed, continuing without:', aiError)
+      }
+    }
+
     // Create audit log
     await prisma.auditLog.create({
       data: {
@@ -142,6 +175,7 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
           netVAT: calculation.netVAT,
           period: `${startDate.toISOString()} to ${endDate.toISOString()}`,
           warnings: calculation.warnings,
+          aiAnalysis: aiAnalysis,
           timestamp: new Date().toISOString()
         }
       }
@@ -163,7 +197,8 @@ async function calculateVAT(request: NextRequest, user: AuthUser) {
           purchaseVAT: Math.round(documentExtractedVAT.purchaseVAT * 100) / 100,
           documentCount: documentExtractedVAT.documentCount,
           hasData: documentExtractedVAT.documentCount > 0
-        }
+        },
+        aiAnalysis: aiAnalysis // Include AI analysis in response
       }
     })
     

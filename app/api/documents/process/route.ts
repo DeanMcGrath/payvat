@@ -65,12 +65,13 @@ async function processDocumentEndpoint(request: NextRequest, user: AuthUser) {
     
     console.log(`Processing document: ${document.originalName} (${document.category})`)
     
-    // Process the document
+    // Process the document with AI enhancement
     const result = await processDocument(
       document.fileData,
       document.mimeType,
       document.originalName,
-      document.category
+      document.category,
+      user.id // Pass user ID for AI usage tracking
     )
     
     if (!result.success) {

@@ -4,6 +4,8 @@ import { getUserFromRequest } from '@/lib/auth'
 import { z } from 'zod'
 import DOMPurify from 'isomorphic-dompurify'
 import { checkChatRateLimit } from '@/lib/chat-rate-limiter'
+import { generateChatResponse, getConversationContext, logChatInteraction } from '@/lib/ai/chatbot'
+import { isAIEnabled } from '@/lib/ai/openai'
 
 // Validation schemas
 const createSessionSchema = z.object({
@@ -47,14 +49,32 @@ export async function POST(request: NextRequest) {
         }
       })
 
-      // Create welcome message
+      // Create welcome message (with AI enhancement if available)
+      let welcomeMessage = "Hi! How can we help you with your VAT submission today?"
+      
+      if (isAIEnabled() && user) {
+        try {
+          const context = await getConversationContext(user.id)
+          const aiWelcome = await generateChatResponse(
+            "Welcome new user to VAT support chat",
+            context
+          )
+          
+          if (aiWelcome.success && aiWelcome.response) {
+            welcomeMessage = aiWelcome.response
+          }
+        } catch (error) {
+          console.warn('AI welcome message failed, using default:', error)
+        }
+      }
+
       await prisma.chatMessage.create({
         data: {
           sessionId: session.id,
-          message: "Hi! How can we help you with your VAT submission today?",
+          message: welcomeMessage,
           messageType: 'text',
           senderType: 'system',
-          senderName: 'Support Team',
+          senderName: isAIEnabled() ? 'PAY VAT Assistant 🤖' : 'Support Team',
           isRead: true,
         }
       })
@@ -130,6 +150,87 @@ export async function POST(request: NextRequest) {
         }
       })
 
+      // Generate AI response if enabled and no admin is online
+      let aiResponseMessage = null
+      if (isAIEnabled() && user) {
+        try {
+          // Get conversation context
+          const context = await getConversationContext(user.id)
+          
+          // Get recent conversation history for context
+          const recentMessages = await prisma.chatMessage.findMany({
+            where: { sessionId: session.id },
+            orderBy: { createdAt: 'desc' },
+            take: 10,
+            select: {
+              message: true,
+              senderType: true,
+            }
+          })
+          
+          const conversationHistory = recentMessages
+            .reverse()
+            .map(msg => ({
+              role: (msg.senderType === 'user' ? 'user' : 'assistant') as 'user' | 'assistant',
+              content: msg.message
+            }))
+          
+          // Generate AI response
+          const aiResponse = await generateChatResponse(
+            sanitizedMessage,
+            context,
+            conversationHistory
+          )
+          
+          if (aiResponse.success && aiResponse.response) {
+            // Create AI response message
+            aiResponseMessage = await prisma.chatMessage.create({
+              data: {
+                sessionId: session.id,
+                message: aiResponse.response,
+                messageType: 'text',
+                senderType: 'system',
+                senderName: 'PAY VAT Assistant 🤖',
+                isRead: false,
+              }
+            })
+            
+            // Log the interaction
+            await logChatInteraction(
+              session.sessionId,
+              sanitizedMessage,
+              aiResponse.response,
+              undefined, // wasHelpful will be set by user feedback
+              user.id
+            )
+            
+            console.log('AI response generated for chat session:', session.sessionId)
+            
+            // If human support is required, flag the session
+            if (aiResponse.requiresHumanSupport) {
+              await prisma.chatSession.update({
+                where: { id: session.id },
+                data: { isResolved: false }
+              })
+              
+              // Create a system message about escalation
+              await prisma.chatMessage.create({
+                data: {
+                  sessionId: session.id,
+                  message: `This conversation has been flagged for human support: ${aiResponse.escalationReason}`,
+                  messageType: 'system',
+                  senderType: 'system',
+                  senderName: 'System',
+                  isRead: true,
+                }
+              })
+            }
+          }
+        } catch (aiError) {
+          console.warn('AI chat response failed:', aiError)
+        }
+      }
+
       return NextResponse.json({
         success: true,
         message: {
@@ -141,7 +242,13 @@ export async function POST(request: NextRequest) {
           createdAt: newMessage.createdAt,
           fileName: newMessage.fileName,
           fileUrl: newMessage.fileUrl,
-        }
+        },
+        aiResponse: aiResponseMessage ? {
+          id: aiResponseMessage.id,
+          message: aiResponseMessage.message,
+          senderName: aiResponseMessage.senderName,
+          createdAt: aiResponseMessage.createdAt,
+        } : null
       })
     }
 

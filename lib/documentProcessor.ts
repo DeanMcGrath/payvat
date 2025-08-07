@@ -1,7 +1,11 @@
 /**
  * Document Processing Service
  * Handles OCR text extraction and VAT amount detection from uploaded documents
+ * Enhanced with OpenAI Vision API for improved accuracy
  */
+
+import { processDocumentWithAI, type AIDocumentProcessingResult } from './ai/documentAnalysis'
+import { isAIEnabled } from './ai/openai'
 
 export interface ExtractedVATData {
   salesVAT: number[]
@@ -271,15 +275,38 @@ export function extractVATDataFromText(
 
 /**
  * Process a document: extract text and VAT data
+ * Uses AI when available, falls back to legacy processing
  */
 export async function processDocument(
   fileData: string,
   mimeType: string,
   fileName: string,
-  category: string
+  category: string,
+  userId?: string
 ): Promise<DocumentProcessingResult> {
   try {
-    console.log(`Processing document: ${fileName} (${category})`)
+    console.log(`Processing document: ${fileName} (${category}) - AI enabled: ${isAIEnabled()}`)
+    
+    // Try AI processing first if available
+    if (isAIEnabled()) {
+      const aiResult = await processDocumentWithAI(fileData, mimeType, fileName, category, userId)
+      
+      if (aiResult.success) {
+        // Convert AI result to legacy format
+        return {
+          success: aiResult.success,
+          isScanned: aiResult.isScanned,
+          scanResult: `🤖 AI Enhanced: ${aiResult.scanResult}`,
+          extractedData: convertToLegacyFormat(aiResult.extractedData),
+          error: aiResult.error
+        }
+      } else {
+        console.warn('AI processing failed, falling back to legacy processing:', aiResult.error)
+      }
+    }
+    
+    // Fallback to legacy processing
+    console.log('Using legacy document processing')
     
     // Step 1: Extract text from document
     const textResult = await extractTextFromDocument(fileData, mimeType, fileName)
@@ -302,7 +329,7 @@ export async function processDocument(
       ? `Extracted ${vatAmounts.length} VAT amount(s): €${vatAmounts.join(', €')} (${Math.round(extractedData.confidence * 100)}% confidence)`
       : 'Document scanned but no VAT amounts detected'
     
-    console.log(`Document processing complete: ${scanResult}`)
+    console.log(`Legacy document processing complete: ${scanResult}`)
     
     return {
       success: true,
@@ -319,6 +346,39 @@ export async function processDocument(
       scanResult: 'Processing failed due to technical error',
       error: error instanceof Error ? error.message : 'Unknown error'
     }
+  }
+}
+
+/**
+ * Convert enhanced AI data to legacy format for compatibility
+ */
+function convertToLegacyFormat(enhancedData: any): ExtractedVATData | undefined {
+  if (!enhancedData) return undefined
+  
+  return {
+    salesVAT: enhancedData.salesVAT || [],
+    purchaseVAT: enhancedData.purchaseVAT || [],
+    totalAmount: enhancedData.totalAmount,
+    vatRate: enhancedData.vatRate,
+    confidence: enhancedData.confidence || 0,
+    extractedText: [enhancedData.extractedText || ''],
+    documentType: mapDocumentType(enhancedData.documentType)
+  }
+}
+
+/**
+ * Map enhanced document types to legacy format
+ */
+function mapDocumentType(type: string): ExtractedVATData['documentType'] {
+  switch (type) {
+    case 'INVOICE':
+      return 'SALES_INVOICE'
+    case 'RECEIPT':
+      return 'SALES_RECEIPT'
+    case 'CREDIT_NOTE':
+      return 'PURCHASE_INVOICE'
+    default:
+      return 'OTHER'
   }
 }
 

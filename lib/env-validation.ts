@@ -22,6 +22,9 @@ export interface EnvConfig {
   
   // Security
   ENCRYPTION_KEY?: string
+  
+  // AI Configuration
+  OPENAI_API_KEY?: string
 }
 
 const requiredEnvVars: (keyof EnvConfig)[] = [
@@ -36,7 +39,8 @@ const optionalEnvVars: (keyof EnvConfig)[] = [
   'STRIPE_SECRET_KEY',
   'STRIPE_PUBLISHABLE_KEY',
   'STRIPE_WEBHOOK_SECRET',
-  'ENCRYPTION_KEY'
+  'ENCRYPTION_KEY',
+  'OPENAI_API_KEY'
 ]
 
 export function validateEnvironment(): EnvConfig {
@@ -98,6 +102,7 @@ export function validateEnvironment(): EnvConfig {
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     NODE_ENV: (process.env.NODE_ENV as EnvConfig['NODE_ENV']) || 'development',
     ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   }
 }
 
