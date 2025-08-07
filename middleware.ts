@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 // Security: Rate limiting configuration
 const RATE_LIMIT_MAX_REQUESTS = 100 // requests per window
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000 // 15 minutes
-const LOGIN_RATE_LIMIT = 5 // login attempts per window
+const LOGIN_RATE_LIMIT = 20 // login attempts per window (increased from 5 to prevent blocking legitimate users)
 const PAYMENT_RATE_LIMIT = 10 // payment attempts per window
 
 // In-memory store for rate limiting (in production, use Redis or similar)
@@ -66,10 +66,11 @@ export function middleware(request: NextRequest) {
   let windowMs = RATE_LIMIT_WINDOW_MS
   
   // Stricter limits for sensitive endpoints
-  if (pathname.includes('/login') || pathname.includes('/api/auth')) {
+  // Only apply login rate limit to actual login API calls, not page loads
+  if (pathname === '/api/auth/login' || pathname === '/api/auth/register') {
     limit = LOGIN_RATE_LIMIT
     windowMs = RATE_LIMIT_WINDOW_MS
-  } else if (pathname.includes('/payment') || pathname.includes('/secure-payment')) {
+  } else if (pathname.includes('/api/payments') || pathname.includes('/api/vat/submit')) {
     limit = PAYMENT_RATE_LIMIT
     windowMs = RATE_LIMIT_WINDOW_MS
   }
