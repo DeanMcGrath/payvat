@@ -1,6 +1,3 @@
-// VAT PAY Database Schema - Simplified for Multi-tenant Database
-// Uses string constants instead of enums to avoid conflicts
-
 generator client {
   provider = "prisma-client-js"
   output   = "../lib/generated/prisma"
@@ -22,167 +19,111 @@ model tenants {
 }
 
 model User {
-  id                String   @id @default(cuid())
-  email             String   @unique
-  password          String
-  role              String   @default("USER") // USER, ADMIN, SUPER_ADMIN
-  
-  // Business Information
-  businessName      String
-  vatNumber         String   @unique
-  
-  // Profile
-  firstName         String?
-  lastName          String?
-  phone             String?
-  address           String?
-  
-  // Security
-  emailVerified     DateTime?
-  lastLoginAt       DateTime?
-  passwordResetToken String?
+  id                   String      @id @default(cuid())
+  email                String      @unique
+  password             String
+  role                 String      @default("USER")
+  businessName         String
+  vatNumber            String      @unique
+  firstName            String?
+  lastName             String?
+  phone                String?
+  address              String?
+  emailVerified        DateTime?
+  lastLoginAt          DateTime?
+  passwordResetToken   String?
   passwordResetExpires DateTime?
-  
-  // Timestamps
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  
-  // Relations
-  vatReturns        VATReturn[]
-  documents         Document[]
-  payments          Payment[]
-  auditLogs         AuditLog[]
-  
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  auditLogs            AuditLog[]
+  documents            Document[]
+  payments             Payment[]
+  vatReturns           VATReturn[]
+
   @@map("vat_users")
 }
 
 model VATReturn {
-  id                String        @id @default(cuid())
-  userId            String
-  
-  // VAT Period Information
-  periodStart       DateTime
-  periodEnd         DateTime
-  dueDate           DateTime
-  
-  // VAT Calculations
-  salesVAT          Decimal
-  purchaseVAT       Decimal
-  netVAT            Decimal
-  
-  // Status and Submission
-  status            String        @default("DRAFT") // DRAFT, SUBMITTED, PROCESSING, APPROVED, REJECTED, PAID
-  submittedAt       DateTime?
-  paidAt            DateTime?
-  
-  // Revenue Integration
-  revenueRefNumber  String?
-  revenueResponse   Json?
-  
-  // Timestamps
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
-  
-  // Relations
-  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  documents         Document[]
-  payment           Payment?
-  
+  id               String     @id @default(cuid())
+  userId           String
+  periodStart      DateTime
+  periodEnd        DateTime
+  dueDate          DateTime
+  salesVAT         Decimal
+  purchaseVAT      Decimal
+  netVAT           Decimal
+  status           String     @default("DRAFT")
+  submittedAt      DateTime?
+  paidAt           DateTime?
+  revenueRefNumber String?
+  revenueResponse  Json?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+  documents        Document[]
+  payment          Payment?
+  user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("vat_returns")
 }
 
 model Document {
-  id              String       @id @default(cuid())
-  userId          String
-  vatReturnId     String?
-  
-  // File Information
-  fileName        String
-  originalName    String
-  filePath        String?      // Optional for serverless compatibility
-  fileData        String?      // Base64 encoded file data for serverless storage
-  fileSize        Int
-  mimeType        String
-  fileHash        String       // For integrity verification
-  
-  // Document Classification
-  documentType    String       // PDF, EXCEL, CSV, IMAGE
-  category        String       // SALES_INVOICE, SALES_RECEIPT, etc.
-  
-  // Security
-  isScanned       Boolean      @default(false)
-  scanResult      String?      // Virus scan result
-  
-  // Timestamps
-  uploadedAt      DateTime     @default(now())
-  
-  // Relations
-  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  vatReturn       VATReturn?   @relation(fields: [vatReturnId], references: [id], onDelete: SetNull)
-  
+  id           String     @id @default(cuid())
+  userId       String
+  vatReturnId  String?
+  fileName     String
+  originalName String
+  filePath     String?
+  fileSize     Int
+  mimeType     String
+  fileHash     String
+  documentType String
+  category     String
+  isScanned    Boolean    @default(false)
+  scanResult   String?
+  uploadedAt   DateTime   @default(now())
+  fileData     String?
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vatReturn    VATReturn? @relation(fields: [vatReturnId], references: [id])
+
   @@map("vat_documents")
 }
 
 model Payment {
-  id                String        @id @default(cuid())
-  userId            String
-  vatReturnId       String        @unique
-  
-  // Payment Details
-  amount            Decimal
-  currency          String        @default("EUR")
-  
-  // Payment Status
-  status            String        @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED, CANCELLED, REFUNDED
-  paymentMethod     String?       // card, bank_transfer, etc.
-  
-  // Stripe Integration
-  stripePaymentId   String?
+  id                 String    @id @default(cuid())
+  userId             String
+  vatReturnId        String    @unique
+  amount             Decimal
+  currency           String    @default("EUR")
+  status             String    @default("PENDING")
+  paymentMethod      String?
+  stripePaymentId    String?
   stripeClientSecret String?
-  
-  // Payment Processing
-  processedAt       DateTime?
-  failedAt          DateTime?
-  failureReason     String?
-  
-  // Receipt Information
-  receiptNumber     String?       @unique
-  receiptUrl        String?
-  
-  // Timestamps
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
-  
-  // Relations
-  user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  vatReturn         VATReturn     @relation(fields: [vatReturnId], references: [id], onDelete: Cascade)
-  
+  processedAt        DateTime?
+  failedAt           DateTime?
+  failureReason      String?
+  receiptNumber      String?   @unique
+  receiptUrl         String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vatReturn          VATReturn @relation(fields: [vatReturnId], references: [id], onDelete: Cascade)
+
   @@map("vat_payments")
 }
 
 model AuditLog {
-  id              String      @id @default(cuid())
-  userId          String?
-  
-  // Action Information
-  action          String      // LOGIN, UPLOAD_DOCUMENT, SUBMIT_VAT, etc.
-  entityType      String?     // USER, VAT_RETURN, DOCUMENT, PAYMENT
-  entityId        String?
-  
-  // Request Information
-  ipAddress       String?
-  userAgent       String?
-  
-  // Additional Context
-  metadata        Json?
-  oldValues       Json?
-  newValues       Json?
-  
-  // Timestamps
-  createdAt       DateTime    @default(now())
-  
-  // Relations
-  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
-  
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String
+  entityType String?
+  entityId   String?
+  ipAddress  String?
+  userAgent  String?
+  metadata   Json?
+  oldValues  Json?
+  newValues  Json?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id])
+
   @@map("vat_audit_logs")
 }
