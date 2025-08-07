@@ -1,23 +1,25 @@
 import Stripe from 'stripe'
 
 // Server-side Stripe configuration
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-07-30.basil',
-  typescript: true,
-})
+const stripe = process.env.STRIPE_SECRET_KEY 
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2025-07-30.basil',
+      typescript: true,
+    })
+  : null
 
 export { stripe }
 
 // Client-side Stripe configuration (for frontend)
 export const getStripePublishableKey = () => {
-  return process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+  return process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || null
 }
 
 // Payment configuration
 export const PAYMENT_CONFIG = {
   CURRENCY: 'eur',
   SUPPORTED_PAYMENT_METHODS: ['card'],
-  WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET!,
+  WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET || '',
   
   // Minimum payment amounts (in cents)
   MIN_AMOUNT: 50, // €0.50
@@ -55,6 +57,10 @@ export async function createVATPaymentIntent(
   userId: string,
   metadata?: Record<string, string>
 ): Promise<Stripe.PaymentIntent> {
+  if (!stripe) {
+    throw new Error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.')
+  }
+  
   const amountInCents = Math.round(amount * 100)
   
   const paymentIntent = await stripe.paymentIntents.create({
@@ -79,6 +85,10 @@ export async function createVATPaymentIntent(
 export async function confirmPaymentIntent(
   paymentIntentId: string
 ): Promise<Stripe.PaymentIntent> {
+  if (!stripe) {
+    throw new Error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.')
+  }
+  
   const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId)
   return paymentIntent
 }
@@ -87,6 +97,10 @@ export async function confirmPaymentIntent(
 export async function retrievePaymentIntent(
   paymentIntentId: string
 ): Promise<Stripe.PaymentIntent> {
+  if (!stripe) {
+    throw new Error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.')
+  }
+  
   return await stripe.paymentIntents.retrieve(paymentIntentId)
 }
 
@@ -94,6 +108,10 @@ export async function retrievePaymentIntent(
 export async function cancelPaymentIntent(
   paymentIntentId: string
 ): Promise<Stripe.PaymentIntent> {
+  if (!stripe) {
+    throw new Error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.')
+  }
+  
   return await stripe.paymentIntents.cancel(paymentIntentId)
 }
 
@@ -103,6 +121,10 @@ export async function createRefund(
   amount?: number,
   reason?: Stripe.RefundCreateParams.Reason
 ): Promise<Stripe.Refund> {
+  if (!stripe) {
+    throw new Error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.')
+  }
+  
   const refund = await stripe.refunds.create({
     payment_intent: paymentIntentId,
     amount: amount ? Math.round(amount * 100) : undefined,
@@ -117,6 +139,14 @@ export function verifyWebhookSignature(
   payload: string | Buffer,
   signature: string
 ): Stripe.Event {
+  if (!stripe) {
+    throw new Error('Stripe is not configured. Please set STRIPE_SECRET_KEY environment variable.')
+  }
+  
+  if (!PAYMENT_CONFIG.WEBHOOK_SECRET) {
+    throw new Error('Stripe webhook secret is not configured. Please set STRIPE_WEBHOOK_SECRET environment variable.')
+  }
+  
   return stripe.webhooks.constructEvent(
     payload,
     signature,
