@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -81,11 +81,7 @@ export default function AdminDocuments() {
     totalPages: 0
   })
 
-  useEffect(() => {
-    fetchDocuments()
-  }, [userIdFilter, categoryFilter, documentTypeFilter, scannedFilter, page])
-
-  const fetchDocuments = async () => {
+  const fetchDocuments = useCallback(async () => {
     try {
       const params = new URLSearchParams({
         page: page.toString(),
@@ -110,7 +106,11 @@ export default function AdminDocuments() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userIdFilter, categoryFilter, documentTypeFilter, scannedFilter, page])
+
+  useEffect(() => {
+    fetchDocuments()
+  }, [fetchDocuments])
 
   const formatFileSize = (bytes: number) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB']
@@ -392,8 +392,17 @@ export default function AdminDocuments() {
                       <div className="font-medium text-blue-800 mb-1">Scan Results:</div>
                       <div className="text-blue-700">
                         {typeof document.scanResult === 'object' 
-                          ? JSON.stringify(document.scanResult, null, 2)
-                          : document.scanResult}
+                          ? (
+                              <pre className="whitespace-pre-wrap font-mono text-xs bg-white p-2 rounded border max-h-32 overflow-y-auto">
+                                {JSON.stringify(document.scanResult, null, 2)}
+                              </pre>
+                            )
+                          : (
+                              <div className="whitespace-pre-wrap">
+                                {document.scanResult}
+                              </div>
+                            )
+                        }
                       </div>
                     </div>
                   )}

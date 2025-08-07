@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import AdminRoute from '@/components/admin-route'
+import { ErrorBoundary } from '@/components/error-boundary'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -63,7 +64,9 @@ interface AnalyticsData {
 export default function AdminDashboard() {
   return (
     <AdminRoute requiredRole="ADMIN">
-      <AdminDashboardContent />
+      <ErrorBoundary>
+        <AdminDashboardContent />
+      </ErrorBoundary>
     </AdminRoute>
   )
 }
@@ -73,24 +76,63 @@ function AdminDashboardContent() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    fetchAnalytics()
-  }, [])
-
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     try {
-      const response = await fetch('/api/admin/analytics?metric=overview&period=30')
+      setLoading(true)
+      setError(null)
+      
+      const response = await fetch('/api/admin/analytics?metric=overview&period=30', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      })
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch analytics')
+        if (response.status === 401) {
+          setError('Authentication required. Please log in as admin.')
+          setTimeout(() => {
+            window.location.href = '/login'
+          }, 2000)
+          return
+        } else if (response.status === 403) {
+          setError('Admin access required. Contact system administrator.')
+          return
+        }
+        throw new Error(`Server responded with ${response.status}`)
       }
+      
       const data = await response.json()
-      setAnalytics(data.analytics)
+      
+      // Validate API response structure
+      if (!data.success || !data.analytics) {
+        throw new Error('Invalid response format from server')
+      }
+      
+      // Ensure analytics data has required structure
+      const analytics = data.analytics
+      if (!analytics.overview || !analytics.trends || !analytics.distributions || !analytics.topBusinesses) {
+        throw new Error('Incomplete analytics data received')
+      }
+      
+      setAnalytics(analytics)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load data')
+      console.error('Analytics fetch error:', err)
+      if (err instanceof TypeError && err.message.includes('fetch')) {
+        setError('Network error. Please check your connection and try again.')
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to load analytics data')
+      }
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    fetchAnalytics()
+  }, [fetchAnalytics])
 
   if (loading) {
     return (
@@ -102,24 +144,64 @@ function AdminDashboardContent() {
     )
   }
 
-  if (error || !analytics) {
+  if (error) {
     return (
       <div className="container mx-auto p-6">
         <div className="text-center">
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Error Loading Dashboard</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <Button onClick={fetchAnalytics}>Try Again</Button>
+          <h2 className="text-xl font-semibold mb-2">Error Loading Admin Dashboard</h2>
+          <p className="text-gray-600 mb-4 max-w-md mx-auto">{error}</p>
+          <div className="flex justify-center space-x-3">
+            <Button onClick={fetchAnalytics} disabled={loading}>
+              {loading ? 'Retrying...' : 'Try Again'}
+            </Button>
+            <Button variant="outline" onClick={() => window.location.href = '/admin-setup'}>
+              Admin Setup
+            </Button>
+          </div>
         </div>
       </div>
     )
   }
 
-  const formatCurrency = (amount: number) => {
+  if (!analytics) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="text-center">
+          <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2">No Data Available</h2>
+          <p className="text-gray-600 mb-4">Analytics data is not available. This could be because:</p>
+          <ul className="text-sm text-gray-500 mb-4 text-left max-w-md mx-auto">
+            <li>• No users have registered yet</li>
+            <li>• Database is empty</li>
+            <li>• Admin permissions not configured</li>
+          </ul>
+          <Button onClick={fetchAnalytics} disabled={loading}>
+            {loading ? 'Refreshing...' : 'Refresh Data'}
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  const formatCurrency = (amount: number | undefined | null) => {
+    const safeAmount = amount || 0
     return new Intl.NumberFormat('en-IE', {
       style: 'currency',
       currency: 'EUR'
-    }).format(amount)
+    }).format(safeAmount)
+  }
+
+  const safeGet = (obj: any, path: string, defaultValue: any = 0) => {
+    const keys = path.split('.')
+    let result = obj
+    for (const key of keys) {
+      if (result == null || result[key] == null) {
+        return defaultValue
+      }
+      result = result[key]
+    }
+    return result
   }
 
   const getStatusColor = (status: string) => {

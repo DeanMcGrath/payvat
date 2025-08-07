@@ -171,6 +171,22 @@ async function getAnalytics(request: NextRequest, user: AuthUser) {
         })
       )
       
+      // Create admin audit log for overview analytics
+      await prisma.auditLog.create({
+        data: {
+          userId: user.id,
+          action: 'ADMIN_VIEW_ANALYTICS',
+          entityType: 'SYSTEM',
+          ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+          userAgent: request.headers.get('user-agent') || 'unknown',
+          metadata: {
+            metric,
+            period: periodDays,
+            timestamp: new Date().toISOString()
+          }
+        }
+      })
+
       return NextResponse.json({
         success: true,
         analytics: {
@@ -257,6 +273,22 @@ async function getAnalytics(request: NextRequest, user: AuthUser) {
         ? processingTimes.reduce((a, b) => a + b, 0) / processingTimes.length / 1000 / 60 // minutes
         : 0
       
+      // Create admin audit log for performance analytics
+      await prisma.auditLog.create({
+        data: {
+          userId: user.id,
+          action: 'ADMIN_VIEW_PERFORMANCE',
+          entityType: 'SYSTEM',
+          ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+          userAgent: request.headers.get('user-agent') || 'unknown',
+          metadata: {
+            metric,
+            period: periodDays,
+            timestamp: new Date().toISOString()
+          }
+        }
+      })
+
       return NextResponse.json({
         success: true,
         analytics: {
@@ -271,28 +303,11 @@ async function getAnalytics(request: NextRequest, user: AuthUser) {
       })
     }
     
-    // Create admin audit log
-    await prisma.auditLog.create({
-      data: {
-        userId: user.id,
-        action: 'ADMIN_VIEW_ANALYTICS',
-        entityType: 'SYSTEM',
-        ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-        userAgent: request.headers.get('user-agent') || 'unknown',
-        metadata: {
-          metric,
-          period: periodDays,
-          timestamp: new Date().toISOString()
-        }
-      }
-    })
-    
-    return NextResponse.json({
-      success: true,
-      analytics: {
-        message: 'Metric not implemented yet'
-      }
-    })
+    // If we reach here, the metric was not recognized
+    return NextResponse.json(
+      { error: `Unsupported metric: ${metric}` },
+      { status: 400 }
+    )
     
   } catch (error) {
     console.error('Admin analytics error:', error)

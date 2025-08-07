@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Shield, AlertTriangle, Lock } from 'lucide-react'
@@ -22,13 +22,16 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    checkAdminAccess()
-  }, [])
-
-  const checkAdminAccess = async () => {
+  const checkAdminAccess = useCallback(async () => {
     try {
-      const response = await fetch('/api/auth/profile')
+      const response = await fetch('/api/auth/profile', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
       
       if (response.ok) {
         const data = await response.json()
@@ -41,18 +44,33 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
             setError('Insufficient privileges. Admin access required.')
           }
         } else {
-          setError('Authentication required')
+          setError('Authentication failed. Please log in.')
         }
+      } else if (response.status === 401) {
+        setError('Authentication session expired. Redirecting to login...')
+        setTimeout(() => {
+          window.location.href = '/login'
+        }, 2000)
+      } else if (response.status === 403) {
+        setError('Access forbidden. Admin privileges required. Try admin setup if this is the first time.')
       } else {
-        setError('Authentication required')
+        setError(`Authentication error (${response.status}). Please try again.`)
       }
     } catch (err) {
       console.error('Admin access check failed:', err)
-      setError('Failed to verify admin access')
+      if (err instanceof TypeError && err.message.includes('fetch')) {
+        setError('Network connection failed. Please check your internet connection.')
+      } else {
+        setError('Failed to verify admin access')
+      }
     } finally {
       setLoading(false)
     }
-  }
+  }, [requiredRole])
+
+  useEffect(() => {
+    checkAdminAccess()
+  }, [checkAdminAccess])
 
   const hasAdminRole = (userRole: string, required: string): boolean => {
     const roles = ['USER', 'ADMIN', 'SUPER_ADMIN']

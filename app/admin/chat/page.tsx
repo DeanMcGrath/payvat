@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -66,7 +66,7 @@ function AdminChatPage() {
   }, [messages])
 
   // Load chat sessions
-  const loadSessions = async () => {
+  const loadSessions = useCallback(async () => {
     setIsLoading(true)
     try {
       const response = await fetch(`/api/admin/chat?status=${statusFilter}`)
@@ -81,7 +81,7 @@ function AdminChatPage() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [statusFilter])
 
   // Load messages for selected session
   const loadMessages = async (sessionId: string) => {
@@ -175,7 +175,18 @@ function AdminChatPage() {
   // Load sessions on mount and filter change
   useEffect(() => {
     loadSessions()
-  }, [statusFilter])
+  }, [loadSessions])
+
+  // Auto-refresh sessions every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isLoading) {
+        loadSessions()
+      }
+    }, 30000)
+
+    return () => clearInterval(interval)
+  }, [isLoading, loadSessions])
 
   // Load messages when session is selected
   useEffect(() => {
@@ -183,6 +194,19 @@ function AdminChatPage() {
       loadMessages(selectedSession.sessionId)
     }
   }, [selectedSession])
+
+  // Auto-refresh messages every 10 seconds when a session is active
+  useEffect(() => {
+    if (selectedSession && !selectedSession.isResolved) {
+      const interval = setInterval(() => {
+        if (!isLoadingMessages) {
+          loadMessages(selectedSession.sessionId)
+        }
+      }, 10000)
+
+      return () => clearInterval(interval)
+    }
+  }, [selectedSession, isLoadingMessages])
 
   return (
     <AdminRoute requiredRole="ADMIN">

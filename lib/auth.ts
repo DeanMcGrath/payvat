@@ -74,12 +74,29 @@ export async function getUserFromRequest(request: NextRequest): Promise<AuthUser
       return null
     }
     
+    // Load full user data from database
+    const { prisma } = await import('./prisma')
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        businessName: true,
+        vatNumber: true
+      }
+    })
+    
+    if (!user) {
+      return null
+    }
+    
     return {
-      id: payload.userId,
-      email: payload.email,
-      role: payload.role,
-      businessName: '',
-      vatNumber: ''
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      businessName: user.businessName,
+      vatNumber: user.vatNumber
     }
   } catch (error) {
     console.error('Error extracting user from request:', error)

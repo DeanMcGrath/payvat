@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -100,11 +100,7 @@ export default function AdminPayments() {
     totalPages: 0
   })
 
-  useEffect(() => {
-    fetchPayments()
-  }, [userIdFilter, statusFilter, paymentMethodFilter, dateFromFilter, dateToFilter, minAmountFilter, maxAmountFilter, page])
-
-  const fetchPayments = async () => {
+  const fetchPayments = useCallback(async () => {
     try {
       const params = new URLSearchParams({
         page: page.toString(),
@@ -133,7 +129,11 @@ export default function AdminPayments() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userIdFilter, statusFilter, paymentMethodFilter, dateFromFilter, dateToFilter, minAmountFilter, maxAmountFilter, page])
+
+  useEffect(() => {
+    fetchPayments()
+  }, [fetchPayments])
 
   const formatCurrency = (amount: number, currency: string = 'EUR') => {
     return new Intl.NumberFormat('en-IE', {

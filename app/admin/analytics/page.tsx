@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -85,11 +85,7 @@ export default function AdminAnalytics() {
   const [period, setPeriod] = useState('30')
   const [activeTab, setActiveTab] = useState('overview')
 
-  useEffect(() => {
-    fetchAnalytics()
-  }, [period])
-
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = useCallback(async () => {
     setLoading(true)
     try {
       const [overviewResponse, performanceResponse] = await Promise.all([
@@ -111,7 +107,11 @@ export default function AdminAnalytics() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [period])
+
+  useEffect(() => {
+    fetchAnalytics()
+  }, [fetchAnalytics])
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IE', {

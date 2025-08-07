@@ -1,6 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
+import AdminRoute from '@/components/admin-route'
+import { ErrorBoundary } from '@/components/error-boundary'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -69,6 +71,16 @@ interface UsersResponse {
 }
 
 export default function AdminUsers() {
+  return (
+    <AdminRoute requiredRole="ADMIN">
+      <ErrorBoundary>
+        <AdminUsersContent />
+      </ErrorBoundary>
+    </AdminRoute>
+  )
+}
+
+function AdminUsersContent() {
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -83,12 +95,11 @@ export default function AdminUsers() {
     totalPages: 0
   })
 
-  useEffect(() => {
-    fetchUsers()
-  }, [search, roleFilter, statusFilter, page])
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
+      setLoading(true)
+      setError(null)
+      
       const params = new URLSearchParams({
         page: page.toString(),
         limit: '20'
@@ -98,35 +109,90 @@ export default function AdminUsers() {
       if (roleFilter) params.append('role', roleFilter)
       if (statusFilter) params.append('status', statusFilter)
 
-      const response = await fetch(`/api/admin/users?${params}`)
+      const response = await fetch(`/api/admin/users?${params}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch users')
+        if (response.status === 401) {
+          setError('Authentication required. Redirecting to login...')
+          setTimeout(() => {
+            window.location.href = '/login'
+          }, 2000)
+          return
+        } else if (response.status === 403) {
+          setError('Admin access required. Please log in as administrator.')
+          return
+        }
+        throw new Error(`Server responded with ${response.status}`)
       }
       
       const data: UsersResponse = await response.json()
-      setUsers(data.users)
-      setPagination(data.pagination)
+      
+      // Validate response structure
+      if (!data.success || !Array.isArray(data.users)) {
+        throw new Error('Invalid response format from server')
+      }
+      
+      // Ensure all users have safe stats object
+      const safeUsers = data.users.map(user => ({
+        ...user,
+        stats: user.stats || {
+          totalVATReturns: 0,
+          totalDocuments: 0,
+          totalPayments: 0,
+          totalVATPaid: 0,
+          pendingPayments: 0,
+          lastVATReturn: null
+        }
+      }))
+      
+      setUsers(safeUsers)
+      setPagination(data.pagination || { page: 1, limit: 20, totalCount: 0, totalPages: 0 })
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load users')
+      console.error('Users fetch error:', err)
+      if (err instanceof TypeError && err.message.includes('fetch')) {
+        setError('Network error. Please check your connection and try again.')
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to load users')
+      }
     } finally {
       setLoading(false)
     }
-  }
+  }, [search, roleFilter, statusFilter, page])
 
-  const formatCurrency = (amount: number) => {
+  useEffect(() => {
+    fetchUsers()
+  }, [fetchUsers])
+
+  const formatCurrency = (amount: number | undefined | null) => {
+    const safeAmount = amount || 0
     return new Intl.NumberFormat('en-IE', {
       style: 'currency',
       currency: 'EUR'
-    }).format(amount)
+    }).format(safeAmount)
   }
 
   const formatDate = (date: Date | string | null) => {
     if (!date) return 'Never'
-    return new Date(date).toLocaleDateString('en-IE', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    })
+    
+    try {
+      const dateObj = new Date(date)
+      if (isNaN(dateObj.getTime())) return 'Invalid Date'
+      
+      return dateObj.toLocaleDateString('en-IE', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      })
+    } catch (err) {
+      return 'Invalid Date'
+    }
   }
 
   const getRoleColor = (role: string) => {
@@ -179,7 +245,8 @@ export default function AdminUsers() {
     return (
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+          <span className="ml-2 text-gray-600">Loading users...</span>
         </div>
       </div>
     )
@@ -191,8 +258,15 @@ export default function AdminUsers() {
         <div className="text-center">
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-2">Error Loading Users</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <Button onClick={fetchUsers}>Try Again</Button>
+          <p className="text-gray-600 mb-4 max-w-md mx-auto">{error}</p>
+          <div className="flex justify-center space-x-3">
+            <Button onClick={fetchUsers} disabled={loading}>
+              {loading ? 'Retrying...' : 'Try Again'}
+            </Button>
+            <Button variant="outline" onClick={() => window.location.href = '/admin'}>
+              Back to Admin
+            </Button>
+          </div>
         </div>
       </div>
     )
@@ -293,8 +367,8 @@ export default function AdminUsers() {
                                 ? `${user.firstName} ${user.lastName}` 
                                 : user.businessName}
                             </h3>
-                            <Badge className={getRoleColor(user.role)}>
-                              {user.role.toLowerCase().replace('_', ' ')}
+                            <Badge className={getRoleColor(user.role || 'user')}>
+                              {(user.role || 'user').toLowerCase().replace('_', ' ')}
                             </Badge>
                             {user.emailVerified ? (
                               <CheckCircle className="h-4 w-4 text-green-500" />
@@ -309,9 +383,9 @@ export default function AdminUsers() {
                             </span>
                             <span className="flex items-center">
                               <Building className="h-4 w-4 mr-1" />
-                              {user.businessName}
+                              {user.businessName || 'No business name'}
                             </span>
-                            <span>VAT: {user.vatNumber}</span>
+                            <span>VAT: {user.vatNumber || 'Not provided'}</span>
                             <span className="flex items-center">
                               <Clock className="h-4 w-4 mr-1" />
                               Last login: {formatDate(user.lastLoginAt)}
@@ -326,40 +400,40 @@ export default function AdminUsers() {
                       <div className="text-center">
                         <div className="font-semibold flex items-center">
                           <FileText className="h-4 w-4 mr-1" />
-                          {user.stats.totalVATReturns}
+                          {user.stats?.totalVATReturns || 0}
                         </div>
                         <div className="text-gray-500">VAT Returns</div>
                       </div>
                       <div className="text-center">
                         <div className="font-semibold flex items-center">
                           <CreditCard className="h-4 w-4 mr-1" />
-                          {user.stats.totalPayments}
+                          {user.stats?.totalPayments || 0}
                         </div>
                         <div className="text-gray-500">Payments</div>
                       </div>
                       <div className="text-center">
                         <div className="font-semibold">
-                          {formatCurrency(user.stats.totalVATPaid)}
+                          {formatCurrency(user.stats?.totalVATPaid)}
                         </div>
                         <div className="text-gray-500">VAT Paid</div>
                       </div>
                     </div>
 
                     {/* Last VAT Return */}
-                    {user.stats.lastVATReturn && (
+                    {user.stats?.lastVATReturn && (
                       <div className="min-w-[200px]">
                         <div className="text-sm">
                           <div className="font-medium">Last VAT Return</div>
                           <div className="flex items-center space-x-2">
-                            <Badge className={getStatusColor(user.stats.lastVATReturn.status)}>
-                              {user.stats.lastVATReturn.status}
+                            <Badge className={getStatusColor(user.stats.lastVATReturn?.status || 'unknown')}>
+                              {user.stats.lastVATReturn?.status || 'Unknown'}
                             </Badge>
                             <span className="text-gray-500">
-                              {formatDate(user.stats.lastVATReturn.periodEnd)}
+                              {formatDate(user.stats.lastVATReturn?.periodEnd)}
                             </span>
                           </div>
                           <div className="text-gray-600">
-                            {formatCurrency(user.stats.lastVATReturn.netVAT)}
+                            {formatCurrency(user.stats.lastVATReturn?.netVAT)}
                           </div>
                         </div>
                       </div>
@@ -367,7 +441,7 @@ export default function AdminUsers() {
                   </div>
 
                   {/* Pending Payments Warning */}
-                  {user.stats.pendingPayments > 0 && (
+                  {(user.stats?.pendingPayments || 0) > 0 && (
                     <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded text-sm">
                       <div className="flex items-center">
                         <AlertCircle className="h-4 w-4 text-yellow-600 mr-2" />
