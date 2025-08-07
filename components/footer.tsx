@@ -1,7 +1,7 @@
 "use client"
 
 import Link from 'next/link'
-import { ExternalLink, ArrowUp } from 'lucide-react'
+import { ArrowUp } from 'lucide-react'
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -167,38 +167,10 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Column 4 - External & Government */}
+            {/* Column 4 - Navigation */}
             <div>
-              <h4 className="font-semibold text-white mb-4">External & Government</h4>
+              <h4 className="font-semibold text-white mb-4">Navigation</h4>
               <ul className="space-y-3">
-                <li>
-                  <a 
-                    href="https://revenue.ie" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-white hover:text-teal-100 underline transition-colors flex items-center gap-1"
-                  >
-                    Revenue.ie <ExternalLink className="h-3 w-3" />
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="https://gov.ie" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-white hover:text-teal-100 underline transition-colors flex items-center gap-1"
-                  >
-                    gov.ie <ExternalLink className="h-3 w-3" />
-                  </a>
-                </li>
-                <li>
-                  <a 
-                    href="mailto:feedback@payvat.ie" 
-                    className="text-white hover:text-teal-100 underline transition-colors"
-                  >
-                    Website Feedback
-                  </a>
-                </li>
                 <li>
                   <Link 
                     href="/" 
