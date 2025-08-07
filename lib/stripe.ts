@@ -1,7 +1,7 @@
 import Stripe from 'stripe'
 
 // Server-side Stripe configuration
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder', {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-07-30.basil',
   typescript: true,
 })
@@ -10,14 +10,14 @@ export { stripe }
 
 // Client-side Stripe configuration (for frontend)
 export const getStripePublishableKey = () => {
-  return process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder'
+  return process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 }
 
 // Payment configuration
 export const PAYMENT_CONFIG = {
   CURRENCY: 'eur',
   SUPPORTED_PAYMENT_METHODS: ['card'],
-  WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET || 'whsec_placeholder',
+  WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET!,
   
   // Minimum payment amounts (in cents)
   MIN_AMOUNT: 50, // €0.50

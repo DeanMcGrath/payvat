@@ -84,19 +84,19 @@ export default function PaymentMethodPage() {
                 </div>
               </div>
 
-              <div className="flex gap-4">
+              <div className="pt-4">
                 <Button 
-                  variant="outline"
-                  className="flex-1 border-gray-300 text-gray-700 hover:bg-gray-50"
-                  onClick={() => window.location.href = '/payment'}
+                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-lg transition-colors duration-200"
+                  onClick={() => {
+                    if (selectedMethod === 'card') {
+                      window.location.href = '/secure-payment'
+                    } else {
+                      // Handle bank transfer
+                      alert('Bank transfer option selected')
+                    }
+                  }}
                 >
-                  Back
-                </Button>
-                <Button 
-                  className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold"
-                  onClick={() => window.location.href = '/secure-payment'}
-                >
-                  Continue to Payment
+                  Continue with {selectedMethod === 'card' ? 'Card Payment' : 'Bank Transfer'}
                 </Button>
               </div>
             </div>
@@ -108,7 +108,7 @@ export default function PaymentMethodPage() {
       <LiveChat />
 
       {/* Footer */}
-      <footer className="mt-8 py-6 text-center border-t border-gray-200">
+      <footer className="mt-12 py-8 border-t border-gray-200 text-center">
         <p className="text-gray-500 text-sm">payvat.ie</p>
       </footer>
     </div>

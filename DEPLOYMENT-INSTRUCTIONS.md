@@ -75,9 +75,8 @@ RATE_LIMIT_MAX_REQUESTS=100
 RATE_LIMIT_WINDOW_MS=900000
 ENCRYPTION_KEY=your_32_char_encryption_key
 
-# Admin (optional)
-ADMIN_EMAIL=admin@yourcompany.com
-ADMIN_PASSWORD_HASH=your_bcrypt_hashed_password
+# Admin (optional - Configure through application interface)
+# Create admin users through the registration system after deployment
 
 # Revenue API (for production)
 REVENUE_API_URL=https://api.revenue.ie

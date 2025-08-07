@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import AdminRoute from '@/components/admin-route'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -59,6 +60,14 @@ interface AnalyticsData {
 }
 
 export default function AdminDashboard() {
+  return (
+    <AdminRoute requiredRole="ADMIN">
+      <AdminDashboardContent />
+    </AdminRoute>
+  )
+}
+
+function AdminDashboardContent() {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

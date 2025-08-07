@@ -21,7 +21,7 @@ export interface JWTPayload {
 }
 
 // JWT Configuration
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_jwt_secret_key'
+const JWT_SECRET = process.env.JWT_SECRET!
 const TOKEN_EXPIRY = '24h'
 
 // Password hashing

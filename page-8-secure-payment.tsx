@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ArrowLeft, CreditCard, Building, Shield, Lock, CheckCircle, AlertTriangle, Clock, Calendar, Euro, FileText } from 'lucide-react'
+import LiveChat from "./components/live-chat"
 
 export default function SecurePayment() {
   const [paymentMethod, setPaymentMethod] = useState("card")
@@ -71,39 +72,14 @@ export default function SecurePayment() {
               Secure Payment
             </Badge>
           </div>
-          <div className="flex items-center space-x-6">
-            <div className="text-right">
-              <h3 className="text-lg font-bold text-emerald-600">Brian Cusack Trading Ltd</h3>
-              <p className="text-emerald-600 font-mono text-sm">VAT: IE0352440A</p>
-            </div>
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
-              <Shield className="h-4 w-4 text-emerald-500" />
-              <span className="font-medium">256-bit SSL Encryption</span>
-            </div>
+          <div className="text-right">
+            <h3 className="text-lg font-bold text-emerald-600">Brian Cusack Trading Ltd</h3>
+            <p className="text-emerald-600 font-mono text-sm">VAT: IE0352440A</p>
           </div>
         </div>
       </header>
 
       <div className="p-6 max-w-6xl mx-auto">
-        {/* Business Information Card - Add this section */}
-        <Card className="mb-6 border-blue-200 bg-blue-50">
-          <CardContent className="pt-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <Building className="h-8 w-8 text-blue-600" />
-                <div>
-                  <h3 className="text-xl font-bold text-blue-900">{paymentData.businessName}</h3>
-                  <p className="text-blue-700 font-mono text-lg">VAT Number: {paymentData.vatNumber}</p>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-sm text-blue-600 font-medium">Making payment for:</p>
-                <p className="text-lg font-semibold text-blue-900">{paymentData.period}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Payment Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-full mb-4">
@@ -410,6 +386,14 @@ export default function SecurePayment() {
           </div>
         </div>
       </div>
+
+      {/* Live Chat */}
+      <LiveChat />
+
+      {/* Footer */}
+      <footer className="mt-8 py-6 text-center border-t border-gray-200">
+        <p className="text-gray-500 text-sm">payvat.ie</p>
+      </footer>
     </div>
   )
 }

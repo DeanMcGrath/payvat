@@ -70,9 +70,8 @@ ENCRYPTION_KEY=your_32_character_encryption_key_here
 MAX_FILE_SIZE=10485760
 ALLOWED_FILE_TYPES=pdf,csv,xlsx,xls,jpg,jpeg,png
 
-# Admin (Optional)
-ADMIN_EMAIL=admin@yourdomain.com
-ADMIN_PASSWORD_HASH=your_bcrypt_hashed_admin_password
+# Admin (Optional - Configure through user registration)
+# Create admin users through the application interface after deployment
 
 # Revenue API (for Irish VAT integration)
 REVENUE_API_URL=https://api.revenue.ie

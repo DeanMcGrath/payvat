@@ -194,10 +194,8 @@ The VAT PAY application has undergone a comprehensive security audit and hardeni
    - Regular security audits and assessments
    - Documentation of security procedures
 
-## Demo Credentials
-For testing the secure login implementation:
-- **Email:** demo@payvat.ie
-- **Password:** demo123456
+## Production Authentication
+For production deployment, ensure all authentication is handled through secure server-side validation with properly configured JWT tokens and environment variables.
 
 ## Security Contact
 For security concerns or questions about this audit:

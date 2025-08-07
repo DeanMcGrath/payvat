@@ -50,7 +50,7 @@ export default function SignupPage() {
                 value={vatNumber}
                 onChange={(e) => setVatNumber(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900"
-                placeholder="IE1234567A"
+                placeholder="IE0000000AA"
               />
             </div>
             
@@ -64,7 +64,7 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900"
-                placeholder="your@email.com"
+                placeholder="Enter your email address"
               />
             </div>
             

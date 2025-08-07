@@ -63,8 +63,7 @@ export default function LoginPage() {
     setLoginAttempts(prev => prev + 1)
 
     try {
-      // Security: In production, this should be a secure API call to backend
-      // For demo purposes, using basic credential check
+      // Production API authentication
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -83,12 +82,7 @@ export default function LoginPage() {
         setErrors({ general: "Invalid email or password" })
       }
     } catch (error) {
-      // Fallback for demo - basic validation
-      if (sanitizedEmail === 'demo@payvat.ie' && sanitizedPassword === 'demo123456') {
-        window.location.href = '/dashboard'
-      } else {
-        setErrors({ general: "Invalid email or password" })
-      }
+      setErrors({ general: "Invalid email or password" })
     } finally {
       setIsLoading(false)
     }
