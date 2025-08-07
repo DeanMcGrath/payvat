@@ -210,7 +210,7 @@ function AdminChatPage() {
 
   return (
     <AdminRoute requiredRole="ADMIN">
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Live Chat Management</h1>
@@ -248,7 +248,7 @@ function AdminChatPage() {
                   <div className="space-y-0 max-h-[650px] overflow-y-auto">
                     {isLoading ? (
                       <div className="flex items-center justify-center py-12">
-                        <Loader2 className="h-6 w-6 animate-spin text-emerald-500" />
+                        <Loader2 className="h-6 w-6 animate-spin text-teal-500" />
                       </div>
                     ) : sessions.length === 0 ? (
                       <div className="text-center py-12 text-gray-500">
@@ -259,8 +259,8 @@ function AdminChatPage() {
                       sessions.map((session) => (
                         <div
                           key={session.id}
-                          className={`border-b p-4 cursor-pointer hover:bg-gray-50 ${
-                            selectedSession?.id === session.id ? 'bg-emerald-50 border-l-4 border-l-emerald-500' : ''
+                          className={`border-b p-4 cursor-pointer hover:bg-gray-100 ${
+                            selectedSession?.id === session.id ? 'bg-teal-50 border-l-4 border-l-teal-500' : ''
                           }`}
                           onClick={() => setSelectedSession(session)}
                         >
@@ -285,7 +285,7 @@ function AdminChatPage() {
                                   Resolved
                                 </Badge>
                               ) : session.isActive ? (
-                                <Badge variant="default" className="text-xs bg-emerald-500">
+                                <Badge variant="default" className="text-xs bg-teal-500">
                                   <Clock className="h-3 w-3 mr-1" />
                                   Active
                                 </Badge>
@@ -357,7 +357,7 @@ function AdminChatPage() {
                     <div className="flex-1 p-4 overflow-y-auto">
                       {isLoadingMessages ? (
                         <div className="flex items-center justify-center h-full">
-                          <Loader2 className="h-6 w-6 animate-spin text-emerald-500" />
+                          <Loader2 className="h-6 w-6 animate-spin text-teal-500" />
                           <span className="ml-2 text-sm text-gray-600">Loading messages...</span>
                         </div>
                       ) : (
@@ -374,7 +374,7 @@ function AdminChatPage() {
                                   msg.senderType === 'admin'
                                     ? 'bg-blue-500 text-white'
                                     : msg.senderType === 'user'
-                                    ? 'bg-emerald-100 text-gray-800'
+                                    ? 'bg-teal-100 text-gray-800'
                                     : 'bg-gray-100 text-gray-800'
                                 }`}
                               >

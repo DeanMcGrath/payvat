@@ -56,7 +56,7 @@ export default function SecurePayment() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
@@ -64,17 +64,17 @@ export default function SecurePayment() {
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-2xl font-bold text-gray-800">
-              PAY <span className="text-emerald-500">VAT</span>
+            <h1 className="text-2xl font-thin text-gray-800">
+              PAY <span className="text-teal-600">VAT</span>
             </h1>
-            <Badge variant="outline" className="text-emerald-600 border-emerald-200">
+            <Badge variant="outline" className="text-teal-600 border-teal-200">
               <Lock className="h-3 w-3 mr-1" />
               Secure Payment
             </Badge>
           </div>
           <div className="text-right">
-            <h3 className="text-lg font-bold text-emerald-600">Brian Cusack Trading Ltd</h3>
-            <p className="text-emerald-600 font-mono text-sm">VAT: IE0352440A</p>
+            <h3 className="text-lg font-bold text-teal-600">Brian Cusack Trading Ltd</h3>
+            <p className="text-teal-600 font-mono text-sm">VAT: IE0352440A</p>
           </div>
         </div>
       </header>
@@ -82,19 +82,19 @@ export default function SecurePayment() {
       <div className="p-6 max-w-6xl mx-auto">
         {/* Payment Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-full mb-4">
-            <Euro className="h-8 w-8 text-emerald-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-100 rounded-full mb-4">
+            <Euro className="h-8 w-8 text-teal-600" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Secure VAT Payment</h2>
           <p className="text-gray-600 text-lg">Complete your payment safely and securely</p>
         </div>
 
         {/* Payment Amount Card - Prominent */}
-        <Card className="mb-8 border-emerald-200 bg-gradient-to-r from-emerald-50 to-green-50">
+        <Card className="mb-8 border-teal-200 bg-gradient-to-r from-teal-50 to-green-50">
           <CardContent className="pt-6">
             <div className="text-center">
               <p className="text-lg font-medium text-gray-700 mb-2">Total Amount Due</p>
-              <div className="text-5xl font-bold text-emerald-600 mb-4">€{paymentData.amount}</div>
+              <div className="text-5xl font-bold text-teal-600 mb-4">€{paymentData.amount}</div>
               <div className="flex items-center justify-center space-x-6 text-sm text-gray-600">
                 <div className="flex items-center space-x-2">
                   <Calendar className="h-4 w-4 text-red-500" />
@@ -120,25 +120,25 @@ export default function SecurePayment() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-                  <CreditCard className="h-5 w-5 mr-2 text-emerald-600" />
+                  <CreditCard className="h-5 w-5 mr-2 text-teal-600" />
                   Payment Method
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-4">
-                  <div className="flex items-center space-x-3 p-4 border-2 rounded-lg hover:bg-gray-50 border-emerald-200 bg-emerald-50">
+                  <div className="flex items-center space-x-3 p-4 border-2 rounded-lg hover:bg-gray-100 border-teal-200 bg-teal-50">
                     <RadioGroupItem value="card" id="card" />
-                    <CreditCard className="h-6 w-6 text-emerald-600" />
+                    <CreditCard className="h-6 w-6 text-teal-600" />
                     <div className="flex-1">
                       <Label htmlFor="card" className="font-semibold cursor-pointer text-gray-900">Credit/Debit Card</Label>
                       <p className="text-sm text-gray-600">Visa, Mastercard, American Express</p>
                       <div className="flex items-center space-x-1 mt-1">
-                        <CheckCircle className="h-3 w-3 text-emerald-500" />
-                        <span className="text-xs text-emerald-600">Instant Processing</span>
+                        <CheckCircle className="h-3 w-3 text-teal-500" />
+                        <span className="text-xs text-teal-600">Instant Processing</span>
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50">
+                  <div className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-100">
                     <RadioGroupItem value="bank" id="bank" />
                     <Building className="h-6 w-6 text-gray-600" />
                     <div className="flex-1">
@@ -160,12 +160,12 @@ export default function SecurePayment() {
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold text-gray-900 flex items-center justify-between">
                     <div className="flex items-center">
-                      <Lock className="h-5 w-5 mr-2 text-emerald-600" />
+                      <Lock className="h-5 w-5 mr-2 text-teal-600" />
                       Card Details
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Shield className="h-4 w-4 text-emerald-500" />
-                      <span className="text-sm text-emerald-600 font-medium">Secured</span>
+                      <Shield className="h-4 w-4 text-teal-500" />
+                      <span className="text-sm text-teal-600 font-medium">Secured</span>
                     </div>
                   </CardTitle>
                 </CardHeader>
@@ -173,7 +173,7 @@ export default function SecurePayment() {
                   <div className="space-y-2">
                     <Label htmlFor="card-number" className="text-gray-700 font-medium flex items-center">
                       Card Number
-                      <Lock className="h-3 w-3 ml-1 text-emerald-500" />
+                      <Lock className="h-3 w-3 ml-1 text-teal-500" />
                     </Label>
                     <Input
                       id="card-number"
@@ -181,7 +181,7 @@ export default function SecurePayment() {
                       value={cardNumber}
                       onChange={(e) => setCardNumber(formatCardNumber(e.target.value))}
                       placeholder="1234 5678 9012 3456"
-                      className="bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-lg py-3"
+                      className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-lg py-3"
                       maxLength={19}
                     />
                   </div>
@@ -197,14 +197,14 @@ export default function SecurePayment() {
                         value={expiryDate}
                         onChange={(e) => setExpiryDate(e.target.value)}
                         placeholder="MM/YY"
-                        className="bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-lg py-3"
+                        className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-lg py-3"
                         maxLength={5}
                       />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="cvv" className="text-gray-700 font-medium flex items-center">
                         CVV
-                        <Shield className="h-3 w-3 ml-1 text-emerald-500" />
+                        <Shield className="h-3 w-3 ml-1 text-teal-500" />
                       </Label>
                       <Input
                         id="cvv"
@@ -212,7 +212,7 @@ export default function SecurePayment() {
                         value={cvv}
                         onChange={(e) => setCvv(e.target.value)}
                         placeholder="123"
-                        className="bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-lg py-3"
+                        className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-lg py-3"
                         maxLength={4}
                       />
                     </div>
@@ -227,7 +227,7 @@ export default function SecurePayment() {
                       type="text"
                       value={cardholderName}
                       onChange={(e) => setCardholderName(e.target.value)}
-                      className="bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-lg py-3"
+                      className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-lg py-3"
                     />
                   </div>
                 </CardContent>
@@ -285,15 +285,15 @@ export default function SecurePayment() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t">
                   <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <Shield className="h-4 w-4 text-emerald-500" />
+                    <Shield className="h-4 w-4 text-teal-500" />
                     <span>256-bit SSL</span>
                   </div>
                   <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <Lock className="h-4 w-4 text-emerald-500" />
+                    <Lock className="h-4 w-4 text-teal-500" />
                     <span>PCI Compliant</span>
                   </div>
                   <div className="flex items-center space-x-2 text-sm text-gray-600">
-                    <CheckCircle className="h-4 w-4 text-emerald-500" />
+                    <CheckCircle className="h-4 w-4 text-teal-500" />
                     <span>Bank Grade Security</span>
                   </div>
                 </div>
@@ -336,14 +336,14 @@ export default function SecurePayment() {
                 <div className="border-t pt-4">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold text-gray-900">Total Amount:</span>
-                    <span className="text-2xl font-bold text-emerald-600">€{paymentData.amount}</span>
+                    <span className="text-2xl font-bold text-teal-600">€{paymentData.amount}</span>
                   </div>
                 </div>
 
                 <Button 
                   onClick={handlePayment}
                   disabled={!acceptTerms || isProcessing || (paymentMethod === "card" && (!cardNumber || !expiryDate || !cvv))}
-                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 text-lg font-bold disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-200"
+                  className="w-full bg-teal-500 hover:bg-teal-600 text-white py-4 text-lg font-bold disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all duration-200"
                 >
                   {isProcessing ? (
                     <>
@@ -367,13 +367,13 @@ export default function SecurePayment() {
             </Card>
 
             {/* Security Notice */}
-            <Card className="border-emerald-200 bg-emerald-50">
+            <Card className="border-teal-200 bg-teal-50">
               <CardContent className="pt-6">
                 <div className="flex items-start space-x-3">
-                  <Shield className="h-6 w-6 text-emerald-600 mt-1" />
+                  <Shield className="h-6 w-6 text-teal-600 mt-1" />
                   <div>
-                    <h4 className="font-semibold text-emerald-900 mb-2">Your Payment is Secure</h4>
-                    <ul className="text-sm text-emerald-800 space-y-1">
+                    <h4 className="font-semibold text-teal-900 mb-2">Your Payment is Secure</h4>
+                    <ul className="text-sm text-teal-800 space-y-1">
                       <li>• All data encrypted with 256-bit SSL</li>
                       <li>• PCI DSS Level 1 compliant</li>
                       <li>• No card details stored</li>

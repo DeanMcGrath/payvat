@@ -430,7 +430,7 @@ export default function AdminPayments() {
               </div>
             ) : (
               payments.map((payment) => (
-                <div key={payment.id} className="border rounded-lg p-4 hover:bg-gray-50">
+                <div key={payment.id} className="border rounded-lg p-4 hover:bg-gray-100">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     {/* Payment Info */}
                     <div className="flex-1">

@@ -62,9 +62,9 @@ export default function VATReturnPeriod() {
       return {
         type: "current",
         message: "This covers the two-month taxable period as per VAT regulations",
-        color: "text-emerald-800",
-        bgColor: "bg-emerald-50",
-        borderColor: "border-emerald-200"
+        color: "text-teal-800",
+        bgColor: "bg-teal-50",
+        borderColor: "border-teal-200"
       }
     }
   }
@@ -72,7 +72,7 @@ export default function VATReturnPeriod() {
   const status = getStatusMessage()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
@@ -80,21 +80,21 @@ export default function VATReturnPeriod() {
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-2xl font-bold text-gray-800">
-              PAY <span className="text-emerald-500">VAT</span>
+            <h1 className="text-2xl font-thin text-gray-800">
+              PAY <span className="text-teal-600">VAT</span>
             </h1>
           </div>
           <div className="text-right">
             <h3 className="text-lg font-bold text-gray-800">Brian Cusack Trading Ltd</h3>
-            <p className="text-emerald-600 font-mono text-sm">VAT: IE0352440A</p>
+            <p className="text-teal-600 font-mono text-sm">VAT: IE0352440A</p>
           </div>
         </div>
       </header>
 
       <div className="p-6 max-w-2xl mx-auto">
         <div className="mb-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-full mb-4">
-            <Calendar className="h-8 w-8 text-emerald-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-100 rounded-full mb-4">
+            <Calendar className="h-8 w-8 text-teal-600" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">VAT Return Period</h2>
           <p className="text-gray-600">Select the bi-monthly period for your VAT return</p>
@@ -109,7 +109,7 @@ export default function VATReturnPeriod() {
               <div className="space-y-2">
                 <Label className="text-gray-700 font-medium">Tax Year</Label>
                 <Select value={selectedYear} onValueChange={setSelectedYear}>
-                  <SelectTrigger className="bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                  <SelectTrigger className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500">
                     <SelectValue placeholder="Select year" />
                   </SelectTrigger>
                   <SelectContent>
@@ -125,7 +125,7 @@ export default function VATReturnPeriod() {
               <div className="space-y-2">
                 <Label className="text-gray-700 font-medium">Tax Period (Bi-Monthly)</Label>
                 <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-                  <SelectTrigger className="bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500">
+                  <SelectTrigger className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500">
                     <SelectValue placeholder="Select period" />
                   </SelectTrigger>
                   <SelectContent>
@@ -149,7 +149,7 @@ export default function VATReturnPeriod() {
               </p>
             </div>
 
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+            <div className="bg-gray-100 border border-gray-200 rounded-lg p-4">
               <div className="flex justify-between items-center">
                 <div>
                   <p className="text-sm font-medium text-gray-900">
@@ -171,7 +171,7 @@ export default function VATReturnPeriod() {
 
         <div className="flex justify-center">
           <Button 
-            className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 text-lg"
+            className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 text-lg"
             onClick={() => window.location.href = '/vat-submission'}
           >
             {isPastPeriod(selectedYear, selectedPeriod) ? "View Past Submission" : "Continue to VAT Submission"}
@@ -181,7 +181,7 @@ export default function VATReturnPeriod() {
 
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-500">
-            Need help? <a href="#" className="text-emerald-600 hover:text-emerald-700">View VAT submission guide</a>
+            Need help? <a href="#" className="text-teal-600 hover:text-teal-700">View VAT submission guide</a>
           </p>
         </div>
       </div>

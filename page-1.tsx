@@ -10,12 +10,12 @@ export default function LoginForm() {
   const [password, setPassword] = useState("")
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-100 p-4">
       {/* Business Info - Top Right */}
       <div className="flex justify-end mb-4">
         <div className="text-right">
           <h3 className="text-lg font-bold text-gray-800">Brian Cusack Trading Ltd</h3>
-          <p className="text-emerald-600 font-mono text-sm">VAT: IE0352440A</p>
+          <p className="text-teal-600 font-mono text-sm">VAT: IE0352440A</p>
         </div>
       </div>
       
@@ -23,13 +23,13 @@ export default function LoginForm() {
         <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-8 w-full max-w-md">
           <div className="text-center mb-8">
             <div className="inline-flex flex-col items-center">
-              <h1 className="text-4xl font-bold text-gray-800 mb-1">
-                PAY <span className="text-emerald-500">VAT</span>
+              <h1 className="text-2xl font-thin text-gray-800 mb-1">
+                PAY <span className="text-teal-600">VAT</span>
               </h1>
               <div className="text-gray-500 text-sm font-medium tracking-wider">
                 payvat.ie
               </div>
-              <div className="w-16 h-0.5 bg-emerald-500 mt-3"></div>
+              <div className="w-16 h-0.5 bg-teal-500 mt-3"></div>
             </div>
           </div>
           
@@ -45,7 +45,7 @@ export default function LoginForm() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-gray-900 rounded-lg"
+                className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 rounded-lg"
                 placeholder="your@email.com"
               />
             </div>
@@ -59,14 +59,14 @@ export default function LoginForm() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-gray-900 rounded-lg"
+                className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 rounded-lg"
                 placeholder="Enter your password"
               />
             </div>
             
             <div className="pt-4">
               <Button 
-                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-lg transition-colors duration-200"
+                className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-lg transition-colors duration-200"
                 onClick={() => window.location.href = '/dashboard'}
               >
                 Login
@@ -80,7 +80,7 @@ export default function LoginForm() {
             </p>
             <Button 
               variant="link"
-              className="text-emerald-600 hover:text-emerald-700 font-medium"
+              className="text-teal-600 hover:text-teal-700 font-medium"
               onClick={() => window.location.href = '/signup'}
             >
               Sign up here

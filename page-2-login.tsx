@@ -112,15 +112,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-100 p-4">
       <div className="flex items-center justify-center">
         <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-6 md:p-8 w-full max-w-md">
           <div className="text-center mb-8">
             <div className="inline-flex flex-col items-center">
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-1">
-                PAY <span className="text-emerald-500">VAT</span>
+              <h1 className="text-2xl font-thin text-gray-800 mb-1">
+                PAY <span className="text-teal-600">VAT</span>
               </h1>
-              <div className="w-16 h-0.5 bg-emerald-500 mt-3"></div>
+              <div className="w-16 h-0.5 bg-teal-600 mt-3"></div>
             </div>
           </div>
           
@@ -144,7 +144,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => handleEmailChange(e.target.value)}
-                className={`bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-gray-900 rounded-lg ${errors.email ? 'border-red-500' : ''}`}
+                className={`bg-white border-gray-300 focus:border-teal-600 focus:ring-teal-600 text-gray-900 rounded-lg ${errors.email ? 'border-red-500' : ''}`}
                 placeholder="your@email.com"
                 disabled={isLoading}
               />
@@ -162,7 +162,7 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => handlePasswordChange(e.target.value)}
-                className={`bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-gray-900 rounded-lg ${errors.password ? 'border-red-500' : ''}`}
+                className={`bg-white border-gray-300 focus:border-teal-600 focus:ring-teal-600 text-gray-900 rounded-lg ${errors.password ? 'border-red-500' : ''}`}
                 placeholder="Enter your password"
                 disabled={isLoading}
               />
@@ -173,7 +173,7 @@ export default function LoginPage() {
             
             <div className="pt-4">
               <Button 
-                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleLogin}
                 disabled={isLoading || loginAttempts >= 5}
               >
@@ -188,7 +188,7 @@ export default function LoginPage() {
             </p>
             <Button 
               variant="link"
-              className="text-emerald-600 hover:text-emerald-700 font-medium"
+              className="text-teal-600 hover:text-teal-700 font-medium"
               onClick={() => window.location.href = '/signup'}
             >
               Sign up here

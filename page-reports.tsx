@@ -1,56 +1,81 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, TrendingUp, FileText, Calendar, Download, Eye, BarChart3, PieChart, LineChart, Euro, Building } from 'lucide-react'
 import LiveChat from "./components/live-chat"
 
+interface Report {
+  id: number
+  title: string
+  period: string
+  type: string
+  status: string
+  date: string
+  amount: string
+}
+
 export default function ReportsPage() {
-  // Mock report data
-  const reports = [
-    {
-      id: 1,
-      title: "VAT Summary Report",
-      period: "Q4 2024",
-      type: "VAT Summary",
-      status: "Available",
-      date: "15 Jan 2025",
-      amount: "€12,450.00"
-    },
-    {
-      id: 2,
-      title: "Annual VAT Report",
-      period: "2024",
-      type: "Annual Summary",
-      status: "Available",
-      date: "31 Dec 2024",
-      amount: "€48,230.00"
-    },
-    {
-      id: 3,
-      title: "Q3 2024 VAT Return",
-      period: "Q3 2024",
-      type: "VAT Return",
-      status: "Submitted",
-      date: "15 Oct 2024",
-      amount: "€8,750.00"
-    },
-    {
-      id: 4,
-      title: "Q2 2024 VAT Return",
-      period: "Q2 2024",
-      type: "VAT Return",
-      status: "Paid",
-      date: "15 Jul 2024",
-      amount: "€6,890.00"
+  const [reports, setReports] = useState<Report[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await fetch('/api/reports')
+        if (response.ok) {
+          const data = await response.json()
+          setReports(data.reports || [])
+        } else {
+          setError('Failed to load reports')
+        }
+      } catch (err) {
+        setError('Failed to connect to server')
+      } finally {
+        setIsLoading(false)
+      }
     }
-  ]
+
+    fetchReports()
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-teal-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading reports...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-8 text-center">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Error Loading Reports</h2>
+            <p className="text-gray-600 mb-6">{error}</p>
+            <Button 
+              onClick={() => window.location.reload()}
+              className="bg-teal-600 hover:bg-teal-700"
+            >
+              Try Again
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Available':
-        return 'bg-emerald-100 text-emerald-800 border-emerald-200'
+        return 'bg-teal-100 text-teal-800 border-teal-200'
       case 'Submitted':
         return 'bg-blue-100 text-blue-800 border-blue-200'
       case 'Paid':
@@ -61,7 +86,7 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
@@ -73,13 +98,13 @@ export default function ReportsPage() {
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-2xl font-bold text-gray-800">
-              PAY <span className="text-emerald-500">VAT</span>
+            <h1 className="text-2xl font-thin text-gray-800">
+              PAY <span className="text-teal-600">VAT</span>
             </h1>
           </div>
           <div className="text-right">
-            <h3 className="text-lg font-bold text-emerald-600">Brian Cusack Trading Ltd</h3>
-            <p className="text-emerald-600 font-mono text-sm">VAT: IE0352440A</p>
+            <h3 className="text-lg font-bold text-teal-600">Brian Cusack Trading Ltd</h3>
+            <p className="text-teal-600 font-mono text-sm">VAT: IE0352440A</p>
           </div>
         </div>
       </header>
@@ -88,8 +113,8 @@ export default function ReportsPage() {
         {/* Page Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 rounded-full">
-              <TrendingUp className="h-6 w-6 text-emerald-600" />
+            <div className="inline-flex items-center justify-center w-12 h-12 bg-teal-100 rounded-full">
+              <TrendingUp className="h-6 w-6 text-teal-600" />
             </div>
             <div>
               <h2 className="text-3xl font-bold text-gray-900">VAT Reports & Analytics</h2>
@@ -103,18 +128,18 @@ export default function ReportsPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">Total VAT Paid (2024)</CardTitle>
-              <Euro className="h-4 w-4 text-emerald-500" />
+              <Euro className="h-4 w-4 text-teal-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">€48,230.00</div>
-              <p className="text-xs text-emerald-600 mt-1">+15% from 2023</p>
+              <p className="text-xs text-teal-600 mt-1">+15% from 2023</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">Returns Filed</CardTitle>
-              <FileText className="h-4 w-4 text-emerald-500" />
+              <FileText className="h-4 w-4 text-teal-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">6</div>
@@ -125,7 +150,7 @@ export default function ReportsPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">Average VAT</CardTitle>
-              <BarChart3 className="h-4 w-4 text-emerald-500" />
+              <BarChart3 className="h-4 w-4 text-teal-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">€8,038.33</div>
@@ -136,21 +161,21 @@ export default function ReportsPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">On-Time Payments</CardTitle>
-              <Calendar className="h-4 w-4 text-emerald-500" />
+              <Calendar className="h-4 w-4 text-teal-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">100%</div>
-              <p className="text-xs text-emerald-600 mt-1">Perfect record</p>
+              <p className="text-xs text-teal-600 mt-1">Perfect record</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Report Categories */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="border-emerald-200 hover:border-emerald-300 cursor-pointer transition-colors">
+          <Card className="border-teal-200 hover:border-teal-300 cursor-pointer transition-colors">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-                <PieChart className="h-5 w-5 mr-2 text-emerald-600" />
+                <PieChart className="h-5 w-5 mr-2 text-teal-600" />
                 VAT Summary Reports
               </CardTitle>
             </CardHeader>
@@ -158,7 +183,7 @@ export default function ReportsPage() {
               <p className="text-gray-600 text-sm mb-4">
                 Comprehensive VAT summaries by period with breakdowns of sales and purchase VAT.
               </p>
-              <Button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white">
+              <Button className="w-full bg-teal-500 hover:bg-teal-600 text-white">
                 View VAT Summaries
               </Button>
             </CardContent>
@@ -204,7 +229,7 @@ export default function ReportsPage() {
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center justify-between">
               <div className="flex items-center">
-                <FileText className="h-5 w-5 mr-2 text-emerald-600" />
+                <FileText className="h-5 w-5 mr-2 text-teal-600" />
                 Recent Reports
               </div>
               <Button variant="outline" size="sm">
@@ -216,10 +241,10 @@ export default function ReportsPage() {
           <CardContent>
             <div className="space-y-4">
               {reports.map((report) => (
-                <div key={report.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <div key={report.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
                   <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                      <FileText className="h-5 w-5 text-emerald-600" />
+                    <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
+                      <FileText className="h-5 w-5 text-teal-600" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">{report.title}</h4>
@@ -260,7 +285,7 @@ export default function ReportsPage() {
           >
             Back to Dashboard
           </Button>
-          <Button className="bg-emerald-500 hover:bg-emerald-600 text-white">
+          <Button className="bg-teal-500 hover:bg-teal-600 text-white">
             <Download className="h-4 w-4 mr-2" />
             Export All Reports
           </Button>

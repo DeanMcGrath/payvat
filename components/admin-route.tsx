@@ -82,11 +82,11 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="pt-6">
             <div className="flex items-center justify-center space-x-2">
-              <Shield className="h-5 w-5 text-emerald-600 animate-spin" />
+              <Shield className="h-5 w-5 text-teal-600 animate-spin" />
               <span className="text-gray-600">Verifying admin access...</span>
             </div>
           </CardContent>
@@ -97,7 +97,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
 
   if (error || !user || !hasAdminRole(user.role, requiredRole)) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <Card className="w-full max-w-md border-red-200">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2 text-red-800">
@@ -121,7 +121,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
                 <p className="text-sm text-gray-600 mb-3">Please log in with an admin account</p>
                 <Button 
                   onClick={() => window.location.href = '/login'}
-                  className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                  className="bg-teal-500 hover:bg-teal-600 text-white"
                 >
                   Go to Login
                 </Button>
@@ -130,7 +130,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
             
             {user && !hasAdminRole(user.role, requiredRole) && (
               <div className="text-center">
-                <div className="bg-gray-50 rounded-lg p-3 mb-3">
+                <div className="bg-gray-100 rounded-lg p-3 mb-3">
                   <p className="text-sm text-gray-600">Current Role: <span className="font-medium">{user.role}</span></p>
                   <p className="text-sm text-gray-600">Required: <span className="font-medium">{requiredRole}+</span></p>
                 </div>
@@ -153,12 +153,12 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
   return (
     <div className="admin-context">
       {/* Admin Header Bar */}
-      <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white py-2 px-4">
+      <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white py-2 px-4">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center space-x-3">
             <Shield className="h-4 w-4" />
             <span className="text-sm font-medium">Admin Panel</span>
-            <span className="text-xs bg-emerald-500 px-2 py-1 rounded">{user.role}</span>
+            <span className="text-xs bg-teal-500 px-2 py-1 rounded">{user.role}</span>
           </div>
           <div className="text-sm">
             {user.businessName} • {user.email}

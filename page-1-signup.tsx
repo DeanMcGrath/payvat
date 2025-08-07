@@ -129,7 +129,7 @@ export default function SignupPage() {
                 type="text"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
-                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 ${errors.businessName ? 'border-red-500' : ''}`}
+                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.businessName ? 'border-red-500' : ''}`}
                 placeholder="Enter your business name"
                 disabled={isLoading}
               />
@@ -147,7 +147,7 @@ export default function SignupPage() {
                 type="text"
                 value={vatNumber}
                 onChange={(e) => setVatNumber(e.target.value)}
-                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 ${errors.vatNumber ? 'border-red-500' : ''}`}
+                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.vatNumber ? 'border-red-500' : ''}`}
                 placeholder="Enter your VAT number (optional)"
                 disabled={isLoading}
               />
@@ -165,7 +165,7 @@ export default function SignupPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 ${errors.email ? 'border-red-500' : ''}`}
+                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.email ? 'border-red-500' : ''}`}
                 placeholder="Enter your email address"
                 disabled={isLoading}
               />
@@ -183,7 +183,7 @@ export default function SignupPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 ${errors.password ? 'border-red-500' : ''}`}
+                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.password ? 'border-red-500' : ''}`}
                 placeholder="Create a secure password"
                 disabled={isLoading}
               />
@@ -201,7 +201,7 @@ export default function SignupPage() {
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 ${errors.confirmPassword ? 'border-red-500' : ''}`}
+                className={`w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.confirmPassword ? 'border-red-500' : ''}`}
                 placeholder="Confirm your password"
                 disabled={isLoading}
               />
@@ -212,7 +212,7 @@ export default function SignupPage() {
             
             <div className="pt-4">
               <Button 
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-4 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-3 px-4 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleRegister}
                 disabled={isLoading || success}
               >
@@ -225,7 +225,7 @@ export default function SignupPage() {
             <p className="text-gray-600 text-sm">
               Already have an account?{' '}
               <button 
-                className="text-emerald-600 hover:text-emerald-700 font-medium hover:underline"
+                className="text-teal-600 hover:text-teal-700 font-medium hover:underline"
                 onClick={() => window.location.href = '/login'}
               >
                 Sign in

@@ -196,14 +196,14 @@ export default function FileUpload({
       <h4 className="text-md font-semibold text-gray-900 mb-3">{title}</h4>
       
       {/* Upload Area */}
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-emerald-300 transition-colors">
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-teal-300 transition-colors">
         <Upload className="h-10 w-10 text-gray-400 mx-auto mb-3" />
         <p className="text-gray-600 mb-2">{description}</p>
         <p className="text-sm text-gray-500 mb-3">PDF, Excel, or CSV files up to 10MB each</p>
         
         <Button 
           variant="outline" 
-          className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+          className="border-teal-200 text-teal-700 hover:bg-teal-50"
           onClick={handleFileSelect}
           disabled={isUploading}
         >
@@ -223,7 +223,7 @@ export default function FileUpload({
       {uploadedFiles.length > 0 && (
         <div className="mt-4 space-y-2">
           {uploadedFiles.map((file) => (
-            <div key={file.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div key={file.id} className="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
               <div className="flex items-center space-x-3">
                 <FileText className="h-5 w-5 text-gray-500" />
                 <div>

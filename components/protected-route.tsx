@@ -70,9 +70,9 @@ export default function ProtectedRoute({
   // Show loading state while checking authentication
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="flex items-center space-x-2">
-          <Loader2 className="h-6 w-6 animate-spin text-emerald-500" />
+          <Loader2 className="h-6 w-6 animate-spin text-teal-500" />
           <span className="text-gray-600">Verifying access...</span>
         </div>
       </div>
@@ -82,7 +82,7 @@ export default function ProtectedRoute({
   // Show authentication error
   if (authError || !isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <Card className="w-full max-w-md border-red-200">
           <CardContent className="pt-6">
             <div className="flex items-center justify-center space-x-2 mb-4">

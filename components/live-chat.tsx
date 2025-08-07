@@ -172,7 +172,7 @@ export default function LiveChat() {
       {isOpen && (
         <div className="fixed bottom-20 right-4 w-80 h-96 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
           <Card className="h-full">
-            <CardHeader className="bg-emerald-500 text-white rounded-t-lg">
+            <CardHeader className="bg-teal-500 text-white rounded-t-lg">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg font-semibold">
                   Live Chat Support
@@ -186,7 +186,7 @@ export default function LiveChat() {
                   variant="ghost"
                   size="sm"
                   onClick={toggleChat}
-                  className="text-white hover:bg-emerald-600"
+                  className="text-white hover:bg-teal-600"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -196,7 +196,7 @@ export default function LiveChat() {
               <div className="flex-1 p-4 overflow-y-auto">
                 {isLoading ? (
                   <div className="flex items-center justify-center h-full">
-                    <Loader2 className="h-6 w-6 animate-spin text-emerald-500" />
+                    <Loader2 className="h-6 w-6 animate-spin text-teal-500" />
                     <span className="ml-2 text-sm text-gray-600">Connecting...</span>
                   </div>
                 ) : (
@@ -209,7 +209,7 @@ export default function LiveChat() {
                           key={msg.id}
                           className={`rounded-lg p-3 max-w-[85%] ${
                             msg.senderType === 'user'
-                              ? 'bg-emerald-500 text-white ml-auto'
+                              ? 'bg-teal-500 text-white ml-auto'
                               : msg.senderType === 'admin'
                               ? isAI 
                                 ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-gray-800 border border-blue-200'
@@ -272,7 +272,7 @@ export default function LiveChat() {
                   <Button 
                     onClick={sendMessage} 
                     size="sm" 
-                    className="bg-emerald-500 hover:bg-emerald-600"
+                    className="bg-teal-500 hover:bg-teal-600"
                     disabled={isLoading || isSending || !session || !message.trim()}
                   >
                     {isSending ? (
@@ -291,7 +291,7 @@ export default function LiveChat() {
       {/* Chat Button */}
       <Button
         onClick={toggleChat}
-        className="fixed bottom-4 right-4 w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg z-40"
+        className="fixed bottom-4 right-4 w-14 h-14 rounded-full bg-teal-500 hover:bg-teal-600 text-white shadow-lg z-40"
       >
         <MessageCircle className="h-6 w-6" />
       </Button>

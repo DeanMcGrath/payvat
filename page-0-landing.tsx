@@ -4,17 +4,18 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin } from 'lucide-react'
 import LiveChat from "./components/live-chat"
+import Footer from "./components/footer"
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="min-h-screen bg-gray-100">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">
-            PAY <span className="text-emerald-500">VAT</span>
+          <h1 className="text-2xl font-thin text-gray-800 mb-4">
+            PAY <span className="text-teal-600">VAT</span>
           </h1>
           
-          <div className="w-20 h-0.5 bg-emerald-500 mx-auto mb-8"></div>
+          <div className="w-20 h-0.5 bg-teal-600 mx-auto mb-8"></div>
           
           <h2 className="text-2xl text-gray-700 mb-4">
             Simplify Your VAT Submission and Payments
@@ -28,8 +29,8 @@ export default function LandingPage() {
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <Card className="bg-white border border-gray-200 shadow-lg">
             <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FileText className="h-6 w-6 text-emerald-600" />
+              <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FileText className="h-6 w-6 text-teal-700" />
               </div>
               <h3 className="font-semibold text-gray-800 mb-2">Easy Submission</h3>
               <p className="text-gray-600 text-sm">
@@ -75,7 +76,7 @@ export default function LandingPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
-              className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 px-8 text-lg"
+              className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
               onClick={() => window.location.href = '/signup'}
             >
               Sign Up Now
@@ -90,26 +91,26 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="bg-emerald-50 rounded-xl p-6 border border-emerald-200 mb-12">
-          <h4 className="font-semibold text-emerald-800 mb-4 text-center">
+        <div className="bg-teal-50 rounded-xl p-6 border border-teal-200 mb-12">
+          <h4 className="font-semibold text-teal-800 mb-4 text-center">
             Why Choose PAY VAT?
           </h4>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-5 w-5 text-emerald-600 flex-shrink-0" />
-              <span className="text-emerald-700 text-sm">Revenue approved platform</span>
+              <CheckCircle className="h-5 w-5 text-teal-700 flex-shrink-0" />
+              <span className="text-teal-700 text-sm">Revenue approved platform</span>
             </div>
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-5 w-5 text-emerald-600 flex-shrink-0" />
-              <span className="text-emerald-700 text-sm">Instant payment confirmation</span>
+              <CheckCircle className="h-5 w-5 text-teal-700 flex-shrink-0" />
+              <span className="text-teal-700 text-sm">Instant payment confirmation</span>
             </div>
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-5 w-5 text-emerald-600 flex-shrink-0" />
-              <span className="text-emerald-700 text-sm">Automated deadline reminders</span>
+              <CheckCircle className="h-5 w-5 text-teal-700 flex-shrink-0" />
+              <span className="text-teal-700 text-sm">Automated deadline reminders</span>
             </div>
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-5 w-5 text-emerald-600 flex-shrink-0" />
-              <span className="text-emerald-700 text-sm">24/7 customer support</span>
+              <CheckCircle className="h-5 w-5 text-teal-700 flex-shrink-0" />
+              <span className="text-teal-700 text-sm">24/7 customer support</span>
             </div>
           </div>
         </div>
@@ -134,7 +135,7 @@ export default function LandingPage() {
               <p className="text-gray-600 text-sm mb-3">Get help via email</p>
               <a 
                 href="mailto:support@payvat.ie" 
-                className="text-emerald-600 hover:text-emerald-700 font-medium text-sm"
+                className="text-teal-600 hover:text-teal-700 font-medium text-sm"
               >
                 support@payvat.ie
               </a>
@@ -148,19 +149,19 @@ export default function LandingPage() {
               <p className="text-gray-600 text-sm mb-3">Mon-Fri, 9AM-5PM</p>
               <a 
                 href="tel:+35318901234" 
-                className="text-emerald-600 hover:text-emerald-700 font-medium text-sm"
+                className="text-teal-600 hover:text-teal-700 font-medium text-sm"
               >
                 +353 1 890 1234
               </a>
             </div>
 
             <div className="text-center">
-              <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="h-6 w-6 text-emerald-600" />
+              <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="h-6 w-6 text-teal-700" />
               </div>
               <h4 className="font-semibold text-gray-800 mb-2">Live Chat</h4>
               <p className="text-gray-600 text-sm mb-3">24/7 instant support</p>
-              <p className="text-emerald-600 font-medium text-sm">
+              <p className="text-teal-600 font-medium text-sm">
                 Available 24/7
               </p>
             </div>
@@ -169,10 +170,7 @@ export default function LandingPage() {
         {/* Live Chat */}
         <LiveChat />
         {/* Footer */}
-        <footer className="mt-16 py-8 border-t border-gray-200 text-center">
-          <p className="text-gray-500 text-sm">payvat.ie</p>
-          <p className="text-gray-400 text-xs mt-2">© 2024 PAY VAT. All rights reserved.</p>
-        </footer>
+        <Footer />
       </div>
     </div>
   )

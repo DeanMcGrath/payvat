@@ -165,7 +165,7 @@ export default function VATReturnSubmission() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-4">
         <div className="flex items-center justify-between">
@@ -173,13 +173,13 @@ export default function VATReturnSubmission() {
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-xl md:text-2xl font-bold text-gray-800">
-              PAY <span className="text-emerald-500">VAT</span>
+            <h1 className="text-xl md:text-2xl font-thin text-gray-800">
+              PAY <span className="text-teal-600">VAT</span>
             </h1>
           </div>
           <div className="text-right">
             <h3 className="text-sm md:text-lg font-bold text-gray-800 hidden sm:block">Brian Cusack Trading Ltd</h3>
-            <p className="text-emerald-600 font-mono text-xs md:text-sm">VAT: IE0352440A</p>
+            <p className="text-teal-600 font-mono text-xs md:text-sm">VAT: IE0352440A</p>
           </div>
         </div>
       </header>
@@ -187,8 +187,8 @@ export default function VATReturnSubmission() {
       <div className="p-4 md:p-6 max-w-6xl mx-auto">
         <div className="mb-6 md:mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="inline-flex items-center justify-center w-8 md:w-10 h-8 md:h-10 bg-emerald-100 rounded-full">
-              <FileText className="h-4 md:h-5 w-4 md:w-5 text-emerald-600" />
+            <div className="inline-flex items-center justify-center w-8 md:w-10 h-8 md:h-10 bg-teal-100 rounded-full">
+              <FileText className="h-4 md:h-5 w-4 md:w-5 text-teal-600" />
             </div>
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900">VAT Return Submission</h2>
@@ -202,18 +202,18 @@ export default function VATReturnSubmission() {
           <div className="lg:col-span-2 space-y-6">
             {/* Extracted VAT Data Card */}
             {extractedVATData && extractedVATData.processedDocuments > 0 && (
-              <Card className="border-emerald-200 bg-emerald-50">
+              <Card className="border-teal-200 bg-teal-50">
                 <CardHeader>
-                  <CardTitle className="text-lg font-semibold text-emerald-900 flex items-center">
-                    <Sparkles className="h-5 w-5 mr-2 text-emerald-600" />
+                  <CardTitle className="text-lg font-semibold text-teal-900 flex items-center">
+                    <Sparkles className="h-5 w-5 mr-2 text-teal-600" />
                     VAT Data Extracted from Documents
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-white p-3 rounded-lg border border-emerald-200">
+                    <div className="bg-white p-3 rounded-lg border border-teal-200">
                       <div className="text-sm text-gray-600">Sales VAT</div>
-                      <div className="text-lg font-semibold text-emerald-600">
+                      <div className="text-lg font-semibold text-teal-600">
                         €{extractedVATData.totalSalesVAT.toFixed(2)}
                       </div>
                       <div className="text-xs text-gray-500">
@@ -221,9 +221,9 @@ export default function VATReturnSubmission() {
                       </div>
                     </div>
                     
-                    <div className="bg-white p-3 rounded-lg border border-emerald-200">
+                    <div className="bg-white p-3 rounded-lg border border-teal-200">
                       <div className="text-sm text-gray-600">Purchase VAT</div>
-                      <div className="text-lg font-semibold text-emerald-600">
+                      <div className="text-lg font-semibold text-teal-600">
                         €{extractedVATData.totalPurchaseVAT.toFixed(2)}
                       </div>
                       <div className="text-xs text-gray-500">
@@ -231,9 +231,9 @@ export default function VATReturnSubmission() {
                       </div>
                     </div>
                     
-                    <div className="bg-white p-3 rounded-lg border border-emerald-200">
+                    <div className="bg-white p-3 rounded-lg border border-teal-200">
                       <div className="text-sm text-gray-600">Confidence</div>
-                      <div className="text-lg font-semibold text-emerald-600">
+                      <div className="text-lg font-semibold text-teal-600">
                         {extractedVATData.averageConfidence.toFixed(0)}%
                       </div>
                       <div className="text-xs text-gray-500">
@@ -245,7 +245,7 @@ export default function VATReturnSubmission() {
                   <div className="flex space-x-2">
                     <Button 
                       onClick={useExtractedVATData}
-                      className="bg-emerald-500 hover:bg-emerald-600 text-white"
+                      className="bg-teal-600 hover:bg-teal-600 text-white"
                       disabled={useExtractedData}
                     >
                       <Calculator className="h-4 w-4 mr-2" />
@@ -255,7 +255,7 @@ export default function VATReturnSubmission() {
                     <Button 
                       onClick={loadExtractedVATData}
                       variant="outline" 
-                      className="border-emerald-200 text-emerald-700"
+                      className="border-teal-200 text-teal-700"
                       disabled={loadingExtractedData}
                     >
                       <RefreshCw className={`h-4 w-4 mr-2 ${loadingExtractedData ? 'animate-spin' : ''}`} />
@@ -269,10 +269,10 @@ export default function VATReturnSubmission() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-                  <Calculator className="h-5 w-5 mr-2 text-emerald-600" />
+                  <Calculator className="h-5 w-5 mr-2 text-teal-600" />
                   VAT Calculation
                   {useExtractedData && (
-                    <Badge className="ml-2 bg-emerald-100 text-emerald-800">
+                    <Badge className="ml-2 bg-teal-100 text-teal-800">
                       From Documents
                     </Badge>
                   )}
@@ -291,7 +291,7 @@ export default function VATReturnSubmission() {
                         type="text"
                         value={salesVAT}
                         onChange={(e) => setSalesVAT(e.target.value)}
-                        className="pl-8 bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
+                        className="pl-8 bg-white border-gray-300 focus:border-teal-600 focus:ring-teal-600"
                       />
                     </div>
                     <p className="text-xs text-gray-500">Total VAT collected on sales</p>
@@ -308,7 +308,7 @@ export default function VATReturnSubmission() {
                         type="text"
                         value={purchaseVAT}
                         onChange={(e) => setPurchaseVAT(e.target.value)}
-                        className="pl-8 bg-white border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
+                        className="pl-8 bg-white border-gray-300 focus:border-teal-600 focus:ring-teal-600"
                       />
                     </div>
                     <p className="text-xs text-gray-500">Total VAT paid on purchases</p>
@@ -316,20 +316,20 @@ export default function VATReturnSubmission() {
                 </div>
 
                 <div className="border-t pt-6">
-                  <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+                  <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label className="text-lg font-semibold text-emerald-900">Net VAT Due</Label>
-                        <p className="text-sm text-emerald-700">Amount to pay to Revenue</p>
+                        <Label className="text-lg font-semibold text-teal-900">Net VAT Due</Label>
+                        <p className="text-sm text-teal-700">Amount to pay to Revenue</p>
                       </div>
-                      <div className="text-3xl font-bold text-emerald-600">€{netVAT}</div>
+                      <div className="text-3xl font-bold text-teal-600">€{netVAT}</div>
                     </div>
                   </div>
                 </div>
 
                 <Button 
                   onClick={calculateNetVAT}
-                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-white"
+                  className="w-full bg-teal-600 hover:bg-teal-600 text-white"
                 >
                   <Calculator className="h-4 w-4 mr-2" />
                   Recalculate VAT
@@ -340,7 +340,7 @@ export default function VATReturnSubmission() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-                  <Upload className="h-5 w-5 mr-2 text-emerald-600" />
+                  <Upload className="h-5 w-5 mr-2 text-teal-600" />
                   Supporting Documents
                 </CardTitle>
               </CardHeader>
@@ -404,14 +404,14 @@ export default function VATReturnSubmission() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-                    <FileText className="h-5 w-5 mr-2 text-emerald-600" />
+                    <FileText className="h-5 w-5 mr-2 text-teal-600" />
                     Uploaded Documents ({uploadedDocuments.length})
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     {uploadedDocuments.map((document) => (
-                      <div key={document.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
+                      <div key={document.id} className="flex items-center justify-between p-4 bg-gray-100 rounded-lg border">
                         <div className="flex items-center space-x-4">
                           <div className="flex-shrink-0">
                             {document.mimeType?.includes('pdf') ? (
@@ -434,7 +434,7 @@ export default function VATReturnSubmission() {
                               {document.isScanned && (
                                 <div className="flex items-center text-xs">
                                   {document.scanResult?.includes('€') ? (
-                                    <span className="inline-flex items-center text-emerald-600">
+                                    <span className="inline-flex items-center text-teal-600">
                                       <CheckCircle className="h-3 w-3 mr-1" />
                                       <span className="font-medium">{document.scanResult}</span>
                                     </span>
@@ -496,7 +496,7 @@ export default function VATReturnSubmission() {
                 <div className="border-t pt-4">
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Total Due:</span>
-                    <span className="text-emerald-600">€{netVAT}</span>
+                    <span className="text-teal-600">€{netVAT}</span>
                   </div>
                 </div>
               </CardContent>
@@ -508,11 +508,11 @@ export default function VATReturnSubmission() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-500" />
+                  <CheckCircle className="h-4 w-4 text-teal-600" />
                   <span className="text-sm text-gray-700">Period selected</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-500" />
+                  <CheckCircle className="h-4 w-4 text-teal-600" />
                   <span className="text-sm text-gray-700">VAT amounts entered</span>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -536,7 +536,7 @@ export default function VATReturnSubmission() {
                   Save as Draft
                 </Button>
                 <Button 
-                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-white justify-start"
+                  className="w-full bg-teal-600 hover:bg-teal-600 text-white justify-start"
                   onClick={() => window.location.href = '/submit-return'}
                 >
                   Submit Return

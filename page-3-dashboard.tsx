@@ -69,9 +69,9 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="flex items-center space-x-2">
-          <Loader2 className="h-6 w-6 animate-spin text-emerald-500" />
+          <Loader2 className="h-6 w-6 animate-spin text-teal-700" />
           <span className="text-gray-600">Loading dashboard...</span>
         </div>
       </div>
@@ -80,7 +80,7 @@ export default function HomePage() {
 
   if (error || !user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <Card className="w-full max-w-md border-red-200">
           <CardContent className="pt-6">
             <div className="flex items-center justify-center space-x-2 mb-4">
@@ -103,19 +103,19 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold text-gray-800">
-              PAY <span className="text-emerald-500">VAT</span>
+            <h1 className="text-2xl font-thin text-gray-800">
+              PAY <span className="text-teal-700">VAT</span>
             </h1>
           </div>
           <div className="flex items-center space-x-6">
             <div className="text-right">
-              <h3 className="text-lg font-bold text-emerald-600">{user.businessName}</h3>
-              <p className="text-emerald-600 font-mono text-sm">VAT: {user.vatNumber}</p>
+              <h3 className="text-lg font-bold text-teal-700">{user.businessName}</h3>
+              <p className="text-teal-700 font-mono text-sm">VAT: {user.vatNumber}</p>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="ghost" size="sm">
@@ -146,7 +146,7 @@ export default function HomePage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">VAT Due</CardTitle>
-              <Euro className="h-4 w-4 text-emerald-500" />
+              <Euro className="h-4 w-4 text-teal-700" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">€12,450.00</div>
@@ -157,18 +157,18 @@ export default function HomePage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">This Quarter</CardTitle>
-              <TrendingUp className="h-4 w-4 text-emerald-500" />
+              <TrendingUp className="h-4 w-4 text-teal-700" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">€45,230.00</div>
-              <p className="text-xs text-emerald-600 mt-1">+12% from last quarter</p>
+              <p className="text-xs text-teal-700 mt-1">+12% from last quarter</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">Next Return</CardTitle>
-              <Calendar className="h-4 w-4 text-emerald-500" />
+              <Calendar className="h-4 w-4 text-teal-700" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">15 days</div>
@@ -209,7 +209,7 @@ export default function HomePage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <Button 
-                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white justify-start"
+                className="w-full bg-teal-600 hover:bg-teal-600 text-white justify-start"
                 onClick={() => window.location.href = '/vat-period'}
               >
                 <FileText className="h-4 w-4 mr-2" />
@@ -217,7 +217,7 @@ export default function HomePage() {
               </Button>
               <Button 
                 variant="outline" 
-                className="w-full justify-start border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                className="w-full justify-start border-teal-200 text-teal-700 hover:bg-teal-50"
                 onClick={() => window.location.href = '/payment'}
               >
                 <CreditCard className="h-4 w-4 mr-2" />
@@ -236,7 +236,7 @@ export default function HomePage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-teal-600 rounded-full"></div>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-900">Payment processed</p>
                   <p className="text-xs text-gray-500">€8,450.00 - 2 hours ago</p>

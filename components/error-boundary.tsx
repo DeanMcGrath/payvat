@@ -65,7 +65,7 @@ export class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
           <Card className="w-full max-w-md">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2 text-red-600">
@@ -91,7 +91,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <div className="flex space-x-2">
                 <Button 
                   onClick={this.handleRetry}
-                  className="flex-1 bg-emerald-500 hover:bg-emerald-600"
+                  className="flex-1 bg-teal-500 hover:bg-teal-600"
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Try Again
@@ -110,7 +110,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   If the problem persists, please contact support at{' '}
                   <a 
                     href="mailto:support@payvat.ie" 
-                    className="text-emerald-600 hover:text-emerald-700"
+                    className="text-teal-600 hover:text-teal-700"
                   >
                     support@payvat.ie
                   </a>

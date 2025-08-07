@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -9,31 +9,120 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, CheckCircle, FileText, Calculator, Euro, Calendar, Upload } from 'lucide-react'
 import LiveChat from "./components/live-chat"
 
+interface VATReturnData {
+  period: string
+  salesVAT: string
+  purchaseVAT: string
+  netVAT: string
+  dueDate: string
+  businessName: string
+  vatNumber: string
+}
+
 export default function SubmitReturn() {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [returnData, setReturnData] = useState<VATReturnData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Mock data - would come from previous pages/calculations
-  const returnData = {
-    period: "November - December 2024",
-    salesVAT: "9,450.00",
-    purchaseVAT: "2,100.00", 
-    netVAT: "7,350.00",
-    dueDate: "15 January 2025",
-    businessName: "Brian Cusack Trading Ltd",
-    vatNumber: "IE0352440A"
+  useEffect(() => {
+    const loadReturnData = async () => {
+      try {
+        // Get return data from URL params or session storage
+        const urlParams = new URLSearchParams(window.location.search)
+        const returnId = urlParams.get('return_id') || sessionStorage.getItem('current_return_id')
+        
+        if (returnId) {
+          const response = await fetch(`/api/vat/${returnId}`)
+          if (response.ok) {
+            const data = await response.json()
+            setReturnData(data.vatReturn)
+          } else {
+            setError('VAT return data not found')
+          }
+        } else {
+          setError('No VAT return data provided')
+        }
+      } catch (err) {
+        setError('Failed to load VAT return data')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadReturnData()
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-teal-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading VAT return data...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !returnData) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-8 text-center">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">VAT Return Not Found</h2>
+            <p className="text-gray-600 mb-6">{error || 'VAT return data could not be loaded'}</p>
+            <Button 
+              onClick={() => window.location.href = '/vat-submission'}
+              className="bg-teal-600 hover:bg-teal-700"
+            >
+              Return to VAT Submission
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   const handleSubmit = async () => {
+    if (!returnData) return
+    
     setIsSubmitting(true)
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    setIsSubmitting(false)
-    // Redirect to payment page
-    window.location.href = '/secure-payment'
+    try {
+      const response = await fetch('/api/vat/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          returnId: new URLSearchParams(window.location.search).get('return_id'),
+          confirmSubmission: true,
+        }),
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success) {
+          // Store payment info for next page
+          sessionStorage.setItem('payment_amount', returnData.netVAT)
+          sessionStorage.setItem('payment_period', returnData.period)
+          // Redirect to payment page
+          window.location.href = '/secure-payment'
+        } else {
+          alert('Failed to submit VAT return: ' + result.error)
+        }
+      } else {
+        alert('Failed to submit VAT return. Please try again.')
+      }
+    } catch (error) {
+      console.error('Submission error:', error)
+      alert('Network error. Please check your connection and try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
@@ -41,22 +130,22 @@ export default function SubmitReturn() {
             <Button variant="ghost" size="sm">
               <ArrowLeft className="h-4 w-4" />
             </Button>
-            <h1 className="text-2xl font-bold text-gray-800">
-              PAY <span className="text-emerald-500">VAT</span>
+            <h1 className="text-2xl font-thin text-gray-800">
+              PAY <span className="text-teal-600">VAT</span>
             </h1>
           </div>
           <div className="text-right">
-            <h3 className="text-lg font-bold text-emerald-600">{returnData.businessName}</h3>
-            <p className="text-emerald-600 font-mono text-sm">VAT: {returnData.vatNumber}</p>
+            <h3 className="text-lg font-bold text-teal-600">{returnData.businessName}</h3>
+            <p className="text-teal-600 font-mono text-sm">VAT: {returnData.vatNumber}</p>
           </div>
         </div>
       </header>
 
-      <div className="p-6 max-w-4xl mx-auto">
+      <div className="p-6 max-w-7xl mx-auto">
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="inline-flex items-center justify-center w-10 h-10 bg-emerald-100 rounded-full">
-              <CheckCircle className="h-5 w-5 text-emerald-600" />
+            <div className="inline-flex items-center justify-center w-10 h-10 bg-teal-100 rounded-full">
+              <CheckCircle className="h-5 w-5 text-teal-600" />
             </div>
             <div>
               <h2 className="text-3xl font-bold text-gray-900">Submit VAT Return</h2>
@@ -71,7 +160,7 @@ export default function SubmitReturn() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-                  <FileText className="h-5 w-5 mr-2 text-emerald-600" />
+                  <FileText className="h-5 w-5 mr-2 text-teal-600" />
                   Return Summary
                 </CardTitle>
               </CardHeader>
@@ -99,7 +188,7 @@ export default function SubmitReturn() {
                     </div>
                     <div className="border-t pt-3 flex justify-between items-center">
                       <span className="text-lg font-semibold text-gray-900">Net VAT Due:</span>
-                      <span className="text-2xl font-bold text-emerald-600">€{returnData.netVAT}</span>
+                      <span className="text-2xl font-bold text-teal-600">€{returnData.netVAT}</span>
                     </div>
                   </div>
                 </div>
@@ -109,7 +198,7 @@ export default function SubmitReturn() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-                  <Upload className="h-5 w-5 mr-2 text-emerald-600" />
+                  <Upload className="h-5 w-5 mr-2 text-teal-600" />
                   Supporting Documents
                 </CardTitle>
               </CardHeader>
@@ -186,13 +275,13 @@ export default function SubmitReturn() {
                 <div className="border-t pt-4">
                   <div className="text-center mb-4">
                     <div className="text-sm text-gray-600">Amount to Pay</div>
-                    <div className="text-3xl font-bold text-emerald-600">€{returnData.netVAT}</div>
+                    <div className="text-3xl font-bold text-teal-600">€{returnData.netVAT}</div>
                   </div>
 
                   <Button 
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 text-lg font-bold disabled:opacity-50"
+                    className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 text-lg font-bold disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <>

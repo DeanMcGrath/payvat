@@ -245,7 +245,7 @@ function AdminUsersContent() {
     return (
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
           <span className="ml-2 text-gray-600">Loading users...</span>
         </div>
       </div>
@@ -355,7 +355,7 @@ function AdminUsersContent() {
               </div>
             ) : (
               users.map((user) => (
-                <div key={user.id} className="border rounded-lg p-4 hover:bg-gray-50">
+                <div key={user.id} className="border rounded-lg p-4 hover:bg-gray-100">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     {/* User Info */}
                     <div className="flex-1">

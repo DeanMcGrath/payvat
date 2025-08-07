@@ -301,7 +301,7 @@ export default function AdminDocuments() {
               </div>
             ) : (
               documents.map((document) => (
-                <div key={document.id} className="border rounded-lg p-4 hover:bg-gray-50">
+                <div key={document.id} className="border rounded-lg p-4 hover:bg-gray-100">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     {/* Document Info */}
                     <div className="flex-1">
