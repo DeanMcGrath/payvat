@@ -157,10 +157,17 @@ function AdminUsersContent() {
       setPagination(data.pagination || { page: 1, limit: 20, totalCount: 0, totalPages: 0 })
     } catch (err) {
       console.error('Users fetch error:', err)
+      
+      // More specific error handling
       if (err instanceof TypeError && err.message.includes('fetch')) {
         setError('Network error. Please check your connection and try again.')
+      } else if (err instanceof TypeError || err instanceof ReferenceError) {
+        // Handle potential runtime/reference errors that could cause crashes
+        setError('Application error. Please refresh the page and try again.')
+      } else if (err instanceof Error) {
+        setError(err.message)
       } else {
-        setError(err instanceof Error ? err.message : 'Failed to load users')
+        setError('Failed to load users. Please try again.')
       }
     } finally {
       setLoading(false)
@@ -168,7 +175,18 @@ function AdminUsersContent() {
   }, [search, roleFilter, statusFilter, page])
 
   useEffect(() => {
-    fetchUsers()
+    // Wrap async call in proper error handling to prevent unhandled promise rejections
+    const loadUsers = async () => {
+      try {
+        await fetchUsers()
+      } catch (error) {
+        console.error('Critical error in useEffect fetchUsers:', error)
+        setError('Critical error loading users. Please refresh the page.')
+        setLoading(false)
+      }
+    }
+    
+    loadUsers()
   }, [fetchUsers])
 
   const formatCurrency = (amount: number | undefined | null) => {

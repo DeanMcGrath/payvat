@@ -9,17 +9,19 @@ async function getUsers(request: NextRequest, user: AuthUser) {
   console.log(`[${requestId}] Admin users request started by user ${user.email} (${user.role})`)
   
   try {
-    // Test database connection first
+    // Simple database connection test using basic operation
     try {
-      await prisma.$queryRaw`SELECT 1`
-      console.log(`[${requestId}] Database connection test passed`)
+      // Use a lightweight operation instead of raw SQL
+      await prisma.$connect()
+      console.log(`[${requestId}] Database connection confirmed`)
     } catch (dbError) {
-      console.error(`[${requestId}] Database connection test failed:`, dbError)
+      console.error(`[${requestId}] Database connection failed:`, dbError)
       return NextResponse.json(
         { 
           error: 'Database connection unavailable',
-          details: 'Unable to connect to database. Please try again later.',
-          requestId
+          details: process.env.NODE_ENV === 'development' 
+            ? `Database error: ${String(dbError)}` 
+            : 'Database service temporarily unavailable. Please try again.'
         },
         { status: 503 }
       )
@@ -88,8 +90,7 @@ async function getUsers(request: NextRequest, user: AuthUser) {
       return NextResponse.json(
         { 
           error: 'Database connection failed - unable to fetch user count',
-          details: process.env.NODE_ENV === 'development' ? String(countError) : 'Database error',
-          requestId
+          details: process.env.NODE_ENV === 'development' ? String(countError) : 'Database error'
         },
         { status: 500 }
       )
@@ -134,8 +135,7 @@ async function getUsers(request: NextRequest, user: AuthUser) {
       return NextResponse.json(
         { 
           error: 'Database connection failed - unable to fetch users',
-          details: process.env.NODE_ENV === 'development' ? String(usersError) : 'Database error',
-          requestId
+          details: process.env.NODE_ENV === 'development' ? String(usersError) : 'Database error'
         },
         { status: 500 }
       )
@@ -234,6 +234,7 @@ async function getUsers(request: NextRequest, user: AuthUser) {
       console.log(`[${requestId}] No users found in database - returning empty result`)
     }
     
+    // Simple response format matching frontend interface exactly
     const response = {
       success: true,
       users: usersWithStats,
@@ -242,17 +243,15 @@ async function getUsers(request: NextRequest, user: AuthUser) {
         limit,
         totalCount,
         totalPages: Math.ceil(totalCount / limit) || 1
-      },
-      requestId,
-      timestamp: new Date().toISOString()
+      }
     }
     
     console.log(`[${requestId}] Admin users request completed successfully: ${usersWithStats.length} users returned`)
     return NextResponse.json(response)
     
   } catch (error) {
-    const requestId = Math.random().toString(36).substring(7)
-    console.error(`[${requestId}] Critical admin users fetch error:`, {
+    const errorId = Math.random().toString(36).substring(7)
+    console.error(`[${errorId}] Critical admin users fetch error:`, {
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
       timestamp: new Date().toISOString()
@@ -260,9 +259,7 @@ async function getUsers(request: NextRequest, user: AuthUser) {
     return NextResponse.json(
       { 
         error: 'Failed to fetch users', 
-        details: process.env.NODE_ENV === 'development' ? String(error) : 'Internal server error',
-        requestId,
-        timestamp: new Date().toISOString()
+        details: process.env.NODE_ENV === 'development' ? String(error) : 'Internal server error'
       },
       { status: 500 }
     )
