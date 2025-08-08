@@ -478,7 +478,7 @@ Find the total VAT amount clearly labeled on the document. Be accurate - this is
     // DIAGNOSTIC TEST: If we suspect this should extract €111.36, run diagnostic comparison
     console.log('🧪 RUNNING POST-PROCESSING DIAGNOSTIC TESTS...')
     if (fileName.toLowerCase().includes('vw') || fileName.toLowerCase().includes('volkswagen') || 
-        fileName.toLowerCase().includes('financial') || (extractedPDFText && extractedPDFText.includes('111.36'))) {
+        fileName.toLowerCase().includes('financial')) {
       console.log('🎯 SUSPECTED VW FINANCIAL DOCUMENT - Running comprehensive diagnostic tests')
       
       // Test 1: Document processing diagnostic
