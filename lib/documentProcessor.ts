@@ -201,6 +201,72 @@ async function extractTextFromCSV(base64Data: string): Promise<{ success: boolea
 }
 
 /**
+ * Extract VAT amounts from table-like structures in document text
+ * Handles various VAT table formats with multiple rates
+ */
+function extractVATFromTables(text: string): number[] {
+  const vatAmounts: number[] = []
+  const lines = text.split('\n')
+  
+  // Look for VAT table sections
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].toLowerCase().trim()
+    
+    // Check if this line contains VAT table headers
+    if (line.includes('vat') && (line.includes('breakdown') || line.includes('summary') || 
+        line.includes('details') || line.includes('rate') || line.includes('amount'))) {
+      
+      // Process the next several lines looking for VAT amounts
+      for (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
+        const tableLine = lines[j].toLowerCase().trim()
+        if (!tableLine) continue
+        
+        // Look for common VAT table patterns
+        const tablePatterns = [
+          // Pattern: "MIN    €1.51" or "MIN  1.51"
+          /\b(min|nil|std23?|red13\.5?|tou9?)\s+€?([0-9,]+\.?[0-9]*)\b/gi,
+          // Pattern: "VAT @ 23%   €109.85"
+          /vat\s*@\s*([0-9.]+)%\s*€?([0-9,]+\.?[0-9]*)/gi,
+          // Pattern: "23%     €109.85"
+          /\b([0-9.]+)%\s+€?([0-9,]+\.?[0-9]*)\b/gi,
+          // Pattern: "€109.85    23%" (amount first)
+          /€?([0-9,]+\.?[0-9]*)\s+([0-9.]+)%/gi,
+        ]
+        
+        for (const pattern of tablePatterns) {
+          let match
+          while ((match = pattern.exec(tableLine)) !== null) {
+            // For patterns with rate and amount, extract the amount
+            let amount: number
+            if (pattern.source.includes('([0-9,]+\\.?[0-9]*).*([0-9.]+)%')) {
+              // Amount comes first, rate second
+              amount = parseFloat(match[1].replace(/,/g, ''))
+            } else {
+              // Rate comes first, amount second (most common)
+              amount = parseFloat(match[2]?.replace(/,/g, '') || match[1]?.replace(/,/g, ''))
+            }
+            
+            if (!isNaN(amount) && amount > 0) {
+              // Only add if we haven't already found this amount
+              if (!vatAmounts.some(existing => Math.abs(existing - amount) < 0.01)) {
+                vatAmounts.push(amount)
+              }
+            }
+          }
+        }
+        
+        // Stop processing if we hit another section header or empty lines
+        if (tableLine.includes('total') && !tableLine.includes('vat')) {
+          break
+        }
+      }
+    }
+  }
+  
+  return vatAmounts
+}
+
+/**
  * Extract VAT amounts and related data from text content
  */
 export function extractVATDataFromText(
@@ -231,6 +297,20 @@ export function extractVATDataFromText(
     /vat\s*@?\s*13\.5%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*@?\s*9%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     
+    // VAT rate category patterns (MIN, NIL, STD, etc.)
+    /vat\s*min[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /vat\s*std(?:23)?[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /vat\s*red(?:13\.5)?[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /vat\s*tou(?:9)?[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /vat\s*nil[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /vat\s*zero[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    
+    // VAT table row patterns
+    /min\s+€?([0-9,]+\.?[0-9]*)/gi,
+    /std23?\s+€?([0-9,]+\.?[0-9]*)/gi,
+    /red13\.5?\s+€?([0-9,]+\.?[0-9]*)/gi,
+    /tou9?\s+€?([0-9,]+\.?[0-9]*)/gi,
+    
     // Currency first patterns
     /€([0-9,]+\.?[0-9]*)\s*vat/gi,
     /€([0-9,]+\.?[0-9]*)\s*tax/gi,
@@ -240,6 +320,12 @@ export function extractVATDataFromText(
     
     // Irish specific patterns
     /cáin\s*bhreisluacha[:\s]*€?([0-9,]+\.?[0-9]*)/gi, // Irish for VAT
+    
+    // VAT breakdown table patterns
+    /(?:vat|tax)\s*(?:breakdown|summary|details)[^€]*€?([0-9,]+\.?[0-9]*)/gi,
+    
+    // Multiple VAT amounts in sequence (for tables)
+    /([0-9,]+\.?[0-9]*)\s*€?\s*(?:vat|tax)/gi,
   ]
   
   // Total amount patterns
@@ -249,18 +335,32 @@ export function extractVATDataFromText(
     /grand\s*total[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
   ]
   
-  // Extract VAT amounts
+  // Extract VAT amounts and track unique amounts to avoid duplicates
+  const foundVATAmounts = new Set<number>()
+  
   for (const pattern of vatPatterns) {
     let match
     while ((match = pattern.exec(normalizedText)) !== null) {
       const amount = parseFloat(match[1].replace(/,/g, ''))
       if (!isNaN(amount) && amount > 0) {
-        if (category.includes('SALES')) {
-          salesVAT.push(amount)
-        } else if (category.includes('PURCHASE')) {
-          purchaseVAT.push(amount)
+        // Check if this is a duplicate amount (avoid counting same amount multiple times)
+        const roundedAmount = Math.round(amount * 100) / 100
+        if (!foundVATAmounts.has(roundedAmount)) {
+          foundVATAmounts.add(roundedAmount)
+          
+          if (category.includes('SALES')) {
+            salesVAT.push(amount)
+          } else if (category.includes('PURCHASE')) {
+            purchaseVAT.push(amount)
+          }
+          
+          // Higher confidence boost for the first VAT amount, smaller for additional ones
+          if (foundVATAmounts.size === 1) {
+            confidence += 0.4
+          } else {
+            confidence += 0.2
+          }
         }
-        confidence += 0.3
       }
     }
   }
@@ -284,7 +384,20 @@ export function extractVATDataFromText(
     confidence += 0.1
   }
   
-  // If no explicit VAT amounts found, try to calculate from total and rate
+  // Try advanced VAT table extraction if we haven't found enough VAT amounts
+  if (salesVAT.length === 0 && purchaseVAT.length === 0) {
+    const tableVATAmounts = extractVATFromTables(text)
+    for (const amount of tableVATAmounts) {
+      if (category.includes('SALES')) {
+        salesVAT.push(amount)
+      } else if (category.includes('PURCHASE')) {
+        purchaseVAT.push(amount)
+      }
+      confidence += 0.3
+    }
+  }
+
+  // If still no explicit VAT amounts found, try to calculate from total and rate
   if (salesVAT.length === 0 && purchaseVAT.length === 0 && totalAmount && vatRate) {
     const calculatedVAT = (totalAmount * vatRate) / (100 + vatRate)
     if (category.includes('SALES')) {

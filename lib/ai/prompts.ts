@@ -60,20 +60,40 @@ CRITICAL INSTRUCTIONS FOR VAT EXTRACTION:
    - Pattern: "VAT @ 23%" or similar followed by amount
    - Pattern: "€X.XX VAT" or "VAT €X.XX"
 
-2. Irish VAT context:
-   - Standard rate: 23%
-   - Reduced rate: 13.5% (fuel, electricity, newspapers)
-   - Tourism rate: 9% (hospitality, tourism, sporting facilities)
-   - Zero rate: 0% (exports, certain foods, books, medicines)
+2. IMPORTANT: Look for VAT BREAKDOWN TABLES that show multiple VAT rates:
+   - Tables with columns like: Rate | VAT Amount | Total
+   - VAT rate categories: MIN, NIL, STD, STD23, RED13.5, TOU9, ZERO
+   - Example patterns:
+     * "VAT MIN €1.51"
+     * "VAT NIL €0.00"
+     * "VAT STD23 €109.85"
+     * "VAT @ 23% €109.85"
+     * "VAT @ 13.5% €1.51"
+   - Sum ALL VAT amounts from these breakdowns for the total
+   - Common table headers: "VAT Breakdown", "VAT Summary", "VAT Details", "Tax Summary"
+
+3. Irish VAT context and rate codes:
+   - Standard rate: 23% (STD, STD23)
+   - Reduced rate: 13.5% (RED, RED13.5, fuel, electricity, newspapers)
+   - Tourism rate: 9% (TOU, TOU9, hospitality, tourism, sporting facilities)
+   - Minimum rate: Often used for specific goods (MIN)
+   - Zero rate: 0% (NIL, ZERO, exports, certain foods, books, medicines)
    - Irish VAT numbers: IE followed by 8-9 characters
 
-3. Prioritize accuracy:
+4. Multi-line VAT extraction:
+   - Look for ALL VAT line items in the document
+   - Check for subtotals by VAT rate
+   - Sum individual VAT amounts to get the true total
+   - Don't stop at the first VAT amount found - scan the entire document
+
+5. Prioritize accuracy:
    - Extract the actual total VAT amount shown on the document
    - If multiple VAT amounts exist, sum them for totalVatAmount
+   - ALWAYS include ALL VAT amounts found in lineItems array
    - Cross-validate VAT calculations where possible
    - Mark confidence as high (0.8-1.0) only if VAT amounts are clearly visible
 
-4. Currency handling:
+6. Currency handling:
    - Convert amounts to numbers (remove €, commas)
    - Assume EUR if currency not specified
    - Handle both "€123.45" and "123.45" formats

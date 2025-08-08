@@ -225,7 +225,7 @@ function convertToEnhancedVATData(aiData: any, category: string): EnhancedVATDat
   const purchaseVAT: number[] = []
 
   // Extract VAT amounts based on classification and line items
-  if (aiData.vatData?.lineItems) {
+  if (aiData.vatData?.lineItems && aiData.vatData.lineItems.length > 0) {
     for (const item of aiData.vatData.lineItems) {
       if (item.vatAmount && item.vatAmount > 0) {
         if (aiData.classification?.category === 'SALES' || category.includes('SALES')) {
@@ -237,12 +237,30 @@ function convertToEnhancedVATData(aiData: any, category: string): EnhancedVATDat
     }
   }
 
-  // If no line items, use total VAT amount
-  if (salesVAT.length === 0 && purchaseVAT.length === 0 && aiData.vatData?.totalVatAmount) {
+  // If no line items but we have a total VAT amount, use it
+  if (salesVAT.length === 0 && purchaseVAT.length === 0 && aiData.vatData?.totalVatAmount && aiData.vatData.totalVatAmount > 0) {
     if (aiData.classification?.category === 'SALES' || category.includes('SALES')) {
       salesVAT.push(aiData.vatData.totalVatAmount)
     } else if (aiData.classification?.category === 'PURCHASES' || category.includes('PURCHASE')) {
       purchaseVAT.push(aiData.vatData.totalVatAmount)
+    }
+  }
+  
+  // Validate that line item VAT amounts sum to total VAT (if both exist)
+  if (salesVAT.length > 1 && aiData.vatData?.totalVatAmount) {
+    const calculatedTotal = salesVAT.reduce((sum, amount) => sum + amount, 0)
+    const tolerance = 0.02 // Allow for small rounding differences
+    if (Math.abs(calculatedTotal - aiData.vatData.totalVatAmount) > tolerance) {
+      // If the individual amounts don't add up, prefer the explicitly stated total
+      console.log(`VAT amount mismatch: line items sum to €${calculatedTotal.toFixed(2)}, but total VAT is €${aiData.vatData.totalVatAmount.toFixed(2)}`)
+    }
+  }
+  
+  if (purchaseVAT.length > 1 && aiData.vatData?.totalVatAmount) {
+    const calculatedTotal = purchaseVAT.reduce((sum, amount) => sum + amount, 0)
+    const tolerance = 0.02
+    if (Math.abs(calculatedTotal - aiData.vatData.totalVatAmount) > tolerance) {
+      console.log(`VAT amount mismatch: line items sum to €${calculatedTotal.toFixed(2)}, but total VAT is €${aiData.vatData.totalVatAmount.toFixed(2)}`)
     }
   }
 
@@ -261,8 +279,43 @@ function convertToEnhancedVATData(aiData: any, category: string): EnhancedVATDat
     purchaseVAT,
     totalAmount: aiData.vatData?.grandTotal,
     vatRate: aiData.vatData?.lineItems?.[0]?.vatRate,
-    confidence: aiData.classification?.confidence || 0.8
+    confidence: calculateConfidence(aiData, salesVAT, purchaseVAT)
   }
+}
+
+/**
+ * Calculate confidence score based on the quality and consistency of extracted VAT data
+ */
+function calculateConfidence(aiData: any, salesVAT: number[], purchaseVAT: number[]): number {
+  let confidence = aiData.classification?.confidence || 0.5
+  
+  // Boost confidence if we have multiple consistent VAT amounts
+  const totalVATItems = salesVAT.length + purchaseVAT.length
+  if (totalVATItems > 0) {
+    confidence = Math.max(confidence, 0.7) // Minimum confidence when VAT amounts are found
+    
+    // Additional boost for multiple VAT items (suggests comprehensive extraction)
+    if (totalVATItems > 1) {
+      confidence = Math.min(confidence + 0.15, 0.95)
+    }
+    
+    // Boost if we have both line items and a matching total
+    if (aiData.vatData?.lineItems?.length > 0 && aiData.vatData?.totalVatAmount) {
+      const lineItemTotal = aiData.vatData.lineItems.reduce((sum: number, item: any) => 
+        sum + (item.vatAmount || 0), 0)
+      const tolerance = 0.02
+      if (Math.abs(lineItemTotal - aiData.vatData.totalVatAmount) <= tolerance) {
+        confidence = Math.min(confidence + 0.1, 0.98)
+      }
+    }
+  }
+  
+  // Reduce confidence if there are validation flags indicating issues
+  if (aiData.validationFlags?.length > 0) {
+    confidence = Math.max(confidence - (aiData.validationFlags.length * 0.05), 0.3)
+  }
+  
+  return Math.round(confidence * 100) / 100 // Round to 2 decimal places
 }
 
 /**
