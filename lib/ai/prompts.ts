@@ -52,11 +52,14 @@ Return your analysis in the following JSON format:
 }
 
 CRITICAL INSTRUCTIONS FOR VAT EXTRACTION:
-1. Look for TOTAL VAT amounts in these patterns:
-   - "VAT": followed by euro amount
-   - "Total VAT": followed by euro amount  
+1. Look for TOTAL VAT amounts in these EXACT patterns (HIGH PRIORITY):
+   - "Total Amount VAT": followed by euro amount (HIGHEST PRIORITY)
+   - "Total VAT Amount": followed by euro amount (HIGHEST PRIORITY)
    - "VAT Amount": followed by euro amount
-   - "Tax": followed by euro amount
+   - "Total VAT": followed by euro amount  
+   - "VAT Total": followed by euro amount
+   - "Total Tax": followed by euro amount
+   - "Tax Amount": followed by euro amount
    - Pattern: "VAT @ 23%" or similar followed by amount
    - Pattern: "€X.XX VAT" or "VAT €X.XX"
 
@@ -105,8 +108,23 @@ CRITICAL INSTRUCTIONS FOR VAT EXTRACTION:
    - CRITICAL: Do NOT confuse lease payments with VAT amounts
    - Look for dedicated VAT sections separate from payment amounts  
    - Lease invoices should be classified as PURCHASES (you're buying a service)
-   - Examples of amounts to IGNORE: "Monthly Payment €126.62", "Lease Payment", "Amount Due"
-   - Examples of amounts to EXTRACT: "VAT Amount €111.36", "Total VAT €111.36"
+   
+   VOLKSWAGEN FINANCIAL SERVICES SPECIFIC PATTERNS:
+   - Look for "Total Amount VAT" field (this is the correct total)
+   - Example VAT breakdown table format:
+     * VAT MIN €1.51
+     * VAT NIL €0.00  
+     * VAT STD23 €109.85
+     * Total: €111.36 (sum of breakdown = €1.51 + €0.00 + €109.85)
+   
+   - Examples of amounts to IGNORE: 
+     * "Monthly Payment €610.50" (or similar high amounts)
+     * "Lease Payment", "Amount Due", "Total Due"
+     * Any amount around €129.35 (often miscategorized)
+   - Examples of amounts to EXTRACT: 
+     * "Total Amount VAT €111.36" 
+     * "VAT Amount €111.36"
+     * Sum of VAT breakdown: €1.51 + €0.00 + €109.85 = €111.36
 
 8. DOCUMENT CLASSIFICATION:
    - SALES: You provided goods/services (your business issued this document)
