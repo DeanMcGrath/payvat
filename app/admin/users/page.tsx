@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/select'
 import { 
   Users, 
+  User,
   Search, 
   Filter,
   ChevronLeft,
@@ -355,18 +356,20 @@ function AdminUsersContent() {
               </div>
             ) : (
               users.map((user) => (
-                <div key={user.id} className="border rounded-lg p-4 hover:bg-gray-100">
+                <div key={user.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     {/* User Info */}
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <div>
                           <div className="flex items-center space-x-2">
-                            <h3 className="font-semibold text-lg">
-                              {user.firstName && user.lastName 
-                                ? `${user.firstName} ${user.lastName}` 
-                                : user.businessName}
-                            </h3>
+                            <Link href={`/admin/users/${user.id}`}>
+                              <h3 className="font-semibold text-lg hover:text-teal-600 cursor-pointer">
+                                {user.firstName && user.lastName 
+                                  ? `${user.firstName} ${user.lastName}` 
+                                  : user.businessName}
+                              </h3>
+                            </Link>
                             <Badge className={getRoleColor(user.role || 'user')}>
                               {(user.role || 'user').toLowerCase().replace('_', ' ')}
                             </Badge>
@@ -438,6 +441,16 @@ function AdminUsersContent() {
                         </div>
                       </div>
                     )}
+
+                    {/* View Details Button */}
+                    <div className="flex items-center">
+                      <Link href={`/admin/users/${user.id}`}>
+                        <Button size="sm" variant="outline">
+                          <User className="h-4 w-4 mr-1" />
+                          View Details
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
 
                   {/* Pending Payments Warning */}
