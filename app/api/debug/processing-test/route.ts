@@ -132,7 +132,7 @@ async function debugProcessingTest(request: NextRequest) {
         }
       }
       
-      const pdfTest = {
+      const pdfTest: any = {
         name: 'PDF Processing Dependencies',
         success: importSuccess,
         details: {
