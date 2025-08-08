@@ -86,8 +86,8 @@ function AdminUsersContent() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
-  const [roleFilter, setRoleFilter] = useState('')
-  const [statusFilter, setStatusFilter] = useState('')
+  const [roleFilter, setRoleFilter] = useState<string | undefined>(undefined)
+  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
   const [page, setPage] = useState(1)
   const [pagination, setPagination] = useState({
     page: 1,
@@ -253,9 +253,9 @@ function AdminUsersContent() {
 
   const handleFilterChange = (filterType: 'role' | 'status', value: string) => {
     if (filterType === 'role') {
-      setRoleFilter(value)
+      setRoleFilter(value || undefined)
     } else {
-      setStatusFilter(value)
+      setStatusFilter(value || undefined)
     }
     setPage(1) // Reset to first page on filter change
   }
