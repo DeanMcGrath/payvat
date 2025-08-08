@@ -22,44 +22,67 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isReady, setIsReady] = useState(false)
+  const [timeoutReached, setTimeoutReached] = useState(false)
 
   const checkAdminAccess = useCallback(async () => {
+    console.log('[AdminRoute] Starting admin access check...')
     try {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => {
+        controller.abort()
+        console.log('[AdminRoute] Request timeout after 10 seconds')
+      }, 10000)
+      
       const response = await fetch('/api/auth/profile', {
         method: 'GET',
         credentials: 'include',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        }
+        },
+        signal: controller.signal
       })
+      
+      clearTimeout(timeoutId)
+      console.log(`[AdminRoute] Auth API responded: ${response.status}`)
       
       if (response.ok) {
         const data = await response.json()
         if (data.success && data.user) {
+          console.log(`[AdminRoute] User authenticated: ${data.user.email} (${data.user.role})`)
           setUser(data.user)
           
           // Check if user has required admin role
           const hasAccess = hasAdminRole(data.user.role, requiredRole)
           if (!hasAccess) {
+            console.log(`[AdminRoute] Insufficient role: ${data.user.role} < ${requiredRole}`)
             setError('Insufficient privileges. Admin access required.')
+          } else {
+            console.log('[AdminRoute] Admin access granted')
           }
         } else {
+          console.log('[AdminRoute] Invalid response data')
           setError('Authentication failed. Please log in.')
         }
       } else if (response.status === 401) {
-        setError('Authentication session expired. Redirecting to login...')
-        setTimeout(() => {
-          window.location.href = '/login'
-        }, 2000)
+        console.log('[AdminRoute] 401 - Redirecting to login immediately')
+        // Immediate redirect for 401 - don't wait
+        window.location.href = '/login'
+        return // Don't set error, just redirect
       } else if (response.status === 403) {
+        console.log('[AdminRoute] 403 - Access forbidden')
         setError('Access forbidden. Admin privileges required. Try admin setup if this is the first time.')
       } else {
+        console.log(`[AdminRoute] Unexpected status: ${response.status}`)
         setError(`Authentication error (${response.status}). Please try again.`)
       }
     } catch (err) {
-      console.error('Admin access check failed:', err)
-      if (err instanceof TypeError && err.message.includes('fetch')) {
+      console.error('[AdminRoute] Admin access check failed:', err)
+      if (err instanceof Error && err.name === 'AbortError') {
+        console.log('[AdminRoute] Request was aborted due to timeout')
+        setTimeoutReached(true)
+        setError('Authentication check timed out. Please try refreshing the page or check your connection.')
+      } else if (err instanceof TypeError && err.message.includes('fetch')) {
         setError('Network connection failed. Please check your internet connection.')
       } else {
         setError('Failed to verify admin access')
@@ -70,7 +93,20 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
   }, [requiredRole])
 
   useEffect(() => {
+    console.log('[AdminRoute] Component mounted, checking admin access...')
     checkAdminAccess()
+    
+    // Absolute safety timeout - if still loading after 30 seconds, force error state
+    const safetyTimeout = setTimeout(() => {
+      if (loading) {
+        console.error('[AdminRoute] SAFETY TIMEOUT: Still loading after 30 seconds')
+        setTimeoutReached(true)
+        setLoading(false)
+        setError('Authentication check took too long. Please refresh the page.')
+      }
+    }, 30000)
+    
+    return () => clearTimeout(safetyTimeout)
   }, [checkAdminAccess])
 
   // Handle admin panel readiness (ensure auth state is settled)
@@ -97,9 +133,33 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="pt-6">
-            <div className="flex items-center justify-center space-x-2">
-              <Shield className="h-5 w-5 text-teal-600 animate-spin" />
-              <span className="text-gray-600">Verifying admin access...</span>
+            <div className="flex flex-col items-center justify-center space-y-4">
+              <div className="flex items-center space-x-2">
+                <Shield className="h-5 w-5 text-teal-600 animate-spin" />
+                <span className="text-gray-600">
+                  {timeoutReached ? 'Connection taking longer than expected...' : 'Verifying admin access...'}
+                </span>
+              </div>
+              {timeoutReached && (
+                <div className="text-center space-y-2">
+                  <p className="text-sm text-gray-500">This is taking too long</p>
+                  <div className="flex space-x-2">
+                    <Button 
+                      size="sm" 
+                      onClick={() => window.location.reload()}
+                      variant="outline"
+                    >
+                      Refresh Page
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      onClick={() => window.location.href = '/login'}
+                    >
+                      Go to Login
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -107,7 +167,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
     )
   }
 
-  if (error || !user || !hasAdminRole(user.role, requiredRole)) {
+  if (error || !user || (user && !hasAdminRole(user.role, requiredRole))) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <Card className="w-full max-w-md border-red-200">
