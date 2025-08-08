@@ -14,9 +14,9 @@ export const openai = new OpenAI({
 // AI Service Configuration
 export const AI_CONFIG = {
   models: {
-    vision: 'gpt-4-vision-preview',
-    chat: 'gpt-4-turbo',
-    analysis: 'gpt-4-turbo',
+    vision: 'gpt-4o', // gpt-4o includes vision capabilities 
+    chat: 'gpt-4o-mini', // gpt-4o-mini for cost-effective chat
+    analysis: 'gpt-4o', // gpt-4o for detailed analysis
   },
   limits: {
     maxTokens: 2000,
