@@ -188,12 +188,12 @@ async function validateOpenAISetup(): Promise<{
   }
   
   // Check model access
-  const requiredModels = ['gpt-4-turbo', 'gpt-4-vision-preview']
+  const requiredModels = ['gpt-4o', 'gpt-4o-mini']
   details.models = {
     required: requiredModels,
     configured: {
-      chat: 'gpt-4-turbo',
-      vision: 'gpt-4-vision-preview'
+      chat: 'gpt-4o-mini',
+      vision: 'gpt-4o'
     }
   }
   

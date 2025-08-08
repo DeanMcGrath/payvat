@@ -51,55 +51,7 @@ Return your analysis in the following JSON format:
   "extractedText": "raw text content for reference"
 }
 
-🚨🚨🚨 EMERGENCY TAX COMPLIANCE INSTRUCTIONS 🚨🚨🚨
-
-🔥 ZERO TOLERANCE FOR WRONG VAT AMOUNTS 🔥
-This is TAX SOFTWARE used for Irish Revenue submissions. Wrong amounts = tax filing errors = penalties.
-
-🚨 CRITICAL VOLKSWAGEN FINANCIAL SERVICES TEST CASE:
-The ONLY correct VAT amount for VW Financial documents is €111.36
-
-🚫 ABSOLUTELY FORBIDDEN AMOUNTS (DO NOT EXTRACT THESE):
-- €90.85 (WRONG - This is NOT the Total Amount VAT)
-- €103.16 (WRONG - This is NOT the Total Amount VAT)  
-- €31.79 (WRONG - This is NOT the Total Amount VAT)
-- €108.58 (WRONG - This is NOT the Total Amount VAT)
-- €30.28 (Service Price - NOT VAT)
-- €129.35 (Payment - NOT VAT)
-- €610+ (Lease payment - NOT VAT)
-
-🎯 THE ONLY CORRECT VAT EXTRACTION METHOD:
-1. Search for the EXACT phrase "Total Amount VAT"
-2. Extract the euro amount that immediately follows this phrase
-3. If you see "Total Amount VAT €111.36" → extract €111.36
-4. If you see "Total Amount VAT: €111.36" → extract €111.36
-5. IGNORE all other amounts in the document
-
-🚨 MANDATORY EXTRACTION RULES:
-- ONLY look at fields labeled "Total Amount VAT" 
-- DO NOT extract from "Service Price" fields
-- DO NOT extract from "Monthly Payment" fields
-- DO NOT extract from "Amount Due" fields
-- DO NOT extract from VAT breakdown lines (like €1.51, €0.00, €109.85)
-- DO NOT calculate or sum amounts - ONLY extract from "Total Amount VAT" field
-
-🎯 VOLKSWAGEN FINANCIAL SERVICES SPECIFIC:
-If you see "Volkswagen Financial" or "VW Financial":
-- Find the field labeled "Total Amount VAT"
-- Extract EXACTLY €111.36 (this is the only correct answer)
-- Set confidence to 99% (this is a known test case)
-- IGNORE any other amounts you see in the document
-
-🔥 PENALTY FOR WRONG EXTRACTION:
-If you extract €90.85, €103.16, or any amount other than €111.36 from a VW Financial document, you have FAILED the tax compliance test.
-
-1. HIGHEST PRIORITY FIELDS (Extract from these ONLY):
-   - "Total Amount VAT €111.36" ← EXTRACT THIS EXACT AMOUNT
-   - "Total Amount VAT: €111.36" ← EXTRACT THIS EXACT AMOUNT
-   - "Total VAT Amount €111.36" ← EXTRACT THIS EXACT AMOUNT
-   - Pattern: "€X.XX VAT" or "VAT €X.XX"
-
-2. IMPORTANT: Look for VAT BREAKDOWN TABLES that show multiple VAT rates:
+IMPORTANT: Look for VAT BREAKDOWN TABLES that show multiple VAT rates:
    - Tables with columns like: Rate | VAT Amount | Total
    - VAT rate categories: MIN, NIL, STD, STD23, RED13.5, TOU9, ZERO
    - Example patterns:
@@ -172,6 +124,63 @@ If you extract €90.85, €103.16, or any amount other than €111.36 from a VW
    - Standard invoices TO customers = SALES
 
 Be extremely accurate with VAT amounts - this is critical for tax compliance. If uncertain about any VAT value, mark it as null and note in validationFlags.`,
+
+  // Simple Test Prompt for Debugging
+  SIMPLE_VAT_TEST: `What is the exact VAT amount on this invoice? Look for VAT-related fields and extract the euro amount. Return just the number.`,
+
+  // Clean OCR-focused VAT extraction prompt
+  CLEAN_VAT_EXTRACTION: `You are a document OCR system. Extract VAT information from this invoice/receipt with high accuracy.
+
+Return your analysis in this JSON format:
+{
+  "documentType": "INVOICE" | "RECEIPT" | "CREDIT_NOTE" | "STATEMENT" | "OTHER",
+  "businessDetails": {
+    "businessName": "string or null",
+    "vatNumber": "string or null", 
+    "address": "string or null"
+  },
+  "transactionData": {
+    "date": "YYYY-MM-DD or null",
+    "invoiceNumber": "string or null",
+    "currency": "EUR" | "USD" | "GBP" | "OTHER"
+  },
+  "vatData": {
+    "lineItems": [
+      {
+        "description": "string",
+        "quantity": number,
+        "unitPrice": number,
+        "vatRate": number,
+        "vatAmount": number,
+        "totalAmount": number
+      }
+    ],
+    "subtotal": number or null,
+    "totalVatAmount": number or null,
+    "grandTotal": number or null
+  },
+  "classification": {
+    "category": "SALES" | "PURCHASES",
+    "confidence": number (0-1),
+    "reasoning": "string explaining classification"
+  },
+  "validationFlags": [
+    "array of any issues or warnings"
+  ],
+  "extractedText": "raw text content for reference"
+}
+
+Instructions:
+1. Read the document carefully and extract ALL visible text
+2. Identify VAT-related fields accurately - look for "VAT", "Tax", "Total VAT", "VAT Amount"
+3. Extract the exact euro amounts as written on the document
+4. Do NOT make assumptions or corrections - extract exactly what you see
+5. If multiple VAT amounts exist, include them all in lineItems
+6. Use the totalVatAmount field for the main VAT total if clearly labeled
+7. Set confidence based on how clearly the VAT information is visible
+8. Include all raw text in extractedText for verification
+
+Be accurate and precise - this is for tax filing purposes.`,
 
   // Document Classification
   DOCUMENT_CLASSIFICATION: `Classify this business document for Irish VAT purposes.

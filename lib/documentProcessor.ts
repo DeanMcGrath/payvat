@@ -54,9 +54,18 @@ export async function extractTextFromDocument(
       return await extractTextFromCSV(fileData)
     }
     
+    // For plain text files, just decode the base64
+    if (mimeType === 'text/plain' || mimeType.startsWith('text/')) {
+      const textContent = Buffer.from(fileData, 'base64').toString('utf-8')
+      return {
+        success: true,
+        text: textContent
+      }
+    }
+    
     return {
       success: false,
-      error: 'Unsupported file type for text extraction'
+      error: `Unsupported file type for text extraction: ${mimeType}. Supported types: PDF, images, CSV, and text files.`
     }
   } catch (error) {
     console.error('Text extraction error:', error)
@@ -670,100 +679,84 @@ export async function processDocument(
   const processingStartTime = Date.now()
   
   try {
-    console.log('🔄 DOCUMENT PROCESSING PIPELINE START:')
-    console.log(`📄 Document: ${fileName}`)
-    console.log(`📁 Category: ${category}`)
-    console.log(`🎭 MIME Type: ${mimeType}`)
-    console.log(`👤 User ID: ${userId || 'guest'}`)
-    console.log(`🤖 AI enabled: ${isAIEnabled()}`)
-    console.log(`📂 File size: ${Math.round(fileData.length / 1024)}KB (base64)`)
-    console.log('=' .repeat(80))
+    console.log('🔄 DOCUMENT PROCESSING START:')
+    console.log(`   Document: ${fileName}`)
+    console.log(`   Category: ${category}`)
+    console.log(`   MIME Type: ${mimeType}`)
+    console.log(`   File size: ${Math.round(fileData.length / 1024)}KB`)
     
-    // Try AI processing first if available
-    if (isAIEnabled()) {
-      console.log('🤖 ATTEMPTING AI DOCUMENT PROCESSING...')
+    // Validate inputs
+    if (!fileData || !mimeType || !fileName) {
+      throw new Error('Missing required document data')
+    }
+    
+    // Check if AI processing is available and working
+    const aiAvailable = isAIEnabled()
+    console.log(`   AI enabled: ${aiAvailable}`)
+    
+    if (aiAvailable) {
+      console.log('🤖 ATTEMPTING AI PROCESSING...')
       
-      // Quick connectivity test before heavy AI processing
-      console.log('⚡ Running quick OpenAI connectivity check before document processing...')
+      // Quick connectivity test
       try {
         const { quickConnectivityTest } = await import('./ai/diagnostics')
         const connectivityCheck = await quickConnectivityTest()
         
-        if (!connectivityCheck.success) {
-          console.error('🚨 OpenAI connectivity check failed before document processing:', connectivityCheck.error)
-          console.log('⚠️ Falling back to legacy processing due to API connectivity issues')
+        if (connectivityCheck.success) {
+          console.log('✅ OpenAI connectivity confirmed')
           
-          // Skip AI processing and go straight to legacy
-          return await processWithLegacyMethod(fileData, mimeType, fileName, category, processingStartTime)
+          // Attempt AI processing
+          const aiResult = await processDocumentWithAI(fileData, mimeType, fileName, category, userId)
+          
+          if (aiResult.success && aiResult.extractedData) {
+            console.log('✅ AI PROCESSING SUCCESS')
+            console.log(`   VAT amounts found: ${[...aiResult.extractedData.salesVAT, ...aiResult.extractedData.purchaseVAT].length}`)
+            
+            return {
+              success: true,
+              isScanned: true,
+              scanResult: `AI: ${aiResult.scanResult}`,
+              extractedData: convertToLegacyFormat(aiResult.extractedData),
+              error: undefined
+            }
+          } else {
+            console.log('⚠️ AI processing returned no results, falling back to legacy')
+          }
+        } else {
+          console.log('⚠️ OpenAI connectivity failed, using legacy processing')
         }
-        
-        console.log('✅ OpenAI connectivity confirmed, proceeding with AI document processing')
       } catch (connectivityError) {
-        console.error('⚠️ Failed to run connectivity check:', connectivityError)
-        // Continue with AI processing attempt anyway
-      }
-      
-      const aiResult = await processDocumentWithAI(fileData, mimeType, fileName, category, userId)
-      
-      console.log('🔍 AI PROCESSING RESULT:')
-      console.log(`   Success: ${aiResult.success}`)
-      console.log(`   Scanned: ${aiResult.isScanned}`)
-      console.log(`   AI Processed: ${aiResult.aiProcessed}`)
-      console.log(`   Processing Time: ${aiResult.processingTime}ms`)
-      console.log(`   Scan Result: ${aiResult.scanResult}`)
-      console.log(`   Has Extracted Data: ${!!aiResult.extractedData}`)
-      
-      if (aiResult.extractedData) {
-        console.log('💰 AI EXTRACTED VAT DATA:')
-        console.log(`   Sales VAT: [${aiResult.extractedData.salesVAT?.join(', ') || 'none'}]`)
-        console.log(`   Purchase VAT: [${aiResult.extractedData.purchaseVAT?.join(', ') || 'none'}]`)
-        console.log(`   Confidence: ${Math.round((aiResult.extractedData.confidence || 0) * 100)}%`)
-      }
-      
-      if (aiResult.success && aiResult.extractedData) {
-        // Validate AI results
-        const validation = validateExtractedVAT(aiResult.extractedData)
-        console.log(`✅ AI processing successful: ${aiResult.scanResult}`, {
-          processingTime: aiResult.processingTime,
-          validation: validation.isValid ? 'PASS' : 'WARNINGS',
-          issues: validation.issues
-        })
-        
-        // Convert AI result to legacy format with validation info
-        const finalResult = {
-          success: aiResult.success,
-          isScanned: aiResult.isScanned,
-          scanResult: `🤖 AI Enhanced: ${aiResult.scanResult}${validation.issues.length > 0 ? ` (${validation.issues.length} validation notes)` : ''}`,
-          extractedData: convertToLegacyFormat(aiResult.extractedData),
-          error: aiResult.error
-        }
-        
-        console.log('🎯 FINAL AI RESULT:')
-        console.log(`   Final VAT amounts: Sales=[${finalResult.extractedData?.salesVAT?.join(', ') || 'none'}], Purchase=[${finalResult.extractedData?.purchaseVAT?.join(', ') || 'none'}]`)
-        console.log(`   Final confidence: ${Math.round((finalResult.extractedData?.confidence || 0) * 100)}%`)
-        console.log('🔄 DOCUMENT PROCESSING PIPELINE: AI SUCCESS - Returning result')
-        console.log('=' .repeat(80))
-        
-        return finalResult
-      } else {
-        console.warn('❌ AI processing failed, falling back to legacy processing:', aiResult.error)
+        console.log('⚠️ Connectivity test failed, using legacy processing')
       }
     } else {
-      console.log('⚠️  AI processing not available, using legacy processing')
+      console.log('⚠️ AI not available, using legacy processing')
     }
     
     // Fallback to legacy processing
+    console.log('🔧 USING LEGACY PROCESSING...')
     return await processWithLegacyMethod(fileData, mimeType, fileName, category, processingStartTime)
     
   } catch (error) {
     const processingTime = Date.now() - processingStartTime
-    console.error('Document processing error:', error, { fileName, category, processingTime })
+    console.error('🚨 DOCUMENT PROCESSING ERROR:', error)
+    
+    // Return a clear error with helpful information
+    const errorMessage = error instanceof Error ? error.message : 'Unknown processing error'
     
     return {
       success: false,
       isScanned: false,
-      scanResult: `Processing failed after ${processingTime}ms: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      error: error instanceof Error ? error.message : 'Unknown error'
+      scanResult: `❌ Processing Failed (${processingTime}ms): ${errorMessage}. Please try uploading the document again or contact support if the issue persists.`,
+      error: errorMessage,
+      extractedData: {
+        salesVAT: [],
+        purchaseVAT: [],
+        totalAmount: undefined,
+        vatRate: undefined,
+        confidence: 0,
+        extractedText: ['Processing failed'],
+        documentType: 'OTHER'
+      }
     }
   }
 }

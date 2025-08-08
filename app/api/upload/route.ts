@@ -200,8 +200,22 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       where: { id: document.id }
     })
 
+    // 🔑 CRITICAL: Log document ID prominently for debugging
+    console.log('🔑🔑🔑 DOCUMENT UPLOADED SUCCESSFULLY 🔑🔑🔑')
+    console.log(`🔑 USE THIS DOCUMENT ID FOR DEBUGGING: ${document.id}`)
+    console.log(`📄 File: ${document.originalName}`)
+    console.log(`📂 Category: ${document.category}`)
+    console.log(`🔍 For diagnostic testing, use: /api/debug/prompt-test?documentId=${document.id}&testtype=compare_both`)
+    console.log('🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑')
+
     return NextResponse.json({
       success: true,
+      message: `Document uploaded successfully! Use document ID: ${document.id} for debugging`,
+      debugInfo: {
+        documentId: document.id,
+        debugUrl: `/api/debug/prompt-test?documentId=${document.id}&testtype=compare_both`,
+        instruction: "🔑 Copy the documentId above to use in diagnostic testing"
+      },
       document: {
         id: document.id,
         fileName: document.originalName,
