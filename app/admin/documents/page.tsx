@@ -179,13 +179,13 @@ export default function AdminDocuments() {
   const handleFilterChange = (filterType: string, value: string) => {
     switch (filterType) {
       case 'category':
-        setCategoryFilter(value)
+        setCategoryFilter(value === 'all' ? undefined : value)
         break
       case 'documentType':
-        setDocumentTypeFilter(value)
+        setDocumentTypeFilter(value === 'all' ? undefined : value)
         break
       case 'scanned':
-        setScannedFilter(value)
+        setScannedFilter(value === 'all' ? undefined : value)
         break
     }
     setPage(1) // Reset to first page on filter change
@@ -245,7 +245,7 @@ export default function AdminDocuments() {
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="SALES">Sales</SelectItem>
                 <SelectItem value="PURCHASES">Purchases</SelectItem>
                 <SelectItem value="EXPENSES">Expenses</SelectItem>
@@ -258,7 +258,7 @@ export default function AdminDocuments() {
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="INVOICE">Invoice</SelectItem>
                 <SelectItem value="RECEIPT">Receipt</SelectItem>
                 <SelectItem value="BANK_STATEMENT">Bank Statement</SelectItem>
@@ -271,7 +271,7 @@ export default function AdminDocuments() {
                 <SelectValue placeholder="All Documents" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Documents</SelectItem>
+                <SelectItem value="all">All Documents</SelectItem>
                 <SelectItem value="true">Scanned Only</SelectItem>
                 <SelectItem value="false">Not Scanned</SelectItem>
               </SelectContent>

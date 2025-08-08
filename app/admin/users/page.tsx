@@ -253,9 +253,9 @@ function AdminUsersContent() {
 
   const handleFilterChange = (filterType: 'role' | 'status', value: string) => {
     if (filterType === 'role') {
-      setRoleFilter(value || undefined)
+      setRoleFilter(value === 'all' ? undefined : value)
     } else {
-      setStatusFilter(value || undefined)
+      setStatusFilter(value === 'all' ? undefined : value)
     }
     setPage(1) // Reset to first page on filter change
   }
@@ -333,7 +333,7 @@ function AdminUsersContent() {
                 <SelectValue placeholder="All Roles" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Roles</SelectItem>
+                <SelectItem value="all">All Roles</SelectItem>
                 <SelectItem value="USER">User</SelectItem>
                 <SelectItem value="ADMIN">Admin</SelectItem>
                 <SelectItem value="SUPER_ADMIN">Super Admin</SelectItem>
@@ -344,7 +344,7 @@ function AdminUsersContent() {
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Status</SelectItem>
+                <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="active">Active (30 days)</SelectItem>
                 <SelectItem value="inactive">Inactive</SelectItem>
               </SelectContent>

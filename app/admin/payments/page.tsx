@@ -190,22 +190,22 @@ export default function AdminPayments() {
   const handleFilterChange = (filterType: string, value: string) => {
     switch (filterType) {
       case 'status':
-        setStatusFilter(value)
+        setStatusFilter(value === 'all' ? undefined : value)
         break
       case 'paymentMethod':
-        setPaymentMethodFilter(value)
+        setPaymentMethodFilter(value === 'all' ? undefined : value)
         break
       case 'dateFrom':
-        setDateFromFilter(value)
+        setDateFromFilter(value || undefined)
         break
       case 'dateTo':
-        setDateToFilter(value)
+        setDateToFilter(value || undefined)
         break
       case 'minAmount':
-        setMinAmountFilter(value)
+        setMinAmountFilter(value || undefined)
         break
       case 'maxAmount':
-        setMaxAmountFilter(value)
+        setMaxAmountFilter(value || undefined)
         break
     }
     setPage(1) // Reset to first page on filter change
@@ -357,7 +357,7 @@ export default function AdminPayments() {
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Status</SelectItem>
+                <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="COMPLETED">Completed</SelectItem>
                 <SelectItem value="PENDING">Pending</SelectItem>
                 <SelectItem value="PROCESSING">Processing</SelectItem>
@@ -371,7 +371,7 @@ export default function AdminPayments() {
                 <SelectValue placeholder="All Methods" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Methods</SelectItem>
+                <SelectItem value="all">All Methods</SelectItem>
                 <SelectItem value="card">Card</SelectItem>
                 <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
                 <SelectItem value="sepa_debit">SEPA Debit</SelectItem>
