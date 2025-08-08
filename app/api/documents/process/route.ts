@@ -67,6 +67,53 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     
     console.log(`Processing document: ${document.originalName} (${document.category})`)
     
+    // IMMEDIATE OPENAI API STATUS CHECK - Show status to user via console and response
+    console.log('🔍 PRE-PROCESSING: Checking OpenAI API status...')
+    const openAIStatus: any = {
+      apiKeyConfigured: false,
+      apiKeyFormat: 'invalid',
+      apiEnabled: false,
+      connectivityTest: null
+    }
+    
+    try {
+      // Quick API status check
+      openAIStatus.apiKeyConfigured = !!process.env.OPENAI_API_KEY
+      openAIStatus.apiKeyFormat = process.env.OPENAI_API_KEY?.startsWith('sk-') ? 'valid-format' : 'invalid-format'
+      
+      // Import diagnostics and run quick connectivity test
+      const { isAIEnabled } = await import('@/lib/ai/openai')
+      const { quickConnectivityTest } = await import('@/lib/ai/diagnostics')
+      openAIStatus.apiEnabled = isAIEnabled()
+      
+      if (openAIStatus.apiEnabled) {
+        console.log('✅ OpenAI API key configured, testing connectivity...')
+        const connectivityResult = await quickConnectivityTest()
+        openAIStatus.connectivityTest = {
+          success: connectivityResult.success,
+          message: connectivityResult.message,
+          error: connectivityResult.error
+        }
+        
+        if (connectivityResult.success) {
+          console.log('✅ OpenAI API connectivity confirmed')
+        } else {
+          console.error('🚨 OpenAI API connectivity failed:', connectivityResult.error)
+        }
+      } else {
+        console.log('⚠️ OpenAI API not enabled (missing or invalid API key)')
+      }
+    } catch (statusError) {
+      console.error('⚠️ Failed to check OpenAI API status:', statusError)
+      openAIStatus.connectivityTest = {
+        success: false,
+        message: 'Status check failed',
+        error: statusError instanceof Error ? statusError.message : 'Unknown error'
+      }
+    }
+    
+    console.log('🤖 OpenAI API Status Summary:', openAIStatus)
+    
     // Process the document with AI enhancement
     const result = await processDocument(
       document.fileData,
@@ -125,6 +172,13 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         scanResult: updatedDocument.scanResult,
         category: updatedDocument.category,
         extractedData: result.extractedData
+      },
+      // Include OpenAI API status for debugging
+      openAIStatus: openAIStatus,
+      processingInfo: {
+        timestamp: new Date().toISOString(),
+        processingType: result.scanResult.includes('AI') ? 'AI_ENHANCED' : 'LEGACY',
+        hasAPIConnectivity: openAIStatus.connectivityTest?.success || false
       }
     })
     

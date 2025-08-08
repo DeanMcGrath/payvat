@@ -682,6 +682,27 @@ export async function processDocument(
     // Try AI processing first if available
     if (isAIEnabled()) {
       console.log('🤖 ATTEMPTING AI DOCUMENT PROCESSING...')
+      
+      // Quick connectivity test before heavy AI processing
+      console.log('⚡ Running quick OpenAI connectivity check before document processing...')
+      try {
+        const { quickConnectivityTest } = await import('./ai/diagnostics')
+        const connectivityCheck = await quickConnectivityTest()
+        
+        if (!connectivityCheck.success) {
+          console.error('🚨 OpenAI connectivity check failed before document processing:', connectivityCheck.error)
+          console.log('⚠️ Falling back to legacy processing due to API connectivity issues')
+          
+          // Skip AI processing and go straight to legacy
+          return await processWithLegacyMethod(fileData, mimeType, fileName, category, processingStartTime)
+        }
+        
+        console.log('✅ OpenAI connectivity confirmed, proceeding with AI document processing')
+      } catch (connectivityError) {
+        console.error('⚠️ Failed to run connectivity check:', connectivityError)
+        // Continue with AI processing attempt anyway
+      }
+      
       const aiResult = await processDocumentWithAI(fileData, mimeType, fileName, category, userId)
       
       console.log('🔍 AI PROCESSING RESULT:')
@@ -732,52 +753,7 @@ export async function processDocument(
     }
     
     // Fallback to legacy processing
-    console.log('Using legacy document processing')
-    
-    // Step 1: Extract text from document
-    const textResult = await extractTextFromDocument(fileData, mimeType, fileName)
-    
-    if (!textResult.success || !textResult.text) {
-      // If both AI and legacy text extraction fail, return helpful error
-      const errorMsg = isAIEnabled() 
-        ? `Both AI and legacy processing failed. ${textResult.error || 'Unable to extract text from document'}`
-        : `Text extraction failed: ${textResult.error || 'Unable to process this document type'}`
-        
-      console.error('Document processing failed:', errorMsg)
-      
-      return {
-        success: false,
-        isScanned: false,
-        scanResult: errorMsg,
-        error: textResult.error
-      }
-    }
-    
-    // Step 2: Extract VAT data from text
-    const extractedData = extractVATDataFromText(textResult.text, category, fileName)
-    
-    // Step 3: Validate extracted data
-    const validation = validateExtractedVAT(extractedData)
-    
-    // Step 4: Generate scan result summary
-    const vatAmounts = [...extractedData.salesVAT, ...extractedData.purchaseVAT]
-    const processingTime = Date.now() - processingStartTime
-    const scanResult = vatAmounts.length > 0 
-      ? `Legacy: Extracted ${vatAmounts.length} VAT amount(s): €${vatAmounts.join(', €')} (${Math.round(extractedData.confidence * 100)}% confidence, ${processingTime}ms)`
-      : `Legacy: Document scanned but no VAT amounts detected (${processingTime}ms)`
-    
-    console.log(`Legacy document processing complete: ${scanResult}`, {
-      validation: validation.isValid ? 'PASS' : 'WARNINGS',
-      issues: validation.issues,
-      processingTime
-    })
-    
-    return {
-      success: true,
-      isScanned: true,
-      scanResult: scanResult + (validation.issues.length > 0 ? ` (${validation.issues.length} validation notes)` : ''),
-      extractedData
-    }
+    return await processWithLegacyMethod(fileData, mimeType, fileName, category, processingStartTime)
     
   } catch (error) {
     const processingTime = Date.now() - processingStartTime
@@ -892,6 +868,60 @@ export function validateExtractedVAT(extractedData: ExtractedVATData | any): {
     isValid: issues.length === 0,
     issues,
     warnings
+  }
+}
+
+/**
+ * Process document using legacy methods (fallback when AI is not available or fails)
+ */
+async function processWithLegacyMethod(
+  fileData: string,
+  mimeType: string,
+  fileName: string,
+  category: string,
+  processingStartTime: number
+): Promise<DocumentProcessingResult> {
+  console.log('🔄 PROCESSING WITH LEGACY METHOD (no AI)')
+  
+  // Step 1: Extract text from document
+  const textResult = await extractTextFromDocument(fileData, mimeType, fileName)
+  
+  if (!textResult.success || !textResult.text) {
+    const errorMsg = `Legacy text extraction failed: ${textResult.error || 'Unable to process this document type'}`
+    console.error('Legacy document processing failed:', errorMsg)
+    
+    return {
+      success: false,
+      isScanned: false,
+      scanResult: errorMsg,
+      error: textResult.error
+    }
+  }
+  
+  // Step 2: Extract VAT data from text
+  const extractedData = extractVATDataFromText(textResult.text, category, fileName)
+  
+  // Step 3: Validate extracted data
+  const validation = validateExtractedVAT(extractedData)
+  
+  // Step 4: Generate scan result summary
+  const vatAmounts = [...extractedData.salesVAT, ...extractedData.purchaseVAT]
+  const processingTime = Date.now() - processingStartTime
+  const scanResult = vatAmounts.length > 0 
+    ? `Legacy: Extracted ${vatAmounts.length} VAT amount(s): €${vatAmounts.join(', €')} (${Math.round(extractedData.confidence * 100)}% confidence, ${processingTime}ms)`
+    : `Legacy: Document scanned but no VAT amounts detected (${processingTime}ms)`
+  
+  console.log(`Legacy document processing complete: ${scanResult}`, {
+    validation: validation.isValid ? 'PASS' : 'WARNINGS',
+    issues: validation.issues,
+    processingTime
+  })
+  
+  return {
+    success: true,
+    isScanned: true,
+    scanResult: scanResult + (validation.issues.length > 0 ? ` (${validation.issues.length} validation notes)` : ''),
+    extractedData
   }
 }
 

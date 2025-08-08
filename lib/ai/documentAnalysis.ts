@@ -5,6 +5,7 @@
 
 import { openai, AI_CONFIG, isAIEnabled, handleOpenAIError, logAIUsage } from './openai'
 import { DOCUMENT_PROMPTS, formatPrompt } from './prompts'
+import { quickConnectivityTest, testDocumentProcessingDiagnostics, compareTextExtractionWithAIVision } from './diagnostics'
 
 // Enhanced VAT data structure
 export interface EnhancedVATData {
@@ -81,6 +82,21 @@ export async function processDocumentWithAI(
       }
     }
 
+    // DIAGNOSTIC: Quick pre-processing API connectivity test
+    console.log('🔍 PRE-PROCESSING DIAGNOSTICS: Testing OpenAI API connectivity...')
+    const connectivityTest = await quickConnectivityTest()
+    if (!connectivityTest.success) {
+      console.error('🚨 PRE-PROCESSING DIAGNOSTIC FAILED:', connectivityTest.error)
+      return {
+        success: false,
+        isScanned: false,
+        scanResult: `OpenAI API connectivity failed: ${connectivityTest.message}`,
+        error: connectivityTest.error || 'OpenAI API not responding',
+        aiProcessed: false
+      }
+    }
+    console.log('✅ PRE-PROCESSING DIAGNOSTICS: OpenAI API connectivity confirmed')
+
     // Only process images and PDFs with AI
     if (!mimeType.startsWith('image/') && mimeType !== 'application/pdf') {
       return {
@@ -129,7 +145,7 @@ export async function processDocumentWithAI(
         
       } catch (pdfError) {
         console.error('🚨 PDF text extraction failed:', pdfError)
-        extractedPDFText = `ERROR: ${pdfError.message}`
+        extractedPDFText = `ERROR: ${pdfError instanceof Error ? pdfError.message : String(pdfError)}`
       }
     }
 
@@ -143,6 +159,14 @@ export async function processDocumentWithAI(
     // Call OpenAI Vision API
     let response
     try {
+      console.log('🚀 CALLING OPENAI VISION API:')
+      console.log(`   Model: ${AI_CONFIG.models.vision}`)
+      console.log(`   Max tokens: ${AI_CONFIG.limits.maxTokens}`)
+      console.log(`   Temperature: ${AI_CONFIG.limits.temperature}`)
+      console.log(`   Image data size: ${Math.round(imageData.length / 1024)}KB (base64)`)
+      console.log(`   MIME type: ${mimeType}`)
+      console.log(`   Detail level: high`)
+
       response = await openai.chat.completions.create({
         model: AI_CONFIG.models.vision,
         max_tokens: AI_CONFIG.limits.maxTokens,
@@ -168,8 +192,34 @@ export async function processDocumentWithAI(
           }
         ]
       })
+      
+      console.log('✅ OPENAI VISION API RESPONSE RECEIVED:')
+      console.log(`   Response status: Success`)
+      console.log(`   Usage tokens: ${JSON.stringify(response.usage)}`)
+      console.log(`   Response choices: ${response.choices.length}`)
+      console.log(`   Finish reason: ${response.choices[0]?.finish_reason}`)
+      
     } catch (visionError) {
-      console.error('GPT-4 Vision API error:', visionError)
+      console.error('🚨 OPENAI VISION API ERROR:')
+      console.error(`   Error type: ${visionError?.constructor?.name}`)
+      console.error(`   Error message: ${visionError instanceof Error ? visionError.message : 'Unknown error'}`)
+      console.error(`   Full error:`, visionError)
+      
+      // Check for specific error types
+      if (visionError instanceof Error) {
+        if (visionError.message.includes('rate_limit')) {
+          console.error('   🚨 RATE LIMITING DETECTED - API quota exceeded or too many requests')
+        }
+        if (visionError.message.includes('invalid_api_key')) {
+          console.error('   🚨 INVALID API KEY - Check OPENAI_API_KEY environment variable')
+        }
+        if (visionError.message.includes('insufficient_quota')) {
+          console.error('   🚨 INSUFFICIENT QUOTA - OpenAI account may need billing setup')
+        }
+        if (visionError.message.includes('model_not_found')) {
+          console.error('   🚨 MODEL NOT FOUND - GPT-4 Vision may not be available for this API key')
+        }
+      }
       
       // If PDF processing failed with Vision API, try text-based processing
       if (processAsPdf) {
@@ -256,6 +306,44 @@ export async function processDocumentWithAI(
       console.error('🚨 Failed to parse AI response as JSON:', parseError)
       console.error('🚨 Raw response that failed to parse:', aiResult)
       throw new Error('Invalid AI response format')
+    }
+
+    // DIAGNOSTIC TEST: If we suspect this should extract €111.36, run diagnostic comparison
+    console.log('🧪 RUNNING POST-PROCESSING DIAGNOSTIC TESTS...')
+    if (fileName.toLowerCase().includes('vw') || fileName.toLowerCase().includes('volkswagen') || 
+        fileName.toLowerCase().includes('financial') || (extractedPDFText && extractedPDFText.includes('111.36'))) {
+      console.log('🎯 SUSPECTED VW FINANCIAL DOCUMENT - Running comprehensive diagnostic tests')
+      
+      // Test 1: Document processing diagnostic
+      try {
+        const diagnosticTest = await testDocumentProcessingDiagnostics(fileData, 111.36)
+        console.log('🔍 DOCUMENT PROCESSING DIAGNOSTIC:')
+        console.log(`   Success: ${diagnosticTest.success}`)
+        console.log(`   Message: ${diagnosticTest.message}`)
+        console.log(`   Expected: €111.36`)
+        console.log(`   AI Extracted: €${diagnosticTest.details?.extractedAmount || 'unknown'}`)
+        console.log(`   Matches Expected: ${Math.abs((diagnosticTest.details?.extractedAmount || 0) - 111.36) < 0.01}`)
+      } catch (diagnosticError) {
+        console.log('⚠️ Document processing diagnostic failed:', diagnosticError)
+      }
+      
+      // Test 2: Text extraction vs AI vision comparison
+      try {
+        const comparisonTest = await compareTextExtractionWithAIVision(fileData, mimeType, fileName)
+        console.log('🔍 TEXT EXTRACTION vs AI VISION COMPARISON:')
+        console.log(`   Text extraction found €111.36: ${comparisonTest.comparison.textContains111_36}`)
+        console.log(`   AI vision found €111.36: ${comparisonTest.comparison.aiContains111_36}`)
+        console.log(`   Text extraction found €103.16: ${comparisonTest.comparison.textContains103_16}`)
+        console.log(`   AI vision found €103.16: ${comparisonTest.comparison.aiContains103_16}`)
+        console.log(`   Discrepancies: ${comparisonTest.discrepancies.length}`)
+        if (comparisonTest.discrepancies.length > 0) {
+          comparisonTest.discrepancies.forEach((discrepancy, index) => {
+            console.log(`     ${index + 1}. ${discrepancy}`)
+          })
+        }
+      } catch (comparisonError) {
+        console.log('⚠️ Comparison test failed:', comparisonError)
+      }
     }
 
     // Convert to enhanced VAT data structure - pass all data for comprehensive hardcoded test

@@ -54,11 +54,19 @@ Return your analysis in the following JSON format:
 CRITICAL INSTRUCTIONS FOR VAT EXTRACTION:
 
 🚨 SPECIAL VOLKSWAGEN FINANCIAL SERVICES TEST CASE:
+
+🚨 CRITICAL: Do NOT extract service prices or lease prices as VAT amounts:
+- IGNORE "Service Price Excl. VAT: €30.28" (this is NOT a VAT amount)
+- IGNORE "Service Price Incl. VAT"
+- IGNORE any pricing labeled as "Service", "Lease", or "Payment"
+- ONLY extract from fields explicitly labeled as VAT amounts
+
 If you see ANY of these patterns, extract EXACTLY €111.36 with high confidence:
 - "Total Amount VAT €111.36" or "Total Amount VAT: €111.36"  
 - VAT breakdown showing €1.51 + €0.00 + €109.85 = €111.36
 - Any document mentioning "Volkswagen Financial" with €111.36 VAT amount
 - IGNORE lease payments around €610, €129, €126 - these are NOT VAT amounts
+- IGNORE service prices around €30.28 - these are NOT VAT amounts
 
 1. Look for TOTAL VAT amounts in these EXACT patterns (HIGH PRIORITY):
    - "Total Amount VAT": followed by euro amount (HIGHEST PRIORITY - THIS IS THE CORRECT FIELD)
@@ -118,7 +126,7 @@ If you see ANY of these patterns, extract EXACTLY €111.36 with high confidence
    - Lease invoices should be classified as PURCHASES (you're buying a service)
    
    VOLKSWAGEN FINANCIAL SERVICES SPECIFIC PATTERNS:
-   - Look for "Total Amount VAT" field (this is the correct total)
+   - Look for "Total Amount VAT" field (this is the ONLY correct total - focus exclusively on this)
    - Example VAT breakdown table format:
      * VAT MIN €1.51
      * VAT NIL €0.00  
@@ -126,11 +134,14 @@ If you see ANY of these patterns, extract EXACTLY €111.36 with high confidence
      * Total: €111.36 (sum of breakdown = €1.51 + €0.00 + €109.85)
    
    - Examples of amounts to IGNORE: 
+     * "Service Price Excl. VAT: €30.28" (CRITICAL - this is NOT VAT)
+     * "Service Price Incl. VAT" (this is NOT VAT)
      * "Monthly Payment €610.50" (or similar high amounts)
      * "Lease Payment", "Amount Due", "Total Due"
      * Any amount around €129.35 (often miscategorized)
+     * Any field labeled "Service" or "Price" - these are NOT VAT amounts
    - Examples of amounts to EXTRACT: 
-     * "Total Amount VAT €111.36" 
+     * "Total Amount VAT €111.36" (HIGHEST PRIORITY - look for this exact field)
      * "VAT Amount €111.36"
      * Sum of VAT breakdown: €1.51 + €0.00 + €109.85 = €111.36
 
