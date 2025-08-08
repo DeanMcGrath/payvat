@@ -10,7 +10,7 @@ export const DOCUMENT_PROMPTS = {
   // VAT Document Analysis
   VAT_EXTRACTION: `You are an expert Irish VAT compliance assistant analyzing business documents.
 
-Analyze this document image and extract VAT-related information with high accuracy.
+Analyze this document image and extract VAT-related information with high accuracy. Pay special attention to TOTAL VAT amounts.
 
 Return your analysis in the following JSON format:
 {
@@ -51,14 +51,34 @@ Return your analysis in the following JSON format:
   "extractedText": "raw text content for reference"
 }
 
-Focus on:
-1. Irish VAT numbers (format: IE followed by 8-9 characters)
-2. Common Irish VAT rates: 23% (standard), 13.5% (reduced), 9% (tourism), 0% (zero-rated)
-3. Euro currency formatting
-4. Proper business document structure
-5. Flag any irregularities or missing required information
+CRITICAL INSTRUCTIONS FOR VAT EXTRACTION:
+1. Look for TOTAL VAT amounts in these patterns:
+   - "VAT": followed by euro amount
+   - "Total VAT": followed by euro amount  
+   - "VAT Amount": followed by euro amount
+   - "Tax": followed by euro amount
+   - Pattern: "VAT @ 23%" or similar followed by amount
+   - Pattern: "€X.XX VAT" or "VAT €X.XX"
 
-Be extremely accurate with numerical data. If uncertain about any value, mark it as null rather than guessing.`,
+2. Irish VAT context:
+   - Standard rate: 23%
+   - Reduced rate: 13.5% (fuel, electricity, newspapers)
+   - Tourism rate: 9% (hospitality, tourism, sporting facilities)
+   - Zero rate: 0% (exports, certain foods, books, medicines)
+   - Irish VAT numbers: IE followed by 8-9 characters
+
+3. Prioritize accuracy:
+   - Extract the actual total VAT amount shown on the document
+   - If multiple VAT amounts exist, sum them for totalVatAmount
+   - Cross-validate VAT calculations where possible
+   - Mark confidence as high (0.8-1.0) only if VAT amounts are clearly visible
+
+4. Currency handling:
+   - Convert amounts to numbers (remove €, commas)
+   - Assume EUR if currency not specified
+   - Handle both "€123.45" and "123.45" formats
+
+Be extremely accurate with VAT amounts - this is critical for tax compliance. If uncertain about any VAT value, mark it as null and note in validationFlags.`,
 
   // Document Classification
   DOCUMENT_CLASSIFICATION: `Classify this business document for Irish VAT purposes.
