@@ -149,9 +149,9 @@ export async function GET(request: NextRequest) {
       overrides: overrides.map(override => ({
         id: override.id,
         timestamp: override.createdAt,
-        correctVATAmount: override.metadata?.correctVATAmount,
-        originalAmount: override.metadata?.originalAmount,
-        reason: override.metadata?.reason,
+        correctVATAmount: (override.metadata as any)?.correctVATAmount,
+        originalAmount: (override.metadata as any)?.originalAmount,
+        reason: (override.metadata as any)?.reason,
         ipAddress: override.ipAddress
       }))
     })
