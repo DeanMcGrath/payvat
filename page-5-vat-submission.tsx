@@ -547,6 +547,29 @@ export default function VATReturnSubmission() {
                         console.log('🎯 FRONTEND: Post-upload VAT data refresh complete, using fresh API response for auto-populate')
                         console.log('📊 FRONTEND: Fresh data from API:', freshData)
                         
+                        // CRITICAL DEBUGGING: Show key VAT extraction details
+                        if (freshData) {
+                          console.log('🔍 FRONTEND VAT EXTRACTION SUMMARY:')
+                          console.log(`   💰 Total Sales VAT: €${freshData.totalSalesVAT || 0}`)
+                          console.log(`   💰 Total Purchase VAT: €${freshData.totalPurchaseVAT || 0}`)
+                          console.log(`   💰 Net VAT: €${freshData.totalNetVAT || 0}`)
+                          console.log(`   📊 Confidence: ${Math.round((freshData.averageConfidence || 0) * 100)}%`)
+                          console.log(`   📄 Documents processed: ${freshData.processedDocuments || 0}`)
+                          
+                          // MYSTERY INVESTIGATION: Check if we see expected €111.36
+                          const expectedAmount = 111.36
+                          const actualAmount = freshData.totalPurchaseVAT || freshData.totalSalesVAT || 0
+                          
+                          if (Math.abs(actualAmount - expectedAmount) < 0.01) {
+                            console.log('✅ SUCCESS: Found expected €111.36!')
+                          } else if (Math.abs(actualAmount - 103.16) < 0.01) {
+                            console.log('🚨 MYSTERY: Got €103.16 instead of €111.36!')
+                            console.log('   This confirms AI is extracting wrong amount from document')
+                          } else {
+                            console.log(`⚠️  UNEXPECTED: Got €${actualAmount}, expected €111.36`)
+                          }
+                        }
+                        
                         // Use fresh data directly from API response, not stale state
                         if (freshData && freshData.processedDocuments > 0) {
                           console.log('✅ FRONTEND: Auto-populating calculator after sales document upload with fresh API data')
@@ -583,6 +606,29 @@ export default function VATReturnSubmission() {
                       loadExtractedVATData().then((freshData) => {
                         console.log('🎯 FRONTEND: Post-upload VAT data refresh complete, using fresh API response for auto-populate')
                         console.log('📊 FRONTEND: Fresh data from API:', freshData)
+                        
+                        // CRITICAL DEBUGGING: Show key VAT extraction details
+                        if (freshData) {
+                          console.log('🔍 FRONTEND VAT EXTRACTION SUMMARY:')
+                          console.log(`   💰 Total Sales VAT: €${freshData.totalSalesVAT || 0}`)
+                          console.log(`   💰 Total Purchase VAT: €${freshData.totalPurchaseVAT || 0}`)
+                          console.log(`   💰 Net VAT: €${freshData.totalNetVAT || 0}`)
+                          console.log(`   📊 Confidence: ${Math.round((freshData.averageConfidence || 0) * 100)}%`)
+                          console.log(`   📄 Documents processed: ${freshData.processedDocuments || 0}`)
+                          
+                          // MYSTERY INVESTIGATION: Check if we see expected €111.36
+                          const expectedAmount = 111.36
+                          const actualAmount = freshData.totalPurchaseVAT || freshData.totalSalesVAT || 0
+                          
+                          if (Math.abs(actualAmount - expectedAmount) < 0.01) {
+                            console.log('✅ SUCCESS: Found expected €111.36!')
+                          } else if (Math.abs(actualAmount - 103.16) < 0.01) {
+                            console.log('🚨 MYSTERY: Got €103.16 instead of €111.36!')
+                            console.log('   This confirms AI is extracting wrong amount from document')
+                          } else {
+                            console.log(`⚠️  UNEXPECTED: Got €${actualAmount}, expected €111.36`)
+                          }
+                        }
                         
                         // Use fresh data directly from API response, not stale state
                         if (freshData && freshData.processedDocuments > 0) {
