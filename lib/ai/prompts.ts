@@ -65,12 +65,13 @@ CRITICAL INSTRUCTIONS FOR VAT EXTRACTION:
    - VAT rate categories: MIN, NIL, STD, STD23, RED13.5, TOU9, ZERO
    - Example patterns:
      * "VAT MIN €1.51"
-     * "VAT NIL €0.00"
+     * "VAT NIL €0.00"  
      * "VAT STD23 €109.85"
      * "VAT @ 23% €109.85"
      * "VAT @ 13.5% €1.51"
    - Sum ALL VAT amounts from these breakdowns for the total
    - Common table headers: "VAT Breakdown", "VAT Summary", "VAT Details", "Tax Summary"
+   - PRIORITIZE explicit "Total VAT Amount" or "VAT Total" fields over individual calculations
 
 3. Irish VAT context and rate codes:
    - Standard rate: 23% (STD, STD23)
@@ -97,6 +98,21 @@ CRITICAL INSTRUCTIONS FOR VAT EXTRACTION:
    - Convert amounts to numbers (remove €, commas)
    - Assume EUR if currency not specified
    - Handle both "€123.45" and "123.45" formats
+
+7. LEASE INVOICE RECOGNITION:
+   - Identify lease/rental invoices from financial services companies
+   - Keywords: "lease", "rental", "monthly payment", "Volkswagen Financial", "Financial Services"
+   - CRITICAL: Do NOT confuse lease payments with VAT amounts
+   - Look for dedicated VAT sections separate from payment amounts  
+   - Lease invoices should be classified as PURCHASES (you're buying a service)
+   - Examples of amounts to IGNORE: "Monthly Payment €126.62", "Lease Payment", "Amount Due"
+   - Examples of amounts to EXTRACT: "VAT Amount €111.36", "Total VAT €111.36"
+
+8. DOCUMENT CLASSIFICATION:
+   - SALES: You provided goods/services (your business issued this document)
+   - PURCHASES: You received goods/services (another business issued this to you)
+   - Lease/rental invoices FROM financial services = PURCHASES
+   - Standard invoices TO customers = SALES
 
 Be extremely accurate with VAT amounts - this is critical for tax compliance. If uncertain about any VAT value, mark it as null and note in validationFlags.`,
 

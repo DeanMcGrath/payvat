@@ -267,6 +267,73 @@ function extractVATFromTables(text: string): number[] {
 }
 
 /**
+ * Detect document type and business context from content
+ */
+function analyzeDocumentType(text: string): {
+  isLease: boolean
+  isFinancialServices: boolean
+  businessType: string
+  suggestedCategory: 'SALES' | 'PURCHASES' | 'UNKNOWN'
+  confidence: number
+} {
+  const normalizedText = text.toLowerCase()
+  
+  // Lease detection patterns
+  const leasePatterns = [
+    /lease/gi,
+    /rental/gi,
+    /monthly payment/gi,
+    /vehicle finance/gi,
+    /car finance/gi,
+    /finance agreement/gi,
+    /hire agreement/gi
+  ]
+  
+  // Financial services company patterns
+  const financialServicePatterns = [
+    /financial services/gi,
+    /volkswagen financial/gi,
+    /vw financial/gi,
+    /bank/gi,
+    /finance limited/gi,
+    /finance ltd/gi,
+    /credit/gi,
+    /lending/gi
+  ]
+  
+  const isLease = leasePatterns.some(pattern => pattern.test(normalizedText))
+  const isFinancialServices = financialServicePatterns.some(pattern => pattern.test(normalizedText))
+  
+  let businessType = 'UNKNOWN'
+  let suggestedCategory: 'SALES' | 'PURCHASES' | 'UNKNOWN' = 'UNKNOWN'
+  let confidence = 0.5
+  
+  if (isLease || isFinancialServices) {
+    businessType = 'FINANCIAL_SERVICES'
+    // Lease invoices are typically purchases (you're buying a service)
+    suggestedCategory = 'PURCHASES'
+    confidence = 0.8
+  }
+  
+  // Additional business type detection
+  if (normalizedText.includes('invoice')) {
+    if (normalizedText.includes('from') || normalizedText.includes('bill to')) {
+      // This suggests we're being billed by someone (purchase)
+      suggestedCategory = 'PURCHASES'
+      confidence = Math.max(confidence, 0.7)
+    }
+  }
+  
+  return {
+    isLease,
+    isFinancialServices,
+    businessType,
+    suggestedCategory,
+    confidence
+  }
+}
+
+/**
  * Extract VAT amounts and related data from text content
  */
 export function extractVATDataFromText(
@@ -285,14 +352,23 @@ export function extractVATDataFromText(
   const normalizedText = text.toLowerCase().replace(/\s+/g, ' ').trim()
   extractedText.push(text)
   
-  // Enhanced VAT amount patterns - match various formats commonly used on invoices
-  const vatPatterns = [
-    // Standard VAT patterns
-    /(?:total\s+)?vat[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+  // Analyze document type for smart categorization
+  const docAnalysis = analyzeDocumentType(text)
+  
+  // Prioritized VAT amount patterns - high priority patterns first
+  const highPriorityVATPatterns = [
+    // Explicit total VAT amount patterns (highest priority)
+    /total\s+(?:amount\s+)?vat[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /total\s+vat\s+amount[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /vat\s+total[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*amount[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
-    /(?:total\s+)?tax[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     
-    // VAT with rates
+    // VAT breakdown table totals
+    /(?:total\s+)?(?:vat|tax)\s*(?:breakdown|summary|details)[^€]*total[^€]*€?([0-9,]+\.?[0-9]*)/gi,
+  ]
+  
+  const standardVATPatterns = [
+    // VAT with specific rates
     /vat\s*@?\s*23%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*@?\s*13\.5%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*@?\s*9%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
@@ -304,6 +380,12 @@ export function extractVATDataFromText(
     /vat\s*tou(?:9)?[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*nil[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*zero[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+  ]
+  
+  const genericVATPatterns = [
+    // Generic VAT patterns (lower priority)
+    /(?:total\s+)?vat[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /(?:total\s+)?tax[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     
     // VAT table row patterns
     /min\s+€?([0-9,]+\.?[0-9]*)/gi,
@@ -320,12 +402,15 @@ export function extractVATDataFromText(
     
     // Irish specific patterns
     /cáin\s*bhreisluacha[:\s]*€?([0-9,]+\.?[0-9]*)/gi, // Irish for VAT
-    
-    // VAT breakdown table patterns
-    /(?:vat|tax)\s*(?:breakdown|summary|details)[^€]*€?([0-9,]+\.?[0-9]*)/gi,
-    
-    // Multiple VAT amounts in sequence (for tables)
-    /([0-9,]+\.?[0-9]*)\s*€?\s*(?:vat|tax)/gi,
+  ]
+  
+  // Patterns to exclude from VAT detection (lease/payment amounts)
+  const excludePatterns = [
+    /monthly\s+payment[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /lease\s+payment[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /rental[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /instalment[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /payment\s+due[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
   ]
   
   // Total amount patterns
@@ -335,30 +420,109 @@ export function extractVATDataFromText(
     /grand\s*total[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
   ]
   
-  // Extract VAT amounts and track unique amounts to avoid duplicates
-  const foundVATAmounts = new Set<number>()
-  
-  for (const pattern of vatPatterns) {
+  // Extract amounts to exclude (lease payments, etc.)
+  const excludedAmounts = new Set<number>()
+  for (const pattern of excludePatterns) {
     let match
     while ((match = pattern.exec(normalizedText)) !== null) {
       const amount = parseFloat(match[1].replace(/,/g, ''))
       if (!isNaN(amount) && amount > 0) {
-        // Check if this is a duplicate amount (avoid counting same amount multiple times)
+        excludedAmounts.add(Math.round(amount * 100) / 100)
+      }
+    }
+  }
+  
+  // Extract VAT amounts using prioritized approach
+  const foundVATAmounts = new Set<number>()
+  let highPriorityFound = false
+  
+  // Try high priority patterns first (Total VAT Amount, etc.)
+  for (const pattern of highPriorityVATPatterns) {
+    let match
+    while ((match = pattern.exec(normalizedText)) !== null) {
+      const amount = parseFloat(match[1].replace(/,/g, ''))
+      if (!isNaN(amount) && amount > 0) {
         const roundedAmount = Math.round(amount * 100) / 100
+        // Skip if this amount is in excluded list
+        if (excludedAmounts.has(roundedAmount)) continue
+        
         if (!foundVATAmounts.has(roundedAmount)) {
           foundVATAmounts.add(roundedAmount)
           
-          if (category.includes('SALES')) {
+          // Use smart categorization or fallback to original category
+          const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
+            ? docAnalysis.suggestedCategory 
+            : (category.includes('SALES') ? 'SALES' : 'PURCHASES')
+          
+          if (targetCategory === 'SALES') {
             salesVAT.push(amount)
-          } else if (category.includes('PURCHASE')) {
+          } else {
             purchaseVAT.push(amount)
           }
           
-          // Higher confidence boost for the first VAT amount, smaller for additional ones
-          if (foundVATAmounts.size === 1) {
+          // High confidence for explicit VAT amount patterns
+          confidence += 0.6
+          highPriorityFound = true
+        }
+      }
+    }
+  }
+  
+  // If no high priority patterns found, try standard VAT patterns
+  if (!highPriorityFound) {
+    for (const pattern of standardVATPatterns) {
+      let match
+      while ((match = pattern.exec(normalizedText)) !== null) {
+        const amount = parseFloat(match[1].replace(/,/g, ''))
+        if (!isNaN(amount) && amount > 0) {
+          const roundedAmount = Math.round(amount * 100) / 100
+          if (excludedAmounts.has(roundedAmount)) continue
+          
+          if (!foundVATAmounts.has(roundedAmount)) {
+            foundVATAmounts.add(roundedAmount)
+            
+            const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
+              ? docAnalysis.suggestedCategory 
+              : (category.includes('SALES') ? 'SALES' : 'PURCHASES')
+            
+            if (targetCategory === 'SALES') {
+              salesVAT.push(amount)
+            } else {
+              purchaseVAT.push(amount)
+            }
+            
             confidence += 0.4
-          } else {
-            confidence += 0.2
+          }
+        }
+      }
+    }
+  }
+  
+  // Only use generic patterns as last resort if nothing else found
+  if (foundVATAmounts.size === 0) {
+    for (const pattern of genericVATPatterns) {
+      let match
+      while ((match = pattern.exec(normalizedText)) !== null) {
+        const amount = parseFloat(match[1].replace(/,/g, ''))
+        if (!isNaN(amount) && amount > 0) {
+          const roundedAmount = Math.round(amount * 100) / 100
+          if (excludedAmounts.has(roundedAmount)) continue
+          
+          if (!foundVATAmounts.has(roundedAmount)) {
+            foundVATAmounts.add(roundedAmount)
+            
+            const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
+              ? docAnalysis.suggestedCategory 
+              : (category.includes('SALES') ? 'SALES' : 'PURCHASES')
+            
+            if (targetCategory === 'SALES') {
+              salesVAT.push(amount)
+            } else {
+              purchaseVAT.push(amount)
+            }
+            
+            // Lower confidence for generic patterns
+            confidence += 0.3
           }
         }
       }
@@ -388,9 +552,16 @@ export function extractVATDataFromText(
   if (salesVAT.length === 0 && purchaseVAT.length === 0) {
     const tableVATAmounts = extractVATFromTables(text)
     for (const amount of tableVATAmounts) {
-      if (category.includes('SALES')) {
+      // Skip excluded amounts
+      if (excludedAmounts.has(Math.round(amount * 100) / 100)) continue
+      
+      const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
+        ? docAnalysis.suggestedCategory 
+        : (category.includes('SALES') ? 'SALES' : 'PURCHASES')
+      
+      if (targetCategory === 'SALES') {
         salesVAT.push(amount)
-      } else if (category.includes('PURCHASE')) {
+      } else {
         purchaseVAT.push(amount)
       }
       confidence += 0.3
@@ -400,12 +571,28 @@ export function extractVATDataFromText(
   // If still no explicit VAT amounts found, try to calculate from total and rate
   if (salesVAT.length === 0 && purchaseVAT.length === 0 && totalAmount && vatRate) {
     const calculatedVAT = (totalAmount * vatRate) / (100 + vatRate)
-    if (category.includes('SALES')) {
+    
+    const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
+      ? docAnalysis.suggestedCategory 
+      : (category.includes('SALES') ? 'SALES' : 'PURCHASES')
+    
+    if (targetCategory === 'SALES') {
       salesVAT.push(Math.round(calculatedVAT * 100) / 100)
-    } else if (category.includes('PURCHASE')) {
+    } else {
       purchaseVAT.push(Math.round(calculatedVAT * 100) / 100)
     }
     confidence += 0.2
+  }
+  
+  // Boost confidence based on document analysis
+  if (docAnalysis.confidence > 0.7) {
+    confidence += 0.2 // Boost for confident document type detection
+  }
+  
+  // Boost confidence if we found multiple VAT amounts that suggest a breakdown table
+  const totalVATItems = salesVAT.length + purchaseVAT.length
+  if (totalVATItems > 1) {
+    confidence += 0.1
   }
   
   // Determine document type from category and content
