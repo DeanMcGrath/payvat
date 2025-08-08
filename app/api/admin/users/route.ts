@@ -5,13 +5,34 @@ import { AuthUser } from '@/lib/auth'
 
 // GET /api/admin/users - List all users (admin only)
 async function getUsers(request: NextRequest, user: AuthUser) {
+  const requestId = Math.random().toString(36).substring(7)
+  console.log(`[${requestId}] Admin users request started by user ${user.email} (${user.role})`)
+  
   try {
+    // Test database connection first
+    try {
+      await prisma.$queryRaw`SELECT 1`
+      console.log(`[${requestId}] Database connection test passed`)
+    } catch (dbError) {
+      console.error(`[${requestId}] Database connection test failed:`, dbError)
+      return NextResponse.json(
+        { 
+          error: 'Database connection unavailable',
+          details: 'Unable to connect to database. Please try again later.',
+          requestId
+        },
+        { status: 503 }
+      )
+    }
+    
     const { searchParams } = new URL(request.url)
     const search = searchParams.get('search')
     const role = searchParams.get('role')
     const status = searchParams.get('status') // active, inactive
     const page = parseInt(searchParams.get('page') || '1')
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100)
+    
+    console.log(`[${requestId}] Query parameters:`, { search, role, status, page, limit })
     
     // Build where clause with proper AND/OR logic
     const where: any = {}
@@ -56,40 +77,69 @@ async function getUsers(request: NextRequest, user: AuthUser) {
       where.AND = conditions
     }
     
-    // Get total count
-    const totalCount = await prisma.user.count({ where })
+    // Get total count with error handling
+    let totalCount = 0
+    try {
+      totalCount = await prisma.user.count({ where })
+      console.log(`[${requestId}] Admin users count query succeeded: ${totalCount} users found`)
+    } catch (countError) {
+      console.error(`[${requestId}] Failed to get user count:`, countError)
+      // Return error immediately if basic database connection fails
+      return NextResponse.json(
+        { 
+          error: 'Database connection failed - unable to fetch user count',
+          details: process.env.NODE_ENV === 'development' ? String(countError) : 'Database error',
+          requestId
+        },
+        { status: 500 }
+      )
+    }
     
-    // Get users with aggregated data
-    const users = await prisma.user.findMany({
-      where,
-      select: {
-        id: true,
-        email: true,
-        role: true,
-        businessName: true,
-        vatNumber: true,
-        firstName: true,
-        lastName: true,
-        phone: true,
-        address: true,
-        emailVerified: true,
-        lastLoginAt: true,
-        createdAt: true,
-        updatedAt: true,
-        _count: {
-          select: {
-            vatReturns: true,
-            documents: true,
-            payments: true
+    // Get users with aggregated data and error handling
+    let users: any[] = []
+    try {
+      users = await prisma.user.findMany({
+        where,
+        select: {
+          id: true,
+          email: true,
+          role: true,
+          businessName: true,
+          vatNumber: true,
+          firstName: true,
+          lastName: true,
+          phone: true,
+          address: true,
+          emailVerified: true,
+          lastLoginAt: true,
+          createdAt: true,
+          updatedAt: true,
+          _count: {
+            select: {
+              vatReturns: true,
+              documents: true,
+              payments: true
+            }
           }
-        }
-      },
-      orderBy: [
-        { createdAt: 'desc' }
-      ],
-      skip: (page - 1) * limit,
-      take: limit
-    })
+        },
+        orderBy: [
+          { createdAt: 'desc' }
+        ],
+        skip: (page - 1) * limit,
+        take: limit
+      })
+      console.log(`[${requestId}] Admin users query succeeded: ${users.length} users retrieved`)
+    } catch (usersError) {
+      console.error(`[${requestId}] Failed to get users:`, usersError)
+      return NextResponse.json(
+        { 
+          error: 'Database connection failed - unable to fetch users',
+          details: process.env.NODE_ENV === 'development' ? String(usersError) : 'Database error',
+          requestId
+        },
+        { status: 500 }
+      )
+    }
     
     // Get additional statistics for each user with error handling
     const usersWithStats = await Promise.all(
@@ -139,7 +189,7 @@ async function getUsers(request: NextRequest, user: AuthUser) {
             }
           }
         } catch (error) {
-          console.error(`Error fetching stats for user ${user.id}:`, error)
+          console.error(`[${requestId}] Error fetching stats for user ${user.id}:`, error)
           // Return user with safe default stats
           return {
             ...user,
@@ -175,25 +225,45 @@ async function getUsers(request: NextRequest, user: AuthUser) {
         }
       })
     } catch (auditError) {
-      console.error('Failed to create audit log (non-critical):', auditError)
+      console.error(`[${requestId}] Failed to create audit log (non-critical):`, auditError)
       // Continue without failing the request
     }
     
-    return NextResponse.json({
+    // Handle empty state gracefully
+    if (totalCount === 0) {
+      console.log(`[${requestId}] No users found in database - returning empty result`)
+    }
+    
+    const response = {
       success: true,
       users: usersWithStats,
       pagination: {
         page,
         limit,
         totalCount,
-        totalPages: Math.ceil(totalCount / limit)
-      }
-    })
+        totalPages: Math.ceil(totalCount / limit) || 1
+      },
+      requestId,
+      timestamp: new Date().toISOString()
+    }
+    
+    console.log(`[${requestId}] Admin users request completed successfully: ${usersWithStats.length} users returned`)
+    return NextResponse.json(response)
     
   } catch (error) {
-    console.error('Admin users fetch error:', error)
+    const requestId = Math.random().toString(36).substring(7)
+    console.error(`[${requestId}] Critical admin users fetch error:`, {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString()
+    })
     return NextResponse.json(
-      { error: 'Failed to fetch users' },
+      { 
+        error: 'Failed to fetch users', 
+        details: process.env.NODE_ENV === 'development' ? String(error) : 'Internal server error',
+        requestId,
+        timestamp: new Date().toISOString()
+      },
       { status: 500 }
     )
   }
