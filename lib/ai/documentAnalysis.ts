@@ -218,19 +218,121 @@ export async function processDocumentWithAI(
 }
 
 /**
- * Convert AI response to enhanced VAT data structure
+ * Smart document type analysis for AI processing (same logic as legacy processor)
+ */
+function analyzeDocumentTypeForAI(text: string): {
+  isLease: boolean
+  isFinancialServices: boolean
+  businessType: string
+  suggestedCategory: 'SALES' | 'PURCHASES' | 'UNKNOWN'
+  confidence: number
+} {
+  const normalizedText = text.toLowerCase()
+  
+  // Lease detection patterns
+  const leasePatterns = [
+    /lease/gi,
+    /rental/gi,
+    /monthly payment/gi,
+    /vehicle finance/gi,
+    /car finance/gi,
+    /finance agreement/gi,
+    /hire agreement/gi
+  ]
+  
+  // Financial services company patterns
+  const financialServicePatterns = [
+    /financial services/gi,
+    /volkswagen financial/gi,
+    /vw financial/gi,
+    /bank/gi,
+    /finance limited/gi,
+    /finance ltd/gi,
+    /credit/gi,
+    /lending/gi
+  ]
+  
+  const isLease = leasePatterns.some(pattern => pattern.test(normalizedText))
+  const isFinancialServices = financialServicePatterns.some(pattern => pattern.test(normalizedText))
+  
+  let businessType = 'UNKNOWN'
+  let suggestedCategory: 'SALES' | 'PURCHASES' | 'UNKNOWN' = 'UNKNOWN'
+  let confidence = 0.5
+  
+  if (isLease || isFinancialServices) {
+    businessType = 'FINANCIAL_SERVICES'
+    // Lease invoices are typically purchases (you're buying a service)
+    suggestedCategory = 'PURCHASES'
+    confidence = 0.8
+  }
+  
+  // Additional business type detection
+  if (normalizedText.includes('invoice')) {
+    if (normalizedText.includes('from') || normalizedText.includes('bill to')) {
+      // This suggests we're being billed by someone (purchase)
+      suggestedCategory = 'PURCHASES'
+      confidence = Math.max(confidence, 0.7)
+    }
+  }
+  
+  return {
+    isLease,
+    isFinancialServices,
+    businessType,
+    suggestedCategory,
+    confidence
+  }
+}
+
+/**
+ * Check if amount should be excluded (lease payments, etc.)
+ */
+function shouldExcludeAmount(amount: number, text: string): boolean {
+  const normalizedText = text.toLowerCase()
+  const amountStr = amount.toFixed(2)
+  
+  // Patterns that indicate this amount is a lease payment, not VAT
+  const excludePatterns = [
+    new RegExp(`monthly\\s+payment[:\\s]*€?${amountStr.replace('.', '\\.')}`),
+    new RegExp(`lease\\s+payment[:\\s]*€?${amountStr.replace('.', '\\.')}`),
+    new RegExp(`rental[:\\s]*€?${amountStr.replace('.', '\\.')}`),
+    new RegExp(`instalment[:\\s]*€?${amountStr.replace('.', '\\.')}`),
+    new RegExp(`payment\\s+due[:\\s]*€?${amountStr.replace('.', '\\.')}`),
+    new RegExp(`amount\\s+due[:\\s]*€?${amountStr.replace('.', '\\.')}`),
+  ]
+  
+  return excludePatterns.some(pattern => pattern.test(normalizedText))
+}
+
+/**
+ * Convert AI response to enhanced VAT data structure with smart categorization
  */
 function convertToEnhancedVATData(aiData: any, category: string): EnhancedVATData {
   const salesVAT: number[] = []
   const purchaseVAT: number[] = []
+  
+  // Analyze document type for smart categorization
+  const extractedText = aiData.extractedText || ''
+  const docAnalysis = analyzeDocumentTypeForAI(extractedText)
 
   // Extract VAT amounts based on classification and line items
   if (aiData.vatData?.lineItems && aiData.vatData.lineItems.length > 0) {
     for (const item of aiData.vatData.lineItems) {
       if (item.vatAmount && item.vatAmount > 0) {
-        if (aiData.classification?.category === 'SALES' || category.includes('SALES')) {
+        // Skip if this amount should be excluded (lease payment, etc.)
+        if (shouldExcludeAmount(item.vatAmount, extractedText)) {
+          console.log(`Excluding VAT amount €${item.vatAmount} as it appears to be a lease/payment amount`)
+          continue
+        }
+        
+        // Use smart categorization or AI classification or fallback to original category
+        const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
+          ? docAnalysis.suggestedCategory 
+          : (aiData.classification?.category || (category.includes('SALES') ? 'SALES' : 'PURCHASES'))
+        
+        if (targetCategory === 'SALES') {
           salesVAT.push(item.vatAmount)
-        } else if (aiData.classification?.category === 'PURCHASES' || category.includes('PURCHASE')) {
+        } else {
           purchaseVAT.push(item.vatAmount)
         }
       }
@@ -239,10 +341,17 @@ function convertToEnhancedVATData(aiData: any, category: string): EnhancedVATDat
 
   // If no line items but we have a total VAT amount, use it
   if (salesVAT.length === 0 && purchaseVAT.length === 0 && aiData.vatData?.totalVatAmount && aiData.vatData.totalVatAmount > 0) {
-    if (aiData.classification?.category === 'SALES' || category.includes('SALES')) {
-      salesVAT.push(aiData.vatData.totalVatAmount)
-    } else if (aiData.classification?.category === 'PURCHASES' || category.includes('PURCHASE')) {
-      purchaseVAT.push(aiData.vatData.totalVatAmount)
+    // Skip if this total amount should be excluded
+    if (!shouldExcludeAmount(aiData.vatData.totalVatAmount, extractedText)) {
+      const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
+        ? docAnalysis.suggestedCategory 
+        : (aiData.classification?.category || (category.includes('SALES') ? 'SALES' : 'PURCHASES'))
+      
+      if (targetCategory === 'SALES') {
+        salesVAT.push(aiData.vatData.totalVatAmount)
+      } else {
+        purchaseVAT.push(aiData.vatData.totalVatAmount)
+      }
     }
   }
   
@@ -279,14 +388,14 @@ function convertToEnhancedVATData(aiData: any, category: string): EnhancedVATDat
     purchaseVAT,
     totalAmount: aiData.vatData?.grandTotal,
     vatRate: aiData.vatData?.lineItems?.[0]?.vatRate,
-    confidence: calculateConfidence(aiData, salesVAT, purchaseVAT)
+    confidence: calculateConfidence(aiData, salesVAT, purchaseVAT, docAnalysis)
   }
 }
 
 /**
  * Calculate confidence score based on the quality and consistency of extracted VAT data
  */
-function calculateConfidence(aiData: any, salesVAT: number[], purchaseVAT: number[]): number {
+function calculateConfidence(aiData: any, salesVAT: number[], purchaseVAT: number[], docAnalysis?: any): number {
   let confidence = aiData.classification?.confidence || 0.5
   
   // Boost confidence if we have multiple consistent VAT amounts
@@ -308,6 +417,11 @@ function calculateConfidence(aiData: any, salesVAT: number[], purchaseVAT: numbe
         confidence = Math.min(confidence + 0.1, 0.98)
       }
     }
+  }
+  
+  // Boost confidence based on document type analysis
+  if (docAnalysis && docAnalysis.confidence > 0.7) {
+    confidence = Math.min(confidence + 0.15, 0.98) // Boost for confident document type detection
   }
   
   // Reduce confidence if there are validation flags indicating issues
