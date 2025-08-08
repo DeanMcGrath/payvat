@@ -21,6 +21,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isReady, setIsReady] = useState(false)
 
   const checkAdminAccess = useCallback(async () => {
     try {
@@ -71,6 +72,17 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
   useEffect(() => {
     checkAdminAccess()
   }, [checkAdminAccess])
+
+  // Handle admin panel readiness (ensure auth state is settled)
+  useEffect(() => {
+    if (user && hasAdminRole(user.role, requiredRole) && !loading && !error) {
+      // Small delay to ensure auth state is fully settled before rendering children
+      const timer = setTimeout(() => setIsReady(true), 100)
+      return () => clearTimeout(timer)
+    } else {
+      setIsReady(false)
+    }
+  }, [user, requiredRole, loading, error])
 
   const hasAdminRole = (userRole: string, required: string): boolean => {
     const roles = ['USER', 'ADMIN', 'SUPER_ADMIN']
@@ -150,18 +162,8 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
   }
 
   // User has admin access - render admin interface with user context
-  // Add defensive delay to ensure authentication state is fully settled
-  const [isReady, setIsReady] = useState(false)
-  
-  useEffect(() => {
-    if (user && hasAdminRole(user.role, requiredRole)) {
-      // Small delay to ensure auth state is fully settled before rendering children
-      const timer = setTimeout(() => setIsReady(true), 100)
-      return () => clearTimeout(timer)
-    }
-  }, [user, requiredRole])
-  
-  if (!isReady) {
+  // Check if admin panel is ready (defensive loading state)
+  if (user && hasAdminRole(user.role, requiredRole) && !isReady) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <Card className="w-full max-w-md">
