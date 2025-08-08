@@ -514,7 +514,7 @@ Find the total VAT amount clearly labeled on the document. Be accurate - this is
     }
 
     // Convert to enhanced VAT data structure - pass all data for comprehensive hardcoded test
-    const enhancedData = convertToEnhancedVATDataWithAllSources(parsedData, category, extractedPDFText, aiResult)
+    const enhancedData = convertToEnhancedVATDataWithAllSources(parsedData, category, '', aiResult)
     
     // Generate scan result summary
     const vatAmounts = [...enhancedData.salesVAT, ...enhancedData.purchaseVAT]
