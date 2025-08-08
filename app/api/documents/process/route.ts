@@ -182,20 +182,17 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       },
       // RAW TEXT DEBUG INFO (for tax compliance debugging)
       debugInfo: {
-        aiExtractedText: result.extractedData?.extractedText && typeof result.extractedData.extractedText === 'string' ? 
-          result.extractedData.extractedText.substring(0, 1000) + (result.extractedData.extractedText.length > 1000 ? '...' : '') : 
+        aiExtractedText: result.extractedData?.extractedText ? 
+          String(result.extractedData.extractedText).substring(0, 1000) + (String(result.extractedData.extractedText).length > 1000 ? '...' : '') : 
           'No AI extracted text available',
-        textLength: result.extractedData?.extractedText && typeof result.extractedData.extractedText === 'string' ? 
-          result.extractedData.extractedText.length : 0,
-        contains111_36: result.extractedData?.extractedText && typeof result.extractedData.extractedText === 'string' ? 
-          result.extractedData.extractedText.includes('111.36') : false,
-        contains90_85: result.extractedData?.extractedText && typeof result.extractedData.extractedText === 'string' ? 
-          result.extractedData.extractedText.includes('90.85') : false,
-        containsVW: result.extractedData?.extractedText && typeof result.extractedData.extractedText === 'string' ? 
-          (result.extractedData.extractedText.toLowerCase().includes('volkswagen') || 
-           result.extractedData.extractedText.toLowerCase().includes('vw financial')) : false,
-        containsTotalAmountVAT: result.extractedData?.extractedText && typeof result.extractedData.extractedText === 'string' ? 
-          result.extractedData.extractedText.toLowerCase().includes('total amount vat') : false,
+        textLength: result.extractedData?.extractedText ? String(result.extractedData.extractedText).length : 0,
+        contains111_36: result.extractedData?.extractedText ? String(result.extractedData.extractedText).includes('111.36') : false,
+        contains90_85: result.extractedData?.extractedText ? String(result.extractedData.extractedText).includes('90.85') : false,
+        containsVW: result.extractedData?.extractedText ? 
+          (String(result.extractedData.extractedText).toLowerCase().includes('volkswagen') || 
+           String(result.extractedData.extractedText).toLowerCase().includes('vw financial')) : false,
+        containsTotalAmountVAT: result.extractedData?.extractedText ? 
+          String(result.extractedData.extractedText).toLowerCase().includes('total amount vat') : false,
         hardcodedOverride: result.scanResult.includes('HARDCODED') || false
       }
     })
