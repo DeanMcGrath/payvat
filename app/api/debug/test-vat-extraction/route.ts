@@ -43,7 +43,7 @@ VAT Amount: €23.00
         'PURCHASES'
       )
       
-      const simpleTest = {
+      const simpleTest: any = {
         name: 'Simple Text Invoice',
         success: simpleResult.success,
         details: {
@@ -111,7 +111,7 @@ Payment Terms: 30 days
         'PURCHASES'
       )
       
-      const vwTest = {
+      const vwTest: any = {
         name: 'VW Financial Invoice',
         success: vwResult.success,
         details: {
@@ -178,7 +178,7 @@ Payment Terms: 30 days
         
         const aiContent = directAPIResponse.choices[0]?.message?.content || 'No response'
         
-        const directTest = {
+        const directTest: any = {
           name: 'Direct OpenAI Vision API',
           success: true,
           details: {
