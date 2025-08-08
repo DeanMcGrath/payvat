@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-// GET /api/admin/test-user-details/[id] - Test user details endpoint bypassing auth
-async function testUserDetails(request: NextRequest, { params }: { params: { id: string } }) {
+// GET /api/admin/test-user-details/[id] - Test user details endpoint bypassing auth  
+async function testUserDetails(
+  request: NextRequest, 
+  context: { params: Promise<{ id: string }> }
+) {
   const requestId = Math.random().toString(36).substring(7)
-  const userId = params.id
+  const { id: userId } = await context.params
   
   try {
     console.log(`[${requestId}] Test admin user detail request for user ${userId} (bypassing auth for testing)`)
