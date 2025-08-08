@@ -150,6 +150,32 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
   }
 
   // User has admin access - render admin interface with user context
+  // Add defensive delay to ensure authentication state is fully settled
+  const [isReady, setIsReady] = useState(false)
+  
+  useEffect(() => {
+    if (user && hasAdminRole(user.role, requiredRole)) {
+      // Small delay to ensure auth state is fully settled before rendering children
+      const timer = setTimeout(() => setIsReady(true), 100)
+      return () => clearTimeout(timer)
+    }
+  }, [user, requiredRole])
+  
+  if (!isReady) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-center space-x-2">
+              <Shield className="h-5 w-5 text-teal-600 animate-spin" />
+              <span className="text-gray-600">Initializing admin panel...</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+  
   return (
     <div className="admin-context">
       {/* Admin Header Bar */}

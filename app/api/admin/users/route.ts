@@ -9,13 +9,30 @@ async function getUsers(request: NextRequest, user: AuthUser) {
   console.log(`[${requestId}] Admin users request started by user ${user.email} (${user.role})`)
   
   try {
-    // Simple database connection test using basic operation
+    // Database connection with retry logic
+    async function testDatabaseConnection(maxRetries = 3, delay = 1000) {
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          await prisma.$connect()
+          console.log(`[${requestId}] Database connection confirmed on attempt ${attempt}`)
+          return true
+        } catch (dbError) {
+          console.error(`[${requestId}] Database connection attempt ${attempt} failed:`, dbError)
+          
+          if (attempt === maxRetries) {
+            throw dbError
+          }
+          
+          // Wait before retry
+          await new Promise(resolve => setTimeout(resolve, delay))
+        }
+      }
+    }
+    
     try {
-      // Use a lightweight operation instead of raw SQL
-      await prisma.$connect()
-      console.log(`[${requestId}] Database connection confirmed`)
+      await testDatabaseConnection()
     } catch (dbError) {
-      console.error(`[${requestId}] Database connection failed:`, dbError)
+      console.error(`[${requestId}] Database connection failed after all retries:`, dbError)
       return NextResponse.json(
         { 
           error: 'Database connection unavailable',
