@@ -46,6 +46,21 @@ export default function VATReturnSubmission() {
     loadUploadedDocuments()
   }, [])
   
+  // Monitor changes to extracted VAT data
+  useEffect(() => {
+    console.log('🔄 FRONTEND: extractedVATData state changed:', extractedVATData)
+    if (extractedVATData) {
+      console.log('📊 FRONTEND: New extracted VAT data details:', {
+        totalSalesVAT: extractedVATData.totalSalesVAT,
+        totalPurchaseVAT: extractedVATData.totalPurchaseVAT,
+        totalNetVAT: extractedVATData.totalNetVAT,
+        processedDocuments: extractedVATData.processedDocuments,
+        averageConfidence: extractedVATData.averageConfidence,
+        documentCount: extractedVATData.documentCount
+      })
+    }
+  }, [extractedVATData])
+  
   const fetchUserProfile = async () => {
     try {
       const response = await fetch('/api/auth/profile', {
@@ -138,31 +153,70 @@ export default function VATReturnSubmission() {
     }
   }
 
-  const loadExtractedVATData = async () => {
+  const loadExtractedVATData = async (): Promise<any> => {
     try {
       setLoadingExtractedData(true)
-      const response = await fetch('/api/documents/extracted-vat')
+      console.log('🔍 FRONTEND: Loading extracted VAT data...')
+      
+      const response = await fetch(`/api/documents/extracted-vat?t=${Date.now()}`)
+      console.log('🌐 FRONTEND: API response status:', response.status)
       
       if (response.ok) {
         const result = await response.json()
+        console.log('📊 FRONTEND: Raw API response:', JSON.stringify(result, null, 2))
+        
         if (result.success && result.extractedVAT) {
+          console.log('✅ FRONTEND: Setting extracted VAT data:', {
+            totalSalesVAT: result.extractedVAT.totalSalesVAT,
+            totalPurchaseVAT: result.extractedVAT.totalPurchaseVAT,
+            totalNetVAT: result.extractedVAT.totalNetVAT,
+            processedDocuments: result.extractedVAT.processedDocuments,
+            averageConfidence: result.extractedVAT.averageConfidence,
+            salesDocuments: result.extractedVAT.salesDocuments?.length || 0,
+            purchaseDocuments: result.extractedVAT.purchaseDocuments?.length || 0
+          })
+          
           setExtractedVATData(result.extractedVAT)
           logger.info('Loaded extracted VAT data', { totalSalesVAT: result.extractedVAT.totalSalesVAT, totalPurchaseVAT: result.extractedVAT.totalPurchaseVAT }, 'VAT_SUBMISSION')
+          return result.extractedVAT // Return fresh data
+        } else {
+          console.log('❌ FRONTEND: API response indicates failure or no data:', {
+            success: result.success,
+            hasExtractedVAT: !!result.extractedVAT
+          })
+          return null
         }
+      } else {
+        console.log('❌ FRONTEND: API request failed:', response.status, response.statusText)
+        return null
       }
     } catch (error) {
+      console.error('🚨 FRONTEND: Error loading extracted VAT data:', error)
       logger.error('Failed to load extracted VAT data', error, 'VAT_SUBMISSION')
+      return null
     } finally {
       setLoadingExtractedData(false)
+      console.log('🏁 FRONTEND: Finished loading extracted VAT data')
     }
   }
 
   const useExtractedVATData = () => {
+    console.log('🎯 FRONTEND: useExtractedVATData called')
+    console.log('📊 FRONTEND: Current extractedVATData state:', extractedVATData)
+    
     if (extractedVATData) {
+      console.log('✅ FRONTEND: Applying extracted VAT data to calculator:', {
+        salesVAT: extractedVATData.totalSalesVAT.toFixed(2),
+        purchaseVAT: extractedVATData.totalPurchaseVAT.toFixed(2),
+        netVAT: extractedVATData.totalNetVAT.toFixed(2)
+      })
+      
       setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
       setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
       setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
       setUseExtractedData(true)
+    } else {
+      console.log('❌ FRONTEND: No extractedVATData available to use')
     }
   }
 
@@ -378,7 +432,10 @@ export default function VATReturnSubmission() {
                     </Button>
                     
                     <Button 
-                      onClick={loadExtractedVATData}
+                      onClick={() => {
+                        console.log('🔄 FRONTEND: Manual refresh button clicked')
+                        loadExtractedVATData()
+                      }}
                       variant="outline" 
                       className="border-teal-200 text-teal-700"
                       disabled={loadingExtractedData}
@@ -477,22 +534,33 @@ export default function VATReturnSubmission() {
                   description="Upload sales-related documents"
                   acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
                   onUploadSuccess={(doc) => {
+                    console.log('📤 FRONTEND: Sales document uploaded:', doc.fileName)
                     logger.info('Sales document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
                     // Add to uploaded documents list
                     setUploadedDocuments(prev => [...prev, doc])
                     
+                    console.log('⏳ FRONTEND: Waiting 5s for AI processing, then refreshing VAT data...')
                     // Refresh extracted VAT data when new documents are uploaded
                     setTimeout(() => {
-                      loadExtractedVATData().then(() => {
-                        // Auto-populate calculator if we have extracted data
-                        if (extractedVATData && extractedVATData.processedDocuments > 0) {
-                          setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
-                          setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
-                          setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
+                      console.log('🔄 FRONTEND: Refreshing extracted VAT data after sales document upload')
+                      loadExtractedVATData().then((freshData) => {
+                        console.log('🎯 FRONTEND: Post-upload VAT data refresh complete, using fresh API response for auto-populate')
+                        console.log('📊 FRONTEND: Fresh data from API:', freshData)
+                        
+                        // Use fresh data directly from API response, not stale state
+                        if (freshData && freshData.processedDocuments > 0) {
+                          console.log('✅ FRONTEND: Auto-populating calculator after sales document upload with fresh API data')
+                          setSalesVAT(freshData.totalSalesVAT.toFixed(2))
+                          setPurchaseVAT(freshData.totalPurchaseVAT.toFixed(2))
+                          setNetVAT(freshData.totalNetVAT.toFixed(2))
                           setUseExtractedData(true)
+                        } else {
+                          console.log('❌ FRONTEND: No extracted data in fresh API response for auto-populate after sales upload')
                         }
+                      }).catch((error) => {
+                        console.error('🚨 FRONTEND: Error during post-upload VAT refresh:', error)
                       })
-                    }, 2000) // Allow time for AI processing
+                    }, 5000) // Allow time for AI processing
                   }}
                 />
 
@@ -503,22 +571,33 @@ export default function VATReturnSubmission() {
                   description="Upload purchase-related documents"
                   acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
                   onUploadSuccess={(doc) => {
+                    console.log('📤 FRONTEND: Purchase document uploaded:', doc.fileName)
                     logger.info('Purchase document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
                     // Add to uploaded documents list
                     setUploadedDocuments(prev => [...prev, doc])
                     
+                    console.log('⏳ FRONTEND: Waiting 5s for AI processing, then refreshing VAT data...')
                     // Refresh extracted VAT data when new documents are uploaded
                     setTimeout(() => {
-                      loadExtractedVATData().then(() => {
-                        // Auto-populate calculator if we have extracted data
-                        if (extractedVATData && extractedVATData.processedDocuments > 0) {
-                          setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
-                          setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
-                          setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
+                      console.log('🔄 FRONTEND: Refreshing extracted VAT data after purchase document upload')
+                      loadExtractedVATData().then((freshData) => {
+                        console.log('🎯 FRONTEND: Post-upload VAT data refresh complete, using fresh API response for auto-populate')
+                        console.log('📊 FRONTEND: Fresh data from API:', freshData)
+                        
+                        // Use fresh data directly from API response, not stale state
+                        if (freshData && freshData.processedDocuments > 0) {
+                          console.log('✅ FRONTEND: Auto-populating calculator after purchase document upload with fresh API data')
+                          setSalesVAT(freshData.totalSalesVAT.toFixed(2))
+                          setPurchaseVAT(freshData.totalPurchaseVAT.toFixed(2))
+                          setNetVAT(freshData.totalNetVAT.toFixed(2))
                           setUseExtractedData(true)
+                        } else {
+                          console.log('❌ FRONTEND: No extracted data in fresh API response for auto-populate after purchase upload')
                         }
+                      }).catch((error) => {
+                        console.error('🚨 FRONTEND: Error during post-upload VAT refresh:', error)
                       })
-                    }, 2000) // Allow time for AI processing
+                    }, 5000) // Allow time for AI processing
                   }}
                 />
               </CardContent>

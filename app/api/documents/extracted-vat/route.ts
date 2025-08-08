@@ -89,7 +89,11 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       }
     })
     
-    console.log(`Found ${documents.length} processed documents`)
+    console.log(`🔍 EXTRACTED VAT API DEBUG:`)
+    console.log(`📄 Found ${documents.length} processed documents:`)
+    documents.forEach(doc => {
+      console.log(`   - ${doc.originalName} (${doc.category}) - Scanned: ${doc.isScanned}, Result: ${doc.scanResult}`)
+    })
     
     // Get audit logs with extracted VAT data
     const auditLogs = await prisma.auditLog.findMany({
@@ -106,7 +110,16 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       }
     })
     
-    console.log(`Found ${auditLogs.length} audit logs with VAT data`)
+    console.log(`📊 Found ${auditLogs.length} audit logs with VAT data:`)
+    auditLogs.forEach(log => {
+      const extractedData = log.metadata as any
+      console.log(`   - Document ${log.entityId}: Created ${log.createdAt}`)
+      console.log(`     Metadata keys: ${Object.keys(extractedData || {}).join(', ')}`)
+      if (extractedData?.extractedData) {
+        const { salesVAT = [], purchaseVAT = [], confidence = 0 } = extractedData.extractedData
+        console.log(`     Sales VAT: [${salesVAT.join(', ')}], Purchase VAT: [${purchaseVAT.join(', ')}], Confidence: ${confidence}`)
+      }
+    })
     
     // Aggregate VAT data
     let totalSalesVAT = 0
@@ -118,18 +131,25 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     const purchaseDocuments: ExtractedVATSummary['purchaseDocuments'] = []
     
     // Process each document
+    console.log(`💰 Processing VAT data from documents:`)
     for (const document of documents) {
       const auditLog = auditLogs.find(log => log.entityId === document.id)
       
+      console.log(`   📄 Processing ${document.originalName}:`)
       if (auditLog && auditLog.metadata) {
         const extractedData = auditLog.metadata as any
+        console.log(`      Has audit log: ✅ (${auditLog.createdAt})`)
         
         if (extractedData.extractedData) {
           const { salesVAT = [], purchaseVAT = [], confidence = 0 } = extractedData.extractedData
+          console.log(`      Has extracted data: ✅`)
           
           // Sum up VAT amounts
           const salesTotal = salesVAT.reduce((sum: number, amount: number) => sum + amount, 0)
           const purchaseTotal = purchaseVAT.reduce((sum: number, amount: number) => sum + amount, 0)
+          console.log(`      Sales VAT: €${salesTotal} (from [${salesVAT.join(', ')}])`)
+          console.log(`      Purchase VAT: €${purchaseTotal} (from [${purchaseVAT.join(', ')}])`)
+          console.log(`      Confidence: ${Math.round(confidence * 100)}%`)
           
           totalSalesVAT += salesTotal
           totalPurchaseVAT += purchaseTotal
@@ -183,10 +203,17 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       processedDocuments: summary.processedDocuments
     })
     
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       extractedVAT: summary
     })
+    
+    // Prevent browser caching to ensure fresh data
+    response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+    
+    return response
     
   } catch (error) {
     console.error('Error getting extracted VAT data:', error)
