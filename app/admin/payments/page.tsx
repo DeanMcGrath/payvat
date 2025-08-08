@@ -85,13 +85,13 @@ export default function AdminPayments() {
   const [statistics, setStatistics] = useState<PaymentsResponse['statistics'] | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [userIdFilter, setUserIdFilter] = useState('')
-  const [statusFilter, setStatusFilter] = useState('')
-  const [paymentMethodFilter, setPaymentMethodFilter] = useState('')
-  const [dateFromFilter, setDateFromFilter] = useState('')
-  const [dateToFilter, setDateToFilter] = useState('')
-  const [minAmountFilter, setMinAmountFilter] = useState('')
-  const [maxAmountFilter, setMaxAmountFilter] = useState('')
+  const [userIdFilter, setUserIdFilter] = useState<string | undefined>(undefined)
+  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
+  const [paymentMethodFilter, setPaymentMethodFilter] = useState<string | undefined>(undefined)
+  const [dateFromFilter, setDateFromFilter] = useState<string | undefined>(undefined)
+  const [dateToFilter, setDateToFilter] = useState<string | undefined>(undefined)
+  const [minAmountFilter, setMinAmountFilter] = useState<string | undefined>(undefined)
+  const [maxAmountFilter, setMaxAmountFilter] = useState<string | undefined>(undefined)
   const [page, setPage] = useState(1)
   const [pagination, setPagination] = useState({
     page: 1,
@@ -352,7 +352,7 @@ export default function AdminPayments() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-            <Select value={statusFilter} onValueChange={(value) => handleFilterChange('status', value)}>
+            <Select value={statusFilter || undefined} onValueChange={(value) => handleFilterChange('status', value)}>
               <SelectTrigger>
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>
@@ -366,7 +366,7 @@ export default function AdminPayments() {
               </SelectContent>
             </Select>
 
-            <Select value={paymentMethodFilter} onValueChange={(value) => handleFilterChange('paymentMethod', value)}>
+            <Select value={paymentMethodFilter || undefined} onValueChange={(value) => handleFilterChange('paymentMethod', value)}>
               <SelectTrigger>
                 <SelectValue placeholder="All Methods" />
               </SelectTrigger>

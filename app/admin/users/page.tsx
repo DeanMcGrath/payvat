@@ -328,7 +328,7 @@ function AdminUsersContent() {
                 />
               </div>
             </div>
-            <Select value={roleFilter} onValueChange={(value) => handleFilterChange('role', value)}>
+            <Select value={roleFilter || undefined} onValueChange={(value) => handleFilterChange('role', value)}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="All Roles" />
               </SelectTrigger>
@@ -339,7 +339,7 @@ function AdminUsersContent() {
                 <SelectItem value="SUPER_ADMIN">Super Admin</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={statusFilter} onValueChange={(value) => handleFilterChange('status', value)}>
+            <Select value={statusFilter || undefined} onValueChange={(value) => handleFilterChange('status', value)}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>

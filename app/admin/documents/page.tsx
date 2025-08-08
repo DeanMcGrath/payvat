@@ -69,10 +69,10 @@ export default function AdminDocuments() {
   const [documents, setDocuments] = useState<Document[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [userIdFilter, setUserIdFilter] = useState('')
-  const [categoryFilter, setCategoryFilter] = useState('')
-  const [documentTypeFilter, setDocumentTypeFilter] = useState('')
-  const [scannedFilter, setScannedFilter] = useState('')
+  const [userIdFilter, setUserIdFilter] = useState<string | undefined>(undefined)
+  const [categoryFilter, setCategoryFilter] = useState<string | undefined>(undefined)
+  const [documentTypeFilter, setDocumentTypeFilter] = useState<string | undefined>(undefined)
+  const [scannedFilter, setScannedFilter] = useState<string | undefined>(undefined)
   const [page, setPage] = useState(1)
   const [pagination, setPagination] = useState({
     page: 1,
@@ -240,7 +240,7 @@ export default function AdminDocuments() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-4">
-            <Select value={categoryFilter} onValueChange={(value) => handleFilterChange('category', value)}>
+            <Select value={categoryFilter || undefined} onValueChange={(value) => handleFilterChange('category', value)}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
@@ -253,7 +253,7 @@ export default function AdminDocuments() {
               </SelectContent>
             </Select>
 
-            <Select value={documentTypeFilter} onValueChange={(value) => handleFilterChange('documentType', value)}>
+            <Select value={documentTypeFilter || undefined} onValueChange={(value) => handleFilterChange('documentType', value)}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
@@ -266,7 +266,7 @@ export default function AdminDocuments() {
               </SelectContent>
             </Select>
 
-            <Select value={scannedFilter} onValueChange={(value) => handleFilterChange('scanned', value)}>
+            <Select value={scannedFilter || undefined} onValueChange={(value) => handleFilterChange('scanned', value)}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="All Documents" />
               </SelectTrigger>
