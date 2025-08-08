@@ -106,29 +106,68 @@ async function extractTextFromPDF(base64Data: string): Promise<{ success: boolea
  */
 async function extractPDFTextContent(buffer: Buffer): Promise<string> {
   try {
+    console.log('🔍 PDF EXTRACTION DEBUG:')
+    console.log(`📄 PDF Buffer size: ${buffer.length} bytes`)
+    console.log(`📄 First 100 bytes: ${buffer.subarray(0, 100).toString('hex')}`)
+    
     // This is a basic implementation
     // In production, you would use: const pdf = await pdfParse(buffer)
     
     // For now, we'll attempt to read the PDF as text
     const pdfText = buffer.toString('utf8')
+    console.log(`📄 PDF as UTF8 length: ${pdfText.length} characters`)
+    console.log(`📄 First 200 chars of PDF text: "${pdfText.substring(0, 200)}"`)
+    
+    // CRITICAL TEST: Search for our target amount in raw PDF
+    const contains111_36 = pdfText.includes('111.36')
+    const containsTotalAmountVAT = pdfText.includes('Total Amount VAT')
+    console.log(`🎯 RAW PDF SEARCH RESULTS:`)
+    console.log(`   - Contains "111.36": ${contains111_36}`)
+    console.log(`   - Contains "Total Amount VAT": ${containsTotalAmountVAT}`)
     
     // Look for text patterns that indicate this might be a text-based PDF
     if (pdfText.includes('/Type /Page') || pdfText.includes('stream')) {
+      console.log('📄 PDF appears to have valid structure (/Type /Page or stream found)')
+      
       // This appears to be a valid PDF structure
       // Extract any readable text content
       const textMatches = pdfText.match(/BT[^E]*ET/g) || []
-      const extractedTexts = textMatches.map(match => {
+      console.log(`📄 Found ${textMatches.length} text blocks (BT...ET patterns)`)
+      
+      const extractedTexts = textMatches.map((match, index) => {
         // Simple text extraction from PDF streams
-        return match.replace(/[^a-zA-Z0-9\s€.,:%()-]/g, ' ').replace(/\s+/g, ' ').trim()
+        const cleaned = match.replace(/[^a-zA-Z0-9\s€.,:%()-]/g, ' ').replace(/\s+/g, ' ').trim()
+        console.log(`📄 Text block ${index + 1}: "${cleaned.substring(0, 100)}${cleaned.length > 100 ? '...' : ''}"`)
+        
+        // Check each block for our target
+        if (cleaned.includes('111.36')) {
+          console.log(`🎯 FOUND "111.36" in text block ${index + 1}!`)
+        }
+        if (cleaned.includes('Total Amount VAT')) {
+          console.log(`🎯 FOUND "Total Amount VAT" in text block ${index + 1}!`)
+        }
+        
+        return cleaned
       }).filter(text => text.length > 5)
       
-      return extractedTexts.join('\n')
+      const finalText = extractedTexts.join('\n')
+      console.log(`📄 Final extracted text length: ${finalText.length} characters`)
+      console.log(`📄 Final text preview: "${finalText.substring(0, 300)}${finalText.length > 300 ? '...' : ''}"`)
+      
+      // Final test on extracted text
+      console.log(`🎯 FINAL EXTRACTION TEST:`)
+      console.log(`   - Final text contains "111.36": ${finalText.includes('111.36')}`)
+      console.log(`   - Final text contains "Total Amount VAT": ${finalText.includes('Total Amount VAT')}`)
+      
+      return finalText
     }
     
+    console.log('❌ PDF does not appear to have valid structure - no /Type /Page or stream found')
     // If no text found, throw error to trigger AI processing
     throw new Error('PDF appears to be image-based or encrypted')
     
   } catch (error) {
+    console.error('🚨 PDF text extraction failed:', error)
     // If PDF text extraction fails, let AI handle it
     throw new Error('PDF requires AI processing for text extraction')
   }
@@ -631,35 +670,65 @@ export async function processDocument(
   const processingStartTime = Date.now()
   
   try {
-    console.log(`Processing document: ${fileName} (${category}, ${mimeType}) - AI enabled: ${isAIEnabled()}`)
+    console.log('🔄 DOCUMENT PROCESSING PIPELINE START:')
+    console.log(`📄 Document: ${fileName}`)
+    console.log(`📁 Category: ${category}`)
+    console.log(`🎭 MIME Type: ${mimeType}`)
+    console.log(`👤 User ID: ${userId || 'guest'}`)
+    console.log(`🤖 AI enabled: ${isAIEnabled()}`)
+    console.log(`📂 File size: ${Math.round(fileData.length / 1024)}KB (base64)`)
+    console.log('=' .repeat(80))
     
     // Try AI processing first if available
     if (isAIEnabled()) {
-      console.log('Attempting AI document processing...')
+      console.log('🤖 ATTEMPTING AI DOCUMENT PROCESSING...')
       const aiResult = await processDocumentWithAI(fileData, mimeType, fileName, category, userId)
+      
+      console.log('🔍 AI PROCESSING RESULT:')
+      console.log(`   Success: ${aiResult.success}`)
+      console.log(`   Scanned: ${aiResult.isScanned}`)
+      console.log(`   AI Processed: ${aiResult.aiProcessed}`)
+      console.log(`   Processing Time: ${aiResult.processingTime}ms`)
+      console.log(`   Scan Result: ${aiResult.scanResult}`)
+      console.log(`   Has Extracted Data: ${!!aiResult.extractedData}`)
+      
+      if (aiResult.extractedData) {
+        console.log('💰 AI EXTRACTED VAT DATA:')
+        console.log(`   Sales VAT: [${aiResult.extractedData.salesVAT?.join(', ') || 'none'}]`)
+        console.log(`   Purchase VAT: [${aiResult.extractedData.purchaseVAT?.join(', ') || 'none'}]`)
+        console.log(`   Confidence: ${Math.round((aiResult.extractedData.confidence || 0) * 100)}%`)
+      }
       
       if (aiResult.success && aiResult.extractedData) {
         // Validate AI results
         const validation = validateExtractedVAT(aiResult.extractedData)
-        console.log(`AI processing successful: ${aiResult.scanResult}`, {
+        console.log(`✅ AI processing successful: ${aiResult.scanResult}`, {
           processingTime: aiResult.processingTime,
           validation: validation.isValid ? 'PASS' : 'WARNINGS',
           issues: validation.issues
         })
         
         // Convert AI result to legacy format with validation info
-        return {
+        const finalResult = {
           success: aiResult.success,
           isScanned: aiResult.isScanned,
           scanResult: `🤖 AI Enhanced: ${aiResult.scanResult}${validation.issues.length > 0 ? ` (${validation.issues.length} validation notes)` : ''}`,
           extractedData: convertToLegacyFormat(aiResult.extractedData),
           error: aiResult.error
         }
+        
+        console.log('🎯 FINAL AI RESULT:')
+        console.log(`   Final VAT amounts: Sales=[${finalResult.extractedData?.salesVAT?.join(', ') || 'none'}], Purchase=[${finalResult.extractedData?.purchaseVAT?.join(', ') || 'none'}]`)
+        console.log(`   Final confidence: ${Math.round((finalResult.extractedData?.confidence || 0) * 100)}%`)
+        console.log('🔄 DOCUMENT PROCESSING PIPELINE: AI SUCCESS - Returning result')
+        console.log('=' .repeat(80))
+        
+        return finalResult
       } else {
-        console.warn('AI processing failed, falling back to legacy processing:', aiResult.error)
+        console.warn('❌ AI processing failed, falling back to legacy processing:', aiResult.error)
       }
     } else {
-      console.log('AI processing not available, using legacy processing')
+      console.log('⚠️  AI processing not available, using legacy processing')
     }
     
     // Fallback to legacy processing
