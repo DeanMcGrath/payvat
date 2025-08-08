@@ -13,13 +13,7 @@ export default function Footer() {
       {/* Utility Section */}
       <div className="bg-gray-100 py-4 mt-8 sm:mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
-            <Link 
-              href="/" 
-              className="text-gray-600 hover:text-gray-800 text-sm underline transition-colors"
-            >
-              Back to Homepage
-            </Link>
+          <div className="flex justify-center">
             <button 
               onClick={scrollToTop}
               className="text-gray-600 hover:text-gray-800 text-sm underline transition-colors flex items-center gap-1"
@@ -33,7 +27,7 @@ export default function Footer() {
       {/* Main Footer */}
       <footer className="bg-teal-700 text-white py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {/* Column 1 - Company & Services */}
             <div>
               <h4 className="font-semibold text-white mb-4">Company & Services</h4>
@@ -95,26 +89,18 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link 
+                    href="/vat-registration" 
+                    className="text-white hover:text-teal-100 underline transition-colors"
+                  >
+                    How to Apply for a VAT Number
+                  </Link>
+                </li>
+                <li>
+                  <Link 
                     href="/vat-period" 
                     className="text-white hover:text-teal-100 underline transition-colors"
                   >
                     VAT Calculator
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    href="/vat-guide" 
-                    className="text-white hover:text-teal-100 underline transition-colors"
-                  >
-                    Tax Education
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    href="/reports" 
-                    className="text-white hover:text-teal-100 underline transition-colors"
-                  >
-                    VAT Statistics
                   </Link>
                 </li>
               </ul>
@@ -140,47 +126,9 @@ export default function Footer() {
                     Terms of Service
                   </Link>
                 </li>
-                <li>
-                  <Link 
-                    href="/accessibility" 
-                    className="text-white hover:text-teal-100 underline transition-colors"
-                  >
-                    Accessibility
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    href="/gdpr" 
-                    className="text-white hover:text-teal-100 underline transition-colors"
-                  >
-                    GDPR Compliance
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    href="/statutory" 
-                    className="text-white hover:text-teal-100 underline transition-colors"
-                  >
-                    Statutory Obligations
-                  </Link>
-                </li>
               </ul>
             </div>
 
-            {/* Column 4 - Navigation */}
-            <div>
-              <h4 className="font-semibold text-white mb-4">Navigation</h4>
-              <ul className="space-y-3">
-                <li>
-                  <Link 
-                    href="/" 
-                    className="text-white hover:text-teal-100 underline transition-colors"
-                  >
-                    Back to Homepage
-                  </Link>
-                </li>
-              </ul>
-            </div>
           </div>
           
           {/* Bottom Section */}

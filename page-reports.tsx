@@ -4,8 +4,10 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, TrendingUp, FileText, Calendar, Download, Eye, BarChart3, PieChart, LineChart, Euro, Building } from 'lucide-react'
+import { ArrowLeft, TrendingUp, FileText, Calendar, Download, Eye, BarChart3, PieChart, LineChart, Euro, Building, Bell, Settings, LogOut, Search, Loader2, AlertCircle } from 'lucide-react'
 import LiveChat from "./components/live-chat"
+import Footer from "./components/footer"
+import { Input } from "@/components/ui/input"
 
 interface Report {
   id: number
@@ -17,13 +19,67 @@ interface Report {
   amount: string
 }
 
+interface UserProfile {
+  id: string
+  email: string
+  businessName: string
+  vatNumber: string
+  firstName?: string
+  lastName?: string
+}
+
 export default function ReportsPage() {
   const [reports, setReports] = useState<Report[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [user, setUser] = useState<UserProfile | null>(null)
+  const [userLoading, setUserLoading] = useState(true)
+  const [userError, setUserError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchReports = async () => {
+    fetchUserProfile()
+    fetchReports()
+  }, [])
+  
+  const fetchUserProfile = async () => {
+    try {
+      const response = await fetch('/api/auth/profile', {
+        method: 'GET',
+        credentials: 'include'
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && data.user) {
+          setUser(data.user)
+        } else {
+          setUserError('Failed to load user profile')
+        }
+      } else if (response.status === 401) {
+        window.location.href = '/login'
+      } else {
+        setUserError('Failed to fetch user profile')
+      }
+    } catch (err) {
+      setUserError('Network error occurred')
+    } finally {
+      setUserLoading(false)
+    }
+  }
+  
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      })
+      window.location.href = '/login'
+    } catch (err) {
+      window.location.href = '/login'
+    }
+  }
+  
+  const fetchReports = async () => {
       try {
         const response = await fetch('/api/reports')
         if (response.ok) {
@@ -39,16 +95,37 @@ export default function ReportsPage() {
       }
     }
 
-    fetchReports()
-  }, [])
-
-  if (isLoading) {
+  if (userLoading || isLoading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-teal-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading reports...</p>
+        <div className="flex items-center space-x-2">
+          <Loader2 className="h-6 w-6 animate-spin text-teal-700" />
+          <span className="text-gray-600">Loading...</span>
         </div>
+      </div>
+    )
+  }
+
+  if (userError || !user) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <Card className="w-full max-w-md border-red-200">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <AlertCircle className="h-8 w-8 text-red-500" />
+              <span className="text-lg font-medium text-red-800">Error Loading Page</span>
+            </div>
+            <p className="text-red-600 text-center mb-4">{userError}</p>
+            <div className="flex space-x-2">
+              <Button onClick={fetchUserProfile} className="flex-1">
+                Try Again
+              </Button>
+              <Button onClick={() => window.location.href = '/login'} variant="outline" className="flex-1">
+                Login
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     )
   }
@@ -88,23 +165,57 @@ export default function ReportsPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={() => window.location.href = '/dashboard'}
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <h1 className="text-2xl font-thin text-gray-800">
-              PAY <span className="text-teal-600">VAT</span>
-            </h1>
+      <header className="bg-teal-700 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
+            
+            <div className="flex items-center space-x-2 sm:space-x-6">
+              <div className="hidden lg:flex items-center space-x-2">
+                <Input
+                  placeholder="Search"
+                  className="w-32 xl:w-48 2xl:w-64 bg-white text-gray-900 border-0"
+                />
+                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
+                  <Search className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="text-right hidden sm:block max-w-48 lg:max-w-none">
+                <h3 className="text-sm lg:text-base font-bold text-white truncate">{user.businessName}</h3>
+                <p className="text-teal-100 font-mono text-xs">VAT: {user.vatNumber}</p>
+              </div>
+              
+              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 lg:hidden p-2 min-w-[44px] min-h-[44px]">
+                  <Search className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
+                  <Bell className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
+                  <Settings className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]" onClick={handleLogout} title="Logout">
+                  <LogOut className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </div>
-          <div className="text-right">
-            <h3 className="text-lg font-bold text-teal-600">Brian Cusack Trading Ltd</h3>
-            <p className="text-teal-600 font-mono text-sm">VAT: IE0352440A</p>
+        </div>
+        
+        {/* Navigation */}
+        <div className="bg-teal-600 px-4 sm:px-6 py-3">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2 text-sm">
+                <span className="text-white">Reports</span>
+              </div>
+              <div className="sm:hidden text-right max-w-40">
+                <p className="text-xs text-teal-100 font-mono truncate">{user.businessName}</p>
+                <p className="text-xs text-teal-200 font-mono">{user.vatNumber}</p>
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -296,9 +407,7 @@ export default function ReportsPage() {
       <LiveChat />
 
       {/* Footer */}
-      <footer className="mt-8 py-6 text-center border-t border-gray-200">
-        <p className="text-gray-500 text-sm">payvat.ie</p>
-      </footer>
+      <Footer />
     </div>
   )
 }

@@ -23,6 +23,7 @@ export default function HomePage() {
   const [user, setUser] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     fetchUserProfile()
@@ -66,6 +67,18 @@ export default function HomePage() {
     } catch (err) {
       // Even if logout fails, redirect to login
       window.location.href = '/login'
+    }
+  }
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`
+    }
+  }
+
+  const handleSearchKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch()
     }
   }
 
@@ -116,9 +129,12 @@ export default function HomePage() {
               <div className="hidden lg:flex items-center space-x-2">
                 <Input
                   placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleSearchKeyPress}
                   className="w-32 xl:w-48 2xl:w-64 bg-white text-gray-900 border-0"
                 />
-                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
+                <Button size="sm" className="bg-blue-700 hover:bg-blue-800" onClick={handleSearch}>
                   <Search className="h-4 w-4" />
                 </Button>
               </div>
@@ -129,7 +145,13 @@ export default function HomePage() {
               </div>
               
               <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 lg:hidden p-2 min-w-[44px] min-h-[44px]">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-white hover:bg-teal-600 lg:hidden p-2 min-w-[44px] min-h-[44px]"
+                  onClick={() => window.location.href = '/search'}
+                  title="Search"
+                >
                   <Search className="h-4 w-4" />
                 </Button>
                 <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
