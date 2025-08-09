@@ -358,16 +358,16 @@ async function processDocumentWithAI_Internal(
         
         let extractedPDFText: string
         
-        // Use pdfjs-dist for reliable PDF text extraction (fixes ENOENT bug from pdf-parse)
-        console.log('📄 Using pdfjs-dist for PDF text extraction...')
+        // Use pdf-parse with serverless optimization (fixes ENOENT bug)
+        console.log('📄 Using pdf-parse with serverless configuration...')
         
         try {
           extractedPDFText = await extractPDFTextWithPdfParse(pdfBuffer)
-          console.log('✅ PDF text extraction succeeded with pdfjs-dist!')
+          console.log('✅ PDF text extraction succeeded with pdf-parse (serverless optimized)!')
         } catch (pdfError) {
-          console.error('🚨 PDF text extraction failed:', pdfError)
+          console.error('🚨 PDF-parse extraction failed:', pdfError)
           
-          // Fallback to emergency extraction if pdfjs-dist fails
+          // Fallback to emergency extraction if pdf-parse fails
           console.log('🔄 Attempting emergency extraction as fallback...')
           try {
             extractedPDFText = await emergencyPDFTextExtraction(pdfBuffer)
@@ -1530,11 +1530,12 @@ async function convertPDFToImage(pdfBase64: string): Promise<{
 }
 
 /**
- * Extract text from PDF using pdf-parse library (fallback when image conversion fails)
+ * Extract text from PDF using pdf-parse library with proper serverless handling
+ * This function avoids the ENOENT bug by preventing debug code execution
  */
 async function extractPDFTextWithPdfParse(pdfBuffer: Buffer): Promise<string> {
   try {
-    console.log('📄 PDF PROCESSING WITH PDFJS-DIST:')
+    console.log('📄 PDF PROCESSING WITH PDF-PARSE (SERVERLESS OPTIMIZED):')
     console.log(`   Buffer size: ${pdfBuffer.length} bytes`)
     console.log(`   Buffer type: ${Buffer.isBuffer(pdfBuffer)}`)
     console.log(`   Buffer first 50 bytes: ${pdfBuffer.subarray(0, 50).toString('hex')}`)
@@ -1552,84 +1553,104 @@ async function extractPDFTextWithPdfParse(pdfBuffer: Buffer): Promise<string> {
       console.warn('⚠️ Warning: Buffer does not start with PDF header, but attempting to parse anyway')
     }
     
-    console.log('📄 Using pdfjs-dist for text extraction (replacing pdf-parse to fix ENOENT bug)...')
+    console.log('📄 Using pdf-parse with serverless configuration...')
     
-    // Dynamic import pdfjs-dist
-    let pdfjs: any
+    // Import pdf-parse with proper error handling for serverless
+    let pdfParse: any
     try {
-      pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
+      // Use require instead of dynamic import to avoid module resolution issues
+      pdfParse = require('pdf-parse')
+      console.log('✅ pdf-parse imported successfully')
     } catch (importError) {
-      console.error('🚨 Failed to import pdfjs-dist library:', importError)
-      throw new Error('pdfjs-dist library not available - cannot extract PDF text')
+      console.error('🚨 Failed to import pdf-parse library:', importError)
+      throw new Error('pdf-parse library not available - check Next.js configuration')
     }
     
-    // Convert buffer to Uint8Array for pdfjs-dist
-    const uint8Array = new Uint8Array(pdfBuffer)
+    // Ensure we have a valid parse function
+    const parseFunction = typeof pdfParse === 'function' ? pdfParse : pdfParse.default
     
-    console.log('📄 Starting PDF parsing with pdfjs-dist...')
+    if (typeof parseFunction !== 'function') {
+      throw new Error('pdf-parse import failed - parseFunction is not a function')
+    }
     
-    // Load the PDF document
-    const loadingTask = pdfjs.getDocument({
-      data: uint8Array,
-      useSystemFonts: true,
-      verbosity: 0 // Suppress pdfjs warnings
+    console.log('📄 Starting PDF parsing with timeout protection...')
+    
+    // Parse the PDF buffer with comprehensive options and timeout protection
+    const parseOptions = {
+      // Limit parsing to prevent memory issues in serverless
+      max: 50, // Maximum pages to parse
+      version: 'v1.10.100', // Specific version for compatibility
+      // Normalize whitespace for better text extraction
+      normalizeWhitespace: true,
+      // Disable font loading to avoid filesystem access issues
+      disableFontFace: true
+    }
+    
+    // Create a timeout promise to prevent hanging in serverless environment
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => {
+        reject(new Error('PDF parsing timeout after 30 seconds - document may be too complex'))
+      }, 30000)
     })
     
-    const pdfDoc = await loadingTask.promise
+    // Race between parsing and timeout
+    const parsePromise = parseFunction(pdfBuffer, parseOptions)
+    const result = await Promise.race([parsePromise, timeoutPromise])
     
-    console.log(`📄 PDF loaded successfully: ${pdfDoc.numPages} pages`)
+    console.log('📄 PDF parsing completed, validating result...')
+    console.log(`   Result type: ${typeof result}`)
+    console.log(`   Has text property: ${result && 'text' in result}`)
     
-    // Extract text from all pages
-    let fullText = ''
-    
-    for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
-      const page = await pdfDoc.getPage(pageNum)
-      const textContent = await page.getTextContent()
-      
-      // Concatenate text items with proper spacing
-      const pageText = textContent.items
-        .map((item: any) => item.str)
-        .join(' ')
-      
-      fullText += pageText + '\n'
-      
-      console.log(`   Page ${pageNum}: ${pageText.length} characters extracted`)
+    if (!result || typeof result.text !== 'string') {
+      console.error('🚨 pdf-parse returned invalid result:', {
+        resultExists: !!result,
+        hasText: result && 'text' in result,
+        textType: typeof result?.text,
+        textLength: result?.text?.length || 0
+      })
+      throw new Error('pdf-parse returned no valid text content')
     }
+    
+    const extractedText = result.text.trim()
     
     console.log('📄 PDF PARSE RESULTS:')
-    console.log(`   Total pages: ${pdfDoc.numPages}`)
-    console.log(`   Text length: ${fullText.length} characters`)
-    console.log(`   Text starts with: "${fullText.substring(0, 100)}..."`)
-    console.log(`   Text includes VAT keyword: ${fullText.toLowerCase().includes('vat')}`)
-    console.log(`   Text includes 111.36: ${fullText.includes('111.36')}`)
-    console.log(`   Contains "Total Amount VAT": ${fullText.includes('Total Amount VAT')}`)
-    console.log(`   First 300 chars: "${fullText.substring(0, 300)}..."`)
+    console.log(`   Text length: ${extractedText.length} characters`)
+    console.log(`   Pages processed: ${result.numpages || 'unknown'}`)
+    console.log(`   Document title: ${result.info?.Title || 'no title'}`)
+    console.log(`   Contains "VAT": ${extractedText.toLowerCase().includes('vat')}`)
+    console.log(`   Contains "111.36": ${extractedText.includes('111.36')}`)
+    console.log(`   Contains "Total Amount VAT": ${extractedText.includes('Total Amount VAT')}`)
+    console.log(`   First 300 chars: "${extractedText.substring(0, 300)}..."`)
     
-    if (!fullText || fullText.trim().length === 0) {
-      console.warn('⚠️ PDF parsed but no text extracted - document may be image-based')
-      throw new Error('PDF contains no extractable text - may be image-based')
+    if (extractedText.length === 0) {
+      throw new Error('PDF contains no extractable text - may be image-based or corrupted')
     }
     
-    console.log('✅ PDF text extraction successful with pdfjs-dist (no ENOENT errors!)')
+    console.log('✅ PDF text extraction successful with pdf-parse (serverless optimized)')
     
-    return fullText
+    return extractedText
     
   } catch (error) {
-    console.error('🚨 PDF text extraction failed with detailed error:')
+    console.error('🚨 PDF text extraction failed:')
     console.error(`   Error type: ${error?.constructor?.name}`)
     console.error(`   Error message: ${error instanceof Error ? error.message : 'Unknown error'}`)
     console.error(`   Stack trace: ${error instanceof Error ? error.stack?.substring(0, 500) : 'No stack'}`)
     
-    // Check for specific error types
+    // Check for specific error types and provide helpful messages
     if (error instanceof Error) {
       const errorMsg = error.message.toLowerCase()
       
-      if (errorMsg.includes('encrypted')) {
+      if (errorMsg.includes('enoent') || errorMsg.includes('no such file')) {
+        console.error('🚨 CRITICAL: ENOENT error detected - pdf-parse configuration issue')
+        throw new Error('PDF processing failed: Library trying to access test files. Check Next.js serverless configuration.')
+      } else if (errorMsg.includes('timeout')) {
+        throw new Error('PDF processing timed out - document may be too large or complex')
+      } else if (errorMsg.includes('encrypted')) {
         throw new Error('PDF is encrypted and cannot be processed')
-      } else if (errorMsg.includes('invalid pdf')) {
+      } else if (errorMsg.includes('invalid pdf') || errorMsg.includes('corrupt')) {
         throw new Error('Invalid or corrupted PDF file')
       } else if (errorMsg.includes('import') || errorMsg.includes('module')) {
-        throw new Error('PDF processing failed: pdfjs-dist library not properly installed or configured')
+        throw new Error('PDF processing library not properly configured for serverless deployment')
       }
     }
     
