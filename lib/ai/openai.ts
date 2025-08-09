@@ -31,10 +31,73 @@ export const AI_CONFIG = {
 } as const
 
 /**
- * Check if AI features are available
+ * Check if AI features are available with detailed logging
  */
 export function isAIEnabled(): boolean {
-  return !!env.OPENAI_API_KEY && env.OPENAI_API_KEY !== 'your_openai_api_key_here'
+  const hasApiKey = !!env.OPENAI_API_KEY
+  const isValidFormat = env.OPENAI_API_KEY?.startsWith('sk-')
+  const isNotPlaceholder = env.OPENAI_API_KEY !== 'your_openai_api_key_here'
+  
+  const isEnabled = hasApiKey && isValidFormat && isNotPlaceholder
+  
+  if (!isEnabled) {
+    console.log('🚨 AI DISABLED - CRITICAL DEBUGGING:')
+    console.log(`   Has API Key: ${hasApiKey}`)
+    console.log(`   Valid Format (sk-): ${isValidFormat}`)
+    console.log(`   Not Placeholder: ${isNotPlaceholder}`)
+    console.log(`   Key Length: ${env.OPENAI_API_KEY?.length || 0} characters`)
+    console.log(`   Key Preview: ${env.OPENAI_API_KEY ? `${env.OPENAI_API_KEY.substring(0, 7)}...` : 'undefined'}`)
+    console.log('   🔧 SOLUTION: Set valid OpenAI API key in environment variables')
+  } else {
+    console.log('✅ AI ENABLED: OpenAI API key configured and valid')
+  }
+  
+  return isEnabled
+}
+
+/**
+ * Get detailed AI status information for diagnostics
+ */
+export function getAIStatus(): {
+  enabled: boolean
+  reason: string
+  apiKeyConfigured: boolean
+  apiKeyFormat: 'valid' | 'invalid' | 'missing'
+  suggestions: string[]
+} {
+  const hasApiKey = !!env.OPENAI_API_KEY
+  const isValidFormat = env.OPENAI_API_KEY?.startsWith('sk-')
+  const isNotPlaceholder = env.OPENAI_API_KEY !== 'your_openai_api_key_here'
+  
+  const suggestions: string[] = []
+  let reason = ''
+  let apiKeyFormat: 'valid' | 'invalid' | 'missing' = 'missing'
+  
+  if (!hasApiKey) {
+    reason = 'OpenAI API key not found in environment variables'
+    suggestions.push('Set OPENAI_API_KEY environment variable')
+    suggestions.push('Get API key from https://platform.openai.com/api-keys')
+  } else if (!isValidFormat) {
+    reason = 'OpenAI API key format is invalid (should start with sk-)'
+    apiKeyFormat = 'invalid'
+    suggestions.push('Verify API key format (should start with sk-)')
+    suggestions.push('Generate a new API key if needed')
+  } else if (!isNotPlaceholder) {
+    reason = 'OpenAI API key is still set to placeholder value'
+    apiKeyFormat = 'invalid'
+    suggestions.push('Replace placeholder with actual API key')
+  } else {
+    reason = 'OpenAI API key configured correctly'
+    apiKeyFormat = 'valid'
+  }
+  
+  return {
+    enabled: hasApiKey && isValidFormat && isNotPlaceholder,
+    reason,
+    apiKeyConfigured: hasApiKey,
+    apiKeyFormat,
+    suggestions
+  }
 }
 
 /**
