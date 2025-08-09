@@ -35,7 +35,7 @@ export const AI_CONFIG = {
  */
 export function isAIEnabled(): boolean {
   const hasApiKey = !!env.OPENAI_API_KEY
-  const isValidFormat = env.OPENAI_API_KEY?.startsWith('sk-')
+  const isValidFormat = env.OPENAI_API_KEY?.startsWith('sk-') ?? false
   const isNotPlaceholder = env.OPENAI_API_KEY !== 'your_openai_api_key_here'
   
   const isEnabled = hasApiKey && isValidFormat && isNotPlaceholder
@@ -66,7 +66,7 @@ export function getAIStatus(): {
   suggestions: string[]
 } {
   const hasApiKey = !!env.OPENAI_API_KEY
-  const isValidFormat = env.OPENAI_API_KEY?.startsWith('sk-')
+  const isValidFormat = env.OPENAI_API_KEY?.startsWith('sk-') ?? false
   const isNotPlaceholder = env.OPENAI_API_KEY !== 'your_openai_api_key_here'
   
   const suggestions: string[] = []
