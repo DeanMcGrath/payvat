@@ -65,8 +65,25 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       )
     }
     
-    // Generate session-based user ID for guests
-    const userId = user?.id || `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    // Generate session-based user ID for guests - but we need a valid User record for DB constraint
+    let userId: string;
+    if (user) {
+      userId = user.id;
+    } else {
+      // For guest uploads, create a minimal guest user record to satisfy foreign key constraint
+      const guestEmail = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}@guest.payvat.ie`;
+      const guestUser = await prisma.user.create({
+        data: {
+          email: guestEmail,
+          password: 'guest-no-password',
+          businessName: 'Guest Upload',
+          vatNumber: `GUEST${Date.now()}`,
+          role: 'GUEST'
+        }
+      });
+      userId = guestUser.id;
+      console.log(`Created guest user for upload: ${userId}`);
+    }
     
     // Validate VAT return ownership if provided and user is authenticated
     if (vatReturnId && user) {

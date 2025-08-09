@@ -45,10 +45,38 @@ Thank you for your business.
     const crypto = await import('crypto')
     const fileHash = crypto.createHash('md5').update(fileBuffer).digest('hex')
     
-    // Create document record in database - use a test user ID
+    // Create or find a test user for the debug document
+    let testUserId: string;
+    
+    // Try to find existing test user
+    const existingTestUser = await prisma.user.findFirst({
+      where: {
+        email: 'debug-test@payvat.ie'
+      }
+    });
+    
+    if (existingTestUser) {
+      testUserId = existingTestUser.id;
+      console.log(`   Using existing test user: ${testUserId}`);
+    } else {
+      // Create minimal test user for debugging
+      const testUser = await prisma.user.create({
+        data: {
+          email: 'debug-test@payvat.ie',
+          password: 'debug-password-not-for-login',
+          businessName: 'Debug Test Business',
+          vatNumber: `DEBUG${Date.now()}`,
+          role: 'USER'
+        }
+      });
+      testUserId = testUser.id;
+      console.log(`   Created new test user: ${testUserId}`);
+    }
+    
+    // Create document record in database
     const document = await prisma.document.create({
       data: {
-        userId: 'test-user-debug', // Use a placeholder for debugging
+        userId: testUserId,
         fileName: 'test-vw-invoice.txt',
         originalName: 'test-vw-invoice.txt',
         filePath: '/debug/test-vw-invoice.txt',

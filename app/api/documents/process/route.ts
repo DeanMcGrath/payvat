@@ -348,6 +348,8 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         category: updatedDocument.category,
         extractedData: result.extractedData
       },
+      // Also include extractedData at root level for easier access
+      extractedData: result.extractedData,
       // Include OpenAI API status for debugging
       openAIStatus: openAIStatus,
       // 🚨 EMERGENCY EMBEDDED PROMPT DIAGNOSTIC
