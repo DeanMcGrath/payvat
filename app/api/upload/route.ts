@@ -144,27 +144,51 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           }
         })
         
-        // Log extracted VAT data for audit trail (skip for guests)
-        if (user && processingResult.extractedData && 
+        // 🔧 CRITICAL FIX: Log extracted VAT data for audit trail (NOW INCLUDING GUESTS!)
+        // This was the root cause of "processedDocuments": 0 - guest users weren't getting audit logs
+        if (processingResult.extractedData && 
             (processingResult.extractedData.salesVAT.length > 0 || 
              processingResult.extractedData.purchaseVAT.length > 0)) {
-          await prisma.auditLog.create({
-            data: {
-              userId: user.id,
-              action: 'VAT_DATA_EXTRACTED',
-              entityType: 'DOCUMENT',
-              entityId: document.id,
-              ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-              userAgent: request.headers.get('user-agent') || 'unknown',
-              metadata: {
-                extractedData: JSON.parse(JSON.stringify(processingResult.extractedData)),
-                fileName: processedFile.originalName,
-                category,
-                confidence: processingResult.extractedData.confidence,
-                timestamp: new Date().toISOString()
+          
+          console.log('💾 CREATING VAT AUDIT LOG FOR USER:', userId)
+          console.log(`   Document: ${processedFile.originalName}`)
+          console.log(`   Sales VAT: [${processingResult.extractedData.salesVAT.join(', ')}]`)
+          console.log(`   Purchase VAT: [${processingResult.extractedData.purchaseVAT.join(', ')}]`)
+          console.log(`   User Type: ${user ? 'AUTHENTICATED' : 'GUEST'}`)
+          console.log(`   This audit log enables VAT extraction API to find the data!`)
+          
+          try {
+            await prisma.auditLog.create({
+              data: {
+                userId: userId, // Use the userId (works for both authenticated and guest users)
+                action: 'VAT_DATA_EXTRACTED',
+                entityType: 'DOCUMENT',
+                entityId: document.id,
+                ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+                userAgent: request.headers.get('user-agent') || 'unknown',
+                metadata: {
+                  extractedData: JSON.parse(JSON.stringify(processingResult.extractedData)),
+                  fileName: processedFile.originalName,
+                  category,
+                  confidence: processingResult.extractedData.confidence,
+                  timestamp: new Date().toISOString(),
+                  userType: user ? 'authenticated' : 'guest' // Add flag for debugging
+                }
               }
-            }
-          })
+            })
+            
+            console.log('✅ VAT AUDIT LOG CREATED SUCCESSFULLY')
+            console.log('   This should fix "processedDocuments": 0 issue!')
+            
+          } catch (auditError) {
+            console.error('🚨 AUDIT LOG CREATION FAILED:', auditError)
+            console.error('   This may cause VAT extraction to fail for this document')
+          }
+        } else {
+          console.log('ℹ️  NO VAT DATA TO LOG:')
+          console.log(`   Has extracted data: ${!!processingResult.extractedData}`)
+          console.log(`   Sales VAT count: ${processingResult.extractedData?.salesVAT?.length || 0}`)
+          console.log(`   Purchase VAT count: ${processingResult.extractedData?.purchaseVAT?.length || 0}`)
         }
         
         logger.info('Document processing completed', { scanResult: processingResult.scanResult }, 'UPLOAD_API')
@@ -191,11 +215,14 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       })
     }
     
-    // Create audit log (skip for guests)
-    if (user) {
+    // Create audit log for document upload (now including guests for consistency)
+    console.log('📝 CREATING UPLOAD AUDIT LOG FOR USER:', userId)
+    console.log(`   User Type: ${user ? 'AUTHENTICATED' : 'GUEST'}`)
+    
+    try {
       await prisma.auditLog.create({
         data: {
-          userId: user.id,
+          userId: userId, // Use userId for both authenticated and guest users
           action: 'UPLOAD_DOCUMENT',
           entityType: 'DOCUMENT',
           entityId: document.id,
@@ -206,10 +233,17 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
             fileSize: processedFile.fileSize,
             category,
             vatReturnId,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            userType: user ? 'authenticated' : 'guest'
           }
         }
       })
+      
+      console.log('✅ UPLOAD AUDIT LOG CREATED SUCCESSFULLY')
+      
+    } catch (uploadAuditError) {
+      console.error('🚨 UPLOAD AUDIT LOG CREATION FAILED:', uploadAuditError)
+      console.error('   This won\'t prevent upload but may affect audit trail')
     }
     
     // Fetch updated document status

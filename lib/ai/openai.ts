@@ -34,22 +34,46 @@ export const AI_CONFIG = {
  * Check if AI features are available with detailed logging
  */
 export function isAIEnabled(): boolean {
+  console.log('🔍 CHECKING AI AVAILABILITY:')
+  
   const hasApiKey = !!env.OPENAI_API_KEY
   const isValidFormat = env.OPENAI_API_KEY?.startsWith('sk-') ?? false
   const isNotPlaceholder = env.OPENAI_API_KEY !== 'your_openai_api_key_here'
   
+  console.log('   Environment check:')
+  console.log(`     - API Key exists: ${hasApiKey}`)
+  console.log(`     - Key length: ${env.OPENAI_API_KEY?.length || 0} chars`)
+  console.log(`     - Valid format (sk-*): ${isValidFormat}`)
+  console.log(`     - Not placeholder: ${isNotPlaceholder}`)
+  console.log(`     - Key preview: ${env.OPENAI_API_KEY ? `"${env.OPENAI_API_KEY.substring(0, 7)}..."` : '"undefined"'}`)
+  
   const isEnabled = hasApiKey && isValidFormat && isNotPlaceholder
   
   if (!isEnabled) {
-    console.log('🚨 AI DISABLED - CRITICAL DEBUGGING:')
-    console.log(`   Has API Key: ${hasApiKey}`)
-    console.log(`   Valid Format (sk-): ${isValidFormat}`)
-    console.log(`   Not Placeholder: ${isNotPlaceholder}`)
-    console.log(`   Key Length: ${env.OPENAI_API_KEY?.length || 0} characters`)
-    console.log(`   Key Preview: ${env.OPENAI_API_KEY ? `${env.OPENAI_API_KEY.substring(0, 7)}...` : 'undefined'}`)
-    console.log('   🔧 SOLUTION: Set valid OpenAI API key in environment variables')
+    console.log('🚨 AI DISABLED - DIAGNOSIS:')
+    
+    if (!hasApiKey) {
+      console.log('   ❌ No OPENAI_API_KEY found in environment')
+      console.log('   🔧 Add OPENAI_API_KEY=sk-... to your .env file')
+    } else if (!isValidFormat) {
+      console.log('   ❌ API key format invalid (must start with "sk-")')
+      console.log('   🔧 Get a valid key from https://platform.openai.com/api-keys')
+    } else if (!isNotPlaceholder) {
+      console.log('   ❌ API key is still placeholder text')
+      console.log('   🔧 Replace "your_openai_api_key_here" with real key')
+    }
+    
+    console.log('')
+    console.log('   🚨 IMPACT: All document processing will fail!')
+    console.log('   🚨 Result: "processedDocuments": 0 in API responses')
+    console.log('   🚨 Users will see no VAT amounts extracted')
+    console.log('')
   } else {
     console.log('✅ AI ENABLED: OpenAI API key configured and valid')
+    console.log('   🎉 Document processing with AI will work!')
+    console.log('   🎉 VAT extraction should succeed!')
+    console.log('   🎉 "processedDocuments" count will be accurate!')
+    console.log('')
   }
   
   return isEnabled

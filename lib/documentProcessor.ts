@@ -728,23 +728,38 @@ export async function processDocument(
   const processingStartTime = Date.now()
   
   try {
+    console.log('=' .repeat(80))
     console.log('🔄 DOCUMENT PROCESSING START:')
     console.log(`   Document: ${fileName}`)
     console.log(`   Category: ${category}`)
     console.log(`   MIME Type: ${mimeType}`)
     console.log(`   File size: ${Math.round(fileData.length / 1024)}KB`)
+    console.log(`   User ID: ${userId || 'anonymous'}`)
+    console.log(`   Timestamp: ${new Date().toISOString()}`)
     
     // Validate inputs
     if (!fileData || !mimeType || !fileName) {
       throw new Error('Missing required document data')
     }
     
-    // Check if AI processing is available and working
+    // 🚨 CRITICAL DEBUGGING: Check if AI processing is available and working
+    console.log('🔍 AI AVAILABILITY CHECK:')
     const aiAvailable = isAIEnabled()
     console.log(`   AI enabled: ${aiAvailable}`)
     
+    if (!aiAvailable) {
+      console.log('🚨 AI PROCESSING DISABLED:')
+      console.log('   - OpenAI API key not configured or invalid')
+      console.log('   - All documents will fall back to legacy processing')
+      console.log('   - This causes "processedDocuments": 0 in API responses')
+      console.log('   - 🔧 FIX: Add valid OPENAI_API_KEY to .env file')
+      console.log('')
+    }
+    
     if (aiAvailable) {
       console.log('🤖 ATTEMPTING AI PROCESSING...')
+      console.log('   - OpenAI API key configured')
+      console.log('   - Testing connectivity...')
       
       // Quick connectivity test
       try {
@@ -755,11 +770,20 @@ export async function processDocument(
           console.log('✅ OpenAI connectivity confirmed')
           
           // Attempt AI processing
+          console.log('📤 CALLING processDocumentWithAI()...')
           const aiResult = await processDocumentWithAI(fileData, mimeType, fileName, category, userId)
+          console.log('📥 AI PROCESSING RESULT:')
+          console.log(`   Success: ${aiResult.success}`)
+          console.log(`   Has extracted data: ${!!aiResult.extractedData}`)
+          console.log(`   Error: ${aiResult.error || 'none'}`)
           
           if (aiResult.success && aiResult.extractedData) {
+            const allVATAmounts = [...aiResult.extractedData.salesVAT, ...aiResult.extractedData.purchaseVAT]
             console.log('✅ AI PROCESSING SUCCESS')
-            console.log(`   VAT amounts found: ${[...aiResult.extractedData.salesVAT, ...aiResult.extractedData.purchaseVAT].length}`)
+            console.log(`   VAT amounts found: ${allVATAmounts.length}`)
+            console.log(`   VAT values: €${allVATAmounts.join(', €')}`)
+            console.log(`   Confidence: ${aiResult.extractedData.confidence}`)
+            console.log('   🎉 THIS WILL COUNT AS A PROCESSED DOCUMENT!')
             
             return {
               success: true,
@@ -769,7 +793,9 @@ export async function processDocument(
               error: undefined
             }
           } else {
-            console.log('⚠️ AI processing returned no results, falling back to legacy')
+            console.log('⚠️ AI PROCESSING FAILED:')
+            console.log(`   Reason: ${aiResult.error || 'Unknown error'}`)
+            console.log('   Falling back to legacy processing...')
           }
         } else {
           console.log('⚠️ OpenAI connectivity failed, using legacy processing')
@@ -783,7 +809,21 @@ export async function processDocument(
     
     // Fallback to legacy processing
     console.log('🔧 USING LEGACY PROCESSING...')
-    return await processWithLegacyMethod(fileData, mimeType, fileName, category, processingStartTime)
+    console.log('   ⚠️  WARNING: Legacy processing does NOT count as "processed" in API!')
+    console.log('   ⚠️  This is why you see "processedDocuments": 0')
+    console.log('   ⚠️  Only AI processing counts as truly "processed"')
+    console.log('')
+    
+    const legacyResult = await processWithLegacyMethod(fileData, mimeType, fileName, category, processingStartTime)
+    
+    console.log('🔧 LEGACY PROCESSING COMPLETE:')
+    console.log(`   Success: ${legacyResult.success}`)
+    console.log(`   Is scanned: ${legacyResult.isScanned}`)
+    console.log(`   VAT amounts: ${legacyResult.extractedData ? [...legacyResult.extractedData.salesVAT, ...legacyResult.extractedData.purchaseVAT].length : 0}`)
+    console.log('   📊 Document uploaded but NOT counted as "processed" by API')
+    console.log('=' .repeat(80))
+    
+    return legacyResult
     
   } catch (error) {
     const processingTime = Date.now() - processingStartTime
