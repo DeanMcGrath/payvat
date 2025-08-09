@@ -135,7 +135,40 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       )
     }
     
-    console.log(`Processing document: ${document.originalName} (${document.category})`)
+    // CRITICAL DEBUG: Validate file data before processing
+    console.log('🔍 FILE DATA VALIDATION:')
+    console.log(`   Document: ${document.originalName} (${document.category})`)
+    console.log(`   MIME Type: ${document.mimeType}`)
+    console.log(`   File data exists: ${!!document.fileData}`)
+    console.log(`   File data type: ${typeof document.fileData}`)
+    console.log(`   File data length: ${document.fileData?.length || 0} characters`)
+    
+    // Check if fileData is valid base64
+    if (document.fileData) {
+      try {
+        const testBuffer = Buffer.from(document.fileData, 'base64')
+        console.log(`   Base64 decode test: SUCCESS (${testBuffer.length} bytes)`)
+        
+        // For PDFs, check the header
+        if (document.mimeType === 'application/pdf') {
+          const pdfHeader = testBuffer.subarray(0, 4).toString('ascii')
+          console.log(`   PDF header check: "${pdfHeader}" (${pdfHeader.startsWith('%PDF') ? 'VALID' : 'INVALID'})`)
+        }
+      } catch (base64Error) {
+        console.error('🚨 CRITICAL: fileData base64 decode failed:', base64Error)
+        return NextResponse.json(
+          { 
+            error: 'Invalid file data format - not valid base64',
+            errorCode: 'INVALID_FILE_DATA',
+            technicalDetails: {
+              error: base64Error instanceof Error ? base64Error.message : 'Base64 decode failed',
+              timestamp: new Date().toISOString()
+            }
+          },
+          { status: 400 }
+        )
+      }
+    }
     
     // IMMEDIATE OPENAI API STATUS CHECK - Show status to user via console and response
     console.log('🔍 PRE-PROCESSING: Checking OpenAI API status...')

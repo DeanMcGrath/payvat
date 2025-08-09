@@ -59,10 +59,14 @@ export default function SignupPage() {
     setIsLoading(true)
 
     try {
+      console.log('📤 Starting registration request...')
+      
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
         },
         body: JSON.stringify({
           email: email.trim(),
@@ -72,22 +76,84 @@ export default function SignupPage() {
         })
       })
 
-      const data = await response.json()
+      // Log comprehensive response details for debugging
+      console.log('📥 Registration response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+        redirected: response.redirected,
+        type: response.type,
+        url: response.url,
+        headers: Object.fromEntries(response.headers.entries())
+      })
+
+      // Get response text first to check if it's valid JSON
+      let responseText = ''
+      let data: any = null
+      
+      try {
+        responseText = await response.text()
+        console.log('📄 Raw response text:', responseText)
+        
+        // Check if response text is empty
+        if (!responseText || responseText.trim() === '') {
+          throw new Error('Empty response body received')
+        }
+        
+        // Try to parse as JSON
+        data = JSON.parse(responseText)
+        console.log('✅ Parsed JSON data:', data)
+      } catch (parseError) {
+        console.error('🚨 JSON parsing failed:', {
+          parseError,
+          responseText,
+          responseLength: responseText.length,
+          responsePreview: responseText.substring(0, 200)
+        })
+        throw new Error(`Failed to parse server response: ${parseError instanceof Error ? parseError.message : 'Unknown parsing error'}`)
+      }
 
       if (response.ok) {
+        console.log('✅ Registration successful!')
         setSuccess(true)
         toast.success('Account created successfully! Redirecting to dashboard...')
         // Redirect to dashboard after successful registration
         setTimeout(() => {
+          console.log('🔄 Redirecting to dashboard...')
           window.location.href = '/dashboard'
         }, 1500)
       } else {
-        const errorMessage = data.error || 'Registration failed'
+        console.log('❌ Registration failed with server error:', {
+          status: response.status,
+          statusText: response.statusText,
+          data
+        })
+        const errorMessage = data?.error || `Registration failed (${response.status}: ${response.statusText})`
         setErrors({ general: errorMessage })
         toast.error(errorMessage)
       }
     } catch (error) {
-      const errorMessage = 'Network error occurred. Please try again.'
+      console.error('🚨 Registration request failed:', {
+        error,
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : 'No stack trace',
+        name: error instanceof Error ? error.name : 'Unknown error type'
+      })
+      
+      let errorMessage = 'Registration failed. Please try again.'
+      
+      if (error instanceof Error) {
+        if (error.message.includes('parse')) {
+          errorMessage = 'Server returned invalid response. Please try again or contact support.'
+        } else if (error.message.includes('Failed to fetch')) {
+          errorMessage = 'Network connection failed. Please check your connection and try again.'
+        } else if (error.message.includes('Empty response')) {
+          errorMessage = 'Server returned empty response. Please try again.'
+        } else {
+          errorMessage = `Error: ${error.message}`
+        }
+      }
+      
       setErrors({ general: errorMessage })
       toast.error(errorMessage)
     } finally {

@@ -9,7 +9,7 @@ export interface AuthUser {
   email: string
   role: string
   businessName: string
-  vatNumber: string
+  vatNumber: string | null
 }
 
 export interface JWTPayload {

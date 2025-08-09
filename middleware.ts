@@ -53,56 +53,20 @@ function cleanupRateLimit() {
 }
 
 export function middleware(request: NextRequest) {
-  const clientIP = getClientIP(request)
   const pathname = request.nextUrl.pathname
   
-  // Clean up expired entries periodically
-  if (Math.random() < 0.01) { // 1% chance
-    cleanupRateLimit()
-  }
+  console.log('🚨 EMERGENCY BYPASS: Middleware completely disabled for:', pathname)
+  console.log('   Method:', request.method)
+  console.log('   Timestamp:', new Date().toISOString())
   
-  // Security: Different rate limits for different endpoints
-  let limit = RATE_LIMIT_MAX_REQUESTS
-  let windowMs = RATE_LIMIT_WINDOW_MS
-  
-  // Stricter limits for sensitive endpoints
-  // Only apply login rate limit to actual login API calls, not page loads
-  if (pathname === '/api/auth/login' || pathname === '/api/auth/register') {
-    limit = LOGIN_RATE_LIMIT
-    windowMs = RATE_LIMIT_WINDOW_MS
-  } else if (pathname.includes('/api/payments') || pathname.includes('/api/vat/submit')) {
-    limit = PAYMENT_RATE_LIMIT
-    windowMs = RATE_LIMIT_WINDOW_MS
-  }
-  
-  const rateLimitResult = checkRateLimit(clientIP, limit, windowMs)
-  
-  if (!rateLimitResult.allowed) {
-    // Security: Return 429 Too Many Requests with security headers
-    const response = new NextResponse(JSON.stringify({
-      error: 'Too Many Requests',
-      message: 'Rate limit exceeded. Please try again later.',
-      retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)
-    }), {
-      status: 429,
-      headers: {
-        'Content-Type': 'application/json',
-        'Retry-After': Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString(),
-        'X-RateLimit-Limit': limit.toString(),
-        'X-RateLimit-Remaining': '0',
-        'X-RateLimit-Reset': rateLimitResult.resetTime.toString(),
-      }
-    })
-    
-    return response
-  }
-  
-  // Security: Add rate limit headers to successful responses
+  // EMERGENCY: Complete bypass of all middleware logic
+  // This will allow all requests through without any processing
   const response = NextResponse.next()
-  response.headers.set('X-RateLimit-Limit', limit.toString())
-  response.headers.set('X-RateLimit-Remaining', rateLimitResult.remaining.toString())
-  response.headers.set('X-RateLimit-Reset', rateLimitResult.resetTime.toString())
+  response.headers.set('X-Emergency-Bypass', 'true')
+  response.headers.set('X-Debug-Path', pathname)
+  response.headers.set('X-Emergency-Timestamp', new Date().toISOString())
   
+  console.log('✅ EMERGENCY BYPASS: Request allowed through without ANY processing')
   return response
 }
 

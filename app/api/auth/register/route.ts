@@ -55,11 +55,11 @@ export async function POST(request: NextRequest) {
         email: email.toLowerCase(),
         password: hashedPassword,
         businessName,
-        vatNumber: vatNumber ? vatNumber.toUpperCase() : '',
-        firstName,
-        lastName,
-        phone,
-        role: 'USER', // Default role
+        ...(vatNumber ? { vatNumber: vatNumber.toUpperCase() } : {}),
+        ...(firstName ? { firstName } : {}),
+        ...(lastName ? { lastName } : {}),
+        ...(phone ? { phone } : {}),
+        role: 'USER',
       }
     })
     
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
         userAgent: request.headers.get('user-agent') || 'unknown',
         metadata: {
           businessName,
-          vatNumber: vatNumber ? vatNumber.toUpperCase() : '',
+          ...(vatNumber && { vatNumber: vatNumber.toUpperCase() }),
           timestamp: new Date().toISOString()
         }
       }
@@ -108,9 +108,15 @@ export async function POST(request: NextRequest) {
     return response
     
   } catch (error) {
-    console.error('Registration error:', error)
+    console.error('Registration error details:', {
+      error: error,
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : 'No stack trace',
+      timestamp: new Date().toISOString(),
+      requestBody: 'Request body hidden for security'
+    })
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error', timestamp: new Date().toISOString() },
       { status: 500 }
     )
   }

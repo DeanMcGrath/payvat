@@ -96,7 +96,7 @@ async function createPayment(request: NextRequest, user: AuthUser) {
         user.id,
         {
           businessName: user.businessName,
-          vatNumber: user.vatNumber,
+          vatNumber: user.vatNumber || 'Not provided',
           period: `${vatReturn.periodStart.toISOString()}-${vatReturn.periodEnd.toISOString()}`,
         }
       )
