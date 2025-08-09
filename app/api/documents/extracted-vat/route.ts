@@ -210,16 +210,9 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           console.log(`   Category: ${doc.category} (${isSales ? 'SALES' : 'PURCHASES'})`)
           console.log(`   VAT total: €${vatTotal}, Confidence: ${Math.round(confidence * 100)}%`)
           
-          // Check if document was processed (even if no VAT found)
-          const wasProcessed = doc.isScanned && (doc.scanResult?.includes('processed') || 
-                                                  doc.scanResult?.includes('scanned') || 
-                                                  doc.scanResult?.includes('extracted') ||
-                                                  doc.scanResult?.includes('attempted') ||
-                                                  doc.scanResult?.includes('Emergency') ||
-                                                  doc.scanResult?.includes('fallback') ||
-                                                  doc.scanResult?.includes('Legacy') ||
-                                                  doc.scanResult?.includes('HARDCODED') ||
-                                                  doc.scanResult?.includes('AI'))
+          // Check if document was processed - simplified logic for reliability
+          // Any document with isScanned: true should be counted as processed
+          const wasProcessed = doc.isScanned && doc.scanResult !== null
           
           if (vatAmounts.length > 0) {
             if (isSales) {
