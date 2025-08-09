@@ -111,9 +111,7 @@ export default function FileUpload({
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              documentId: newDocument.id,
-              fileName: newDocument.fileName,
-              category: newDocument.category
+              documentId: newDocument.id
             })
           })
           
@@ -141,12 +139,22 @@ export default function FileUpload({
             
             onUploadSuccess?.(updatedDocument)
           } else {
-            console.warn('AI processing failed, document uploaded but not processed:', processResult.error)
+            console.error('AI processing failed:', {
+              status: processResponse.status,
+              statusText: processResponse.statusText,
+              error: processResult?.error || 'Unknown error',
+              documentId: newDocument.id
+            })
+            toast.error(`AI processing failed: ${processResult?.error || 'Unknown error'}`)
             onUploadSuccess?.(newDocument)
           }
         } catch (processError) {
-          console.warn('AI processing error:', processError)
-          toast.success('File uploaded (AI processing unavailable)')
+          console.error('AI processing error:', {
+            error: processError,
+            message: processError instanceof Error ? processError.message : 'Unknown error',
+            documentId: newDocument.id
+          })
+          toast.error(`AI processing failed: ${processError instanceof Error ? processError.message : 'Network error'}`)
           onUploadSuccess?.(newDocument)
         }
       } else {
