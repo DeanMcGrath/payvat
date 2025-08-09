@@ -796,6 +796,15 @@ export async function processDocument(
             console.log('⚠️ AI PROCESSING FAILED:')
             console.log(`   Reason: ${aiResult.error || 'Unknown error'}`)
             console.log('   Falling back to legacy processing...')
+            
+            // Store AI error for reporting to frontend
+            const aiError = {
+              type: 'AI_PROCESSING_FAILED',
+              message: aiResult.error || 'Unknown AI processing error',
+              scanResult: aiResult.scanResult || 'AI processing failed',
+              timestamp: new Date().toISOString()
+            }
+            console.log('📊 AI ERROR DETAILS:', JSON.stringify(aiError, null, 2))
           }
         } else {
           console.log('⚠️ OpenAI connectivity failed, using legacy processing')
