@@ -969,7 +969,7 @@ export default function VATSubmissionPage() {
                 </Button>
                 <Button 
                   className="w-full bg-teal-600 hover:bg-teal-600 text-white justify-start"
-                  onClick={() => window.location.href = '/submit-return'}
+                  onClick={() => window.location.href = '/vat3-return'}
                 >
                   Submit Return
                 </Button>
