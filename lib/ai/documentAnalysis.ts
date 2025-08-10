@@ -543,21 +543,31 @@ async function processDocumentWithAI_Internal(
         console.log(`   Text preview: "${csvText.substring(0, 500)}..."`)
         
         // Use GPT-4 to analyze the CSV data
-        const csvPrompt = `Extract VAT information from this CSV financial data.
+        const csvPrompt = `Extract tax information from this CSV financial data. Support international tax terminology.
 
 CSV Data:
 ${csvText}
 
-Look for VAT amounts, tax amounts, or similar financial data. Return in JSON format:
+Look for tax amounts using ANY of these terms:
+- VAT, Value Added Tax (Europe, Ireland)
+- Tax, Sales Tax, Tax Amount, Total Tax (USA)
+- GST, GST Amount (Australia, UK)
+- HST, HST Amount (Canada)
+- BTW (Netherlands), MWST (Germany)
+
+For WooCommerce reports, look specifically for "Tax Amount" columns.
+
+Return in JSON format:
 {
   "totalVatAmount": number or null,
   "lineItems": [{"description": "string", "vatAmount": number}],
-  "extractedText": "relevant CSV rows",
+  "extractedText": "relevant CSV rows with tax data",
   "documentType": "STATEMENT" | "REPORT" | "OTHER",
   "classification": {"category": "SALES" | "PURCHASES", "confidence": number}
 }
 
-Focus on finding numerical values that represent VAT or tax amounts.`
+If CSV contains multiple rows with tax amounts, sum them all for totalVatAmount.
+Focus on tax-related columns and numerical values that represent any form of tax.`
 
         return await processTextWithGPT4(csvPrompt, fileName, category, userId, model)
         
@@ -601,21 +611,31 @@ Focus on finding numerical values that represent VAT or tax amounts.`
         console.log(`   Text preview: "${excelText.substring(0, 500)}..."`)
         
         // Use GPT-4 to analyze the Excel data
-        const excelPrompt = `Extract VAT information from this Excel financial data.
+        const excelPrompt = `Extract tax information from this Excel financial data. Support international tax terminology.
 
 Excel Data:
 ${excelText}
 
-Look for VAT amounts, tax amounts, or similar financial data. Return in JSON format:
+Look for tax amounts using ANY of these terms:
+- VAT, Value Added Tax (Europe, Ireland)
+- Tax, Sales Tax, Tax Amount, Total Tax (USA)
+- GST, GST Amount (Australia, UK)
+- HST, HST Amount (Canada)
+- BTW (Netherlands), MWST (Germany)
+
+For WooCommerce/e-commerce spreadsheets, look specifically for "Tax Amount" columns.
+
+Return in JSON format:
 {
   "totalVatAmount": number or null,
   "lineItems": [{"description": "string", "vatAmount": number}],
-  "extractedText": "relevant spreadsheet data",
+  "extractedText": "relevant spreadsheet data with tax amounts",
   "documentType": "STATEMENT" | "REPORT" | "OTHER",
   "classification": {"category": "SALES" | "PURCHASES", "confidence": number}
 }
 
-Focus on finding numerical values that represent VAT or tax amounts.`
+If spreadsheet contains multiple rows with tax amounts, sum them all for totalVatAmount.
+Focus on tax-related columns and numerical values that represent any form of tax.`
 
         return await processTextWithGPT4(excelPrompt, fileName, category, userId, model)
         
@@ -649,10 +669,16 @@ Focus on finding numerical values that represent VAT or tax amounts.`
       // For images, use OpenAI Vision API with simplified approach
       console.log(`🤖 PROCESSING IMAGE: ${fileName} with OpenAI Vision API`)
     
-    // Use a simple, reliable prompt
-    const prompt = `Extract VAT information from this business document/invoice. 
+    // Use a simple, reliable prompt with international tax terminology
+    const prompt = `Extract tax information from this business document/invoice. Look for tax amounts using ANY of these terms:
+- VAT, Value Added Tax (Europe, Ireland)
+- Tax, Sales Tax, Tax Amount, Total Tax (USA)
+- GST, GST Amount (Australia, UK)
+- HST, HST Amount (Canada)
+- BTW (Netherlands)
+- MWST, MwSt (Germany, Austria)
 
-Look for VAT amounts and return them in this JSON format:
+Return the information in this JSON format:
 {
   "totalVatAmount": number or null,
   "lineItems": [{"description": "string", "vatAmount": number}],
@@ -661,7 +687,7 @@ Look for VAT amounts and return them in this JSON format:
   "classification": {"category": "SALES" | "PURCHASES", "confidence": number}
 }
 
-Find the total VAT amount clearly labeled on the document. Be accurate - this is for tax compliance.`
+Find the total tax amount clearly labeled on the document using any of the above terminology. Be accurate - this is for tax compliance.`
 
     console.log('📝 SENDING SIMPLIFIED PROMPT TO OPENAI VISION API')
     

@@ -302,8 +302,14 @@ async function extractTextFromCSV(base64Data: string): Promise<{ success: boolea
     
     headers.forEach((header, index) => {
       const lowerHeader = header.toLowerCase()
+      // International tax terminology support
       if (lowerHeader.includes('vat') || lowerHeader.includes('tax') || 
-          lowerHeader.includes('btw') || lowerHeader.includes('mwst')) {
+          lowerHeader.includes('btw') || lowerHeader.includes('mwst') ||
+          lowerHeader.includes('gst') || lowerHeader.includes('hst') ||
+          lowerHeader.includes('sales tax') || lowerHeader.includes('tax amount') ||
+          lowerHeader.includes('tax amt') || lowerHeader.includes('total tax') ||
+          lowerHeader.includes('tax total') || lowerHeader.includes('gst amount') ||
+          lowerHeader.includes('hst amount') || lowerHeader.includes('value added tax')) {
         vatColumns.push(index)
       }
       if (lowerHeader.includes('amount') || lowerHeader.includes('total') || 
@@ -316,7 +322,7 @@ async function extractTextFromCSV(base64Data: string): Promise<{ success: boolea
     // Format for AI analysis
     let formattedText = `CSV Financial Data Analysis:\n\n`
     formattedText += `Headers: ${headers.join(', ')}\n`
-    formattedText += `Detected VAT-related columns: ${vatColumns.map(i => headers[i]).join(', ') || 'None directly identified'}\n`
+    formattedText += `Detected tax-related columns: ${vatColumns.map(i => headers[i]).join(', ') || 'None directly identified'}\n`
     formattedText += `Detected amount columns: ${amountColumns.map(i => headers[i]).join(', ') || 'None directly identified'}\n\n`
     
     formattedText += `Data Rows:\n`
