@@ -40,23 +40,52 @@ export async function extractTextFromDocument(
   fileName: string
 ): Promise<{ success: boolean; text?: string; error?: string }> {
   try {
+    // 🚨 CRITICAL DEBUG: Log file type detection
+    console.log('🚨 FILE TYPE DETECTION - DEBUG MODE')
+    console.log('=====================================')
+    console.log(`📄 File: ${fileName}`)
+    console.log(`🔍 MIME Type: "${mimeType}"`)
+    console.log(`📁 File extension: ${fileName.split('.').pop()?.toLowerCase()}`)
+    
+    // Check if this is an Excel file first (CRITICAL FIX)
+    const fileExtension = fileName.split('.').pop()?.toLowerCase()
+    const isExcelByMimeType = mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || 
+                              mimeType === 'application/vnd.ms-excel' ||
+                              mimeType.includes('spreadsheet')
+    const isExcelByExtension = fileExtension === 'xlsx' || fileExtension === 'xls'
+    const isExcel = isExcelByMimeType || isExcelByExtension
+    
+    console.log(`📊 Excel detection results:`)
+    console.log(`   By MIME type: ${isExcelByMimeType ? '✅ YES' : '❌ NO'}`)
+    console.log(`   By extension: ${isExcelByExtension ? '✅ YES' : '❌ NO'}`)
+    console.log(`   Final decision: ${isExcel ? '✅ PROCESS AS EXCEL' : '❌ NOT EXCEL'}`)
+    
+    if (isExcel) {
+      console.log('🚨 ROUTING TO EXCEL PROCESSOR - Enhanced WooCommerce VAT detection!')
+      return await extractTextFromExcel(fileData)
+    }
+    
     // For PDFs, we'll use a simple text extraction approach
     if (mimeType === 'application/pdf') {
+      console.log('📄 ROUTING TO PDF PROCESSOR')
       return await extractTextFromPDF(fileData)
     }
     
     // For images, we'll simulate OCR (in production, use actual OCR service)
     if (mimeType.startsWith('image/')) {
+      console.log('🖼️ ROUTING TO IMAGE OCR PROCESSOR')
       return await simulateImageOCR(fileName)
     }
     
-    // For CSV/Excel files, parse structured data
-    if (mimeType.includes('csv') || mimeType.includes('spreadsheet')) {
+    // For CSV files, parse structured data
+    if (mimeType.includes('csv') || fileExtension === 'csv') {
+      console.log('📊 ROUTING TO CSV PROCESSOR')
       return await extractTextFromCSV(fileData)
     }
     
     // For plain text files, just decode the base64
-    if (mimeType === 'text/plain' || mimeType.startsWith('text/')) {
+    if (mimeType === 'text/plain' || mimeType.startsWith('text/') || fileExtension === 'txt') {
+      console.log('📝 ROUTING TO TEXT PROCESSOR')
       const textContent = Buffer.from(fileData, 'base64').toString('utf-8')
       return {
         success: true,
@@ -64,12 +93,17 @@ export async function extractTextFromDocument(
       }
     }
     
+    console.log('❌ UNSUPPORTED FILE TYPE - No processor available')
+    console.log(`   MIME: ${mimeType}`)
+    console.log(`   Extension: ${fileExtension}`)
+    console.log('   Supported types: Excel (.xlsx/.xls), PDF, images, CSV, text')
+    
     return {
       success: false,
-      error: `Unsupported file type for text extraction: ${mimeType}. Supported types: PDF, images, CSV, and text files.`
+      error: `Unsupported file type: ${mimeType} (${fileName}). Supported: Excel (.xlsx/.xls), PDF, images, CSV, text files.`
     }
   } catch (error) {
-    console.error('Text extraction error:', error)
+    console.error('🚨 Text extraction error:', error)
     return {
       success: false,
       error: 'Failed to extract text from document'
