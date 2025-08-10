@@ -330,12 +330,21 @@ async function processDocumentWithAI_Internal(
   try {
     console.log(`🤖 PROCESSING with model: ${model}`)
 
-    // Only process images and PDFs with AI
-    if (!mimeType.startsWith('image/') && mimeType !== 'application/pdf') {
+    // Process supported file types with AI (images, PDFs, CSV, Excel)
+    const supportedTypes = [
+      'image/',
+      'application/pdf', 
+      'text/csv',
+      'application/csv',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ];
+    
+    if (!supportedTypes.some(type => mimeType.startsWith(type) || mimeType === type)) {
       return {
         success: false,
         isScanned: false,
-        scanResult: 'AI processing only supports images and PDFs',
+        scanResult: `AI processing supports images, PDFs, CSV, and Excel files. Received: ${mimeType}`,
         error: 'Unsupported file type for AI processing',
         aiProcessed: false
       }
@@ -521,6 +530,121 @@ async function processDocumentWithAI_Internal(
           }
         }
       }
+    } else if (mimeType === 'text/csv' || mimeType === 'application/csv') {
+      // Handle CSV files - extract text and process with GPT-4
+      console.log('📊 PROCESSING CSV: Using text extraction + GPT-4 analysis')
+      
+      try {
+        const csvBuffer = Buffer.from(fileData, 'base64')
+        const csvText = csvBuffer.toString('utf8')
+        
+        console.log('✅ CSV TEXT EXTRACTION SUCCESS:')
+        console.log(`   Text length: ${csvText.length} characters`)
+        console.log(`   Text preview: "${csvText.substring(0, 500)}..."`)
+        
+        // Use GPT-4 to analyze the CSV data
+        const csvPrompt = `Extract VAT information from this CSV financial data.
+
+CSV Data:
+${csvText}
+
+Look for VAT amounts, tax amounts, or similar financial data. Return in JSON format:
+{
+  "totalVatAmount": number or null,
+  "lineItems": [{"description": "string", "vatAmount": number}],
+  "extractedText": "relevant CSV rows",
+  "documentType": "STATEMENT" | "REPORT" | "OTHER",
+  "classification": {"category": "SALES" | "PURCHASES", "confidence": number}
+}
+
+Focus on finding numerical values that represent VAT or tax amounts.`
+
+        return await processTextWithGPT4(csvPrompt, fileName, category, userId, model)
+        
+      } catch (csvError) {
+        console.error('🚨 CSV processing failed:', csvError)
+        
+        return {
+          success: false,
+          isScanned: false,
+          scanResult: `CSV processing failed: ${csvError instanceof Error ? csvError.message : 'Unknown error'}. Please ensure the file is a valid CSV with proper formatting.`,
+          error: `CSV file processing error: ${csvError instanceof Error ? csvError.message : 'Unknown error'}`,
+          aiProcessed: false,
+          extractedData: {
+            salesVAT: [],
+            purchaseVAT: [],
+            totalAmount: 0,
+            vatRate: 0,
+            confidence: 0,
+            extractedText: '',
+            documentType: 'OTHER',
+            businessDetails: { businessName: null, vatNumber: null, address: null },
+            transactionData: { date: null, invoiceNumber: null, currency: 'EUR' },
+            vatData: { lineItems: [], subtotal: null, totalVatAmount: null, grandTotal: null },
+            classification: { category: 'PURCHASES', confidence: 0, reasoning: 'CSV processing failed' },
+            validationFlags: ['CSV_PROCESSING_FAILED', 'REQUIRES_MANUAL_REVIEW']
+          }
+        }
+      }
+      
+    } else if (mimeType === 'application/vnd.ms-excel' || mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+      // Handle Excel files - extract text and process with GPT-4
+      console.log('📊 PROCESSING EXCEL: Using text extraction + GPT-4 analysis')
+      
+      try {
+        const excelBuffer = Buffer.from(fileData, 'base64')
+        // For now, treat as text extraction (we can enhance with xlsx library later)
+        const excelText = excelBuffer.toString('utf8')
+        
+        console.log('✅ EXCEL TEXT EXTRACTION SUCCESS:')
+        console.log(`   Text length: ${excelText.length} characters`)
+        console.log(`   Text preview: "${excelText.substring(0, 500)}..."`)
+        
+        // Use GPT-4 to analyze the Excel data
+        const excelPrompt = `Extract VAT information from this Excel financial data.
+
+Excel Data:
+${excelText}
+
+Look for VAT amounts, tax amounts, or similar financial data. Return in JSON format:
+{
+  "totalVatAmount": number or null,
+  "lineItems": [{"description": "string", "vatAmount": number}],
+  "extractedText": "relevant spreadsheet data",
+  "documentType": "STATEMENT" | "REPORT" | "OTHER",
+  "classification": {"category": "SALES" | "PURCHASES", "confidence": number}
+}
+
+Focus on finding numerical values that represent VAT or tax amounts.`
+
+        return await processTextWithGPT4(excelPrompt, fileName, category, userId, model)
+        
+      } catch (excelError) {
+        console.error('🚨 Excel processing failed:', excelError)
+        
+        return {
+          success: false,
+          isScanned: false,
+          scanResult: `Excel processing failed: ${excelError instanceof Error ? excelError.message : 'Unknown error'}. Please ensure the file is a valid Excel spreadsheet.`,
+          error: `Excel file processing error: ${excelError instanceof Error ? excelError.message : 'Unknown error'}`,
+          aiProcessed: false,
+          extractedData: {
+            salesVAT: [],
+            purchaseVAT: [],
+            totalAmount: 0,
+            vatRate: 0,
+            confidence: 0,
+            extractedText: '',
+            documentType: 'OTHER',
+            businessDetails: { businessName: null, vatNumber: null, address: null },
+            transactionData: { date: null, invoiceNumber: null, currency: 'EUR' },
+            vatData: { lineItems: [], subtotal: null, totalVatAmount: null, grandTotal: null },
+            classification: { category: 'PURCHASES', confidence: 0, reasoning: 'Excel processing failed' },
+            validationFlags: ['EXCEL_PROCESSING_FAILED', 'REQUIRES_MANUAL_REVIEW']
+          }
+        }
+      }
+      
     } else {
       // For images, use OpenAI Vision API with simplified approach
       console.log(`🤖 PROCESSING IMAGE: ${fileName} with OpenAI Vision API`)

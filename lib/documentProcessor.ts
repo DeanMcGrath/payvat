@@ -285,14 +285,75 @@ async function simulateImageOCR(fileName: string): Promise<{ success: boolean; t
 async function extractTextFromCSV(base64Data: string): Promise<{ success: boolean; text?: string; error?: string }> {
   try {
     const csvContent = Buffer.from(base64Data, 'base64').toString('utf-8')
+    
+    // Parse CSV structure for better AI analysis
+    const lines = csvContent.split('\n').filter(line => line.trim())
+    if (lines.length === 0) {
+      return { success: false, error: 'Empty CSV file' }
+    }
+    
+    // Extract header row
+    const headerRow = lines[0]
+    const headers = headerRow.split(',').map(h => h.trim().replace(/"/g, ''))
+    
+    // Find columns that might contain VAT/tax data
+    const vatColumns: number[] = []
+    const amountColumns: number[] = []
+    
+    headers.forEach((header, index) => {
+      const lowerHeader = header.toLowerCase()
+      if (lowerHeader.includes('vat') || lowerHeader.includes('tax') || 
+          lowerHeader.includes('btw') || lowerHeader.includes('mwst')) {
+        vatColumns.push(index)
+      }
+      if (lowerHeader.includes('amount') || lowerHeader.includes('total') || 
+          lowerHeader.includes('sum') || lowerHeader.includes('value') ||
+          lowerHeader.includes('price') || lowerHeader.includes('cost')) {
+        amountColumns.push(index)
+      }
+    })
+    
+    // Format for AI analysis
+    let formattedText = `CSV Financial Data Analysis:\n\n`
+    formattedText += `Headers: ${headers.join(', ')}\n`
+    formattedText += `Detected VAT-related columns: ${vatColumns.map(i => headers[i]).join(', ') || 'None directly identified'}\n`
+    formattedText += `Detected amount columns: ${amountColumns.map(i => headers[i]).join(', ') || 'None directly identified'}\n\n`
+    
+    formattedText += `Data Rows:\n`
+    
+    // Include first 20 data rows (skip header)
+    const dataRows = lines.slice(1, Math.min(21, lines.length))
+    dataRows.forEach((row, index) => {
+      const cells = row.split(',').map(cell => cell.trim().replace(/"/g, ''))
+      
+      // Highlight potential VAT/amount cells
+      let formattedRow = `Row ${index + 1}: `
+      cells.forEach((cell, cellIndex) => {
+        if (vatColumns.includes(cellIndex) || amountColumns.includes(cellIndex)) {
+          formattedRow += `[${headers[cellIndex]}: ${cell}] `
+        } else if (cellIndex < 3) { // Include first few columns for context
+          formattedRow += `${cell} | `
+        }
+      })
+      formattedText += formattedRow + '\n'
+    })
+    
+    if (lines.length > 21) {
+      formattedText += `\n... and ${lines.length - 21} more rows\n`
+    }
+    
+    // Add raw CSV for completeness but with size limit
+    formattedText += `\nRaw CSV Data (first 2000 chars):\n${csvContent.substring(0, 2000)}${csvContent.length > 2000 ? '...' : ''}`
+    
     return {
       success: true,
-      text: csvContent
+      text: formattedText
     }
   } catch (error) {
+    console.error('CSV extraction error:', error)
     return {
       success: false,
-      error: 'Failed to extract text from CSV'
+      error: `Failed to extract text from CSV: ${error instanceof Error ? error.message : 'Unknown error'}`
     }
   }
 }
