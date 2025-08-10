@@ -513,6 +513,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         if (extractedData.extractedData) {
           const { salesVAT = [], purchaseVAT = [], confidence = 0 } = extractedData.extractedData
           console.log(`      Has extracted data: ✅`)
+          console.log(`      Document category: ${document.category}`)
           
           // Sum up VAT amounts
           const salesTotal = salesVAT.reduce((sum: number, amount: number) => sum + amount, 0)
@@ -526,8 +527,13 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           totalConfidence += confidence
           processedDocuments++
           
-          // Categorize documents
-          if (salesTotal > 0 || document.category.includes('SALES')) {
+          // Categorize documents - prioritize by VAT amounts first, then by category
+          const isSalesDocument = document.category.includes('SALES')
+          const isPurchaseDocument = document.category.includes('PURCHASE')
+          
+          if (salesTotal > 0 && (isSalesDocument || !isPurchaseDocument)) {
+            // Has sales VAT and is sales category, OR has sales VAT but no clear purchase category
+            console.log(`      ➡️ Added to SALES section (salesTotal: €${salesTotal}, isSales: ${isSalesDocument})`)
             salesDocuments.push({
               id: document.id,
               fileName: document.originalName,
@@ -536,9 +542,9 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
               confidence: confidence,
               scanResult: document.scanResult || 'Processed'
             })
-          }
-          
-          if (purchaseTotal > 0 || document.category.includes('PURCHASE')) {
+          } else if (purchaseTotal > 0 && (isPurchaseDocument || !isSalesDocument)) {
+            // Has purchase VAT and is purchase category, OR has purchase VAT but no clear sales category
+            console.log(`      ➡️ Added to PURCHASE section (purchaseTotal: €${purchaseTotal}, isPurchase: ${isPurchaseDocument})`)
             purchaseDocuments.push({
               id: document.id,
               fileName: document.originalName,
@@ -547,6 +553,30 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
               confidence: confidence,
               scanResult: document.scanResult || 'Processed'
             })
+          } else if (isSalesDocument && !isPurchaseDocument) {
+            // No VAT amounts but clearly a sales document
+            console.log(`      ➡️ Added to SALES section (no VAT but sales category)`)
+            salesDocuments.push({
+              id: document.id,
+              fileName: document.originalName,
+              category: document.category,
+              extractedAmounts: salesVAT,
+              confidence: confidence,
+              scanResult: document.scanResult || 'Processed'
+            })
+          } else if (isPurchaseDocument && !isSalesDocument) {
+            // No VAT amounts but clearly a purchase document
+            console.log(`      ➡️ Added to PURCHASE section (no VAT but purchase category)`)
+            purchaseDocuments.push({
+              id: document.id,
+              fileName: document.originalName,
+              category: document.category,
+              extractedAmounts: purchaseVAT,
+              confidence: confidence,
+              scanResult: document.scanResult || 'Processed'
+            })
+          } else {
+            console.log(`      ⚠️ Document NOT categorized - salesTotal: €${salesTotal}, purchaseTotal: €${purchaseTotal}, category: ${document.category}`)
           }
         }
       } else if (document.scanResult) {

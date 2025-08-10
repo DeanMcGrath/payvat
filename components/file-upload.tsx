@@ -59,24 +59,41 @@ export default function FileUpload({
     const files = event.target.files
     if (!files || files.length === 0) return
 
-    const file = files[0]
-    
-    // Validate file size (10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error('File size must be less than 10MB')
-      return
-    }
-
-    // Validate file type
-    const extension = file.name.split('.').pop()?.toLowerCase()
     const allowedExtensions = ['pdf', 'csv', 'xlsx', 'xls', 'jpg', 'jpeg', 'png']
+    const validFiles: File[] = []
     
-    if (!extension || !allowedExtensions.includes(extension)) {
-      toast.error('Invalid file type. Please upload PDF, Excel, CSV, or image files.')
-      return
+    // Validate all selected files
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      
+      // Validate file size (10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error(`File "${file.name}" is too large. Must be less than 10MB`)
+        continue
+      }
+
+      // Validate file type
+      const extension = file.name.split('.').pop()?.toLowerCase()
+      
+      if (!extension || !allowedExtensions.includes(extension)) {
+        toast.error(`File "${file.name}" has invalid type. Please upload PDF, Excel, CSV, or image files.`)
+        continue
+      }
+      
+      validFiles.push(file)
+    }
+    
+    if (validFiles.length === 0) return
+    
+    // Show progress toast for multiple files
+    if (validFiles.length > 1) {
+      toast.success(`Starting upload of ${validFiles.length} files...`)
     }
 
-    await uploadFile(file)
+    // Upload files sequentially to avoid overwhelming the server
+    for (const file of validFiles) {
+      await uploadFile(file)
+    }
   }
 
   const uploadFile = async (file: File) => {
@@ -207,7 +224,7 @@ export default function FileUpload({
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-teal-300 transition-colors">
         <Upload className="h-10 w-10 text-gray-400 mx-auto mb-3" />
         <p className="text-gray-600 mb-2">{description}</p>
-        <p className="text-sm text-gray-500 mb-3">PDF, Excel, or CSV files up to 10MB each</p>
+        <p className="text-sm text-gray-500 mb-3">Select multiple files: PDF, Excel, or CSV files up to 10MB each</p>
         
         <Button 
           variant="outline" 
@@ -221,6 +238,7 @@ export default function FileUpload({
         <input
           ref={fileInputRef}
           type="file"
+          multiple
           className="hidden"
           accept={acceptedFiles.join(',')}
           onChange={handleFileChange}

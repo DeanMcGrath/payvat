@@ -319,7 +319,7 @@ export default function VATSubmissionPage() {
                   placeholder="Search"
                   className="w-32 xl:w-48 2xl:w-64 bg-white text-gray-900 border-0"
                 />
-                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
+                <Button size="sm" className="bg-teal-700 hover:bg-teal-800">
                   <Search className="h-4 w-4" />
                 </Button>
               </div>
@@ -654,15 +654,15 @@ export default function VATSubmissionPage() {
               <>
                 {/* Sales Documents Section */}
                 {uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length > 0 && (
-                  <Card className="border-blue-200">
-                    <CardHeader className="bg-blue-50">
-                      <CardTitle className="text-lg font-semibold text-blue-900 flex items-center justify-between">
+                  <Card className="border-teal-200">
+                    <CardHeader className="bg-teal-50">
+                      <CardTitle className="text-lg font-semibold text-teal-900 flex items-center justify-between">
                         <div className="flex items-center">
-                          <FileText className="h-5 w-5 mr-2 text-blue-600" />
+                          <FileText className="h-5 w-5 mr-2 text-teal-600" />
                           Section 1: VAT on Sales Documents ({uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length})
                         </div>
                         <div className="text-right">
-                          <div className="text-sm font-medium text-blue-600">
+                          <div className="text-sm font-medium text-teal-600">
                             Sales VAT Total: €{extractedVATData?.totalSalesVAT?.toFixed(2) || '0.00'}
                           </div>
                         </div>
@@ -680,7 +680,7 @@ export default function VATSubmissionPage() {
                             const totalVAT = vatAmounts.reduce((sum: number, amount: number) => sum + amount, 0);
                             
                             return (
-                              <div key={document.id} className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                              <div key={document.id} className="flex items-center justify-between p-4 bg-teal-50 rounded-lg border border-teal-200">
                                 <div className="flex items-center space-x-4">
                                   <div className="flex-shrink-0">
                                     {document.mimeType?.includes('pdf') ? (
@@ -704,7 +704,7 @@ export default function VATSubmissionPage() {
                                       {/* VAT Amount Display */}
                                       {document.isScanned && vatAmounts.length > 0 && (
                                         <div className="flex items-center text-xs">
-                                          <span className="inline-flex items-center text-blue-700 font-medium">
+                                          <span className="inline-flex items-center text-teal-700 font-medium">
                                             <CheckCircle className="h-3 w-3 mr-1" />
                                             €{totalVAT.toFixed(2)} ({Math.round(confidence * 100)}% confidence)
                                           </span>
@@ -746,15 +746,15 @@ export default function VATSubmissionPage() {
                 
                 {/* Purchase Documents Section */}
                 {uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length > 0 && (
-                  <Card className="border-orange-200">
-                    <CardHeader className="bg-orange-50">
-                      <CardTitle className="text-lg font-semibold text-orange-900 flex items-center justify-between">
+                  <Card className="border-green-200">
+                    <CardHeader className="bg-green-50">
+                      <CardTitle className="text-lg font-semibold text-green-900 flex items-center justify-between">
                         <div className="flex items-center">
-                          <FileText className="h-5 w-5 mr-2 text-orange-600" />
+                          <FileText className="h-5 w-5 mr-2 text-green-600" />
                           Section 2: VAT on Purchases Documents ({uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length})
                         </div>
                         <div className="text-right">
-                          <div className="text-sm font-medium text-orange-600">
+                          <div className="text-sm font-medium text-green-600">
                             Purchase VAT Total: €{extractedVATData?.totalPurchaseVAT?.toFixed(2) || '0.00'}
                           </div>
                         </div>
@@ -772,7 +772,7 @@ export default function VATSubmissionPage() {
                             const totalVAT = vatAmounts.reduce((sum: number, amount: number) => sum + amount, 0);
                             
                             return (
-                              <div key={document.id} className="flex items-center justify-between p-4 bg-orange-50 rounded-lg border border-orange-200">
+                              <div key={document.id} className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
                                 <div className="flex items-center space-x-4">
                                   <div className="flex-shrink-0">
                                     {document.mimeType?.includes('pdf') ? (
@@ -796,7 +796,7 @@ export default function VATSubmissionPage() {
                                       {/* VAT Amount Display */}
                                       {document.isScanned && vatAmounts.length > 0 && (
                                         <div className="flex items-center text-xs">
-                                          <span className="inline-flex items-center text-orange-700 font-medium">
+                                          <span className="inline-flex items-center text-green-700 font-medium">
                                             <CheckCircle className="h-3 w-3 mr-1" />
                                             €{totalVAT.toFixed(2)} ({Math.round(confidence * 100)}% confidence)
                                           </span>
