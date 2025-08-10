@@ -1082,6 +1082,9 @@ export function extractVATDataFromText(
     /vat\s+total[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*amount[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     
+    // VAT with percentage in parentheses - HIGH PRIORITY (for BRIANC-0008.pdf format)
+    /vat\s*\([0-9.]+%\)[:\s]*€?([0-9,]+\.?[0-9]*)/gi,  // VAT (23.00%): €92.00
+    
     // VAT breakdown table totals
     /(?:total\s+)?(?:vat|tax)\s*(?:breakdown|summary|details)[^€]*total[^€]*€?([0-9,]+\.?[0-9]*)/gi,
   ]
@@ -1091,6 +1094,11 @@ export function extractVATDataFromText(
     /vat\s*@?\s*23%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*@?\s*13\.5%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*@?\s*9%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    
+    // CRITICAL: VAT with percentage in parentheses (like BRIANC-0008.pdf)
+    /vat\s*\(23\.?0?0?%?\)[:\s]*€?([0-9,]+\.?[0-9]*)/gi,  // VAT (23.00%): €92.00
+    /vat\s*\(13\.5%?\)[:\s]*€?([0-9,]+\.?[0-9]*)/gi,      // VAT (13.5%): €XX
+    /vat\s*\(9\.?0?%?\)[:\s]*€?([0-9,]+\.?[0-9]*)/gi,     // VAT (9%): €XX
     
     // VAT rate category patterns (MIN, NIL, STD, etc.)
     /vat\s*min[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
@@ -1362,6 +1370,36 @@ export async function processDocument(
     // Validate inputs
     if (!fileData || !mimeType || !fileName) {
       throw new Error('Missing required document data')
+    }
+    
+    // 🚨 CRITICAL FIX: Route Excel files to dedicated processor BEFORE AI
+    const fileExtension = fileName.split('.').pop()?.toLowerCase()
+    const isExcelByMimeType = mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || 
+                              mimeType === 'application/vnd.ms-excel' ||
+                              mimeType.includes('spreadsheet')
+    const isExcelByExtension = fileExtension === 'xlsx' || fileExtension === 'xls'
+    const isExcel = isExcelByMimeType || isExcelByExtension
+    
+    if (isExcel) {
+      console.log('📊📊📊 EXCEL FILE DETECTED - BYPASSING AI FOR DEDICATED PROCESSING')
+      console.log(`   File: ${fileName}`)
+      console.log(`   MIME: ${mimeType}`)
+      console.log(`   Extension: ${fileExtension}`)
+      console.log('   🚀 Using specialized Excel processor with WooCommerce VAT detection')
+      
+      // Use dedicated Excel processing instead of AI
+      const legacyResult = await processWithLegacyMethod(fileData, mimeType, fileName, category, processingStartTime)
+      
+      console.log('📊 EXCEL PROCESSING COMPLETE:')
+      console.log(`   Success: ${legacyResult.success}`)
+      console.log(`   VAT amounts found: ${legacyResult.extractedData ? [...legacyResult.extractedData.salesVAT, ...legacyResult.extractedData.purchaseVAT].length : 0}`)
+      if (legacyResult.extractedData) {
+        const allVAT = [...legacyResult.extractedData.salesVAT, ...legacyResult.extractedData.purchaseVAT]
+        console.log(`   VAT values: €${allVAT.join(', €')}`)
+        console.log('   🎉 Excel processed with dedicated WooCommerce detection!')
+      }
+      
+      return legacyResult
     }
     
     // 🚨 CRITICAL DEBUGGING: Check if AI processing is available and working
@@ -1645,8 +1683,48 @@ async function processWithLegacyMethod(
     }
   }
   
-  // Step 2: Extract VAT data from text
-  const extractedData = extractVATDataFromText(textResult.text, category, fileName)
+  // Step 1.5: CRITICAL FIX - Check if Excel processor already extracted VAT
+  let extractedData: ExtractedVATData
+  const isExcelProcessed = textResult.text.startsWith('VAT extracted from Excel:')
+  
+  if (isExcelProcessed) {
+    console.log('📊 EXCEL PROCESSOR OUTPUT DETECTED - Using WooCommerce VAT extraction')
+    
+    // Extract the VAT amount from Excel processor output
+    const vatMatch = textResult.text.match(/VAT extracted from Excel: €([\d,]+\.?\d*)/i)
+    if (vatMatch) {
+      const vatAmount = parseFloat(vatMatch[1].replace(/,/g, ''))
+      console.log(`✅ EXTRACTED WOOCOMMERCE VAT: €${vatAmount}`)
+      
+      // Check if this is the expected WooCommerce amount
+      if (Math.abs(vatAmount - 5518.20) < 0.01) {
+        console.log('🎉 SUCCESS! Got expected WooCommerce total €5518.20!')
+      }
+      
+      // Create proper ExtractedVATData with the Excel-extracted amount
+      extractedData = {
+        salesVAT: category.includes('SALES') ? [vatAmount] : [],
+        purchaseVAT: category.includes('PURCHASE') ? [vatAmount] : [],
+        totalAmount: undefined,
+        vatRate: 23, // Irish standard VAT rate
+        confidence: 0.95, // High confidence for Excel extraction
+        extractedText: [textResult.text],
+        documentType: 'OTHER' as const
+      }
+      
+      console.log('📊 WooCommerce Excel VAT data structured:')
+      console.log(`   Sales VAT: [${extractedData.salesVAT.join(', ')}]`)
+      console.log(`   Purchase VAT: [${extractedData.purchaseVAT.join(', ')}]`)
+      console.log(`   Confidence: ${extractedData.confidence}`)
+    } else {
+      console.log('⚠️ Excel processed but no VAT amount found in output')
+      // Fall back to generic text extraction
+      extractedData = extractVATDataFromText(textResult.text, category, fileName)
+    }
+  } else {
+    // Step 2: Extract VAT data from text (non-Excel documents)
+    extractedData = extractVATDataFromText(textResult.text, category, fileName)
+  }
   
   // Step 3: Enhanced VAT extraction for known patterns
   if (extractedData.salesVAT.length === 0 && extractedData.purchaseVAT.length === 0) {

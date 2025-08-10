@@ -118,154 +118,228 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
-            
-            <div className="flex items-center space-x-2 sm:space-x-6">
-              <div className="hidden lg:flex items-center space-x-2">
-                <Input
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={handleSearchKeyPress}
-                  className="w-32 xl:w-48 2xl:w-64 bg-white text-gray-900 border-0"
-                />
-                <Button size="sm" className="bg-blue-700 hover:bg-blue-800" onClick={handleSearch}>
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
-              
-              <div className="text-right hidden sm:block max-w-48 lg:max-w-none">
-                <h3 className="text-sm lg:text-base font-bold text-white truncate">{user.businessName}</h3>
-                <p className="text-teal-100 font-mono text-xs">VAT: {user.vatNumber}</p>
-              </div>
-              
-              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="text-white hover:bg-teal-600 lg:hidden p-2 min-w-[44px] min-h-[44px]"
-                  onClick={() => window.location.href = '/search'}
-                  title="Search"
-                >
-                  <Search className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
-                  <Bell className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
-                  <Settings className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]" onClick={handleLogout} title="Logout">
-                  <LogOut className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-background">
+      {/* Modern Header */}
+      <header className="gradient-primary relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
         
-        {/* Navigation */}
-        <div className="bg-teal-600 px-4 sm:px-6 py-3">
-          <div className="max-w-7xl mx-auto">
+        <div className="relative z-10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2 text-sm">
-                <span className="text-white">Dashboard</span>
+              {/* Logo */}
+              <div className="flex items-center space-x-3">
+                <div className="icon-modern">
+                  <FileText className="h-6 w-6 text-white" />
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  PayVAT
+                </h1>
               </div>
-              <div className="sm:hidden text-right max-w-40">
-                <p className="text-xs text-teal-100 font-mono truncate">{user.businessName}</p>
-                <p className="text-xs text-teal-200 font-mono">{user.vatNumber}</p>
+              
+              {/* Header Content */}
+              <div className="flex items-center space-x-6">
+                {/* Search - Desktop */}
+                <div className="hidden lg:flex items-center space-x-3">
+                  <div className="relative">
+                    <Input
+                      placeholder="Search VAT records..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyPress={handleSearchKeyPress}
+                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
+                    />
+                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70 cursor-pointer" onClick={handleSearch} />
+                  </div>
+                </div>
+                
+                {/* Business Info */}
+                <div className="text-right hidden sm:block">
+                  <h3 className="text-sm lg:text-base font-bold text-white truncate max-w-48 lg:max-w-none">{user.businessName}</h3>
+                  <p className="text-white/70 font-mono text-xs">VAT: {user.vatNumber}</p>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
+                    onClick={() => window.location.href = '/search'}
+                    title="Search"
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
+                  >
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20"
+                    onClick={handleLogout} 
+                    title="Logout"
+                  >
+                    <LogOut className="h-5 w-5" />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
+          
+          {/* Modern Navigation */}
+          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-8">
+                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <span>Dashboard</span>
+                  </span>
+                  <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
+                    <button className="hover:text-white transition-colors">VAT Returns</button>
+                    <button className="hover:text-white transition-colors">Documents</button>
+                    <button className="hover:text-white transition-colors">Reports</button>
+                    <button className="hover:text-white transition-colors">Settings</button>
+                  </div>
+                </div>
+                <div className="text-white/60 text-xs hidden sm:block">
+                  Welcome back, {user.firstName || user.businessName}
+                </div>
+              </div>
+            </div>
+          </nav>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user.firstName || user.businessName.split(' ')[0] || 'User'}
-          </h2>
-          <p className="text-gray-600">Here's your VAT overview for this quarter</p>
-        </div>
+      {/* Main Content */}
+      <main className="py-8 lg:py-12">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          {/* Welcome Section */}
+          <div className="mb-12 animate-fade-in">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              Welcome back, <span className="text-gradient-primary">{user.firstName || user.businessName.split(' ')[0] || 'User'}</span>
+            </h2>
+            <p className="text-xl text-muted-foreground">Here's your VAT overview and recent activity</p>
+          </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">VAT Due</CardTitle>
-              <Euro className="h-4 w-4 text-teal-700" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900">€12,450.00</div>
-              <p className="text-xs text-gray-500 mt-1">Due: 15th Jan 2025</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">This Quarter</CardTitle>
-              <TrendingUp className="h-4 w-4 text-teal-700" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900">€45,230.00</div>
-              <p className="text-xs text-teal-700 mt-1">+12% from last quarter</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Next Return</CardTitle>
-              <Calendar className="h-4 w-4 text-teal-700" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900">15 days</div>
-              <p className="text-xs text-gray-500 mt-1">Q4 2024 Return</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Subscription Status */}
-        {subscriptionType === 'trial' && trialEndsAt && (
-          <Card className="mb-6 border-amber-200 bg-amber-50">
-            <CardContent className="pt-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                    <Bell className="h-5 w-5 text-amber-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-amber-900">Free Trial Active</h3>
-                    <p className="text-sm text-amber-700">
-                      Your trial expires on {trialEndsAt.toLocaleDateString()}
-                    </p>
-                  </div>
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12" data-animate>
+            <div className="card-modern p-6 hover-lift">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-sm text-muted-foreground font-medium">VAT Due</p>
+                  <div className="text-3xl font-bold text-foreground">€12,450.00</div>
                 </div>
-                <Button className="bg-amber-500 hover:bg-amber-600 text-white">
-                  Upgrade Now
-                </Button>
+                <div className="icon-premium">
+                  <Euro className="h-6 w-6 text-white" />
+                </div>
               </div>
-            </CardContent>
-          </Card>
-        )}
+              <div className="flex items-center gap-2 text-sm">
+                <div className="status-warning">Due: 15th Jan 2025</div>
+              </div>
+            </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold text-gray-900">Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Button 
-                className="w-full bg-teal-600 hover:bg-teal-600 text-white justify-start"
-                onClick={() => window.location.href = '/vat-period'}
-              >
-                <FileText className="h-4 w-4 mr-2" />
-                VAT RETURNS
+            <div className="card-modern p-6 hover-lift">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-sm text-muted-foreground font-medium">This Quarter</p>
+                  <div className="text-3xl font-bold text-foreground">€45,230.00</div>
+                </div>
+                <div className="icon-premium">
+                  <TrendingUp className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <div className="status-success">+12% from last quarter</div>
+              </div>
+            </div>
+
+            <div className="card-modern p-6 hover-lift">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-sm text-muted-foreground font-medium">Returns Filed</p>
+                  <div className="text-3xl font-bold text-foreground">24</div>
+                </div>
+                <div className="icon-premium">
+                  <FileText className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <div className="status-success">All up to date</div>
+              </div>
+            </div>
+
+            <div className="card-modern p-6 hover-lift">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-sm text-muted-foreground font-medium">Compliance</p>
+                  <div className="text-3xl font-bold text-foreground">100%</div>
+                </div>
+                <div className="icon-premium">
+                  <CheckCircle className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-sm">
+                <div className="status-success">Fully compliant</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Subscription Status */}
+          {subscriptionType === 'trial' && trialEndsAt && (
+            <div className="mb-12">
+              <div className="card-premium p-8 border border-warning/20 bg-warning/5 relative overflow-hidden">
+                <div className="absolute inset-0 gradient-mesh opacity-10"></div>
+                <div className="relative z-10 flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="icon-modern bg-warning/20 border-warning/30">
+                      <Bell className="h-6 w-6 text-warning" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-foreground mb-1">Free Trial Active</h3>
+                      <p className="text-muted-foreground">
+                        Your trial expires on {trialEndsAt.toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  <Button variant="premium" size="lg" className="hover-lift">
+                    Upgrade Now
+                    <CheckCircle className="ml-2 h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div className="card-modern p-8">
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold text-foreground mb-2">Quick Actions</h3>
+                <p className="text-muted-foreground">Common VAT tasks and operations</p>
+              </div>
+              
+              <div className="space-y-4">
+                <Button 
+                  size="lg"
+                  className="w-full btn-primary justify-start hover-lift"
+                  onClick={() => window.location.href = '/vat-period'}
+                >
+                  <FileText className="h-5 w-5 mr-3" />
+                  File VAT Return
               </Button>
               <Button 
                 variant="outline" 

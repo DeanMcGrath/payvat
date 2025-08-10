@@ -4,217 +4,426 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
 
 export default function LandingPage() {
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    // Trigger animations after component mounts
+    const timer = setTimeout(() => {
+      setIsVisible(true)
+    }, 100)
+
+    // Add scroll-triggered animations
+    const handleScroll = () => {
+      const elements = document.querySelectorAll('[data-animate]')
+      elements.forEach((element) => {
+        const rect = element.getBoundingClientRect()
+        const isInView = rect.top < window.innerHeight && rect.bottom > 0
+        
+        if (isInView) {
+          element.classList.add('animate-slide-up')
+          element.removeAttribute('data-animate')
+        }
+      })
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Run once on mount
+
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
-            
-            <div className="flex items-center space-x-2 sm:space-x-6">
-              <div className="hidden md:flex items-center space-x-2">
-                <Input
-                  placeholder="Search"
-                  className="w-32 sm:w-40 lg:w-48 xl:w-64 bg-white text-gray-900 border-0"
-                />
-                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
-                  <Search className="h-4 w-4" />
-                </Button>
+    <div className="min-h-screen bg-background">
+      {/* Modern Header */}
+      <header className="gradient-primary relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
+        
+        <div className="relative z-10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <div className="flex items-center space-x-3">
+                <div className="icon-modern">
+                  <FileText className="h-6 w-6 text-white" />
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  PayVAT
+                </h1>
               </div>
               
-              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 md:hidden p-2 min-w-[44px] min-h-[44px]">
-                  <Search className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
-                  <Bell className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
-                  <Settings className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
-                  <LogOut className="h-4 w-4" />
-                </Button>
+              {/* Header Actions */}
+              <div className="flex items-center space-x-4">
+                {/* Search - Desktop */}
+                <div className="hidden lg:flex items-center space-x-3">
+                  <div className="relative">
+                    <Input
+                      placeholder="Search VAT records..."
+                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
+                    />
+                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
+                  >
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <LogOut className="h-5 w-5" />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        {/* Navigation */}
-        <div className="bg-teal-600 px-4 sm:px-6 py-3">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center space-x-2 text-sm">
-              <span className="text-white">Home</span>
+          
+          {/* Modern Navigation */}
+          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-8">
+                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <span>Dashboard</span>
+                  </span>
+                  <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
+                    <button className="hover:text-white transition-colors">VAT Returns</button>
+                    <button className="hover:text-white transition-colors">Documents</button>
+                    <button className="hover:text-white transition-colors">Reports</button>
+                    <button className="hover:text-white transition-colors">Settings</button>
+                  </div>
+                </div>
+                <div className="text-white/60 text-xs hidden sm:block">
+                  Last updated: 2 min ago
+                </div>
+              </div>
             </div>
-          </div>
+          </nav>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Simplify Your VAT Submission and Payments
-          </h2>
+      {/* Hero Section */}
+      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center">
+            {/* Hero Content */}
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
+                  Trusted by 10,000+ Irish businesses
+                </div>
+                
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
+                  <span className="text-gradient-primary">Simplify Your VAT</span>
+                  <br />
+                  <span className="text-foreground">Submission & Payments</span>
+                </h1>
+                
+                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                
+                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                  Professional VAT return submission and payment processing for Irish businesses. 
+                  <span className="text-primary font-semibold">Complete your obligations in minutes, not hours.</span>
+                </p>
+              </div>
+              
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+                <Button size="lg" className="btn-primary px-8 py-4 text-lg font-semibold hover-lift">
+                  Start Free Trial
+                  <CheckCircle className="ml-2 h-5 w-5" />
+                </Button>
+                <Button variant="outline" size="lg" className="btn-outline px-8 py-4 text-lg">
+                  Watch Demo
+                </Button>
+              </div>
+              
+              {/* Trust Indicators */}
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-success" />
+                  <span>Bank-grade security</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>Revenue compliant</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-success" />
+                  <span>24/7 support</span>
+                </div>
+              </div>
+            </div>
+          </div>
           
-          <div className="w-20 h-0.5 bg-teal-600 mx-auto mb-8"></div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Fast, secure, and compliant VAT return submission and payment processing for Irish businesses. 
-            Get your VAT obligations sorted in minutes, not hours.
-          </p>
+          {/* Background Elements */}
+          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
+          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
         </div>
+      </section>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
-          <Card className="bg-white border border-gray-200 shadow-lg">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FileText className="h-6 w-6 text-teal-700" />
-              </div>
-              <h3 className="font-semibold text-gray-800 mb-2">Easy Submission</h3>
-              <p className="text-gray-600 text-sm">
-                Simple step-by-step VAT return submission process
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white border border-gray-200 shadow-lg">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="h-6 w-6 text-blue-600" />
-              </div>
-              <h3 className="font-semibold text-gray-800 mb-2">Secure Payments</h3>
-              <p className="text-gray-600 text-sm">
-                Safe and secure VAT payment options
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white border border-gray-200 shadow-lg">
-            <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Clock className="h-6 w-6 text-green-600" />
-              </div>
-              <h3 className="font-semibold text-gray-800 mb-2">Save Time</h3>
-              <p className="text-gray-600 text-sm">
-                Complete your VAT obligations in minutes
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-12">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4">
-              Ready to Get Started?
-            </h3>
-            <p className="text-gray-600">
-              Join thousands of Irish businesses who trust PayVAT for their compliance needs
+      {/* Features Section */}
+      <section className="py-20 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="text-center mb-16 animate-slide-up">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              Everything You Need for 
+              <span className="text-gradient-primary"> VAT Management</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Professional tools designed specifically for Irish businesses to streamline VAT compliance
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Button 
-              className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 sm:px-8 text-base sm:text-lg"
-              onClick={() => window.location.href = '/signup'}
-            >
-              Sign Up Now
-            </Button>
-            <Button 
-              variant="outline"
-              className="border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-3 px-6 sm:px-8 text-base sm:text-lg"
-              onClick={() => window.location.href = '/login'}
-            >
-              Login to Your Account
-            </Button>
+          {/* Feature Grid */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8" data-animate>
+            {/* Feature 1 */}
+            <div className="card-modern p-8 text-center hover-lift group">
+              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+                <FileText className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-foreground mb-4">Smart Submission</h3>
+              <p className="text-muted-foreground leading-relaxed mb-4">
+                Intelligent step-by-step VAT return process with automatic calculations and error checking
+              </p>
+              <div className="status-success inline-flex">
+                <CheckCircle className="h-4 w-4 mr-1" />
+                Revenue Approved
+              </div>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="card-modern p-8 text-center hover-lift group">
+              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+                <Shield className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-foreground mb-4">Secure Payments</h3>
+              <p className="text-muted-foreground leading-relaxed mb-4">
+                Bank-grade encryption with instant payment confirmation and automated receipt generation
+              </p>
+              <div className="status-success inline-flex">
+                <Shield className="h-4 w-4 mr-1" />
+                PCI Compliant
+              </div>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="card-modern p-8 text-center hover-lift group">
+              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+                <Clock className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-foreground mb-4">Save Time</h3>
+              <p className="text-muted-foreground leading-relaxed mb-4">
+                Complete VAT obligations in minutes with automated calculations and smart data import
+              </p>
+              <div className="status-success inline-flex">
+                <Clock className="h-4 w-4 mr-1" />
+                95% Time Saved
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <div className="bg-teal-50 rounded-xl p-6 border border-teal-200 mb-12">
-          <h4 className="font-semibold text-teal-800 mb-4 text-center">
-            Why Choose PayVAT?
-          </h4>
-          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
-            <div className="flex items-center gap-3">
-              <CheckCircle className="h-5 w-5 text-teal-700 flex-shrink-0" />
-              <span className="text-teal-700 text-sm">Revenue approved platform</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <CheckCircle className="h-5 w-5 text-teal-700 flex-shrink-0" />
-              <span className="text-teal-700 text-sm">Instant payment confirmation</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <CheckCircle className="h-5 w-5 text-teal-700 flex-shrink-0" />
-              <span className="text-teal-700 text-sm">Automated deadline reminders</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <CheckCircle className="h-5 w-5 text-teal-700 flex-shrink-0" />
-              <span className="text-teal-700 text-sm">24/7 customer support</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Contact Us Section */}
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-semibold text-gray-800 mb-4">
-              Need Help? Contact Us
-            </h3>
-            <p className="text-gray-600">
-              Our team is here to help you with any questions about VAT submission and payments
-            </p>
-          </div>
-
-          <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Mail className="h-6 w-6 text-blue-600" />
+      {/* CTA Section */}
+      <section className="py-20 relative">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8">
+          <div className="card-premium p-12 text-center relative overflow-hidden">
+            {/* Background Elements */}
+            <div className="absolute inset-0 gradient-mesh opacity-10"></div>
+            
+            <div className="relative z-10">
+              <div className="mb-8">
+                <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+                  Ready to Modernize Your
+                  <span className="text-gradient-primary"> VAT Process?</span>
+                </h3>
+                <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                  Join 10,000+ Irish businesses who've streamlined their VAT compliance with PayVAT
+                </p>
               </div>
-              <h4 className="font-semibold text-gray-800 mb-2">Email Support</h4>
-              <p className="text-gray-600 text-sm mb-3">Get help via email</p>
-              <a 
-                href="mailto:support@payvat.ie" 
-                className="text-teal-600 hover:text-teal-700 font-medium text-sm"
-              >
-                support@payvat.ie
-              </a>
-            </div>
 
-            <div className="text-center">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone className="h-6 w-6 text-green-600" />
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
+                <Button 
+                  size="lg"
+                  className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"
+                  onClick={() => window.location.href = '/signup'}
+                >
+                  Start Free Trial
+                  <CheckCircle className="ml-2 h-5 w-5" />
+                </Button>
+                <Button 
+                  variant="outline"
+                  size="lg"
+                  className="btn-outline px-12 py-4 text-lg min-w-[220px]"
+                  onClick={() => window.location.href = '/login'}
+                >
+                  Sign In
+                </Button>
               </div>
-              <h4 className="font-semibold text-gray-800 mb-2">Phone Support</h4>
-              <p className="text-gray-600 text-sm mb-3">Mon-Fri, 9AM-5PM</p>
-              <a 
-                href="tel:+35318901234" 
-                className="text-teal-600 hover:text-teal-700 font-medium text-sm"
-              >
-                +353 1 890 1234
-              </a>
-            </div>
-
-            <div className="text-center">
-              <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="h-6 w-6 text-teal-700" />
-              </div>
-              <h4 className="font-semibold text-gray-800 mb-2">Live Chat</h4>
-              <p className="text-gray-600 text-sm mb-3">24/7 instant support</p>
-              <p className="text-teal-600 font-medium text-sm">
-                Available 24/7
+              
+              <p className="text-sm text-muted-foreground">
+                ✓ No setup fees  ✓ 14-day free trial  ✓ Cancel anytime
               </p>
             </div>
           </div>
         </div>
-        {/* Live Chat */}
-        <LiveChat />
-        
-        {/* Footer */}
-        <Footer />
-      </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-16 animate-slide-up">
+            <h4 className="text-3xl font-bold text-foreground mb-4">
+              Why Choose <span className="text-gradient-primary">PayVAT?</span>
+            </h4>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              The most trusted VAT compliance platform in Ireland
+            </p>
+          </div>
+          
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-animate>
+            <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
+              <div className="icon-modern group-hover:scale-110 transition-transform">
+                <CheckCircle className="h-6 w-6 text-success" />
+              </div>
+              <div>
+                <div className="font-semibold text-foreground">Revenue Approved</div>
+                <div className="text-sm text-muted-foreground">Official platform</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
+              <div className="icon-modern group-hover:scale-110 transition-transform">
+                <Shield className="h-6 w-6 text-success" />
+              </div>
+              <div>
+                <div className="font-semibold text-foreground">Instant Confirmation</div>
+                <div className="text-sm text-muted-foreground">Real-time processing</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
+              <div className="icon-modern group-hover:scale-110 transition-transform">
+                <Bell className="h-6 w-6 text-success" />
+              </div>
+              <div>
+                <div className="font-semibold text-foreground">Smart Reminders</div>
+                <div className="text-sm text-muted-foreground">Never miss deadlines</div>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
+              <div className="icon-modern group-hover:scale-110 transition-transform">
+                <MessageCircle className="h-6 w-6 text-success" />
+              </div>
+              <div>
+                <div className="font-semibold text-foreground">24/7 Support</div>
+                <div className="text-sm text-muted-foreground">Always here to help</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-16 animate-slide-up">
+            <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+              Need Help? <span className="text-gradient-primary">We're Here</span>
+            </h3>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Expert support team ready to assist with all your VAT compliance questions
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-3" data-animate>
+            <div className="card-modern p-8 text-center hover-lift group">
+              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <Mail className="h-8 w-8 text-white" />
+              </div>
+              <h4 className="text-xl font-semibold text-foreground mb-4">Email Support</h4>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                Detailed help via email with expert guidance
+              </p>
+              <Button variant="outline" className="btn-outline">
+                <Mail className="h-4 w-4 mr-2" />
+                Email Us
+              </Button>
+            </div>
+
+            <div className="card-modern p-8 text-center hover-lift group">
+              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <Phone className="h-8 w-8 text-white" />
+              </div>
+              <h4 className="text-xl font-semibold text-foreground mb-4">Phone Support</h4>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                Direct line: Mon-Fri, 9AM-5PM IST
+              </p>
+              <Button variant="outline" className="btn-outline">
+                <Phone className="h-4 w-4 mr-2" />
+                Call Us
+              </Button>
+            </div>
+
+            <div className="card-modern p-8 text-center hover-lift group">
+              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform">
+                <MessageCircle className="h-8 w-8 text-white" />
+              </div>
+              <h4 className="text-xl font-semibold text-foreground mb-4">Live Chat</h4>
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                Instant help via our integrated chat system
+              </p>
+              <Button variant="outline" className="btn-outline">
+                <MessageCircle className="h-4 w-4 mr-2" />
+                Start Chat
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Live Chat Component */}
+      <LiveChat />
+      
+      {/* Footer Component */}
+      <Footer />
     </div>
   )
 }

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Debug Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 50px auto; 
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .upload-area { 
+            border: 2px dashed #ccc; 
+            padding: 40px; 
+            text-align: center; 
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button { 
+            background: #007bff; 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #log { 
+            background: #000; 
+            color: #00ff00; 
+            padding: 20px; 
+            margin: 20px 0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            height: 400px;
+            overflow-y: auto;
+        }
+        .log-entry { margin: 5px 0; }
+        .error { color: #ff4444; }
+        .success { color: #44ff44; }
+        .warning { color: #ffaa44; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 File Upload Debug Test</h1>
+        <p>This page tests file upload functionality with extensive console logging to debug the broken upload issue.</p>
+        
+        <div class="upload-area">
+            <input type="file" id="fileInput" accept=".pdf,.xlsx,.xls,.csv,.jpg,.jpeg,.png" style="display: none;">
+            <button id="selectBtn" onclick="selectFile()">📁 Select File for Upload Test</button>
+            <p>Selected file: <span id="selectedFile">None</span></p>
+            <button id="uploadBtn" onclick="uploadFile()" disabled style="margin-top: 10px;">🚀 Upload to /api/upload</button>
+        </div>
+
+        <div id="log"></div>
+        
+        <div style="margin-top: 20px; font-size: 12px; color: #666;">
+            <p><strong>Instructions:</strong></p>
+            <ol>
+                <li>Click "Select File" and choose a test file</li>
+                <li>Click "Upload" and watch the console logs</li>
+                <li>Check browser Network tab to see if request is made</li>
+                <li>Look for any JavaScript errors in browser console</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const timestamp = new Date().toISOString();
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.innerHTML = `[${timestamp}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            
+            // Also log to browser console
+            if (type === 'error') {
+                console.error(message);
+            } else if (type === 'warning') {
+                console.warn(message);
+            } else {
+                console.log(message);
+            }
+        }
+
+        let selectedFile = null;
+
+        function selectFile() {
+            log('🔥🔥🔥 SELECT FILE BUTTON CLICKED', 'success');
+            const fileInput = document.getElementById('fileInput');
+            log('📁 File input element found: ' + !!fileInput, 'info');
+            fileInput.click();
+            log('✅ File input click() triggered', 'success');
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            log('🔥🔥🔥 FILE INPUT CHANGE EVENT TRIGGERED', 'success');
+            log('📂 Event target: ' + event.target, 'info');
+            log('📂 Files count: ' + (event.target.files?.length || 0), 'info');
+            
+            const files = event.target.files;
+            if (!files || files.length === 0) {
+                log('❌ No files selected', 'warning');
+                return;
+            }
+
+            selectedFile = files[0];
+            log('📄 Selected file details:', 'info');
+            log('   - Name: ' + selectedFile.name, 'info');
+            log('   - Size: ' + selectedFile.size + ' bytes', 'info');
+            log('   - Type: ' + selectedFile.type, 'info');
+            log('   - Last Modified: ' + new Date(selectedFile.lastModified), 'info');
+
+            // Update UI
+            document.getElementById('selectedFile').textContent = selectedFile.name;
+            document.getElementById('uploadBtn').disabled = false;
+            
+            log('✅ File selection completed successfully', 'success');
+        });
+
+        async function uploadFile() {
+            if (!selectedFile) {
+                log('❌ No file selected for upload', 'error');
+                return;
+            }
+
+            log('🔥🔥🔥 UPLOAD FILE FUNCTION CALLED', 'success');
+            log('📄 Uploading file: ' + selectedFile.name, 'info');
+
+            // Disable button during upload
+            const uploadBtn = document.getElementById('uploadBtn');
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = '🤖 Uploading...';
+
+            try {
+                // Create FormData
+                log('📦 Creating FormData...', 'info');
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                formData.append('category', 'SALES_REPORT'); // Default category for testing
+                
+                log('📦 FormData created with entries:', 'info');
+                for (let [key, value] of formData.entries()) {
+                    if (key === 'file') {
+                        log(`   - ${key}: File(${value.name}, ${value.size} bytes)`, 'info');
+                    } else {
+                        log(`   - ${key}: ${value}`, 'info');
+                    }
+                }
+
+                log('🌐🌐🌐 ABOUT TO SEND NETWORK REQUEST TO /api/upload', 'warning');
+                log('📡 Request details:', 'info');
+                log('   - URL: /api/upload', 'info');
+                log('   - Method: POST', 'info');
+                log('   - Body: FormData with file and category', 'info');
+
+                // Make the request
+                const startTime = Date.now();
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+                const endTime = Date.now();
+
+                log('🌐 NETWORK REQUEST COMPLETED', 'success');
+                log(`📡 Request took ${endTime - startTime}ms`, 'info');
+                log('📡 Response status: ' + response.status + ' ' + response.statusText, 'info');
+                log('📡 Response ok: ' + response.ok, 'info');
+                log('📡 Response headers:', 'info');
+                for (let [key, value] of response.headers.entries()) {
+                    log(`   - ${key}: ${value}`, 'info');
+                }
+
+                // Parse response
+                const result = await response.json();
+                log('📄 Response JSON parsed successfully', 'success');
+                log('📄 Response data: ' + JSON.stringify(result, null, 2), 'info');
+
+                if (response.ok && result.success) {
+                    log('✅✅✅ UPLOAD SUCCESSFUL!', 'success');
+                    log('🎉 Document uploaded: ' + result.document.fileName, 'success');
+                    log('🔑 Document ID: ' + result.document.id, 'success');
+                    if (result.debugInfo) {
+                        log('🔧 Debug URL: ' + result.debugInfo.debugUrl, 'info');
+                    }
+                } else {
+                    log('❌ Upload failed', 'error');
+                    log('📄 Error details: ' + JSON.stringify(result, null, 2), 'error');
+                }
+
+            } catch (error) {
+                log('🚨🚨🚨 UPLOAD ERROR CAUGHT', 'error');
+                log('Error name: ' + error.name, 'error');
+                log('Error message: ' + error.message, 'error');
+                if (error.stack) {
+                    log('Error stack: ' + error.stack, 'error');
+                }
+            } finally {
+                // Re-enable button
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = '🚀 Upload to /api/upload';
+                log('🏁 Upload function completed', 'info');
+            }
+        }
+
+        // Initialize
+        log('🚀 File Upload Debug Test Page Loaded', 'success');
+        log('🌐 Current URL: ' + window.location.href, 'info');
+        log('🔧 User Agent: ' + navigator.userAgent, 'info');
+        log('✅ Page initialization complete', 'success');
+    </script>
+</body>
+</html>

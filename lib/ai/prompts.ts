@@ -68,9 +68,17 @@ IMPORTANT: Look for TAX BREAKDOWN TABLES that show multiple tax rates:
      * "VAT STD23 €109.85", "Tax @ 8.25% $15.50"
      * "VAT @ 23% €109.85", "GST @ 10% AUD$50.00"
      * "VAT @ 13.5% €1.51", "HST @ 13% CAD$25.00"
+     * "VAT (23.00%): €92.00" - CRITICAL: VAT with percentage in parentheses
+     * "VAT (13.5%): €15.50", "GST (10%): AUD$50.00"
+     * "Tax (8.25%): $25.50", "HST (13%): CAD$30.00"
    - Sum ALL tax amounts from these breakdowns for the total
    - Common table headers: "VAT Breakdown", "Tax Summary", "Tax Details", "Sales Tax Summary", "GST/HST Summary"
    - PRIORITIZE explicit "Total Tax Amount", "Total VAT Amount", "Total Sales Tax", "Total GST" or "Tax Total" fields over individual calculations
+   
+   CRITICAL PATTERN TO DETECT: "VAT (XX.XX%): €XX.XX"
+   - This format shows VAT with the rate in parentheses followed by colon and amount
+   - Extract the full amount after the colon as the VAT amount
+   - Common in professional invoices with subtotal/VAT/total breakdown
 
 3. International tax context and common rates:
    - Ireland VAT: 23% standard, 13.5% reduced, 9% tourism, 0% zero (IE VAT numbers)
@@ -181,13 +189,18 @@ Return your analysis in this JSON format:
 
 Instructions:
 1. Read the document carefully and extract ALL visible text
-2. Identify tax-related fields accurately - look for "VAT", "Tax", "Sales Tax", "GST", "HST", "Total Tax", "Tax Amount"
+2. Identify tax-related fields accurately - look for:
+   - "VAT", "Tax", "Sales Tax", "GST", "HST", "Total Tax", "Tax Amount"
+   - "VAT (XX%): €XX" or "VAT (XX.XX%): €XX.XX" format with percentage in parentheses
+   - Tax amounts following patterns like "VAT (23.00%): €92.00"
 3. Extract the exact amounts as written on the document (€, $, £, etc.)
 4. Do NOT make assumptions or corrections - extract exactly what you see
 5. If multiple tax amounts exist, include them all in lineItems
 6. Use the totalVatAmount field for the main tax total if clearly labeled (VAT, Sales Tax, GST, HST, etc.)
 7. Set confidence based on how clearly the tax information is visible
 8. Include all raw text in extractedText for verification
+
+CRITICAL: Look for VAT patterns with percentage in parentheses like "VAT (23.00%): €92.00"
 
 Be accurate and precise - this is for tax filing purposes.`,
 

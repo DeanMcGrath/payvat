@@ -52,12 +52,22 @@ export default function FileUpload({
   }
 
   const handleFileSelect = () => {
+    console.log('🔥🔥🔥 HANDLEFILESELECT CALLED - User clicked upload button')
+    console.log('📁 File input ref exists:', !!fileInputRef.current)
     fileInputRef.current?.click()
+    console.log('✅ File input click() triggered')
   }
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('🔥🔥🔥 HANDLEFILECHANGE CALLED - Files were selected')
+    console.log('📂 Event target:', event.target)
+    console.log('📂 Event target files:', event.target.files)
     const files = event.target.files
-    if (!files || files.length === 0) return
+    console.log('📂 Files count:', files?.length || 0)
+    if (!files || files.length === 0) {
+      console.log('❌ No files selected, returning early')
+      return
+    }
 
     const allowedExtensions = ['pdf', 'csv', 'xlsx', 'xls', 'jpg', 'jpeg', 'png']
     const validFiles: File[] = []
@@ -91,31 +101,60 @@ export default function FileUpload({
     }
 
     // Upload files sequentially to avoid overwhelming the server
+    console.log(`🚀 Starting upload of ${validFiles.length} valid files`)
     for (const file of validFiles) {
+      console.log(`📤 About to upload file: ${file.name}`)
       await uploadFile(file)
+      console.log(`✅ Finished uploading file: ${file.name}`)
     }
   }
 
   const uploadFile = async (file: File) => {
+    console.log('🔥🔥🔥 UPLOADFILE FUNCTION CALLED')
+    console.log('📄 File details:', {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      lastModified: file.lastModified
+    })
     setIsUploading(true)
 
     try {
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('category', getCategoryValue(category, file.name))
+      const categoryValue = getCategoryValue(category, file.name)
+      formData.append('category', categoryValue)
+      console.log('📂 Category determined:', categoryValue)
       
       if (vatReturnId) {
         formData.append('vatReturnId', vatReturnId)
+        console.log('🔑 VAT Return ID added:', vatReturnId)
       }
+
+      console.log('🌐🌐🌐 ABOUT TO SEND NETWORK REQUEST TO /api/upload')
+      console.log('📡 Request details:', {
+        url: '/api/upload',
+        method: 'POST',
+        hasFormData: true,
+        formDataEntries: Array.from(formData.entries()).map(([key, value]) => 
+          key === 'file' ? [key, `File: ${(value as File).name}`] : [key, value]
+        )
+      })
 
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       })
 
+      console.log('🌐 NETWORK REQUEST COMPLETED')
+      console.log('📡 Response status:', response.status, response.statusText)
+      console.log('📡 Response ok:', response.ok)
+
       const result = await response.json()
+      console.log('📄 Response JSON:', result)
 
       if (response.ok && result.success) {
+        console.log('✅ Upload successful, processing response')
         const newDocument: UploadedDocument = result.document
         setUploadedFiles(prev => [...prev, newDocument])
         toast.success('File uploaded successfully')
@@ -175,10 +214,17 @@ export default function FileUpload({
           onUploadSuccess?.(newDocument)
         }
       } else {
+        console.log('❌ Upload failed')
+        console.log('📄 Error details:', result)
         toast.error(result.error || 'Upload failed')
       }
     } catch (error) {
-      console.error('Upload error:', error)
+      console.error('🚨🚨🚨 UPLOAD ERROR CAUGHT:', error)
+      console.error('Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : 'No stack trace',
+        name: error instanceof Error ? error.name : 'Unknown error type'
+      })
       toast.error('Upload failed. Please try again.')
     } finally {
       setIsUploading(false)
