@@ -6,6 +6,7 @@
 
 import { processDocumentWithAI, type AIDocumentProcessingResult } from './ai/documentAnalysis'
 import { isAIEnabled } from './ai/openai'
+import * as XLSX from 'xlsx'
 
 export interface ExtractedVATData {
   salesVAT: number[]
@@ -428,6 +429,177 @@ async function extractTextFromCSV(base64Data: string): Promise<{ success: boolea
     return {
       success: false,
       error: `Failed to extract text from CSV: ${error instanceof Error ? error.message : 'Unknown error'}`
+    }
+  }
+}
+
+/**
+ * Extract text from Excel files with multi-column tax detection
+ * Properly parses Excel binary data and identifies all tax columns
+ */
+export async function extractTextFromExcel(base64Data: string): Promise<{ success: boolean; text?: string; error?: string }> {
+  try {
+    console.log('📊 EXCEL EXTRACTION: Starting Excel file parsing')
+    
+    // Convert base64 to buffer
+    const buffer = Buffer.from(base64Data, 'base64')
+    
+    // Parse Excel file using XLSX library
+    const workbook = XLSX.read(buffer, { type: 'buffer' })
+    console.log(`📋 Excel sheets found: ${workbook.SheetNames.join(', ')}`)
+    
+    // Process the first sheet (usually contains the main data)
+    const sheetName = workbook.SheetNames[0]
+    const worksheet = workbook.Sheets[sheetName]
+    
+    // Convert to JSON for easier processing
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[][]
+    
+    if (jsonData.length === 0) {
+      return { success: false, error: 'Empty Excel file' }
+    }
+    
+    console.log(`📑 Excel data: ${jsonData.length} rows found`)
+    
+    // Extract headers (first row)
+    const headers = jsonData[0] as string[]
+    console.log(`📑 Column headers: ${headers.join(', ')}`)
+    
+    // Find all tax-related columns - Enhanced for WooCommerce
+    const taxColumnDetails: Array<{index: number, name: string, type: string}> = []
+    const taxTotals = new Map<string, number>()
+    
+    headers.forEach((header, index) => {
+      if (!header) return
+      
+      const headerStr = String(header).trim()
+      const lowerHeader = headerStr.toLowerCase()
+      
+      // Enhanced tax column detection for WooCommerce and international formats
+      if (lowerHeader.includes('tax') || lowerHeader.includes('vat') || 
+          lowerHeader.includes('gst') || lowerHeader.includes('hst') ||
+          lowerHeader.includes('btw') || lowerHeader.includes('mwst')) {
+        
+        let taxType = 'general'
+        
+        // Specific tax type identification
+        if (lowerHeader.includes('shipping') && lowerHeader.includes('tax')) {
+          taxType = 'shipping_tax'
+          console.log(`💰 Found SHIPPING TAX column: "${headerStr}" at index ${index}`)
+        } else if (lowerHeader.includes('item') && lowerHeader.includes('tax')) {
+          taxType = 'item_tax'
+          console.log(`💰 Found ITEM TAX column: "${headerStr}" at index ${index}`)
+        } else if (lowerHeader.includes('product') && lowerHeader.includes('tax')) {
+          taxType = 'product_tax'
+          console.log(`💰 Found PRODUCT TAX column: "${headerStr}" at index ${index}`)
+        } else if (lowerHeader.includes('sales') && lowerHeader.includes('tax')) {
+          taxType = 'sales_tax'
+          console.log(`💰 Found SALES TAX column: "${headerStr}" at index ${index}`)
+        } else {
+          console.log(`💰 Found TAX column: "${headerStr}" at index ${index}`)
+        }
+        
+        taxColumnDetails.push({
+          index: index,
+          name: headerStr,
+          type: taxType
+        })
+        
+        taxTotals.set(headerStr, 0)
+      }
+    })
+    
+    console.log(`🎯 Identified ${taxColumnDetails.length} tax columns for processing`)
+    
+    // Process all data rows to calculate tax totals
+    let overallTaxTotal = 0
+    let rowCount = 0
+    
+    for (let i = 1; i < jsonData.length; i++) {
+      const row = jsonData[i]
+      if (!row || row.length === 0) continue
+      
+      rowCount++
+      
+      // Extract values from each tax column
+      taxColumnDetails.forEach(({index, name}) => {
+        const cellValue = row[index]
+        if (cellValue !== undefined && cellValue !== null && cellValue !== '') {
+          // Parse the value (handle various formats)
+          let numValue = 0
+          
+          if (typeof cellValue === 'number') {
+            numValue = cellValue
+          } else if (typeof cellValue === 'string') {
+            // Clean and parse string values
+            const cleanValue = cellValue.replace(/[€$£¥,]/g, '').trim()
+            numValue = parseFloat(cleanValue)
+          }
+          
+          if (!isNaN(numValue) && numValue !== 0) {
+            const currentTotal = taxTotals.get(name) || 0
+            taxTotals.set(name, currentTotal + numValue)
+            overallTaxTotal += numValue
+          }
+        }
+      })
+    }
+    
+    console.log(`🧮 Processed ${rowCount} data rows`)
+    
+    // Format the extracted text with detailed tax information
+    let formattedText = `EXCEL Financial Data Analysis:\n\n`
+    formattedText += `File: ${sheetName}\n`
+    formattedText += `Total Rows: ${jsonData.length}\n`
+    formattedText += `Headers: ${headers.join(', ')}\n\n`
+    
+    if (taxColumnDetails.length > 0) {
+      formattedText += `📊 DETECTED TAX COLUMNS (${taxColumnDetails.length}):\n`
+      
+      taxColumnDetails.forEach(({name, type}, i) => {
+        const columnTotal = taxTotals.get(name) || 0
+        formattedText += `  ${i + 1}. "${name}" (${type}): €${columnTotal.toFixed(2)}\n`
+        console.log(`   Column "${name}": €${columnTotal.toFixed(2)}`)
+      })
+      
+      formattedText += `\n🎯 CALCULATED TOTAL TAX FROM ALL COLUMNS: €${overallTaxTotal.toFixed(2)}\n`
+      formattedText += `This total combines all tax columns and should be used as the totalVatAmount.\n\n`
+      
+      console.log(`🎯 TOTAL VAT CALCULATED: €${overallTaxTotal.toFixed(2)}`)
+    } else {
+      formattedText += `⚠️ No tax columns detected in Excel file\n\n`
+      console.log('⚠️ No tax columns found in Excel file')
+    }
+    
+    // Include sample data rows
+    formattedText += `Sample Data (first 10 rows):\n`
+    for (let i = 1; i <= Math.min(10, jsonData.length - 1); i++) {
+      const row = jsonData[i]
+      let rowText = `Row ${i}: `
+      
+      // Show tax column values prominently
+      taxColumnDetails.forEach(({index, name}) => {
+        const value = row[index] || '0'
+        rowText += `[${name}: ${value}] `
+      })
+      
+      formattedText += rowText + '\n'
+    }
+    
+    if (jsonData.length > 11) {
+      formattedText += `\n... and ${jsonData.length - 11} more rows\n`
+    }
+    
+    return {
+      success: true,
+      text: formattedText
+    }
+    
+  } catch (error) {
+    console.error('❌ Excel extraction error:', error)
+    return {
+      success: false,
+      error: `Failed to extract text from Excel: ${error instanceof Error ? error.message : 'Unknown error'}`
     }
   }
 }

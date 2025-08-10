@@ -603,17 +603,26 @@ CRITICAL: Do NOT use only the first tax column found. Sum ALL tax-related column
       }
       
     } else if (mimeType === 'application/vnd.ms-excel' || mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-      // Handle Excel files - extract text and process with GPT-4
-      console.log('📊 PROCESSING EXCEL: Using text extraction + GPT-4 analysis')
+      // Handle Excel files - extract text using XLSX library and process with GPT-4
+      console.log('📊 PROCESSING EXCEL: Starting enhanced Excel extraction')
+      console.log(`📊 Excel file: ${fileName}`)
       
       try {
-        const excelBuffer = Buffer.from(fileData, 'base64')
-        // For now, treat as text extraction (we can enhance with xlsx library later)
-        const excelText = excelBuffer.toString('utf8')
+        // Import the Excel extraction function
+        const { extractTextFromExcel } = await import('../documentProcessor')
         
-        console.log('✅ EXCEL TEXT EXTRACTION SUCCESS:')
+        // Extract structured data from Excel file
+        const extractionResult = await extractTextFromExcel(fileData)
+        
+        if (!extractionResult.success || !extractionResult.text) {
+          throw new Error(extractionResult.error || 'Excel extraction failed')
+        }
+        
+        const excelText = extractionResult.text
+        
+        console.log('✅ EXCEL EXTRACTION SUCCESS:')
         console.log(`   Text length: ${excelText.length} characters`)
-        console.log(`   Text preview: "${excelText.substring(0, 500)}..."`)
+        console.log(`   Data preview: "${excelText.substring(0, 500)}..."`)
         
         // Use GPT-4 to analyze the Excel data with enhanced multi-column tax detection
         const excelPrompt = `Extract tax information from this Excel financial data. CRITICAL: Support MULTI-COLUMN tax extraction for WooCommerce and e-commerce platforms.
