@@ -674,7 +674,7 @@ export default function VATSubmissionPage() {
                           .filter(doc => doc.category?.includes('SALES'))
                           .map((document) => {
                             // Find VAT data for this document
-                            const docVATData = extractedVATData?.salesDocuments?.find(vatDoc => vatDoc.id === document.id);
+                            const docVATData = extractedVATData?.salesDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
                             const vatAmounts = docVATData?.extractedAmounts || [];
                             const confidence = docVATData?.confidence || 0;
                             const totalVAT = vatAmounts.reduce((sum, amount) => sum + amount, 0);
@@ -766,7 +766,7 @@ export default function VATSubmissionPage() {
                           .filter(doc => doc.category?.includes('PURCHASE'))
                           .map((document) => {
                             // Find VAT data for this document
-                            const docVATData = extractedVATData?.purchaseDocuments?.find(vatDoc => vatDoc.id === document.id);
+                            const docVATData = extractedVATData?.purchaseDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
                             const vatAmounts = docVATData?.extractedAmounts || [];
                             const confidence = docVATData?.confidence || 0;
                             const totalVAT = vatAmounts.reduce((sum, amount) => sum + amount, 0);
