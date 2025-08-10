@@ -228,8 +228,7 @@ async function extractPDFTextContent(buffer: Buffer): Promise<string> {
       }
     }
     
-    // ENHANCED FALLBACK: Try to find VAT amounts even in raw PDF binary
-    console.log('🔍 EMERGENCY: Searching raw PDF binary for VAT patterns...')
+    // Enhanced fallback: Extract VAT amounts from raw PDF binary
     const vatPatterns = [
       /Total Amount VAT[^0-9]*([0-9]+\.?[0-9]*)/gi,
       /111\.36/g,
@@ -243,18 +242,15 @@ async function extractPDFTextContent(buffer: Buffer): Promise<string> {
       for (const match of matches) {
         if (match[1]) {
           foundAmounts.push(match[1])
-          console.log(`🎯 EMERGENCY: Found amount ${match[1]} using pattern ${pattern.source}`)
         } else if (match[0] && (match[0].includes('111.36') || match[0].includes('103.16'))) {
           foundAmounts.push(match[0])
-          console.log(`🎯 EMERGENCY: Found exact match ${match[0]}`)
         }
       }
     }
     
     if (foundAmounts.length > 0) {
-      const emergencyText = `EMERGENCY PDF EXTRACTION\nFound VAT amounts: ${foundAmounts.join(', ')}\nRAW PDF DATA (partial): ${pdfText.substring(0, 1000)}`
-      console.log(`✅ EMERGENCY extraction found ${foundAmounts.length} amounts`)
-      return emergencyText
+      const extractedText = `Enhanced PDF Extraction\nFound VAT amounts: ${foundAmounts.join(', ')}\nRAW PDF DATA (partial): ${pdfText.substring(0, 1000)}`
+      return extractedText
     }
     
     console.log('❌ All PDF text extraction methods failed')
@@ -529,22 +525,21 @@ export async function extractTextFromExcel(base64Data: string): Promise<{ succes
     
     if (vatColumns.length === 0) {
       console.log('❌ CRITICAL: No VAT columns detected after pattern matching')
-      console.log('🔧 EMERGENCY FALLBACK: Checking for any column containing "tax" or "amt"...')
+      console.log('🔧 Fallback: Checking for any column containing "tax" or "amt"...')
       
-      // Emergency fallback detection
-      const emergencyColumns = []
+      // Fallback detection
+      const fallbackColumns = []
       for (let col = 0; col <= range.e.c; col++) {
         const headerCell = worksheet[XLSX.utils.encode_cell({ r: 0, c: col })]
         if (headerCell && headerCell.v) {
           const headerText = String(headerCell.v).toLowerCase()
           if (headerText.includes('tax') || headerText.includes('amt') || headerText.includes('vat')) {
-            console.log(`🚨 EMERGENCY: Found potential VAT column "${headerCell.v}" at index ${col}`)
-            emergencyColumns.push({ col, header: String(headerCell.v) })
+            fallbackColumns.push({ col, header: String(headerCell.v) })
           }
         }
       }
       
-      if (emergencyColumns.length === 0) {
+      if (fallbackColumns.length === 0) {
         console.log('❌ COMPLETE FAILURE: No columns found containing tax/vat/amt keywords')
         console.log('📋 Available headers were:', allHeaders.join(', '))
         return { 
@@ -552,7 +547,7 @@ export async function extractTextFromExcel(base64Data: string): Promise<{ succes
           error: `No VAT columns found in Excel. Headers: ${allHeaders.join(', ')}` 
         }
       } else {
-        console.log(`⚠️ Found ${emergencyColumns.length} emergency columns, but main detection failed`)
+        console.log(`⚠️ Found ${fallbackColumns.length} fallback columns, but main detection failed`)
       }
     }
 

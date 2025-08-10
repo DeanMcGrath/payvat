@@ -423,14 +423,14 @@ async function processDocumentWithAI_Internal(
         }
         
       } catch (pdfError) {
-        console.error('🚨 PDF processing completely failed, trying emergency fallback:', pdfError)
+        console.error('🚨 PDF processing completely failed, trying fallback extraction:', pdfError)
         
-        // EMERGENCY FALLBACK: Use basic document processor patterns with raw PDF content
+        // Fallback: Use basic document processor patterns with raw PDF content
         try {
-          console.log('🔧 EMERGENCY FALLBACK: Attempting to extract text from raw PDF buffer...')
+          console.log('🔧 Fallback: Attempting to extract text from raw PDF buffer...')
           
-          // Try to extract some text from the raw PDF buffer for emergency processing
-          let emergencyText = `PDF processing failed. Error: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}`
+          // Try to extract some text from the raw PDF buffer for fallback processing
+          let fallbackText = `PDF processing failed. Error: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}`
           
           try {
             // Convert base64 to buffer and try basic text extraction
@@ -463,51 +463,46 @@ async function processDocumentWithAI_Internal(
             }
             
             if (foundAmounts.length > 0) {
-              emergencyText = `EMERGENCY PDF EXTRACTION\nVAT amounts found: €${foundAmounts.join(', €')}\nOriginal error: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}\nRaw data preview: ${rawText.substring(0, 500)}`
-              console.log(`🎯 EMERGENCY: Found ${foundAmounts.length} potential VAT amounts: ${foundAmounts.join(', ')}`)
-            } else {
-              console.log('⚠️ EMERGENCY: No VAT amounts found in raw PDF data')
+              fallbackText = `Fallback PDF Extraction\nVAT amounts found: €${foundAmounts.join(', €')}\nOriginal error: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}\nRaw data preview: ${rawText.substring(0, 500)}`
             }
             
           } catch (rawExtractionError) {
-            console.log('⚠️ EMERGENCY: Raw PDF text extraction also failed:', rawExtractionError)
+            console.log('⚠️ Fallback: Raw PDF text extraction also failed:', rawExtractionError)
           }
           
-          const emergencyResult = await processWithTextOnlyExtraction(
-            emergencyText,
+          const fallbackResult = await processWithTextOnlyExtraction(
+            fallbackText,
             fileName, 
             category, 
             userId
           )
           
-          // Mark as emergency processing and create informative scan result
-          if (emergencyResult.extractedData) {
-            emergencyResult.extractedData.validationFlags.push('EMERGENCY_PROCESSING', 'PDF_FAILED', 'REQUIRES_MANUAL_REVIEW')
-            emergencyResult.extractedData.confidence = 0.3 // Slightly higher confidence since we did extract data
+          // Mark as fallback processing and create informative scan result
+          if (fallbackResult.extractedData) {
+            fallbackResult.extractedData.validationFlags.push('FALLBACK_PROCESSING', 'PDF_FAILED', 'REQUIRES_MANUAL_REVIEW')
+            fallbackResult.extractedData.confidence = 0.3
             
             // Include extracted amounts in scan result for API processing
-            const allAmounts = [...emergencyResult.extractedData.salesVAT, ...emergencyResult.extractedData.purchaseVAT]
+            const allAmounts = [...fallbackResult.extractedData.salesVAT, ...fallbackResult.extractedData.purchaseVAT]
             if (allAmounts.length > 0) {
-              emergencyResult.scanResult = `AI Emergency: Extracted ${allAmounts.length} VAT amount(s): €${allAmounts.join(', €')} (PDF failed, used fallback)`
-              emergencyResult.success = true
-              emergencyResult.isScanned = true
+              fallbackResult.scanResult = `Fallback Extraction: Found ${allAmounts.length} VAT amount(s): €${allAmounts.join(', €')} (PDF failed, used fallback)`
+              fallbackResult.success = true
+              fallbackResult.isScanned = true
             } else {
-              emergencyResult.scanResult = `AI Emergency: PDF processing attempted but no VAT amounts found (requires manual review)`
-              // Still mark as processed even if no VAT found
-              emergencyResult.success = true
-              emergencyResult.isScanned = true
+              fallbackResult.scanResult = `Fallback Processing: PDF processing attempted but no VAT amounts found (requires manual review)`
+              fallbackResult.success = true
+              fallbackResult.isScanned = true
             }
           } else {
-            emergencyResult.scanResult = `⚠️ PDF processing attempted with emergency fallback. No VAT amounts detected - manual review required.`
-            // Mark as processed even without VAT amounts
-            emergencyResult.success = true
-            emergencyResult.isScanned = true
+            fallbackResult.scanResult = `⚠️ PDF processing attempted with fallback extraction. No VAT amounts detected - manual review required.`
+            fallbackResult.success = true
+            fallbackResult.isScanned = true
           }
           
-          return emergencyResult
+          return fallbackResult
           
-        } catch (emergencyError) {
-          console.error('🚨 Even emergency fallback failed:', emergencyError)
+        } catch (fallbackError) {
+          console.error('🚨 Even fallback extraction failed:', fallbackError)
           
           // Last resort: Clear error message to user
           return {
@@ -1867,11 +1862,11 @@ async function extractPDFTextWithPdfParse(pdfBuffer: Buffer): Promise<string> {
 }
 
 /**
- * Emergency PDF text extraction when pdf-parse fails
+ * Fallback PDF text extraction when pdf-parse fails
  * Uses raw buffer parsing to extract basic text content
  */
 async function emergencyPDFTextExtraction(pdfBuffer: Buffer): Promise<string> {
-  console.log('🚨 EMERGENCY PDF TEXT EXTRACTION:')
+  console.log('🔄 Fallback PDF text extraction:')
   console.log(`   Buffer size: ${pdfBuffer.length} bytes`)
   
   try {
@@ -1909,7 +1904,7 @@ async function emergencyPDFTextExtraction(pdfBuffer: Buffer): Promise<string> {
       }
     }
     
-    console.log(`   🔍 Emergency extraction found ${foundAmounts.length} amounts: ${foundAmounts.join(', ')}`)
+    console.log(`   🔍 Fallback extraction found ${foundAmounts.length} amounts: ${foundAmounts.join(', ')}`)
     
     // Try to extract text using PDF stream markers
     const textBlocks = rawText.match(/BT[^E]*ET/g) || []
@@ -1932,7 +1927,7 @@ async function emergencyPDFTextExtraction(pdfBuffer: Buffer): Promise<string> {
     let extractedText = ''
     
     if (foundAmounts.length > 0) {
-      extractedText += `EMERGENCY PDF EXTRACTION\n`
+      extractedText += `Fallback PDF Extraction\n`
       extractedText += `Found VAT amounts: ${foundAmounts.join(', ')}\n`
       extractedText += `Context snippets:\n${textSnippets.join('\n---\n')}\n\n`
     }
@@ -1943,10 +1938,10 @@ async function emergencyPDFTextExtraction(pdfBuffer: Buffer): Promise<string> {
     
     // If no text extracted, provide minimal structure for processing
     if (extractedText.length === 0) {
-      extractedText = `Emergency PDF processing attempted but no readable text found.\nFile size: ${pdfBuffer.length} bytes\nThis document may require manual processing.`
+      extractedText = `Fallback PDF processing attempted but no readable text found.\nFile size: ${pdfBuffer.length} bytes\nThis document may require manual processing.`
     }
     
-    console.log(`✅ Emergency extraction complete: ${extractedText.length} characters extracted`)
+    console.log(`✅ Fallback extraction complete: ${extractedText.length} characters extracted`)
     console.log(`   Contains "111.36": ${extractedText.includes('111.36')}`)
     console.log(`   Preview: "${extractedText.substring(0, 300)}..."`)
     

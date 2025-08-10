@@ -58,7 +58,7 @@ async function promptTestEndpoint(request: NextRequest, user?: AuthUser) {
       }, { status: 400 })
     }
 
-    console.log(`🚨 EMERGENCY PROMPT DEBUG: ${testType} for document ${document.originalName}`)
+    console.log(`🔍 Prompt Debug: ${testType} for document ${document.originalName}`)
     
     const results: any = {
       documentName: document.originalName,
@@ -274,7 +274,7 @@ async function promptTestEndpoint(request: NextRequest, user?: AuthUser) {
       }
     }
 
-    console.log('🚨 EMERGENCY PROMPT DEBUG COMPLETE')
+    console.log('✅ Prompt Debug Complete')
     
     return NextResponse.json({
       success: true,
@@ -315,7 +315,7 @@ async function promptTestGetEndpoint(request: NextRequest, user?: AuthUser) {
       }, { status: 400 })
     }
     
-    console.log(`🚨 EMERGENCY PROMPT DEBUG (GET): ${testType} for document ${documentId}`)
+    console.log(`🔍 Prompt Debug (GET): ${testType} for document ${documentId}`)
     
     // Find the document
     const whereClause: any = { id: documentId }
@@ -529,7 +529,7 @@ async function promptTestGetEndpoint(request: NextRequest, user?: AuthUser) {
       console.log(`   ${results.comparison.conclusion}`)
     }
 
-    console.log('🚨 EMERGENCY PROMPT DEBUG (GET) COMPLETE')
+    console.log('✅ Prompt Debug (GET) Complete')
     
     return NextResponse.json({
       success: true,
