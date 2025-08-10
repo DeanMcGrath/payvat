@@ -677,7 +677,7 @@ export default function VATSubmissionPage() {
                             const docVATData = extractedVATData?.salesDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
                             const vatAmounts = docVATData?.extractedAmounts || [];
                             const confidence = docVATData?.confidence || 0;
-                            const totalVAT = vatAmounts.reduce((sum, amount) => sum + amount, 0);
+                            const totalVAT = vatAmounts.reduce((sum: number, amount: number) => sum + amount, 0);
                             
                             return (
                               <div key={document.id} className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
@@ -769,7 +769,7 @@ export default function VATSubmissionPage() {
                             const docVATData = extractedVATData?.purchaseDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
                             const vatAmounts = docVATData?.extractedAmounts || [];
                             const confidence = docVATData?.confidence || 0;
-                            const totalVAT = vatAmounts.reduce((sum, amount) => sum + amount, 0);
+                            const totalVAT = vatAmounts.reduce((sum: number, amount: number) => sum + amount, 0);
                             
                             return (
                               <div key={document.id} className="flex items-center justify-between p-4 bg-orange-50 rounded-lg border border-orange-200">

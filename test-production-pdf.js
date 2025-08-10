@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Production URL - update this with the actual production URL
-const PRODUCTION_URL = 'https://payvat.ie';
+const PRODUCTION_URL = 'https://vat-pay-ireland-7i0bq95zm-deans-projects-cdf015cf.vercel.app';
 
 async function testPDFProcessing() {
   console.log('🧪 Testing PDF processing on production...');
