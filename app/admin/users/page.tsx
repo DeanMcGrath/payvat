@@ -14,6 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Checkbox } from '@/components/ui/checkbox'
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
 import { 
   Users, 
   User,
@@ -27,7 +35,12 @@ import {
   FileText,
   Clock,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  MoreHorizontal,
+  UserX,
+  UserCheck,
+  Download,
+  Trash2
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -95,6 +108,8 @@ function AdminUsersContent() {
     totalCount: 0,
     totalPages: 0
   })
+  const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set())
+  const [isPerformingBulkAction, setIsPerformingBulkAction] = useState(false)
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -260,6 +275,109 @@ function AdminUsersContent() {
     setPage(1) // Reset to first page on filter change
   }
 
+  const handleSelectUser = (userId: string, checked: boolean) => {
+    setSelectedUsers(prev => {
+      const newSet = new Set(prev)
+      if (checked) {
+        newSet.add(userId)
+      } else {
+        newSet.delete(userId)
+      }
+      return newSet
+    })
+  }
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedUsers(new Set(users.map(user => user.id)))
+    } else {
+      setSelectedUsers(new Set())
+    }
+  }
+
+  const handleBulkAction = async (action: 'export' | 'deactivate' | 'activate' | 'delete') => {
+    if (selectedUsers.size === 0) return
+    
+    setIsPerformingBulkAction(true)
+    try {
+      switch (action) {
+        case 'export':
+          await handleExportUsers(Array.from(selectedUsers))
+          break
+        case 'deactivate':
+          await handleDeactivateUsers(Array.from(selectedUsers))
+          break
+        case 'activate':
+          await handleActivateUsers(Array.from(selectedUsers))
+          break
+        case 'delete':
+          if (confirm(`Are you sure you want to delete ${selectedUsers.size} user(s)? This action cannot be undone.`)) {
+            await handleDeleteUsers(Array.from(selectedUsers))
+          }
+          break
+      }
+      setSelectedUsers(new Set()) // Clear selection after action
+      fetchUsers() // Refresh the list
+    } catch (error) {
+      console.error('Bulk action failed:', error)
+      setError(`Failed to perform bulk action: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+      setIsPerformingBulkAction(false)
+    }
+  }
+
+  const handleExportUsers = async (userIds: string[]) => {
+    const response = await fetch('/api/admin/users/export', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userIds }),
+      credentials: 'include'
+    })
+    
+    if (!response.ok) throw new Error('Export failed')
+    
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `users-export-${new Date().toISOString().split('T')[0]}.csv`
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+
+  const handleDeactivateUsers = async (userIds: string[]) => {
+    const response = await fetch('/api/admin/users/bulk-deactivate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userIds }),
+      credentials: 'include'
+    })
+    
+    if (!response.ok) throw new Error('Deactivation failed')
+  }
+
+  const handleActivateUsers = async (userIds: string[]) => {
+    const response = await fetch('/api/admin/users/bulk-activate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userIds }),
+      credentials: 'include'
+    })
+    
+    if (!response.ok) throw new Error('Activation failed')
+  }
+
+  const handleDeleteUsers = async (userIds: string[]) => {
+    const response = await fetch('/api/admin/users/bulk-delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userIds }),
+      credentials: 'include'
+    })
+    
+    if (!response.ok) throw new Error('Deletion failed')
+  }
+
   if (loading) {
     return (
       <div className="container mx-auto p-6">
@@ -310,9 +428,53 @@ function AdminUsersContent() {
       {/* Filters */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center">
-            <Filter className="h-5 w-5 mr-2" />
-            Filters
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Filter className="h-5 w-5 mr-2" />
+              Filters
+            </div>
+            {selectedUsers.size > 0 && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">
+                  {selectedUsers.size} selected
+                </span>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      disabled={isPerformingBulkAction}
+                    >
+                      {isPerformingBulkAction ? 'Processing...' : 'Bulk Actions'}
+                      <MoreHorizontal className="h-4 w-4 ml-1" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => handleBulkAction('export')}>
+                      <Download className="h-4 w-4 mr-2" />
+                      Export Selected
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => handleBulkAction('activate')}>
+                      <UserCheck className="h-4 w-4 mr-2" />
+                      Activate Selected
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleBulkAction('deactivate')}>
+                      <UserX className="h-4 w-4 mr-2" />
+                      Deactivate Selected
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={() => handleBulkAction('delete')}
+                      className="text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete Selected
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -357,9 +519,21 @@ function AdminUsersContent() {
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">
-            <CardTitle>
-              Users ({pagination.totalCount})
-            </CardTitle>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  checked={users.length > 0 && selectedUsers.size === users.length}
+                  onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
+                  aria-label="Select all users"
+                />
+                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Select all
+                </label>
+              </div>
+              <CardTitle>
+                Users ({pagination.totalCount})
+              </CardTitle>
+            </div>
             <div className="text-sm text-gray-500">
               Page {pagination.page} of {pagination.totalPages}
             </div>
@@ -376,8 +550,18 @@ function AdminUsersContent() {
               users.map((user) => (
                 <div key={user.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                    {/* User Info */}
-                    <div className="flex-1">
+                    {/* Selection Checkbox */}
+                    <div className="flex items-start gap-3">
+                      <div className="pt-1">
+                        <Checkbox
+                          checked={selectedUsers.has(user.id)}
+                          onCheckedChange={(checked) => handleSelectUser(user.id, checked as boolean)}
+                          aria-label={`Select ${user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.businessName}`}
+                        />
+                      </div>
+                      
+                      {/* User Info */}
+                      <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-2">
                         <div>
                           <div className="flex items-center space-x-2">
@@ -412,6 +596,7 @@ function AdminUsersContent() {
                               Last login: {formatDate(user.lastLoginAt)}
                             </span>
                           </div>
+                        </div>
                         </div>
                       </div>
                     </div>

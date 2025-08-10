@@ -12,6 +12,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Checkbox } from '@/components/ui/checkbox'
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
 import { 
   FileText, 
   Search, 
@@ -26,7 +34,11 @@ import {
   Building,
   Calendar,
   FileIcon,
-  Scan
+  Scan,
+  MoreHorizontal,
+  Trash2,
+  Archive,
+  RefreshCw
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -69,6 +81,7 @@ export default function AdminDocuments() {
   const [documents, setDocuments] = useState<Document[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
   const [userIdFilter, setUserIdFilter] = useState<string | undefined>(undefined)
   const [categoryFilter, setCategoryFilter] = useState<string | undefined>(undefined)
   const [documentTypeFilter, setDocumentTypeFilter] = useState<string | undefined>(undefined)
@@ -80,6 +93,8 @@ export default function AdminDocuments() {
     totalCount: 0,
     totalPages: 0
   })
+  const [selectedDocuments, setSelectedDocuments] = useState<Set<string>>(new Set())
+  const [isPerformingBulkAction, setIsPerformingBulkAction] = useState(false)
 
   const fetchDocuments = useCallback(async () => {
     try {
@@ -88,6 +103,7 @@ export default function AdminDocuments() {
         limit: '20'
       })
       
+      if (search) params.append('search', search)
       if (userIdFilter) params.append('userId', userIdFilter)
       if (categoryFilter) params.append('category', categoryFilter)
       if (documentTypeFilter) params.append('documentType', documentTypeFilter)
@@ -106,7 +122,7 @@ export default function AdminDocuments() {
     } finally {
       setLoading(false)
     }
-  }, [userIdFilter, categoryFilter, documentTypeFilter, scannedFilter, page])
+  }, [search, userIdFilter, categoryFilter, documentTypeFilter, scannedFilter, page])
 
   useEffect(() => {
     fetchDocuments()
@@ -176,6 +192,11 @@ export default function AdminDocuments() {
     return <FileIcon className="h-4 w-4 text-gray-500" />
   }
 
+  const handleSearchChange = (value: string) => {
+    setSearch(value)
+    setPage(1) // Reset to first page on search
+  }
+
   const handleFilterChange = (filterType: string, value: string) => {
     switch (filterType) {
       case 'category':
@@ -189,6 +210,109 @@ export default function AdminDocuments() {
         break
     }
     setPage(1) // Reset to first page on filter change
+  }
+
+  const handleSelectDocument = (documentId: string, checked: boolean) => {
+    setSelectedDocuments(prev => {
+      const newSet = new Set(prev)
+      if (checked) {
+        newSet.add(documentId)
+      } else {
+        newSet.delete(documentId)
+      }
+      return newSet
+    })
+  }
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedDocuments(new Set(documents.map(doc => doc.id)))
+    } else {
+      setSelectedDocuments(new Set())
+    }
+  }
+
+  const handleBulkAction = async (action: 'download' | 'delete' | 'rescan' | 'archive') => {
+    if (selectedDocuments.size === 0) return
+    
+    setIsPerformingBulkAction(true)
+    try {
+      switch (action) {
+        case 'download':
+          await handleDownloadDocuments(Array.from(selectedDocuments))
+          break
+        case 'rescan':
+          await handleRescanDocuments(Array.from(selectedDocuments))
+          break
+        case 'archive':
+          await handleArchiveDocuments(Array.from(selectedDocuments))
+          break
+        case 'delete':
+          if (confirm(`Are you sure you want to delete ${selectedDocuments.size} document(s)? This action cannot be undone.`)) {
+            await handleDeleteDocuments(Array.from(selectedDocuments))
+          }
+          break
+      }
+      setSelectedDocuments(new Set()) // Clear selection after action
+      fetchDocuments() // Refresh the list
+    } catch (error) {
+      console.error('Bulk action failed:', error)
+      setError(`Failed to perform bulk action: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+      setIsPerformingBulkAction(false)
+    }
+  }
+
+  const handleDownloadDocuments = async (documentIds: string[]) => {
+    const response = await fetch('/api/admin/documents/bulk-download', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ documentIds }),
+      credentials: 'include'
+    })
+    
+    if (!response.ok) throw new Error('Download failed')
+    
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `documents-${new Date().toISOString().split('T')[0]}.zip`
+    a.click()
+    window.URL.revokeObjectURL(url)
+  }
+
+  const handleRescanDocuments = async (documentIds: string[]) => {
+    const response = await fetch('/api/admin/documents/bulk-rescan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ documentIds }),
+      credentials: 'include'
+    })
+    
+    if (!response.ok) throw new Error('Rescan failed')
+  }
+
+  const handleArchiveDocuments = async (documentIds: string[]) => {
+    const response = await fetch('/api/admin/documents/bulk-archive', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ documentIds }),
+      credentials: 'include'
+    })
+    
+    if (!response.ok) throw new Error('Archive failed')
+  }
+
+  const handleDeleteDocuments = async (documentIds: string[]) => {
+    const response = await fetch('/api/admin/documents/bulk-delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ documentIds }),
+      credentials: 'include'
+    })
+    
+    if (!response.ok) throw new Error('Delete failed')
   }
 
   if (loading) {
@@ -233,13 +357,68 @@ export default function AdminDocuments() {
       {/* Filters */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center">
-            <Filter className="h-5 w-5 mr-2" />
-            Filters
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Filter className="h-5 w-5 mr-2" />
+              Filters
+            </div>
+            {selectedDocuments.size > 0 && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">
+                  {selectedDocuments.size} selected
+                </span>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      disabled={isPerformingBulkAction}
+                    >
+                      {isPerformingBulkAction ? 'Processing...' : 'Bulk Actions'}
+                      <MoreHorizontal className="h-4 w-4 ml-1" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => handleBulkAction('download')}>
+                      <Download className="h-4 w-4 mr-2" />
+                      Download Selected
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleBulkAction('rescan')}>
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Rescan Selected
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => handleBulkAction('archive')}>
+                      <Archive className="h-4 w-4 mr-2" />
+                      Archive Selected
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={() => handleBulkAction('delete')}
+                      className="text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete Selected
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-4">
+            <div className="flex-1 min-w-[200px]">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search by filename, user, or VAT number..."
+                  value={search}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
             <Select value={categoryFilter || undefined} onValueChange={(value) => handleFilterChange('category', value)}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="All Categories" />
