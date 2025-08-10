@@ -1025,12 +1025,21 @@ function convertToEnhancedVATData(aiData: any, category: string): EnhancedVATDat
           ? docAnalysis.suggestedCategory 
           : (aiData.classification?.category || (category.includes('SALES') ? 'SALES' : 'PURCHASES'))
         
-        console.log(`   ✅ INCLUDED €${item.vatAmount} as ${targetCategory}`)
+        // 🚨 CRITICAL DEBUG: VAT Amount Categorization
+        console.log(`   🔍 VAT CATEGORIZATION DEBUG for €${item.vatAmount}:`)
+        console.log(`      Input category: "${category}"`)
+        console.log(`      AI classification.category: ${aiData.classification?.category}`)
+        console.log(`      Document analysis suggested: ${docAnalysis.suggestedCategory}`)
+        console.log(`      Final targetCategory: ${targetCategory}`)
+        console.log(`      category.includes('SALES'): ${category.includes('SALES')}`)
+        console.log(`      Logic path: ${docAnalysis.suggestedCategory !== 'UNKNOWN' ? 'Used doc analysis' : 'Used fallback logic'}`)
         
         if (targetCategory === 'SALES') {
           salesVAT.push(item.vatAmount)
+          console.log(`   ✅ ADDED €${item.vatAmount} to SALES VAT array (length now: ${salesVAT.length})`)
         } else {
           purchaseVAT.push(item.vatAmount)
+          console.log(`   ✅ ADDED €${item.vatAmount} to PURCHASE VAT array (length now: ${purchaseVAT.length})`)
         }
       }
     }
@@ -1057,12 +1066,21 @@ function convertToEnhancedVATData(aiData: any, category: string): EnhancedVATDat
         ? docAnalysis.suggestedCategory 
         : (aiData.classification?.category || (category.includes('SALES') ? 'SALES' : 'PURCHASES'))
       
-      console.log(`   ✅ USING total VAT €${totalVatAmount} as ${targetCategory}`)
+      // 🚨 CRITICAL DEBUG: Total VAT Amount Categorization
+      console.log(`   🔍 TOTAL VAT CATEGORIZATION DEBUG for €${totalVatAmount}:`)
+      console.log(`      Input category: "${category}"`)
+      console.log(`      AI classification.category: ${aiData.classification?.category}`)
+      console.log(`      Document analysis suggested: ${docAnalysis.suggestedCategory}`)
+      console.log(`      Final targetCategory: ${targetCategory}`)
+      console.log(`      category.includes('SALES'): ${category.includes('SALES')}`)
+      console.log(`      Logic path: ${docAnalysis.suggestedCategory !== 'UNKNOWN' ? 'Used doc analysis' : 'Used fallback logic'}`)
       
       if (targetCategory === 'SALES') {
         salesVAT.push(totalVatAmount)
+        console.log(`   ✅ ADDED €${totalVatAmount} to SALES VAT array (length now: ${salesVAT.length})`)
       } else {
         purchaseVAT.push(totalVatAmount)
+        console.log(`   ✅ ADDED €${totalVatAmount} to PURCHASE VAT array (length now: ${purchaseVAT.length})`)
       }
     } else {
       console.log(`   ❌ EXCLUDED total VAT €${totalVatAmount} - appears to be lease/payment amount`)
@@ -1126,6 +1144,16 @@ function convertToEnhancedVATData(aiData: any, category: string): EnhancedVATDat
   } else {
     console.log(`   No VAT amounts found`)
   }
+
+  // 🚨 FINAL VAT CATEGORIZATION RESULT DEBUG
+  console.log(`\n🏁 FINAL VAT CATEGORIZATION RESULTS:`)
+  console.log(`   📄 Document category: "${category}"`)
+  console.log(`   💰 Sales VAT amounts: [${salesVAT.join(', ')}] (${salesVAT.length} items)`)
+  console.log(`   💰 Purchase VAT amounts: [${purchaseVAT.join(', ')}] (${purchaseVAT.length} items)`)
+  console.log(`   🎯 Total VAT found: ${salesVAT.length + purchaseVAT.length} amounts`)
+  console.log(`   📊 AI classification: ${aiData.classification?.category || 'NONE PROVIDED'}`)
+  console.log(`   📊 Final classification: ${aiData.classification?.category || (category.includes('SALES') ? 'SALES' : 'PURCHASES')}`)
+  console.log(``)
 
   return {
     // New enhanced fields

@@ -510,9 +510,31 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         console.log('💾 CREATING AUDIT LOG: VAT data extracted successfully')
         console.log(`   User: ${user.id}`)
         console.log(`   Document: ${document.originalName} (${documentId})`)
-        console.log(`   Sales VAT: [${result.extractedData.salesVAT?.join(', ') || 'none'}]`)
-        console.log(`   Purchase VAT: [${result.extractedData.purchaseVAT?.join(', ') || 'none'}]`)
-        console.log(`   Confidence: ${Math.round((result.extractedData.confidence || 0) * 100)}%`)
+        console.log(`   Document Category: ${document.category}`)
+        
+        // 🚨 CRITICAL DEBUG: Audit Log VAT Data Storage
+        console.log(`\n🔍 AUDIT LOG VAT DATA DEBUG:`)
+        console.log(`   📊 Full extracted data structure:`, JSON.stringify(result.extractedData, null, 2))
+        console.log(`   💰 Sales VAT array: [${result.extractedData.salesVAT?.join(', ') || 'EMPTY'}] (${result.extractedData.salesVAT?.length || 0} items)`)
+        console.log(`   💰 Purchase VAT array: [${result.extractedData.purchaseVAT?.join(', ') || 'EMPTY'}] (${result.extractedData.purchaseVAT?.length || 0} items)`)
+        console.log(`   📈 Confidence: ${Math.round((result.extractedData.confidence || 0) * 100)}%`)
+        console.log(`   🏷️  Classification: ${result.extractedData.classification?.category || 'UNKNOWN'}`)
+        console.log(`   📝 Expected behavior: ${document.category.includes('SALES') ? 'Sales amounts should be in salesVAT array' : 'Purchase amounts should be in purchaseVAT array'}`)
+        console.log(``)
+        
+        // Validate the data before storing
+        const totalSalesAmount = (result.extractedData.salesVAT || []).reduce((sum: number, val: number) => sum + val, 0)
+        const totalPurchaseAmount = (result.extractedData.purchaseVAT || []).reduce((sum: number, val: number) => sum + val, 0)
+        console.log(`   🧮 Total Sales VAT: €${totalSalesAmount}`)
+        console.log(`   🧮 Total Purchase VAT: €${totalPurchaseAmount}`)
+        
+        if (document.category.includes('SALES') && totalSalesAmount === 0 && totalPurchaseAmount > 0) {
+          console.log(`   🚨 POTENTIAL BUG: Sales document has VAT in purchase array!`)
+        } else if (document.category.includes('PURCHASE') && totalPurchaseAmount === 0 && totalSalesAmount > 0) {
+          console.log(`   🚨 POTENTIAL BUG: Purchase document has VAT in sales array!`)
+        } else {
+          console.log(`   ✅ VAT categorization appears correct for document category`)
+        }
         
         await prisma.auditLog.create({
           data: {
