@@ -6,6 +6,7 @@
 import { openai, AI_CONFIG, isAIEnabled, handleOpenAIError, logAIUsage } from './openai'
 import { DOCUMENT_PROMPTS, formatPrompt } from './prompts'
 import { quickConnectivityTest, testDocumentProcessingDiagnostics, compareTextExtractionWithAIVision } from './diagnostics'
+import { extractTextFromExcel } from '../documentProcessor'
 
 // Enhanced VAT data structure
 export interface EnhancedVATData {
@@ -604,12 +605,12 @@ CRITICAL: Do NOT use only the first tax column found. Sum ALL tax-related column
       
     } else if (mimeType === 'application/vnd.ms-excel' || mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
       // Handle Excel files - extract text using XLSX library and process with GPT-4
+      console.log('🚨 EXCEL FILE DETECTED:', fileName)
       console.log('📊 PROCESSING EXCEL: Starting enhanced Excel extraction')
-      console.log(`📊 Excel file: ${fileName}`)
+      console.log(`📊 Excel MIME type: ${mimeType}`)
+      console.log('🔧 XLSX MODULE CHECK: Using static import')
       
       try {
-        // Import the Excel extraction function
-        const { extractTextFromExcel } = await import('../documentProcessor')
         
         // Extract structured data from Excel file
         const extractionResult = await extractTextFromExcel(fileData)
@@ -667,6 +668,9 @@ CRITICAL: Sum ALL tax-related columns for accurate WooCommerce compatibility. Lo
         
       } catch (excelError) {
         console.error('🚨 Excel processing failed:', excelError)
+        console.error('🚨 Error details:', excelError instanceof Error ? excelError.stack : 'Unknown error')
+        console.error('🚨 Error type:', typeof excelError)
+        console.error('🚨 Error message:', excelError instanceof Error ? excelError.message : String(excelError))
         
         return {
           success: false,

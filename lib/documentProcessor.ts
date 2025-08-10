@@ -434,174 +434,427 @@ async function extractTextFromCSV(base64Data: string): Promise<{ success: boolea
 }
 
 /**
- * Extract text from Excel files with multi-column tax detection
- * Properly parses Excel binary data and identifies all tax columns
+ * Enhanced Excel VAT extraction with WooCommerce support and extensive debugging
  */
 export async function extractTextFromExcel(base64Data: string): Promise<{ success: boolean; text?: string; error?: string }> {
   try {
-    console.log('📊 EXCEL EXTRACTION: Starting Excel file parsing')
+    console.log('=' .repeat(80))
+    console.log('🚨 EXCEL FILE DETECTED: Starting WooCommerce VAT extraction')
+    console.log(`📊 Input base64 length: ${base64Data.length} characters`)
+    console.log(`⏰ Processing started at: ${new Date().toISOString()}`)
     
     // Convert base64 to buffer
     const buffer = Buffer.from(base64Data, 'base64')
+    console.log(`📦 Buffer created: ${buffer.length} bytes`)
     
-    // Parse Excel file using XLSX library
-    const workbook = XLSX.read(buffer, { type: 'buffer' })
-    console.log(`📋 Excel sheets found: ${workbook.SheetNames.join(', ')}`)
+    // Parse Excel file using XLSX library with enhanced options
+    console.log('🔧 Parsing Excel file with XLSX library...')
+    const workbook = XLSX.read(buffer, {
+      cellStyles: true,
+      cellFormula: true,
+      cellDates: true,
+      cellNF: true,
+      sheetStubs: true
+    })
+    console.log(`✅ Excel workbook parsed successfully`)
+    console.log(`📋 Available sheets: ${workbook.SheetNames.join(', ')}`)
     
-    // Process the first sheet (usually contains the main data)
-    const sheetName = workbook.SheetNames[0]
-    const worksheet = workbook.Sheets[sheetName]
+    const firstSheetName = workbook.SheetNames[0]
+    const worksheet = workbook.Sheets[firstSheetName]
+    console.log(`🎯 Processing sheet: "${firstSheetName}"`)
     
-    // Convert to JSON for easier processing
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[][]
-    
-    if (jsonData.length === 0) {
-      return { success: false, error: 'Empty Excel file' }
+    if (!worksheet['!ref']) {
+      console.log('❌ CRITICAL ERROR: No data range found in Excel worksheet')
+      console.log('   Worksheet object:', worksheet)
+      return { success: false, error: 'Empty Excel file - no data range' }
     }
+
+    const range = XLSX.utils.decode_range(worksheet['!ref'])
+    console.log(`📊 Excel data range: ${worksheet['!ref']}`)
+    console.log(`📊 Parsed dimensions: ${range.e.c + 1} columns (A-${XLSX.utils.encode_col(range.e.c)}) x ${range.e.r + 1} rows (1-${range.e.r + 1})`)
     
-    console.log(`📑 Excel data: ${jsonData.length} rows found`)
+    // Debug: Show all headers
+    console.log('🔍 EXTRACTING ALL COLUMN HEADERS:')
+    const allHeaders = []
+    for (let col = 0; col <= range.e.c; col++) {
+      const headerCell = worksheet[XLSX.utils.encode_cell({ r: 0, c: col })]
+      const headerValue = headerCell && headerCell.v ? String(headerCell.v).trim() : '[EMPTY]'
+      allHeaders.push(headerValue)
+      console.log(`   Column ${XLSX.utils.encode_col(col)} (index ${col}): "${headerValue}"`)
+    }
+    console.log(`📋 All headers array: [${allHeaders.map(h => `"${h}"`).join(', ')}]`)
+
+    // Enhanced column detection for WooCommerce
+    console.log('🔍 STARTING VAT COLUMN DETECTION...')
+    const vatColumns = findVATColumns(worksheet, range)
     
-    // Extract headers (first row)
-    const headers = jsonData[0] as string[]
-    console.log(`📑 Column headers: ${headers.join(', ')}`)
-    
-    // Find all tax-related columns - Enhanced for WooCommerce
-    const taxColumnDetails: Array<{index: number, name: string, type: string}> = []
-    const taxTotals = new Map<string, number>()
-    
-    headers.forEach((header, index) => {
-      if (!header) return
+    if (vatColumns.length === 0) {
+      console.log('❌ CRITICAL: No VAT columns detected after pattern matching')
+      console.log('🔧 EMERGENCY FALLBACK: Checking for any column containing "tax" or "amt"...')
       
-      const headerStr = String(header).trim()
-      const lowerHeader = headerStr.toLowerCase()
-      
-      // Enhanced tax column detection for WooCommerce and international formats
-      if (lowerHeader.includes('tax') || lowerHeader.includes('vat') || 
-          lowerHeader.includes('gst') || lowerHeader.includes('hst') ||
-          lowerHeader.includes('btw') || lowerHeader.includes('mwst')) {
-        
-        let taxType = 'general'
-        
-        // Specific tax type identification
-        if (lowerHeader.includes('shipping') && lowerHeader.includes('tax')) {
-          taxType = 'shipping_tax'
-          console.log(`💰 Found SHIPPING TAX column: "${headerStr}" at index ${index}`)
-        } else if (lowerHeader.includes('item') && lowerHeader.includes('tax')) {
-          taxType = 'item_tax'
-          console.log(`💰 Found ITEM TAX column: "${headerStr}" at index ${index}`)
-        } else if (lowerHeader.includes('product') && lowerHeader.includes('tax')) {
-          taxType = 'product_tax'
-          console.log(`💰 Found PRODUCT TAX column: "${headerStr}" at index ${index}`)
-        } else if (lowerHeader.includes('sales') && lowerHeader.includes('tax')) {
-          taxType = 'sales_tax'
-          console.log(`💰 Found SALES TAX column: "${headerStr}" at index ${index}`)
-        } else {
-          console.log(`💰 Found TAX column: "${headerStr}" at index ${index}`)
+      // Emergency fallback detection
+      const emergencyColumns = []
+      for (let col = 0; col <= range.e.c; col++) {
+        const headerCell = worksheet[XLSX.utils.encode_cell({ r: 0, c: col })]
+        if (headerCell && headerCell.v) {
+          const headerText = String(headerCell.v).toLowerCase()
+          if (headerText.includes('tax') || headerText.includes('amt') || headerText.includes('vat')) {
+            console.log(`🚨 EMERGENCY: Found potential VAT column "${headerCell.v}" at index ${col}`)
+            emergencyColumns.push({ col, header: String(headerCell.v) })
+          }
         }
-        
-        taxColumnDetails.push({
-          index: index,
-          name: headerStr,
-          type: taxType
-        })
-        
-        taxTotals.set(headerStr, 0)
       }
+      
+      if (emergencyColumns.length === 0) {
+        console.log('❌ COMPLETE FAILURE: No columns found containing tax/vat/amt keywords')
+        console.log('📋 Available headers were:', allHeaders.join(', '))
+        return { 
+          success: false, 
+          error: `No VAT columns found in Excel. Headers: ${allHeaders.join(', ')}` 
+        }
+      } else {
+        console.log(`⚠️ Found ${emergencyColumns.length} emergency columns, but main detection failed`)
+      }
+    }
+
+    // Calculate total VAT from all detected columns
+    let totalVAT = 0
+    console.log('💰 CALCULATING TOTAL VAT FROM DETECTED COLUMNS:')
+    vatColumns.forEach((col, index) => {
+      totalVAT += col.total
+      console.log(`   ${index + 1}. "${col.name}" (${col.type}): €${col.total.toFixed(2)} ${col.usedSummary ? '(from summary row)' : `(calculated from ${col.rows} rows)`}`)
+    })
+
+    console.log(`🎯 FINAL TOTAL VAT CALCULATED: €${totalVAT.toFixed(2)}`)
+    console.log(`📊 Detection summary: ${vatColumns.length} VAT columns found, total €${totalVAT.toFixed(2)}`)
+
+    // Format the extracted text with enhanced details
+    let formattedText = `EXCEL Financial Data Analysis - WooCommerce Export (DEBUGGED):\n\n`
+    formattedText += `File: ${firstSheetName}\n`
+    formattedText += `Processing Time: ${new Date().toISOString()}\n`
+    formattedText += `Total Rows: ${range.e.r + 1}\n`
+    formattedText += `Total Columns: ${range.e.c + 1}\n`
+    formattedText += `All Headers: ${allHeaders.join(', ')}\n\n`
+    
+    formattedText += `📊 DETECTED VAT COLUMNS (${vatColumns.length}):\n`
+    vatColumns.forEach((col, i) => {
+      formattedText += `  ${i + 1}. "${col.name}" (${col.type}): €${col.total.toFixed(2)} ${col.usedSummary ? '(from summary row)' : `(from ${col.rows} rows)`}\n`
     })
     
-    console.log(`🎯 Identified ${taxColumnDetails.length} tax columns for processing`)
+    formattedText += `\n🎯 CALCULATED TOTAL VAT FROM ALL COLUMNS: €${totalVAT.toFixed(2)}\n`
+    formattedText += `This total combines all VAT columns and should be used as the totalVatAmount.\n\n`
     
-    // Process all data rows to calculate tax totals
-    let overallTaxTotal = 0
-    let rowCount = 0
-    
-    for (let i = 1; i < jsonData.length; i++) {
-      const row = jsonData[i]
-      if (!row || row.length === 0) continue
-      
-      rowCount++
-      
-      // Extract values from each tax column
-      taxColumnDetails.forEach(({index, name}) => {
-        const cellValue = row[index]
-        if (cellValue !== undefined && cellValue !== null && cellValue !== '') {
-          // Parse the value (handle various formats)
-          let numValue = 0
-          
-          if (typeof cellValue === 'number') {
-            numValue = cellValue
-          } else if (typeof cellValue === 'string') {
-            // Clean and parse string values
-            const cleanValue = cellValue.replace(/[€$£¥,]/g, '').trim()
-            numValue = parseFloat(cleanValue)
-          }
-          
-          if (!isNaN(numValue) && numValue !== 0) {
-            const currentTotal = taxTotals.get(name) || 0
-            taxTotals.set(name, currentTotal + numValue)
-            overallTaxTotal += numValue
-          }
-        }
-      })
-    }
-    
-    console.log(`🧮 Processed ${rowCount} data rows`)
-    
-    // Format the extracted text with detailed tax information
-    let formattedText = `EXCEL Financial Data Analysis:\n\n`
-    formattedText += `File: ${sheetName}\n`
-    formattedText += `Total Rows: ${jsonData.length}\n`
-    formattedText += `Headers: ${headers.join(', ')}\n\n`
-    
-    if (taxColumnDetails.length > 0) {
-      formattedText += `📊 DETECTED TAX COLUMNS (${taxColumnDetails.length}):\n`
-      
-      taxColumnDetails.forEach(({name, type}, i) => {
-        const columnTotal = taxTotals.get(name) || 0
-        formattedText += `  ${i + 1}. "${name}" (${type}): €${columnTotal.toFixed(2)}\n`
-        console.log(`   Column "${name}": €${columnTotal.toFixed(2)}`)
-      })
-      
-      formattedText += `\n🎯 CALCULATED TOTAL TAX FROM ALL COLUMNS: €${overallTaxTotal.toFixed(2)}\n`
-      formattedText += `This total combines all tax columns and should be used as the totalVatAmount.\n\n`
-      
-      console.log(`🎯 TOTAL VAT CALCULATED: €${overallTaxTotal.toFixed(2)}`)
-    } else {
-      formattedText += `⚠️ No tax columns detected in Excel file\n\n`
-      console.log('⚠️ No tax columns found in Excel file')
-    }
-    
-    // Include sample data rows
-    formattedText += `Sample Data (first 10 rows):\n`
-    for (let i = 1; i <= Math.min(10, jsonData.length - 1); i++) {
-      const row = jsonData[i]
-      let rowText = `Row ${i}: `
-      
-      // Show tax column values prominently
-      taxColumnDetails.forEach(({index, name}) => {
-        const value = row[index] || '0'
-        rowText += `[${name}: ${value}] `
-      })
-      
-      formattedText += rowText + '\n'
-    }
-    
-    if (jsonData.length > 11) {
-      formattedText += `\n... and ${jsonData.length - 11} more rows\n`
-    }
+    console.log('✅ EXCEL PROCESSING COMPLETED SUCCESSFULLY')
+    console.log('=' .repeat(80))
     
     return {
       success: true,
-      text: formattedText
+      text: `VAT extracted from Excel: €${totalVAT.toFixed(2)}. ${formattedText}`
     }
-    
+
   } catch (error) {
-    console.error('❌ Excel extraction error:', error)
+    console.error('❌ EXCEL PROCESSING CRITICAL ERROR:', error)
+    console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace')
+    console.log('=' .repeat(80))
     return {
       success: false,
       error: `Failed to extract text from Excel: ${error instanceof Error ? error.message : 'Unknown error'}`
     }
   }
+}
+
+/**
+ * Find and analyze VAT columns in Excel worksheet with enhanced debugging
+ */
+function findVATColumns(worksheet: any, range: any): Array<{column: number, name: string, total: number, rows: number, usedSummary: boolean, type: string}> {
+  const vatColumns: Array<{column: number, name: string, total: number, rows: number, usedSummary: boolean, type: string}> = []
+  
+  console.log('🔍 INITIALIZING VAT COLUMN DETECTION...')
+  
+  // Enhanced VAT column patterns for WooCommerce and other systems
+  const vatPatterns = [
+    // WooCommerce specific (your file format) - PRIORITY PATTERNS
+    { pattern: /shipping\s*tax\s*amt/i, name: 'WooCommerce Shipping Tax', priority: 1 },
+    { pattern: /item\s*tax\s*amt/i, name: 'WooCommerce Item Tax', priority: 1 },
+    
+    // Standard VAT patterns
+    { pattern: /^vat$/i, name: 'Simple VAT', priority: 2 },
+    { pattern: /vat\s*amount/i, name: 'VAT Amount', priority: 2 },
+    { pattern: /tax\s*amount/i, name: 'Tax Amount', priority: 2 },
+    { pattern: /sales\s*tax/i, name: 'Sales Tax', priority: 2 },
+    
+    // European variations
+    { pattern: /btw/i, name: 'Dutch BTW', priority: 3 },
+    { pattern: /tva/i, name: 'French TVA', priority: 3 },
+    { pattern: /iva/i, name: 'Spanish/Italian IVA', priority: 3 },
+    { pattern: /mwst/i, name: 'German MWST', priority: 3 },
+    
+    // Irish specific
+    { pattern: /vat\s*23/i, name: 'Irish VAT 23%', priority: 2 },
+    { pattern: /vat\s*13\.5/i, name: 'Irish VAT 13.5%', priority: 2 },
+    { pattern: /vat\s*9/i, name: 'Irish VAT 9%', priority: 2 },
+    
+    // Generic tax patterns (lowest priority)
+    { pattern: /\btax\b/i, name: 'Generic Tax', priority: 4 },
+    { pattern: /duty/i, name: 'Duty', priority: 4 },
+    { pattern: /levy/i, name: 'Levy', priority: 4 }
+  ]
+
+  console.log(`🎯 VAT pattern definitions loaded: ${vatPatterns.length} patterns available`)
+  console.log('   Priority 1 (WooCommerce): shipping tax amt, item tax amt')
+  console.log('   Priority 2 (Standard): vat, vat amount, tax amount, sales tax, Irish VAT rates')
+  console.log('   Priority 3 (European): btw, tva, iva, mwst')
+  console.log('   Priority 4 (Generic): tax, duty, levy')
+
+  // Check if last row is a summary row
+  console.log('🔍 CHECKING FOR SUMMARY ROW...')
+  const lastRowData = []
+  for (let col = 0; col <= range.e.c; col++) {
+    const cell = worksheet[XLSX.utils.encode_cell({ r: range.e.r, c: col })]
+    const cellValue = cell ? cell.v : ''
+    lastRowData.push(cellValue)
+  }
+  console.log(`📊 Last row data: [${lastRowData.map(v => typeof v === 'number' ? v.toFixed(2) : `"${v}"`).join(', ')}]`)
+  
+  const hasSummaryRow = detectSummaryRow(lastRowData)
+  console.log(`🔍 Summary row detected: ${hasSummaryRow ? '✅ YES' : '❌ NO'}`)
+  if (hasSummaryRow) {
+    console.log('   Will use summary row values for VAT calculations')
+  } else {
+    console.log('   Will calculate VAT by summing individual row values')
+  }
+
+  // Check header row for VAT column names with detailed pattern matching
+  console.log('🔍 TESTING EACH COLUMN HEADER AGAINST ALL PATTERNS...')
+  for (let col = 0; col <= range.e.c; col++) {
+    const headerCell = worksheet[XLSX.utils.encode_cell({ r: 0, c: col })]
+    
+    if (headerCell && headerCell.v) {
+      const headerText = String(headerCell.v).trim()
+      const lowerHeaderText = headerText.toLowerCase()
+      
+      console.log(``)
+      console.log(`🔍 Column ${XLSX.utils.encode_col(col)} (index ${col}): "${headerText}"`)
+      console.log(`   Lowercase: "${lowerHeaderText}"`)
+      
+      // Test against each pattern with detailed logging
+      let matchedPattern = null
+      let matchedPatternInfo = null
+      
+      for (const patternInfo of vatPatterns) {
+        const isMatch = patternInfo.pattern.test(headerText)
+        console.log(`   📋 Testing pattern ${patternInfo.pattern.source} (${patternInfo.name}): ${isMatch ? '✅ MATCH' : '❌ NO MATCH'}`)
+        
+        if (isMatch && !matchedPattern) {
+          matchedPattern = patternInfo.pattern
+          matchedPatternInfo = patternInfo
+          console.log(`   🎯 FIRST MATCH FOUND: ${patternInfo.name} (priority ${patternInfo.priority})`)
+        }
+      }
+      
+      if (matchedPattern) {
+        console.log(`💰 VAT COLUMN CONFIRMED: "${headerText}" matched pattern "${matchedPatternInfo?.name}"`)
+        
+        let columnTotal = 0
+        let rowCount = 0
+        
+        if (hasSummaryRow) {
+          // Use summary row value if available
+          const summaryCell = worksheet[XLSX.utils.encode_cell({ r: range.e.r, c: col })]
+          console.log(`📊 Extracting from summary row (row ${range.e.r + 1})...`)
+          if (summaryCell && summaryCell.v !== undefined) {
+            columnTotal = parseFloat(summaryCell.v) || 0
+            console.log(`   Summary cell value: ${summaryCell.v} → parsed as €${columnTotal.toFixed(2)}`)
+          } else {
+            console.log(`   ⚠️ Summary cell is empty or undefined`)
+          }
+        } else {
+          // Calculate from individual rows
+          console.log(`🧮 Calculating from individual rows (rows 2-${range.e.r + 1})...`)
+          const endRow = hasSummaryRow ? range.e.r - 1 : range.e.r
+          
+          for (let row = 1; row <= endRow; row++) {
+            const cell = worksheet[XLSX.utils.encode_cell({ r: row, c: col })]
+            if (cell && cell.v !== undefined) {
+              const value = parseFloat(cell.v)
+              if (!isNaN(value) && value > 0) {
+                columnTotal += value
+                rowCount++
+                console.log(`   Row ${row + 1}: ${cell.v} → €${value.toFixed(2)} (running total: €${columnTotal.toFixed(2)})`)
+              }
+            }
+          }
+          console.log(`   Final calculation: €${columnTotal.toFixed(2)} from ${rowCount} rows`)
+        }
+        
+        if (columnTotal > 0) {
+          // Determine column type
+          let columnType = 'general'
+          if (headerText.toLowerCase().includes('shipping')) {
+            columnType = 'shipping_tax'
+          } else if (headerText.toLowerCase().includes('item')) {
+            columnType = 'item_tax'
+          } else if (matchedPatternInfo?.priority === 1) {
+            columnType = 'woocommerce'
+          }
+          
+          vatColumns.push({
+            column: col,
+            name: headerText,
+            total: columnTotal,
+            rows: rowCount,
+            usedSummary: hasSummaryRow,
+            type: columnType
+          })
+          
+          console.log(`✅ VAT COLUMN ADDED: "${headerText}" (${columnType}) = €${columnTotal.toFixed(2)} ${hasSummaryRow ? '(from summary row)' : `(from ${rowCount} rows)`}`)
+        } else {
+          console.log(`⚠️ VAT column "${headerText}" has zero total, skipping`)
+        }
+      } else {
+        console.log(`❌ No pattern match for "${headerText}"`)
+      }
+    } else {
+      console.log(`📋 Column ${XLSX.utils.encode_col(col)} (index ${col}): [EMPTY OR NO VALUE]`)
+    }
+  }
+
+  console.log(``)
+  console.log(`📊 PATTERN MATCHING COMPLETE: ${vatColumns.length} VAT columns detected`)
+
+  // FALLBACK: Smart numeric detection if no headers match
+  if (vatColumns.length === 0) {
+    console.log('🔄 FALLBACK: No header matches found, attempting smart numeric detection...')
+    const numericColumns = detectVATByNumbers(worksheet, range)
+    vatColumns.push(...numericColumns)
+    
+    if (numericColumns.length > 0) {
+      console.log(`✅ Smart detection found ${numericColumns.length} potential VAT columns`)
+    } else {
+      console.log(`❌ Smart detection also found no VAT columns`)
+    }
+  }
+
+  return vatColumns
+}
+
+/**
+ * Detect if last row contains summary data with enhanced debugging
+ */
+function detectSummaryRow(rowData: any[]): boolean {
+  console.log('🔍 ANALYZING LAST ROW FOR SUMMARY DATA...')
+  console.log(`   Row data types: [${rowData.map(v => typeof v).join(', ')}]`)
+  console.log(`   Row values: [${rowData.map(v => typeof v === 'number' ? v.toFixed(2) : `"${v}"`).join(', ')}]`)
+  
+  // Count numeric values
+  const numericValues = rowData.filter(val => typeof val === 'number' && val > 0)
+  console.log(`   Positive numeric values: ${numericValues.length} (${numericValues.map(v => v.toFixed(2)).join(', ')})`)
+  
+  // Check for large numbers (typical of summary totals)
+  const hasLargeNumbers = rowData.some(val => 
+    typeof val === 'number' && val > 1000
+  )
+  console.log(`   Has large numbers (>1000): ${hasLargeNumbers ? '✅ YES' : '❌ NO'}`)
+  
+  // Check for repeated values (less reliable indicator)
+  const uniquePositiveNumbers = new Set(numericValues)
+  const hasRepeatedValues = uniquePositiveNumbers.size < numericValues.length
+  console.log(`   Has repeated values: ${hasRepeatedValues ? '✅ YES' : '❌ NO'}`)
+  console.log(`   Unique numbers: ${uniquePositiveNumbers.size}, Total numbers: ${numericValues.length}`)
+  
+  // Check for summary keywords
+  const summaryKeywords = ['total', 'totals', 'sum', 'summary', 'grand total', 'subtotal']
+  const hasSummaryKeywords = rowData.some(val => 
+    typeof val === 'string' && summaryKeywords.some(keyword => 
+      val.toLowerCase().includes(keyword)
+    )
+  )
+  console.log(`   Has summary keywords: ${hasSummaryKeywords ? '✅ YES' : '❌ NO'}`)
+  
+  const isSummaryRow = hasLargeNumbers || hasRepeatedValues || hasSummaryKeywords
+  console.log(`   SUMMARY ROW CONCLUSION: ${isSummaryRow ? '✅ YES (will use summary values)' : '❌ NO (will calculate from rows)'}`)
+  
+  return isSummaryRow
+}
+
+/**
+ * Smart numeric detection for VAT columns when header matching fails
+ */
+function detectVATByNumbers(worksheet: any, range: any): Array<{column: number, name: string, total: number, rows: number, usedSummary: boolean, type: string}> {
+  console.log('🧮 STARTING SMART NUMERIC VAT DETECTION...')
+  console.log('   Analyzing columns for Irish VAT patterns (23%, 13.5%, 9%)')
+  
+  const candidates: Array<{column: number, name: string, total: number, rows: number, usedSummary: boolean, type: string}> = []
+  
+  // Analyze each column for VAT-like patterns
+  for (let col = 0; col <= range.e.c; col++) {
+    const headerCell = worksheet[XLSX.utils.encode_cell({ r: 0, c: col })]
+    const headerName = headerCell && headerCell.v ? String(headerCell.v) : `Column ${XLSX.utils.encode_col(col)}`
+    
+    console.log(`   Analyzing column ${XLSX.utils.encode_col(col)}: "${headerName}"`)
+    
+    const columnAnalysis = analyzeColumnForVAT(worksheet, range, col)
+    
+    console.log(`     Total: €${columnAnalysis.total.toFixed(2)}, Count: ${columnAnalysis.count}, Score: ${columnAnalysis.score}`)
+    
+    if (columnAnalysis.score > 5 && columnAnalysis.total > 0) {
+      console.log(`     ✅ QUALIFIES: Score ${columnAnalysis.score} > 5 threshold`)
+      
+      candidates.push({
+        column: col,
+        name: `${headerName} (auto-detected)`,
+        total: columnAnalysis.total,
+        rows: columnAnalysis.count,
+        usedSummary: false,
+        type: 'auto_detected'
+      })
+    } else {
+      console.log(`     ❌ REJECTED: Score ${columnAnalysis.score} <= 5 or total €${columnAnalysis.total.toFixed(2)} <= 0`)
+    }
+  }
+  
+  // Sort by total value (higher amounts more likely to be VAT)
+  const sortedCandidates = candidates.sort((a, b) => b.total - a.total)
+  const topCandidates = sortedCandidates.slice(0, 3)
+  
+  console.log(`🧮 SMART DETECTION RESULTS: ${candidates.length} candidates found, returning top ${topCandidates.length}`)
+  topCandidates.forEach((candidate, index) => {
+    console.log(`   ${index + 1}. ${candidate.name}: €${candidate.total.toFixed(2)} (${candidate.rows} values)`)
+  })
+  
+  return topCandidates
+}
+
+/**
+ * Analyze column for VAT-like patterns based on Irish tax rates
+ */
+function analyzeColumnForVAT(worksheet: any, range: any, col: number): {total: number, count: number, score: number} {
+  let total = 0
+  let count = 0
+  let score = 0
+  
+  for (let row = 1; row <= range.e.r; row++) {
+    const cell = worksheet[XLSX.utils.encode_cell({ r: row, c: col })]
+    
+    if (cell && cell.v !== undefined) {
+      const value = parseFloat(cell.v)
+      
+      if (!isNaN(value) && value > 0) {
+        total += value
+        count++
+        
+        // Score based on Irish VAT patterns
+        if (value % 23 === 0 || Math.abs((value * 100) % 23) < 0.01) score += 3
+        if (value % 13.5 === 0 || Math.abs((value * 100) % 135) < 0.1) score += 3
+        if (value % 9 === 0 || Math.abs((value * 100) % 9) < 0.01) score += 2
+        
+        // Reasonable VAT range
+        if (value >= 1 && value <= 1000) score += 1
+      }
+    }
+  }
+  
+  return { total, count, score }
 }
 
 /**

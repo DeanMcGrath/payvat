@@ -4,6 +4,9 @@ import { prisma } from '@/lib/prisma'
 import { processDocument } from '@/lib/documentProcessor'
 import { AuthUser } from '@/lib/auth'
 
+// Force Node.js runtime for XLSX library compatibility
+export const runtime = 'nodejs'
+
 interface ProcessDocumentRequest {
   documentId: string
   forceReprocess?: boolean
