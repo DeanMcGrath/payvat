@@ -649,76 +649,258 @@ export default function VATSubmissionPage() {
               </CardContent>
             </Card>
 
-            {/* Uploaded Documents Display */}
+            {/* Uploaded Documents Display - Separated by Category */}
             {uploadedDocuments.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-                    <FileText className="h-5 w-5 mr-2 text-teal-600" />
-                    Uploaded Documents ({uploadedDocuments.length})
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {uploadedDocuments.map((document) => (
-                      <div key={document.id} className="flex items-center justify-between p-4 bg-gray-100 rounded-lg border">
-                        <div className="flex items-center space-x-4">
-                          <div className="flex-shrink-0">
-                            {document.mimeType?.includes('pdf') ? (
-                              <FileText className="h-8 w-8 text-red-500" />
-                            ) : document.mimeType?.includes('image') ? (
-                              <FileText className="h-8 w-8 text-blue-500" />
-                            ) : (
-                              <FileText className="h-8 w-8 text-green-500" />
-                            )}
-                          </div>
-                          
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">
-                              {document.originalName || document.fileName}
-                            </p>
-                            <div className="flex items-center space-x-4 mt-1">
-                              <p className="text-xs text-gray-500">
-                                {Math.round(document.fileSize / 1024)}KB • {document.category?.replace('_', ' ')}
-                              </p>
-                              {document.isScanned && (
-                                <div className="flex items-center text-xs">
-                                  {document.scanResult?.includes('€') ? (
-                                    <span className="inline-flex items-center text-teal-600">
-                                      <CheckCircle className="h-3 w-3 mr-1" />
-                                      <span className="font-medium">{document.scanResult}</span>
-                                    </span>
-                                  ) : (
-                                    <span className="inline-flex items-center text-green-600">
-                                      <CheckCircle className="h-3 w-3 mr-1" />
-                                      AI Processed
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                              {!document.isScanned && (
-                                <span className="inline-flex items-center text-yellow-600 text-xs">
-                                  <AlertCircle className="h-3 w-3 mr-1" />
-                                  Processing...
-                                </span>
-                              )}
-                            </div>
+              <>
+                {/* Sales Documents Section */}
+                {uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length > 0 && (
+                  <Card className="border-blue-200">
+                    <CardHeader className="bg-blue-50">
+                      <CardTitle className="text-lg font-semibold text-blue-900 flex items-center justify-between">
+                        <div className="flex items-center">
+                          <FileText className="h-5 w-5 mr-2 text-blue-600" />
+                          Section 1: VAT on Sales Documents ({uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length})
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm font-medium text-blue-600">
+                            Sales VAT Total: €{extractedVATData?.totalSalesVAT?.toFixed(2) || '0.00'}
                           </div>
                         </div>
-                        
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeDocument(document.id)}
-                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-4">
+                      <div className="space-y-3">
+                        {uploadedDocuments
+                          .filter(doc => doc.category?.includes('SALES'))
+                          .map((document) => {
+                            // Find VAT data for this document
+                            const docVATData = extractedVATData?.salesDocuments?.find(vatDoc => vatDoc.id === document.id);
+                            const vatAmounts = docVATData?.extractedAmounts || [];
+                            const confidence = docVATData?.confidence || 0;
+                            const totalVAT = vatAmounts.reduce((sum, amount) => sum + amount, 0);
+                            
+                            return (
+                              <div key={document.id} className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                <div className="flex items-center space-x-4">
+                                  <div className="flex-shrink-0">
+                                    {document.mimeType?.includes('pdf') ? (
+                                      <FileText className="h-8 w-8 text-red-500" />
+                                    ) : document.mimeType?.includes('image') ? (
+                                      <FileText className="h-8 w-8 text-blue-500" />
+                                    ) : (
+                                      <FileText className="h-8 w-8 text-green-500" />
+                                    )}
+                                  </div>
+                                  
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-medium text-gray-900 truncate">
+                                      {document.originalName || document.fileName}
+                                    </p>
+                                    <div className="flex items-center space-x-4 mt-1">
+                                      <p className="text-xs text-gray-500">
+                                        {Math.round(document.fileSize / 1024)}KB
+                                      </p>
+                                      
+                                      {/* VAT Amount Display */}
+                                      {document.isScanned && vatAmounts.length > 0 && (
+                                        <div className="flex items-center text-xs">
+                                          <span className="inline-flex items-center text-blue-700 font-medium">
+                                            <CheckCircle className="h-3 w-3 mr-1" />
+                                            €{totalVAT.toFixed(2)} ({Math.round(confidence * 100)}% confidence)
+                                          </span>
+                                        </div>
+                                      )}
+                                      
+                                      {document.isScanned && vatAmounts.length === 0 && (
+                                        <span className="inline-flex items-center text-green-600 text-xs">
+                                          <CheckCircle className="h-3 w-3 mr-1" />
+                                          AI Processed - No VAT detected
+                                        </span>
+                                      )}
+                                      
+                                      {!document.isScanned && (
+                                        <span className="inline-flex items-center text-yellow-600 text-xs">
+                                          <AlertCircle className="h-3 w-3 mr-1" />
+                                          Processing...
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeDocument(document.id)}
+                                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                >
+                                  <X className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            );
+                          })}
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                    </CardContent>
+                  </Card>
+                )}
+                
+                {/* Purchase Documents Section */}
+                {uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length > 0 && (
+                  <Card className="border-orange-200">
+                    <CardHeader className="bg-orange-50">
+                      <CardTitle className="text-lg font-semibold text-orange-900 flex items-center justify-between">
+                        <div className="flex items-center">
+                          <FileText className="h-5 w-5 mr-2 text-orange-600" />
+                          Section 2: VAT on Purchases Documents ({uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length})
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm font-medium text-orange-600">
+                            Purchase VAT Total: €{extractedVATData?.totalPurchaseVAT?.toFixed(2) || '0.00'}
+                          </div>
+                        </div>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-4">
+                      <div className="space-y-3">
+                        {uploadedDocuments
+                          .filter(doc => doc.category?.includes('PURCHASE'))
+                          .map((document) => {
+                            // Find VAT data for this document
+                            const docVATData = extractedVATData?.purchaseDocuments?.find(vatDoc => vatDoc.id === document.id);
+                            const vatAmounts = docVATData?.extractedAmounts || [];
+                            const confidence = docVATData?.confidence || 0;
+                            const totalVAT = vatAmounts.reduce((sum, amount) => sum + amount, 0);
+                            
+                            return (
+                              <div key={document.id} className="flex items-center justify-between p-4 bg-orange-50 rounded-lg border border-orange-200">
+                                <div className="flex items-center space-x-4">
+                                  <div className="flex-shrink-0">
+                                    {document.mimeType?.includes('pdf') ? (
+                                      <FileText className="h-8 w-8 text-red-500" />
+                                    ) : document.mimeType?.includes('image') ? (
+                                      <FileText className="h-8 w-8 text-blue-500" />
+                                    ) : (
+                                      <FileText className="h-8 w-8 text-green-500" />
+                                    )}
+                                  </div>
+                                  
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-medium text-gray-900 truncate">
+                                      {document.originalName || document.fileName}
+                                    </p>
+                                    <div className="flex items-center space-x-4 mt-1">
+                                      <p className="text-xs text-gray-500">
+                                        {Math.round(document.fileSize / 1024)}KB
+                                      </p>
+                                      
+                                      {/* VAT Amount Display */}
+                                      {document.isScanned && vatAmounts.length > 0 && (
+                                        <div className="flex items-center text-xs">
+                                          <span className="inline-flex items-center text-orange-700 font-medium">
+                                            <CheckCircle className="h-3 w-3 mr-1" />
+                                            €{totalVAT.toFixed(2)} ({Math.round(confidence * 100)}% confidence)
+                                          </span>
+                                        </div>
+                                      )}
+                                      
+                                      {document.isScanned && vatAmounts.length === 0 && (
+                                        <span className="inline-flex items-center text-green-600 text-xs">
+                                          <CheckCircle className="h-3 w-3 mr-1" />
+                                          AI Processed - No VAT detected
+                                        </span>
+                                      )}
+                                      
+                                      {!document.isScanned && (
+                                        <span className="inline-flex items-center text-yellow-600 text-xs">
+                                          <AlertCircle className="h-3 w-3 mr-1" />
+                                          Processing...
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeDocument(document.id)}
+                                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                >
+                                  <X className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+                
+                {/* Other Documents Section (if any exist that aren't SALES or PURCHASE) */}
+                {uploadedDocuments.filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE')).length > 0 && (
+                  <Card className="border-gray-200">
+                    <CardHeader>
+                      <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
+                        <FileText className="h-5 w-5 mr-2 text-gray-600" />
+                        Other Documents ({uploadedDocuments.filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE')).length})
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {uploadedDocuments
+                          .filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE'))
+                          .map((document) => (
+                            <div key={document.id} className="flex items-center justify-between p-4 bg-gray-100 rounded-lg border">
+                              <div className="flex items-center space-x-4">
+                                <div className="flex-shrink-0">
+                                  {document.mimeType?.includes('pdf') ? (
+                                    <FileText className="h-8 w-8 text-red-500" />
+                                  ) : document.mimeType?.includes('image') ? (
+                                    <FileText className="h-8 w-8 text-blue-500" />
+                                  ) : (
+                                    <FileText className="h-8 w-8 text-green-500" />
+                                  )}
+                                </div>
+                                
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium text-gray-900 truncate">
+                                    {document.originalName || document.fileName}
+                                  </p>
+                                  <div className="flex items-center space-x-4 mt-1">
+                                    <p className="text-xs text-gray-500">
+                                      {Math.round(document.fileSize / 1024)}KB • {document.category?.replace('_', ' ')}
+                                    </p>
+                                    {document.isScanned && (
+                                      <span className="inline-flex items-center text-green-600 text-xs">
+                                        <CheckCircle className="h-3 w-3 mr-1" />
+                                        AI Processed
+                                      </span>
+                                    )}
+                                    {!document.isScanned && (
+                                      <span className="inline-flex items-center text-yellow-600 text-xs">
+                                        <AlertCircle className="h-3 w-3 mr-1" />
+                                        Processing...
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeDocument(document.id)}
+                                className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </>
             )}
           </div>
 
