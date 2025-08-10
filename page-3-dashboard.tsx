@@ -340,52 +340,74 @@ export default function HomePage() {
                 >
                   <FileText className="h-5 w-5 mr-3" />
                   File VAT Return
-              </Button>
-              <Button 
-                variant="outline" 
-                className="w-full justify-start border-teal-200 text-teal-700 hover:bg-teal-50"
-                onClick={() => window.location.href = '/payment'}
-              >
-                <CreditCard className="h-4 w-4 mr-2" />
-                Make Payment
-              </Button>
-              <Button variant="outline" className="w-full justify-start" onClick={() => window.location.href = '/reports'}>
-                <TrendingUp className="h-4 w-4 mr-2" />
-                View Reports
-              </Button>
-            </CardContent>
-          </Card>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  className="w-full btn-outline justify-start"
+                  onClick={() => window.location.href = '/payment'}
+                >
+                  <CreditCard className="h-5 w-5 mr-3" />
+                  Make Payment
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  className="w-full btn-outline justify-start"
+                  onClick={() => window.location.href = '/reports'}
+                >
+                  <TrendingUp className="h-5 w-5 mr-3" />
+                  View Reports
+                </Button>
+              </div>
+            </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg font-semibold text-gray-900">Recent Activity</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-teal-600 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">Payment processed</p>
-                  <p className="text-xs text-gray-500">€8,450.00 - 2 hours ago</p>
+            {/* Recent Activity */}
+            <div className="card-modern p-8">
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold text-foreground mb-2">Recent Activity</h3>
+                <p className="text-muted-foreground">Latest VAT transactions and updates</p>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="flex items-center space-x-4">
+                  <div className="icon-modern bg-success/20 border-success/30">
+                    <CheckCircle className="h-5 w-5 text-success" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-foreground">Payment processed</p>
+                    <p className="text-sm text-muted-foreground">€8,450.00 - 2 hours ago</p>
+                  </div>
+                  <div className="status-success">Completed</div>
+                </div>
+                
+                <div className="flex items-center space-x-4">
+                  <div className="icon-modern bg-primary/20 border-primary/30">
+                    <FileText className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-foreground">VAT return submitted</p>
+                    <p className="text-sm text-muted-foreground">Q3 2024 - 3 days ago</p>
+                  </div>
+                  <div className="status-success">Filed</div>
+                </div>
+                
+                <div className="flex items-center space-x-4">
+                  <div className="icon-modern">
+                    <Settings className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-foreground">Account updated</p>
+                    <p className="text-sm text-muted-foreground">Profile settings - 1 week ago</p>
+                  </div>
+                  <div className="status-success">Updated</div>
                 </div>
               </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">VAT return submitted</p>
-                  <p className="text-xs text-gray-500">Q3 2024 - 3 days ago</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">Account updated</p>
-                  <p className="text-xs text-gray-500">Profile settings - 1 week ago</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
 
       {/* Live Chat */}
       <LiveChat />
