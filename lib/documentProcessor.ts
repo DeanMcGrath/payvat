@@ -296,13 +296,16 @@ async function extractTextFromCSV(base64Data: string): Promise<{ success: boolea
     const headerRow = lines[0]
     const headers = headerRow.split(',').map(h => h.trim().replace(/"/g, ''))
     
-    // Find columns that might contain VAT/tax data
+    // Find columns that might contain VAT/tax data - Enhanced for WooCommerce multi-column detection
     const vatColumns: number[] = []
+    const taxColumnDetails: Array<{index: number, name: string, type: string}> = []
     const amountColumns: number[] = []
     
     headers.forEach((header, index) => {
       const lowerHeader = header.toLowerCase()
-      // International tax terminology support
+      const originalHeader = header.trim()
+      
+      // Enhanced international tax terminology support with specific column type identification
       if (lowerHeader.includes('vat') || lowerHeader.includes('tax') || 
           lowerHeader.includes('btw') || lowerHeader.includes('mwst') ||
           lowerHeader.includes('gst') || lowerHeader.includes('hst') ||
@@ -310,7 +313,28 @@ async function extractTextFromCSV(base64Data: string): Promise<{ success: boolea
           lowerHeader.includes('tax amt') || lowerHeader.includes('total tax') ||
           lowerHeader.includes('tax total') || lowerHeader.includes('gst amount') ||
           lowerHeader.includes('hst amount') || lowerHeader.includes('value added tax')) {
+        
         vatColumns.push(index)
+        
+        // Identify specific tax column types for better processing
+        let taxType = 'general'
+        if (lowerHeader.includes('shipping') && lowerHeader.includes('tax')) {
+          taxType = 'shipping_tax'
+        } else if (lowerHeader.includes('item') && lowerHeader.includes('tax')) {
+          taxType = 'item_tax'  
+        } else if (lowerHeader.includes('product') && lowerHeader.includes('tax')) {
+          taxType = 'product_tax'
+        } else if (lowerHeader.includes('sales') && lowerHeader.includes('tax')) {
+          taxType = 'sales_tax'
+        } else if (lowerHeader.includes('total') && lowerHeader.includes('tax')) {
+          taxType = 'total_tax'
+        }
+        
+        taxColumnDetails.push({
+          index: index,
+          name: originalHeader,
+          type: taxType
+        })
       }
       if (lowerHeader.includes('amount') || lowerHeader.includes('total') || 
           lowerHeader.includes('sum') || lowerHeader.includes('value') ||
@@ -319,28 +343,72 @@ async function extractTextFromCSV(base64Data: string): Promise<{ success: boolea
       }
     })
     
-    // Format for AI analysis
+    // Calculate actual tax totals from each column for enhanced accuracy
+    const taxTotals = new Map<string, number>()
+    let overallTaxTotal = 0
+    
+    // Process all data rows to sum tax values by column
+    const dataRows = lines.slice(1) // Skip header
+    dataRows.forEach(row => {
+      const cells = row.split(',').map(cell => cell.trim().replace(/"/g, ''))
+      
+      // Sum values from each tax column
+      taxColumnDetails.forEach(({index, name, type}) => {
+        const cellValue = cells[index]
+        if (cellValue && cellValue !== '') {
+          // Clean and parse the value (handle currency symbols, commas)
+          const cleanValue = cellValue.replace(/[€$£¥,]/g, '').trim()
+          const numValue = parseFloat(cleanValue)
+          
+          if (!isNaN(numValue) && numValue !== 0) {
+            const currentTotal = taxTotals.get(name) || 0
+            taxTotals.set(name, currentTotal + numValue)
+            overallTaxTotal += numValue
+          }
+        }
+      })
+    })
+    
+    // Format for AI analysis with enhanced tax column details
     let formattedText = `CSV Financial Data Analysis:\n\n`
     formattedText += `Headers: ${headers.join(', ')}\n`
-    formattedText += `Detected tax-related columns: ${vatColumns.map(i => headers[i]).join(', ') || 'None directly identified'}\n`
-    formattedText += `Detected amount columns: ${amountColumns.map(i => headers[i]).join(', ') || 'None directly identified'}\n\n`
+    formattedText += `Detected ${taxColumnDetails.length} tax-related columns:\n`
+    
+    taxColumnDetails.forEach(({name, type}, i) => {
+      const columnTotal = taxTotals.get(name) || 0
+      formattedText += `  ${i + 1}. "${name}" (${type}): €${columnTotal.toFixed(2)}\n`
+    })
+    
+    if (taxColumnDetails.length > 0) {
+      formattedText += `\n🎯 CALCULATED TOTAL TAX FROM ALL COLUMNS: €${overallTaxTotal.toFixed(2)}\n`
+      formattedText += `This total combines all tax columns and should be used as the totalVatAmount.\n\n`
+    }
+    
+    formattedText += `Other amount columns: ${amountColumns.filter(i => !vatColumns.includes(i)).map(i => headers[i]).join(', ') || 'None'}\n\n`
     
     formattedText += `Data Rows:\n`
     
-    // Include first 20 data rows (skip header)
-    const dataRows = lines.slice(1, Math.min(21, lines.length))
-    dataRows.forEach((row, index) => {
+    // Include first 20 data rows with enhanced tax column highlighting
+    const sampleDataRows = lines.slice(1, Math.min(21, lines.length))
+    sampleDataRows.forEach((row, index) => {
       const cells = row.split(',').map(cell => cell.trim().replace(/"/g, ''))
       
-      // Highlight potential VAT/amount cells
+      // Enhanced formatting to highlight ALL tax columns
       let formattedRow = `Row ${index + 1}: `
+      
+      // Show all tax column values prominently  
+      taxColumnDetails.forEach(({index: colIndex, name}) => {
+        const value = cells[colIndex] || '0'
+        formattedRow += `[${name}: ${value}] `
+      })
+      
+      // Add context from first few non-tax columns
       cells.forEach((cell, cellIndex) => {
-        if (vatColumns.includes(cellIndex) || amountColumns.includes(cellIndex)) {
-          formattedRow += `[${headers[cellIndex]}: ${cell}] `
-        } else if (cellIndex < 3) { // Include first few columns for context
+        if (!vatColumns.includes(cellIndex) && cellIndex < 3) {
           formattedRow += `${cell} | `
         }
       })
+      
       formattedText += formattedRow + '\n'
     })
     

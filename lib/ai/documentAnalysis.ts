@@ -542,32 +542,37 @@ async function processDocumentWithAI_Internal(
         console.log(`   Text length: ${csvText.length} characters`)
         console.log(`   Text preview: "${csvText.substring(0, 500)}..."`)
         
-        // Use GPT-4 to analyze the CSV data
-        const csvPrompt = `Extract tax information from this CSV financial data. Support international tax terminology.
+        // Use GPT-4 to analyze the CSV data with enhanced multi-column tax detection
+        const csvPrompt = `Extract tax information from this CSV financial data. CRITICAL: Support MULTI-COLUMN tax extraction for WooCommerce and e-commerce platforms.
 
 CSV Data:
 ${csvText}
 
-Look for tax amounts using ANY of these terms:
-- VAT, Value Added Tax (Europe, Ireland)
-- Tax, Sales Tax, Tax Amount, Total Tax (USA)
-- GST, GST Amount (Australia, UK)
-- HST, HST Amount (Canada)
-- BTW (Netherlands), MWST (Germany)
+🎯 MULTI-COLUMN TAX EXTRACTION INSTRUCTIONS:
+1. Look for ALL tax columns in the spreadsheet, including:
+   - "Shipping Tax Amt", "Item Tax Amt", "Product Tax Amt"
+   - "Tax Amount", "Tax Amt", "Sales Tax", "Total Tax"
+   - "VAT", "GST Amount", "HST Amount", "BTW", "MWST"
 
-For WooCommerce reports, look specifically for "Tax Amount" columns.
+2. For WooCommerce exports specifically:
+   - Find "Shipping Tax Amt." and "Item Tax Amt." columns
+   - Sum ALL values from BOTH columns for the total VAT
+   - Example: Shipping Tax €375.88 + Item Tax €5,142.32 = Total VAT €5,518.20
+
+3. The CSV analysis above shows calculated totals - USE THESE TOTALS:
+   - If you see "🎯 CALCULATED TOTAL TAX FROM ALL COLUMNS: €X.XX" - use this as totalVatAmount
+   - This pre-calculated total combines all tax columns accurately
 
 Return in JSON format:
 {
-  "totalVatAmount": number or null,
-  "lineItems": [{"description": "string", "vatAmount": number}],
-  "extractedText": "relevant CSV rows with tax data",
+  "totalVatAmount": number (USE the calculated total from all tax columns),
+  "lineItems": [{"description": "column_name", "vatAmount": column_total}] (one entry per tax column),
+  "extractedText": "tax column details and totals",
   "documentType": "STATEMENT" | "REPORT" | "OTHER",
   "classification": {"category": "SALES" | "PURCHASES", "confidence": number}
 }
 
-If CSV contains multiple rows with tax amounts, sum them all for totalVatAmount.
-Focus on tax-related columns and numerical values that represent any form of tax.`
+CRITICAL: Do NOT use only the first tax column found. Sum ALL tax-related columns for the totalVatAmount. Look for pre-calculated totals in the CSV analysis.`
 
         return await processTextWithGPT4(csvPrompt, fileName, category, userId, model)
         
@@ -610,32 +615,44 @@ Focus on tax-related columns and numerical values that represent any form of tax
         console.log(`   Text length: ${excelText.length} characters`)
         console.log(`   Text preview: "${excelText.substring(0, 500)}..."`)
         
-        // Use GPT-4 to analyze the Excel data
-        const excelPrompt = `Extract tax information from this Excel financial data. Support international tax terminology.
+        // Use GPT-4 to analyze the Excel data with enhanced multi-column tax detection
+        const excelPrompt = `Extract tax information from this Excel financial data. CRITICAL: Support MULTI-COLUMN tax extraction for WooCommerce and e-commerce platforms.
 
 Excel Data:
 ${excelText}
 
-Look for tax amounts using ANY of these terms:
-- VAT, Value Added Tax (Europe, Ireland)
-- Tax, Sales Tax, Tax Amount, Total Tax (USA)
-- GST, GST Amount (Australia, UK)
-- HST, HST Amount (Canada)
-- BTW (Netherlands), MWST (Germany)
+🎯 MULTI-COLUMN TAX EXTRACTION INSTRUCTIONS:
+1. Look for ALL tax columns in the spreadsheet, including:
+   - "Shipping Tax Amt", "Item Tax Amt", "Product Tax Amt"
+   - "Tax Amount", "Tax Amt", "Sales Tax", "Total Tax"
+   - "VAT", "GST Amount", "HST Amount", "BTW", "MWST"
 
-For WooCommerce/e-commerce spreadsheets, look specifically for "Tax Amount" columns.
+2. For WooCommerce/e-commerce Excel exports:
+   - Identify multiple tax columns (e.g., shipping tax + item tax)
+   - Sum values from ALL tax columns across ALL rows
+   - Example: If "Shipping Tax Amt." = €375.88 and "Item Tax Amt." = €5,142.32, then Total VAT = €5,518.20
+
+3. Excel Processing Logic:
+   - Scan all columns for tax-related headers
+   - Process each row and extract values from all identified tax columns
+   - Sum all tax values for the final totalVatAmount
+   - Don't stop at the first tax column - find ALL of them
+
+4. American/International Format Support:
+   - "Tax Amt" (American abbreviation)
+   - "Sales Tax" (US terminology)
+   - Multiple currency formats ($, €, £, etc.)
 
 Return in JSON format:
 {
-  "totalVatAmount": number or null,
-  "lineItems": [{"description": "string", "vatAmount": number}],
-  "extractedText": "relevant spreadsheet data with tax amounts",
-  "documentType": "STATEMENT" | "REPORT" | "OTHER",
+  "totalVatAmount": number (sum of ALL tax columns from ALL rows),
+  "lineItems": [{"description": "column_name", "vatAmount": column_total}] (breakdown by tax type),
+  "extractedText": "all tax column data and calculations",
+  "documentType": "STATEMENT" | "REPORT" | "OTHER", 
   "classification": {"category": "SALES" | "PURCHASES", "confidence": number}
 }
 
-If spreadsheet contains multiple rows with tax amounts, sum them all for totalVatAmount.
-Focus on tax-related columns and numerical values that represent any form of tax.`
+CRITICAL: Sum ALL tax-related columns for accurate WooCommerce compatibility. Look for split tax amounts and combine them.`
 
         return await processTextWithGPT4(excelPrompt, fileName, category, userId, model)
         
