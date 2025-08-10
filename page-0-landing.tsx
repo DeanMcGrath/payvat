@@ -51,11 +51,8 @@ export default function LandingPage() {
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
             <div className="flex items-center justify-between">
               {/* Logo */}
-              <div className="flex items-center space-x-3">
-                <div className="icon-modern">
-                  <FileText className="h-6 w-6 text-white" />
-                </div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              <div className="flex items-center">
+                <h1 className="text-2xl font-thin text-white tracking-tight">
                   PayVAT
                 </h1>
               </div>
@@ -175,7 +172,7 @@ export default function LandingPage() {
               <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
-                  <span>Bank-grade security</span>
+                  <span>Secure</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />
@@ -234,7 +231,7 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-4">Secure Payments</h3>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Bank-grade encryption with instant payment confirmation and automated receipt generation
+                Secure encryption with instant payment confirmation and automated receipt generation
               </p>
               <div className="status-success inline-flex">
                 <Shield className="h-4 w-4 mr-1" />
