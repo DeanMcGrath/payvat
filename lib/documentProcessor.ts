@@ -434,10 +434,12 @@ async function extractTextFromCSV(base64Data: string): Promise<{ success: boolea
 }
 
 /**
- * Enhanced Excel VAT extraction with WooCommerce support and extensive debugging
+ * Enhanced Excel VAT extraction with WooCommerce support and prominent debugging
  */
 export async function extractTextFromExcel(base64Data: string): Promise<{ success: boolean; text?: string; error?: string }> {
   try {
+    // Prominent debug indicators
+    console.log('🚨 EXCEL PROCESSING STARTED - DEBUG MODE')
     console.log('=' .repeat(80))
     console.log('🚨 EXCEL FILE DETECTED: Starting WooCommerce VAT extraction')
     console.log(`📊 Input base64 length: ${base64Data.length} characters`)
@@ -445,7 +447,8 @@ export async function extractTextFromExcel(base64Data: string): Promise<{ succes
     
     // Convert base64 to buffer
     const buffer = Buffer.from(base64Data, 'base64')
-    console.log(`📦 Buffer created: ${buffer.length} bytes`)
+    console.log('🔍 File buffer size:', buffer.length)
+    console.log(`📦 Buffer created successfully: ${buffer.length} bytes`)
     
     // Parse Excel file using XLSX library with enhanced options
     console.log('🔧 Parsing Excel file with XLSX library...')
@@ -485,7 +488,9 @@ export async function extractTextFromExcel(base64Data: string): Promise<{ succes
     console.log(`📋 All headers array: [${allHeaders.map(h => `"${h}"`).join(', ')}]`)
 
     // Enhanced column detection for WooCommerce
+    console.log('🔍 Looking for WooCommerce patterns...')
     console.log('🔍 STARTING VAT COLUMN DETECTION...')
+    console.log('🎯 TARGET PATTERNS: "Shipping Tax Amt." and "Item Tax Amt."')
     const vatColumns = findVATColumns(worksheet, range)
     
     if (vatColumns.length === 0) {
@@ -525,8 +530,18 @@ export async function extractTextFromExcel(base64Data: string): Promise<{ succes
       console.log(`   ${index + 1}. "${col.name}" (${col.type}): €${col.total.toFixed(2)} ${col.usedSummary ? '(from summary row)' : `(calculated from ${col.rows} rows)`}`)
     })
 
+    console.log('🚨🚨 FINAL RESULTS - DEBUG MODE 🚨🚨')
     console.log(`🎯 FINAL TOTAL VAT CALCULATED: €${totalVAT.toFixed(2)}`)
     console.log(`📊 Detection summary: ${vatColumns.length} VAT columns found, total €${totalVAT.toFixed(2)}`)
+    
+    // Expected result check
+    if (Math.abs(totalVAT - 5518.20) < 0.01) {
+      console.log('🎉🎉 SUCCESS! Got expected €5518.20 total! 🎉🎉')
+    } else if (totalVAT > 0) {
+      console.log(`⚠️ Got €${totalVAT.toFixed(2)} but expected €5518.20`)
+    } else {
+      console.log('❌ CRITICAL: Total VAT is €0.00 - detection failed')
+    }
 
     // Format the extracted text with enhanced details
     let formattedText = `EXCEL Financial Data Analysis - WooCommerce Export (DEBUGGED):\n\n`
@@ -569,7 +584,9 @@ export async function extractTextFromExcel(base64Data: string): Promise<{ succes
 function findVATColumns(worksheet: any, range: any): Array<{column: number, name: string, total: number, rows: number, usedSummary: boolean, type: string}> {
   const vatColumns: Array<{column: number, name: string, total: number, rows: number, usedSummary: boolean, type: string}> = []
   
+  console.log('🚨 EXCEL PATTERN MATCHING - DEBUG MODE')
   console.log('🔍 INITIALIZING VAT COLUMN DETECTION...')
+  console.log('🎯 SEARCHING FOR: Shipping Tax Amt. and Item Tax Amt.')
   
   // Enhanced VAT column patterns for WooCommerce and other systems
   const vatPatterns = [
@@ -653,7 +670,18 @@ function findVATColumns(worksheet: any, range: any): Array<{column: number, name
       }
       
       if (matchedPattern) {
+        console.log('🚨🚨 WOOCOMMERCE COLUMN FOUND! 🚨🚨')
         console.log(`💰 VAT COLUMN CONFIRMED: "${headerText}" matched pattern "${matchedPatternInfo?.name}"`)
+        
+        // Special logging for WooCommerce patterns
+        if (matchedPatternInfo?.priority === 1) {
+          console.log('🎉 SUCCESS! This is a WooCommerce-specific pattern!')
+          if (headerText.toLowerCase().includes('shipping')) {
+            console.log('🚢 SHIPPING TAX COLUMN DETECTED!')
+          } else if (headerText.toLowerCase().includes('item')) {
+            console.log('📦 ITEM TAX COLUMN DETECTED!')
+          }
+        }
         
         let columnTotal = 0
         let rowCount = 0
