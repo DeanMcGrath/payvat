@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Bell, FileText, CreditCard, Settings, LogOut, TrendingUp, Calendar, Euro, AlertCircle, Loader2, Search } from 'lucide-react'
+import { Bell, FileText, CreditCard, Settings, LogOut, TrendingUp, Calendar, Euro, AlertCircle, Loader2, Search, CheckCircle } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
