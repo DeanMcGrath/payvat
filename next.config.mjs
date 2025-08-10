@@ -1,9 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Configure external packages for serverless deployment (fixes PDF processing)
-  experimental: {
-    serverComponentsExternalPackages: ['pdf-parse']
-  },
+  serverExternalPackages: ['pdf-parse'],
   // Security: Enable ESLint checks during builds to catch potential issues
   eslint: {
     ignoreDuringBuilds: false,
