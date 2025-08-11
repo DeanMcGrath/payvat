@@ -336,20 +336,23 @@ async function extractTextFromCSV(base64Data: string): Promise<{ success: boolea
       const lowerHeader = header.toLowerCase()
       const originalHeader = header.trim()
       
-      // Enhanced international tax terminology support with specific column type identification
+      // Enhanced international tax terminology support with WooCommerce patterns
       if (lowerHeader.includes('vat') || lowerHeader.includes('tax') || 
           lowerHeader.includes('btw') || lowerHeader.includes('mwst') ||
           lowerHeader.includes('gst') || lowerHeader.includes('hst') ||
           lowerHeader.includes('sales tax') || lowerHeader.includes('tax amount') ||
           lowerHeader.includes('tax amt') || lowerHeader.includes('total tax') ||
           lowerHeader.includes('tax total') || lowerHeader.includes('gst amount') ||
-          lowerHeader.includes('hst amount') || lowerHeader.includes('value added tax')) {
+          lowerHeader.includes('hst amount') || lowerHeader.includes('value added tax') ||
+          lowerHeader.includes('net total tax') || lowerHeader.includes('net tax total')) {
         
         vatColumns.push(index)
         
         // Identify specific tax column types for better processing
         let taxType = 'general'
-        if (lowerHeader.includes('shipping') && lowerHeader.includes('tax')) {
+        if (lowerHeader.includes('net') && lowerHeader.includes('total') && lowerHeader.includes('tax')) {
+          taxType = 'net_total_tax'
+        } else if (lowerHeader.includes('shipping') && lowerHeader.includes('tax')) {
           taxType = 'shipping_tax'
         } else if (lowerHeader.includes('item') && lowerHeader.includes('tax')) {
           taxType = 'item_tax'  
@@ -519,9 +522,22 @@ export async function extractTextFromExcel(base64Data: string): Promise<{ succes
 
     // Enhanced column detection for WooCommerce
     console.log('🔍 Looking for WooCommerce patterns...')
+    
+    // Check if this is a WooCommerce tax report
+    const fileName = firstSheetName || 'unknown'
+    const isWooCommerceReport = fileName.toLowerCase().includes('tax_report') || 
+                               fileName.toLowerCase().includes('woocommerce') ||
+                               allHeaders.some(h => h.toLowerCase().includes('net total tax'))
+    
+    if (isWooCommerceReport) {
+      console.log('🏪 WOOCOMMERCE TAX REPORT DETECTED!')
+      console.log('🎯 Enhanced processing for multi-country tax aggregation')
+      console.log('🎯 TARGET: Sum all "Net Total Tax" columns by country')
+    }
+    
     console.log('🔍 STARTING VAT COLUMN DETECTION...')
-    console.log('🎯 TARGET PATTERNS: "Shipping Tax Amt." and "Item Tax Amt."')
-    const vatColumns = findVATColumns(worksheet, range)
+    console.log('🎯 TARGET PATTERNS: "Net Total Tax", "Shipping Tax Amt.", "Item Tax Amt."')
+    const vatColumns = findVATColumns(worksheet, range, isWooCommerceReport)
     
     if (vatColumns.length === 0) {
       console.log('❌ CRITICAL: No VAT columns detected after pattern matching')
@@ -563,18 +579,35 @@ export async function extractTextFromExcel(base64Data: string): Promise<{ succes
     console.log(`🎯 FINAL TOTAL VAT CALCULATED: €${totalVAT.toFixed(2)}`)
     console.log(`📊 Detection summary: ${vatColumns.length} VAT columns found, total €${totalVAT.toFixed(2)}`)
     
-    // Expected result check
-    if (Math.abs(totalVAT - 5518.20) < 0.01) {
-      console.log('🎉🎉 SUCCESS! Got expected €5518.20 total! 🎉🎉')
-    } else if (totalVAT > 0) {
-      console.log(`⚠️ Got €${totalVAT.toFixed(2)} but expected €5518.20`)
+    // Expected result check - WooCommerce vs legacy files
+    if (isWooCommerceReport) {
+      // Check against WooCommerce expected total
+      if (Math.abs(totalVAT - 5475.24) < 0.01) {
+        console.log('🎉🎉 SUCCESS! Got expected WooCommerce total €5475.24! 🎉🎉')
+        console.log('✅ Country breakdown: 7.55 + 40.76 + 5333.62 + 58.37 + 14.26 + 20.68')
+      } else if (totalVAT > 0) {
+        console.log(`⚠️ Got €${totalVAT.toFixed(2)} but expected WooCommerce total €5475.24`)
+        console.log('🔍 Check if all "Net Total Tax" columns were detected')
+      } else {
+        console.log('❌ CRITICAL: Total VAT is €0.00 - WooCommerce detection failed')
+      }
     } else {
-      console.log('❌ CRITICAL: Total VAT is €0.00 - detection failed')
+      // Legacy check for other files
+      if (Math.abs(totalVAT - 5518.20) < 0.01) {
+        console.log('🎉🎉 SUCCESS! Got expected €5518.20 total! 🎉🎉')
+      } else if (totalVAT > 0) {
+        console.log(`⚠️ Got €${totalVAT.toFixed(2)} but expected €5518.20`)
+      } else {
+        console.log('❌ CRITICAL: Total VAT is €0.00 - detection failed')
+      }
     }
 
     // Format the extracted text with enhanced details
-    let formattedText = `EXCEL Financial Data Analysis - WooCommerce Export (DEBUGGED):\n\n`
+    let formattedText = isWooCommerceReport 
+      ? `EXCEL Financial Data Analysis - WooCommerce Tax Report (ENHANCED):\n\n`
+      : `EXCEL Financial Data Analysis - Standard Export (DEBUGGED):\n\n`
     formattedText += `File: ${firstSheetName}\n`
+    formattedText += `WooCommerce Mode: ${isWooCommerceReport ? 'ENABLED' : 'DISABLED'}\n`
     formattedText += `Processing Time: ${new Date().toISOString()}\n`
     formattedText += `Total Rows: ${range.e.r + 1}\n`
     formattedText += `Total Columns: ${range.e.c + 1}\n`
@@ -583,6 +616,16 @@ export async function extractTextFromExcel(base64Data: string): Promise<{ succes
     formattedText += `📊 DETECTED VAT COLUMNS (${vatColumns.length}):\n`
     vatColumns.forEach((col, i) => {
       formattedText += `  ${i + 1}. "${col.name}" (${col.type}): €${col.total.toFixed(2)} ${col.usedSummary ? '(from summary row)' : `(from ${col.rows} rows)`}\n`
+      
+      // Add country breakdown for WooCommerce reports
+      if (col.countryBreakdown) {
+        formattedText += `     🌍 Country Breakdown:\n`
+        Object.entries(col.countryBreakdown).forEach(([country, amount]) => {
+          formattedText += `       ${country}: €${amount.toFixed(2)}\n`
+        })
+        const breakdownTotal = Object.values(col.countryBreakdown).reduce((sum, amount) => sum + amount, 0)
+        formattedText += `       Total from breakdown: €${breakdownTotal.toFixed(2)}\n`
+      }
     })
     
     formattedText += `\n🎯 CALCULATED TOTAL VAT FROM ALL COLUMNS: €${totalVAT.toFixed(2)}\n`
@@ -608,18 +651,28 @@ export async function extractTextFromExcel(base64Data: string): Promise<{ succes
 }
 
 /**
- * Find and analyze VAT columns in Excel worksheet with enhanced debugging
+ * Find and analyze VAT columns in Excel worksheet with enhanced debugging and multi-country aggregation
  */
-function findVATColumns(worksheet: any, range: any): Array<{column: number, name: string, total: number, rows: number, usedSummary: boolean, type: string}> {
-  const vatColumns: Array<{column: number, name: string, total: number, rows: number, usedSummary: boolean, type: string}> = []
+function findVATColumns(worksheet: any, range: any, isWooCommerceReport: boolean = false): Array<{column: number, name: string, total: number, rows: number, usedSummary: boolean, type: string, countryBreakdown?: Record<string, number>}> {
+  const vatColumns: Array<{column: number, name: string, total: number, rows: number, usedSummary: boolean, type: string, countryBreakdown?: Record<string, number>}> = []
   
   console.log('🚨 EXCEL PATTERN MATCHING - DEBUG MODE')
   console.log('🔍 INITIALIZING VAT COLUMN DETECTION...')
-  console.log('🎯 SEARCHING FOR: Shipping Tax Amt. and Item Tax Amt.')
+  if (isWooCommerceReport) {
+    console.log('🏪 WooCommerce Mode: PRIORITY SEARCH for "Net Total Tax" columns')
+    console.log('🎯 Expected total: €5,475.24 (7.55 + 40.76 + 5333.62 + 58.37 + 14.26 + 20.68)')
+  } else {
+    console.log('🎯 SEARCHING FOR: Shipping Tax Amt. and Item Tax Amt.')
+  }
   
   // Enhanced VAT column patterns for WooCommerce and other systems
   const vatPatterns = [
-    // WooCommerce specific (your file format) - PRIORITY PATTERNS
+    // WooCommerce Tax Report specific - HIGHEST PRIORITY PATTERNS
+    { pattern: /net\s*total\s*tax/i, name: 'WooCommerce Net Total Tax', priority: 1 },
+    { pattern: /total\s*tax\s*amount/i, name: 'WooCommerce Total Tax Amount', priority: 1 },
+    { pattern: /tax\s*total/i, name: 'Tax Total Column', priority: 1 },
+    
+    // WooCommerce specific (legacy patterns) - PRIORITY PATTERNS
     { pattern: /shipping\s*tax\s*amt/i, name: 'WooCommerce Shipping Tax', priority: 1 },
     { pattern: /item\s*tax\s*amt/i, name: 'WooCommerce Item Tax', priority: 1 },
     
@@ -714,6 +767,8 @@ function findVATColumns(worksheet: any, range: any): Array<{column: number, name
         
         let columnTotal = 0
         let rowCount = 0
+        // Multi-country aggregation for WooCommerce reports
+        let countryBreakdown: Record<string, number> = {}
         
         if (hasSummaryRow) {
           // Use summary row value if available
@@ -726,9 +781,25 @@ function findVATColumns(worksheet: any, range: any): Array<{column: number, name
             console.log(`   ⚠️ Summary cell is empty or undefined`)
           }
         } else {
-          // Calculate from individual rows
+          // Calculate from individual rows with country tracking for WooCommerce
           console.log(`🧮 Calculating from individual rows (rows 2-${range.e.r + 1})...`)
           const endRow = hasSummaryRow ? range.e.r - 1 : range.e.r
+          
+          // Find country column if this is a WooCommerce report
+          let countryColumn = -1
+          if (isWooCommerceReport) {
+            for (let c = 0; c <= range.e.c; c++) {
+              const headerCell = worksheet[XLSX.utils.encode_cell({ r: 0, c: c })]
+              if (headerCell && headerCell.v) {
+                const headerText = String(headerCell.v).toLowerCase()
+                if (headerText.includes('country') || headerText.includes('region') || headerText.includes('billing_country')) {
+                  countryColumn = c
+                  console.log(`🌍 Found country column at index ${c}: "${headerCell.v}"`)
+                  break
+                }
+              }
+            }
+          }
           
           for (let row = 1; row <= endRow; row++) {
             const cell = worksheet[XLSX.utils.encode_cell({ r: row, c: col })]
@@ -738,21 +809,58 @@ function findVATColumns(worksheet: any, range: any): Array<{column: number, name
                 columnTotal += value
                 rowCount++
                 console.log(`   Row ${row + 1}: ${cell.v} → €${value.toFixed(2)} (running total: €${columnTotal.toFixed(2)})`)
+                
+                // Track by country for WooCommerce reports
+                if (isWooCommerceReport && countryColumn >= 0) {
+                  const countryCell = worksheet[XLSX.utils.encode_cell({ r: row, c: countryColumn })]
+                  const country = countryCell && countryCell.v ? String(countryCell.v) : 'Unknown'
+                  
+                  if (!countryBreakdown[country]) {
+                    countryBreakdown[country] = 0
+                  }
+                  countryBreakdown[country] += value
+                  console.log(`     Country: ${country} → €${value.toFixed(2)} (country total: €${countryBreakdown[country].toFixed(2)})`)
+                }
               }
             }
           }
           console.log(`   Final calculation: €${columnTotal.toFixed(2)} from ${rowCount} rows`)
+          
+          // Log country breakdown for WooCommerce reports
+          if (isWooCommerceReport && Object.keys(countryBreakdown).length > 0) {
+            console.log(`🌍 COUNTRY BREAKDOWN:`)
+            let breakdownTotal = 0
+            Object.entries(countryBreakdown).forEach(([country, amount]) => {
+              console.log(`   ${country}: €${amount.toFixed(2)}`)
+              breakdownTotal += amount
+            })
+            console.log(`   BREAKDOWN TOTAL: €${breakdownTotal.toFixed(2)} (should match column total: €${columnTotal.toFixed(2)})`)
+            
+            // Validate expected WooCommerce breakdown: 7.55 + 40.76 + 5333.62 + 58.37 + 14.26 + 20.68 = 5475.24
+            const expectedTotal = 5475.24
+            if (Math.abs(columnTotal - expectedTotal) < 0.01) {
+              console.log(`🎯 SUCCESS! Column total €${columnTotal.toFixed(2)} matches expected WooCommerce total €${expectedTotal.toFixed(2)}`)
+            } else {
+              console.log(`⚠️ Column total €${columnTotal.toFixed(2)} differs from expected WooCommerce total €${expectedTotal.toFixed(2)}`)
+            }
+          }
         }
         
         if (columnTotal > 0) {
-          // Determine column type
+          // Determine column type with enhanced WooCommerce support
           let columnType = 'general'
-          if (headerText.toLowerCase().includes('shipping')) {
+          const lowerHeaderText = headerText.toLowerCase()
+          
+          if (lowerHeaderText.includes('net') && lowerHeaderText.includes('total') && lowerHeaderText.includes('tax')) {
+            columnType = 'net_total_tax'
+          } else if (lowerHeaderText.includes('shipping')) {
             columnType = 'shipping_tax'
-          } else if (headerText.toLowerCase().includes('item')) {
+          } else if (lowerHeaderText.includes('item')) {
             columnType = 'item_tax'
           } else if (matchedPatternInfo?.priority === 1) {
             columnType = 'woocommerce'
+          } else if (isWooCommerceReport) {
+            columnType = 'woocommerce_tax'
           }
           
           vatColumns.push({
@@ -761,7 +869,8 @@ function findVATColumns(worksheet: any, range: any): Array<{column: number, name
             total: columnTotal,
             rows: rowCount,
             usedSummary: hasSummaryRow,
-            type: columnType
+            type: columnType,
+            countryBreakdown: Object.keys(countryBreakdown).length > 0 ? countryBreakdown : undefined
           })
           
           console.log(`✅ VAT COLUMN ADDED: "${headerText}" (${columnType}) = €${columnTotal.toFixed(2)} ${hasSummaryRow ? '(from summary row)' : `(from ${rowCount} rows)`}`)

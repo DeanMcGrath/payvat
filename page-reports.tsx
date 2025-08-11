@@ -150,7 +150,7 @@ export default function ReportsPage() {
         <Card className="w-full max-w-md card-modern">
           <CardContent className="p-8 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">Error Loading Reports</h2>
-            <p className="text-muted-foreground mb-6">{error}</p>
+            <p className="text-muted-foreground mb-2">{error}</p>
             <Button 
               onClick={() => window.location.reload()}
               className="btn-primary"
@@ -309,7 +309,7 @@ export default function ReportsPage() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-6">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
                   <span>Revenue compliant</span>
@@ -335,7 +335,7 @@ export default function ReportsPage() {
 
       <div className="px-6 lg:px-8 max-w-7xl mx-auto -mt-8">
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-2">
           <Card className="card-premium hover-lift">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Total VAT Paid (2024)</CardTitle>
@@ -396,7 +396,7 @@ export default function ReportsPage() {
         </div>
 
         {/* Report Categories */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2">
           <Card className="card-modern hover-lift group cursor-pointer">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-foreground flex items-center">
@@ -459,7 +459,7 @@ export default function ReportsPage() {
         </div>
 
         {/* Reports List */}
-        <Card className="card-premium mb-8">
+        <Card className="card-premium mb-2">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-foreground flex items-center justify-between">
               <div className="flex items-center">

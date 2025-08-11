@@ -272,7 +272,7 @@ export default function HomePage() {
       <main className="py-8 lg:py-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {/* Welcome Section */}
-          <div className="mb-12 animate-fade-in">
+          <div className="mb-3 animate-fade-in">
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
               Welcome back, <span className="text-gradient-primary">{user.firstName || user.businessName.split(' ')[0] || 'User'}</span>
             </h2>
@@ -280,7 +280,7 @@ export default function HomePage() {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12" data-animate>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-3" data-animate>
             <div className="card-modern p-6 hover-lift">
               <div className="flex items-center justify-between mb-4">
                 <div>
@@ -395,7 +395,7 @@ export default function HomePage() {
 
           {/* Subscription Status */}
           {subscriptionType === 'trial' && trialEndsAt && (
-            <div className="mb-12">
+            <div className="mb-3">
               <div className="card-premium p-8 border border-warning/20 bg-warning/5 relative overflow-hidden">
                 <div className="absolute inset-0 gradient-mesh opacity-10"></div>
                 <div className="relative z-10 flex items-center justify-between">
@@ -420,9 +420,9 @@ export default function HomePage() {
           )}
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-3">
             <div className="card-modern p-8">
-              <div className="mb-6">
+              <div className="mb-2">
                 <h3 className="text-2xl font-bold text-foreground mb-2">Quick Actions</h3>
                 <p className="text-muted-foreground">Common VAT tasks and operations</p>
               </div>
@@ -451,7 +451,7 @@ export default function HomePage() {
 
             {/* Recent Activity */}
             <div className="card-modern p-8">
-              <div className="mb-6">
+              <div className="mb-2">
                 <h3 className="text-2xl font-bold text-foreground mb-2">Recent Activity</h3>
                 <p className="text-muted-foreground">Latest VAT transactions and updates</p>
               </div>

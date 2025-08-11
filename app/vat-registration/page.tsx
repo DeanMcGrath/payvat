@@ -177,7 +177,7 @@ export default function VATRegistrationPage() {
           <div className="text-center">
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-8">
+              <div className="mb-2">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Expert registration guidance
@@ -187,7 +187,7 @@ export default function VATRegistrationPage() {
                   <UserCheck className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
                   <span className="text-gradient-primary">Apply for Your</span>
                   <br />
                   <span className="text-foreground">VAT Number in Ireland</span>
@@ -202,7 +202,7 @@ export default function VATRegistrationPage() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-3">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
                   <span>Revenue approved</span>
@@ -229,7 +229,7 @@ export default function VATRegistrationPage() {
       <div className="max-w-7xl mx-auto px-6 py-8">
 
         {/* Step 1: Determine if You Need to Register */}
-        <Card className="card-modern hover-lift mb-8" id="step-1">
+        <Card className="card-modern hover-lift mb-2" id="step-1">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
@@ -305,7 +305,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 2: Gather Required Information */}
-        <Card className="card-modern hover-lift mb-8" id="step-2">
+        <Card className="card-modern hover-lift mb-2" id="step-2">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
@@ -370,7 +370,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 3: Choose the Appropriate Registration Form */}
-        <Card className="card-modern hover-lift mb-8" id="step-3">
+        <Card className="card-modern hover-lift mb-2" id="step-3">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
@@ -474,7 +474,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 4: Register Through ROS */}
-        <Card className="card-modern hover-lift mb-8" id="step-4">
+        <Card className="card-modern hover-lift mb-2" id="step-4">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">4</span>
@@ -544,7 +544,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 5: Await Processing */}
-        <Card className="card-modern hover-lift mb-8" id="step-5">
+        <Card className="card-modern hover-lift mb-2" id="step-5">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">5</span>
@@ -595,7 +595,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 6: Post-Registration Obligations */}
-        <Card className="card-modern hover-lift mb-8" id="step-6">
+        <Card className="card-modern hover-lift mb-2" id="step-6">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">6</span>
@@ -703,7 +703,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 7: Monitor and Maintain Compliance */}
-        <Card className="card-modern hover-lift mb-8" id="step-7">
+        <Card className="card-modern hover-lift mb-2" id="step-7">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">7</span>
@@ -744,7 +744,7 @@ export default function VATRegistrationPage() {
         <Card className="card-premium hover-lift">
           <CardContent className="p-8 text-center">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Streamline Your VAT Management?</h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">Once you receive your VAT number, let PayVAT handle your VAT calculations, submissions, and payments. Focus on growing your business while we ensure your VAT compliance.</p>
+            <p className="text-gray-600 mb-2 max-w-2xl mx-auto">Once you receive your VAT number, let PayVAT handle your VAT calculations, submissions, and payments. Focus on growing your business while we ensure your VAT compliance.</p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button 
                 className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"

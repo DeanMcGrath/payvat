@@ -10,10 +10,13 @@ import { ArrowLeft, ArrowRight, Calendar, Bell, Settings, LogOut, Search, CheckC
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
+import { useVATData } from "@/contexts/vat-data-context"
+import { VAT_PERIODS, getPeriodLabel } from "@/lib/vat-utils"
 
 export default function VATReturnPeriod() {
-  const [selectedYear, setSelectedYear] = useState("2025")
-  const [selectedPeriod, setSelectedPeriod] = useState("jan-feb")
+  const { selectedYear: contextYear, selectedPeriod: contextPeriod, setPeriodData } = useVATData()
+  const [selectedYear, setSelectedYear] = useState(contextYear || "2025")
+  const [selectedPeriod, setSelectedPeriod] = useState(contextPeriod || "jan-feb")
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -45,16 +48,15 @@ export default function VATReturnPeriod() {
     }
   }, [])
 
-  const getPeriodLabel = (period: string) => {
-    const periods = {
-      "jan-feb": "January - February",
-      "mar-apr": "March - April", 
-      "may-jun": "May - June",
-      "jul-aug": "July - August",
-      "sep-oct": "September - October",
-      "nov-dec": "November - December"
-    }
-    return periods[period as keyof typeof periods] || period
+  // Handle year and period changes
+  const handleYearChange = (year: string) => {
+    setSelectedYear(year)
+    setPeriodData(year, selectedPeriod)
+  }
+
+  const handlePeriodChange = (period: string) => {
+    setSelectedPeriod(period)
+    setPeriodData(selectedYear, period)
   }
 
   const getDueDate = (year: string, period: string) => {
@@ -210,7 +212,7 @@ export default function VATReturnPeriod() {
           <div className="text-center">
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-8">
+              <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   VAT Period Selection
@@ -235,7 +237,7 @@ export default function VATReturnPeriod() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-8">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
                   <span>Revenue compliant</span>
@@ -265,20 +267,20 @@ export default function VATReturnPeriod() {
           <div className="max-w-2xl mx-auto">
 
             {/* Period Selection Card */}
-            <div className="card-premium p-8 mb-8 animate-fade-in" data-animate>
-              <div className="text-center mb-8">
+            <div className="card-premium p-8 mb-4 animate-fade-in" data-animate>
+              <div className="text-center mb-4">
                 <h2 className="text-2xl font-bold text-foreground mb-2">
                 </h2>
                 <p className="text-muted-foreground">
                 </p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                 <div className="space-y-3">
                   <Label className="text-foreground font-semibold flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-primary" />
                     Tax Year
                   </Label>
-                  <Select value={selectedYear} onValueChange={setSelectedYear}>
+                  <Select value={selectedYear} onValueChange={handleYearChange}>
                     <SelectTrigger className="h-12 bg-background border-border hover:border-primary focus:border-primary focus:ring-primary/20 transition-colors">
                       <SelectValue placeholder="Select year" />
                     </SelectTrigger>
@@ -297,23 +299,22 @@ export default function VATReturnPeriod() {
                     <Clock className="h-4 w-4 text-primary" />
                     Tax Period (Bi-Monthly)
                   </Label>
-                  <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+                  <Select value={selectedPeriod} onValueChange={handlePeriodChange}>
                     <SelectTrigger className="h-12 bg-background border-border hover:border-primary focus:border-primary focus:ring-primary/20 transition-colors">
                       <SelectValue placeholder="Select period" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="jan-feb">January - February</SelectItem>
-                      <SelectItem value="mar-apr">March - April</SelectItem>
-                      <SelectItem value="may-jun">May - June</SelectItem>
-                      <SelectItem value="jul-aug">July - August</SelectItem>
-                      <SelectItem value="sep-oct">September - October</SelectItem>
-                      <SelectItem value="nov-dec">November - December</SelectItem>
+                      {VAT_PERIODS.map((period) => (
+                        <SelectItem key={period.key} value={period.key}>
+                          {period.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
               </div>
               {/* Status Information */}
-              <div className="card-modern p-6 mb-6 group hover-lift">
+              <div className="card-modern p-6 mb-2 group hover-lift">
                 <div className="flex items-start gap-4">
                   <div className={`icon-modern ${status.type === 'past' ? 'bg-blue-500' : 'bg-primary'}`}>
                     {status.type === 'past' ? 
@@ -333,7 +334,7 @@ export default function VATReturnPeriod() {
               </div>
 
               {/* Due Date Card */}
-              <div className="card-modern p-6 mb-8 group hover-lift">
+              <div className="card-modern p-6 mb-2 group hover-lift">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className={`icon-modern ${isPastPeriod(selectedYear, selectedPeriod) ? 'bg-muted' : 'bg-warning'}`}>
@@ -357,7 +358,7 @@ export default function VATReturnPeriod() {
               </div>
 
               {/* CTA Button */}
-              <div className="flex justify-center mb-8">
+              <div className="flex justify-center mb-2">
                 <Button 
                   size="lg"
                   className="btn-primary px-8 py-4 text-lg font-semibold hover-lift"

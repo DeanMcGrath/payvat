@@ -152,7 +152,7 @@ export default function TermsPage() {
           <div className="text-center">
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-8">
+              <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Legal documentation
@@ -162,7 +162,7 @@ export default function TermsPage() {
                   <Scale className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
                   <span className="text-gradient-primary">Terms of</span>
                   <br />
                   <span className="text-foreground">Service</span>
@@ -177,7 +177,7 @@ export default function TermsPage() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
                   <span>GDPR compliant</span>
@@ -206,7 +206,7 @@ export default function TermsPage() {
           {/* Table of Contents - Sidebar */}
           <div className="lg:col-span-1">
             <div className="card-modern p-6 sticky top-6">
-              <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-3">
+              <h2 className="text-lg font-semibold text-foreground mb-2 flex items-center gap-3">
                 <BookOpen className="h-5 w-5 text-primary" />
                 Contents
               </h2>
@@ -261,12 +261,12 @@ export default function TermsPage() {
             <div className="card-premium p-12 space-y-12">
 
             <section id="acceptance" data-animate>
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-2">
                 <div className="icon-modern bg-primary">
                   <CheckCircle className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">1. Acceptance of Terms</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">1. Acceptance of Terms</h2>
                   <div className="w-16 h-1 bg-primary rounded-full"></div>
                 </div>
               </div>
@@ -278,16 +278,16 @@ export default function TermsPage() {
             </section>
 
             <section id="service" data-animate>
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-2">
                 <div className="icon-modern bg-blue-500">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">2. Service Description</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">2. Service Description</h2>
                   <div className="w-16 h-1 bg-blue-500 rounded-full"></div>
                 </div>
               </div>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+              <p className="text-lg text-muted-foreground leading-relaxed mb-2">
                 PayVAT provides automated VAT return processing services for Irish businesses, including:
               </p>
               <div className="grid gap-4">
@@ -319,16 +319,16 @@ export default function TermsPage() {
             </section>
 
             <section id="responsibilities" data-animate>
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-2">
                 <div className="icon-modern bg-green-500">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">3. User Responsibilities</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">3. User Responsibilities</h2>
                   <div className="w-16 h-1 bg-green-500 rounded-full"></div>
                 </div>
               </div>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+              <p className="text-lg text-muted-foreground leading-relaxed mb-2">
                 You agree to:
               </p>
               <div className="space-y-4">
@@ -356,26 +356,26 @@ export default function TermsPage() {
             </section>
 
             <section id="payment" data-animate>
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-2">
                 <div className="icon-modern bg-purple-500">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">4. Payment Terms</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">4. Payment Terms</h2>
                   <div className="w-16 h-1 bg-purple-500 rounded-full"></div>
                 </div>
               </div>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+              <p className="text-lg text-muted-foreground leading-relaxed mb-2">
                 Payment for services is due at the time of use. We accept payments via:
               </p>
-              <div className="grid gap-4 mb-6">
+              <div className="grid gap-4 mb-2">
                 <div className="card-modern p-6 hover-lift">
                   <div className="flex items-center gap-4">
                     <div className="icon-modern bg-success">
                       <CheckCircle className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Credit and Debit Cards</h3>
+                      <h3 className="font-semibold text-foreground mb-0">Credit and Debit Cards</h3>
                       <p className="text-sm text-muted-foreground">Processed securely via Stripe with secure encryption</p>
                     </div>
                   </div>
@@ -386,7 +386,7 @@ export default function TermsPage() {
                       <CheckCircle className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Bank Transfers</h3>
+                      <h3 className="font-semibold text-foreground mb-0">Bank Transfers</h3>
                       <p className="text-sm text-muted-foreground">Available for enterprise accounts with special terms</p>
                     </div>
                   </div>
@@ -400,12 +400,12 @@ export default function TermsPage() {
             </section>
 
             <section id="liability" data-animate>
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-2">
                 <div className="icon-modern bg-warning">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">5. Limitation of Liability</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">5. Limitation of Liability</h2>
                   <div className="w-16 h-1 bg-warning rounded-full"></div>
                 </div>
               </div>
@@ -425,17 +425,17 @@ export default function TermsPage() {
             </section>
 
             <section id="data" data-animate>
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-2">
                 <div className="icon-premium">
                   <Shield className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">6. Data Protection</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">6. Data Protection</h2>
                   <div className="w-16 h-1 gradient-primary rounded-full"></div>
                 </div>
               </div>
               <div className="card-premium p-8">
-                <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+                <p className="text-lg text-muted-foreground leading-relaxed mb-2">
                   We are committed to protecting your data in accordance with GDPR and Irish data 
                   protection laws. For details on how we collect and use your information, please 
                   refer to our Privacy Policy.
@@ -454,16 +454,16 @@ export default function TermsPage() {
             </section>
 
             <section id="availability" data-animate>
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-2">
                 <div className="icon-modern bg-blue-500">
                   <Clock className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">7. Service Availability</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">7. Service Availability</h2>
                   <div className="w-16 h-1 bg-blue-500 rounded-full"></div>
                 </div>
               </div>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+              <p className="text-lg text-muted-foreground leading-relaxed mb-2">
                 We strive to maintain high service availability but cannot guarantee uninterrupted 
                 access. Scheduled maintenance will be communicated in advance where possible.
               </p>
@@ -480,12 +480,12 @@ export default function TermsPage() {
             </section>
 
             <section id="termination" data-animate>
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-2">
                 <div className="icon-modern bg-orange-500">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">8. Termination</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">8. Termination</h2>
                   <div className="w-16 h-1 bg-orange-500 rounded-full"></div>
                 </div>
               </div>
@@ -499,12 +499,12 @@ export default function TermsPage() {
             </section>
 
             <section id="changes" data-animate>
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-2">
                 <div className="icon-modern bg-indigo-500">
                   <Bell className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">9. Changes to Terms</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">9. Changes to Terms</h2>
                   <div className="w-16 h-1 bg-indigo-500 rounded-full"></div>
                 </div>
               </div>
@@ -521,24 +521,24 @@ export default function TermsPage() {
             </section>
 
             <section id="contact" data-animate>
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-2">
                 <div className="icon-modern bg-green-500">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">10. Contact Information</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">10. Contact Information</h2>
                   <div className="w-16 h-1 bg-green-500 rounded-full"></div>
                 </div>
               </div>
               <div className="card-modern p-8">
-                <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+                <p className="text-lg text-muted-foreground leading-relaxed mb-2">
                   For questions about these Terms of Service, please contact us at:
                 </p>
                 <div className="card-premium p-6 text-center">
                   <div className="icon-modern bg-success mb-4 mx-auto">
                     <FileText className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">Email Support</h3>
+                  <h3 className="font-semibold text-foreground mb-1">Email Support</h3>
                   <a href="mailto:support@payvat.ie" className="text-primary hover:text-primary/80 font-semibold transition-colors">
                     support@payvat.ie
                   </a>
@@ -548,12 +548,12 @@ export default function TermsPage() {
             </section>
 
             <section id="law" data-animate>
-              <div className="flex items-start gap-4 mb-6">
+              <div className="flex items-start gap-4 mb-2">
                 <div className="icon-premium">
                   <Scale className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">11. Governing Law</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">11. Governing Law</h2>
                   <div className="w-16 h-1 gradient-primary rounded-full"></div>
                 </div>
               </div>

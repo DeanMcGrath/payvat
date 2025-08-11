@@ -434,7 +434,7 @@ export default function VATSubmissionPage() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-6">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />
                   <span>AI document scanning</span>

@@ -130,7 +130,7 @@ export default function LandingPage() {
           <div className="text-center">
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-8">
+              <div className="mb-2">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Expert VAT Guidance, Trusted by Irish businesses
@@ -151,7 +151,7 @@ export default function LandingPage() {
               </div>
               
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-3">
                 <Button size="lg" className="btn-primary px-8 py-4 text-lg font-semibold hover-lift" onClick={() => window.location.href = '/signup'}>
                   Start Free Trial
                   <CheckCircle className="ml-2 h-5 w-5" />
@@ -190,7 +190,7 @@ export default function LandingPage() {
       <section className="py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center mb-16 animate-slide-up">
+          <div className="text-center mb-4 animate-slide-up">
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
               Everything You Need for 
               <span className="text-gradient-primary"> VAT Management</span>
@@ -258,7 +258,7 @@ export default function LandingPage() {
             <div className="absolute inset-0 gradient-mesh opacity-10"></div>
             
             <div className="relative z-10">
-              <div className="mb-8">
+              <div className="mb-2">
                 <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
                   Ready to Modernize Your
                   <span className="text-gradient-primary"> VAT Process?</span>
@@ -268,7 +268,7 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-2">
                 <Button 
                   size="lg"
                   className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"
@@ -298,7 +298,7 @@ export default function LandingPage() {
       {/* Benefits Section */}
       <section className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16 animate-slide-up">
+          <div className="text-center mb-4 animate-slide-up">
             <h4 className="text-3xl font-bold text-foreground mb-2">
               Why Choose <span className="text-gradient-primary">PayVAT?</span>
             </h4>
@@ -354,7 +354,7 @@ export default function LandingPage() {
       {/* Contact Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-16 animate-slide-up">
+          <div className="text-center mb-4 animate-slide-up">
             <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
               Need Help? <span className="text-gradient-primary">We're Here</span>
             </h3>
@@ -369,7 +369,7 @@ export default function LandingPage() {
                 <Mail className="h-8 w-8 text-white" />
               </div>
               <h4 className="text-xl font-semibold text-foreground mb-2">Email Support</h4>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
+              <p className="text-muted-foreground mb-2 leading-relaxed">
                 Detailed help via email with expert guidance
               </p>
               <Button variant="outline" className="btn-outline">
@@ -383,7 +383,7 @@ export default function LandingPage() {
                 <Phone className="h-8 w-8 text-white" />
               </div>
               <h4 className="text-xl font-semibold text-foreground mb-2">Phone Support</h4>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
+              <p className="text-muted-foreground mb-2 leading-relaxed">
                 Direct line: Mon-Fri, 9AM-5PM IST
               </p>
               <Button variant="outline" className="btn-outline">
@@ -397,7 +397,7 @@ export default function LandingPage() {
                 <MessageCircle className="h-8 w-8 text-white" />
               </div>
               <h4 className="text-xl font-semibold text-foreground mb-2">Live Chat</h4>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
+              <p className="text-muted-foreground mb-2 leading-relaxed">
                 Instant help via our integrated chat system
               </p>
               <Button variant="outline" className="btn-outline">

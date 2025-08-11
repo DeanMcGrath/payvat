@@ -143,23 +143,23 @@ export default function FAQPage() {
           <div className="text-center">
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-8">
+              <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Get instant answers
                 </div>
                 
-                <div className="icon-premium mb-6 mx-auto">
+                <div className="icon-premium mb-3 mx-auto">
                   <HelpCircle className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
                   <span className="text-gradient-primary">Frequently Asked</span>
                   <br />
                   <span className="text-foreground">Questions</span>
                 </h1>
                 
-                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   Everything you need to know about PayVAT. 
@@ -168,7 +168,7 @@ export default function FAQPage() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
                   <span> Expert VAT Guidance, Trusted by Irish businesses </span>
@@ -203,7 +203,7 @@ export default function FAQPage() {
                 <div className="icon-premium group-hover:scale-110 transition-transform duration-300">
                   <HelpCircle className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                   What is PayVAT?
                 </h3>
               </div>
@@ -227,7 +227,7 @@ export default function FAQPage() {
                 <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                   Who can use PayVAT?
                 </h3>
               </div>
@@ -251,7 +251,7 @@ export default function FAQPage() {
                 <div className="icon-modern bg-green-500 group-hover:scale-110 transition-transform duration-300">
                   <Settings className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                   How do I register?
                 </h3>
               </div>
@@ -290,7 +290,7 @@ export default function FAQPage() {
                 <div className="icon-modern bg-purple-500 group-hover:scale-110 transition-transform duration-300">
                   <CreditCard className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                   How does payment work?
                 </h3>
               </div>
@@ -318,7 +318,7 @@ export default function FAQPage() {
                 <div className="icon-premium group-hover:scale-110 transition-transform duration-300">
                   <Euro className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                   How much does it cost?
                 </h3>
               </div>
@@ -381,7 +381,7 @@ export default function FAQPage() {
                 <div className="icon-modern bg-success group-hover:scale-110 transition-transform duration-300">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                   Is my data secure?
                 </h3>
               </div>
@@ -423,7 +423,7 @@ export default function FAQPage() {
                 <div className="icon-modern bg-warning group-hover:scale-110 transition-transform duration-300">
                   <Clock className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                   What if I miss a deadline?
                 </h3>
               </div>
@@ -456,7 +456,7 @@ export default function FAQPage() {
                 <div className="icon-modern bg-indigo-500 group-hover:scale-110 transition-transform duration-300">
                   <Settings className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                   Can I switch plans?
                 </h3>
               </div>
@@ -484,7 +484,7 @@ export default function FAQPage() {
                 <div className="icon-premium group-hover:scale-110 transition-transform duration-300">
                   <HelpCircle className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                   Do you offer support?
                 </h3>
               </div>
@@ -522,12 +522,12 @@ export default function FAQPage() {
               <div className="absolute inset-0 gradient-mesh opacity-10"></div>
               
               <div className="relative z-10">
-                <div className="mb-8">
-                  <div className="icon-premium mb-6 mx-auto">
+                <div className="mb-4">
+                  <div className="icon-premium mb-3 mx-auto">
                     <HelpCircle className="h-12 w-12 text-white" />
                   </div>
                   
-                  <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+                  <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
                     Still Have <span className="text-gradient-primary">Questions?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -535,7 +535,7 @@ export default function FAQPage() {
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
+                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-2">
                   <Button 
                     size="lg"
                     className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"

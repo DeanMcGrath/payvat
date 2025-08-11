@@ -35,7 +35,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             {/* Column 1 - Company & Services */}
             <div className="animate-fade-in">
-              <h4 className="text-xl font-bold text-white mb-6">Company & Services</h4>
+              <h4 className="text-xl font-bold text-white mb-2">Company & Services</h4>
               <ul className="space-y-4">
                 <li>
                   <Link 
@@ -78,7 +78,7 @@ export default function Footer() {
 
             {/* Column 2 - VAT Resources */}
             <div className="animate-fade-in" style={{animationDelay: '0.2s'}}>
-              <h4 className="text-xl font-bold text-white mb-6">VAT Resources</h4>
+              <h4 className="text-xl font-bold text-white mb-2">VAT Resources</h4>
               <ul className="space-y-4">
                 <li>
                   <Link 
@@ -103,7 +103,7 @@ export default function Footer() {
 
             {/* Column 3 - Legal & Compliance */}
             <div className="animate-fade-in" style={{animationDelay: '0.4s'}}>
-              <h4 className="text-xl font-bold text-white mb-6">Legal & Compliance</h4>
+              <h4 className="text-xl font-bold text-white mb-2">Legal & Compliance</h4>
               <ul className="space-y-4">
                 <li>
                   <Link 

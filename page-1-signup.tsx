@@ -260,7 +260,7 @@ export default function SignupPage() {
           <div className="text-center">
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-8">
+              <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Join Irish businesses
@@ -270,7 +270,7 @@ export default function SignupPage() {
                   <UserPlus className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
                   <span className="text-gradient-primary">Start Your VAT</span>
                   <br />
                   <span className="text-foreground">Journey Today</span>
@@ -285,7 +285,7 @@ export default function SignupPage() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
                   <span>Secure & compliant</span>
@@ -311,24 +311,24 @@ export default function SignupPage() {
 
       <div className="max-w-lg mx-auto px-6 py-8 -mt-16 relative z-10">
         <div className="card-premium p-8 hover-lift">
-          <div className="text-center mb-8">
+          <div className="text-center mb-4">
             <div className="icon-premium mb-4 mx-auto">
               <Building className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-2">Create Your Business Account</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-1">Create Your Business Account</h2>
             <p className="text-muted-foreground">Join thousands of Irish businesses</p>
           </div>
           
           {/* Success Message */}
           {success && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6">
+            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-2">
               Account created successfully! Redirecting to dashboard...
             </div>
           )}
           
           {/* Error Messages */}
           {errors.general && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-2">
               {errors.general}
             </div>
           )}

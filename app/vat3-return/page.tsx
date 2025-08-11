@@ -389,7 +389,7 @@ export default function VAT3ReturnForm() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-6">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
                   <span>Revenue compliant</span>
@@ -416,7 +416,7 @@ export default function VAT3ReturnForm() {
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Validation Errors */}
         {validationErrors.length > 0 && (
-          <Card className="border-red-200 bg-red-50 mb-6">
+          <Card className="border-red-200 bg-red-50 mb-2">
             <CardContent className="pt-6">
               <div className="flex items-start space-x-3">
                 <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />

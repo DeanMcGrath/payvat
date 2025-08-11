@@ -141,23 +141,23 @@ export default function VATGuidePage() {
           <div className="text-center">
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-8">
+              <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Expert VAT guidance
                 </div>
                 
-                <div className="icon-premium mb-6 mx-auto">
+                <div className="icon-premium mb-3 mx-auto">
                   <BookOpen className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
                   <span className="text-gradient-primary">Everything About</span>
                   <br />
                   <span className="text-foreground">VAT in Ireland</span>
                 </h1>
                 
-                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   A comprehensive business guide to VAT compliance in Ireland. 
@@ -166,7 +166,7 @@ export default function VATGuidePage() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
                   <span>Revenue compliant</span>
@@ -193,7 +193,7 @@ export default function VATGuidePage() {
       <div className="max-w-7xl mx-auto px-6 py-8">
 
         {/* What Is VAT */}
-        <Card className="mb-8">
+        <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
               <BookOpen className="h-5 w-5 text-teal-500 mr-2" />
@@ -208,7 +208,7 @@ export default function VATGuidePage() {
         </Card>
 
         {/* Registration Requirements */}
-        <Card className="mb-8">
+        <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
               <Users className="h-5 w-5 text-teal-500 mr-2" />
@@ -219,11 +219,11 @@ export default function VATGuidePage() {
             <p className="text-gray-600 mb-4">You must register for VAT if your annual turnover exceeds:</p>
             <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <h4 className="font-semibold text-blue-800 mb-2">Services: €37,500</h4>
+                <h4 className="font-semibold text-blue-800 mb-1">Services: €37,500</h4>
                 <p className="text-blue-700 text-sm">Annual turnover threshold for service-based businesses</p>
               </div>
               <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                <h4 className="font-semibold text-green-800 mb-2">Goods: €75,000</h4>
+                <h4 className="font-semibold text-green-800 mb-1">Goods: €75,000</h4>
                 <p className="text-green-700 text-sm">Annual turnover threshold for goods-based businesses</p>
               </div>
             </div>
@@ -241,7 +241,7 @@ export default function VATGuidePage() {
         </Card>
 
         {/* VAT Rates */}
-        <Card className="mb-8">
+        <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
               <Calculator className="h-5 w-5 text-teal-500 mr-2" />
@@ -251,19 +251,19 @@ export default function VATGuidePage() {
           <CardContent>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="p-4 bg-teal-50 rounded-lg border border-teal-200">
-                <h4 className="font-semibold text-teal-800 mb-2">Standard Rate: 23%</h4>
+                <h4 className="font-semibold text-teal-800 mb-1">Standard Rate: 23%</h4>
                 <p className="text-teal-700 text-sm">Most goods and services</p>
               </div>
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <h4 className="font-semibold text-blue-800 mb-2">Reduced Rate: 13.5%</h4>
+                <h4 className="font-semibold text-blue-800 mb-1">Reduced Rate: 13.5%</h4>
                 <p className="text-blue-700 text-sm">Food, hospitality</p>
               </div>
               <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                <h4 className="font-semibold text-green-800 mb-2">Second Reduced Rate: 9%</h4>
+                <h4 className="font-semibold text-green-800 mb-1">Second Reduced Rate: 9%</h4>
                 <p className="text-green-700 text-sm">Newspapers, certain sporting facilities</p>
               </div>
               <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <h4 className="font-semibold text-gray-800 mb-2">Zero Rate: 0%</h4>
+                <h4 className="font-semibold text-gray-800 mb-1">Zero Rate: 0%</h4>
                 <p className="text-gray-700 text-sm">Exports, certain medical goods</p>
               </div>
             </div>
@@ -271,7 +271,7 @@ export default function VATGuidePage() {
         </Card>
 
         {/* Filing & Payment Deadlines */}
-        <Card className="mb-8">
+        <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
               <Calendar className="h-5 w-5 text-teal-500 mr-2" />
@@ -306,7 +306,7 @@ export default function VATGuidePage() {
         </Card>
 
         {/* VAT Return Preparation Steps */}
-        <Card className="mb-8">
+        <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
               <FileText className="h-5 w-5 text-teal-500 mr-2" />
@@ -340,7 +340,7 @@ export default function VATGuidePage() {
         </Card>
 
         {/* Common Mistakes to Avoid */}
-        <Card className="mb-8">
+        <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
               <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
@@ -350,7 +350,7 @@ export default function VATGuidePage() {
           <CardContent>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="p-4 border border-red-200 rounded-lg bg-red-50">
-                <h4 className="font-semibold text-red-800 mb-2">Common Mistakes</h4>
+                <h4 className="font-semibold text-red-800 mb-1">Common Mistakes</h4>
                 <ul className="space-y-1 text-red-700 text-sm">
                   <li>• Mixing VAT rates</li>
                   <li>• Incorrect invoice dates</li>
@@ -359,7 +359,7 @@ export default function VATGuidePage() {
                 </ul>
               </div>
               <div className="p-4 border border-green-200 rounded-lg bg-green-50">
-                <h4 className="font-semibold text-green-800 mb-2">Best Practices</h4>
+                <h4 className="font-semibold text-green-800 mb-1">Best Practices</h4>
                 <ul className="space-y-1 text-green-700 text-sm">
                   <li>• Double-check reduced vs. standard rates</li>
                   <li>• Match dates to correct VAT period</li>
@@ -372,7 +372,7 @@ export default function VATGuidePage() {
         </Card>
 
         {/* How PayVat Simplifies VAT */}
-        <Card className="mb-8 border-teal-200 bg-teal-50">
+        <Card className="mb-2 border-teal-200 bg-teal-50">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-teal-800 flex items-center">
               <CheckCircle className="h-5 w-5 text-teal-600 mr-2" />
@@ -414,7 +414,7 @@ export default function VATGuidePage() {
         </Card>
 
         {/* Further Resources */}
-        <Card className="mb-8">
+        <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
               <ExternalLink className="h-5 w-5 text-teal-500 mr-2" />
@@ -451,8 +451,8 @@ export default function VATGuidePage() {
         {/* CTA */}
         <Card className="text-center">
           <CardContent className="p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Ready to Simplify Your VAT?</h3>
-            <p className="text-gray-600 mb-6">Let PayVAT handle the complexity while you focus on growing your business</p>
+            <h3 className="text-2xl font-bold text-gray-900 mb-1">Ready to Simplify Your VAT?</h3>
+            <p className="text-gray-600 mb-2">Let PayVAT handle the complexity while you focus on growing your business</p>
             <Button 
               className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
               onClick={() => window.location.href = '/signup'}
