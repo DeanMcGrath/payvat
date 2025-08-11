@@ -1,4 +1,4 @@
-import SubmitReturn from "@/page-6-submit-return"
+import SubmitReturn from "@/page-6-vat3-return"
 
 export default function SubmitReturnPage() {
   return <SubmitReturn />
