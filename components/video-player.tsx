@@ -81,7 +81,7 @@ export function VideoPlayer({
     lastCurrentTime: 0
   })
 
-  const hideControlsTimeoutRef = useRef<NodeJS.Timeout>()
+  const hideControlsTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   // Send analytics data to API
   const sendAnalytics = useCallback(async (data: Partial<VideoAnalytics> & { completionRate?: number }) => {

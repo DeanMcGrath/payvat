@@ -48,10 +48,12 @@ export async function GET(request: NextRequest) {
         remainingViews: accessCheck.remainingViews
       }, { 
         status: accessCheck.rateLimited ? 429 : 403,
-        headers: {
+        headers: accessCheck.rateLimited ? {
           'X-RateLimit-Remaining': (accessCheck.remainingViews || 0).toString(),
-          'Retry-After': accessCheck.rateLimited ? '3600' : undefined
-        }.filter(([key, value]) => value !== undefined)
+          'Retry-After': '3600'
+        } : {
+          'X-RateLimit-Remaining': (accessCheck.remainingViews || 0).toString()
+        }
       })
     }
 
