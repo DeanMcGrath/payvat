@@ -135,7 +135,7 @@ export default function ReportsPage() {
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Error Loading Reports</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Error Loading Reports</h2>
             <p className="text-gray-600 mb-6">{error}</p>
             <Button 
               onClick={() => window.location.reload()}

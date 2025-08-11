@@ -167,14 +167,6 @@ export default function LoginPage() {
                   >
                     <Settings className="h-5 w-5" />
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
-                    onClick={() => window.location.href = '/signup'}
-                  >
-                    Sign Up
-                  </Button>
                 </div>
               </div>
             </div>
@@ -212,22 +204,22 @@ export default function LoginPage() {
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
               <div className="mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Secure authentication
                 </div>
                 
-                <div className="icon-premium mb-6 mx-auto">
+                <div className="icon-premium mb-3 mx-auto">
                   <UserCheck className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
                   <span className="text-gradient-primary">Welcome Back to</span>
                   <br />
                   <span className="text-foreground">PayVAT</span>
                 </h1>
                 
-                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   Access your secure VAT management dashboard. 

@@ -153,22 +153,22 @@ export default function PrivacyPage() {
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
               <div className="mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Your data, your rights
                 </div>
                 
-                <div className="icon-premium mb-6 mx-auto">
+                <div className="icon-premium mb-3 mx-auto">
                   <Shield className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
                   <span className="text-gradient-primary">Privacy</span>
                   <br />
                   <span className="text-foreground">Policy</span>
                 </h1>
                 
-                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   How we collect, use, and protect your personal information. 
@@ -206,7 +206,7 @@ export default function PrivacyPage() {
           {/* Table of Contents - Sidebar */}
           <div className="lg:col-span-1">
             <div className="card-modern p-6 sticky top-6">
-              <h2 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-3">
+              <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-3">
                 <BookOpen className="h-5 w-5 text-primary" />
                 Contents
               </h2>
@@ -261,7 +261,7 @@ export default function PrivacyPage() {
                   <Database className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">1. Information We Collect</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">1. Information We Collect</h2>
                   <div className="w-16 h-1 gradient-primary rounded-full"></div>
                 </div>
               </div>
@@ -325,7 +325,7 @@ export default function PrivacyPage() {
                   <Eye className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">2. How We Use Your Information</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">2. How We Use Your Information</h2>
                   <div className="w-16 h-1 bg-primary rounded-full"></div>
                 </div>
               </div>
@@ -362,7 +362,7 @@ export default function PrivacyPage() {
                   <Shield className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">3. Information Sharing</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">3. Information Sharing</h2>
                   <div className="w-16 h-1 bg-warning rounded-full"></div>
                 </div>
               </div>
@@ -423,7 +423,7 @@ export default function PrivacyPage() {
                   <Lock className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">4. Data Security</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">4. Data Security</h2>
                   <div className="w-16 h-1 gradient-primary rounded-full"></div>
                 </div>
               </div>
@@ -472,7 +472,7 @@ export default function PrivacyPage() {
                   <CheckCircle className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">5. Your Rights</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">5. Your Rights</h2>
                   <div className="w-16 h-1 bg-success rounded-full"></div>
                 </div>
               </div>
@@ -540,7 +540,7 @@ export default function PrivacyPage() {
                   <Mail className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-4">6. Contact Us</h2>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">6. Contact Us</h2>
                   <div className="w-16 h-1 gradient-primary rounded-full"></div>
                 </div>
               </div>

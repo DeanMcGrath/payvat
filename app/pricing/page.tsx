@@ -141,22 +141,22 @@ export default function PricingPage() {
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
               <div className="mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Trusted by 10,000+ Irish businesses
                 </div>
                 
-                <div className="icon-premium mb-6 mx-auto">
+                <div className="icon-premium mb-3 mx-auto">
                   <Euro className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
                   <span className="text-gradient-primary">Simple, Transparent</span>
                   <br />
                   <span className="text-foreground">Pricing Plans</span>
                 </h1>
                 
-                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   Choose the plan that fits your business needs. 
@@ -195,7 +195,7 @@ export default function PricingPage() {
 
           {/* Pricing Cards */}
           <div className="text-center mb-16 animate-slide-up">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
               Choose Your 
               <span className="text-gradient-primary"> Perfect Plan</span>
             </h2>
@@ -207,13 +207,13 @@ export default function PricingPage() {
           <div className="grid md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
             {/* Monthly Plan */}
             <div className="card-modern p-8 text-center hover-lift group relative">
-              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
                 <Calendar className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-2xl font-semibold text-foreground mb-4">Monthly Plan</h3>
+              <h3 className="text-2xl font-semibold text-foreground mb-2">Monthly Plan</h3>
               <div className="flex items-center justify-center space-x-2 mb-4">
                 <Euro className="h-8 w-8 text-primary" />
-                <span className="text-5xl font-bold text-foreground">30</span>
+                <span className="text-5xl font-bold text-foreground">90</span>
                 <span className="text-muted-foreground text-lg">/month</span>
               </div>
               <p className="text-primary font-semibold mb-6">Cancel anytime</p>
@@ -237,13 +237,13 @@ export default function PricingPage() {
                   Most Popular
                 </span>
               </div>
-              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
                 <Star className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-2xl font-semibold text-foreground mb-4">Annual Plan</h3>
+              <h3 className="text-2xl font-semibold text-foreground mb-2">Annual Plan</h3>
               <div className="flex items-center justify-center space-x-2 mb-4">
                 <Euro className="h-8 w-8 text-primary" />
-                <span className="text-5xl font-bold text-foreground">300</span>
+                <span className="text-5xl font-bold text-foreground">900</span>
                 <span className="text-muted-foreground text-lg">/year</span>
               </div>
               <p className="text-primary font-semibold mb-6">Two months free!</p>

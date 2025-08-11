@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import Link from "next/link"
 import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search, LogIn } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import LiveChat from "./components/live-chat"
@@ -52,9 +53,9 @@ export default function LandingPage() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center">
-                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
+                <Link href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
                   PayVAT
-                </a>
+                </Link>
               </div>
               
               {/* Header Actions */}
@@ -130,18 +131,18 @@ export default function LandingPage() {
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
               <div className="mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Expert VAT Guidance, Trusted by Irish businesses
                 </div>
                 
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-3">
                   <span className="text-gradient-primary">Simplify Your VAT</span>
                   <br />
                   <span className="text-foreground">Submission & Payments</span>
                 </h1>
                 
-                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   Professional VAT return submission and payment processing for Irish businesses. 
@@ -190,7 +191,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-16 animate-slide-up">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
               Everything You Need for 
               <span className="text-gradient-primary"> VAT Management</span>
             </h2>
@@ -203,10 +204,10 @@ export default function LandingPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8" data-animate>
             {/* Feature 1 */}
             <div className="card-modern p-8 text-center hover-lift group">
-              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
                 <FileText className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-4">Smart Submission</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-2">Smart Submission</h3>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 Intelligent step-by-step VAT return process with automatic calculations and error checking
               </p>
@@ -218,10 +219,10 @@ export default function LandingPage() {
 
             {/* Feature 2 */}
             <div className="card-modern p-8 text-center hover-lift group">
-              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
                 <Shield className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-4">Secure Payments</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-2">Secure Payments</h3>
               <p className="text-muted-foreground leading-relaxed mb-4">
               Secure encryption with simple payment using ROS Debit Instruction, you pay direct to Revenue with instant confirmation and charged to your bank account in 1-3 days.
               </p>
@@ -233,10 +234,10 @@ export default function LandingPage() {
 
             {/* Feature 3 */}
             <div className="card-modern p-8 text-center hover-lift group">
-              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
                 <Clock className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-4">Save Time</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-2">Save Time</h3>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 Complete VAT obligations in minutes with automated calculations and smart data import
               </p>
@@ -258,7 +259,7 @@ export default function LandingPage() {
             
             <div className="relative z-10">
               <div className="mb-8">
-                <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+                <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
                   Ready to Modernize Your
                   <span className="text-gradient-primary"> VAT Process?</span>
                 </h3>
@@ -298,7 +299,7 @@ export default function LandingPage() {
       <section className="py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16 animate-slide-up">
-            <h4 className="text-3xl font-bold text-foreground mb-4">
+            <h4 className="text-3xl font-bold text-foreground mb-2">
               Why Choose <span className="text-gradient-primary">PayVAT?</span>
             </h4>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -354,7 +355,7 @@ export default function LandingPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16 animate-slide-up">
-            <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+            <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
               Need Help? <span className="text-gradient-primary">We're Here</span>
             </h3>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -364,10 +365,10 @@ export default function LandingPage() {
 
           <div className="grid gap-8 md:grid-cols-3" data-animate>
             <div className="card-modern p-8 text-center hover-lift group">
-              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform">
+              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform">
                 <Mail className="h-8 w-8 text-white" />
               </div>
-              <h4 className="text-xl font-semibold text-foreground mb-4">Email Support</h4>
+              <h4 className="text-xl font-semibold text-foreground mb-2">Email Support</h4>
               <p className="text-muted-foreground mb-6 leading-relaxed">
                 Detailed help via email with expert guidance
               </p>
@@ -378,10 +379,10 @@ export default function LandingPage() {
             </div>
 
             <div className="card-modern p-8 text-center hover-lift group">
-              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform">
+              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform">
                 <Phone className="h-8 w-8 text-white" />
               </div>
-              <h4 className="text-xl font-semibold text-foreground mb-4">Phone Support</h4>
+              <h4 className="text-xl font-semibold text-foreground mb-2">Phone Support</h4>
               <p className="text-muted-foreground mb-6 leading-relaxed">
                 Direct line: Mon-Fri, 9AM-5PM IST
               </p>
@@ -392,10 +393,10 @@ export default function LandingPage() {
             </div>
 
             <div className="card-modern p-8 text-center hover-lift group">
-              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform">
+              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform">
                 <MessageCircle className="h-8 w-8 text-white" />
               </div>
-              <h4 className="text-xl font-semibold text-foreground mb-4">Live Chat</h4>
+              <h4 className="text-xl font-semibold text-foreground mb-2">Live Chat</h4>
               <p className="text-muted-foreground mb-6 leading-relaxed">
                 Instant help via our integrated chat system
               </p>

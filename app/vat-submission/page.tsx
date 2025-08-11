@@ -328,7 +328,7 @@ export default function VATSubmissionPage() {
                 <div className="hidden lg:flex items-center space-x-3">
                   <div className="relative">
                     <Input
-                      placeholder="Search VAT submissions..."
+                      placeholder="Search..."
                       className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
                     />
                     <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
@@ -404,7 +404,7 @@ export default function VATSubmissionPage() {
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
               <div className="mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Smart VAT calculations
                 </div>
@@ -413,7 +413,7 @@ export default function VATSubmissionPage() {
                   <Calculator className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
                   <span className="text-gradient-primary">VAT Return</span>
                   <br />
                   <span className="text-foreground">Submission</span>

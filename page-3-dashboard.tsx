@@ -1,9 +1,10 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Bell, FileText, CreditCard, Settings, LogOut, TrendingUp, Calendar, Euro, AlertCircle, Loader2, Search, CheckCircle } from 'lucide-react'
+import { Bell, FileText, Settings, LogOut, TrendingUp, Calendar, Euro, AlertCircle, Loader2, Search, CheckCircle, Calculator } from 'lucide-react'
 import { Input } from "@/components/ui/input"
 import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
@@ -18,15 +19,47 @@ interface UserProfile {
   lastName?: string
 }
 
+interface DashboardStats {
+  currentYear: {
+    totalSalesVAT: number
+    totalPurchaseVAT: number
+    totalNetVAT: number
+    returnsSubmitted: number
+  }
+  pendingPayments: Array<{
+    id: string
+    amount: number
+    status: string
+    dueDate?: Date
+    period?: string
+  }>
+  upcomingReturns: Array<{
+    id: string
+    period: string
+    netVAT: number
+    dueDate: Date
+    daysUntilDue: number
+  }>
+  recentActivity: Array<{
+    action: string
+    entityType: string
+    createdAt: Date
+    metadata: any
+  }>
+}
+
 export default function HomePage() {
   const { hasAccess, subscriptionType, trialEndsAt } = useSubscription()
   const [user, setUser] = useState<UserProfile | null>(null)
+  const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [statsLoading, setStatsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     fetchUserProfile()
+    fetchDashboardStats()
   }, [])
 
   const fetchUserProfile = async () => {
@@ -53,6 +86,26 @@ export default function HomePage() {
       setError('Network error occurred')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchDashboardStats = async () => {
+    try {
+      const response = await fetch('/api/reports?type=dashboard-stats', {
+        method: 'GET',
+        credentials: 'include'
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && data.report) {
+          setStats(data.report.stats)
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch dashboard stats:', err)
+    } finally {
+      setStatsLoading(false)
     }
   }
 
@@ -129,9 +182,9 @@ export default function HomePage() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center">
-                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
+                <Link href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
                   PayVAT
-                </a>
+                </Link>
               </div>
               
               {/* Header Content */}
@@ -205,12 +258,6 @@ export default function HomePage() {
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                     <span>Dashboard</span>
                   </span>
-                  <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
-                    <button className="hover:text-white transition-colors">VAT Returns</button>
-                    <button className="hover:text-white transition-colors">Documents</button>
-                    <button className="hover:text-white transition-colors">Reports</button>
-                    <button className="hover:text-white transition-colors">Settings</button>
-                  </div>
                 </div>
                 <div className="text-white/60 text-xs hidden sm:block">
                   Welcome back, {user.firstName || user.businessName}
@@ -226,7 +273,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           {/* Welcome Section */}
           <div className="mb-12 animate-fade-in">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
               Welcome back, <span className="text-gradient-primary">{user.firstName || user.businessName.split(' ')[0] || 'User'}</span>
             </h2>
             <p className="text-xl text-muted-foreground">Here's your VAT overview and recent activity</p>
@@ -237,30 +284,59 @@ export default function HomePage() {
             <div className="card-modern p-6 hover-lift">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-sm text-muted-foreground font-medium">VAT Due</p>
-                  <div className="text-3xl font-bold text-foreground">€</div>
+                  <p className="text-sm text-muted-foreground font-medium">Net VAT Due</p>
+                  {statsLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <div className="text-2xl font-bold text-foreground">Loading...</div>
+                    </div>
+                  ) : (
+                    <div className="text-3xl font-bold text-foreground">
+                      €{(stats?.pendingPayments && stats.pendingPayments.length > 0) ? 
+                        stats.pendingPayments[0].amount.toFixed(2) : 
+                        stats?.currentYear?.totalNetVAT?.toFixed(2) || '0.00'
+                      }
+                    </div>
+                  )}
                 </div>
                 <div className="icon-premium">
                   <Euro className="h-6 w-6 text-white" />
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <div className="status-warning">Due: </div>
+                {(stats?.pendingPayments && stats.pendingPayments.length > 0) ? (
+                  <div className="status-warning">
+                    Due: {stats.pendingPayments[0].dueDate ? new Date(stats.pendingPayments[0].dueDate).toLocaleDateString() : 'Soon'}
+                  </div>
+                ) : (
+                  <div className="status-success">No outstanding VAT</div>
+                )}
               </div>
             </div>
 
             <div className="card-modern p-6 hover-lift">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-sm text-muted-foreground font-medium">This Quarter</p>
-                  <div className="text-3xl font-bold text-foreground">€</div>
+                  <p className="text-sm text-muted-foreground font-medium">This Year</p>
+                  {statsLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <div className="text-2xl font-bold text-foreground">Loading...</div>
+                    </div>
+                  ) : (
+                    <div className="text-3xl font-bold text-foreground">
+                      €{stats?.currentYear?.totalSalesVAT?.toFixed(2) || '0.00'}
+                    </div>
+                  )}
                 </div>
                 <div className="icon-premium">
                   <TrendingUp className="h-6 w-6 text-white" />
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <div className="status-success"> </div>
+                <div className="status-success">
+                  Sales VAT collected
+                </div>
               </div>
             </div>
 
@@ -268,29 +344,51 @@ export default function HomePage() {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="text-sm text-muted-foreground font-medium">Returns Filed</p>
-                  <div className="text-3xl font-bold text-foreground">24</div>
+                  {statsLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <div className="text-2xl font-bold text-foreground">Loading...</div>
+                    </div>
+                  ) : (
+                    <div className="text-3xl font-bold text-foreground">
+                      {stats?.currentYear?.returnsSubmitted || 0}
+                    </div>
+                  )}
                 </div>
                 <div className="icon-premium">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <div className="status-success">All up to date</div>
+                <div className="status-success">
+                  {stats?.currentYear?.returnsSubmitted ? 'Filed this year' : 'Ready to file'}
+                </div>
               </div>
             </div>
 
             <div className="card-modern p-6 hover-lift">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-sm text-muted-foreground font-medium">Compliance</p>
-                  <div className="text-3xl font-bold text-foreground">100%</div>
+                  <p className="text-sm text-muted-foreground font-medium">Upcoming Returns</p>
+                  {statsLoading ? (
+                    <div className="flex items-center space-x-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <div className="text-2xl font-bold text-foreground">Loading...</div>
+                    </div>
+                  ) : (
+                    <div className="text-3xl font-bold text-foreground">
+                      {stats?.upcomingReturns?.length ?? 0}
+                    </div>
+                  )}
                 </div>
                 <div className="icon-premium">
-                  <CheckCircle className="h-6 w-6 text-white" />
+                  <Calendar className="h-6 w-6 text-white" />
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <div className="status-success">Fully compliant</div>
+                <div className="status-success">
+                  {(stats?.upcomingReturns && stats.upcomingReturns.length > 0) ? 'Due soon' : 'All up to date'}
+                </div>
               </div>
             </div>
           </div>
@@ -338,15 +436,6 @@ export default function HomePage() {
                   <FileText className="h-5 w-5 mr-3" />
                   File VAT Return
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="w-full btn-outline justify-start"
-                  onClick={() => window.location.href = '/payment'}
-                >
-                  <CreditCard className="h-5 w-5 mr-3" />
-                  Make Payment
-                </Button>
                 
                 <Button 
                   variant="outline" 
@@ -367,40 +456,77 @@ export default function HomePage() {
                 <p className="text-muted-foreground">Latest VAT transactions and updates</p>
               </div>
               
-              <div className="space-y-6">
-                <div className="flex items-center space-x-4">
-                  <div className="icon-modern bg-success/20 border-success/30">
-                    <CheckCircle className="h-5 w-5 text-success" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-foreground">Payment processed</p>
-                    <p className="text-sm text-muted-foreground">€8,450.00 - 2 hours ago</p>
-                  </div>
-                  <div className="status-success">Completed</div>
+{statsLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                  <span className="ml-2 text-muted-foreground">Loading activity...</span>
                 </div>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="icon-modern bg-primary/20 border-primary/30">
-                    <FileText className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-foreground">VAT return submitted</p>
-                    <p className="text-sm text-muted-foreground">Q3 2024 - 3 days ago</p>
-                  </div>
-                  <div className="status-success">Filed</div>
+              ) : stats?.recentActivity && stats.recentActivity.length > 0 ? (
+                <div className="space-y-6">
+                  {stats.recentActivity.map((activity, index) => {
+                    const getActivityDetails = (action: string) => {
+                      switch (action) {
+                        case 'SUBMIT_VAT_RETURN':
+                          return {
+                            icon: FileText,
+                            bgColor: 'bg-primary/20 border-primary/30',
+                            iconColor: 'text-primary',
+                            title: 'VAT return submitted',
+                            status: 'Filed'
+                          }
+                        case 'UPLOAD_DOCUMENT':
+                          return {
+                            icon: FileText,
+                            bgColor: 'bg-blue-500/20 border-blue-500/30',
+                            iconColor: 'text-blue-500',
+                            title: 'Document uploaded',
+                            status: 'Processed'
+                          }
+                        case 'CALCULATE_VAT':
+                          return {
+                            icon: Calculator,
+                            bgColor: 'bg-green-500/20 border-green-500/30',
+                            iconColor: 'text-green-500',
+                            title: 'VAT calculated',
+                            status: 'Completed'
+                          }
+                        default:
+                          return {
+                            icon: CheckCircle,
+                            bgColor: 'bg-success/20 border-success/30',
+                            iconColor: 'text-success',
+                            title: 'Activity logged',
+                            status: 'Completed'
+                          }
+                      }
+                    }
+                    
+                    const details = getActivityDetails(activity.action)
+                    const Icon = details.icon
+                    
+                    return (
+                      <div key={index} className="flex items-center space-x-4">
+                        <div className={`icon-modern ${details.bgColor}`}>
+                          <Icon className={`h-5 w-5 ${details.iconColor}`} />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-semibold text-foreground">{details.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {new Date(activity.createdAt).toLocaleDateString()} - {new Date(activity.createdAt).toLocaleTimeString()}
+                          </p>
+                        </div>
+                        <div className="status-success">{details.status}</div>
+                      </div>
+                    )
+                  })}
                 </div>
-                
-                <div className="flex items-center space-x-4">
-                  <div className="icon-modern">
-                    <Settings className="h-5 w-5 text-muted-foreground" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-semibold text-foreground">Account updated</p>
-                    <p className="text-sm text-muted-foreground">Profile settings - 1 week ago</p>
-                  </div>
-                  <div className="status-success">Updated</div>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <CheckCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                  <p className="text-lg font-medium">No recent activity</p>
+                  <p className="text-sm">Your VAT activities will appear here</p>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import Link from "next/link"
 import { ArrowLeft, ArrowRight, Calendar, Bell, Settings, LogOut, Search, CheckCircle, Clock, Shield } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import LiveChat from "./components/live-chat"
@@ -115,9 +116,9 @@ export default function VATReturnPeriod() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center">
-                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
+                <Link href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
                   PayVAT
-                </a>
+                </Link>
               </div>
               
               {/* Header Actions */}
@@ -204,28 +205,28 @@ export default function VATReturnPeriod() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+      <section className="relative pt-8 pb-12 lg:pt-12 lg:pb-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center">
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
               <div className="mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   VAT Period Selection
                 </div>
                 
-                <div className="icon-premium mb-6 mx-auto">
+                <div className="icon-premium mb-3 mx-auto">
                   <Calendar className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
                   <span className="text-gradient-primary">Select Your</span>
                   <br />
                   <span className="text-foreground">VAT Return Period</span>
                 </h1>
                 
-                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                <div className="w-32 h-1 gradient-primary mx-auto mb-3 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   Choose the bi-monthly taxable period for your VAT return submission. 
@@ -234,7 +235,7 @@ export default function VATReturnPeriod() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-8">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
                   <span>Revenue compliant</span>
@@ -259,14 +260,14 @@ export default function VATReturnPeriod() {
       </section>
 
       {/* Period Selection Section */}
-      <section className="py-20">
+      <section className="py-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-2xl mx-auto">
 
             {/* Period Selection Card */}
             <div className="card-premium p-8 mb-8 animate-fade-in" data-animate>
               <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold text-foreground mb-4">
+                <h2 className="text-2xl font-bold text-foreground mb-2">
                 </h2>
                 <p className="text-muted-foreground">
                 </p>

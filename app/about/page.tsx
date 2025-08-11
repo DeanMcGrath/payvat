@@ -141,22 +141,22 @@ export default function AboutPayVAT() {
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
               <div className="mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Founded by Irish entrepreneurs.
                 </div>
                 
-                <div className="icon-premium mb-6 mx-auto">
+                <div className="icon-premium mb-3 mx-auto">
                   <Target className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
                   <span className="text-gradient-primary">Putting Control Back</span>
                   <br />
                   <span className="text-foreground">In Your Hands</span>
                 </h1>
                 
-                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   PayVAT is an Irish fintech company on a mission to simplify VAT submissions for every business. 
@@ -195,13 +195,13 @@ export default function AboutPayVAT() {
         <section className="py-20" data-animate>
           <div className="card-premium p-12 mb-16 hover-lift">
             <div className="text-center mb-12">
-              <div className="icon-premium mb-6 mx-auto">
+              <div className="icon-premium mb-3 mx-auto">
                 <Users className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
                 Who <span className="text-gradient-primary">We Are</span>
               </h2>
-              <div className="w-24 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+              <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
             </div>
             
             <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -253,10 +253,10 @@ export default function AboutPayVAT() {
               <div className="icon-modern bg-primary mb-6 mx-auto">
                 <Target className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
                 Our <span className="text-gradient-primary">Vision</span>
               </h2>
-              <div className="w-24 h-1 bg-primary mx-auto mb-8 rounded-full"></div>
+              <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
             </div>
             
             <div className="max-w-4xl mx-auto text-center">
@@ -296,7 +296,7 @@ export default function AboutPayVAT() {
         {/* What We Do */}
         <section className="py-20" data-animate>
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
               What <span className="text-gradient-primary">We Do</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -307,11 +307,11 @@ export default function AboutPayVAT() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="card-modern p-8 hover-lift group">
               <div className="flex items-start gap-6">
-                <div className="icon-premium mb-6 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-premium mb-3 group-hover:scale-110 transition-transform duration-300">
                   <CheckCircle className="h-8 w-8 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-foreground mb-4 group-hover:text-primary transition-colors">
+                  <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
                     Self-Service VAT Filing
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
@@ -331,7 +331,7 @@ export default function AboutPayVAT() {
                   <Bell className="h-8 w-8 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-foreground mb-4 group-hover:text-primary transition-colors">
+                  <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
                     Automated Reminders
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
@@ -351,7 +351,7 @@ export default function AboutPayVAT() {
                   <Shield className="h-8 w-8 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-foreground mb-4 group-hover:text-primary transition-colors">
+                  <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
                     Secure Payments
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
@@ -367,11 +367,11 @@ export default function AboutPayVAT() {
 
             <div className="card-premium p-8 hover-lift group">
               <div className="flex items-start gap-6">
-                <div className="icon-premium mb-6 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-premium mb-3 group-hover:scale-110 transition-transform duration-300">
                   <Euro className="h-8 w-8 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-foreground mb-4 group-hover:text-primary transition-colors">
+                  <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
                     Transparent Pricing
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
@@ -395,13 +395,13 @@ export default function AboutPayVAT() {
             
             <div className="relative z-10">
               <div className="text-center mb-12">
-                <div className="icon-premium mb-6 mx-auto">
+                <div className="icon-premium mb-3 mx-auto">
                   <TrendingUp className="h-10 w-10 text-white" />
                 </div>
-                <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+                <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
                   Why Choose <span className="text-gradient-primary">PayVAT?</span>
                 </h2>
-                <div className="w-24 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
               </div>
               
               <div className="grid md:grid-cols-2 gap-8">
@@ -474,11 +474,11 @@ export default function AboutPayVAT() {
               
               <div className="relative z-10">
                 <div className="mb-8">
-                  <div className="icon-premium mb-6 mx-auto">
+                  <div className="icon-premium mb-3 mx-auto">
                     <Target className="h-12 w-12 text-white" />
                   </div>
                   
-                  <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-6">
+                  <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
                     Ready to Take <span className="text-gradient-primary">Control?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
