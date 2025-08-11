@@ -11,13 +11,11 @@
     },
     "app/api/admin/videos/route.ts": {
       "maxDuration": 300,
-      "memory": 1024,
-      "maxRequestBodySize": "100mb"
+      "memory": 1024
     },
     "app/api/admin/videos/chunked/route.ts": {
       "maxDuration": 300,
-      "memory": 1024,
-      "maxRequestBodySize": "10mb"
+      "memory": 1024
     }
   },
   "crons": [

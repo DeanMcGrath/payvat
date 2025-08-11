@@ -91,14 +91,14 @@ async function postVideo(request: NextRequest, user: AuthUser) {
     console.log(`📋 [VIDEO UPLOAD] Content-Type: ${contentType}`)
     console.log(`📏 [VIDEO UPLOAD] Content-Length: ${contentLength || 'unknown'}`)
 
-    // Early request size validation to prevent 413 errors
-    const maxRequestSize = 100 * 1024 * 1024 // 100MB limit for direct uploads
+    // Early request size validation - Vercel has ~4-6MB hard limit
+    const maxRequestSize = 4 * 1024 * 1024 // 4MB limit due to Vercel serverless constraints
     if (contentLength && parseInt(contentLength) > maxRequestSize) {
       console.error(`❌ [VIDEO UPLOAD] Request too large: ${contentLength} bytes (${Math.round(parseInt(contentLength) / 1024 / 1024)}MB)`)
       return NextResponse.json({ 
         success: false, 
         error: 'File too large for direct upload',
-        details: `Files larger than ${Math.round(maxRequestSize / 1024 / 1024)}MB must use chunked upload. Your file is ${Math.round(parseInt(contentLength) / 1024 / 1024)}MB.`,
+        details: `Due to serverless function limits, files larger than ${Math.round(maxRequestSize / 1024 / 1024)}MB must use chunked upload. Your file is ${Math.round(parseInt(contentLength) / 1024 / 1024)}MB.`,
         errorCode: 'USE_CHUNKED_UPLOAD',
         recommendChunkedUpload: true
       }, { status: 413 })
@@ -166,14 +166,14 @@ async function postVideo(request: NextRequest, user: AuthUser) {
       }, { status: 400 })
     }
 
-    // Pre-upload size validation (max 100MB for direct uploads)
-    const maxSize = 100 * 1024 * 1024 // 100MB in bytes
+    // Pre-upload size validation (max 4MB due to Vercel serverless limits)
+    const maxSize = 4 * 1024 * 1024 // 4MB in bytes - Vercel serverless constraint
     if (file.size > maxSize) {
       console.error(`❌ [VIDEO UPLOAD] File too large - Size: ${file.size} bytes (${Math.round(file.size / 1024 / 1024)}MB)`)
       return NextResponse.json({ 
         success: false, 
         error: 'File too large for direct upload',
-        details: `Files larger than ${Math.round(maxSize / 1024 / 1024)}MB must use chunked upload. Your file is ${Math.round(file.size / 1024 / 1024)}MB.`,
+        details: `Due to serverless function limits, files larger than ${Math.round(maxSize / 1024 / 1024)}MB must use chunked upload. Your file is ${Math.round(file.size / 1024 / 1024)}MB.`,
         errorCode: 'USE_CHUNKED_UPLOAD',
         recommendChunkedUpload: true
       }, { status: 413 })
