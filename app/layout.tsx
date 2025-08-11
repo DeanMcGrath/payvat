@@ -1,4 +1,5 @@
 import { SubscriptionProvider } from '@/contexts/subscription-context'
+import { VATDataProvider } from '@/contexts/vat-data-context'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { Toaster } from '@/components/ui/sonner'
 import '@/lib/env-validation' // Validate environment on startup
@@ -17,7 +18,9 @@ export default function RootLayout({
       <body>
         <ErrorBoundary>
           <SubscriptionProvider>
-            {children}
+            <VATDataProvider>
+              {children}
+            </VATDataProvider>
           </SubscriptionProvider>
           <Toaster />
         </ErrorBoundary>

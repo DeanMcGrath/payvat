@@ -2,19 +2,34 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
-import { Euro, Bell, Settings, LogOut, Search, Save, Send, ArrowUp, FileText, Shield, CheckCircle, Clock } from "lucide-react"
+import { Euro, Bell, Settings, LogOut, Search, Save, Send, ArrowUp, FileText, Shield, CheckCircle, Clock, Sparkles, AlertCircle } from "lucide-react"
 import LiveChat from "../../components/live-chat"
+import { useVATData } from "@/contexts/vat-data-context"
+import { convertToWholeEurosString, calculatePeriodDates, formatEuroAmount } from "@/lib/vat-utils"
+import { Badge } from "@/components/ui/badge"
 
 export default function VAT3ReturnForm() {
+  const { 
+    userProfile, 
+    selectedYear, 
+    selectedPeriod, 
+    periodBeginDate, 
+    periodEndDate,
+    totalSalesVAT, 
+    totalPurchaseVAT, 
+    loadUserProfile 
+  } = useVATData()
+  
   const [formData, setFormData] = useState({
-    traderName: "  ",
-    registrationNumber: " ",
+    traderName: "",
+    registrationNumber: "",
     filingFrequency: "bi-monthly",
     periodBeginDate: "",
     periodEndDate: "",
@@ -35,6 +50,99 @@ export default function VAT3ReturnForm() {
 
   const [isSaving, setIsSaving] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [autoFilledFields, setAutoFilledFields] = useState<string[]>([])
+  const [validationErrors, setValidationErrors] = useState<string[]>([])
+  
+  const router = useRouter()
+
+  // Autofill form on component mount and when context data changes
+  useEffect(() => {
+    console.log('VAT3 Autofill Debug:', {
+      userProfile: userProfile,
+      periodBeginDate: periodBeginDate,
+      periodEndDate: periodEndDate,
+      totalSalesVAT: totalSalesVAT,
+      totalPurchaseVAT: totalPurchaseVAT,
+      selectedYear: selectedYear,
+      selectedPeriod: selectedPeriod
+    })
+
+    let fieldsToAutofill: string[] = []
+    let updatedFormData: typeof formData = {
+      traderName: formData.traderName,
+      registrationNumber: formData.registrationNumber,
+      filingFrequency: formData.filingFrequency,
+      periodBeginDate: formData.periodBeginDate,
+      periodEndDate: formData.periodEndDate,
+      returnType: formData.returnType,
+      t1VATOnSales: formData.t1VATOnSales,
+      t2VATOnPurchases: formData.t2VATOnPurchases,
+      unusualExpenditure: formData.unusualExpenditure,
+      unusualAmount: formData.unusualAmount,
+      unusualDetails: formData.unusualDetails,
+      t3NetPayable: formData.t3NetPayable,
+      t4NetRepayable: formData.t4NetRepayable,
+      e1TotalGoodsTo: formData.e1TotalGoodsTo,
+      e2TotalGoodsFrom: formData.e2TotalGoodsFrom,
+      es1TotalServicesTo: formData.es1TotalServicesTo,
+      es2TotalServicesFrom: formData.es2TotalServicesFrom,
+      pa1PostponedAccounting: formData.pa1PostponedAccounting,
+    }
+
+    // Load user profile if not already loaded
+    if (!userProfile) {
+      loadUserProfile()
+    }
+
+    // 1. Autofill Registration Details from user profile
+    if (userProfile) {
+      if (userProfile.businessName) {
+        updatedFormData.traderName = userProfile.businessName
+        fieldsToAutofill.push('traderName')
+      } else if (userProfile.firstName && userProfile.lastName) {
+        updatedFormData.traderName = `${userProfile.firstName} ${userProfile.lastName}`
+        fieldsToAutofill.push('traderName')
+      }
+      
+      if (userProfile.vatNumber) {
+        updatedFormData.registrationNumber = userProfile.vatNumber
+        fieldsToAutofill.push('registrationNumber')
+      }
+    }
+
+    // 2. Autofill Period Details from context
+    if (periodBeginDate && periodEndDate) {
+      updatedFormData.periodBeginDate = periodBeginDate
+      updatedFormData.periodEndDate = periodEndDate
+      fieldsToAutofill.push('periodBeginDate', 'periodEndDate')
+      console.log('Period dates autofilled:', periodBeginDate, periodEndDate)
+    } else {
+      console.log('No period dates available in context')
+    }
+
+    // 3. Autofill VAT amounts from context (convert to whole euros)
+    if (totalSalesVAT > 0) {
+      const roundedSalesVAT = convertToWholeEurosString(totalSalesVAT)
+      updatedFormData.t1VATOnSales = roundedSalesVAT
+      fieldsToAutofill.push('t1VATOnSales')
+      console.log('Sales VAT autofilled:', totalSalesVAT, '→', roundedSalesVAT)
+    }
+    
+    if (totalPurchaseVAT > 0) {
+      const roundedPurchaseVAT = convertToWholeEurosString(totalPurchaseVAT)
+      updatedFormData.t2VATOnPurchases = roundedPurchaseVAT
+      fieldsToAutofill.push('t2VATOnPurchases')
+      console.log('Purchase VAT autofilled:', totalPurchaseVAT, '→', roundedPurchaseVAT)
+    }
+
+    // Update state if there are changes
+    if (fieldsToAutofill.length > 0) {
+      console.log('Autofilling fields:', fieldsToAutofill)
+      setFormData(updatedFormData)
+      setAutoFilledFields(fieldsToAutofill)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userProfile, periodBeginDate, periodEndDate, totalSalesVAT, totalPurchaseVAT, selectedYear, selectedPeriod])
 
   // Auto-calculate T3 and T4 based on T1 and T2
   useEffect(() => {
@@ -65,7 +173,27 @@ export default function VAT3ReturnForm() {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
+    // Remove from auto-filled list when user manually changes a field
+    if (autoFilledFields.includes(field)) {
+      setAutoFilledFields(prev => prev.filter(f => f !== field))
+    }
   }
+
+  // Helper component for autofill badge
+  const AutoFillBadge = ({ fieldName, children }: { fieldName: string, children: React.ReactNode }) => (
+    <div className="relative">
+      {children}
+      {autoFilledFields.includes(fieldName) && (
+        <Badge 
+          variant="secondary" 
+          className="absolute -top-2 -right-2 text-xs bg-green-100 text-green-800 hover:bg-green-100"
+        >
+          <Sparkles className="h-3 w-3 mr-1" />
+          Auto-filled
+        </Badge>
+      )}
+    </div>
+  )
 
   const handleSaveDraft = async () => {
     setIsSaving(true)
@@ -74,12 +202,71 @@ export default function VAT3ReturnForm() {
     setIsSaving(false)
   }
 
+  // Form validation function
+  const validateForm = (): string[] => {
+    const errors: string[] = []
+    
+    // Required field validation
+    if (!formData.traderName?.trim()) {
+      errors.push('Trader Name is required')
+    }
+    if (!formData.registrationNumber?.trim()) {
+      errors.push('Registration Number is required')
+    }
+    if (!formData.periodBeginDate) {
+      errors.push('Period Begin Date is required')
+    }
+    if (!formData.periodEndDate) {
+      errors.push('Period End Date is required')
+    }
+    if (!formData.t1VATOnSales || parseFloat(formData.t1VATOnSales) < 0) {
+      errors.push('VAT on Sales (T1) must be a valid positive number')
+    }
+    if (!formData.t2VATOnPurchases || parseFloat(formData.t2VATOnPurchases) < 0) {
+      errors.push('VAT on Purchases (T2) must be a valid positive number')
+    }
+    
+    // Unusual expenditure validation
+    if (formData.unusualExpenditure === 'yes') {
+      if (!formData.unusualAmount || parseFloat(formData.unusualAmount) <= 0) {
+        errors.push('Unusual expenditure amount is required when unusual expenditure is Yes')
+      }
+      if (!formData.unusualDetails?.trim()) {
+        errors.push('Unusual expenditure details are required when unusual expenditure is Yes')
+      }
+    }
+    
+    return errors
+  }
+
   const handleSubmitReturn = async () => {
+    // Validate form before submission
+    const errors = validateForm()
+    if (errors.length > 0) {
+      setValidationErrors(errors)
+      // Scroll to top to show errors
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+    
+    setValidationErrors([])
     setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    console.log("Return submitted:", formData)
-    window.location.href = "/submit-return"
-    setIsSubmitting(false)
+    
+    try {
+      // Store form data in localStorage for confirmation page
+      localStorage.setItem('vat3_submission_data', JSON.stringify(formData))
+      
+      // Simulate processing time
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      
+      // Navigate to confirmation page
+      router.push('/confirmation-payment')
+    } catch (error) {
+      console.error('Error submitting return:', error)
+      setValidationErrors(['An error occurred while submitting your return. Please try again.'])
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -173,7 +360,7 @@ export default function VAT3ReturnForm() {
           <div className="text-center">
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-8">
+              <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Revenue compliant VAT3 submission
@@ -183,7 +370,7 @@ export default function VAT3ReturnForm() {
                   <FileText className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
                   <span className="text-gradient-primary">Complete Your</span>
                   <br />
                   <span className="text-foreground">VAT3 Return</span>
@@ -202,7 +389,7 @@ export default function VAT3ReturnForm() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-6">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
                   <span>Revenue compliant</span>
@@ -227,6 +414,27 @@ export default function VAT3ReturnForm() {
       </section>
 
       <div className="max-w-4xl mx-auto px-6 py-8">
+        {/* Validation Errors */}
+        {validationErrors.length > 0 && (
+          <Card className="border-red-200 bg-red-50 mb-6">
+            <CardContent className="pt-6">
+              <div className="flex items-start space-x-3">
+                <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h3 className="text-red-800 font-semibold mb-1">Please correct the following errors:</h3>
+                  <ul className="text-red-700 text-sm space-y-1">
+                    {validationErrors.map((error, index) => (
+                      <li key={index} className="flex items-start space-x-1">
+                        <span className="text-red-500">•</span>
+                        <span>{error}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         <div className="space-y-6">
           {/* Registration Details */}
@@ -238,19 +446,23 @@ export default function VAT3ReturnForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label className="text-base font-medium text-foreground">Trader Name *</Label>
-                  <Input
-                    value={formData.traderName}
-                    onChange={(e) => handleInputChange("traderName", e.target.value)}
-                    className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                  />
+                  <AutoFillBadge fieldName="traderName">
+                    <Input
+                      value={formData.traderName}
+                      onChange={(e) => handleInputChange("traderName", e.target.value)}
+                      className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                    />
+                  </AutoFillBadge>
                 </div>
                 <div className="space-y-2">
                   <Label className="text-base font-medium text-foreground">Registration Number *</Label>
-                  <Input
-                    value={formData.registrationNumber}
-                    onChange={(e) => handleInputChange("registrationNumber", e.target.value)}
-                    className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                  />
+                  <AutoFillBadge fieldName="registrationNumber">
+                    <Input
+                      value={formData.registrationNumber}
+                      onChange={(e) => handleInputChange("registrationNumber", e.target.value)}
+                      className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                    />
+                  </AutoFillBadge>
                 </div>
               </div>
             </CardContent>
@@ -310,22 +522,26 @@ export default function VAT3ReturnForm() {
                   <div className="space-y-2">
                     <Label className="text-base font-medium text-foreground">Period Begin Date *</Label>
                     <div className="text-sm text-gray-600 mb-1">(dd/mm/yyyy)</div>
-                    <Input
-                      type="date"
-                      value={formData.periodBeginDate}
-                      onChange={(e) => handleInputChange("periodBeginDate", e.target.value)}
-                      className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                    />
+                    <AutoFillBadge fieldName="periodBeginDate">
+                      <Input
+                        type="date"
+                        value={formData.periodBeginDate}
+                        onChange={(e) => handleInputChange("periodBeginDate", e.target.value)}
+                        className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                      />
+                    </AutoFillBadge>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-base font-medium text-foreground">Period End Date *</Label>
                     <div className="text-sm text-gray-600 mb-1">(dd/mm/yyyy)</div>
-                    <Input
-                      type="date"
-                      value={formData.periodEndDate}
-                      onChange={(e) => handleInputChange("periodEndDate", e.target.value)}
-                      className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                    />
+                    <AutoFillBadge fieldName="periodEndDate">
+                      <Input
+                        type="date"
+                        value={formData.periodEndDate}
+                        onChange={(e) => handleInputChange("periodEndDate", e.target.value)}
+                        className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                      />
+                    </AutoFillBadge>
                   </div>
                 </div>
               </div>
@@ -386,13 +602,15 @@ export default function VAT3ReturnForm() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Euro className="h-4 w-4 text-gray-600" />
-                      <Input
-                        type="number"
-                        value={formData.t1VATOnSales}
-                        onChange={(e) => handleInputChange("t1VATOnSales", e.target.value)}
-                        className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                        placeholder="0"
-                      />
+                      <AutoFillBadge fieldName="t1VATOnSales">
+                        <Input
+                          type="number"
+                          value={formData.t1VATOnSales}
+                          onChange={(e) => handleInputChange("t1VATOnSales", e.target.value)}
+                          className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                          placeholder="0"
+                        />
+                      </AutoFillBadge>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
@@ -402,13 +620,15 @@ export default function VAT3ReturnForm() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Euro className="h-4 w-4 text-gray-600" />
-                      <Input
-                        type="number"
-                        value={formData.t2VATOnPurchases}
-                        onChange={(e) => handleInputChange("t2VATOnPurchases", e.target.value)}
-                        className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                        placeholder="0"
-                      />
+                      <AutoFillBadge fieldName="t2VATOnPurchases">
+                        <Input
+                          type="number"
+                          value={formData.t2VATOnPurchases}
+                          onChange={(e) => handleInputChange("t2VATOnPurchases", e.target.value)}
+                          className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                          placeholder="0"
+                        />
+                      </AutoFillBadge>
                     </div>
                   </div>
                 </div>

@@ -12,6 +12,8 @@ import FileUpload from "@/components/file-upload"
 import Footer from "@/components/footer"
 import { toast } from "sonner"
 import { logger } from "@/lib/logger"
+import { useVATData } from "@/contexts/vat-data-context"
+import { getPeriodLabel, formatEuroAmount } from "@/lib/vat-utils"
 
 interface UserProfile {
   id: string
@@ -23,6 +25,7 @@ interface UserProfile {
 }
 
 export default function VATSubmissionPage() {
+  const { selectedYear, selectedPeriod, setVATAmounts, totalSalesVAT: contextSalesVAT, totalPurchaseVAT: contextPurchaseVAT } = useVATData()
   const [salesVAT, setSalesVAT] = useState("9450.00")
   const [purchaseVAT, setPurchaseVAT] = useState("2100.00")
   const [netVAT, setNetVAT] = useState("7350.00")
@@ -35,8 +38,8 @@ export default function VATSubmissionPage() {
   const [userLoading, setUserLoading] = useState(true)
   const [userError, setUserError] = useState<string | null>(null)
 
-  // Mock selected period data (would come from previous page)
-  const selectedPeriod = "November - December 2024"
+  // Use period data from context or fallback
+  const displayPeriod = selectedPeriod ? getPeriodLabel(selectedPeriod) + " " + selectedYear : "November - December 2024"
   const dueDate = "15 Jan 2025"
 
   // Load data on component mount
@@ -214,6 +217,9 @@ export default function VATSubmissionPage() {
       setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
       setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
       setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
+      
+      // Save VAT amounts to context for VAT3 form autofill
+      setVATAmounts(extractedVATData.totalSalesVAT, extractedVATData.totalPurchaseVAT)
       setUseExtractedData(true)
     } else {
       console.log('❌ FRONTEND: No extractedVATData available to use')
@@ -403,23 +409,23 @@ export default function VATSubmissionPage() {
           <div className="text-center">
             {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-8">
+              <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Smart VAT calculations
                 </div>
                 
-                <div className="icon-premium mb-6 mx-auto">
+                <div className="icon-premium mb-3 mx-auto">
                   <Calculator className="h-12 w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
                   <span className="text-gradient-primary">VAT Return</span>
                   <br />
                   <span className="text-foreground">Submission</span>
                 </h1>
                 
-                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   Complete your VAT calculations with AI-powered document scanning. 
@@ -428,7 +434,7 @@ export default function VATSubmissionPage() {
               </div>
               
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-6">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />
                   <span>AI document scanning</span>
@@ -550,7 +556,13 @@ export default function VATSubmissionPage() {
                         id="sales-vat"
                         type="text"
                         value={salesVAT}
-                        onChange={(e) => setSalesVAT(e.target.value)}
+                        onChange={(e) => {
+                          setSalesVAT(e.target.value)
+                          // Update context with new value
+                          const salesValue = parseFloat(e.target.value) || 0
+                          const purchaseValue = parseFloat(purchaseVAT) || 0
+                          setVATAmounts(salesValue, purchaseValue)
+                        }}
                         className="pl-8 bg-white border-gray-300 focus:border-teal-600 focus:ring-teal-600"
                       />
                     </div>
@@ -567,7 +579,13 @@ export default function VATSubmissionPage() {
                         id="purchase-vat"
                         type="text"
                         value={purchaseVAT}
-                        onChange={(e) => setPurchaseVAT(e.target.value)}
+                        onChange={(e) => {
+                          setPurchaseVAT(e.target.value)
+                          // Update context with new value
+                          const salesValue = parseFloat(salesVAT) || 0
+                          const purchaseValue = parseFloat(e.target.value) || 0
+                          setVATAmounts(salesValue, purchaseValue)
+                        }}
                         className="pl-8 bg-white border-gray-300 focus:border-teal-600 focus:ring-teal-600"
                       />
                     </div>
@@ -1047,7 +1065,17 @@ export default function VATSubmissionPage() {
                 </Button>
                 <Button 
                   className="w-full bg-teal-600 hover:bg-teal-600 text-white justify-start"
-                  onClick={() => window.location.href = '/vat3-return'}
+                  onClick={() => {
+                    // Save current VAT amounts to context before navigating
+                    const salesValue = parseFloat(salesVAT) || 0
+                    const purchaseValue = parseFloat(purchaseVAT) || 0
+                    setVATAmounts(salesValue, purchaseValue)
+                    
+                    // Navigate to VAT3 return page
+                    setTimeout(() => {
+                      window.location.href = '/vat3-return'
+                    }, 100) // Small delay to ensure context updates
+                  }}
                 >
                   Submit Return
                 </Button>
