@@ -120,7 +120,6 @@ export default function VATGuidePage() {
                     <span>VAT Guide</span>
                   </span>
                   <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/signup'}>Signup</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>

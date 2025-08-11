@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search, UserPlus, LogIn } from 'lucide-react'
+import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search, LogIn } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
@@ -96,15 +96,6 @@ export default function LandingPage() {
                   >
                     <LogIn className="h-5 w-5" />
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20"
-                    onClick={() => window.location.href = '/signup'}
-                    aria-label="Sign up"
-                  >
-                    <UserPlus className="h-5 w-5" />
-                  </Button>
                 </div>
               </div>
             </div>
@@ -116,7 +107,6 @@ export default function LandingPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-8">
                   <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/signup'}>Signup</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>

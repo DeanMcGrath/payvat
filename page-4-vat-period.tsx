@@ -267,10 +267,8 @@ export default function VATReturnPeriod() {
             <div className="card-premium p-8 mb-8 animate-fade-in" data-animate>
               <div className="text-center mb-8">
                 <h2 className="text-2xl font-bold text-foreground mb-4">
-                  Select Return Period
                 </h2>
                 <p className="text-muted-foreground">
-                  Choose your bi-monthly VAT return period below
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

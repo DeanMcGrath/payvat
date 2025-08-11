@@ -119,7 +119,6 @@ export default function AboutPayVAT() {
                     <span>About PayVAT</span>
                   </span>
                   <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/signup'}>Signup</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
