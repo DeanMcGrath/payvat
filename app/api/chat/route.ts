@@ -313,8 +313,20 @@ export async function GET(request: NextRequest) {
         senderName: msg.senderName,
         isRead: msg.isRead,
         createdAt: msg.createdAt,
-        fileName: msg.fileName,
-        fileUrl: msg.fileUrl,
+        
+        // Include file information if it's a file message
+        ...(msg.messageType === 'file' && msg.fileName ? {
+          file: {
+            id: msg.id,
+            name: msg.fileName,
+            originalName: msg.originalName,
+            size: msg.fileSize,
+            mimeType: msg.mimeType,
+            previewUrl: msg.filePreviewUrl,
+            downloadUrl: `/api/chat/files/${msg.id}`,
+            scanResult: msg.scanResult,
+          }
+        } : {})
       }))
     })
 

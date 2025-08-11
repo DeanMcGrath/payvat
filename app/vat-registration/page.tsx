@@ -137,15 +137,6 @@ export default function VATRegistrationPage() {
                     >
                       <LogOut className="h-5 w-5" />
                     </Button>
-                  ) : (
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="text-white hover:bg-white/10 px-3 glass-white/10 backdrop-blur-sm border-white/20"
-                      onClick={() => window.location.href = '/login'}
-                    >
-                      Login
-                    </Button>
                   )}
                 </div>
               </div>
@@ -618,11 +609,11 @@ export default function VATRegistrationPage() {
                 </ul>
               </div>
 
-              {/* File VAT Returns */}
+              {/* Submit VAT Returns */}
               <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
                 <h4 className="font-semibold text-teal-900 mb-3 flex items-center">
                   <FileText className="h-5 w-5 text-teal-600 mr-2" />
-                  File VAT Returns
+                  Submit VAT Returns
                 </h4>
                 <div className="space-y-3">
                   <ul className="space-y-2 text-teal-700 text-sm">
@@ -630,14 +621,14 @@ export default function VATRegistrationPage() {
                     <li>• Choose between invoice basis (VAT due when invoiced) or cash basis (VAT due when paid, if turnover is below €2 million and 90% of customers are non-VAT-registered)</li>
                   </ul>
                   <div className="bg-white border border-teal-200 rounded-lg p-3">
-                    <p className="text-teal-800 text-sm mb-2"><strong>Note:</strong> You can calculate, submit, and pay VAT by signing up for PayVAT.</p>
+                    <p className="text-teal-800 text-sm mb-2"><strong>Note:</strong> You can calculate, submit, and pay VAT using digital platforms.</p>
                     <Button 
                       size="sm" 
                       className="bg-teal-600 hover:bg-teal-700"
-                      onClick={() => window.location.href = '/signup'}
+                      onClick={() => window.location.href = '/vat-guide'}
                     >
                       <ArrowRight className="h-4 w-4 mr-2" />
-                      Sign up for PayVAT now
+                      Learn about VAT process
                     </Button>
                   </div>
                 </div>
@@ -652,14 +643,14 @@ export default function VATRegistrationPage() {
                 <div className="space-y-3">
                   <p className="text-blue-700 text-sm">Pay any VAT owed to Revenue on time to avoid penalties.</p>
                   <div className="bg-white border border-blue-200 rounded-lg p-3">
-                    <p className="text-blue-800 text-sm mb-2"><strong>Note:</strong> You can calculate, submit, and pay VAT by signing up for PayVAT.</p>
+                    <p className="text-blue-800 text-sm mb-2"><strong>Note:</strong> You can calculate, submit, and pay VAT using digital platforms.</p>
                     <Button 
                       size="sm" 
                       className="bg-blue-600 hover:bg-blue-700"
-                      onClick={() => window.location.href = '/signup'}
+                      onClick={() => window.location.href = '/about'}
                     >
                       <ArrowRight className="h-4 w-4 mr-2" />
-                      Sign up for PayVAT now
+                      Contact for help
                     </Button>
                   </div>
                 </div>
@@ -674,14 +665,14 @@ export default function VATRegistrationPage() {
                 <div className="space-y-3">
                   <p className="text-green-700 text-sm">Claim VAT paid on business purchases (e.g., supplies, equipment) if related to taxable sales. Keep valid VAT invoices for deductions.</p>
                   <div className="bg-white border border-green-200 rounded-lg p-3">
-                    <p className="text-green-800 text-sm mb-2"><strong>Note:</strong> You can calculate, submit, and pay VAT by signing up for PayVAT.</p>
+                    <p className="text-green-800 text-sm mb-2"><strong>Note:</strong> You can calculate, submit, and pay VAT using digital platforms.</p>
                     <Button 
                       size="sm" 
                       className="bg-green-600 hover:bg-green-700"
-                      onClick={() => window.location.href = '/signup'}
+                      onClick={() => window.location.href = '/pricing'}
                     >
                       <ArrowRight className="h-4 w-4 mr-2" />
-                      Sign up for PayVAT now
+                      View pricing options
                     </Button>
                   </div>
                 </div>
@@ -748,10 +739,10 @@ export default function VATRegistrationPage() {
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button 
                 className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
-                onClick={() => window.location.href = '/signup'}
+                onClick={() => window.location.href = '/about'}
               >
                 <ArrowRight className="h-5 w-5 mr-2" />
-                Sign Up for PayVAT
+                Contact PayVAT
               </Button>
               <Button 
                 variant="outline" 

@@ -18,7 +18,8 @@ import {
   Euro,
   Activity,
   BarChart3,
-  MessageCircle
+  MessageCircle,
+  Video
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -468,11 +469,17 @@ function AdminDashboardContent() {
           <CardTitle>Quick Actions</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <Link href="/admin/users">
               <Button variant="outline" className="w-full justify-start">
                 <Users className="h-4 w-4 mr-2" />
                 Manage Users
+              </Button>
+            </Link>
+            <Link href="/admin/videos">
+              <Button variant="outline" className="w-full justify-start">
+                <Video className="h-4 w-4 mr-2" />
+                Demo Videos
               </Button>
             </Link>
             <Link href="/admin/documents">

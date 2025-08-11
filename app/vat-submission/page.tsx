@@ -26,9 +26,9 @@ interface UserProfile {
 
 export default function VATSubmissionPage() {
   const { selectedYear, selectedPeriod, setVATAmounts, totalSalesVAT: contextSalesVAT, totalPurchaseVAT: contextPurchaseVAT } = useVATData()
-  const [salesVAT, setSalesVAT] = useState("9450.00")
-  const [purchaseVAT, setPurchaseVAT] = useState("2100.00")
-  const [netVAT, setNetVAT] = useState("7350.00")
+  const [salesVAT, setSalesVAT] = useState("0.00")
+  const [purchaseVAT, setPurchaseVAT] = useState("0.00")
+  const [netVAT, setNetVAT] = useState("0.00")
   const [extractedVATData, setExtractedVATData] = useState<any>(null)
   const [loadingExtractedData, setLoadingExtractedData] = useState(false)
   const [useExtractedData, setUseExtractedData] = useState(false)
@@ -39,8 +39,40 @@ export default function VATSubmissionPage() {
   const [userError, setUserError] = useState<string | null>(null)
 
   // Use period data from context or fallback
-  const displayPeriod = selectedPeriod ? getPeriodLabel(selectedPeriod) + " " + selectedYear : "November - December 2024"
-  const dueDate = "15 Jan 2025"
+  // Calculate current period if none selected
+  const currentDate = new Date()
+  const currentYear = currentDate.getFullYear()
+  const currentMonth = currentDate.getMonth() // 0-based
+  
+  // Determine current VAT period (bi-monthly)
+  let defaultPeriod = "jan-feb"
+  if (currentMonth >= 2 && currentMonth < 4) defaultPeriod = "mar-apr"
+  else if (currentMonth >= 4 && currentMonth < 6) defaultPeriod = "may-jun"
+  else if (currentMonth >= 6 && currentMonth < 8) defaultPeriod = "jul-aug"
+  else if (currentMonth >= 8 && currentMonth < 10) defaultPeriod = "sep-oct"
+  else if (currentMonth >= 10) defaultPeriod = "nov-dec"
+  
+  const displayPeriod = selectedPeriod ? getPeriodLabel(selectedPeriod) + " " + selectedYear : getPeriodLabel(defaultPeriod) + " " + currentYear
+  
+  // Calculate due date dynamically (19th of month after period end)
+  const calculateDueDate = () => {
+    const year = selectedYear ? parseInt(selectedYear) : currentYear
+    const period = selectedPeriod || defaultPeriod
+    
+    // Get period end month
+    let endMonth = 1 // Default Jan-Feb ends in Feb (month 1)
+    if (period === "mar-apr") endMonth = 3
+    else if (period === "may-jun") endMonth = 5
+    else if (period === "jul-aug") endMonth = 7
+    else if (period === "sep-oct") endMonth = 9
+    else if (period === "nov-dec") endMonth = 11
+    
+    // Due date is 19th of the month after period ends
+    const dueDate = new Date(year, endMonth + 1, 19)
+    return dueDate.toLocaleDateString('en-IE', { day: 'numeric', month: 'short', year: 'numeric' })
+  }
+  
+  const dueDate = calculateDueDate()
 
   // Load data on component mount
   useEffect(() => {
@@ -301,8 +333,8 @@ export default function VATSubmissionPage() {
               <Button onClick={fetchUserProfile} className="flex-1">
                 Try Again
               </Button>
-              <Button onClick={() => window.location.href = '/login'} variant="outline" className="flex-1">
-                Login
+              <Button onClick={() => window.location.href = '/'} variant="outline" className="flex-1">
+                Go Home
               </Button>
             </div>
           </CardContent>

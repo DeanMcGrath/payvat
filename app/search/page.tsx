@@ -207,18 +207,9 @@ function SearchPageContent() {
                 <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
                   <Settings className="h-4 w-4" />
                 </Button>
-                {user ? (
+                {user && (
                   <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]" onClick={handleLogout} title="Logout">
                     <LogOut className="h-4 w-4" />
-                  </Button>
-                ) : (
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-teal-600 px-3"
-                    onClick={() => window.location.href = '/login'}
-                  >
-                    Login
                   </Button>
                 )}
               </div>

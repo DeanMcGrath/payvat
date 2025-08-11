@@ -17,9 +17,12 @@ import {
   RefreshCw,
   MoreVertical,
   X,
-  Loader2
+  Loader2,
+  Paperclip,
+  AlertCircle
 } from 'lucide-react'
 import AdminRoute from "@/components/admin-route"
+import FilePreview from "@/components/file-preview"
 
 interface ChatMessage {
   id: string
@@ -28,6 +31,17 @@ interface ChatMessage {
   senderName: string
   createdAt: string
   isRead: boolean
+  messageType?: string
+  file?: {
+    id: string
+    name: string
+    originalName: string
+    size: number
+    mimeType: string
+    previewUrl?: string
+    downloadUrl: string
+    scanResult?: string
+  }
 }
 
 interface ChatSession {
@@ -54,7 +68,10 @@ function AdminChatPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSending, setIsSending] = useState(false)
   const [isLoadingMessages, setIsLoadingMessages] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Auto-scroll to bottom when new messages arrive
   const scrollToBottom = () => {
@@ -98,6 +115,87 @@ function AdminChatPage() {
       console.error('Failed to load messages:', error)
     } finally {
       setIsLoadingMessages(false)
+    }
+  }
+
+  // Client-side file validation for admin
+  const validateFileClient = (file: File) => {
+    const maxSize = 10 * 1024 * 1024 // 10MB
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'image/png',
+      'image/jpeg',
+      'image/jpg',
+      'text/csv'
+    ]
+
+    if (file.size > maxSize) {
+      return { isValid: false, error: `File too large. Maximum size is 10MB (file is ${Math.round(file.size / 1024 / 1024)}MB)` }
+    }
+
+    if (!allowedTypes.includes(file.type)) {
+      return { isValid: false, error: `File type not supported. Allowed: PDF, DOC, DOCX, XLS, XLSX, PNG, JPG, CSV` }
+    }
+
+    return { isValid: true }
+  }
+
+  // Send admin file
+  const sendFile = async (file: File) => {
+    if (!selectedSession) return
+
+    // Client-side validation first
+    const validation = validateFileClient(file)
+    if (!validation.isValid) {
+      setUploadError(validation.error || 'File validation failed')
+      return
+    }
+
+    setIsUploading(true)
+    setUploadError(null)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('sessionId', selectedSession.sessionId)
+      formData.append('message', replyMessage || `Admin shared file: ${file.name}`)
+
+      const response = await fetch('/api/chat/files/upload', {
+        method: 'POST',
+        body: formData
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        // Add the file message to chat
+        setMessages(prev => [...prev, data.message])
+        setReplyMessage("") // Clear text message
+        loadSessions() // Refresh sessions
+      } else {
+        setUploadError(data.error || 'Failed to upload file')
+      }
+    } catch (error) {
+      console.error('Admin file upload error:', error)
+      setUploadError('Network error during file upload')
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  // Handle file input change
+  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    if (files && files.length > 0) {
+      sendFile(files[0])
+    }
+    // Clear the input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
     }
   }
 
@@ -378,7 +476,21 @@ function AdminChatPage() {
                                     : 'bg-gray-100 text-gray-800'
                                 }`}
                               >
-                                <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                                {/* Handle file messages */}
+                                {msg.messageType === 'file' && msg.file ? (
+                                  <div className="space-y-2">
+                                    {msg.message && !msg.message.includes(`file: ${msg.file.originalName}`) && (
+                                      <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                                    )}
+                                    {/* File preview */}
+                                    <div className={`${msg.senderType === 'admin' ? '' : 'bg-white rounded p-2'}`}>
+                                      <FilePreview file={msg.file} compact={true} />
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                                )}
+                                
                                 <div className="mt-1 text-xs opacity-75">
                                   <span>{msg.senderName}</span>
                                   <span className="ml-2">
@@ -399,18 +511,62 @@ function AdminChatPage() {
                     {/* Reply Input */}
                     {!selectedSession.isResolved && (
                       <div className="border-t p-4">
+                        {/* Upload Error Display */}
+                        {uploadError && (
+                          <div className="mb-3 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-600 flex items-start space-x-2">
+                            <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                            <div className="flex-1">
+                              <p>{uploadError}</p>
+                              <button 
+                                onClick={() => setUploadError(null)}
+                                className="text-red-700 underline text-xs hover:text-red-800"
+                              >
+                                Dismiss
+                              </button>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Upload Progress */}
+                        {isUploading && (
+                          <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-600 flex items-center space-x-2">
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span>Uploading file...</span>
+                          </div>
+                        )}
+
                         <div className="flex space-x-2">
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            onChange={handleFileInputChange}
+                            accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.csv"
+                            className="hidden"
+                          />
+                          
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={isSending || isUploading}
+                            className="hover:bg-gray-50"
+                            title="Attach file"
+                          >
+                            <Paperclip className="h-4 w-4" />
+                          </Button>
+
                           <Input
                             value={replyMessage}
                             onChange={(e) => setReplyMessage(e.target.value)}
                             placeholder="Type your reply..."
                             className="flex-1"
                             onKeyPress={(e) => e.key === 'Enter' && sendReply()}
-                            disabled={isSending}
+                            disabled={isSending || isUploading}
                           />
+                          
                           <Button 
                             onClick={sendReply} 
-                            disabled={isSending || !replyMessage.trim()}
+                            disabled={isSending || isUploading || !replyMessage.trim()}
                             className="bg-blue-500 hover:bg-blue-600"
                           >
                             {isSending ? (
@@ -420,6 +576,11 @@ function AdminChatPage() {
                             )}
                           </Button>
                         </div>
+
+                        {/* File Upload Hint */}
+                        <p className="text-xs text-gray-400 mt-2">
+                          Click 📎 to attach files • PDF, DOC, XLS, Images, CSV • Max 10MB
+                        </p>
                       </div>
                     )}
                   </CardContent>

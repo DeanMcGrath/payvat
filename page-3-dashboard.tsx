@@ -434,7 +434,7 @@ export default function HomePage() {
                   onClick={() => window.location.href = '/vat-period'}
                 >
                   <FileText className="h-5 w-5 mr-3" />
-                  File VAT Return
+                  Submit VAT Return
                 </Button>
                 
                 <Button 

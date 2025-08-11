@@ -40,6 +40,7 @@ model User {
   payments             Payment[]
   vatReturns           VATReturn[]
   chatSessions         ChatSession[]
+  videoAnalytics       VideoAnalytics[]
 
   @@map("vat_users")
 }
@@ -179,10 +180,24 @@ model ChatMessage {
   isRead        Boolean     @default(false)
   readAt        DateTime?
   
-  // File Attachment (optional)
+  // File Attachment (enhanced)
   fileName      String?
-  fileUrl       String?
-  fileSize      Int?
+  originalName  String?     // Original file name from user
+  fileUrl       String?     // Secure file path
+  fileSize      Int?        // File size in bytes
+  mimeType      String?     // MIME type for validation
+  fileHash      String?     // SHA256 hash for integrity
+  filePreviewUrl String?    // Thumbnail/preview URL
+  
+  // File Security
+  isScanned     Boolean     @default(false)
+  scanResult    String?     // CLEAN, INFECTED, SUSPICIOUS, ERROR
+  scanDetails   String?     // Additional scan information
+  
+  // File Management
+  downloadCount Int         @default(0)
+  expiresAt     DateTime?   // File expiration date
+  isActive      Boolean     @default(true)
   
   // Timestamps
   createdAt     DateTime    @default(now())
@@ -192,3 +207,96 @@ model ChatMessage {
   
   @@map("vat_chat_messages")
 }
+
+model DemoVideo {
+  id              String    @id @default(cuid())
+  
+  // Video Information
+  title           String
+  description     String?
+  fileName        String
+  originalName    String
+  fileSize        Int       // Size in bytes
+  mimeType        String
+  duration        Int?      // Duration in seconds
+  
+  // File Storage
+  videoUrl        String    // Main video file URL
+  thumbnailUrl    String?   // Video thumbnail/preview image
+  fileHash        String    // SHA256 hash for integrity
+  
+  // Video Quality Versions
+  videoUrlHD      String?   // 1080p version
+  videoUrlMD      String?   // 720p version  
+  videoUrlSD      String?   // 480p version
+  
+  // Video Status
+  status          String    @default("PROCESSING") // PROCESSING, READY, FAILED
+  isActive        Boolean   @default(true)
+  processingError String?   // Error message if processing failed
+  
+  // Video Metadata
+  width           Int?      // Video width in pixels
+  height          Int?      // Video height in pixels
+  aspectRatio     String?   // e.g. "16:9", "4:3"
+  bitrate         Int?      // Bitrate in kbps
+  codec           String?   // Video codec information
+  
+  // Upload Information
+  uploadedBy      String    // Admin user ID who uploaded
+  uploadedAt      DateTime  @default(now())
+  lastModified    DateTime  @updatedAt
+  
+  // Relations
+  analytics       VideoAnalytics[]
+  
+  @@map("demo_videos")
+}
+
+model VideoAnalytics {
+  id            String    @id @default(cuid())
+  videoId       String
+  
+  // View Information
+  sessionId     String?   // Anonymous session ID
+  userId        String?   // Logged in user ID (optional)
+  ipAddress     String?   // Hashed IP for privacy
+  userAgent     String?   // Browser/device information
+  
+  // Geographic Data
+  country       String?
+  city          String?
+  timezone      String?
+  
+  // Device Information  
+  deviceType    String?   // mobile, desktop, tablet
+  browserName   String?   // chrome, firefox, safari, etc.
+  osName        String?   // windows, macos, ios, android
+  screenSize    String?   // viewport dimensions
+  
+  // View Engagement
+  playCount     Int       @default(1)
+  watchDuration Int       @default(0) // Seconds watched
+  completionRate Float    @default(0) // Percentage watched (0-100)
+  
+  // View Context
+  referrerUrl   String?   // Where they came from
+  pageUrl       String?   // Page where video was watched
+  isFirstView   Boolean   @default(true)
+  
+  // Quality & Performance
+  selectedQuality String? // HD, MD, SD
+  bufferEvents   Int      @default(0) // Number of buffering events
+  loadTime       Int?     // Time to start playing (ms)
+  
+  // Timestamps
+  firstViewAt   DateTime  @default(now())
+  lastViewAt    DateTime  @updatedAt
+  
+  // Relations
+  video         DemoVideo @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  user          User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@map("video_analytics")
+}
+

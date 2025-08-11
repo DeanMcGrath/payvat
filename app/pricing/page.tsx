@@ -88,22 +88,6 @@ export default function PricingPage() {
                     <Bell className="h-5 w-5" />
                     <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
-                    onClick={() => window.location.href = '/login'}
-                  >
-                    Sign In
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
-                    onClick={() => window.location.href = '/signup'}
-                  >
-                    Sign Up
-                  </Button>
                 </div>
               </div>
             </div>
@@ -122,7 +106,6 @@ export default function PricingPage() {
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/login'}>Login</button>
                   </div>
                 </div>
                 <div className="text-white/60 text-xs hidden sm:block">
@@ -223,9 +206,9 @@ export default function PricingPage() {
               <Button 
                 size="lg"
                 className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
-                onClick={() => window.location.href = '/signup?plan=monthly'}
+                onClick={() => window.location.href = '/vat-guide'}
               >
-                Choose Monthly
+                Learn More
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>
@@ -253,9 +236,9 @@ export default function PricingPage() {
               <Button 
                 size="lg"
                 className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
-                onClick={() => window.location.href = '/signup?plan=annual'}
+                onClick={() => window.location.href = '/about'}
               >
-                Choose Annual
+                Contact Us
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>

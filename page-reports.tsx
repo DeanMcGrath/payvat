@@ -34,6 +34,14 @@ interface UserProfile {
   lastName?: string
 }
 
+interface UserStats {
+  totalVATPayments: number
+  returnsFiled: number
+  averageVATPerReturn: number
+  onTimePaymentRate: number
+  currentYear: number
+}
+
 export default function ReportsPage() {
   const [reports, setReports] = useState<Report[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -42,10 +50,13 @@ export default function ReportsPage() {
   const [userLoading, setUserLoading] = useState(true)
   const [userError, setUserError] = useState<string | null>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const [userStats, setUserStats] = useState<UserStats | null>(null)
+  const [statsLoading, setStatsLoading] = useState(true)
 
   useEffect(() => {
     fetchUserProfile()
     fetchReports()
+    fetchUserStats()
     
     // Trigger animations after mount
     const timer = setTimeout(() => {
@@ -106,6 +117,25 @@ export default function ReportsPage() {
       setError('Failed to connect to server')
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const fetchUserStats = async () => {
+    try {
+      const response = await fetch('/api/reports/stats', {
+        method: 'GET',
+        credentials: 'include'
+      })
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success) {
+          setUserStats(data.stats)
+        }
+      }
+    } catch (err) {
+      console.error('Failed to fetch user stats:', err)
+    } finally {
+      setStatsLoading(false)
     }
   }
 
@@ -344,11 +374,18 @@ export default function ReportsPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">€48,230.00</div>
-              <p className="text-xs text-success mt-1 flex items-center gap-1">
-                <TrendingUp className="h-3 w-3" />
-                +15% from 2023
-              </p>
+              {statsLoading ? (
+                <div className="text-2xl font-bold text-muted-foreground">Loading...</div>
+              ) : (
+                <>
+                  <div className="text-2xl font-bold text-foreground">
+                    €{userStats?.totalVATPayments?.toLocaleString('en-IE', { minimumFractionDigits: 2 }) || '0.00'}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {userStats?.currentYear || new Date().getFullYear()} total
+                  </p>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -360,8 +397,18 @@ export default function ReportsPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">6</div>
-              <p className="text-xs text-muted-foreground mt-1">Bi-monthly returns</p>
+              {statsLoading ? (
+                <div className="text-2xl font-bold text-muted-foreground">Loading...</div>
+              ) : (
+                <>
+                  <div className="text-2xl font-bold text-foreground">
+                    {userStats?.returnsFiled || 0}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {userStats?.returnsFiled ? 'Returns filed' : 'Ready to file'}
+                  </p>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -373,8 +420,16 @@ export default function ReportsPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">€8,038.33</div>
-              <p className="text-xs text-muted-foreground mt-1">Per return period</p>
+              {statsLoading ? (
+                <div className="text-2xl font-bold text-muted-foreground">Loading...</div>
+              ) : (
+                <>
+                  <div className="text-2xl font-bold text-foreground">
+                    €{userStats?.averageVATPerReturn?.toLocaleString('en-IE', { minimumFractionDigits: 2 }) || '0.00'}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">Average per period</p>
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -386,11 +441,22 @@ export default function ReportsPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">100%</div>
-              <p className="text-xs text-success mt-1 flex items-center gap-1">
-                <CheckCircle className="h-3 w-3" />
-                Perfect record
-              </p>
+              {statsLoading ? (
+                <div className="text-2xl font-bold text-muted-foreground">Loading...</div>
+              ) : (
+                <>
+                  <div className="text-2xl font-bold text-foreground">
+                    {userStats?.onTimePaymentRate || 0}%
+                  </div>
+                  <p className="text-xs text-success mt-1 flex items-center gap-1">
+                    {(userStats?.onTimePaymentRate || 0) === 100 ? (
+                      <><CheckCircle className="h-3 w-3" />Perfect record</>
+                    ) : (
+                      <><Clock className="h-3 w-3" />Payment history</>
+                    )}
+                  </p>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>

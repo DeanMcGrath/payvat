@@ -88,22 +88,6 @@ export default function AboutPayVAT() {
                     <Bell className="h-5 w-5" />
                     <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
-                    onClick={() => window.location.href = '/login'}
-                  >
-                    Sign In
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
-                    onClick={() => window.location.href = '/signup'}
-                  >
-                    Sign Up
-                  </Button>
                 </div>
               </div>
             </div>
@@ -122,7 +106,6 @@ export default function AboutPayVAT() {
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/login'}>Login</button>
                   </div>
                 </div>
                 <div className="text-white/60 text-xs hidden sm:block">
@@ -482,7 +465,7 @@ export default function AboutPayVAT() {
                     Ready to Take <span className="text-gradient-primary">Control?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                    Get back to focusing on growing your business. Sign up at PayVAT.ie today and experience VAT the easy way.
+                    Get back to focusing on growing your business. Experience streamlined VAT management today.
                   </p>
                 </div>
 
@@ -490,9 +473,9 @@ export default function AboutPayVAT() {
                   <Button 
                     size="lg"
                     className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"
-                    onClick={() => window.location.href = '/signup'}
+                    onClick={() => window.location.href = '/vat-guide'}
                   >
-                    Sign Up Now
+                    Get Started
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                   <Button 

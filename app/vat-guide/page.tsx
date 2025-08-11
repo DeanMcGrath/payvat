@@ -89,22 +89,6 @@ export default function VATGuidePage() {
                     <Bell className="h-5 w-5" />
                     <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
-                    onClick={() => window.location.href = '/login'}
-                  >
-                    Sign In
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
-                    onClick={() => window.location.href = '/signup'}
-                  >
-                    Sign Up
-                  </Button>
                 </div>
               </div>
             </div>
@@ -123,7 +107,6 @@ export default function VATGuidePage() {
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/login'}>Login</button>
                   </div>
                 </div>
                 <div className="text-white/60 text-xs hidden sm:block">
@@ -455,9 +438,9 @@ export default function VATGuidePage() {
             <p className="text-gray-600 mb-2">Let PayVAT handle the complexity while you focus on growing your business</p>
             <Button 
               className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
-              onClick={() => window.location.href = '/signup'}
+              onClick={() => window.location.href = '/about'}
             >
-              Start Your Free Trial
+              Contact Us
             </Button>
           </CardContent>
         </Card>

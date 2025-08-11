@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { MessageCircle, X, Send, Loader2, Bot, ThumbsUp, ThumbsDown } from 'lucide-react'
+import { MessageCircle, X, Send, Loader2, Bot, ThumbsUp, ThumbsDown, Paperclip, Upload, AlertCircle } from 'lucide-react'
+import FilePreview from "@/components/file-preview"
 
 interface ChatMessage {
   id: string
@@ -13,6 +14,16 @@ interface ChatMessage {
   senderName: string
   createdAt: string
   messageType?: string
+  file?: {
+    id: string
+    name: string
+    originalName: string
+    size: number
+    mimeType: string
+    previewUrl?: string
+    downloadUrl: string
+    scanResult?: string
+  }
 }
 
 interface ChatSession {
@@ -28,7 +39,11 @@ export default function LiveChat() {
   const [session, setSession] = useState<ChatSession | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isSending, setIsSending] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [isDragOver, setIsDragOver] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Auto-scroll to bottom when new messages arrive
   const scrollToBottom = () => {
@@ -157,6 +172,107 @@ export default function LiveChat() {
     }
   }
 
+  // Client-side file validation
+  const validateFileClient = (file: File) => {
+    const maxSize = 10 * 1024 * 1024 // 10MB
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'image/png',
+      'image/jpeg',
+      'image/jpg',
+      'text/csv'
+    ]
+
+    if (file.size > maxSize) {
+      return { isValid: false, error: `File too large. Maximum size is 10MB (file is ${Math.round(file.size / 1024 / 1024)}MB)` }
+    }
+
+    if (!allowedTypes.includes(file.type)) {
+      return { isValid: false, error: `File type not supported. Allowed: PDF, DOC, DOCX, XLS, XLSX, PNG, JPG, CSV` }
+    }
+
+    return { isValid: true }
+  }
+
+  // Handle file upload
+  const handleFileUpload = async (file: File) => {
+    if (!session) return
+
+    // Client-side validation first
+    const validation = validateFileClient(file)
+    if (!validation.isValid) {
+      setUploadError(validation.error || 'File validation failed')
+      return
+    }
+
+    setIsUploading(true)
+    setUploadError(null)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('sessionId', session.sessionId)
+      formData.append('message', message || `Shared file: ${file.name}`)
+
+      const response = await fetch('/api/chat/files/upload', {
+        method: 'POST',
+        body: formData
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        // Add the file message to chat
+        setMessages(prev => [...prev, data.message])
+        setMessage("") // Clear text message if file was uploaded with text
+      } else {
+        setUploadError(data.error || 'Failed to upload file')
+      }
+    } catch (error) {
+      console.error('File upload error:', error)
+      setUploadError('Network error during file upload')
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  // Handle file input change
+  const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    if (files && files.length > 0) {
+      handleFileUpload(files[0])
+    }
+    // Clear the input so the same file can be selected again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  // Handle drag and drop
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault()
+    setIsDragOver(true)
+  }
+
+  const handleDragLeave = (event: React.DragEvent) => {
+    event.preventDefault()
+    setIsDragOver(false)
+  }
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault()
+    setIsDragOver(false)
+    
+    const files = event.dataTransfer.files
+    if (files && files.length > 0) {
+      handleFileUpload(files[0])
+    }
+  }
+
   // Handle opening chat
   const toggleChat = () => {
     if (!isOpen && !session) {
@@ -170,8 +286,19 @@ export default function LiveChat() {
     <>
       {/* Chat Widget */}
       {isOpen && (
-        <div className="fixed bottom-20 right-4 w-80 h-96 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
-          <Card className="h-full">
+        <div className="fixed bottom-20 right-4 w-80 h-96 bg-white border border-gray-200 rounded-lg shadow-xl z-50 relative">
+          {/* Drag and Drop Overlay */}
+          {isDragOver && (
+            <div className="absolute inset-0 bg-blue-500 bg-opacity-20 border-2 border-dashed border-blue-400 rounded-lg flex items-center justify-center z-10">
+              <div className="text-center text-blue-600">
+                <Upload className="h-8 w-8 mx-auto mb-2" />
+                <p className="font-semibold">Drop file to upload</p>
+                <p className="text-sm">PDF, DOC, XLS, Images, CSV</p>
+              </div>
+            </div>
+          )}
+
+          <Card className="h-full" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
             <CardHeader className="bg-teal-500 text-white rounded-t-lg">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg font-semibold">
@@ -203,6 +330,7 @@ export default function LiveChat() {
                   <div className="space-y-3">
                     {messages.map((msg) => {
                       const isAI = msg.senderName?.includes('🤖') || msg.senderName?.includes('Assistant')
+                      const isFileMessage = msg.messageType === 'file' && msg.file
                       
                       return (
                         <div
@@ -222,7 +350,21 @@ export default function LiveChat() {
                               <Bot className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
                             )}
                             <div className="flex-1">
-                              <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                              {/* Text message */}
+                              {!isFileMessage ? (
+                                <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                              ) : (
+                                <div className="space-y-2">
+                                  {msg.message && msg.message !== `Shared file: ${msg.file?.originalName}` && (
+                                    <p className="text-sm whitespace-pre-wrap">{msg.message}</p>
+                                  )}
+                                  {/* File preview */}
+                                  <div className={`${msg.senderType === 'user' ? '' : 'bg-white rounded p-2'}`}>
+                                    <FilePreview file={msg.file!} compact={true} />
+                                  </div>
+                                </div>
+                              )}
+                              
                               <div className="mt-1 text-xs opacity-75 flex items-center justify-between">
                                 <div>
                                   <span>{msg.senderName}</span>
@@ -260,20 +402,65 @@ export default function LiveChat() {
                 )}
               </div>
               <div className="border-t p-4">
+                {/* Upload Error Display */}
+                {uploadError && (
+                  <div className="mb-3 p-2 bg-red-50 border border-red-200 rounded text-sm text-red-600 flex items-start space-x-2">
+                    <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p>{uploadError}</p>
+                      <button 
+                        onClick={() => setUploadError(null)}
+                        className="text-red-700 underline text-xs hover:text-red-800"
+                      >
+                        Dismiss
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Upload Progress */}
+                {isUploading && (
+                  <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-600 flex items-center space-x-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Uploading file...</span>
+                  </div>
+                )}
+
+                {/* Input Area */}
                 <div className="flex space-x-2">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    onChange={handleFileInputChange}
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.csv"
+                    className="hidden"
+                  />
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isLoading || isSending || isUploading || !session}
+                    className="hover:bg-gray-50"
+                    title="Attach file"
+                  >
+                    <Paperclip className="h-4 w-4" />
+                  </Button>
+
                   <Input
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Type your message..."
                     className="flex-1"
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                    disabled={isLoading || isSending || !session}
+                    disabled={isLoading || isSending || isUploading || !session}
                   />
+                  
                   <Button 
                     onClick={sendMessage} 
                     size="sm" 
                     className="bg-teal-500 hover:bg-teal-600"
-                    disabled={isLoading || isSending || !session || !message.trim()}
+                    disabled={isLoading || isSending || isUploading || !session || !message.trim()}
                   >
                     {isSending ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -282,6 +469,13 @@ export default function LiveChat() {
                     )}
                   </Button>
                 </div>
+
+                {/* File Upload Hint */}
+                {!isLoading && session && (
+                  <p className="text-xs text-gray-400 mt-2 text-center">
+                    Drag & drop files or click 📎 • PDF, DOC, XLS, Images, CSV • Max 10MB
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>

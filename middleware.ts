@@ -61,9 +61,13 @@ export function middleware(request: NextRequest) {
     cleanupRateLimit()
   }
   
+  // Block debug endpoints in production
+  if (process.env.NODE_ENV === 'production' && pathname.startsWith('/api/debug/')) {
+    return new Response('Not found', { status: 404 })
+  }
+  
   // Skip middleware for static files and Next.js internals
   if (pathname.startsWith('/_next/') || 
-      pathname.startsWith('/api/debug/') ||
       pathname.includes('.') && !pathname.includes('/api/')) {
     return NextResponse.next()
   }

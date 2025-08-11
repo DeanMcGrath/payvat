@@ -152,47 +152,47 @@ export default function ConfirmationPayment() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-16 lg:pb-24 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      {/* Hero Section - Optimized for mobile */}
+      <section className="relative pt-8 pb-12 lg:pt-16 lg:pb-20 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="text-center">
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4 animate-bounce-gentle">
+              <div className="mb-6 lg:mb-8">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full bg-primary/10 text-primary text-xs lg:text-sm font-medium mb-3 lg:mb-4 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Final Review Required
                 </div>
                 
-                <div className="icon-premium mb-4 mx-auto">
-                  <FileText className="h-12 w-12 text-white" />
+                <div className="icon-premium mb-3 lg:mb-4 mx-auto">
+                  <FileText className="h-8 w-8 lg:h-12 lg:w-12 text-white" />
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3">
+                <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight mb-2 lg:mb-3">
                   <span className="text-gradient-primary">Confirm Your</span>
                   <br />
                   <span className="text-foreground">VAT Return Submission</span>
                 </h1>
                 
-                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
+                <div className="w-24 lg:w-32 h-1 gradient-primary mx-auto mb-3 lg:mb-4 rounded-full"></div>
                 
-                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                <p className="text-base lg:text-xl xl:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
                   Review your VAT3 return details below before final submission.
                   <span className="text-primary font-semibold"> All information must be accurate and complete.</span>
                 </p>
               </div>
               
-              {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+              {/* Trust Indicators - Responsive */}
+              <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-8 text-muted-foreground text-xs lg:text-sm mb-8 lg:mb-12">
                 <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-success" />
+                  <Shield className="h-3 w-3 lg:h-4 lg:w-4 text-success" />
                   <span>Revenue compliant</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-success" />
+                  <CheckCircle className="h-3 w-3 lg:h-4 lg:w-4 text-success" />
                   <span>Secure transmission</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-success" />
+                  <Clock className="h-3 w-3 lg:h-4 lg:w-4 text-success" />
                   <span>Instant processing</span>
                 </div>
               </div>
@@ -201,10 +201,11 @@ export default function ConfirmationPayment() {
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-6 pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* Main Content Area - Improved responsive layout */}
+      <div className="max-w-6xl mx-auto px-4 lg:px-6 pb-12 min-h-screen">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* VAT Return Summary */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4 lg:space-y-6 order-2 lg:order-1">
             
             {/* Business Information */}
             <Card className="card-premium hover-lift">
@@ -347,80 +348,86 @@ export default function ConfirmationPayment() {
             </Card>
           </div>
 
-          {/* Confirmation Sidebar */}
-          <div className="space-y-6">
-            <Card className="card-premium sticky top-6">
+          {/* Confirmation Sidebar - Mobile friendly */}
+          <div className="space-y-4 lg:space-y-6 order-1 lg:order-2">
+            <Card className="card-premium lg:sticky lg:top-6 shadow-lg">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold text-foreground">Final Confirmation</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                {/* Declaration Section - Enhanced readability */}
+                <div className="p-4 lg:p-6 bg-primary/5 border border-primary/20 rounded-lg">
                   <div className="flex items-start space-x-3">
                     <Shield className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="text-sm font-medium text-foreground mb-2">Declaration</p>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        By proceeding, you confirm that the information provided is accurate, complete, and complies with Revenue requirements.
+                    <div className="flex-1">
+                      <p className="text-sm lg:text-base font-medium text-foreground mb-3">Declaration</p>
+                      <p className="text-xs lg:text-sm text-muted-foreground leading-relaxed">
+                        By proceeding, you confirm that the information provided is accurate, complete, and complies with Revenue requirements. 
+                        You understand that providing false information may result in penalties.
                       </p>
                     </div>
                   </div>
                 </div>
 
+                {/* Submit Button - Improved responsive design */}
                 <Button 
                   onClick={handleConfirmSubmission}
                   disabled={isSubmitting}
-                  className="w-full btn-primary px-6 py-4 text-lg font-semibold hover-scale shadow-lg"
+                  className="w-full btn-primary px-4 lg:px-6 py-3 lg:py-4 text-base lg:text-lg font-semibold hover-scale shadow-lg min-h-[48px]"
                   size="lg"
                 >
                   {isSubmitting ? (
                     <>
                       <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                      Submitting...
+                      <span className="hidden sm:inline">Submitting VAT Return...</span>
+                      <span className="sm:hidden">Submitting...</span>
                     </>
                   ) : (
                     <>
-                      <Send className="h-5 w-5 mr-2" />
-                      Confirm to Submit and Pay VAT Return
+                      <Send className="h-4 w-4 lg:h-5 lg:w-5 mr-2" />
+                      <span className="hidden sm:inline">Confirm to Submit and Pay VAT Return</span>
+                      <span className="sm:hidden">Submit & Pay VAT</span>
                     </>
                   )}
                 </Button>
 
-                <div className="text-center">
+                {/* Go Back Button - Better accessibility */}
+                <div className="text-center pt-2">
                   <Button 
                     variant="ghost" 
                     onClick={() => router.back()}
-                    className="text-muted-foreground hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground min-h-[44px] px-4"
                   >
-                    <ArrowLeft className="h-4 w-4 mr-1" />
-                    Go Back to Edit
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    <span>Go Back to Edit</span>
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
-            {/* What happens next */}
-            <Card className="card-modern">
+            {/* What happens next - Enhanced mobile display */}
+            <Card className="card-modern shadow-sm">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold text-foreground">What Happens Next?</CardTitle>
+                <CardTitle className="text-base lg:text-lg font-semibold text-foreground">What Happens Next?</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-4">
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-primary">1</span>
+                  <div className="w-7 h-7 lg:w-8 lg:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs lg:text-sm font-bold text-primary">1</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">Return submitted to Revenue instantly</p>
+                  <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">Return submitted to Revenue instantly</p>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-primary">2</span>
+                  <div className="w-7 h-7 lg:w-8 lg:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs lg:text-sm font-bold text-primary">2</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">Payment processed automatically</p>
+                  <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">Payment processed automatically</p>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-xs font-bold text-primary">3</span>
+                  <div className="w-7 h-7 lg:w-8 lg:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-xs lg:text-sm font-bold text-primary">3</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">Confirmation receipt generated</p>
+                  <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">Confirmation receipt generated</p>
                 </div>
               </CardContent>
             </Card>

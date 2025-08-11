@@ -239,7 +239,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px bg-blue-500/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Any Irish-registered business required to file VAT returns can use PayVAT. Whether you're a micro-enterprise, an SME, or a growing startup, our platform scales to suit your needs.
+                  Any Irish-registered business required to Submit VAT returns can use PayVAT. Whether you're a micro-enterprise, an SME, or a growing startup, our platform scales to suit your needs.
                 </p>
               </div>
             )}
@@ -265,7 +265,7 @@ export default function FAQPage() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
-                    <span className="text-muted-foreground">Go to PayVAT.ie/signup</span>
+                    <span className="text-muted-foreground">Visit PayVAT.ie/about for contact information</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
@@ -547,9 +547,9 @@ export default function FAQPage() {
                     variant="outline"
                     size="lg"
                     className="btn-outline px-12 py-4 text-lg min-w-[220px]"
-                    onClick={() => window.location.href = '/signup'}
+                    onClick={() => window.location.href = '/about'}
                   >
-                    Start Free Trial
+                    Contact Us
                     <CheckCircle className="ml-2 h-5 w-5" />
                   </Button>
                 </div>

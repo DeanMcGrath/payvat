@@ -4,13 +4,15 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search, LogIn } from 'lucide-react'
+import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search, LogIn, Play } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
+import { VideoModal } from "@/components/video-modal"
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false)
+  const [showVideoModal, setShowVideoModal] = useState(false)
 
   useEffect(() => {
     // Trigger animations after component mounts
@@ -88,15 +90,6 @@ export default function LandingPage() {
                     <Bell className="h-5 w-5" />
                     <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20"
-                    onClick={() => window.location.href = '/login'}
-                    aria-label="Sign in"
-                  >
-                    <LogIn className="h-5 w-5" />
-                  </Button>
                 </div>
               </div>
             </div>
@@ -112,7 +105,6 @@ export default function LandingPage() {
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>
                     <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/login'}>Login</button>
                   </div>
                 </div>
                 <div className="text-white/60 text-xs hidden sm:block">
@@ -152,11 +144,12 @@ export default function LandingPage() {
               
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-3">
-                <Button size="lg" className="btn-primary px-8 py-4 text-lg font-semibold hover-lift" onClick={() => window.location.href = '/signup'}>
-                  Start Free Trial
+                <Button size="lg" className="btn-primary px-8 py-4 text-lg font-semibold hover-lift" onClick={() => window.location.href = '/vat-guide'}>
+                  Get Started
                   <CheckCircle className="ml-2 h-5 w-5" />
                 </Button>
-                <Button variant="outline" size="lg" className="btn-outline px-8 py-4 text-lg">
+                <Button variant="outline" size="lg" className="btn-outline px-8 py-4 text-lg" onClick={() => setShowVideoModal(true)}>
+                  <Play className="mr-2 h-5 w-5" />
                   Watch Demo
                 </Button>
               </div>
@@ -272,23 +265,23 @@ export default function LandingPage() {
                 <Button 
                   size="lg"
                   className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"
-                  onClick={() => window.location.href = '/signup'}
+                  onClick={() => window.location.href = '/vat-guide'}
                 >
-                  Start Free Trial
+                  Get Started
                   <CheckCircle className="ml-2 h-5 w-5" />
                 </Button>
                 <Button 
                   variant="outline"
                   size="lg"
                   className="btn-outline px-12 py-4 text-lg min-w-[220px]"
-                  onClick={() => window.location.href = '/login'}
+                  onClick={() => window.location.href = '/pricing'}
                 >
-                  Sign In
+                  View Pricing
                 </Button>
               </div>
               
               <p className="text-sm text-muted-foreground">
-                ✓ No setup fees  ✓ 14-day free trial  ✓ Cancel anytime
+                ✓ Revenue compliant  ✓ Expert support  ✓ Instant processing
               </p>
             </div>
           </div>
@@ -414,6 +407,12 @@ export default function LandingPage() {
       
       {/* Footer Component */}
       <Footer />
+      
+      {/* Video Modal */}
+      <VideoModal 
+        isOpen={showVideoModal} 
+        onClose={() => setShowVideoModal(false)} 
+      />
     </div>
   )
 }
