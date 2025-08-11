@@ -2,13 +2,11 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import Link from "next/link"
-import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search, LogIn, Play } from 'lucide-react'
+import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Play, Bell } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
 import { VideoModal } from "@/components/video-modal"
+import SiteHeader from "@/components/site-header"
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false)
@@ -45,76 +43,10 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Modern Header */}
-      <header className="gradient-primary relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
-        
-        <div className="relative z-10">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
-            <div className="flex items-center justify-between">
-              {/* Logo */}
-              <div className="flex items-center">
-                <Link href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
-                  PayVAT
-                </Link>
-              </div>
-              
-              {/* Header Actions */}
-              <div className="flex items-center space-x-4">
-                {/* Search - Desktop */}
-                <div className="hidden lg:flex items-center space-x-3">
-                  <div className="relative">
-                    <Input
-                      placeholder="Search..."
-                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
-                    />
-                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
-                  </div>
-                </div>
-                
-                {/* Action Buttons */}
-                <div className="flex items-center space-x-2">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
-                  >
-                    <Search className="h-5 w-5" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
-                  >
-                    <Bell className="h-5 w-5" />
-                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Modern Navigation */}
-          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-8">
-                  <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
-                  </div>
-                </div>
-                <div className="text-white/60 text-xs hidden sm:block">
-                  Irish VAT compliance made simple
-                </div>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader 
+        searchPlaceholder="Search..."
+        pageSubtitle="Irish VAT compliance made simple"
+      />
 
       {/* Hero Section */}
       <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
@@ -402,8 +334,6 @@ export default function LandingPage() {
         </div>
       </section>
       
-      {/* Live Chat Component */}
-      <LiveChat />
       
       {/* Footer Component */}
       <Footer />

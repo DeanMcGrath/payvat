@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { ArrowLeft, ArrowRight, Calendar, Bell, Settings, LogOut, Search, CheckCircle, Clock, Shield } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
 import { useVATData } from "@/contexts/vat-data-context"
 import { VAT_PERIODS, getPeriodLabel } from "@/lib/vat-utils"
@@ -380,8 +379,6 @@ export default function VATReturnPeriod() {
         </div>
       </section>
       
-      {/* Live Chat */}
-      <LiveChat />
       
       {/* Footer */}
       <Footer />

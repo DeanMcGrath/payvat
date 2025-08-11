@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { useVATData } from "@/contexts/vat-data-context"
 import { formatEuroAmount, getPeriodLabel } from "@/lib/vat-utils"
 import Link from "next/link"
+import SiteHeader from "@/components/site-header"
 
 interface VAT3FormData {
   traderName: string
@@ -110,47 +111,11 @@ export default function ConfirmationPayment() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Modern Header */}
-      <header className="gradient-primary relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
-        
-        <div className="relative z-10">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
-            <div className="flex items-center justify-between">
-              {/* Logo */}
-              <div className="flex items-center">
-                <Link href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
-                  PayVAT
-                </Link>
-              </div>
-            </div>
-          </div>
-          
-          {/* Modern Navigation */}
-          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-8">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => router.back()}
-                    className="text-white/90 hover:text-white flex items-center space-x-2 transition-colors"
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                    <span>Go Back</span>
-                  </Button>
-                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                    <span>Confirm VAT Return Submission</span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader 
+        searchPlaceholder="Search confirmation details..."
+        currentPage="Confirmation & Payment"
+        pageSubtitle="Review and submit your VAT return"
+      />
 
       {/* Hero Section - Optimized for mobile */}
       <section className="relative pt-8 pb-12 lg:pt-16 lg:pb-20 overflow-hidden">

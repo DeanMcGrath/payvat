@@ -2,6 +2,14 @@
 const nextConfig = {
   // Configure external packages for serverless deployment (fixes PDF processing)
   serverExternalPackages: ['pdf-parse'],
+  // Configure experimental features for large file uploads
+  experimental: {
+    // Disable ISR memory cache to save memory for uploads
+    staleTimes: {
+      dynamic: 0,
+      static: 0,
+    },
+  },
   // Security: Enable ESLint checks during builds to catch potential issues
   eslint: {
     ignoreDuringBuilds: false,
@@ -51,11 +59,23 @@ const nextConfig = {
           },
           {
             key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains'
+            value: 'max-age=31536000; includeSubDomains; preload'
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:; font-src 'self' data:;"
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:; font-src 'self' data:; upgrade-insecure-requests;"
+          },
+          {
+            key: 'Expect-CT',
+            value: 'max-age=86400, enforce'
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin'
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'require-corp'
           },
           {
             key: 'Permissions-Policy',

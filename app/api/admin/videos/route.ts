@@ -91,8 +91,8 @@ async function postVideo(request: NextRequest, user: AuthUser) {
     console.log(`📋 [VIDEO UPLOAD] Content-Type: ${contentType}`)
     console.log(`📏 [VIDEO UPLOAD] Content-Length: ${contentLength || 'unknown'}`)
 
-    // Early request size validation - Vercel has ~4-6MB hard limit
-    const maxRequestSize = 4 * 1024 * 1024 // 4MB limit due to Vercel serverless constraints
+    // Early request size validation - Vercel has ~1-2MB hard limit for form data  
+    const maxRequestSize = 1 * 1024 * 1024 // 1MB limit due to Vercel serverless constraints
     if (contentLength && parseInt(contentLength) > maxRequestSize) {
       console.error(`❌ [VIDEO UPLOAD] Request too large: ${contentLength} bytes (${Math.round(parseInt(contentLength) / 1024 / 1024)}MB)`)
       return NextResponse.json({ 
@@ -166,8 +166,8 @@ async function postVideo(request: NextRequest, user: AuthUser) {
       }, { status: 400 })
     }
 
-    // Pre-upload size validation (max 4MB due to Vercel serverless limits)
-    const maxSize = 4 * 1024 * 1024 // 4MB in bytes - Vercel serverless constraint
+    // Pre-upload size validation (max 1MB due to Vercel serverless limits)
+    const maxSize = 1 * 1024 * 1024 // 1MB in bytes - Vercel serverless constraint
     if (file.size > maxSize) {
       console.error(`❌ [VIDEO UPLOAD] File too large - Size: ${file.size} bytes (${Math.round(file.size / 1024 / 1024)}MB)`)
       return NextResponse.json({ 

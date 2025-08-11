@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Bell, FileText, Settings, LogOut, TrendingUp, Calendar, Euro, AlertCircle, Loader2, Search, CheckCircle, Calculator } from 'lucide-react'
 import { Input } from "@/components/ui/input"
-import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
 import { useSubscription } from "./contexts/subscription-context"
 
@@ -533,7 +532,6 @@ export default function HomePage() {
       </main>
 
       {/* Live Chat */}
-      <LiveChat />
 
       {/* Footer */}
       <Footer />

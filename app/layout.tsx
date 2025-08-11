@@ -2,6 +2,7 @@ import { SubscriptionProvider } from '@/contexts/subscription-context'
 import { VATDataProvider } from '@/contexts/vat-data-context'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { Toaster } from '@/components/ui/sonner'
+import LiveChat from '@/components/live-chat'
 import '@/lib/env-validation' // Validate environment on startup
 import './globals.css'
 
@@ -23,6 +24,7 @@ export default function RootLayout({
             </VATDataProvider>
           </SubscriptionProvider>
           <Toaster />
+          <LiveChat />
         </ErrorBoundary>
       </body>
     </html>

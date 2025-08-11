@@ -56,6 +56,15 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const clientIP = getClientIP(request)
   
+  // Security: Force HTTPS redirect (except for localhost development)
+  const protocol = request.headers.get('x-forwarded-proto') || 'https'
+  const host = request.headers.get('host')
+  
+  if (protocol === 'http' && host && !host.includes('localhost') && !host.includes('127.0.0.1')) {
+    const httpsUrl = `https://${host}${request.nextUrl.pathname}${request.nextUrl.search}`
+    return NextResponse.redirect(httpsUrl, 301)
+  }
+  
   // Clean up expired rate limit entries periodically
   if (Math.random() < 0.01) { // 1% chance to clean up
     cleanupRateLimit()

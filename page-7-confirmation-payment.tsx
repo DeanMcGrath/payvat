@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, Download, ArrowRight, Calendar, Euro, FileText, Building, Mail, Phone, Bell, Settings, LogOut, Search, Loader2, AlertCircle } from 'lucide-react'
-import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
 import { Input } from "@/components/ui/input"
 
@@ -447,7 +446,6 @@ export default function PaymentConfirmed() {
       </div>
 
       {/* Live Chat */}
-      <LiveChat />
 
       {/* Footer */}
       <Footer />

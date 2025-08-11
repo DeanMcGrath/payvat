@@ -12,7 +12,6 @@ import {
   Search, Loader2, AlertCircle, Shield, CheckCircle, Clock,
   ChevronRight, Sparkles, ArrowUp
 } from 'lucide-react'
-import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
 
 interface Report {
@@ -607,7 +606,6 @@ export default function ReportsPage() {
       </div>
 
       {/* Live Chat */}
-      <LiveChat />
 
       {/* Main Footer */}
       <footer className="bg-teal-700 text-white">

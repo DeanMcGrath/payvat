@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Bell, Settings, LogOut, Search, ArrowRight, Clock, FileText, BookOpen, Calculator, Building, Users, HelpCircle, Loader2, AlertCircle as AlertCircleIcon } from 'lucide-react'
-import LiveChat from "@/components/live-chat"
 import Footer from "@/components/footer"
 
 interface SearchResult {
@@ -423,7 +422,6 @@ function SearchPageContent() {
       </div>
 
       {/* Live Chat */}
-      <LiveChat />
 
       {/* Footer */}
       <Footer />

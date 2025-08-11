@@ -6,10 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Upload, Calculator, FileText, CheckCircle, Sparkles, RefreshCw, X, AlertCircle, Bell, Settings, LogOut, Search, Loader2, Shield } from 'lucide-react'
-import LiveChat from "@/components/live-chat"
+import { ArrowLeft, Upload, Calculator, FileText, CheckCircle, Sparkles, RefreshCw, X, AlertCircle, Loader2, Shield } from 'lucide-react'
 import FileUpload from "@/components/file-upload"
 import Footer from "@/components/footer"
+import SiteHeader from "@/components/site-header"
 import { toast } from "sonner"
 import { logger } from "@/lib/logger"
 import { useVATData } from "@/contexts/vat-data-context"
@@ -345,95 +345,13 @@ export default function VATSubmissionPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Modern Header */}
-      <header className="gradient-primary relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
-        
-        <div className="relative z-10">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
-            <div className="flex items-center justify-between">
-              {/* Logo */}
-              <div className="flex items-center">
-                <h1 className="text-2xl font-thin text-white tracking-tight">
-                  PayVAT
-                </h1>
-              </div>
-              
-              {/* Header Actions */}
-              <div className="flex items-center space-x-4">
-                {/* Search - Desktop */}
-                <div className="hidden lg:flex items-center space-x-3">
-                  <div className="relative">
-                    <Input
-                      placeholder="Search..."
-                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
-                    />
-                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
-                  </div>
-                </div>
-
-                <div className="text-right hidden sm:block max-w-48 lg:max-w-none">
-                  <h3 className="text-sm lg:text-base font-bold text-white truncate">{user.businessName}</h3>
-                  <p className="text-white/70 font-mono text-xs">VAT: {user.vatNumber}</p>
-                </div>
-                
-                {/* Action Buttons */}
-                <div className="flex items-center space-x-2">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
-                  >
-                    <Search className="h-5 w-5" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
-                  >
-                    <Bell className="h-5 w-5" />
-                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
-                  >
-                    <Settings className="h-5 w-5" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20" 
-                    onClick={handleLogout} 
-                    title="Logout"
-                  >
-                    <LogOut className="h-5 w-5" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Modern Navigation */}
-          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-8">
-                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                    <span>VAT Submission</span>
-                  </span>
-                </div>
-                <div className="text-white/60 text-xs hidden sm:block">
-                  Complete your VAT calculations and submit
-                </div>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader 
+        searchPlaceholder="Search VAT documents and forms..."
+        currentPage="VAT Submission"
+        pageSubtitle="Complete your VAT calculations and submit"
+        user={user}
+        onLogout={handleLogout}
+      />
 
       {/* Hero Section */}
       <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
@@ -801,8 +719,14 @@ export default function VATSubmissionPage() {
                         {uploadedDocuments
                           .filter(doc => doc.category?.includes('SALES'))
                           .map((document) => {
-                            // Find VAT data for this document
-                            const docVATData = extractedVATData?.salesDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
+                            // Find VAT data for this document - check sales documents first, then purchase as fallback
+                            let docVATData = extractedVATData?.salesDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
+                            
+                            // If not found in sales, check purchase documents (in case of miscategorization)
+                            if (!docVATData) {
+                              docVATData = extractedVATData?.purchaseDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
+                            }
+                            
                             const vatAmounts = docVATData?.extractedAmounts || [];
                             const confidence = docVATData?.confidence || 0;
                             const totalVAT = vatAmounts.reduce((sum: number, amount: number) => sum + amount, 0);
@@ -830,19 +754,19 @@ export default function VATSubmissionPage() {
                                       </p>
                                       
                                       {/* VAT Amount Display */}
-                                      {document.isScanned && vatAmounts.length > 0 && (
+                                      {document.isScanned && docVATData && vatAmounts.length > 0 && (
                                         <div className="flex items-center text-xs">
                                           <span className="inline-flex items-center text-teal-700 font-medium">
                                             <CheckCircle className="h-3 w-3 mr-1" />
-                                            €{totalVAT.toFixed(2)} ({Math.round(confidence * 100)}% confidence)
+                                            VAT: €{totalVAT.toFixed(2)} detected ({Math.round(confidence * 100)}% confidence)
                                           </span>
                                         </div>
                                       )}
                                       
-                                      {document.isScanned && vatAmounts.length === 0 && (
+                                      {document.isScanned && (!docVATData || vatAmounts.length === 0) && (
                                         <span className="inline-flex items-center text-green-600 text-xs">
                                           <CheckCircle className="h-3 w-3 mr-1" />
-                                          AI Processed - No VAT detected
+                                          AI Processed
                                         </span>
                                       )}
                                       
@@ -893,8 +817,14 @@ export default function VATSubmissionPage() {
                         {uploadedDocuments
                           .filter(doc => doc.category?.includes('PURCHASE'))
                           .map((document) => {
-                            // Find VAT data for this document
-                            const docVATData = extractedVATData?.purchaseDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
+                            // Find VAT data for this document - check purchase documents first, then sales as fallback
+                            let docVATData = extractedVATData?.purchaseDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
+                            
+                            // If not found in purchase, check sales documents (in case of miscategorization)
+                            if (!docVATData) {
+                              docVATData = extractedVATData?.salesDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
+                            }
+                            
                             const vatAmounts = docVATData?.extractedAmounts || [];
                             const confidence = docVATData?.confidence || 0;
                             const totalVAT = vatAmounts.reduce((sum: number, amount: number) => sum + amount, 0);
@@ -922,19 +852,19 @@ export default function VATSubmissionPage() {
                                       </p>
                                       
                                       {/* VAT Amount Display */}
-                                      {document.isScanned && vatAmounts.length > 0 && (
+                                      {document.isScanned && docVATData && vatAmounts.length > 0 && (
                                         <div className="flex items-center text-xs">
                                           <span className="inline-flex items-center text-green-700 font-medium">
                                             <CheckCircle className="h-3 w-3 mr-1" />
-                                            €{totalVAT.toFixed(2)} ({Math.round(confidence * 100)}% confidence)
+                                            VAT: €{totalVAT.toFixed(2)} detected ({Math.round(confidence * 100)}% confidence)
                                           </span>
                                         </div>
                                       )}
                                       
-                                      {document.isScanned && vatAmounts.length === 0 && (
+                                      {document.isScanned && (!docVATData || vatAmounts.length === 0) && (
                                         <span className="inline-flex items-center text-green-600 text-xs">
                                           <CheckCircle className="h-3 w-3 mr-1" />
-                                          AI Processed - No VAT detected
+                                          AI Processed
                                         </span>
                                       )}
                                       
@@ -1116,9 +1046,6 @@ export default function VATSubmissionPage() {
           </div>
         </div>
       </div>
-
-      {/* Live Chat */}
-      <LiveChat />
 
       {/* Footer */}
       <Footer />
