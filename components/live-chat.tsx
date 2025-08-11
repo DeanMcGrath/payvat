@@ -33,7 +33,14 @@ interface ChatSession {
 }
 
 export default function LiveChat() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(() => {
+    // Initialize from localStorage on client-side only
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('chat_is_open')
+      return stored === 'true'
+    }
+    return false
+  })
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [session, setSession] = useState<ChatSession | null>(null)
@@ -53,6 +60,20 @@ export default function LiveChat() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  // Persist chat open/closed state to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('chat_is_open', isOpen.toString())
+    }
+  }, [isOpen])
+
+  // Auto-initialize chat if it was previously open
+  useEffect(() => {
+    if (isOpen && !session) {
+      initializeChat()
+    }
+  }, [isOpen, session])
 
   // Initialize or load chat session
   const initializeChat = async () => {
@@ -286,7 +307,7 @@ export default function LiveChat() {
     <>
       {/* Chat Widget */}
       {isOpen && (
-        <div className="fixed bottom-20 right-4 w-80 h-96 bg-white border border-gray-200 rounded-lg shadow-xl z-50 relative">
+        <div className="fixed bottom-20 left-4 w-80 h-96 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] bg-white border border-gray-200 rounded-lg shadow-xl z-[9999]">
           {/* Drag and Drop Overlay */}
           {isDragOver && (
             <div className="absolute inset-0 bg-blue-500 bg-opacity-20 border-2 border-dashed border-blue-400 rounded-lg flex items-center justify-center z-10">
@@ -485,7 +506,7 @@ export default function LiveChat() {
       {/* Chat Button */}
       <Button
         onClick={toggleChat}
-        className="fixed bottom-4 right-4 w-14 h-14 rounded-full bg-teal-500 hover:bg-teal-600 text-white shadow-lg z-40"
+        className="fixed bottom-4 left-4 w-14 h-14 rounded-full bg-teal-500 hover:bg-teal-600 text-white shadow-lg z-[9998] transition-all duration-200 hover:scale-110 sm:w-14 sm:h-14"
       >
         <MessageCircle className="h-6 w-6" />
       </Button>
