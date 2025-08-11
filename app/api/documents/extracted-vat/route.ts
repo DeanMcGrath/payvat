@@ -203,9 +203,38 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           const isSales = doc.category?.includes('SALES')
           const vatTotal = vatAmounts.reduce((sum, amount) => sum + amount, 0)
           
-          // Extract confidence from scan result
-          const confidenceMatch = doc.scanResult?.match(/([0-9]+)%\s*confidence/)
-          const confidence = confidenceMatch ? parseInt(confidenceMatch[1]) / 100 : vatAmounts.length > 0 ? 0.7 : 0.3
+          // Extract confidence from scan result - improved pattern matching
+          let confidence = 0.85 // Default high confidence for successfully processed documents
+          
+          if (doc.scanResult) {
+            // Try multiple confidence patterns
+            const patterns = [
+              /([0-9]+)%\s*confidence/i,
+              /confidence[:\s]*([0-9]+)%/i,
+              /confidence[:\s]*([0-9]*\.?[0-9]+)/i,
+              /"confidence"[:\s]*([0-9]*\.?[0-9]+)/i
+            ]
+            
+            for (const pattern of patterns) {
+              const match = doc.scanResult.match(pattern)
+              if (match) {
+                const extractedConfidence = parseFloat(match[1])
+                if (extractedConfidence >= 0 && extractedConfidence <= 100) {
+                  // If it's a percentage, convert to decimal; if already decimal, keep as is
+                  confidence = extractedConfidence > 1 ? extractedConfidence / 100 : extractedConfidence
+                  break
+                } else if (extractedConfidence > 0 && extractedConfidence <= 1) {
+                  confidence = extractedConfidence
+                  break
+                }
+              }
+            }
+          }
+          
+          // Fallback logic: high confidence for documents with VAT amounts, lower for those without
+          if (confidence === 0.85 && vatAmounts.length === 0) {
+            confidence = 0.3 // Lower confidence if no VAT amounts found
+          }
           
           console.log(`   Category: ${doc.category} (${isSales ? 'SALES' : 'PURCHASES'})`)
           console.log(`   VAT total: €${vatTotal}, Confidence: ${Math.round(confidence * 100)}%`)
@@ -273,7 +302,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           totalNetVAT: Math.round((guestTotalSalesVAT - guestTotalPurchaseVAT) * 100) / 100,
           documentCount: finalGuestDocs.length,
           processedDocuments: guestProcessedDocuments,
-          averageConfidence: docsWithVAT > 0 ? Math.round((guestTotalConfidence / docsWithVAT) * 100) / 100 : 0,
+          averageConfidence: docsWithVAT > 0 ? guestTotalConfidence / docsWithVAT : 0,
           salesDocuments: guestSalesDocuments,
           purchaseDocuments: guestPurchaseDocuments
         }
@@ -366,7 +395,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
                   fileName: doc.originalName,
                   category: doc.category,
                   extractedAmounts: vatAmounts,
-                  confidence: 0.8,
+                  confidence: 0.85,
                   scanResult: doc.scanResult || 'Processed'
                 })
               }
@@ -378,7 +407,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
               totalNetVAT: Math.round(-fallbackTotalPurchaseVAT * 100) / 100,
               documentCount: simpleDocs.length,
               processedDocuments: fallbackProcessedDocs,
-              averageConfidence: 0.8,
+              averageConfidence: 0.85,
               salesDocuments: [],
               purchaseDocuments: fallbackPurchaseDocs
             }
@@ -610,7 +639,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         if (vatAmounts.length > 0) {
           const isSales = document.category?.includes('SALES')
           const vatTotal = vatAmounts.reduce((sum, amount) => sum + amount, 0)
-          const confidence = 0.7 // Default confidence for scan result extraction
+          const confidence = 0.85 // High confidence for successfully processed authenticated user documents
           
           console.log(`      Found VAT from scan result: €${vatTotal}`)
           
@@ -653,7 +682,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       totalNetVAT: Math.round(totalNetVAT * 100) / 100,
       documentCount: documents.length,
       processedDocuments,
-      averageConfidence: Math.round(averageConfidence * 100) / 100,
+      averageConfidence: averageConfidence,
       salesDocuments,
       purchaseDocuments
     }

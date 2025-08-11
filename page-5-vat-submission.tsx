@@ -364,8 +364,8 @@ export default function VATReturnSubmission() {
       </header>
 
       <div className="p-4 md:p-6 max-w-6xl mx-auto">
-        <div className="mb-6 md:mb-8">
-          <div className="flex items-center space-x-3 mb-4">
+        <div className="mb-3 md:mb-4">
+          <div className="flex items-center space-x-3 mb-2">
             <div className="inline-flex items-center justify-center w-8 md:w-10 h-8 md:h-10 bg-teal-100 rounded-full">
               <FileText className="h-4 md:h-5 w-4 md:w-5 text-teal-600" />
             </div>
