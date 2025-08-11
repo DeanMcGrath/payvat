@@ -192,6 +192,47 @@ export default function AdminDocuments() {
     return <FileIcon className="h-4 w-4 text-gray-500" />
   }
 
+  // Parse VAT amounts and confidence from scanResult
+  const parseVATFromScanResult = (scanResult: string | any) => {
+    if (!scanResult || typeof scanResult !== 'string') {
+      return null
+    }
+
+    // Pattern 1: "AI extracted N VAT amount(s): €X.XX, €Y.YY (ZZ% confidence)"
+    const aiPattern = /(?:AI|Legacy|HARDCODED)\s+(?:processing\s+)?(?:successfully\s+)?extracted\s+\d+\s+VAT\s+amount\(s\):\s+(€[\d,]+\.?\d*(?:,\s+€[\d,]+\.?\d*)*)\s+\((\d+)%\s+confidence/i
+    let match = scanResult.match(aiPattern)
+    if (match) {
+      const vatAmountsStr = match[1]
+      const confidence = parseInt(match[2])
+      const vatAmounts = vatAmountsStr.split(',').map(amount => amount.trim())
+      return { vatAmounts, confidence }
+    }
+
+    // Pattern 2: "VAT extracted from Excel: €X.XX"
+    const excelPattern = /VAT\s+extracted\s+from\s+Excel:\s+(€[\d,]+\.?\d*)/i
+    match = scanResult.match(excelPattern)
+    if (match) {
+      return { vatAmounts: [match[1]], confidence: 95 } // Default high confidence for Excel
+    }
+
+    // Pattern 3: Direct euro amounts in scan result
+    const euroPattern = /€([\d,]+\.?\d*)/g
+    const euros = []
+    let euroMatch
+    while ((euroMatch = euroPattern.exec(scanResult)) !== null) {
+      euros.push(`€${euroMatch[1]}`)
+    }
+    if (euros.length > 0) {
+      // Try to extract confidence if available
+      const confPattern = /(\d+)%/
+      const confMatch = scanResult.match(confPattern)
+      const confidence = confMatch ? parseInt(confMatch[1]) : 85 // Default confidence
+      return { vatAmounts: euros.slice(0, 3), confidence } // Limit to first 3 amounts
+    }
+
+    return null
+  }
+
   const handleSearchChange = (value: string) => {
     setSearch(value)
     setPage(1) // Reset to first page on search
@@ -489,24 +530,47 @@ export default function AdminDocuments() {
                           {getFileTypeIcon(document.mimeType)}
                         </div>
                         <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-1">
-                            <h3 className="font-semibold text-lg truncate">
-                              {document.fileName}
-                            </h3>
-                            <Badge className={getCategoryColor(document.category)}>
-                              {document.category.toLowerCase()}
-                            </Badge>
-                            {document.isScanned ? (
-                              <Badge variant="outline" className="bg-green-50 text-green-700">
-                                <Scan className="h-3 w-3 mr-1" />
-                                Scanned
+                          <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center space-x-2">
+                              <h3 className="font-semibold text-lg truncate">
+                                {document.fileName}
+                              </h3>
+                              <Badge className={getCategoryColor(document.category)}>
+                                {document.category.toLowerCase()}
                               </Badge>
-                            ) : (
-                              <Badge variant="outline" className="bg-yellow-50 text-yellow-700">
-                                <AlertTriangle className="h-3 w-3 mr-1" />
-                                Not Scanned
-                              </Badge>
-                            )}
+                            </div>
+                            
+                            {/* VAT Amount Display - Prominently positioned on the right */}
+                            <div className="flex items-center space-x-2">
+                              {document.isScanned ? (
+                                (() => {
+                                  const vatInfo = parseVATFromScanResult(document.scanResult)
+                                  return vatInfo ? (
+                                    <div className="flex items-center bg-green-50 text-green-800 px-3 py-1 rounded-md border border-green-200">
+                                      <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
+                                      <div className="text-right">
+                                        <div className="font-semibold">
+                                          VAT: {vatInfo.vatAmounts.join(', ')}
+                                        </div>
+                                        <div className="text-xs opacity-75">
+                                          {vatInfo.confidence}% confidence
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <Badge variant="outline" className="bg-green-50 text-green-700">
+                                      <Scan className="h-3 w-3 mr-1" />
+                                      AI Processed
+                                    </Badge>
+                                  )
+                                })()
+                              ) : (
+                                <Badge variant="outline" className="bg-yellow-50 text-yellow-700">
+                                  <AlertTriangle className="h-3 w-3 mr-1" />
+                                  Not Scanned
+                                </Badge>
+                              )}
+                            </div>
                           </div>
                           
                           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
