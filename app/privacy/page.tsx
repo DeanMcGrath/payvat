@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Bell, Settings, LogOut, Search, Shield, CheckCircle, Clock, Lock, Eye, Database, Mail, ArrowUp, BookOpen, Users, FileText } from 'lucide-react'
@@ -72,9 +73,9 @@ export default function PrivacyPage() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center">
-                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
+                <Link href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
                   PayVAT
-                </a>
+                </Link>
               </div>
               
               {/* Header Actions */}
