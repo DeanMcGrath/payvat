@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search, UserPlus } from 'lucide-react'
+import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search, UserPlus, LogIn } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
@@ -87,13 +87,14 @@ export default function LandingPage() {
                     <Bell className="h-5 w-5" />
                     <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
                   </Button>
-    <Button 
-                    variant="outline" 
+                  <Button 
+                    variant="ghost" 
                     size="sm" 
-                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20"
                     onClick={() => window.location.href = '/login'}
+                    aria-label="Sign in"
                   >
-                    Sign In
+                    <LogIn className="h-5 w-5" />
                   </Button>
                   <Button 
                     variant="ghost" 

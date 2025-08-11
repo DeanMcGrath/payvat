@@ -1,4 +1,4 @@
-import PaymentConfirmed from "@/page-7-confirmation and payment"
+import PaymentConfirmed from "@/page-7-confirmation-payment"
 
 export default function PaymentConfirmedPage() {
   return <PaymentConfirmed />
