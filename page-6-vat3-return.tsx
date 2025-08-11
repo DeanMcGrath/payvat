@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { Euro, Bell, Settings, LogOut, Search, Save, Send, ArrowUp, FileText, Shield, CheckCircle, Clock } from "lucide-react"
-import LiveChat from "../../components/live-chat"
+import LiveChat from "./components/live-chat"
 
 export default function VAT3ReturnForm() {
   const [formData, setFormData] = useState({
