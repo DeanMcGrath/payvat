@@ -128,13 +128,10 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
             <div className="flex items-center justify-between">
               {/* Logo */}
-              <div className="flex items-center space-x-3">
-                <div className="icon-modern">
-                  <FileText className="h-6 w-6 text-white" />
-                </div>
-                <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              <div className="flex items-center">
+                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
                   PayVAT
-                </h1>
+                </a>
               </div>
               
               {/* Header Content */}
@@ -143,7 +140,7 @@ export default function HomePage() {
                 <div className="hidden lg:flex items-center space-x-3">
                   <div className="relative">
                     <Input
-                      placeholder="Search VAT records..."
+                      placeholder="Search ..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={handleSearchKeyPress}
@@ -241,14 +238,14 @@ export default function HomePage() {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="text-sm text-muted-foreground font-medium">VAT Due</p>
-                  <div className="text-3xl font-bold text-foreground">€12,450.00</div>
+                  <div className="text-3xl font-bold text-foreground">€</div>
                 </div>
                 <div className="icon-premium">
                   <Euro className="h-6 w-6 text-white" />
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <div className="status-warning">Due: 15th Jan 2025</div>
+                <div className="status-warning">Due: </div>
               </div>
             </div>
 
@@ -256,14 +253,14 @@ export default function HomePage() {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="text-sm text-muted-foreground font-medium">This Quarter</p>
-                  <div className="text-3xl font-bold text-foreground">€45,230.00</div>
+                  <div className="text-3xl font-bold text-foreground">€</div>
                 </div>
                 <div className="icon-premium">
                   <TrendingUp className="h-6 w-6 text-white" />
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <div className="status-success">+12% from last quarter</div>
+                <div className="status-success"> </div>
               </div>
             </div>
 

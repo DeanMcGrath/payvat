@@ -14,8 +14,8 @@ export default function LoginForm() {
       {/* Business Info - Top Right */}
       <div className="flex justify-end mb-4">
         <div className="text-right">
-          <h3 className="text-lg font-bold text-gray-800">Brian Cusack Trading Ltd</h3>
-          <p className="text-teal-600 font-mono text-sm">VAT: IE0352440A</p>
+          <h3 className="text-lg font-bold text-gray-800"> </h3>
+          <p className="text-teal-600 font-mono text-sm">VAT:  </p>
         </div>
       </div>
       

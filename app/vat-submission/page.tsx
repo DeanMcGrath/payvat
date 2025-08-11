@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Upload, Calculator, FileText, CheckCircle, Sparkles, RefreshCw, X, AlertCircle, Bell, Settings, LogOut, Search, Loader2 } from 'lucide-react'
+import { ArrowLeft, Upload, Calculator, FileText, CheckCircle, Sparkles, RefreshCw, X, AlertCircle, Bell, Settings, LogOut, Search, Loader2, Shield } from 'lucide-react'
 import LiveChat from "@/components/live-chat"
 import FileUpload from "@/components/file-upload"
 import Footer from "@/components/footer"
@@ -306,82 +306,160 @@ export default function VATSubmissionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
-            
-            <div className="flex items-center space-x-2 sm:space-x-6">
-              <div className="hidden lg:flex items-center space-x-2">
-                <Input
-                  placeholder="Search"
-                  className="w-32 xl:w-48 2xl:w-64 bg-white text-gray-900 border-0"
-                />
-                <Button size="sm" className="bg-teal-700 hover:bg-teal-800">
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
-              
-              <div className="text-right hidden sm:block max-w-48 lg:max-w-none">
-                <h3 className="text-sm lg:text-base font-bold text-white truncate">{user.businessName}</h3>
-                <p className="text-teal-100 font-mono text-xs">VAT: {user.vatNumber}</p>
-              </div>
-              
-              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 lg:hidden p-2 min-w-[44px] min-h-[44px]">
-                  <Search className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
-                  <Bell className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
-                  <Settings className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]" onClick={handleLogout} title="Logout">
-                  <LogOut className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-background">
+      {/* Modern Header */}
+      <header className="gradient-primary relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
         
-        {/* Navigation */}
-        <div className="bg-teal-600 px-4 sm:px-6 py-3">
-          <div className="max-w-7xl mx-auto">
+        <div className="relative z-10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2 text-sm">
-                <span className="text-white">VAT Submission</span>
+              {/* Logo */}
+              <div className="flex items-center">
+                <h1 className="text-2xl font-thin text-white tracking-tight">
+                  PayVAT
+                </h1>
               </div>
-              <div className="sm:hidden text-right max-w-40">
-                <p className="text-xs text-teal-100 font-mono truncate">{user.businessName}</p>
-                <p className="text-xs text-teal-200 font-mono">{user.vatNumber}</p>
+              
+              {/* Header Actions */}
+              <div className="flex items-center space-x-4">
+                {/* Search - Desktop */}
+                <div className="hidden lg:flex items-center space-x-3">
+                  <div className="relative">
+                    <Input
+                      placeholder="Search VAT submissions..."
+                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
+                    />
+                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                  </div>
+                </div>
+
+                <div className="text-right hidden sm:block max-w-48 lg:max-w-none">
+                  <h3 className="text-sm lg:text-base font-bold text-white truncate">{user.businessName}</h3>
+                  <p className="text-white/70 font-mono text-xs">VAT: {user.vatNumber}</p>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
+                  >
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20" 
+                    onClick={handleLogout} 
+                    title="Logout"
+                  >
+                    <LogOut className="h-5 w-5" />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
+          
+          {/* Modern Navigation */}
+          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-8">
+                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <span>VAT Submission</span>
+                  </span>
+                </div>
+                <div className="text-white/60 text-xs hidden sm:block">
+                  Complete your VAT calculations and submit
+                </div>
+              </div>
+            </div>
+          </nav>
         </div>
       </header>
 
-      <div className="p-4 md:p-6 max-w-6xl mx-auto">
-        <div className="mb-6 md:mb-8">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="inline-flex items-center justify-center w-8 md:w-10 h-8 md:h-10 bg-teal-100 rounded-full">
-              <FileText className="h-4 md:h-5 w-4 md:w-5 text-teal-600" />
-            </div>
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">VAT Return Submission</h2>
-              <p className="text-sm md:text-base text-gray-600">Complete your VAT calculations and submit your return</p>
+      {/* Hero Section */}
+      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center">
+            {/* Hero Content */}
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
+                  Smart VAT calculations
+                </div>
+                
+                <div className="icon-premium mb-6 mx-auto">
+                  <Calculator className="h-12 w-12 text-white" />
+                </div>
+                
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                  <span className="text-gradient-primary">VAT Return</span>
+                  <br />
+                  <span className="text-foreground">Submission</span>
+                </h1>
+                
+                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                
+                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                  Complete your VAT calculations with AI-powered document scanning. 
+                  <span className="text-primary font-semibold">Submit directly to Revenue.</span>
+                </p>
+              </div>
+              
+              {/* Trust Indicators */}
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>AI document scanning</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>Auto calculations</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>Revenue compliant</span>
+                </div>
+              </div>
             </div>
           </div>
+          
+          {/* Background Elements */}
+          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
+          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
         </div>
+      </section>
+
+      <div className="max-w-6xl mx-auto px-6 py-8">
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Form */}
           <div className="lg:col-span-2 space-y-6">
             {/* Extracted VAT Data Card */}
             {extractedVATData && extractedVATData.processedDocuments > 0 && (
-              <Card className="border-teal-200 bg-teal-50">
+              <Card className="card-premium hover-lift">
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold text-teal-900 flex items-center">
                     <Sparkles className="h-5 w-5 mr-2 text-teal-600" />
@@ -448,9 +526,9 @@ export default function VATSubmissionPage() {
               </Card>
             )}
 
-            <Card>
+            <Card className="card-modern hover-lift">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
+                <CardTitle className="text-lg font-semibold text-foreground flex items-center">
                   <Calculator className="h-5 w-5 mr-2 text-teal-600" />
                   VAT Calculation
                   {useExtractedData && (
@@ -519,9 +597,9 @@ export default function VATSubmissionPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="card-modern hover-lift">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
+                <CardTitle className="text-lg font-semibold text-foreground flex items-center">
                   <Upload className="h-5 w-5 mr-2 text-teal-600" />
                   Supporting Documents
                 </CardTitle>
@@ -654,7 +732,7 @@ export default function VATSubmissionPage() {
               <>
                 {/* Sales Documents Section */}
                 {uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length > 0 && (
-                  <Card className="border-teal-200">
+                  <Card className="card-modern hover-lift border-teal-200">
                     <CardHeader className="bg-teal-50">
                       <CardTitle className="text-lg font-semibold text-teal-900 flex items-center justify-between">
                         <div className="flex items-center">
@@ -746,7 +824,7 @@ export default function VATSubmissionPage() {
                 
                 {/* Purchase Documents Section */}
                 {uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length > 0 && (
-                  <Card className="border-green-200">
+                  <Card className="card-modern hover-lift border-green-200">
                     <CardHeader className="bg-green-50">
                       <CardTitle className="text-lg font-semibold text-green-900 flex items-center justify-between">
                         <div className="flex items-center">
@@ -838,7 +916,7 @@ export default function VATSubmissionPage() {
                 
                 {/* Other Documents Section (if any exist that aren't SALES or PURCHASE) */}
                 {uploadedDocuments.filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE')).length > 0 && (
-                  <Card className="border-gray-200">
+                  <Card className="card-modern hover-lift border-gray-200">
                     <CardHeader>
                       <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
                         <FileText className="h-5 w-5 mr-2 text-gray-600" />
@@ -906,9 +984,9 @@ export default function VATSubmissionPage() {
 
           {/* Summary Sidebar */}
           <div className="space-y-6">
-            <Card>
+            <Card className="card-modern hover-lift">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold text-gray-900">Return Summary</CardTitle>
+                <CardTitle className="text-lg font-semibold text-foreground">Return Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
@@ -934,9 +1012,9 @@ export default function VATSubmissionPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="card-modern hover-lift">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold text-gray-900">Checklist</CardTitle>
+                <CardTitle className="text-lg font-semibold text-foreground">Checklist</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center space-x-2">
@@ -958,9 +1036,9 @@ export default function VATSubmissionPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="card-premium hover-lift">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold text-gray-900">Actions</CardTitle>
+                <CardTitle className="text-lg font-semibold text-foreground">Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button variant="outline" className="w-full justify-start">

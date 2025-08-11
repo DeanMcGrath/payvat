@@ -63,9 +63,9 @@ export default function FAQPage() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center">
-                <h1 className="text-2xl font-thin text-white tracking-tight">
+                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
                   PayVAT
-                </h1>
+                </a>
               </div>
               
               {/* Header Actions */}
@@ -170,7 +170,7 @@ export default function FAQPage() {
               <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
-                  <span>Trusted by 10,000+ businesses</span>
+                  <span> Expert VAT Guidance, Trusted by Irish businesses </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />

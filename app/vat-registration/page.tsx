@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { Bell, Settings, LogOut, Search, BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock, ArrowRight, Download, Euro, Building, Mail, Phone, Loader2, AlertCircle as AlertCircleIcon } from 'lucide-react'
+import { Bell, Settings, LogOut, Search, BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock, ArrowRight, Download, Euro, Building, Mail, Phone, Loader2, AlertCircle as AlertCircleIcon, Shield, UserCheck } from 'lucide-react'
 import LiveChat from "@/components/live-chat"
 import Footer from "@/components/footer"
 
@@ -67,87 +67,169 @@ export default function VATRegistrationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
-            
-            <div className="flex items-center space-x-2 sm:space-x-6">
-              <div className="hidden lg:flex items-center space-x-2">
-                <Input
-                  placeholder="Search"
-                  className="w-32 xl:w-48 2xl:w-64 bg-white text-gray-900 border-0"
-                />
-                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
-                  <Search className="h-4 w-4" />
-                </Button>
+    <div className="min-h-screen bg-background">
+      {/* Modern Header */}
+      <header className="gradient-primary relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
+        
+        <div className="relative z-10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <div className="flex items-center">
+                <h1 className="text-2xl font-thin text-white tracking-tight">
+                  PayVAT
+                </h1>
               </div>
               
-              {user && (
-                <div className="text-right hidden sm:block max-w-48 lg:max-w-none">
-                  <h3 className="text-sm lg:text-base font-bold text-white truncate">{user.businessName}</h3>
-                  <p className="text-teal-100 font-mono text-xs">VAT: {user.vatNumber}</p>
+              {/* Header Actions */}
+              <div className="flex items-center space-x-4">
+                {/* Search - Desktop */}
+                <div className="hidden lg:flex items-center space-x-3">
+                  <div className="relative">
+                    <Input
+                      placeholder="Search registration guide..."
+                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
+                    />
+                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                  </div>
                 </div>
-              )}
-              
-              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 lg:hidden p-2 min-w-[44px] min-h-[44px]">
-                  <Search className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
-                  <Bell className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
-                  <Settings className="h-4 w-4" />
-                </Button>
-                {user ? (
-                  <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]" onClick={handleLogout} title="Logout">
-                    <LogOut className="h-4 w-4" />
-                  </Button>
-                ) : (
+
+                {user && (
+                  <div className="text-right hidden sm:block max-w-48 lg:max-w-none">
+                    <h3 className="text-sm lg:text-base font-bold text-white truncate">{user.businessName}</h3>
+                    <p className="text-white/70 font-mono text-xs">VAT: {user.vatNumber}</p>
+                  </div>
+                )}
+                
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-2">
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    className="text-white hover:bg-teal-600 px-3"
-                    onClick={() => window.location.href = '/login'}
+                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
                   >
-                    Login
+                    <Search className="h-5 w-5" />
                   </Button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Navigation */}
-        <div className="bg-teal-600 px-4 sm:px-6 py-3">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2 text-sm">
-                <span className="text-white">How to Apply for a VAT Number in Ireland</span>
-              </div>
-              {user && (
-                <div className="sm:hidden text-right max-w-40">
-                  <p className="text-xs text-teal-100 font-mono truncate">{user.businessName}</p>
-                  <p className="text-xs text-teal-200 font-mono">{user.vatNumber}</p>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
+                  >
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                  {user ? (
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20" 
+                      onClick={handleLogout} 
+                      title="Logout"
+                    >
+                      <LogOut className="h-5 w-5" />
+                    </Button>
+                  ) : (
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-white hover:bg-white/10 px-3 glass-white/10 backdrop-blur-sm border-white/20"
+                      onClick={() => window.location.href = '/login'}
+                    >
+                      Login
+                    </Button>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
+          
+          {/* Modern Navigation */}
+          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-8">
+                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <span>VAT Registration Guide</span>
+                  </span>
+                </div>
+                <div className="text-white/60 text-xs hidden sm:block">
+                  Complete guide to Irish VAT registration
+                </div>
+              </div>
+            </div>
+          </nav>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        {/* Hero Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">How to Apply for a VAT Number in Ireland</h2>
-          <p className="text-lg text-gray-600">This guide outlines the process for new businesses in Ireland to register for a Value-Added Tax (VAT) number, ensuring compliance with Irish tax regulations. It includes links to online resources for applying through the Revenue Online Service (ROS).</p>
+      {/* Hero Section */}
+      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center">
+            {/* Hero Content */}
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
+                  Expert registration guidance
+                </div>
+                
+                <div className="icon-premium mb-6 mx-auto">
+                  <UserCheck className="h-12 w-12 text-white" />
+                </div>
+                
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                  <span className="text-gradient-primary">Apply for Your</span>
+                  <br />
+                  <span className="text-foreground">VAT Number in Ireland</span>
+                </h1>
+                
+                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                
+                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                  Complete step-by-step guide for new businesses to register for VAT in Ireland. 
+                  <span className="text-primary font-semibold">Revenue compliant and up-to-date.</span>
+                </p>
+              </div>
+              
+              {/* Trust Indicators */}
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-success" />
+                  <span>Revenue approved</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>Expert guidance</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-success" />
+                  <span>Always updated</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Background Elements */}
+          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
+          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
         </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-6 py-8">
 
         {/* Step 1: Determine if You Need to Register */}
-        <Card className="mb-8" id="step-1">
+        <Card className="card-modern hover-lift mb-8" id="step-1">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
@@ -223,7 +305,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 2: Gather Required Information */}
-        <Card className="mb-8" id="step-2">
+        <Card className="card-modern hover-lift mb-8" id="step-2">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
@@ -288,7 +370,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 3: Choose the Appropriate Registration Form */}
-        <Card className="mb-8" id="step-3">
+        <Card className="card-modern hover-lift mb-8" id="step-3">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
@@ -392,7 +474,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 4: Register Through ROS */}
-        <Card className="mb-8" id="step-4">
+        <Card className="card-modern hover-lift mb-8" id="step-4">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">4</span>
@@ -462,7 +544,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 5: Await Processing */}
-        <Card className="mb-8" id="step-5">
+        <Card className="card-modern hover-lift mb-8" id="step-5">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">5</span>
@@ -513,7 +595,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 6: Post-Registration Obligations */}
-        <Card className="mb-8" id="step-6">
+        <Card className="card-modern hover-lift mb-8" id="step-6">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">6</span>
@@ -621,7 +703,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* Step 7: Monitor and Maintain Compliance */}
-        <Card className="mb-8" id="step-7">
+        <Card className="card-modern hover-lift mb-8" id="step-7">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
               <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">7</span>
@@ -659,7 +741,7 @@ export default function VATRegistrationPage() {
         </Card>
 
         {/* PayVAT CTA */}
-        <Card className="border-teal-200 bg-gradient-to-r from-teal-50 to-blue-50">
+        <Card className="card-premium hover-lift">
           <CardContent className="p-8 text-center">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Streamline Your VAT Management?</h3>
             <p className="text-gray-600 mb-6 max-w-2xl mx-auto">Once you receive your VAT number, let PayVAT handle your VAT calculations, submissions, and payments. Focus on growing your business while we ensure your VAT compliance.</p>

@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Bell, Settings, LogOut, Search } from 'lucide-react'
+import { Bell, Settings, LogOut, Search, Shield, CheckCircle, Lock, Mail, UserPlus, Building, AlertTriangle } from 'lucide-react'
 import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
 import { z } from "zod"
@@ -162,61 +162,162 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
-            
-            <div className="flex items-center space-x-2 sm:space-x-6">
-              <div className="hidden md:flex items-center space-x-2">
-                <Input
-                  placeholder="Search"
-                  className="w-32 sm:w-40 lg:w-48 xl:w-64 bg-white text-gray-900 border-0"
-                />
-                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
-                  <Search className="h-4 w-4" />
-                </Button>
+    <div className="min-h-screen bg-background">
+      {/* Modern Header */}
+      <header className="gradient-primary relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
+        
+        <div className="relative z-10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <div className="flex items-center">
+                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
+                  PayVAT
+                </a>
               </div>
               
-              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 md:hidden p-2 min-w-[44px] min-h-[44px]">
-                  <Search className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
-                  <Bell className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
-                  <Settings className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
-                  <LogOut className="h-4 w-4" />
-                </Button>
+              {/* Header Actions */}
+              <div className="flex items-center space-x-4">
+                {/* Search - Desktop */}
+                <div className="hidden lg:flex items-center space-x-3">
+                  <div className="relative">
+                    <Input
+                      placeholder="Search..."
+                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
+                    />
+                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
+                  >
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
+                    onClick={() => window.location.href = '/login'}
+                  >
+                    Sign In
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        {/* Navigation */}
-        <div className="bg-teal-600 px-4 sm:px-6 py-3">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center space-x-2 text-sm">
-              <span className="text-white">Sign Up</span>
+          
+          {/* Modern Navigation */}
+          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-8">
+                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <span>Create Account</span>
+                  </span>
+                  <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/login'}>Login</button>
+                  </div>
+                </div>
+                <div className="text-white/60 text-xs hidden sm:block">
+                  Join thousands of Irish businesses
+                </div>
+              </div>
             </div>
-          </div>
+          </nav>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
-        <div className="flex items-center justify-center">
-          <div className="w-full max-w-sm sm:max-w-md mx-2 sm:mx-4 bg-white rounded-xl shadow-lg p-4 sm:p-6">
-            {/* Header */}
-            <div className="text-center mb-6 sm:mb-12">
-              <p className="text-gray-600 text-lg">
-                Create your account to get started.
-              </p>
+      {/* Hero Section */}
+      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center">
+            {/* Hero Content */}
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
+                  Join Irish businesses
+                </div>
+                
+                <div className="icon-premium mb-6 mx-auto">
+                  <UserPlus className="h-12 w-12 text-white" />
+                </div>
+                
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                  <span className="text-gradient-primary">Start Your VAT</span>
+                  <br />
+                  <span className="text-foreground">Journey Today</span>
+                </h1>
+                
+                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                
+                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                  Create your account and join thousands of Irish businesses managing VAT effortlessly. 
+                  <span className="text-primary font-semibold">Get started in minutes.</span>
+                </p>
+              </div>
+              
+              {/* Trust Indicators */}
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-success" />
+                  <span>Secure & compliant</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>14-day free trial</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Building className="h-4 w-4 text-success" />
+                  <span>Irish businesses</span>
+                </div>
+              </div>
             </div>
+          </div>
+          
+          {/* Background Elements */}
+          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
+          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
+        </div>
+      </section>
+
+      <div className="max-w-lg mx-auto px-6 py-8 -mt-16 relative z-10">
+        <div className="card-premium p-8 hover-lift">
+          <div className="text-center mb-8">
+            <div className="icon-premium mb-4 mx-auto">
+              <Building className="h-8 w-8 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-foreground mb-2">Create Your Business Account</h2>
+            <p className="text-muted-foreground">Join thousands of Irish businesses</p>
+          </div>
           
           {/* Success Message */}
           {success && (
@@ -233,9 +334,10 @@ export default function SignupPage() {
           )}
           
           {/* Form */}
-          <div className="space-y-3 sm:space-y-4 md:space-y-6">
-            <div>
-              <Label htmlFor="businessName" className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="businessName" className="text-foreground font-medium flex items-center gap-2">
+                <Building className="h-4 w-4 text-primary" />
                 Business Name *
               </Label>
               <Input
@@ -243,35 +345,43 @@ export default function SignupPage() {
                 type="text"
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
-                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.businessName ? 'border-red-500' : ''}`}
+                className={`bg-white/50 border-gray-200 focus:border-primary focus:ring-primary text-foreground rounded-lg backdrop-blur-sm ${errors.businessName ? 'border-red-500' : ''}`}
                 placeholder="Enter your business name"
                 disabled={isLoading}
               />
               {errors.businessName && (
-                <p className="text-red-500 text-sm mt-1">{errors.businessName}</p>
+                <p className="text-destructive text-sm flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3" />
+                  {errors.businessName}
+                </p>
               )}
             </div>
             
-            <div>
-              <Label htmlFor="vatNumber" className="block text-sm font-medium text-gray-700 mb-2">
-                VAT Number <span className="text-gray-400">(Optional)</span>
+            <div className="space-y-2">
+              <Label htmlFor="vatNumber" className="text-foreground font-medium flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-primary" />
+                VAT Number
               </Label>
               <Input
                 id="vatNumber"
                 type="text"
                 value={vatNumber}
                 onChange={(e) => setVatNumber(e.target.value)}
-                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.vatNumber ? 'border-red-500' : ''}`}
-                placeholder="Enter your VAT number (optional)"
+                className={`bg-white/50 border-gray-200 focus:border-primary focus:ring-primary text-foreground rounded-lg backdrop-blur-sm ${errors.vatNumber ? 'border-red-500' : ''}`}
+                placeholder="  "
                 disabled={isLoading}
               />
               {errors.vatNumber && (
-                <p className="text-red-500 text-sm mt-1">{errors.vatNumber}</p>
+                <p className="text-destructive text-sm flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3" />
+                  {errors.vatNumber}
+                </p>
               )}
             </div>
             
-            <div>
-              <Label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-foreground font-medium flex items-center gap-2">
+                <Mail className="h-4 w-4 text-primary" />
                 Email Address *
               </Label>
               <Input
@@ -279,35 +389,43 @@ export default function SignupPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.email ? 'border-red-500' : ''}`}
-                placeholder="Enter your email address"
+                className={`bg-white/50 border-gray-200 focus:border-primary focus:ring-primary text-foreground rounded-lg backdrop-blur-sm ${errors.email ? 'border-red-500' : ''}`}
+                placeholder="your@business.ie"
                 disabled={isLoading}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                <p className="text-destructive text-sm flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3" />
+                  {errors.email}
+                </p>
               )}
             </div>
             
-            <div>
-              <Label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password * <span className="text-gray-400">(min. 6 characters)</span>
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-foreground font-medium flex items-center gap-2">
+                <Lock className="h-4 w-4 text-primary" />
+                Password * <span className="text-muted-foreground text-sm font-normal">(min. 6 characters)</span>
               </Label>
               <Input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.password ? 'border-red-500' : ''}`}
+                className={`bg-white/50 border-gray-200 focus:border-primary focus:ring-primary text-foreground rounded-lg backdrop-blur-sm ${errors.password ? 'border-red-500' : ''}`}
                 placeholder="Create a secure password"
                 disabled={isLoading}
               />
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                <p className="text-destructive text-sm flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3" />
+                  {errors.password}
+                </p>
               )}
             </div>
             
-            <div>
-              <Label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="text-foreground font-medium flex items-center gap-2">
+                <Lock className="h-4 w-4 text-primary" />
                 Confirm Password *
               </Label>
               <Input
@@ -315,43 +433,52 @@ export default function SignupPage() {
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-600 focus:border-transparent text-gray-900 ${errors.confirmPassword ? 'border-red-500' : ''}`}
+                className={`bg-white/50 border-gray-200 focus:border-primary focus:ring-primary text-foreground rounded-lg backdrop-blur-sm ${errors.confirmPassword ? 'border-red-500' : ''}`}
                 placeholder="Confirm your password"
                 disabled={isLoading}
               />
               {errors.confirmPassword && (
-                <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+                <p className="text-destructive text-sm flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3" />
+                  {errors.confirmPassword}
+                </p>
               )}
             </div>
             
-            <div className="pt-3 sm:pt-4">
+            <div className="pt-4">
               <Button 
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full btn-primary py-4 font-semibold text-lg hover-lift disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleRegister}
                 disabled={isLoading || success}
               >
-                {isLoading ? "Creating Account..." : success ? "Account Created!" : "Create Account"}
+                {isLoading ? "Creating Account..." : success ? "Account Created!" : "Start Free Trial"}
               </Button>
             </div>
           </div>
           
-          <div className="mt-8 text-center">
-            <p className="text-gray-600 text-sm">
-              Already have an account?{' '}
-              <button 
-                className="text-teal-600 hover:text-teal-700 font-medium hover:underline"
+          <div className="mt-8 space-y-4">
+            <div className="text-center text-xs text-muted-foreground px-4">
+              By creating an account, you agree to our terms of service and privacy policy. 
+              Your VAT data is encrypted and secure.
+            </div>
+            
+            <div className="text-center pt-4 border-t">
+              <p className="text-muted-foreground text-sm mb-3">
+                Already have an account?
+              </p>
+              <Button 
+                variant="outline"
+                className="btn-outline font-medium"
                 onClick={() => window.location.href = '/login'}
               >
-                Sign in
-              </button>
-            </p>
-          </div>
-          
-          {/* Live Chat */}
-          <LiveChat />
-          
+                Sign In
+              </Button>
+            </div>
           </div>
         </div>
+        
+        {/* Live Chat */}
+        <LiveChat />
       </div>
       
       {/* Footer */}

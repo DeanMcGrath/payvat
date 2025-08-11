@@ -1,317 +1,271 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Bell, Settings, LogOut, Search, Euro, CheckCircle, Calendar, CreditCard, Shield, Clock, HelpCircle } from 'lucide-react'
+import { Bell, Settings, LogOut, Search, Euro, CheckCircle, Calendar, CreditCard, Shield, Clock, HelpCircle, Star, ArrowRight } from 'lucide-react'
 import LiveChat from "@/components/live-chat"
 import Footer from "@/components/footer"
 
 export default function PricingPage() {
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    // Trigger animations after component mounts
+    const timer = setTimeout(() => {
+      setIsVisible(true)
+    }, 100)
+
+    // Add scroll-triggered animations
+    const handleScroll = () => {
+      const elements = document.querySelectorAll('[data-animate]')
+      elements.forEach((element) => {
+        const rect = element.getBoundingClientRect()
+        const isInView = rect.top < window.innerHeight && rect.bottom > 0
+        
+        if (isInView) {
+          element.classList.add('animate-slide-up')
+          element.removeAttribute('data-animate')
+        }
+      })
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Run once on mount
+
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-thin">PayVAT</h1>
-            
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
-                <Input
-                  placeholder="Search"
-                  className="w-64 bg-white text-gray-900 border-0"
-                />
-                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
-                  <Search className="h-4 w-4" />
-                </Button>
+    <div className="min-h-screen bg-background">
+      {/* Modern Header */}
+      <header className="gradient-primary relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
+        
+        <div className="relative z-10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <div className="flex items-center">
+                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
+                  PayVAT
+                </a>
               </div>
               
+              {/* Header Actions */}
               <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
-                  <Bell className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
-                  <Settings className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
-                  <LogOut className="h-4 w-4" />
-                </Button>
+                {/* Search - Desktop */}
+                <div className="hidden lg:flex items-center space-x-3">
+                  <div className="relative">
+                    <Input
+                      placeholder="Search pricing plans..."
+                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
+                    />
+                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
+                  >
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
+                    onClick={() => window.location.href = '/login'}
+                  >
+                    Sign In
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
+                    onClick={() => window.location.href = '/signup'}
+                  >
+                    Sign Up
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        {/* Navigation */}
-        <div className="bg-teal-600 px-6 py-3">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center space-x-2 text-sm">
-              <span className="text-white">Pricing</span>
+          
+          {/* Modern Navigation */}
+          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-8">
+                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <span>Pricing Plans</span>
+                  </span>
+                  <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/signup'}>Signup</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/login'}>Login</button>
+                  </div>
+                </div>
+                <div className="text-white/60 text-xs hidden sm:block">
+                  Simple, transparent pricing
+                </div>
+              </div>
             </div>
-          </div>
+          </nav>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Hero Section */}
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Simple, Transparent Pricing</h2>
-          <p className="text-gray-600">Choose the plan that suits your business</p>
+      {/* Hero Section */}
+      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center">
+            {/* Hero Content */}
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
+                  Trusted by 10,000+ Irish businesses
+                </div>
+                
+                <div className="icon-premium mb-6 mx-auto">
+                  <Euro className="h-12 w-12 text-white" />
+                </div>
+                
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                  <span className="text-gradient-primary">Simple, Transparent</span>
+                  <br />
+                  <span className="text-foreground">Pricing Plans</span>
+                </h1>
+                
+                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                
+                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                  Choose the plan that fits your business needs. 
+                  <span className="text-primary font-semibold">No hidden fees, no surprises.</span>
+                </p>
+              </div>
+              
+              {/* Trust Indicators */}
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-success" />
+                  <span>No setup fees</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>Cancel anytime</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-success" />
+                  <span>24/7 support</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Background Elements */}
+          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
+          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
         </div>
+      </section>
 
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
-          {/* Monthly Plan */}
-          <Card className="relative">
-            <CardHeader className="text-center pb-4">
-              <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Calendar className="h-8 w-8 text-teal-600" />
+      {/* Pricing Section */}
+      <section className="py-20" data-animate>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+
+          {/* Pricing Cards */}
+          <div className="text-center mb-16 animate-slide-up">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              Choose Your 
+              <span className="text-gradient-primary"> Perfect Plan</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Professional VAT management for Irish businesses of all sizes
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
+            {/* Monthly Plan */}
+            <div className="card-modern p-8 text-center hover-lift group relative">
+              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+                <Calendar className="h-8 w-8 text-white" />
               </div>
-              <CardTitle className="text-2xl font-bold text-gray-900">Monthly Plan</CardTitle>
-              <div className="flex items-center justify-center space-x-1 mt-4">
-                <Euro className="h-6 w-6 text-teal-600" />
-                <span className="text-4xl font-bold text-gray-900">30</span>
-                <span className="text-gray-500">/month</span>
+              <h3 className="text-2xl font-semibold text-foreground mb-4">Monthly Plan</h3>
+              <div className="flex items-center justify-center space-x-2 mb-4">
+                <Euro className="h-8 w-8 text-primary" />
+                <span className="text-5xl font-bold text-foreground">30</span>
+                <span className="text-muted-foreground text-lg">/month</span>
               </div>
-              <p className="text-teal-600 font-medium mt-2">Cancel anytime</p>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-center text-gray-600 mb-6">Perfect for seasonal businesses and short-term projects</p>
+              <p className="text-primary font-semibold mb-6">Cancel anytime</p>
+              <p className="text-muted-foreground leading-relaxed mb-8">
+                Perfect for seasonal businesses and short-term projects
+              </p>
               <Button 
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3"
+                size="lg"
+                className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
                 onClick={() => window.location.href = '/signup?plan=monthly'}
               >
                 Choose Monthly
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-            </CardContent>
-          </Card>
-
-          {/* Annual Plan */}
-          <Card className="relative border-teal-200 bg-teal-50">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <span className="bg-teal-600 text-white px-4 py-2 rounded-full text-sm font-medium">
-                Most Popular
-              </span>
             </div>
-            <CardHeader className="text-center pb-4">
-              <div className="w-16 h-16 bg-teal-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CreditCard className="h-8 w-8 text-teal-700" />
+
+            {/* Annual Plan */}
+            <div className="card-premium p-8 text-center hover-lift group relative">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-medium">
+                  Most Popular
+                </span>
               </div>
-              <CardTitle className="text-2xl font-bold text-teal-900">Annual Plan</CardTitle>
-              <div className="flex items-center justify-center space-x-1 mt-4">
-                <Euro className="h-6 w-6 text-teal-600" />
-                <span className="text-4xl font-bold text-teal-900">300</span>
-                <span className="text-teal-600">/year</span>
+              <div className="icon-premium mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+                <Star className="h-8 w-8 text-white" />
               </div>
-              <p className="text-teal-700 font-medium mt-2">Two months free!</p>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <p className="text-center text-teal-700 mb-6">Best value for steady-state SMEs and cost-savvy entrepreneurs</p>
+              <h3 className="text-2xl font-semibold text-foreground mb-4">Annual Plan</h3>
+              <div className="flex items-center justify-center space-x-2 mb-4">
+                <Euro className="h-8 w-8 text-primary" />
+                <span className="text-5xl font-bold text-foreground">300</span>
+                <span className="text-muted-foreground text-lg">/year</span>
+              </div>
+              <p className="text-primary font-semibold mb-6">Two months free!</p>
+              <p className="text-muted-foreground leading-relaxed mb-8">
+                Best value for steady-state SMEs and cost-savvy entrepreneurs
+              </p>
               <Button 
-                className="w-full bg-teal-700 hover:bg-teal-800 text-white font-semibold py-3"
+                size="lg"
+                className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
                 onClick={() => window.location.href = '/signup?plan=annual'}
               >
                 Choose Annual
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* What's Included */}
-        <Card className="mb-12">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-gray-900 text-center">What&apos;s Included in Both Plans</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-1" />
-                <div>
-                  <span className="font-medium text-gray-800">Unlimited VAT submissions and payments via ROS</span>
-                  <p className="text-gray-600 text-sm">No per-submission charges or hidden fees</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-1" />
-                <div>
-                  <span className="font-medium text-gray-800">Automated deadline reminders</span>
-                  <p className="text-gray-600 text-sm">Never miss a filing or payment deadline</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-1" />
-                <div>
-                  <span className="font-medium text-gray-800">Secure, GDPR-compliant data storage</span>
-                  <p className="text-gray-600 text-sm">Bank-grade encryption and EU-hosted data centers</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-1" />
-                <div>
-                  <span className="font-medium text-gray-800">Email & in-app support</span>
-                  <p className="text-gray-600 text-sm">9 am–5 pm GMT, Monday to Friday</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-1" />
-                <div>
-                  <span className="font-medium text-gray-800">Access to Help Center articles</span>
-                  <p className="text-gray-600 text-sm">Comprehensive guides and business resources</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-1" />
-                <div>
-                  <span className="font-medium text-gray-800">Business guides and templates</span>
-                  <p className="text-gray-600 text-sm">VAT compliance resources and best practices</p>
-                </div>
-              </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Plan Comparison */}
-        <Card className="mb-12">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900 text-center">Plan Comparison</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 font-medium text-gray-800">Feature</th>
-                    <th className="text-center py-3 px-4 font-medium text-gray-800">Monthly</th>
-                    <th className="text-center py-3 px-4 font-medium text-teal-800 bg-teal-50">Annual</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-3 px-4 text-gray-700">Price</td>
-                    <td className="py-3 px-4 text-center">€30/month</td>
-                    <td className="py-3 px-4 text-center bg-teal-50 font-medium text-teal-800">€300/year</td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-3 px-4 text-gray-700">Commitment</td>
-                    <td className="py-3 px-4 text-center">Cancel anytime</td>
-                    <td className="py-3 px-4 text-center bg-teal-50">12-month term</td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-3 px-4 text-gray-700">Best For</td>
-                    <td className="py-3 px-4 text-center text-sm">Seasonal businesses, trials</td>
-                    <td className="py-3 px-4 text-center bg-teal-50 text-sm">Steady SMEs, cost-savvy</td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-3 px-4 text-gray-700">Annual Savings</td>
-                    <td className="py-3 px-4 text-center">-</td>
-                    <td className="py-3 px-4 text-center bg-teal-50 font-medium text-teal-800">€60 saved</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Features Grid */}
-        <div className="mb-12">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Why Choose PayVAT?</h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Euro className="h-6 w-6 text-teal-600" />
-                </div>
-                <h4 className="font-semibold text-gray-800 mb-2">Save Money</h4>
-                <p className="text-gray-600 text-sm">More cost-effective than traditional accounting or solicitor fees</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Clock className="h-6 w-6 text-teal-600" />
-                </div>
-                <h4 className="font-semibold text-gray-800 mb-2">Save Time</h4>
-                <p className="text-gray-600 text-sm">Complete VAT returns in minutes with our step-by-step wizard</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Shield className="h-6 w-6 text-teal-600" />
-                </div>
-                <h4 className="font-semibold text-gray-800 mb-2">Stay Secure</h4>
-                <p className="text-gray-600 text-sm">Bank-grade encryption and GDPR-compliant data protection</p>
-              </CardContent>
-            </Card>
           </div>
         </div>
-
-        {/* FAQ Section */}
-        <Card className="mb-12">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-              <HelpCircle className="h-5 w-5 text-teal-500 mr-2" />
-              Pricing FAQ
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div>
-                <h4 className="font-medium text-gray-800 mb-1">Are there any setup fees or hidden charges?</h4>
-                <p className="text-gray-600 text-sm">No setup fees, no hidden charges. Just the simple monthly or annual subscription.</p>
-              </div>
-              
-              <div>
-                <h4 className="font-medium text-gray-800 mb-1">Can I switch between plans?</h4>
-                <p className="text-gray-600 text-sm">Yes, you can upgrade or downgrade at any time. Changes take effect at your next billing cycle.</p>
-              </div>
-              
-              <div>
-                <h4 className="font-medium text-gray-800 mb-1">What payment methods do you accept?</h4>
-                <p className="text-gray-600 text-sm">We accept all major credit cards and direct debit for your subscription payments.</p>
-              </div>
-              
-              <div>
-                <h4 className="font-medium text-gray-800 mb-1">Is there a free trial?</h4>
-                <p className="text-gray-600 text-sm">Yes! We offer a 14-day free trial so you can explore all features before committing.</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* CTA */}
-        <Card className="text-center">
-          <CardContent className="p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Get Started?</h3>
-            <p className="text-gray-600 mb-6">Join thousands of Irish businesses who trust PayVAT for their VAT compliance</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
-                onClick={() => window.location.href = '/signup'}
-              >
-                Start Free Trial
-              </Button>
-              <Button 
-                variant="outline"
-                className="border-teal-200 text-teal-700 hover:bg-teal-50 font-semibold py-3 px-8 text-lg"
-              >
-                Contact Sales
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
+      </section>
+      
       {/* Live Chat */}
       <LiveChat />
-
+      
       {/* Footer */}
       <Footer />
     </div>

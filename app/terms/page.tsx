@@ -72,9 +72,9 @@ export default function TermsPage() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center">
-                <h1 className="text-2xl font-thin text-white tracking-tight">
+                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
                   PayVAT
-                </h1>
+                </a>
               </div>
               
               {/* Header Actions */}

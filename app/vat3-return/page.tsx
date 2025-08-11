@@ -8,13 +8,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
-import { Euro, Bell, Settings, LogOut, Search, Save, Send, ArrowUp } from "lucide-react"
+import { Euro, Bell, Settings, LogOut, Search, Save, Send, ArrowUp, FileText, Shield, CheckCircle, Clock } from "lucide-react"
 import LiveChat from "../../components/live-chat"
 
 export default function VAT3ReturnForm() {
   const [formData, setFormData] = useState({
-    traderName: "Brian Cusack Trading Ltd",
-    registrationNumber: "IE0352440A",
+    traderName: "  ",
+    registrationNumber: " ",
     filingFrequency: "bi-monthly",
     periodBeginDate: "",
     periodEndDate: "",
@@ -83,62 +83,161 @@ export default function VAT3ReturnForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-garamond font-medium">PayVAT</h1>
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
-                <Input placeholder="Search" className="w-64 bg-white text-gray-900 border-0" />
-                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
-                  <Search className="h-4 w-4" />
-                </Button>
+    <div className="min-h-screen bg-background">
+      {/* Modern Header */}
+      <header className="gradient-primary relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
+        
+        <div className="relative z-10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <div className="flex items-center">
+                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
+                  PayVAT
+                </a>
               </div>
+              
+              {/* Header Actions */}
               <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
-                  <Bell className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
-                  <Settings className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
-                  <LogOut className="h-4 w-4" />
-                </Button>
+                {/* Search - Desktop */}
+                <div className="hidden lg:flex items-center space-x-3">
+                  <div className="relative">
+                    <Input
+                      placeholder="Search VAT forms..."
+                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
+                    />
+                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
+                  >
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <LogOut className="h-5 w-5" />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {/* Navigation */}
-        <div className="bg-teal-600 px-6 py-3">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center space-x-2 text-sm">
-              <span className="text-white">VAT3 Return</span>
+          
+          {/* Modern Navigation */}
+          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-8">
+                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <span>VAT3 Return Form</span>
+                  </span>
+                </div>
+                <div className="text-white/60 text-xs hidden sm:block">
+                  Complete your VAT return submission
+                </div>
+              </div>
             </div>
-          </div>
+          </nav>
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        {/* Hero Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">VAT3 Return</h2>
-          <div className="text-black text-base">
-            <span>* Denotes Required field</span>
+      {/* Hero Section */}
+      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center">
+            {/* Hero Content */}
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
+                  Revenue compliant VAT3 submission
+                </div>
+                
+                <div className="icon-premium mb-6 mx-auto">
+                  <FileText className="h-12 w-12 text-white" />
+                </div>
+                
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                  <span className="text-gradient-primary">Complete Your</span>
+                  <br />
+                  <span className="text-foreground">VAT3 Return</span>
+                </h1>
+                
+                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                
+                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                  Submit your VAT3 return with confidence using our expert-guided form. 
+                  <span className="text-primary font-semibold">All fields validated and Revenue-ready.</span>
+                </p>
+                
+                <div className="mt-4 text-sm text-muted-foreground">
+                  <span className="text-primary">*</span> Denotes Required field
+                </div>
+              </div>
+              
+              {/* Trust Indicators */}
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-success" />
+                  <span>Revenue compliant</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>Auto-calculations</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-success" />
+                  <span>Save & resume</span>
+                </div>
+              </div>
+            </div>
           </div>
+          
+          {/* Background Elements */}
+          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
+          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
         </div>
+      </section>
+
+      <div className="max-w-4xl mx-auto px-6 py-8">
 
         <div className="space-y-6">
           {/* Registration Details */}
-          <Card>
+          <Card className="card-modern hover-lift">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-900">Registration Details</CardTitle>
+              <CardTitle className="text-xl font-semibold text-foreground">Registration Details</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label className="text-base font-medium text-black">Trader Name *</Label>
+                  <Label className="text-base font-medium text-foreground">Trader Name *</Label>
                   <Input
                     value={formData.traderName}
                     onChange={(e) => handleInputChange("traderName", e.target.value)}
@@ -146,7 +245,7 @@ export default function VAT3ReturnForm() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-base font-medium text-black">Registration Number *</Label>
+                  <Label className="text-base font-medium text-foreground">Registration Number *</Label>
                   <Input
                     value={formData.registrationNumber}
                     onChange={(e) => handleInputChange("registrationNumber", e.target.value)}
@@ -158,13 +257,13 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Filing Frequency */}
-          <Card>
+          <Card className="card-modern hover-lift">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-900">Filing Frequency</CardTitle>
+              <CardTitle className="text-xl font-semibold text-foreground">Filing Frequency</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <Label className="text-base font-medium text-black">Please indicate Filing Frequency *</Label>
+                <Label className="text-base font-medium text-foreground">Please indicate Filing Frequency *</Label>
                 <RadioGroup
                   value={formData.filingFrequency}
                   onValueChange={(value) => handleInputChange("filingFrequency", value)}
@@ -200,16 +299,16 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Period Details */}
-          <Card>
+          <Card className="card-modern hover-lift">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-900">Period Details</CardTitle>
+              <CardTitle className="text-xl font-semibold text-foreground">Period Details</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div className="text-base font-semibold text-gray-800">Please enter period dates</div>
+                <div className="text-base font-semibold text-foreground">Please enter period dates</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label className="text-base font-medium text-black">Period Begin Date *</Label>
+                    <Label className="text-base font-medium text-foreground">Period Begin Date *</Label>
                     <div className="text-sm text-gray-600 mb-1">(dd/mm/yyyy)</div>
                     <Input
                       type="date"
@@ -219,7 +318,7 @@ export default function VAT3ReturnForm() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-base font-medium text-black">Period End Date *</Label>
+                    <Label className="text-base font-medium text-foreground">Period End Date *</Label>
                     <div className="text-sm text-gray-600 mb-1">(dd/mm/yyyy)</div>
                     <Input
                       type="date"
@@ -234,13 +333,13 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Return Details */}
-          <Card>
+          <Card className="card-modern hover-lift">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-900">Return Details</CardTitle>
+              <CardTitle className="text-xl font-semibold text-foreground">Return Details</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <Label className="text-base font-medium text-black">
+                <Label className="text-base font-medium text-foreground">
                   Please indicate the type of return you wish to file *
                 </Label>
                 <RadioGroup
@@ -272,17 +371,17 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* VAT3 Details */}
-          <Card>
+          <Card className="card-modern hover-lift">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-900">VAT3 Details</CardTitle>
+              <CardTitle className="text-xl font-semibold text-foreground">VAT3 Details</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div className="text-base font-semibold text-gray-800">Whole Euro only. Please do not enter cent.</div>
+                <div className="text-base font-semibold text-foreground">Whole Euro only. Please do not enter cent.</div>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <Label className="text-base font-medium text-black">VAT on Sales *</Label>
+                      <Label className="text-base font-medium text-foreground">VAT on Sales *</Label>
                       <Label className="font-bold text-base text-gray-800">T1</Label>
                     </div>
                     <div className="flex items-center gap-2">
@@ -298,7 +397,7 @@ export default function VAT3ReturnForm() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <Label className="text-base font-medium text-black">VAT on Purchases *</Label>
+                      <Label className="text-base font-medium text-foreground">VAT on Purchases *</Label>
                       <Label className="font-bold text-base text-gray-800">T2</Label>
                     </div>
                     <div className="flex items-center gap-2">
@@ -318,9 +417,9 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Unusual Expenditure */}
-          <Card>
+          <Card className="card-modern hover-lift">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-900">Unusual Expenditure</CardTitle>
+              <CardTitle className="text-xl font-semibold text-foreground">Unusual Expenditure</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
@@ -351,7 +450,7 @@ export default function VAT3ReturnForm() {
                 {formData.unusualExpenditure === "yes" && (
                   <div className="space-y-6 border-t pt-6">
                     <div className="flex items-center justify-between">
-                      <Label className="text-base font-medium text-black">Amount (excl. VAT) *</Label>
+                      <Label className="text-base font-medium text-foreground">Amount (excl. VAT) *</Label>
                       <div className="flex items-center gap-2">
                         <Euro className="h-4 w-4 text-gray-600" />
                         <Input
@@ -364,7 +463,7 @@ export default function VAT3ReturnForm() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-base font-medium text-black">
+                      <Label className="text-base font-medium text-foreground">
                         Please provide details of the exceptional expenditure. Details should include type of asset
                         acquired, name and VAT number of supplier, total invoice cost excluding VAT, and VAT amount
                         payable in respect of each item of exceptional expenditure. *
@@ -383,9 +482,9 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Net Amounts */}
-          <Card>
+          <Card className="card-modern hover-lift">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-900">Net Amounts</CardTitle>
+              <CardTitle className="text-xl font-semibold text-foreground">Net Amounts</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -424,15 +523,15 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Intra-EU Trade */}
-          <Card>
+          <Card className="card-modern hover-lift">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-900">Intra-EU Trade (INTRASTAT)</CardTitle>
+              <CardTitle className="text-xl font-semibold text-foreground">Intra-EU Trade (INTRASTAT)</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Label className="text-base font-medium text-black">Total goods to other EU countries *</Label>
+                    <Label className="text-base font-medium text-foreground">Total goods to other EU countries *</Label>
                     <Label className="font-bold text-base text-gray-800">E1</Label>
                   </div>
                   <div className="flex items-center gap-2">
@@ -448,7 +547,7 @@ export default function VAT3ReturnForm() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Label className="text-base font-medium text-black">Total goods from other EU countries *</Label>
+                    <Label className="text-base font-medium text-foreground">Total goods from other EU countries *</Label>
                     <Label className="font-bold text-base text-gray-800">E2</Label>
                   </div>
                   <div className="flex items-center gap-2">
@@ -464,7 +563,7 @@ export default function VAT3ReturnForm() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Label className="text-base font-medium text-black">Total services to other EU countries *</Label>
+                    <Label className="text-base font-medium text-foreground">Total services to other EU countries *</Label>
                     <Label className="font-bold text-base text-gray-800">ES1</Label>
                   </div>
                   <div className="flex items-center gap-2">
@@ -480,7 +579,7 @@ export default function VAT3ReturnForm() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Label className="text-base font-medium text-black">Total services from other EU countries *</Label>
+                    <Label className="text-base font-medium text-foreground">Total services from other EU countries *</Label>
                     <Label className="font-bold text-base text-gray-800">ES2</Label>
                   </div>
                   <div className="flex items-center gap-2">
@@ -499,14 +598,14 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Non EU Trade */}
-          <Card>
+          <Card className="card-modern hover-lift">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-900">Non EU Trade</CardTitle>
+              <CardTitle className="text-xl font-semibold text-foreground">Non EU Trade</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <Label className="text-base font-medium text-black">Postponed Accounting *</Label>
+                  <Label className="text-base font-medium text-foreground">Postponed Accounting *</Label>
                   <Label className="font-bold text-base text-gray-800">PA1</Label>
                 </div>
                 <div className="flex items-center gap-2">
@@ -524,14 +623,14 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Action Buttons */}
-          <Card>
+          <Card className="card-modern hover-lift">
             <CardContent className="p-6">
               <div className="flex justify-end gap-4">
                 <Button
                   variant="outline"
                   onClick={handleSaveDraft}
                   disabled={isSaving}
-                  className="px-6 bg-white border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold text-base"
+                  className="px-8 py-3 font-semibold hover-scale glass-white/10 backdrop-blur-sm"
                 >
                   <Save className="h-4 w-4 mr-2" />
                   {isSaving ? "Saving..." : "Save as Draft"}
@@ -539,7 +638,7 @@ export default function VAT3ReturnForm() {
                 <Button
                   onClick={handleSubmitReturn}
                   disabled={isSubmitting}
-                  className="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-6 text-base"
+                  className="gradient-primary px-8 py-3 font-semibold text-white hover-scale shadow-lg"
                 >
                   <Send className="h-4 w-4 mr-2" />
                   {isSubmitting ? "Submitting..." : "Submit Return"}
@@ -570,7 +669,7 @@ export default function VAT3ReturnForm() {
         {/* Copyright */}
         <div className="bg-teal-800 py-4">
           <div className="max-w-7xl mx-auto px-6 text-center">
-            <p className="text-sm font-garamond font-medium">© PayVAT</p>
+            <p className="text-sm font-thin">© PayVAT</p>
           </div>
         </div>
       </footer>

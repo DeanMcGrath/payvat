@@ -214,7 +214,7 @@ export default function SubmitReturn() {
       <header className="bg-teal-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
+            <a href="/" className="text-2xl font-thin hover:text-teal-100 transition-colors">PayVAT</a>
             
             <div className="flex items-center space-x-2 sm:space-x-6">
               <div className="hidden lg:flex items-center space-x-2">

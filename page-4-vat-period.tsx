@@ -1,11 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft, ArrowRight, Calendar, Bell, Settings, LogOut, Search } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Calendar, Bell, Settings, LogOut, Search, CheckCircle, Clock, Shield } from 'lucide-react'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
@@ -13,6 +13,36 @@ import Footer from "./components/footer"
 export default function VATReturnPeriod() {
   const [selectedYear, setSelectedYear] = useState("2025")
   const [selectedPeriod, setSelectedPeriod] = useState("jan-feb")
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    // Trigger animations after component mounts
+    const timer = setTimeout(() => {
+      setIsVisible(true)
+    }, 100)
+
+    // Add scroll-triggered animations
+    const handleScroll = () => {
+      const elements = document.querySelectorAll('[data-animate]')
+      elements.forEach((element) => {
+        const rect = element.getBoundingClientRect()
+        const isInView = rect.top < window.innerHeight && rect.bottom > 0
+        
+        if (isInView) {
+          element.classList.add('animate-slide-up')
+          element.removeAttribute('data-animate')
+        }
+      })
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Run once on mount
+
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   const getPeriodLabel = (period: string) => {
     const periods = {
@@ -74,159 +104,281 @@ export default function VATReturnPeriod() {
   const status = getStatusMessage()
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-thin">PayVAT</h1>
-            
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
-                <Input
-                  placeholder="Search"
-                  className="w-64 bg-white text-gray-900 border-0"
-                />
-                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
-              
-              <div className="text-right">
-                <h3 className="text-lg font-bold text-white">Brian Cusack Trading Ltd</h3>
-                <p className="text-teal-100 font-mono text-sm">VAT: IE0352440A</p>
-              </div>
-              
-              <div className="flex items-center space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
-                  <Bell className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
-                  <Settings className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600">
-                  <LogOut className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-background">
+      {/* Modern Header */}
+      <header className="gradient-primary relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
         
-        {/* Navigation */}
-        <div className="bg-teal-600 px-6 py-3">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center space-x-2 text-sm">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => window.location.href = '/dashboard'}
-                className="flex items-center space-x-1 text-white hover:bg-teal-500"
-              >
-                <ArrowLeft className="h-3 w-3" />
-                <span>Dashboard</span>
-              </Button>
-              <span className="text-white"> / VAT Return Period</span>
+        <div className="relative z-10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <div className="flex items-center">
+                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
+                  PayVAT
+                </a>
+              </div>
+              
+              {/* Header Actions */}
+              <div className="flex items-center space-x-4">
+                {/* Search - Desktop */}
+                <div className="hidden lg:flex items-center space-x-3">
+                  <div className="relative">
+                    <Input
+                      placeholder="Search VAT periods..."
+                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
+                    />
+                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                  </div>
+                </div>
+                
+                {/* Company Info */}
+                <div className="text-right glass-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20">
+                  <h3 className="text-lg font-semibold text-white"> </h3>
+                  <p className="text-white/70 font-mono text-sm">VAT: </p>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
+                  >
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <LogOut className="h-5 w-5" />
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
+          
+          {/* Modern Navigation */}
+          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-8">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => window.location.href = '/dashboard'}
+                    className="text-white/90 hover:text-white flex items-center space-x-2 transition-colors"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                    <span>Dashboard</span>
+                  </Button>
+                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <span>VAT Return Period</span>
+                  </span>
+                </div>
+                <div className="text-white/60 text-xs hidden sm:block">
+                  Period Selection
+                </div>
+              </div>
+            </div>
+          </nav>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="max-w-2xl mx-auto">
-        <div className="mb-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-100 rounded-full mb-4">
-            <Calendar className="h-8 w-8 text-teal-600" />
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">VAT Return Period</h2>
-          <p className="text-gray-600">Select the bi-monthly period for your VAT return</p>
-        </div>
-
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900">Select Return Period</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label className="text-gray-700 font-medium">Tax Year</Label>
-                <Select value={selectedYear} onValueChange={setSelectedYear}>
-                  <SelectTrigger className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500">
-                    <SelectValue placeholder="Select year" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="2025">2025</SelectItem>
-                    <SelectItem value="2024">2024</SelectItem>
-                    <SelectItem value="2023">2023</SelectItem>
-                    <SelectItem value="2022">2022</SelectItem>
-                    <SelectItem value="2021">2021</SelectItem>
-                  </SelectContent>
-                </Select>
+      {/* Hero Section */}
+      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center">
+            {/* Hero Content */}
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
+                  VAT Period Selection
+                </div>
+                
+                <div className="icon-premium mb-6 mx-auto">
+                  <Calendar className="h-12 w-12 text-white" />
+                </div>
+                
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                  <span className="text-gradient-primary">Select Your</span>
+                  <br />
+                  <span className="text-foreground">VAT Return Period</span>
+                </h1>
+                
+                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                
+                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                  Choose the bi-monthly taxable period for your VAT return submission. 
+                  <span className="text-primary font-semibold">Complete compliance in minutes.</span>
+                </p>
               </div>
               
-              <div className="space-y-2">
-                <Label className="text-gray-700 font-medium">Tax Period (Bi-Monthly)</Label>
-                <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-                  <SelectTrigger className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500">
-                    <SelectValue placeholder="Select period" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="jan-feb">January - February</SelectItem>
-                    <SelectItem value="mar-apr">March - April</SelectItem>
-                    <SelectItem value="may-jun">May - June</SelectItem>
-                    <SelectItem value="jul-aug">July - August</SelectItem>
-                    <SelectItem value="sep-oct">September - October</SelectItem>
-                    <SelectItem value="nov-dec">November - December</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            
-            <div className={`${status.bgColor} border ${status.borderColor} rounded-lg p-4`}>
-              <p className={`text-sm ${status.color}`}>
-                <strong>Selected Period:</strong> {getPeriodLabel(selectedPeriod)} {selectedYear}
-              </p>
-              <p className={`text-xs ${status.color.replace('800', '600')} mt-1`}>
-                {status.message}
-              </p>
-            </div>
-
-            <div className="bg-gray-100 border border-gray-200 rounded-lg p-4">
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {isPastPeriod(selectedYear, selectedPeriod) ? "Submission Was Due" : "Submission Due Date"}
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    {isPastPeriod(selectedYear, selectedPeriod) ? "Past submission deadline" : "Submit your return by this date"}
-                  </p>
+              {/* Trust Indicators */}
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-success" />
+                  <span>Revenue compliant</span>
                 </div>
-                <div className="text-right">
-                  <p className={`text-lg font-bold ${isPastPeriod(selectedYear, selectedPeriod) ? 'text-gray-600' : 'text-red-600'}`}>
-                    {getDueDate(selectedYear, selectedPeriod)}
-                  </p>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>Automatic calculations</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-success" />
+                  <span>Real-time validation</span>
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+          
+          {/* Background Elements */}
+          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
+          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
+        </div>
+      </section>
 
-        <div className="flex justify-center">
-          <Button 
-            className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 text-lg"
-            onClick={() => window.location.href = '/vat-submission'}
-          >
-            {isPastPeriod(selectedYear, selectedPeriod) ? "View Past Submission" : "Continue to VAT Submission"}
-            <ArrowRight className="h-5 w-5 ml-2" />
-          </Button>
-        </div>
+      {/* Period Selection Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto">
 
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500">
-            Need help? <a href="#" className="text-teal-600 hover:text-teal-700">View VAT submission guide</a>
-          </p>
+            {/* Period Selection Card */}
+            <div className="card-premium p-8 mb-8 animate-fade-in" data-animate>
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-foreground mb-4">
+                  Select Return Period
+                </h2>
+                <p className="text-muted-foreground">
+                  Choose your bi-monthly VAT return period below
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div className="space-y-3">
+                  <Label className="text-foreground font-semibold flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-primary" />
+                    Tax Year
+                  </Label>
+                  <Select value={selectedYear} onValueChange={setSelectedYear}>
+                    <SelectTrigger className="h-12 bg-background border-border hover:border-primary focus:border-primary focus:ring-primary/20 transition-colors">
+                      <SelectValue placeholder="Select year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="2025">2025</SelectItem>
+                      <SelectItem value="2024">2024</SelectItem>
+                      <SelectItem value="2023">2023</SelectItem>
+                      <SelectItem value="2022">2022</SelectItem>
+                      <SelectItem value="2021">2021</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-3">
+                  <Label className="text-foreground font-semibold flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-primary" />
+                    Tax Period (Bi-Monthly)
+                  </Label>
+                  <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+                    <SelectTrigger className="h-12 bg-background border-border hover:border-primary focus:border-primary focus:ring-primary/20 transition-colors">
+                      <SelectValue placeholder="Select period" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="jan-feb">January - February</SelectItem>
+                      <SelectItem value="mar-apr">March - April</SelectItem>
+                      <SelectItem value="may-jun">May - June</SelectItem>
+                      <SelectItem value="jul-aug">July - August</SelectItem>
+                      <SelectItem value="sep-oct">September - October</SelectItem>
+                      <SelectItem value="nov-dec">November - December</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              {/* Status Information */}
+              <div className="card-modern p-6 mb-6 group hover-lift">
+                <div className="flex items-start gap-4">
+                  <div className={`icon-modern ${status.type === 'past' ? 'bg-blue-500' : 'bg-primary'}`}>
+                    {status.type === 'past' ? 
+                      <CheckCircle className="h-5 w-5 text-white" /> : 
+                      <Calendar className="h-5 w-5 text-white" />
+                    }
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-foreground mb-2">
+                      Selected Period: {getPeriodLabel(selectedPeriod)} {selectedYear}
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {status.message}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Due Date Card */}
+              <div className="card-modern p-6 mb-8 group hover-lift">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className={`icon-modern ${isPastPeriod(selectedYear, selectedPeriod) ? 'bg-muted' : 'bg-warning'}`}>
+                      <Clock className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-foreground">
+                        {isPastPeriod(selectedYear, selectedPeriod) ? "Submission Was Due" : "Submission Due Date"}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {isPastPeriod(selectedYear, selectedPeriod) ? "Past submission deadline" : "Submit your return by this date"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className={`text-2xl font-bold ${isPastPeriod(selectedYear, selectedPeriod) ? 'text-muted-foreground' : 'text-destructive'}`}>
+                      {getDueDate(selectedYear, selectedPeriod)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <div className="flex justify-center mb-8">
+                <Button 
+                  size="lg"
+                  className="btn-primary px-8 py-4 text-lg font-semibold hover-lift"
+                  onClick={() => window.location.href = '/vat-submission'}
+                >
+                  {isPastPeriod(selectedYear, selectedPeriod) ? "View Past Submission" : "Continue to VAT Submission"}
+                  <ArrowRight className="h-5 w-5 ml-2" />
+                </Button>
+              </div>
+
+              {/* Help Link */}
+              <div className="text-center">
+                <p className="text-muted-foreground">
+                  Need help? <a href="/vat-guide" className="text-primary hover:text-primary/80 font-semibold transition-colors">View VAT submission guide</a>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        </div>
-      </div>
+      </section>
       
       {/* Live Chat */}
       <LiveChat />

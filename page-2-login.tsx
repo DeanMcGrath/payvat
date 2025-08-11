@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Bell, Settings, LogOut, Search } from 'lucide-react'
+import { Bell, Settings, LogOut, Search, Shield, CheckCircle, Lock, Mail, UserCheck, AlertTriangle } from 'lucide-react'
 import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
 import { z } from "zod"
@@ -114,57 +114,161 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header */}
-      <header className="bg-teal-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
-            
-            <div className="flex items-center space-x-2 sm:space-x-6">
-              <div className="hidden md:flex items-center space-x-2">
-                <Input
-                  placeholder="Search"
-                  className="w-32 sm:w-40 lg:w-48 xl:w-64 bg-white text-gray-900 border-0"
-                />
-                <Button size="sm" className="bg-blue-700 hover:bg-blue-800">
-                  <Search className="h-4 w-4" />
-                </Button>
+    <div className="min-h-screen bg-background">
+      {/* Modern Header */}
+      <header className="gradient-primary relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
+        
+        <div className="relative z-10">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <div className="flex items-center">
+                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
+                  PayVAT
+                </a>
               </div>
               
-              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 md:hidden p-2 min-w-[44px] min-h-[44px]">
-                  <Search className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
-                  <Bell className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
-                  <Settings className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
-                  <LogOut className="h-4 w-4" />
-                </Button>
+              {/* Header Actions */}
+              <div className="flex items-center space-x-4">
+                {/* Search - Desktop */}
+                <div className="hidden lg:flex items-center space-x-3">
+                  <div className="relative">
+                    <Input
+                      placeholder="Search..."
+                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
+                    />
+                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex items-center space-x-2">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Search className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
+                  >
+                    <Bell className="h-5 w-5" />
+                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                  >
+                    <Settings className="h-5 w-5" />
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
+                    onClick={() => window.location.href = '/signup'}
+                  >
+                    Sign Up
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        {/* Navigation */}
-        <div className="bg-teal-600 px-4 sm:px-6 py-3">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center space-x-2 text-sm">
-              <span className="text-white">Login</span>
+          
+          {/* Modern Navigation */}
+          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-8">
+                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <span>Secure Login</span>
+                  </span>
+                  <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
+                  </div>
+                </div>
+                <div className="text-white/60 text-xs hidden sm:block">
+                  Access your VAT dashboard securely
+                </div>
+              </div>
             </div>
-          </div>
+          </nav>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
-        <div className="flex items-center justify-center min-h-[calc(100vh-12rem)]">
-          <div className="bg-white border border-gray-200 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 w-full max-w-sm sm:max-w-md mx-2 sm:mx-4">
+      {/* Hero Section */}
+      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center">
+            {/* Hero Content */}
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <div className="mb-8">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
+                  Secure authentication
+                </div>
+                
+                <div className="icon-premium mb-6 mx-auto">
+                  <UserCheck className="h-12 w-12 text-white" />
+                </div>
+                
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                  <span className="text-gradient-primary">Welcome Back to</span>
+                  <br />
+                  <span className="text-foreground">PayVAT</span>
+                </h1>
+                
+                <div className="w-32 h-1 gradient-primary mx-auto mb-8 rounded-full"></div>
+                
+                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                  Access your secure VAT management dashboard. 
+                  <span className="text-primary font-semibold">Trusted by Irish businesses.</span>
+                </p>
+              </div>
+              
+              {/* Trust Indicators */}
+              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-success" />
+                  <span>Secure encryption</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-success" />
+                  <span>Revenue compliant</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Lock className="h-4 w-4 text-success" />
+                  <span>Protected data</span>
+                </div>
+              </div>
+            </div>
+          </div>
           
-          <h2 className="text-gray-800 text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-center">Login to Your Account</h2>
+          {/* Background Elements */}
+          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
+          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
+        </div>
+      </section>
+
+      <div className="max-w-lg mx-auto px-6 py-8 -mt-16 relative z-10">
+        <div className="card-premium p-8 hover-lift">
+          <div className="text-center mb-8">
+            <div className="icon-premium mb-4 mx-auto">
+              <Lock className="h-8 w-8 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-foreground mb-2">Sign In to Your Account</h2>
+            <p className="text-muted-foreground">Access your secure VAT dashboard</p>
+          </div>
           
           {/* Security: Display general errors */}
           {errors.general && (
@@ -174,9 +278,10 @@ export default function LoginPage() {
           )}
           
           
-          <div className="space-y-3 sm:space-y-4">
-            <div className="space-y-1 sm:space-y-2">
-              <Label htmlFor="email" className="text-gray-700 text-sm font-medium">
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-foreground font-medium flex items-center gap-2">
+                <Mail className="h-4 w-4 text-primary" />
                 Email Address
               </Label>
               <Input
@@ -184,17 +289,21 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => handleEmailChange(e.target.value)}
-                className={`bg-white border-gray-300 focus:border-teal-600 focus:ring-teal-600 text-gray-900 rounded-lg ${errors.email ? 'border-red-500' : ''}`}
+                className={`bg-white/50 border-gray-200 focus:border-primary focus:ring-primary text-foreground rounded-lg backdrop-blur-sm ${errors.email ? 'border-red-500' : ''}`}
                 placeholder="your@email.com"
                 disabled={isLoading}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email}</p>
+                <p className="text-destructive text-sm flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3" />
+                  {errors.email}
+                </p>
               )}
             </div>
             
-            <div className="space-y-1 sm:space-y-2">
-              <Label htmlFor="password" className="text-gray-700 text-sm font-medium">
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-foreground font-medium flex items-center gap-2">
+                <Lock className="h-4 w-4 text-primary" />
                 Password
               </Label>
               <Input
@@ -202,43 +311,57 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => handlePasswordChange(e.target.value)}
-                className={`bg-white border-gray-300 focus:border-teal-600 focus:ring-teal-600 text-gray-900 rounded-lg ${errors.password ? 'border-red-500' : ''}`}
+                className={`bg-white/50 border-gray-200 focus:border-primary focus:ring-primary text-foreground rounded-lg backdrop-blur-sm ${errors.password ? 'border-red-500' : ''}`}
                 placeholder="Enter your password"
                 disabled={isLoading}
               />
               {errors.password && (
-                <p className="text-red-500 text-sm">{errors.password}</p>
+                <p className="text-destructive text-sm flex items-center gap-1">
+                  <AlertTriangle className="h-3 w-3" />
+                  {errors.password}
+                </p>
               )}
             </div>
             
-            <div className="pt-3 sm:pt-4">
+            <div className="pt-4">
               <Button 
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2.5 sm:py-3 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full btn-primary py-4 font-semibold text-lg hover-lift disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleLogin}
                 disabled={isLoading || loginAttempts >= 5}
               >
-                {isLoading ? "Signing In..." : "Login"}
+                {isLoading ? "Signing In..." : "Sign In Securely"}
               </Button>
             </div>
           </div>
           
-          <div className="mt-6 text-center">
-            <p className="text-gray-500 text-sm mb-2">
-              Don't have an account?
-            </p>
-            <Button 
-              variant="link"
-              className="text-teal-600 hover:text-teal-700 font-medium"
-              onClick={() => window.location.href = '/signup'}
-            >
-              Sign up here
-            </Button>
-          </div>
-
-          {/* Live Chat */}
-          <LiveChat />
+          <div className="mt-8 space-y-4">
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" className="form-checkbox h-4 w-4 text-primary" />
+                <span className="text-muted-foreground">Remember me</span>
+              </label>
+              <Button variant="link" className="text-primary hover:text-primary/80 p-0">
+                Forgot password?
+              </Button>
+            </div>
+            
+            <div className="text-center pt-4 border-t">
+              <p className="text-muted-foreground text-sm mb-3">
+                Don't have an account?
+              </p>
+              <Button 
+                variant="outline"
+                className="btn-outline font-medium"
+                onClick={() => window.location.href = '/signup'}
+              >
+                Create Account
+              </Button>
+            </div>
           </div>
         </div>
+        
+        {/* Live Chat */}
+        <LiveChat />
       </div>
       
       {/* Footer */}

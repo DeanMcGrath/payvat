@@ -53,9 +53,9 @@ export default function VATGuidePage() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center">
-                <h1 className="text-2xl font-thin text-white tracking-tight">
+                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
                   PayVAT
-                </h1>
+                </a>
               </div>
               
               {/* Header Actions */}
@@ -89,18 +89,20 @@ export default function VATGuidePage() {
                     <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
                   </Button>
                   <Button 
-                    variant="ghost" 
+                    variant="outline" 
                     size="sm" 
-                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
+                    onClick={() => window.location.href = '/login'}
                   >
-                    <Settings className="h-5 w-5" />
+                    Sign In
                   </Button>
                   <Button 
-                    variant="ghost" 
+                    variant="outline" 
                     size="sm" 
-                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
+                    onClick={() => window.location.href = '/signup'}
                   >
-                    <LogOut className="h-5 w-5" />
+                    Sign Up
                   </Button>
                 </div>
               </div>
@@ -116,6 +118,13 @@ export default function VATGuidePage() {
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                     <span>VAT Guide</span>
                   </span>
+                  <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/signup'}>Signup</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/login'}>Login</button>
+                  </div>
                 </div>
                 <div className="text-white/60 text-xs hidden sm:block">
                   Complete guide to Irish VAT compliance

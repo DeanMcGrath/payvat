@@ -83,8 +83,8 @@ export default function SecurePayment() {
     dueDate: "15 January 2025",
     daysRemaining: 3,
     referenceNumber: "VAT-2024-ND-001234",
-    businessName: "Brian Cusack Trading Ltd",
-    vatNumber: "IE0352440A"
+    businessName: " ",
+    vatNumber: " "
   }
 
   const handlePayment = async () => {
@@ -152,7 +152,7 @@ export default function SecurePayment() {
       <header className="bg-teal-700 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
+            <a href="/" className="text-2xl font-thin hover:text-teal-100 transition-colors">PayVAT</a>
             
             <div className="flex items-center space-x-2 sm:space-x-6">
               <div className="hidden lg:flex items-center space-x-2">

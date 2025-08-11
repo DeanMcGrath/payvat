@@ -73,15 +73,6 @@ export default function Footer() {
                     Pricing
                   </Link>
                 </li>
-                <li>
-                  <a 
-                    href="mailto:support@payvat.ie" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Customer Service
-                  </a>
-                </li>
               </ul>
             </div>
 
@@ -105,15 +96,6 @@ export default function Footer() {
                   >
                     <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     How to Apply for a VAT Number
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    href="/vat-period" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    VAT Calculator
                   </Link>
                 </li>
               </ul>

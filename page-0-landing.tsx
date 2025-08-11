@@ -52,9 +52,9 @@ export default function LandingPage() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center">
-                <h1 className="text-2xl font-thin text-white tracking-tight">
+                <a href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
                   PayVAT
-                </h1>
+                </a>
               </div>
               
               {/* Header Actions */}
@@ -63,7 +63,7 @@ export default function LandingPage() {
                 <div className="hidden lg:flex items-center space-x-3">
                   <div className="relative">
                     <Input
-                      placeholder="Search VAT records..."
+                      placeholder="Search..."
                       className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
                     />
                     <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
@@ -87,19 +87,23 @@ export default function LandingPage() {
                     <Bell className="h-5 w-5" />
                     <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
                   </Button>
-                  <Button 
-                    variant="ghost" 
+              Secure encryption with simple payment using ROS Debit Instruction, you pay direct to Revenue with instant confirmation and charged to your bank account in 1-3 days.
+
+    <Button 
+                    variant="outline" 
                     size="sm" 
-                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
+                    onClick={() => window.location.href = '/login'}
                   >
-                    <Settings className="h-5 w-5" />
+                    Sign In
                   </Button>
                   <Button 
-                    variant="ghost" 
+                    variant="outline" 
                     size="sm" 
-                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
+                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
+                    onClick={() => window.location.href = '/signup'}
                   >
-                    <LogOut className="h-5 w-5" />
+                    Sign Up
                   </Button>
                 </div>
               </div>
@@ -111,19 +115,17 @@ export default function LandingPage() {
             <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-8">
-                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                    <span>Dashboard</span>
-                  </span>
                   <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
-                    <button className="hover:text-white transition-colors">VAT Returns</button>
-                    <button className="hover:text-white transition-colors">Documents</button>
-                    <button className="hover:text-white transition-colors">Reports</button>
-                    <button className="hover:text-white transition-colors">Settings</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/signup'}>Signup</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
+                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/login'}>Login</button>
                   </div>
                 </div>
                 <div className="text-white/60 text-xs hidden sm:block">
-                  Last updated: 2 min ago
+                  Irish VAT compliance made simple
                 </div>
               </div>
             </div>
@@ -140,7 +142,7 @@ export default function LandingPage() {
               <div className="mb-8">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Trusted by 10,000+ Irish businesses
+                  Expert VAT Guidance, Trusted by Irish businesses
                 </div>
                 
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
@@ -159,7 +161,7 @@ export default function LandingPage() {
               
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-                <Button size="lg" className="btn-primary px-8 py-4 text-lg font-semibold hover-lift">
+                <Button size="lg" className="btn-primary px-8 py-4 text-lg font-semibold hover-lift" onClick={() => window.location.href = '/signup'}>
                   Start Free Trial
                   <CheckCircle className="ml-2 h-5 w-5" />
                 </Button>
@@ -271,7 +273,7 @@ export default function LandingPage() {
                   <span className="text-gradient-primary"> VAT Process?</span>
                 </h3>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                  Join 10,000+ Irish businesses who've streamlined their VAT compliance with PayVAT
+                  Join today and be one of the first Irish businesses to streamlined their VAT compliance with PayVAT
                 </p>
               </div>
 
