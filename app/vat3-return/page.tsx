@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
-import { Euro, Bell, Settings, LogOut, Search, Save, Send, ArrowUp, FileText, Shield, CheckCircle, Clock, Sparkles, AlertCircle } from "lucide-react"
+import { Euro, Bell, Settings, LogOut, Search, Save, Send, ArrowUp, FileText, Shield, CheckCircle, Clock, Sparkles, AlertCircle, Loader2 } from "lucide-react"
 import LiveChat from "../../components/live-chat"
 import { useVATData } from "@/contexts/vat-data-context"
 import { convertToWholeEurosString, calculatePeriodDates, formatEuroAmount } from "@/lib/vat-utils"
@@ -52,6 +52,8 @@ export default function VAT3ReturnForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [autoFilledFields, setAutoFilledFields] = useState<string[]>([])
   const [validationErrors, setValidationErrors] = useState<string[]>([])
+  const [fieldErrors, setFieldErrors] = useState<{[key: string]: string}>({})
+  const [notification, setNotification] = useState<{type: 'success' | 'error', message: string} | null>(null)
   
   const router = useRouter()
 
@@ -177,10 +179,31 @@ export default function VAT3ReturnForm() {
     if (autoFilledFields.includes(field)) {
       setAutoFilledFields(prev => prev.filter(f => f !== field))
     }
+    // Clear field error when user starts typing
+    if (fieldErrors[field]) {
+      setFieldErrors(prev => ({ ...prev, [field]: '' }))
+    }
   }
 
-  // Helper component for autofill badge
-  const AutoFillBadge = ({ fieldName, children }: { fieldName: string, children: React.ReactNode }) => (
+  // Show notification function
+  const showNotification = (type: 'success' | 'error', message: string) => {
+    setNotification({ type, message })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000) // Auto-hide after 5 seconds
+  }
+
+  // Helper function to get input class with error styling
+  const getInputClassName = (fieldName: string, baseClasses = "bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base") => {
+    const hasError = fieldErrors[fieldName]
+    if (hasError) {
+      return baseClasses.replace('border-gray-300', 'border-red-300').replace('focus:border-teal-500', 'focus:border-red-500').replace('focus:ring-teal-500', 'focus:ring-red-500')
+    }
+    return baseClasses
+  }
+
+  // Helper component for autofill badge and error display
+  const FieldWrapper = ({ fieldName, children }: { fieldName: string, children: React.ReactNode }) => (
     <div className="relative">
       {children}
       {autoFilledFields.includes(fieldName) && (
@@ -192,80 +215,227 @@ export default function VAT3ReturnForm() {
           Auto-filled
         </Badge>
       )}
+      {fieldErrors[fieldName] && (
+        <div className="mt-1 text-sm text-red-600 flex items-center">
+          <AlertCircle className="h-4 w-4 mr-1 flex-shrink-0" />
+          {fieldErrors[fieldName]}
+        </div>
+      )}
     </div>
   )
 
   const handleSaveDraft = async () => {
     setIsSaving(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    console.log("Draft saved:", formData)
-    setIsSaving(false)
+    try {
+      // Simulate saving draft
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      
+      // Save to localStorage as draft
+      localStorage.setItem('vat3_draft_data', JSON.stringify({
+        ...formData,
+        lastSaved: new Date().toISOString()
+      }))
+      
+      console.log("Draft saved:", formData)
+      showNotification('success', 'Draft saved successfully! You can resume later.')
+    } catch (error) {
+      console.error("Error saving draft:", error)
+      showNotification('error', 'Failed to save draft. Please try again.')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
-  // Form validation function
-  const validateForm = (): string[] => {
+  // Enhanced form validation function
+  const validateForm = (): { errors: string[], fieldErrors: {[key: string]: string} } => {
     const errors: string[] = []
+    const newFieldErrors: {[key: string]: string} = {}
     
     // Required field validation
     if (!formData.traderName?.trim()) {
       errors.push('Trader Name is required')
+      newFieldErrors.traderName = 'This field is required'
     }
     if (!formData.registrationNumber?.trim()) {
       errors.push('Registration Number is required')
+      newFieldErrors.registrationNumber = 'This field is required'
     }
     if (!formData.periodBeginDate) {
       errors.push('Period Begin Date is required')
+      newFieldErrors.periodBeginDate = 'This field is required'
     }
     if (!formData.periodEndDate) {
       errors.push('Period End Date is required')
+      newFieldErrors.periodEndDate = 'This field is required'
     }
     if (!formData.t1VATOnSales || parseFloat(formData.t1VATOnSales) < 0) {
       errors.push('VAT on Sales (T1) must be a valid positive number')
+      newFieldErrors.t1VATOnSales = 'Must be a valid positive number'
     }
     if (!formData.t2VATOnPurchases || parseFloat(formData.t2VATOnPurchases) < 0) {
       errors.push('VAT on Purchases (T2) must be a valid positive number')
+      newFieldErrors.t2VATOnPurchases = 'Must be a valid positive number'
     }
     
     // Unusual expenditure validation
     if (formData.unusualExpenditure === 'yes') {
       if (!formData.unusualAmount || parseFloat(formData.unusualAmount) <= 0) {
         errors.push('Unusual expenditure amount is required when unusual expenditure is Yes')
+        newFieldErrors.unusualAmount = 'Amount is required for unusual expenditure'
       }
       if (!formData.unusualDetails?.trim()) {
         errors.push('Unusual expenditure details are required when unusual expenditure is Yes')
+        newFieldErrors.unusualDetails = 'Details are required for unusual expenditure'
       }
     }
     
-    return errors
+    // EU Trade validation (ensure no negative numbers)
+    if (parseFloat(formData.e1TotalGoodsTo) < 0) {
+      errors.push('Total goods to other EU countries cannot be negative')
+      newFieldErrors.e1TotalGoodsTo = 'Cannot be negative'
+    }
+    if (parseFloat(formData.e2TotalGoodsFrom) < 0) {
+      errors.push('Total goods from other EU countries cannot be negative')
+      newFieldErrors.e2TotalGoodsFrom = 'Cannot be negative'
+    }
+    if (parseFloat(formData.es1TotalServicesTo) < 0) {
+      errors.push('Total services to other EU countries cannot be negative')
+      newFieldErrors.es1TotalServicesTo = 'Cannot be negative'
+    }
+    if (parseFloat(formData.es2TotalServicesFrom) < 0) {
+      errors.push('Total services from other EU countries cannot be negative')
+      newFieldErrors.es2TotalServicesFrom = 'Cannot be negative'
+    }
+    if (parseFloat(formData.pa1PostponedAccounting) < 0) {
+      errors.push('Postponed Accounting cannot be negative')
+      newFieldErrors.pa1PostponedAccounting = 'Cannot be negative'
+    }
+    
+    return { errors, fieldErrors: newFieldErrors }
   }
 
   const handleSubmitReturn = async () => {
+    console.log('🚀 VAT3 Submit Return: Starting submission process')
+    
+    // Browser compatibility checks
+    if (typeof window === 'undefined') {
+      console.error('❌ VAT3 Submit Return: Window is undefined (SSR issue)')
+      setValidationErrors(['Browser compatibility error. Please refresh and try again.'])
+      return
+    }
+
+    if (typeof localStorage === 'undefined' || !localStorage) {
+      console.error('❌ VAT3 Submit Return: localStorage is not available')
+      setValidationErrors(['Your browser does not support local storage. Please enable cookies and local storage, then try again.'])
+      return
+    }
+
     // Validate form before submission
-    const errors = validateForm()
-    if (errors.length > 0) {
-      setValidationErrors(errors)
-      // Scroll to top to show errors
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    const validation = validateForm()
+    if (validation.errors.length > 0) {
+      console.warn('⚠️ VAT3 Submit Return: Form validation failed', validation.errors)
+      setValidationErrors(validation.errors)
+      setFieldErrors(validation.fieldErrors)
+      // Scroll to top to show errors with fallback for older browsers
+      try {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } catch {
+        window.scrollTo(0, 0)
+      }
       return
     }
     
+    console.log('✅ VAT3 Submit Return: Form validation passed')
     setValidationErrors([])
+    setFieldErrors({})
     setIsSubmitting(true)
     
     try {
+      console.log('💾 VAT3 Submit Return: Storing form data in localStorage')
       // Store form data in localStorage for confirmation page
-      localStorage.setItem('vat3_submission_data', JSON.stringify(formData))
+      const dataToStore = {
+        ...formData,
+        submissionTimestamp: new Date().toISOString(),
+        submissionId: `VAT3-${Date.now()}`
+      }
+      localStorage.setItem('vat3_submission_data', JSON.stringify(dataToStore))
+      
+      // Verify data was stored successfully
+      const storedData = localStorage.getItem('vat3_submission_data')
+      if (!storedData) {
+        throw new Error('Failed to store form data in localStorage')
+      }
+      console.log('✅ VAT3 Submit Return: Form data stored successfully')
       
       // Simulate processing time
+      console.log('⏳ VAT3 Submit Return: Processing submission...')
       await new Promise((resolve) => setTimeout(resolve, 1500))
       
-      // Navigate to confirmation page
-      router.push('/confirmation-payment')
+      console.log('🧭 VAT3 Submit Return: Attempting navigation to /confirmation-payment')
+      
+      // Primary navigation method with error handling
+      try {
+        await router.push('/confirmation-payment')
+        console.log('✅ VAT3 Submit Return: Router.push completed successfully')
+      } catch (routerError) {
+        console.warn('⚠️ VAT3 Submit Return: Router.push failed, using fallback', routerError)
+        window.location.href = '/confirmation-payment'
+        return
+      }
+      
+      // Verify navigation started with extended timeout for slower devices
+      setTimeout(() => {
+        if (window.location.pathname === '/vat3-return') {
+          console.warn('⚠️ VAT3 Submit Return: Navigation may have failed, attempting fallback')
+          // Fallback navigation method
+          try {
+            window.location.href = '/confirmation-payment'
+          } catch (fallbackError) {
+            console.error('❌ VAT3 Submit Return: Fallback navigation also failed', fallbackError)
+            setValidationErrors(['Navigation failed. Please manually navigate to the confirmation page or try again.'])
+          }
+        }
+      }, 2000) // Increased timeout for slower devices
+      
+      console.log('✅ VAT3 Submit Return: Navigation initiated successfully')
+      
     } catch (error) {
-      console.error('Error submitting return:', error)
-      setValidationErrors(['An error occurred while submitting your return. Please try again.'])
+      console.error('❌ VAT3 Submit Return: Error during submission:', error)
+      
+      // More specific error handling
+      if (error instanceof Error) {
+        if (error.message.includes('localStorage')) {
+          setValidationErrors(['Unable to save form data. Please check your browser settings and try again.'])
+        } else if (error.message.includes('navigation') || error.message.includes('router')) {
+          setValidationErrors(['Navigation error occurred. Redirecting...'])
+          // Immediate fallback for navigation errors with multiple methods
+          setTimeout(() => {
+            try {
+              // Try window.location.href first
+              window.location.href = '/confirmation-payment'
+            } catch {
+              // If that fails, try replace
+              try {
+                window.location.replace('/confirmation-payment')
+              } catch {
+                // Final fallback - show manual navigation message
+                setValidationErrors(['Automatic navigation failed. Please click here to continue to confirmation page.'])
+                setNotification({
+                  type: 'error',
+                  message: 'Please manually navigate to the confirmation page to complete your submission.'
+                })
+              }
+            }
+          }, 1000)
+        } else {
+          setValidationErrors([`Submission error: ${error.message}. Please try again.`])
+        }
+      } else {
+        setValidationErrors(['An unexpected error occurred while submitting your return. Please try again.'])
+      }
     } finally {
       setIsSubmitting(false)
+      console.log('🏁 VAT3 Submit Return: Submission process completed')
     }
   }
 
@@ -427,10 +597,49 @@ export default function VAT3ReturnForm() {
                       <li key={index} className="flex items-start space-x-1">
                         <span className="text-red-500">•</span>
                         <span>{error}</span>
+                        {error.includes('click here to continue') && (
+                          <Link 
+                            href="/confirmation-payment" 
+                            className="ml-2 underline font-semibold text-red-800 hover:text-red-900"
+                          >
+                            → Go to Confirmation Page
+                          </Link>
+                        )}
                       </li>
                     ))}
                   </ul>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Notification Toast */}
+        {notification && (
+          <Card className={`border-2 mb-6 ${notification.type === 'success' 
+            ? 'border-green-200 bg-green-50' 
+            : 'border-red-200 bg-red-50'
+          }`}>
+            <CardContent className="pt-4">
+              <div className="flex items-start space-x-3">
+                {notification.type === 'success' ? (
+                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                ) : (
+                  <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+                )}
+                <div className="flex-1">
+                  <p className={`font-semibold ${notification.type === 'success' ? 'text-green-800' : 'text-red-800'}`}>
+                    {notification.message}
+                  </p>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setNotification(null)}
+                  className={`${notification.type === 'success' ? 'text-green-600 hover:text-green-800' : 'text-red-600 hover:text-red-800'}`}
+                >
+                  ×
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -446,23 +655,23 @@ export default function VAT3ReturnForm() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label className="text-base font-medium text-foreground">Trader Name *</Label>
-                  <AutoFillBadge fieldName="traderName">
+                  <FieldWrapper fieldName="traderName">
                     <Input
                       value={formData.traderName}
                       onChange={(e) => handleInputChange("traderName", e.target.value)}
-                      className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                      className={getInputClassName("traderName")}
                     />
-                  </AutoFillBadge>
+                  </FieldWrapper>
                 </div>
                 <div className="space-y-2">
                   <Label className="text-base font-medium text-foreground">Registration Number *</Label>
-                  <AutoFillBadge fieldName="registrationNumber">
+                  <FieldWrapper fieldName="registrationNumber">
                     <Input
                       value={formData.registrationNumber}
                       onChange={(e) => handleInputChange("registrationNumber", e.target.value)}
-                      className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                      className={getInputClassName("registrationNumber")}
                     />
-                  </AutoFillBadge>
+                  </FieldWrapper>
                 </div>
               </div>
             </CardContent>
@@ -522,26 +731,26 @@ export default function VAT3ReturnForm() {
                   <div className="space-y-2">
                     <Label className="text-base font-medium text-foreground">Period Begin Date *</Label>
                     <div className="text-sm text-gray-600 mb-1">(dd/mm/yyyy)</div>
-                    <AutoFillBadge fieldName="periodBeginDate">
+                    <FieldWrapper fieldName="periodBeginDate">
                       <Input
                         type="date"
                         value={formData.periodBeginDate}
                         onChange={(e) => handleInputChange("periodBeginDate", e.target.value)}
-                        className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                        className={getInputClassName("periodBeginDate")}
                       />
-                    </AutoFillBadge>
+                    </FieldWrapper>
                   </div>
                   <div className="space-y-2">
                     <Label className="text-base font-medium text-foreground">Period End Date *</Label>
                     <div className="text-sm text-gray-600 mb-1">(dd/mm/yyyy)</div>
-                    <AutoFillBadge fieldName="periodEndDate">
+                    <FieldWrapper fieldName="periodEndDate">
                       <Input
                         type="date"
                         value={formData.periodEndDate}
                         onChange={(e) => handleInputChange("periodEndDate", e.target.value)}
-                        className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                        className={getInputClassName("periodEndDate")}
                       />
-                    </AutoFillBadge>
+                    </FieldWrapper>
                   </div>
                 </div>
               </div>
@@ -600,17 +809,17 @@ export default function VAT3ReturnForm() {
                       <Label className="text-base font-medium text-foreground">VAT on Sales *</Label>
                       <Label className="font-bold text-base text-gray-800">T1</Label>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Euro className="h-4 w-4 text-gray-600" />
-                      <AutoFillBadge fieldName="t1VATOnSales">
+                    <div className="flex items-start gap-2">
+                      <Euro className="h-4 w-4 text-gray-600 mt-3" />
+                      <FieldWrapper fieldName="t1VATOnSales">
                         <Input
                           type="number"
                           value={formData.t1VATOnSales}
                           onChange={(e) => handleInputChange("t1VATOnSales", e.target.value)}
-                          className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                          className={getInputClassName("t1VATOnSales", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
                           placeholder="0"
                         />
-                      </AutoFillBadge>
+                      </FieldWrapper>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
@@ -618,17 +827,17 @@ export default function VAT3ReturnForm() {
                       <Label className="text-base font-medium text-foreground">VAT on Purchases *</Label>
                       <Label className="font-bold text-base text-gray-800">T2</Label>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Euro className="h-4 w-4 text-gray-600" />
-                      <AutoFillBadge fieldName="t2VATOnPurchases">
+                    <div className="flex items-start gap-2">
+                      <Euro className="h-4 w-4 text-gray-600 mt-3" />
+                      <FieldWrapper fieldName="t2VATOnPurchases">
                         <Input
                           type="number"
                           value={formData.t2VATOnPurchases}
                           onChange={(e) => handleInputChange("t2VATOnPurchases", e.target.value)}
-                          className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                          className={getInputClassName("t2VATOnPurchases", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
                           placeholder="0"
                         />
-                      </AutoFillBadge>
+                      </FieldWrapper>
                     </div>
                   </div>
                 </div>
@@ -671,15 +880,17 @@ export default function VAT3ReturnForm() {
                   <div className="space-y-6 border-t pt-6">
                     <div className="flex items-center justify-between">
                       <Label className="text-base font-medium text-foreground">Amount (excl. VAT) *</Label>
-                      <div className="flex items-center gap-2">
-                        <Euro className="h-4 w-4 text-gray-600" />
-                        <Input
-                          type="number"
-                          value={formData.unusualAmount}
-                          onChange={(e) => handleInputChange("unusualAmount", e.target.value)}
-                          className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                          placeholder="0"
-                        />
+                      <div className="flex items-start gap-2">
+                        <Euro className="h-4 w-4 text-gray-600 mt-3" />
+                        <FieldWrapper fieldName="unusualAmount">
+                          <Input
+                            type="number"
+                            value={formData.unusualAmount}
+                            onChange={(e) => handleInputChange("unusualAmount", e.target.value)}
+                            className={getInputClassName("unusualAmount", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                            placeholder="0"
+                          />
+                        </FieldWrapper>
                       </div>
                     </div>
                     <div className="space-y-2">
@@ -688,12 +899,14 @@ export default function VAT3ReturnForm() {
                         acquired, name and VAT number of supplier, total invoice cost excluding VAT, and VAT amount
                         payable in respect of each item of exceptional expenditure. *
                       </Label>
-                      <Textarea
-                        value={formData.unusualDetails}
-                        onChange={(e) => handleInputChange("unusualDetails", e.target.value)}
-                        className="min-h-[80px] w-full bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                        placeholder="Enter details here..."
-                      />
+                      <FieldWrapper fieldName="unusualDetails">
+                        <Textarea
+                          value={formData.unusualDetails}
+                          onChange={(e) => handleInputChange("unusualDetails", e.target.value)}
+                          className={getInputClassName("unusualDetails", "min-h-[80px] w-full bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                          placeholder="Enter details here..."
+                        />
+                      </FieldWrapper>
                     </div>
                   </div>
                 )}
@@ -754,15 +967,17 @@ export default function VAT3ReturnForm() {
                     <Label className="text-base font-medium text-foreground">Total goods to other EU countries *</Label>
                     <Label className="font-bold text-base text-gray-800">E1</Label>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Euro className="h-4 w-4 text-gray-600" />
-                    <Input
-                      type="number"
-                      value={formData.e1TotalGoodsTo}
-                      onChange={(e) => handleInputChange("e1TotalGoodsTo", e.target.value)}
-                      className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                      placeholder="0"
-                    />
+                  <div className="flex items-start gap-2">
+                    <Euro className="h-4 w-4 text-gray-600 mt-3" />
+                    <FieldWrapper fieldName="e1TotalGoodsTo">
+                      <Input
+                        type="number"
+                        value={formData.e1TotalGoodsTo}
+                        onChange={(e) => handleInputChange("e1TotalGoodsTo", e.target.value)}
+                        className={getInputClassName("e1TotalGoodsTo", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                        placeholder="0"
+                      />
+                    </FieldWrapper>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -770,15 +985,17 @@ export default function VAT3ReturnForm() {
                     <Label className="text-base font-medium text-foreground">Total goods from other EU countries *</Label>
                     <Label className="font-bold text-base text-gray-800">E2</Label>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Euro className="h-4 w-4 text-gray-600" />
-                    <Input
-                      type="number"
-                      value={formData.e2TotalGoodsFrom}
-                      onChange={(e) => handleInputChange("e2TotalGoodsFrom", e.target.value)}
-                      className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                      placeholder="0"
-                    />
+                  <div className="flex items-start gap-2">
+                    <Euro className="h-4 w-4 text-gray-600 mt-3" />
+                    <FieldWrapper fieldName="e2TotalGoodsFrom">
+                      <Input
+                        type="number"
+                        value={formData.e2TotalGoodsFrom}
+                        onChange={(e) => handleInputChange("e2TotalGoodsFrom", e.target.value)}
+                        className={getInputClassName("e2TotalGoodsFrom", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                        placeholder="0"
+                      />
+                    </FieldWrapper>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -786,15 +1003,17 @@ export default function VAT3ReturnForm() {
                     <Label className="text-base font-medium text-foreground">Total services to other EU countries *</Label>
                     <Label className="font-bold text-base text-gray-800">ES1</Label>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Euro className="h-4 w-4 text-gray-600" />
-                    <Input
-                      type="number"
-                      value={formData.es1TotalServicesTo}
-                      onChange={(e) => handleInputChange("es1TotalServicesTo", e.target.value)}
-                      className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                      placeholder="0"
-                    />
+                  <div className="flex items-start gap-2">
+                    <Euro className="h-4 w-4 text-gray-600 mt-3" />
+                    <FieldWrapper fieldName="es1TotalServicesTo">
+                      <Input
+                        type="number"
+                        value={formData.es1TotalServicesTo}
+                        onChange={(e) => handleInputChange("es1TotalServicesTo", e.target.value)}
+                        className={getInputClassName("es1TotalServicesTo", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                        placeholder="0"
+                      />
+                    </FieldWrapper>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -802,15 +1021,17 @@ export default function VAT3ReturnForm() {
                     <Label className="text-base font-medium text-foreground">Total services from other EU countries *</Label>
                     <Label className="font-bold text-base text-gray-800">ES2</Label>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Euro className="h-4 w-4 text-gray-600" />
-                    <Input
-                      type="number"
-                      value={formData.es2TotalServicesFrom}
-                      onChange={(e) => handleInputChange("es2TotalServicesFrom", e.target.value)}
-                      className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                      placeholder="0"
-                    />
+                  <div className="flex items-start gap-2">
+                    <Euro className="h-4 w-4 text-gray-600 mt-3" />
+                    <FieldWrapper fieldName="es2TotalServicesFrom">
+                      <Input
+                        type="number"
+                        value={formData.es2TotalServicesFrom}
+                        onChange={(e) => handleInputChange("es2TotalServicesFrom", e.target.value)}
+                        className={getInputClassName("es2TotalServicesFrom", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                        placeholder="0"
+                      />
+                    </FieldWrapper>
                   </div>
                 </div>
               </div>
@@ -828,15 +1049,17 @@ export default function VAT3ReturnForm() {
                   <Label className="text-base font-medium text-foreground">Postponed Accounting *</Label>
                   <Label className="font-bold text-base text-gray-800">PA1</Label>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Euro className="h-4 w-4 text-gray-600" />
-                  <Input
-                    type="number"
-                    value={formData.pa1PostponedAccounting}
-                    onChange={(e) => handleInputChange("pa1PostponedAccounting", e.target.value)}
-                    className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
-                    placeholder="0"
-                  />
+                <div className="flex items-start gap-2">
+                  <Euro className="h-4 w-4 text-gray-600 mt-3" />
+                  <FieldWrapper fieldName="pa1PostponedAccounting">
+                    <Input
+                      type="number"
+                      value={formData.pa1PostponedAccounting}
+                      onChange={(e) => handleInputChange("pa1PostponedAccounting", e.target.value)}
+                      className={getInputClassName("pa1PostponedAccounting", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                      placeholder="0"
+                    />
+                  </FieldWrapper>
                 </div>
               </div>
             </CardContent>
@@ -858,10 +1081,19 @@ export default function VAT3ReturnForm() {
                 <Button
                   onClick={handleSubmitReturn}
                   disabled={isSubmitting}
-                  className="gradient-primary px-8 py-3 font-semibold text-white hover-scale shadow-lg"
+                  className="gradient-primary px-8 py-3 font-semibold text-white hover-scale shadow-lg disabled:opacity-75 disabled:cursor-not-allowed"
                 >
-                  <Send className="h-4 w-4 mr-2" />
-                  {isSubmitting ? "Submitting..." : "Submit Return"}
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      <span className="animate-pulse">Processing submission...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4 mr-2" />
+                      Submit Return
+                    </>
+                  )}
                 </Button>
               </div>
             </CardContent>
