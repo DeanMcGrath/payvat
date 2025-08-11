@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search } from 'lucide-react'
+import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Bell, Settings, LogOut, Search, UserPlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import LiveChat from "./components/live-chat"
 import Footer from "./components/footer"
@@ -87,8 +87,6 @@ export default function LandingPage() {
                     <Bell className="h-5 w-5" />
                     <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
                   </Button>
-              Secure encryption with simple payment using ROS Debit Instruction, you pay direct to Revenue with instant confirmation and charged to your bank account in 1-3 days.
-
     <Button 
                     variant="outline" 
                     size="sm" 
@@ -98,12 +96,13 @@ export default function LandingPage() {
                     Sign In
                   </Button>
                   <Button 
-                    variant="outline" 
+                    variant="ghost" 
                     size="sm" 
-                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
+                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20"
                     onClick={() => window.location.href = '/signup'}
+                    aria-label="Sign up"
                   >
-                    Sign Up
+                    <UserPlus className="h-5 w-5" />
                   </Button>
                 </div>
               </div>
@@ -233,7 +232,7 @@ export default function LandingPage() {
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-4">Secure Payments</h3>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Secure encryption with instant payment confirmation and automated receipt generation
+              Secure encryption with simple payment using ROS Debit Instruction, you pay direct to Revenue with instant confirmation and charged to your bank account in 1-3 days.
               </p>
               <div className="status-success inline-flex">
                 <Shield className="h-4 w-4 mr-1" />
