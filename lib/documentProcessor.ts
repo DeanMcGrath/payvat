@@ -2393,11 +2393,26 @@ async function processWithAIVision(
     throw new Error('AI Vision processing failed: ' + result.error)
   }
   
+  // Map AI document types to ExtractedVATData enum
+  const mapAIDocumentType = (aiType: string): ExtractedVATData['documentType'] => {
+    switch (aiType?.toUpperCase()) {
+      case 'INVOICE':
+        return category.includes('SALES') ? 'SALES_INVOICE' : 'PURCHASE_INVOICE'
+      case 'RECEIPT':
+        return category.includes('SALES') ? 'SALES_RECEIPT' : 'PURCHASE_RECEIPT'
+      case 'CREDIT_NOTE':
+      case 'STATEMENT':
+      default:
+        return 'OTHER'
+    }
+  }
+
   return {
     ...result.extractedData,
     extractedText: Array.isArray(result.extractedData.extractedText) 
       ? result.extractedData.extractedText 
       : [result.extractedData.extractedText || ''],
+    documentType: mapAIDocumentType(result.extractedData.documentType),
     processingMethod: 'AI_VISION',
     processingTimeMs: 0, // Will be set by caller
     validationFlags: [],
