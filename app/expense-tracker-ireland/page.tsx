@@ -142,41 +142,41 @@ export default function ExpenseTrackerIreland() {
               </div>
               
               <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{expenseCategories[selectedCategory].name}</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">{expenseCategories[selectedCategory as keyof typeof expenseCategories].name}</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-2">Tax Deductibility</h4>
                       <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                        expenseCategories[selectedCategory].deductible === '100%' ? 'bg-green-100 text-green-800' :
-                        expenseCategories[selectedCategory].deductible === '50%' ? 'bg-yellow-100 text-yellow-800' :
+                        expenseCategories[selectedCategory as keyof typeof expenseCategories].deductible === '100%' ? 'bg-green-100 text-green-800' :
+                        expenseCategories[selectedCategory as keyof typeof expenseCategories].deductible === '50%' ? 'bg-yellow-100 text-yellow-800' :
                         'bg-blue-100 text-blue-800'
                       }`}>
-                        {expenseCategories[selectedCategory].deductible}
+                        {expenseCategories[selectedCategory as keyof typeof expenseCategories].deductible}
                       </div>
                     </div>
                     
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-2">VAT Recovery</h4>
                       <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
-                        expenseCategories[selectedCategory].vatRecoverable === 'Yes' ? 'bg-green-100 text-green-800' :
-                        expenseCategories[selectedCategory].vatRecoverable === 'No' ? 'bg-red-100 text-red-800' :
+                        expenseCategories[selectedCategory as keyof typeof expenseCategories].vatRecoverable === 'Yes' ? 'bg-green-100 text-green-800' :
+                        expenseCategories[selectedCategory as keyof typeof expenseCategories].vatRecoverable === 'No' ? 'bg-red-100 text-red-800' :
                         'bg-orange-100 text-orange-800'
                       }`}>
-                        {expenseCategories[selectedCategory].vatRecoverable}
+                        {expenseCategories[selectedCategory as keyof typeof expenseCategories].vatRecoverable}
                       </div>
                     </div>
                     
                     <div>
                       <h4 className="font-semibold text-gray-900 mb-2">Important Notes</h4>
-                      <p className="text-gray-700 text-sm">{expenseCategories[selectedCategory].notes}</p>
+                      <p className="text-gray-700 text-sm">{expenseCategories[selectedCategory as keyof typeof expenseCategories].notes}</p>
                     </div>
                   </div>
                   
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-2">Common Examples</h4>
                     <ul className="space-y-1">
-                      {expenseCategories[selectedCategory].examples.map((example, index) => (
+                      {expenseCategories[selectedCategory as keyof typeof expenseCategories].examples.map((example, index) => (
                         <li key={index} className="flex items-start space-x-2">
                           <span className="text-violet-500 mt-1">•</span>
                           <span className="text-gray-700 text-sm">{example}</span>

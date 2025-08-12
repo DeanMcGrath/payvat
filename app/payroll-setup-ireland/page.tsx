@@ -111,9 +111,9 @@ export default function PayrollSetupIreland() {
               </div>
               
               <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">{topics[selectedTopic].name}</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">{topics[selectedTopic as keyof typeof topics].name}</h3>
                 <div className="grid md:grid-cols-2 gap-4">
-                  {topics[selectedTopic].items.map((item, index) => (
+                  {topics[selectedTopic as keyof typeof topics].items.map((item, index) => (
                     <div key={index} className="bg-white p-4 rounded-lg border">
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="font-semibold text-gray-900">{item.title}</h4>
