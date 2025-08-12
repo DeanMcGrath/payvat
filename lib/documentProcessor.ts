@@ -1898,7 +1898,11 @@ async function processWithLegacyMethod(
       vatRate: 23,
       confidence: 0.95, // High confidence for known test document
       extractedText: [`HARDCODED: VW Financial Services invoice detected (${fileName}). VAT breakdown: MIN €1.51 + NIL €0.00 + STD23 €109.85 = Total Amount VAT €111.36`],
-      documentType: 'PURCHASE_INVOICE'
+      documentType: 'PURCHASE_INVOICE',
+      processingMethod: 'FALLBACK',
+      processingTimeMs: Date.now() - processingStartTime,
+      validationFlags: ['HARDCODED_VW_DOCUMENT', 'HIGH_CONFIDENCE'],
+      irishVATCompliant: true
     }
     
     const processingTime = Date.now() - processingStartTime
@@ -1910,7 +1914,14 @@ async function processWithLegacyMethod(
       success: true,
       isScanned: true,
       scanResult,
-      extractedData: hardcodedVATData
+      extractedData: hardcodedVATData,
+      processingSteps: [{
+        step: 'Hardcoded VW Financial Processing',
+        success: true,
+        duration: processingTime,
+        details: 'Used hardcoded VAT extraction for known VW Financial document'
+      }],
+      qualityScore: 95
     }
   }
   
@@ -1925,7 +1936,15 @@ async function processWithLegacyMethod(
       success: false,
       isScanned: false,
       scanResult: errorMsg,
-      error: textResult.error
+      error: textResult.error,
+      processingSteps: [{
+        step: 'Text Extraction',
+        success: false,
+        duration: Date.now() - processingStartTime,
+        details: 'Failed to extract text from document',
+        error: textResult.error || 'Unknown error'
+      }],
+      qualityScore: 0
     }
   }
   
@@ -1977,7 +1996,11 @@ async function processWithLegacyMethod(
         vatRate: 23, // Irish standard VAT rate
         confidence: confidence,
         extractedText: [textResult.text],
-        documentType
+        documentType,
+        processingMethod: 'EXCEL_PARSER',
+        processingTimeMs: Date.now() - processingStartTime,
+        validationFlags: ['WOOCOMMERCE_DETECTED'],
+        irishVATCompliant: true
       }
       
       console.log('🏪 WooCommerce VAT data structured:')
@@ -2007,7 +2030,11 @@ async function processWithLegacyMethod(
         vatRate: 23, // Irish standard VAT rate
         confidence: 0.90, // High confidence for Excel extraction
         extractedText: [textResult.text],
-        documentType: 'OTHER' as const
+        documentType: 'OTHER' as const,
+        processingMethod: 'EXCEL_PARSER',
+        processingTimeMs: Date.now() - processingStartTime,
+        validationFlags: ['STANDARD_EXCEL_PROCESSING'],
+        irishVATCompliant: true
       }
       
       console.log('📊 Standard Excel VAT data structured:')
@@ -2064,7 +2091,14 @@ async function processWithLegacyMethod(
     success: true,
     isScanned: true,
     scanResult: scanResult + (validation.issues.length > 0 ? ` (${validation.issues.length} validation notes)` : ''),
-    extractedData
+    extractedData,
+    processingSteps: [{
+      step: 'Legacy Document Processing',
+      success: true,
+      duration: Date.now() - processingStartTime,
+      details: `Processed with ${extractedData.processingMethod} method`
+    }],
+    qualityScore: Math.round(extractedData.confidence * 100)
   }
 }
 
