@@ -3,6 +3,7 @@ import { createGuestFriendlyRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { processDocument } from '@/lib/documentProcessor'
 import { AuthUser } from '@/lib/auth'
+import { extractionMonitor, createExtractionAttempt } from '@/lib/extraction-monitor'
 
 // Force Node.js runtime for XLSX library compatibility
 export const runtime = 'nodejs'
@@ -367,10 +368,16 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       }
     }
     
-    // Process the document with AI enhancement
+    // Process the document with AI enhancement and monitoring
     let result: any
+    const processingStartTime = Date.now()
+    
     try {
-      console.log('📄 Starting document processing...')
+      console.log('📄 Starting document processing with monitoring...')
+      console.log(`   File: ${document.originalName}`)
+      console.log(`   Category: ${document.category}`)
+      console.log(`   User: ${user ? user.id : 'anonymous'}`)
+      
       result = await processDocument(
         document.fileData,
         document.mimeType,
@@ -378,9 +385,112 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         document.category,
         user?.id // Pass user ID for AI usage tracking
       )
+      
+      const processingTimeMs = Date.now() - processingStartTime
       console.log('✅ Document processing completed successfully')
+      console.log(`   Processing time: ${processingTimeMs}ms`)
+
+      // 🚨 NEW: Create extraction attempt for monitoring
+      if (result.success && result.extractedData) {
+        const extractedAmount = [
+          ...(result.extractedData.salesVAT || []),
+          ...(result.extractedData.purchaseVAT || [])
+        ].reduce((sum, amt) => sum + amt, 0)
+
+        // Determine file type for monitoring
+        const fileExtension = document.originalName.split('.').pop()?.toLowerCase()
+        let fileType: 'excel' | 'pdf' | 'image' | 'other' = 'other'
+        if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+          fileType = 'excel'
+        } else if (fileExtension === 'pdf') {
+          fileType = 'pdf'
+        } else if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff'].includes(fileExtension || '')) {
+          fileType = 'image'
+        }
+
+        // Determine processing method from result
+        let processingMethod: 'woocommerce_processor' | 'excel_generic' | 'ai_vision' | 'legacy_text' = 'legacy_text'
+        if (result.scanResult?.includes('WooCommerce VAT extracted')) {
+          processingMethod = 'woocommerce_processor'
+        } else if (result.scanResult?.includes('VAT extracted from Excel')) {
+          processingMethod = 'excel_generic'
+        } else if (result.scanResult?.includes('AI processed')) {
+          processingMethod = 'ai_vision'
+        }
+
+        // Check for expected WooCommerce totals
+        let expectedAmount: number | undefined
+        if (document.originalName.toLowerCase().includes('product_list')) {
+          expectedAmount = 5475.24
+        } else if (document.originalName.toLowerCase().includes('recent_order')) {
+          expectedAmount = 11036.40
+        }
+
+        const extractionAttempt = createExtractionAttempt(
+          document.originalName,
+          fileType,
+          processingMethod,
+          {
+            success: true,
+            extractedAmount,
+            confidence: result.extractedData.confidence || 0.8,
+            processingTimeMs,
+            errors: [],
+            warnings: result.extractedData.validationFlags || []
+          },
+          {
+            expectedAmount,
+            userId: user?.id
+          }
+        )
+
+        extractionMonitor.logAttempt(extractionAttempt)
+        
+        console.log('📊 MONITORING: Extraction attempt logged')
+        console.log(`   Amount: €${extractedAmount.toFixed(2)}`)
+        console.log(`   Method: ${processingMethod}`)
+        console.log(`   Confidence: ${Math.round((result.extractedData.confidence || 0.8) * 100)}%`)
+        if (expectedAmount) {
+          const accuracy = Math.max(0, 100 - (Math.abs(extractedAmount - expectedAmount) / expectedAmount) * 100)
+          console.log(`   Accuracy: ${accuracy.toFixed(1)}%`)
+        }
+      }
+      
     } catch (processingError) {
+      const processingTimeMs = Date.now() - processingStartTime
       console.error('🚨 Document processing threw an error:', processingError)
+      console.error(`   Processing time before error: ${processingTimeMs}ms`)
+
+      // 🚨 NEW: Log failed extraction attempt for monitoring
+      const fileExtension = document.originalName.split('.').pop()?.toLowerCase()
+      let fileType: 'excel' | 'pdf' | 'image' | 'other' = 'other'
+      if (fileExtension === 'xlsx' || fileExtension === 'xls') {
+        fileType = 'excel'
+      } else if (fileExtension === 'pdf') {
+        fileType = 'pdf'
+      } else if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff'].includes(fileExtension || '')) {
+        fileType = 'image'
+      }
+
+      const failedAttempt = createExtractionAttempt(
+        document.originalName,
+        fileType,
+        'legacy_text', // Default to legacy since processing failed
+        {
+          success: false,
+          extractedAmount: 0,
+          confidence: 0,
+          processingTimeMs,
+          errors: [processingError instanceof Error ? processingError.message : String(processingError)],
+          warnings: []
+        },
+        {
+          userId: user?.id
+        }
+      )
+
+      extractionMonitor.logAttempt(failedAttempt)
+      console.log('📊 MONITORING: Failed extraction attempt logged')
       
       // Return a structured error response
       return NextResponse.json(

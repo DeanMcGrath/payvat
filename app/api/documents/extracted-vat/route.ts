@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createGuestFriendlyRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { AuthUser } from '@/lib/auth'
+import { extractionMonitor } from '@/lib/extraction-monitor'
 
 interface ExtractedVATSummary {
   totalSalesVAT: number
@@ -694,9 +695,19 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       processedDocuments: summary.processedDocuments
     })
     
+    // 🚨 NEW: Add monitoring statistics to response
+    const monitoringStats = extractionMonitor.getStats()
+    
     const response = NextResponse.json({
       success: true,
-      extractedVAT: summary
+      extractedVAT: summary,
+      monitoringStats: {
+        totalExtractions: monitoringStats.totalAttempts,
+        successRate: monitoringStats.successRate,
+        averageAccuracy: monitoringStats.averageAccuracy,
+        wooCommerceExtractions: monitoringStats.wooCommerceStats.attempts,
+        lastProcessingPerformance: monitoringStats.averageProcessingTime
+      }
     })
     
     // Prevent browser caching to ensure fresh data

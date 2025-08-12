@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, FileText, Building, Calendar, Euro, Shield, CheckCircle, Clock, Send, Loader2 } from 'lucide-react'
 import { useRouter } from "next/navigation"
 import { useVATData } from "@/contexts/vat-data-context"
-import { formatEuroAmount, getPeriodLabel } from "@/lib/vat-utils"
+import { formatEuroAmount, getPeriodLabel } from "@/lib/vatUtils"
 import Link from "next/link"
 import SiteHeader from "@/components/site-header"
 

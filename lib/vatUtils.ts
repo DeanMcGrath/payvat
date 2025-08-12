@@ -246,3 +246,136 @@ export function suggestVATPeriods(filingFrequency: 'monthly' | 'bi-monthly', yea
   
   return periods
 }
+
+// Additional utility functions needed for compatibility
+
+export interface PeriodMapping {
+  label: string
+  key: string
+  startMonth: number // 0-based (0 = January)
+  endMonth: number   // 0-based (11 = December)
+  startDay: number
+  endDay: number
+}
+
+// Standard Irish VAT bi-monthly periods
+export const VAT_PERIODS: PeriodMapping[] = [
+  {
+    label: "January - February",
+    key: "jan-feb",
+    startMonth: 0,
+    endMonth: 1,
+    startDay: 1,
+    endDay: 28, // Will be adjusted for leap years
+  },
+  {
+    label: "March - April", 
+    key: "mar-apr",
+    startMonth: 2,
+    endMonth: 3,
+    startDay: 1,
+    endDay: 30,
+  },
+  {
+    label: "May - June",
+    key: "may-jun", 
+    startMonth: 4,
+    endMonth: 5,
+    startDay: 1,
+    endDay: 30,
+  },
+  {
+    label: "July - August",
+    key: "jul-aug",
+    startMonth: 6,
+    endMonth: 7, 
+    startDay: 1,
+    endDay: 31,
+  },
+  {
+    label: "September - October",
+    key: "sep-oct",
+    startMonth: 8,
+    endMonth: 9,
+    startDay: 1, 
+    endDay: 31,
+  },
+  {
+    label: "November - December",
+    key: "nov-dec",
+    startMonth: 10,
+    endMonth: 11,
+    startDay: 1,
+    endDay: 31,
+  }
+]
+
+export function isLeapYear(year: number): boolean {
+  return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)
+}
+
+export function getFebruaryDays(year: number): number {
+  return isLeapYear(year) ? 29 : 28
+}
+
+export function calculatePeriodDates(year: string, periodKey: string): {
+  startDate: string
+  endDate: string
+  startDateISO: string
+  endDateISO: string
+} {
+  const yearNum = parseInt(year)
+  const period = VAT_PERIODS.find(p => p.key === periodKey)
+  
+  if (!period) {
+    throw new Error(`Invalid period key: ${periodKey}`)
+  }
+  
+  // Create start date
+  const startDate = new Date(yearNum, period.startMonth, period.startDay)
+  
+  // Create end date - handle February leap year special case
+  let endDay = period.endDay
+  if (period.key === 'jan-feb') {
+    endDay = getFebruaryDays(yearNum)
+  }
+  
+  const endDate = new Date(yearNum, period.endMonth, endDay)
+  
+  // Format dates for display and ISO format for form inputs
+  const formatForDisplay = (date: Date): string => {
+    const day = date.getDate().toString().padStart(2, '0')
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const year = date.getFullYear()
+    return `${day}/${month}/${year}`
+  }
+  
+  const formatForISO = (date: Date): string => {
+    return date.toISOString().split('T')[0]
+  }
+  
+  return {
+    startDate: formatForDisplay(startDate),
+    endDate: formatForDisplay(endDate), 
+    startDateISO: formatForISO(startDate),
+    endDateISO: formatForISO(endDate)
+  }
+}
+
+export function getPeriodLabel(periodKey: string): string {
+  const period = VAT_PERIODS.find(p => p.key === periodKey)
+  return period?.label || periodKey
+}
+
+export function convertToWholeEurosString(amount: number): string {
+  return Math.round(amount).toString()
+}
+
+export function formatEuroAmount(amount: number): string {
+  return new Intl.NumberFormat('en-IE', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(amount)
+}

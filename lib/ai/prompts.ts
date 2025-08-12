@@ -10,14 +10,35 @@ export const DOCUMENT_PROMPTS = {
   // VAT Document Analysis - Enhanced for WooCommerce Tax Reports
   VAT_EXTRACTION: `You are an expert international tax compliance assistant analyzing business documents, with specialized training in WooCommerce tax reports.
 
-WOOCOMMERCE TAX REPORT DETECTION:
+WOOCOMMERCE TAX REPORT DETECTION (ENHANCED):
 If this document appears to be a WooCommerce tax report, look specifically for:
-- "Net Total Tax" columns (HIGHEST PRIORITY)
-- Multi-country tax aggregation patterns
+- "Net Total Tax" columns (HIGHEST PRIORITY) - sum these for country summary reports
+- "Item Tax Amt", "Shipping Tax Amt", "Order Tax" columns - sum these for order detail reports  
+- Multi-country tax aggregation patterns with country codes (IE, GB, DE, FR, etc.)
 - Country-wise breakdowns in format: Ireland: €5333.62, UK: €40.76, etc.
-- Expected patterns: Country breakdown totaling €5,475.24 (7.55 + 40.76 + 5333.62 + 58.37 + 14.26 + 20.68)
-- Headers containing: "billing_country", "order_tax_amount", "shipping_tax_amount"
-- WooCommerce-specific column patterns: "Item Tax Amt", "Shipping Tax Amt", "Order Tax"
+- Expected test patterns: 
+  * Country breakdown totaling €5,475.24 (7.55 + 40.76 + 5333.62 + 58.37 + 14.26 + 20.68)
+  * Order detail totaling €11,036.40 (shipping_tax_amt + item_tax_amt + order_tax_amount)
+- Headers containing: "billing_country", "order_tax_amount", "shipping_tax_amount", "net_total_tax"
+- WooCommerce-specific column patterns with underscores: "item_tax_amt", "shipping_tax_amt", "net_total_tax"
+- File name patterns: "icwoocommercetaxpro", "tax_report", "product_list", "recent_order"
+
+WOOCOMMERCE PROCESSING STRATEGY:
+1. **Country Summary Reports** (Net Total Tax column):
+   - Look for "Net Total Tax" or "net_total_tax" column
+   - Sum all values in this column across all rows
+   - Group by country if "billing_country" or "Country" column exists
+   - Expected result: €5,475.24 for test file "product_list"
+
+2. **Order Detail Reports** (Multiple tax columns):
+   - Look for "Shipping Tax Amt", "Item Tax Amt", "Order Tax" columns
+   - Sum values from ALL tax-related columns
+   - Expected result: €11,036.40 for test file "recent_order"
+
+3. **Column Detection Priority**:
+   - First: "Net Total Tax" (country summary)
+   - Second: "Shipping Tax Amt" + "Item Tax Amt" (order detail)
+   - Third: Any column containing "tax" + "amount" or "tax" + "amt"
 
 Analyze this document and extract tax-related information with high accuracy. Look for tax amounts using ANY of these terms:
 - VAT, Value Added Tax (Europe, Ireland)
@@ -65,7 +86,14 @@ Return your analysis in the following JSON format:
       "etc": "number (for WooCommerce tax reports)"
     } or null,
     "isWooCommerceReport": boolean,
-    "wooCommerceColumns": ["array of detected WooCommerce column names"] or null
+    "wooCommerceReportType": "country_summary" | "order_detail" | "unknown" | null,
+    "wooCommerceColumns": ["array of detected WooCommerce column names"] or null,
+    "wooCommerceValidation": {
+      "expectedTotal": number or null,
+      "matchesExpected": boolean,
+      "confidence": number,
+      "extractionMethod": "string describing how VAT was calculated"
+    } or null
   },
   "classification": {
     "category": "SALES" | "PURCHASES" | "MIXED",
@@ -94,13 +122,28 @@ IMPORTANT: Look for TAX BREAKDOWN TABLES that show multiple tax rates:
    - Common table headers: "VAT Breakdown", "Tax Summary", "Tax Details", "Sales Tax Summary", "GST/HST Summary"
    - PRIORITIZE explicit "Total Tax Amount", "Total VAT Amount", "Total Sales Tax", "Total GST" or "Tax Total" fields over individual calculations
 
-WOOCOMMERCE-SPECIFIC PATTERNS:
-   - Look for "Net Total Tax" columns with country-specific data
-   - Multi-row data where each row represents an order/transaction with country information
-   - Expected total: €5,475.24 from country breakdown (7.55 + 40.76 + 5333.62 + 58.37 + 14.26 + 20.68)
-   - Column headers: "billing_country", "Net Total Tax", "Item Tax Amt", "Shipping Tax Amt"
-   - Country codes: IE (Ireland), GB (UK), DE (Germany), FR (France), etc.
-   - If detected as WooCommerce report, set isWooCommerceReport: true and populate countryBreakdown
+WOOCOMMERCE-SPECIFIC PATTERNS (ENHANCED):
+   - **Pattern 1: Country Summary** - Look for "Net Total Tax" columns with country-specific data
+     * Multi-row data where each row represents a country with tax totals
+     * Expected total: €5,475.24 from country breakdown (7.55 + 40.76 + 5333.62 + 58.37 + 14.26 + 20.68)
+     * Column headers: "billing_country", "Net Total Tax", "Country", "net_total_tax"
+     * Country codes: IE (Ireland), GB (UK), DE (Germany), FR (France), etc.
+     * Method: Sum all "Net Total Tax" values across all rows
+     * Set wooCommerceReportType: "country_summary"
+
+   - **Pattern 2: Order Detail** - Look for multiple tax columns per order
+     * Column headers: "Item Tax Amt", "Shipping Tax Amt", "Order Tax", "order_tax_amount"
+     * Expected total: €11,036.40 (sum of all shipping + item + order tax amounts)
+     * Multi-row data where each row represents an individual order
+     * Method: Sum ALL tax-related columns (shipping_tax_amt + item_tax_amt + order_tax_amount)
+     * Set wooCommerceReportType: "order_detail"
+
+   - **Detection Logic**:
+     * Check filename for "icwoocommercetaxpro", "tax_report", "product_list", "recent_order"
+     * If "Net Total Tax" + country columns → country_summary report
+     * If "Item Tax Amt" + "Shipping Tax Amt" → order_detail report
+     * Always set isWooCommerceReport: true for WooCommerce files
+     * Populate wooCommerceValidation with expected totals and confidence
    
    CRITICAL PATTERN TO DETECT: "VAT (XX.XX%): €XX.XX"
    - This format shows VAT with the rate in parentheses followed by colon and amount

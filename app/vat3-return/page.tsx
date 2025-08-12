@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Euro, Save, Send, ArrowUp, FileText, Shield, CheckCircle, Clock, Sparkles, AlertCircle, Loader2 } from "lucide-react"
 import SiteHeader from "@/components/site-header"
 import { useVATData } from "@/contexts/vat-data-context"
-import { convertToWholeEurosString, calculatePeriodDates, formatEuroAmount } from "@/lib/vat-utils"
+import { convertToWholeEurosString, calculatePeriodDates, formatEuroAmount } from "@/lib/vatUtils"
 import { Badge } from "@/components/ui/badge"
 
 export default function VAT3ReturnForm() {

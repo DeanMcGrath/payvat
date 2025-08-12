@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { VideoPlayer } from './video-player'
 import { X, ExternalLink, Share2 } from 'lucide-react'
@@ -120,7 +120,16 @@ export function VideoModal({ isOpen, onClose, className }: VideoModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl w-full p-0 bg-black border-gray-800">
+      <DialogContent className="max-w-4xl w-full p-0 bg-black border-gray-800" showCloseButton={false}>
+        <DialogHeader className="sr-only">
+          <DialogTitle>
+            {video?.title || 'Demo Video'}
+          </DialogTitle>
+          <DialogDescription>
+            {video?.description || 'PayVAT demo video showing how to streamline your VAT process'}
+          </DialogDescription>
+        </DialogHeader>
+        
         {/* Custom Header with Close Button */}
         <div className="absolute top-4 right-4 z-50">
           <Button
@@ -128,6 +137,7 @@ export function VideoModal({ isOpen, onClose, className }: VideoModalProps) {
             size="sm"
             onClick={onClose}
             className="text-white hover:bg-white/20 rounded-full p-2"
+            aria-label="Close video modal"
           >
             <X className="h-5 w-5" />
           </Button>

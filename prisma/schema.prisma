@@ -41,6 +41,12 @@ model User {
   vatReturns           VATReturn[]
   chatSessions         ChatSession[]
   videoAnalytics       VideoAnalytics[]
+  
+  // AI Learning System Relations
+  templateUsages       TemplateUsage[]
+  learningFeedbacks    LearningFeedback[]
+  aiAnalytics          AIProcessingAnalytics[]
+  businessPatterns     BusinessLearningPattern[]
 
   @@map("vat_users")
 }
@@ -86,6 +92,12 @@ model Document {
   fileData     String?
   user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   vatReturn    VATReturn? @relation(fields: [vatReturnId], references: [id])
+  
+  // AI Learning System Relations  
+  fingerprint      DocumentFingerprint?
+  templateUsages   TemplateUsage[]
+  learningFeedbacks LearningFeedback[]
+  aiAnalytics      AIProcessingAnalytics[]
 
   @@map("vat_documents")
 }
@@ -298,5 +310,219 @@ model VideoAnalytics {
   user          User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
   
   @@map("video_analytics")
+}
+
+// AI Learning System Models for PayVAT.ie Document Intelligence
+
+// Document Fingerprints for pattern recognition
+model DocumentFingerprint {
+  id                  String      @id @default(cuid())
+  documentId          String      @unique
+  
+  // Structural Analysis
+  structuralHash      String      // Hash of document structure
+  textPatterns        String[]    // Key text patterns
+  vatPatterns         Json        // VAT-specific patterns with positions
+  businessSignatures  String[]    // Business name/address patterns
+  layoutFeatures      Json        // Layout analysis results
+  
+  // Learning Metrics
+  confidence          Float       @default(0.8)
+  successRate         Float       @default(0.0)
+  usageCount          Int         @default(0)
+  
+  // Timestamps
+  createdAt           DateTime    @default(now())
+  lastUsed            DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  
+  // Relations
+  document            Document    @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  templates           DocumentTemplate[]
+  feedbacks           LearningFeedback[]
+  
+  @@map("document_fingerprints")
+}
+
+// Document Templates for intelligent processing
+model DocumentTemplate {
+  id                    String      @id @default(cuid())
+  name                  String
+  businessName          String?
+  templateType          String      // INVOICE, RECEIPT, STATEMENT, etc.
+  category              String      // SALES, PURCHASES, MIXED
+  
+  // Template Structure
+  fingerprintId         String
+  extractionRules       Json        // Rules for extracting data
+  validationRules       Json        // Rules for validating extraction
+  
+  // Performance Metrics
+  confidence            Float       @default(0.8)
+  usageCount            Int         @default(0)
+  successRate           Float       @default(1.0)
+  averageProcessingTime Int         @default(5000) // milliseconds
+  averageConfidence     Float       @default(0.8)
+  
+  // Learning Data
+  createdFromDocuments  String[]    // Document IDs used to create template
+  errorPatterns         Json        // Common error patterns
+  
+  // Status
+  isActive              Boolean     @default(true)
+  
+  // Timestamps
+  createdAt             DateTime    @default(now())
+  lastUsed              DateTime    @default(now())
+  lastUpdated           DateTime    @updatedAt
+  
+  // Relations
+  fingerprint           DocumentFingerprint @relation(fields: [fingerprintId], references: [id])
+  usageHistory          TemplateUsage[]
+  feedbacks             LearningFeedback[]
+  
+  @@map("document_templates")
+}
+
+// Template usage tracking
+model TemplateUsage {
+  id                    String      @id @default(cuid())
+  templateId            String
+  documentId            String
+  userId                String?
+  
+  // Usage Metrics
+  processingTime        Int         // milliseconds
+  confidence            Float
+  wasAccurate           Boolean?    // Set after user feedback
+  
+  // Template Match Info
+  similarity            Float       // Similarity score when matched
+  matchedFeatures       String[]    // Features that matched
+  
+  // Processing Details
+  extractedData         Json        // What was extracted
+  correctedData         Json?       // User corrections if any
+  
+  // Timestamps
+  createdAt             DateTime    @default(now())
+  feedbackAt            DateTime?   // When feedback was provided
+  
+  // Relations
+  template              DocumentTemplate @relation(fields: [templateId], references: [id])
+  document              Document    @relation(fields: [documentId], references: [id])
+  user                  User?       @relation(fields: [userId], references: [id])
+  
+  @@map("template_usage")
+}
+
+// User feedback for learning improvement
+model LearningFeedback {
+  id                    String      @id @default(cuid())
+  documentId            String
+  fingerprintId         String?
+  templateId            String?
+  userId                String
+  
+  // Feedback Content
+  originalExtraction    Json        // Original AI extraction
+  correctedExtraction   Json        // User-corrected data
+  feedback              String      // CORRECT, INCORRECT, PARTIALLY_CORRECT
+  corrections           Json        // Specific field corrections
+  
+  // Context
+  confidenceScore       Float?      // Original confidence
+  processingTime        Int?        // Original processing time
+  notes                 String?     // User notes
+  
+  // Learning Impact
+  wasProcessed          Boolean     @default(false) // Has learning system processed this?
+  processedAt           DateTime?
+  improvementMade       Boolean     @default(false) // Did this lead to improvements?
+  
+  // Timestamps
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  
+  // Relations
+  document              Document    @relation(fields: [documentId], references: [id])
+  fingerprint           DocumentFingerprint? @relation(fields: [fingerprintId], references: [id])
+  template              DocumentTemplate? @relation(fields: [templateId], references: [id])
+  user                  User        @relation(fields: [userId], references: [id])
+  
+  @@map("learning_feedback")
+}
+
+// AI Processing Analytics
+model AIProcessingAnalytics {
+  id                    String      @id @default(cuid())
+  documentId            String
+  userId                String?
+  
+  // Processing Strategy
+  processingStrategy    String      // TEMPLATE_MATCH, AI_VISION, HYBRID, FALLBACK
+  templateUsed          String?     // Template ID if used
+  
+  // Performance Metrics
+  processingTime        Int         // milliseconds
+  confidenceScore       Float
+  tokensUsed            Int?        // OpenAI tokens consumed
+  cost                  Float?      // Processing cost in cents
+  
+  // Quality Metrics
+  extractionAccuracy    Float?      // Measured after feedback
+  userSatisfaction      Int?        // 1-5 scale from user feedback
+  
+  // Learning Impact
+  learningApplied       Boolean     @default(false)
+  confidenceBoost       Float       @default(0.0)
+  matchedFeatures       String[]
+  suggestedImprovements String[]
+  
+  // Error Tracking
+  hadErrors             Boolean     @default(false)
+  errorType             String?     // Classification of error
+  errorMessage          String?
+  
+  // Timestamps
+  processedAt           DateTime    @default(now())
+  feedbackAt            DateTime?   // When user provided feedback
+  
+  // Relations
+  document              Document    @relation(fields: [documentId], references: [id])
+  user                  User?       @relation(fields: [userId], references: [id])
+  
+  @@map("ai_processing_analytics")
+}
+
+// Business Learning Patterns
+model BusinessLearningPattern {
+  id                    String      @id @default(cuid())
+  userId                String?     // User/business this pattern belongs to
+  businessName          String?
+  
+  // Pattern Information
+  patternType           String      // VAT_RATE, SUPPLIER_FORMAT, INVOICE_STYLE, etc.
+  patternData           Json        // Specific pattern details
+  frequency             Int         @default(1) // How often this pattern appears
+  confidence            Float       @default(0.5) // Confidence in this pattern
+  
+  // Learning Context
+  documentTypes         String[]    // Document types this applies to
+  categories            String[]    // SALES, PURCHASES, etc.
+  
+  // Performance
+  successRate           Float       @default(0.0)
+  lastValidated         DateTime?
+  
+  // Timestamps
+  firstSeen             DateTime    @default(now())
+  lastSeen              DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  
+  // Relations
+  user                  User?       @relation(fields: [userId], references: [id])
+  
+  @@map("business_learning_patterns")
 }
 

@@ -13,7 +13,7 @@ import SiteHeader from "@/components/site-header"
 import { toast } from "sonner"
 import { logger } from "@/lib/logger"
 import { useVATData } from "@/contexts/vat-data-context"
-import { getPeriodLabel, formatEuroAmount } from "@/lib/vat-utils"
+import { getPeriodLabel, formatEuroAmount } from "@/lib/vatUtils"
 
 interface UserProfile {
   id: string
