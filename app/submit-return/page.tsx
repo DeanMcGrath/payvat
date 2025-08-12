@@ -175,7 +175,7 @@ export default function VAT3ReturnForm() {
               <div className="mb-8">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Revenue compliant VAT3 submission
+                  Works with ROS VAT3 submission
                 </div>
                 
                 <div className="icon-premium mb-6 mx-auto">
@@ -204,7 +204,7 @@ export default function VAT3ReturnForm() {
               <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-12">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
-                  <span>Revenue compliant</span>
+                  <span>Works with ROS</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />

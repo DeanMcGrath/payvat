@@ -395,7 +395,7 @@ export default function VATSubmissionPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />
-                  <span>Revenue compliant</span>
+                  <span>Works with ROS</span>
                 </div>
               </div>
             </div>

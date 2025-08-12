@@ -150,7 +150,7 @@ export default function ConfirmationPayment() {
               <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-8 text-muted-foreground text-xs lg:text-sm mb-8 lg:mb-12">
                 <div className="flex items-center gap-2">
                   <Shield className="h-3 w-3 lg:h-4 lg:w-4 text-success" />
-                  <span>Revenue compliant</span>
+                  <span>Works with ROS</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-3 w-3 lg:h-4 lg:w-4 text-success" />

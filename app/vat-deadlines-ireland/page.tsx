@@ -51,12 +51,12 @@ export default function VATDeadlinesIreland() {
           <div className="text-center">
             <div className="max-w-4xl mx-auto animate-fade-in">
               <div className="mb-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-100 text-red-700 text-sm font-medium mb-3 animate-bounce-gentle">
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse-gentle"></div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Next VAT deadline: Always 19th (23rd for ROS users)
                 </div>
                 
-                <div className="icon-premium mb-3 mx-auto" style={{background: 'linear-gradient(to bottom right, #dc2626, #991b1b)'}}>
+                <div className="icon-premium mb-3 mx-auto">
                   <Calendar className="h-12 w-12 text-white" />
                 </div>
                 
@@ -90,9 +90,9 @@ export default function VATDeadlinesIreland() {
             </div>
           </div>
           
-          <div className="absolute top-20 left-10 w-16 h-16 bg-red-200 rounded-full blur-xl opacity-20 animate-float"></div>
-          <div className="absolute top-32 right-20 w-12 h-12 bg-red-300 rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
-          <div className="absolute bottom-20 left-20 w-20 h-20 bg-red-100 rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
+          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
+          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
         </div>
       </section>
 

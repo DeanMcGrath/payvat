@@ -101,7 +101,7 @@ export default function VATRegistrationPage() {
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                   Complete step-by-step guide for new businesses to register for VAT in Ireland, with comprehensive business setup context. 
-                  <span className="text-primary font-semibold">Revenue compliant, up-to-date, and business-focused.</span>
+                  <span className="text-primary font-semibold">Works with ROS, up-to-date, and business-focused.</span>
                 </p>
               </div>
               

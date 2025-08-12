@@ -44,7 +44,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader 
-        searchPlaceholder="Search..."
+        searchPlaceholder="Search guides, tools, and VAT help..."
         pageSubtitle="Irish VAT compliance made simple"
       />
 

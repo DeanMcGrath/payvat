@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -25,6 +26,23 @@ export default function SiteHeader({
   user,
   onLogout
 }: SiteHeaderProps) {
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`
+    }
+  }
+
+  const handleSearchKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch()
+    }
+  }
+
+  const handleMobileSearch = () => {
+    window.location.href = '/search'
+  }
   return (
     <header className="gradient-primary relative overflow-hidden">
       {/* Background Pattern */}
@@ -47,9 +65,15 @@ export default function SiteHeader({
                 <div className="relative">
                   <Input
                     placeholder={searchPlaceholder}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={handleSearchKeyPress}
                     className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
                   />
-                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
+                  <Search 
+                    className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70 cursor-pointer hover:text-white transition-colors" 
+                    onClick={handleSearch}
+                  />
                 </div>
               </div>
 
@@ -67,7 +91,9 @@ export default function SiteHeader({
                 <Button 
                   variant="ghost" 
                   size="sm" 
+                  onClick={handleMobileSearch}
                   className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
+                  title="Search"
                 >
                   <Search className="h-5 w-5" />
                 </Button>

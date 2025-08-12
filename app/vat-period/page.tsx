@@ -240,7 +240,7 @@ function VATPeriodContent() {
               <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
-                  <span>Revenue compliant</span>
+                  <span>Works with ROS</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />
