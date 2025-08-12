@@ -94,11 +94,11 @@ export default function LandingPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />
-                  <span>Revenue compliant</span>
+                  <span>Works with ROS</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-success" />
-                  <span>24/7 support</span>
+                  <span>Expert support</span>
                 </div>
               </div>
             </div>
@@ -277,7 +277,7 @@ export default function LandingPage() {
                   <span className="text-gradient-primary"> VAT Process?</span>
                 </h3>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                  Join today and be one of the first Irish businesses to streamlined their VAT compliance with PayVAT
+                  Join Irish businesses streamlining their VAT compliance with PayVat
                 </p>
               </div>
 
@@ -301,7 +301,7 @@ export default function LandingPage() {
               </div>
               
               <p className="text-sm text-muted-foreground">
-                ✓ Revenue compliant  ✓ Expert support  ✓ Instant processing
+                ✓ Works with ROS (Revenue Online Service)  ✓ Expert support  ✓ Instant processing
               </p>
             </div>
           </div>
@@ -313,7 +313,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-4 animate-slide-up">
             <h4 className="text-3xl font-bold text-foreground mb-2">
-              Why Choose <span className="text-gradient-primary">PayVAT?</span>
+              Why Choose <span className="text-gradient-primary">PayVat?</span>
             </h4>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Ireland's most comprehensive business guidance and VAT compliance platform

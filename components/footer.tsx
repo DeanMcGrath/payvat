@@ -43,7 +43,7 @@ export default function Footer() {
                     className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    About PayVAT
+                    About PayVat
                   </Link>
                 </li>
                 <li>
@@ -211,7 +211,7 @@ export default function Footer() {
           <div className="mt-12 pt-8 border-t border-teal-600/30">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
               <p className="text-teal-100 text-center sm:text-left">
-                © 2024 PayVAT. All rights reserved.
+                © 2025 PayVat. All rights reserved.
               </p>
               <div className="flex items-center space-x-4">
                 <span className="text-teal-100 text-center sm:text-right font-medium">Ireland's complete business guidance platform</span>

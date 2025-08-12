@@ -83,7 +83,7 @@ export default function FAQPage() {
                 <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Everything you need to know about Irish business setup and PayVAT services. 
+                  Everything you need to know about Irish business setup and PayVat services. 
                   <span className="text-primary font-semibold">Quick answers for entrepreneurs and business owners.</span>
                 </p>
               </div>
@@ -96,11 +96,11 @@ export default function FAQPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />
-                  <span>Revenue compliant</span>
+                  <span>Works with ROS</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-success" />
-                  <span>24/7 support</span>
+                  <span>Expert support</span>
                 </div>
               </div>
             </div>
@@ -125,7 +125,7 @@ export default function FAQPage() {
                   <HelpCircle className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                  What is PayVAT?
+                  What is PayVat?
                 </h3>
               </div>
               <div className="text-muted-foreground group-hover:text-primary transition-colors">
@@ -136,7 +136,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px gradient-primary mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed">
-                  PayVAT is an online platform that lets Irish businesses complete their VAT submissions and make payments directly to the Revenue Commissioners—without paying hefty third-party fees.
+                  PayVat is an online platform that lets Irish businesses complete their VAT submissions and make payments directly to the Revenue Commissioners—without paying hefty third-party fees.
                 </p>
               </div>
             )}
@@ -149,7 +149,7 @@ export default function FAQPage() {
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                  Who can use PayVAT?
+                  Who can use PayVat?
                 </h3>
               </div>
               <div className="text-muted-foreground group-hover:text-primary transition-colors">
@@ -160,7 +160,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px bg-blue-500/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Any Irish-registered business required to Submit VAT returns can use PayVAT. Whether you're a micro-enterprise, an SME, or a growing startup, our platform scales to suit your needs.
+                  Any Irish-registered business required to Submit VAT returns can use PayVat. Whether you're a micro-enterprise, an SME, or a growing startup, our platform scales to suit your needs.
                 </p>
               </div>
             )}
@@ -186,7 +186,7 @@ export default function FAQPage() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
-                    <span className="text-muted-foreground">Visit PayVAT.ie/about for contact information</span>
+                    <span className="text-muted-foreground">Visit PayVat.ie/about for contact information</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
@@ -223,7 +223,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px bg-purple-500/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  After you submit your VAT return through PayVAT, you can initiate your VAT payment via Revenue's Online Service (ROS) with one click—no need to log in separately.
+                  After you submit your VAT return through PayVat, you can initiate your VAT payment via Revenue's Online Service (ROS) with one click—no need to log in separately.
                 </p>
                 <div className="flex items-center gap-2 text-success font-medium">
                   <Shield className="h-4 w-4" />
@@ -263,7 +263,7 @@ export default function FAQPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="text-2xl font-bold text-primary">€90</span>
+                        <span className="text-2xl font-bold text-primary">€30</span>
                         <span className="text-muted-foreground">/month</span>
                       </div>
                     </div>
@@ -286,7 +286,7 @@ export default function FAQPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="text-2xl font-bold text-primary">€900</span>
+                        <span className="text-2xl font-bold text-primary">€300</span>
                         <span className="text-muted-foreground">/year</span>
                       </div>
                     </div>
@@ -356,7 +356,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px bg-warning/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  PayVAT will send you automated reminders well before your filing and payment deadlines. If you do miss a deadline, you'll need to contact Revenue directly for extensions or penalties.
+                  PayVat will send you automated reminders well before your filing and payment deadlines. If you do miss a deadline, you'll need to contact Revenue directly for extensions or penalties.
                 </p>
                 <div className="card-modern p-4 bg-warning/10 border-warning/20">
                   <div className="flex items-center gap-3">
@@ -417,12 +417,12 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px gradient-primary mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  We provide email and in-app chat support from 9 am–5 pm GMT, Monday to Friday. Our comprehensive Help Center is also available 24/7.
+                  We provide live chat and email support 7 days a week; phone support Mon–Fri, 09:00–17:00 Ireland time. Our comprehensive Help Center is also available 24/7.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center p-4 card-modern hover-scale">
-                    <div className="text-2xl font-bold text-primary mb-1">9-5</div>
-                    <div className="text-sm text-muted-foreground">Live Support</div>
+                    <div className="text-2xl font-bold text-primary mb-1">7 days</div>
+                    <div className="text-sm text-muted-foreground">Live Chat & Email</div>
                   </div>
                   <div className="text-center p-4 card-modern hover-scale">
                     <div className="text-2xl font-bold text-primary mb-1">24/7</div>
@@ -600,7 +600,7 @@ export default function FAQPage() {
                     Still Have <span className="text-gradient-primary">Questions?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                    Our expert support team is here to help you get started with PayVAT
+                    Our expert support team is here to help you get started with PayVat
                   </p>
                 </div>
 
@@ -626,7 +626,7 @@ export default function FAQPage() {
                 <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm">
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-success" />
-                    <span>9-5 GMT Support</span>
+                    <span>Live chat & email 7 days; phone Mon–Fri, 09:00–17:00 Ireland time</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-success" />

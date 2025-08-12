@@ -51,12 +51,12 @@ export default function AccountantFeesVsPayVatSavings() {
           <div className="text-center">
             <div className="max-w-4xl mx-auto animate-fade-in">
               <div className="mb-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 text-green-700 text-sm font-medium mb-3 animate-bounce-gentle">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse-gentle"></div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
                   Save €4,200+ annually on VAT compliance
                 </div>
                 
-                <div className="icon-premium mb-3 mx-auto" style={{background: 'linear-gradient(to bottom right, #16a34a, #15803d)'}}>
+                <div className="icon-premium mb-3 mx-auto">
                   <Calculator className="h-12 w-12 text-white" />
                 </div>
                 

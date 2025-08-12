@@ -157,7 +157,11 @@ export default function PrivacyPage() {
               <div className="mt-8 pt-6 border-t border-border">
                 <div className="text-xs text-muted-foreground mb-2">
                   <strong>Last updated:</strong><br />
-                  {new Date().toLocaleDateString()}
+                  {new Date().toLocaleDateString('en-GB', { 
+                    day: 'numeric', 
+                    month: 'long', 
+                    year: 'numeric' 
+                  })}
                 </div>
                 <Button 
                   size="sm" 
@@ -360,7 +364,7 @@ export default function PrivacyPage() {
                       <Lock className="h-6 w-6 text-success" />
                       <h3 className="font-semibold text-foreground">Encryption</h3>
                     </div>
-                    <p className="text-sm text-muted-foreground">AES-256 encryption for data at rest and TLS 1.3 for data in transit</p>
+                    <p className="text-sm text-muted-foreground">Enterprise-grade encryption in transit and at rest; data hosted in the EU</p>
                   </div>
                   <div className="card-modern p-6 hover-lift">
                     <div className="flex items-center gap-3 mb-3">
@@ -469,28 +473,20 @@ export default function PrivacyPage() {
                 <p className="text-lg text-muted-foreground leading-relaxed mb-2">
                   If you have questions about this Privacy Policy or want to exercise your rights, please contact us:
                 </p>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="card-modern p-6 text-center hover-lift">
-                    <div className="icon-modern bg-success mb-4 mx-auto">
-                      <Mail className="h-6 w-6 text-white" />
-                    </div>
-                    <h3 className="font-semibold text-foreground mb-1">Email Support</h3>
-                    <a href="mailto:support@payvat.ie" className="text-primary hover:text-primary/80 font-semibold transition-colors">
-                      support@payvat.ie
-                    </a>
-                    <p className="text-sm text-muted-foreground mt-2">Response within 24 hours</p>
+                <div className="card-modern p-6 text-center hover-lift">
+                  <div className="icon-modern bg-success mb-4 mx-auto">
+                    <Mail className="h-6 w-6 text-white" />
                   </div>
-                  
-                  <div className="card-modern p-6 text-center hover-lift">
-                    <div className="icon-modern bg-blue-500 mb-4 mx-auto">
-                      <Shield className="h-6 w-6 text-white" />
-                    </div>
-                    <h3 className="font-semibold text-foreground mb-1">Data Protection Officer</h3>
-                    <a href="mailto:dpo@payvat.ie" className="text-primary hover:text-primary/80 font-semibold transition-colors">
-                      dpo@payvat.ie
-                    </a>
-                    <p className="text-sm text-muted-foreground mt-2">For privacy-specific inquiries</p>
-                  </div>
+                  <h3 className="font-semibold text-foreground mb-1">Contact Us</h3>
+                  <a href="mailto:support@payvat.ie" className="text-primary hover:text-primary/80 font-semibold transition-colors">
+                    support@payvat.ie
+                  </a>
+                  <p className="text-sm text-muted-foreground mt-2">For all support and privacy inquiries</p>
+                  <p className="text-xs text-muted-foreground mt-3">
+                    PayVat Ireland Ltd<br/>
+                    Registered in Ireland<br/>
+                    Response within 24 hours
+                  </p>
                 </div>
               </div>
             </section>

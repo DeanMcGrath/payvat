@@ -7,7 +7,7 @@ import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, Zap, TrendingUp
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
-export default function AboutPayVAT() {
+export default function AboutPayVat() {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function AboutPayVAT() {
     <div className="min-h-screen bg-background">
       <SiteHeader 
         searchPlaceholder="Search company info..."
-        currentPage="About PayVAT"
+        currentPage="About PayVat"
         pageSubtitle="Ireland's fintech VAT platform"
       />
 
@@ -72,7 +72,7 @@ export default function AboutPayVAT() {
                 <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  PayVAT is Ireland's comprehensive business guidance platform - from startup to compliance, we empower Irish entrepreneurs. 
+                  PayVat is Ireland's comprehensive business guidance platform - from startup to compliance, we empower Irish entrepreneurs. 
                   <span className="text-primary font-semibold">Everything you need, all in one place.</span>
                 </p>
               </div>
@@ -120,7 +120,7 @@ export default function AboutPayVAT() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  PayVAT is an Irish company that grew from a simple mission: empower every Irish business with the knowledge and tools needed to succeed. Founded by Irish entrepreneurs and technologists, we started by solving VAT submission pain points, but quickly realized businesses needed much more.
+                  PayVat is an Irish company that grew from a simple mission: empower every Irish business with the knowledge and tools needed to succeed. Founded by Irish entrepreneurs and technologists, we started by solving VAT submission pain points, but quickly realized businesses needed much more.
                 </p>
                 <p className="text-lg text-muted-foreground leading-relaxed">
                   Today, we're Ireland's most comprehensive business guidance platform - covering everything from initial business setup to ongoing compliance, with specialized expertise for every industry and business type.
@@ -139,7 +139,7 @@ export default function AboutPayVAT() {
               
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center p-6 card-modern hover-scale">
-                  <div className="text-3xl font-bold text-primary mb-2">€90</div>
+                  <div className="text-3xl font-bold text-primary mb-2">€30</div>
                   <div className="text-sm text-muted-foreground">Monthly cost vs €500+ traditional</div>
                 </div>
                 <div className="text-center p-6 card-modern hover-scale">
@@ -284,7 +284,7 @@ export default function AboutPayVAT() {
                     Self-Service VAT Filing
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Create your account on PayVAT.ie and submit returns directly to the Revenue Commissioners.
+                    Create your account on PayVat.ie and submit returns directly to the Revenue Commissioners.
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-success font-medium text-sm">
                     <CheckCircle className="h-4 w-4" />
@@ -348,7 +348,7 @@ export default function AboutPayVAT() {
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-primary font-medium text-sm">
                     <Euro className="h-4 w-4" />
-                    <span>€90/month or €900/year</span>
+                    <span>€30/month or €300/year</span>
                   </div>
                 </div>
               </div>
@@ -368,7 +368,7 @@ export default function AboutPayVAT() {
                   <TrendingUp className="h-10 w-10 text-white" />
                 </div>
                 <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
-                  Why Choose <span className="text-gradient-primary">PayVAT?</span>
+                  Why Choose <span className="text-gradient-primary">PayVat?</span>
                 </h2>
                 <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
               </div>
@@ -382,7 +382,7 @@ export default function AboutPayVAT() {
                     <div>
                       <h3 className="text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">Save Money</h3>
                       <p className="text-muted-foreground leading-relaxed">
-                        At just €90/month (or €900/year), more cost-effective than traditional solutions
+                        At just €30/month (or €300/year), more cost-effective than traditional solutions
                       </p>
                     </div>
                   </div>

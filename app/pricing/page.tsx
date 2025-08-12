@@ -89,7 +89,7 @@ export default function PricingPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-success" />
-                  <span>24/7 support</span>
+                  <span>Expert support</span>
                 </div>
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function PricingPage() {
               <h3 className="text-2xl font-semibold text-foreground mb-1">Monthly Plan</h3>
               <div className="flex items-center justify-center space-x-2 mb-4">
                 <Euro className="h-8 w-8 text-primary" />
-                <span className="text-5xl font-bold text-foreground">90</span>
+                <span className="text-5xl font-bold text-foreground">30</span>
                 <span className="text-muted-foreground text-lg">/month</span>
               </div>
               <p className="text-primary font-semibold mb-2">Cancel anytime</p>
@@ -156,7 +156,7 @@ export default function PricingPage() {
               <h3 className="text-2xl font-semibold text-foreground mb-1">Annual Plan</h3>
               <div className="flex items-center justify-center space-x-2 mb-4">
                 <Euro className="h-8 w-8 text-primary" />
-                <span className="text-5xl font-bold text-foreground">900</span>
+                <span className="text-5xl font-bold text-foreground">300</span>
                 <span className="text-muted-foreground text-lg">/year</span>
               </div>
               <p className="text-primary font-semibold mb-2">Two months free!</p>

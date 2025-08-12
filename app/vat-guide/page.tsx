@@ -82,7 +82,7 @@ export default function VATGuidePage() {
               <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
-                  <span>Revenue compliant</span>
+                  <span>Works with ROS</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />
@@ -133,13 +133,14 @@ export default function VATGuidePage() {
             <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <h4 className="font-semibold text-blue-800 mb-1">Services: €42,500</h4>
-                <p className="text-blue-700 text-sm">Annual turnover threshold for service-based businesses</p>
+                <p className="text-blue-700 text-sm">Annual turnover threshold for service-based businesses (from 1 Jan 2025)</p>
               </div>
               <div className="p-4 bg-green-50 rounded-lg border border-green-200">
                 <h4 className="font-semibold text-green-800 mb-1">Goods: €85,000</h4>
-                <p className="text-green-700 text-sm">Annual turnover threshold for goods-based businesses</p>
+                <p className="text-green-700 text-sm">Annual turnover threshold for goods-based businesses (from 1 Jan 2025)</p>
               </div>
             </div>
+            <p className="text-gray-600 mb-4">If you're likely to exceed your threshold in the current or previous calendar year, register.</p>
             <div className="space-y-2">
               <div className="flex items-center gap-3">
                 <CheckCircle className="h-4 w-4 text-teal-600 flex-shrink-0" />
@@ -148,6 +149,10 @@ export default function VATGuidePage() {
               <div className="flex items-center gap-3">
                 <CheckCircle className="h-4 w-4 text-teal-600 flex-shrink-0" />
                 <span className="text-gray-600">Voluntary registration to reclaim VAT on business purchases</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <CheckCircle className="h-4 w-4 text-teal-600 flex-shrink-0" />
+                <span className="text-gray-600">Cash basis eligibility: ≤€2m turnover OR ≥90% supplies to customers not entitled to full VAT deduction</span>
               </div>
             </div>
           </CardContent>
@@ -177,7 +182,7 @@ export default function VATGuidePage() {
               </div>
               <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <h4 className="font-semibold text-gray-800 mb-1">Zero Rate: 0%</h4>
-                <p className="text-gray-700 text-sm">Exports, certain medical goods</p>
+                <p className="text-gray-700 text-sm">Many basic foodstuffs (e.g., bread, milk), qualifying children's clothing/footwear, exports; check Revenue for product specifics</p>
               </div>
             </div>
           </CardContent>
@@ -204,7 +209,7 @@ export default function VATGuidePage() {
                 <Clock className="h-4 w-4 text-teal-600 flex-shrink-0 mt-1" />
                 <div>
                   <span className="font-medium text-gray-800">Submission Deadline:</span>
-                  <span className="text-gray-600 ml-1">23rd day after tax period end</span>
+                  <span className="text-gray-600 ml-1">Due by the 19th; extended to the 23rd for ROS filers</span>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -212,6 +217,13 @@ export default function VATGuidePage() {
                 <div>
                   <span className="font-medium text-gray-800">Late filings:</span>
                   <span className="text-gray-600 ml-1">Can incur penalties and interest</span>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Calendar className="h-4 w-4 text-teal-600 flex-shrink-0 mt-1" />
+                <div>
+                  <span className="font-medium text-gray-800">RTD (Return of Trading Details):</span>
+                  <span className="text-gray-600 ml-1">Due by the 23rd of the month after your accounting period ends (filed in ROS)</span>
                 </div>
               </div>
             </div>
@@ -375,7 +387,7 @@ export default function VATGuidePage() {
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-teal-800 flex items-center">
               <CheckCircle className="h-5 w-5 text-teal-600 mr-2" />
-              7. How PayVAT Simplifies VAT
+              7. How PayVat Simplifies VAT
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -384,7 +396,7 @@ export default function VATGuidePage() {
                 <Calculator className="h-5 w-5 text-teal-600 flex-shrink-0" />
                 <div>
                   <span className="font-medium text-teal-800">Automatic Calculations</span>
-                  <p className="text-teal-700 text-sm">Upload or enter invoices and let PayVAT compute net VAT</p>
+                  <p className="text-teal-700 text-sm">Upload or enter invoices and let PayVat compute net VAT</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -439,7 +451,7 @@ export default function VATGuidePage() {
               <div className="flex items-center gap-3 p-3 border border-teal-200 rounded-lg bg-teal-50">
                 <CheckCircle className="h-4 w-4 text-teal-600" />
                 <div>
-                  <span className="font-medium text-teal-800">PayVAT Help Center</span>
+                  <span className="font-medium text-teal-800">PayVat Help Center</span>
                   <p className="text-teal-700 text-sm">Accessible once you register</p>
                 </div>
               </div>
@@ -451,7 +463,7 @@ export default function VATGuidePage() {
         <Card className="text-center">
           <CardContent className="p-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-1">Ready to Simplify Your VAT?</h3>
-            <p className="text-gray-600 mb-2">Let PayVAT handle the complexity while you focus on growing your business</p>
+            <p className="text-gray-600 mb-2">Let PayVat handle the complexity while you focus on growing your business</p>
             <Button 
               className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
               onClick={() => window.location.href = '/about'}

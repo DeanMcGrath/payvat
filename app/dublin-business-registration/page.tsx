@@ -35,13 +35,13 @@ export default function DublinBusinessRegistration() {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-blue-50 rounded-full text-blue-700 text-sm font-medium mb-6 animate-pulse">
-              <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+            <div className="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6 animate-pulse">
+              <span className="w-2 h-2 bg-primary rounded-full mr-2"></span>
               Dublin Business Registration Guide
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Register Your Business in 
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="text-gradient-primary">
                 Dublin (2025)
               </span>
             </h1>
@@ -57,7 +57,7 @@ export default function DublinBusinessRegistration() {
               </a>
               <a 
                 href="#dublin-checklist" 
-                className="px-8 py-4 text-lg font-semibold text-blue-600 border-2 border-blue-200 rounded-xl hover:bg-blue-50 transition-all duration-300"
+                className="px-8 py-4 text-lg font-semibold text-primary border-2 border-primary/20 rounded-xl hover:bg-primary/10 transition-all duration-300"
               >
                 View Local Requirements
               </a>
