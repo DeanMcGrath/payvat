@@ -263,7 +263,7 @@ export default function FAQPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="text-2xl font-bold text-primary">€30</span>
+                        <span className="text-2xl font-bold text-primary">€90</span>
                         <span className="text-muted-foreground">/month</span>
                       </div>
                     </div>
@@ -286,7 +286,7 @@ export default function FAQPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="text-2xl font-bold text-primary">€300</span>
+                        <span className="text-2xl font-bold text-primary">€900</span>
                         <span className="text-muted-foreground">/year</span>
                       </div>
                     </div>

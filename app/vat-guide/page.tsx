@@ -132,11 +132,11 @@ export default function VATGuidePage() {
             <p className="text-gray-600 mb-4">You must register for VAT if your annual turnover exceeds:</p>
             <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <h4 className="font-semibold text-blue-800 mb-1">Services: €37,500</h4>
+                <h4 className="font-semibold text-blue-800 mb-1">Services: €42,500</h4>
                 <p className="text-blue-700 text-sm">Annual turnover threshold for service-based businesses</p>
               </div>
               <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                <h4 className="font-semibold text-green-800 mb-1">Goods: €75,000</h4>
+                <h4 className="font-semibold text-green-800 mb-1">Goods: €85,000</h4>
                 <p className="text-green-700 text-sm">Annual turnover threshold for goods-based businesses</p>
               </div>
             </div>

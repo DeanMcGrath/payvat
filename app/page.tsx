@@ -138,7 +138,7 @@ export default function LandingPage() {
               </p>
               <div className="status-success inline-flex">
                 <CheckCircle className="h-4 w-4 mr-1" />
-                Revenue Approved
+                Works with ROS
               </div>
             </div>
 
@@ -238,8 +238,8 @@ export default function LandingPage() {
                 <CheckCircle className="h-6 w-6 text-success" />
               </div>
               <div>
-                <div className="font-semibold text-foreground">Revenue Approved</div>
-                <div className="text-sm text-muted-foreground">Official platform</div>
+                <div className="font-semibold text-foreground">Works with ROS</div>
+                <div className="text-sm text-muted-foreground">Submit via ROS</div>
               </div>
             </div>
             

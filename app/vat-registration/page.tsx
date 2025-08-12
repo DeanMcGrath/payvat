@@ -109,7 +109,7 @@ export default function VATRegistrationPage() {
               <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-3">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-success" />
-                  <span>Revenue approved</span>
+                  <span>Works with ROS</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />

@@ -113,7 +113,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
                 <Card className="border-2 border-gray-200 hover:border-teal-300 transition-colors">
                   <CardHeader className="text-center pb-4">
                     <CardTitle className="text-lg font-semibold text-gray-900">Monthly Plan</CardTitle>
-                    <div className="text-3xl font-bold text-gray-900">€30</div>
+                    <div className="text-3xl font-bold text-gray-900">€90</div>
                     <p className="text-sm text-gray-600">per month</p>
                   </CardHeader>
                   <CardContent className="pt-0">
@@ -133,13 +133,13 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
                 {/* Annual Plan */}
                 <Card className="border-2 border-teal-300 bg-teal-50 relative">
                   <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-teal-500 text-white">
-                    Save €60
+                    Save €180
                   </Badge>
                   <CardHeader className="text-center pb-4">
                     <CardTitle className="text-lg font-semibold text-teal-900">Annual Plan</CardTitle>
-                    <div className="text-3xl font-bold text-teal-900">€300</div>
+                    <div className="text-3xl font-bold text-teal-900">€900</div>
                     <p className="text-sm text-teal-700">per year</p>
-                    <p className="text-xs text-teal-600">€25/month when paid annually</p>
+                    <p className="text-xs text-teal-600">€75/month when paid annually</p>
                   </CardHeader>
                   <CardContent className="pt-0">
                     <Button 

@@ -85,7 +85,7 @@ export default function AboutPayVAT() {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-success" />
-                  <span>Revenue approved</span>
+                  <span>Works with ROS</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-success" />
@@ -139,7 +139,7 @@ export default function AboutPayVAT() {
               
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center p-6 card-modern hover-scale">
-                  <div className="text-3xl font-bold text-primary mb-2">€30</div>
+                  <div className="text-3xl font-bold text-primary mb-2">€90</div>
                   <div className="text-sm text-muted-foreground">Monthly cost vs €500+ traditional</div>
                 </div>
                 <div className="text-center p-6 card-modern hover-scale">
@@ -148,7 +148,7 @@ export default function AboutPayVAT() {
                 </div>
                 <div className="text-center p-6 card-modern hover-scale">
                   <div className="text-3xl font-bold text-primary mb-2">2019</div>
-                  <div className="text-sm text-muted-foreground">Founded & revenue approved</div>
+                  <div className="text-sm text-muted-foreground">Founded & works with ROS</div>
                 </div>
                 <div className="text-center p-6 card-modern hover-scale">
                   <div className="text-3xl font-bold text-primary mb-2">95%</div>
@@ -292,7 +292,7 @@ export default function AboutPayVAT() {
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-primary font-medium text-sm">
                     <Euro className="h-4 w-4" />
-                    <span>€30/month or €300/year</span>
+                    <span>€90/month or €900/year</span>
                   </div>
                 </div>
               </div>
@@ -326,7 +326,7 @@ export default function AboutPayVAT() {
                     <div>
                       <h3 className="text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">Save Money</h3>
                       <p className="text-muted-foreground leading-relaxed">
-                        At just €30/month (or €300/year), more cost-effective than traditional solutions
+                        At just €90/month (or €900/year), more cost-effective than traditional solutions
                       </p>
                     </div>
                   </div>
