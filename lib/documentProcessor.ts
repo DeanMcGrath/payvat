@@ -504,6 +504,57 @@ export async function extractTextFromExcel(base64Data: string, fileName: string 
     console.log('🔍 File buffer size:', buffer.length)
     console.log(`📦 Buffer created successfully: ${buffer.length} bytes`)
     
+    // 🏪 CRITICAL: Check for WooCommerce files FIRST before general Excel processing
+    const fileNameLower = fileName.toLowerCase()
+    const isWooCommerceFile = fileNameLower.includes('icwoocommercetaxpro_tax_report_page-product_list') ||
+                              fileNameLower.includes('icwoocommercetaxpro_report_page_recent_order') ||
+                              fileNameLower.includes('woocommerce') && fileNameLower.includes('tax')
+    
+    if (isWooCommerceFile) {
+      console.log('🏪🏪🏪 WOOCOMMERCE FILE DETECTED - USING SPECIALIZED PROCESSOR')
+      console.log(`   File: ${fileName}`)
+      console.log('   Expected outputs:')
+      console.log('   - Country summary: €5,475.24')
+      console.log('   - Order detail: €11,036.40')
+      
+      try {
+        // Use the specialized WooCommerce processor
+        const wooResult = await processWooCommerceVATReport(buffer, fileName)
+        
+        console.log('🏪 WooCommerce processing complete:')
+        console.log(`   Total VAT: €${wooResult.totalVAT}`)
+        console.log(`   Report type: ${wooResult.reportType}`)
+        console.log(`   Confidence: ${(wooResult.confidence * 100).toFixed(0)}%`)
+        console.log(`   Method: ${wooResult.extractionMethod}`)
+        
+        // Return formatted text that preserves the WooCommerce extraction
+        const formattedText = `WOOCOMMERCE_TAX_REPORT_STRUCTURED
+File: ${fileName}
+Report Type: ${wooResult.reportType}
+Extraction Method: ${wooResult.extractionMethod}
+Total VAT: €${wooResult.totalVAT}
+Confidence: ${wooResult.confidence}
+
+COLUMN DETAILS:
+${wooResult.columnDetails.map(col => `- ${col.name}: €${col.total.toFixed(2)} (${col.rows} rows)`).join('\n')}
+
+${wooResult.countryBreakdown ? `
+COUNTRY BREAKDOWN:
+${Object.entries(wooResult.countryBreakdown).map(([country, amount]) => `- ${country}: €${amount.toFixed(2)}`).join('\n')}
+` : ''}
+
+VAT_EXTRACTION_MARKER: ${wooResult.totalVAT}`
+        
+        return {
+          success: true,
+          text: formattedText
+        }
+      } catch (wooError) {
+        console.error('🚨 WooCommerce processor failed, falling back to standard Excel:', wooError)
+        // Fall through to standard Excel processing
+      }
+    }
+    
     // Parse Excel file using XLSX library with enhanced options
     console.log('🔧 Parsing Excel file with XLSX library...')
     const workbook = XLSX.read(buffer, {
@@ -545,7 +596,7 @@ export async function extractTextFromExcel(base64Data: string, fileName: string 
     console.log('🔍 Looking for WooCommerce patterns...')
     
     // Check if this is a WooCommerce tax report
-    const fileName = firstSheetName || 'unknown'
+    const sheetName = firstSheetName || 'unknown'
     const isWooCommerceReport = fileName.toLowerCase().includes('tax_report') || 
                                fileName.toLowerCase().includes('woocommerce') ||
                                allHeaders.some(h => h.toLowerCase().includes('net total tax'))
@@ -1264,6 +1315,45 @@ export function extractVATDataFromText(
   let vatRate: number | undefined
   let confidence = 0
   const extractedText: string[] = []
+  
+  // 🏪 CRITICAL: Check for WooCommerce structured format FIRST
+  if (text.includes('WOOCOMMERCE_TAX_REPORT_STRUCTURED')) {
+    console.log('🏪 WooCommerce structured format detected in text extraction')
+    
+    // Extract the VAT amount from the marker
+    const vatMarkerMatch = text.match(/VAT_EXTRACTION_MARKER:\s*([\d.]+)/i)
+    if (vatMarkerMatch) {
+      const vatAmount = parseFloat(vatMarkerMatch[1])
+      console.log(`🏪 Extracted WooCommerce VAT: €${vatAmount}`)
+      
+      // Extract confidence
+      const confidenceMatch = text.match(/Confidence:\s*([\d.]+)/i)
+      const extractedConfidence = confidenceMatch ? parseFloat(confidenceMatch[1]) : 0.95
+      
+      // Extract report type for categorization
+      const reportTypeMatch = text.match(/Report Type:\s*(\w+)/i)
+      const reportType = reportTypeMatch ? reportTypeMatch[1] : 'unknown'
+      
+      // Determine document type based on report
+      let documentType: ExtractedVATData['documentType'] = 'OTHER'
+      if (reportType === 'country_summary' || reportType === 'order_detail') {
+        documentType = 'SALES_INVOICE' // WooCommerce reports are typically sales
+      }
+      
+      return {
+        salesVAT: [vatAmount], // WooCommerce VAT is typically sales VAT
+        purchaseVAT: [],
+        totalAmount: vatAmount,
+        confidence: extractedConfidence,
+        extractedText: [text],
+        documentType,
+        processingMethod: 'EXCEL_PARSER',
+        processingTimeMs: 0,
+        validationFlags: ['WOOCOMMERCE_STRUCTURED_EXTRACTION'],
+        irishVATCompliant: true // WooCommerce reports follow Irish VAT structure
+      }
+    }
+  }
   
   // Normalize text for processing
   const normalizedText = text.toLowerCase().replace(/\s+/g, ' ').trim()
