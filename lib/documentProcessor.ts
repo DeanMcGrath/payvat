@@ -1538,7 +1538,12 @@ export function extractVATDataFromText(
     vatRate,
     confidence,
     extractedText,
-    documentType
+    documentType,
+    // Enhanced fields required by new interface
+    processingMethod: 'OCR_TEXT',
+    processingTimeMs: 0,
+    validationFlags: [],
+    irishVATCompliant: false
   }
 }
 
@@ -2093,6 +2098,13 @@ export function aggregateVATAmounts(documents: ExtractedVATData[]): {
       documentsWithIssues
     }
   }
+}
+
+/**
+ * Alias for extractVATDataFromText for backward compatibility
+ */
+export async function extractVATFromText(text: string, category: string): Promise<ExtractedVATData> {
+  return extractVATDataFromText(text, category, 'unknown')
 }
 
 /**
