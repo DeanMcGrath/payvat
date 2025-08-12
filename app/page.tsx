@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Play, Bell } from 'lucide-react'
+import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Play, Bell, Calculator, Building, UserCheck, Euro } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Footer from "@/components/footer"
 import { VideoModal } from "@/components/video-modal"
@@ -57,27 +57,27 @@ export default function LandingPage() {
               <div className="mb-2">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Expert VAT Guidance, Trusted by Irish businesses
+                  Ireland's Complete Business Compliance Hub
                 </div>
                 
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-3">
-                  <span className="text-gradient-primary">Simplify Your VAT</span>
+                  <span className="text-gradient-primary">Complete Business</span>
                   <br />
-                  <span className="text-foreground">Submission & Payments</span>
+                  <span className="text-foreground">Setup & VAT Compliance</span>
                 </h1>
                 
                 <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Professional VAT return submission and payment processing for Irish businesses. 
-                  <span className="text-primary font-semibold">Complete your obligations in minutes, not hours.</span>
+                  From business registration to VAT compliance - everything Irish startups and SMEs need in one place. 
+                  <span className="text-primary font-semibold">40+ expert guides, tools, and professional services.</span>
                 </p>
               </div>
               
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-3">
-                <Button size="lg" className="btn-primary px-8 py-4 text-lg font-semibold hover-lift" onClick={() => window.location.href = '/vat-guide'}>
-                  Get Started
+                <Button size="lg" className="btn-primary px-8 py-4 text-lg font-semibold hover-lift" onClick={() => window.location.href = '/complete-business-setup-guide-ireland'}>
+                  Start Your Business
                   <CheckCircle className="ml-2 h-5 w-5" />
                 </Button>
                 <Button variant="outline" size="lg" className="btn-outline px-8 py-4 text-lg" onClick={() => setShowVideoModal(true)}>
@@ -118,57 +118,145 @@ export default function LandingPage() {
           <div className="text-center mb-4 animate-slide-up">
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
               Everything You Need for 
-              <span className="text-gradient-primary"> VAT Management</span>
+              <span className="text-gradient-primary"> Irish Business Success</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Professional tools designed specifically for Irish businesses to streamline VAT compliance
+              From business setup to VAT compliance - comprehensive guides and professional tools for Irish entrepreneurs
             </p>
           </div>
 
           {/* Feature Grid */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8" data-animate>
             {/* Feature 1 */}
-            <div className="card-modern p-8 text-center hover-lift group">
+            <div className="card-modern p-8 text-center hover-lift group cursor-pointer" onClick={() => window.location.href = '/complete-business-setup-guide-ireland'}>
               <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
                 <FileText className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Smart Submission</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-2">Complete Business Setup</h3>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Intelligent step-by-step VAT return process with automatic calculations and error checking
+                Step-by-step guides covering registration, structures, compliance, and everything needed to start your Irish business
               </p>
               <div className="status-success inline-flex">
                 <CheckCircle className="h-4 w-4 mr-1" />
-                Works with ROS
+                40+ Expert Guides
               </div>
             </div>
 
             {/* Feature 2 */}
-            <div className="card-modern p-8 text-center hover-lift group">
+            <div className="card-modern p-8 text-center hover-lift group cursor-pointer" onClick={() => window.location.href = '/vat-calculator-ireland'}>
               <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
                 <Shield className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Secure Payments</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-2">VAT Tools & Services</h3>
               <p className="text-muted-foreground leading-relaxed mb-4">
-              Secure encryption with simple payment using ROS Debit Instruction, you pay direct to Revenue with instant confirmation and charged to your bank account in 1-3 days.
+                Professional VAT calculation, submission, and payment services with instant tools and Revenue-compliant processes
               </p>
               <div className="status-success inline-flex">
                 <Shield className="h-4 w-4 mr-1" />
-                PCI Compliant
+                Revenue Compliant
               </div>
             </div>
 
             {/* Feature 3 */}
-            <div className="card-modern p-8 text-center hover-lift group">
+            <div className="card-modern p-8 text-center hover-lift group cursor-pointer" onClick={() => window.location.href = '/freelancer-vat-ireland'}>
               <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
                 <Clock className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Save Time</h3>
+              <h3 className="text-xl font-semibold text-foreground mb-2">Industry Expertise</h3>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Complete VAT obligations in minutes with automated calculations and smart data import
+                Specialized guidance for freelancers, construction, e-commerce, property, and every Irish business type
               </p>
               <div className="status-success inline-flex">
                 <Clock className="h-4 w-4 mr-1" />
-                95% Time Saved
+                Every Industry Covered
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Resources Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-4 animate-slide-up">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              Popular <span className="text-gradient-primary">Business Resources</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Most accessed guides helping Irish businesses succeed
+            </p>
+          </div>
+          
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-animate>
+            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/start-a-business-ireland'}>
+              <div className="flex items-center gap-4">
+                <div className="icon-modern group-hover:scale-110 transition-transform">
+                  <FileText className="h-6 w-6 text-success" />
+                </div>
+                <div>
+                  <div className="font-semibold text-foreground">Start a Business in Ireland</div>
+                  <div className="text-sm text-muted-foreground">Complete startup guide</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/vat-calculator-ireland'}>
+              <div className="flex items-center gap-4">
+                <div className="icon-modern group-hover:scale-110 transition-transform">
+                  <Calculator className="h-6 w-6 text-success" />
+                </div>
+                <div>
+                  <div className="font-semibold text-foreground">VAT Calculator Ireland</div>
+                  <div className="text-sm text-muted-foreground">Instant VAT calculations</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/company-vs-sole-trader-ireland'}>
+              <div className="flex items-center gap-4">
+                <div className="icon-modern group-hover:scale-110 transition-transform">
+                  <Building className="h-6 w-6 text-success" />
+                </div>
+                <div>
+                  <div className="font-semibold text-foreground">Company vs Sole Trader</div>
+                  <div className="text-sm text-muted-foreground">Choose your structure</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/dublin-business-registration'}>
+              <div className="flex items-center gap-4">
+                <div className="icon-modern group-hover:scale-110 transition-transform">
+                  <MapPin className="h-6 w-6 text-success" />
+                </div>
+                <div>
+                  <div className="font-semibold text-foreground">Dublin Business Registration</div>
+                  <div className="text-sm text-muted-foreground">City-specific guide</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/how-to-register-for-vat-ireland'}>
+              <div className="flex items-center gap-4">
+                <div className="icon-modern group-hover:scale-110 transition-transform">
+                  <UserCheck className="h-6 w-6 text-success" />
+                </div>
+                <div>
+                  <div className="font-semibold text-foreground">How to Register for VAT</div>
+                  <div className="text-sm text-muted-foreground">Step-by-step VAT registration</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/accountant-fees-vs-payvat-savings'}>
+              <div className="flex items-center gap-4">
+                <div className="icon-modern group-hover:scale-110 transition-transform">
+                  <Euro className="h-6 w-6 text-success" />
+                </div>
+                <div>
+                  <div className="font-semibold text-foreground">PayVat vs Accountant Fees</div>
+                  <div className="text-sm text-muted-foreground">Cost comparison guide</div>
+                </div>
               </div>
             </div>
           </div>
@@ -228,7 +316,7 @@ export default function LandingPage() {
               Why Choose <span className="text-gradient-primary">PayVAT?</span>
             </h4>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              The most trusted VAT compliance platform in Ireland
+              Ireland's most comprehensive business guidance and VAT compliance platform
             </p>
           </div>
           
@@ -238,8 +326,8 @@ export default function LandingPage() {
                 <CheckCircle className="h-6 w-6 text-success" />
               </div>
               <div>
-                <div className="font-semibold text-foreground">Works with ROS</div>
-                <div className="text-sm text-muted-foreground">Submit via ROS</div>
+                <div className="font-semibold text-foreground">40+ Expert Guides</div>
+                <div className="text-sm text-muted-foreground">Complete business library</div>
               </div>
             </div>
             
@@ -248,8 +336,8 @@ export default function LandingPage() {
                 <Shield className="h-6 w-6 text-success" />
               </div>
               <div>
-                <div className="font-semibold text-foreground">Instant Confirmation</div>
-                <div className="text-sm text-muted-foreground">Real-time processing</div>
+                <div className="font-semibold text-foreground">Revenue Compliant</div>
+                <div className="text-sm text-muted-foreground">Official ROS integration</div>
               </div>
             </div>
             
@@ -258,8 +346,8 @@ export default function LandingPage() {
                 <Bell className="h-6 w-6 text-success" />
               </div>
               <div>
-                <div className="font-semibold text-foreground">Smart Reminders</div>
-                <div className="text-sm text-muted-foreground">Never miss deadlines</div>
+                <div className="font-semibold text-foreground">All Industries Covered</div>
+                <div className="text-sm text-muted-foreground">Specialized guidance</div>
               </div>
             </div>
             
@@ -268,8 +356,8 @@ export default function LandingPage() {
                 <MessageCircle className="h-6 w-6 text-success" />
               </div>
               <div>
-                <div className="font-semibold text-foreground">24/7 Support</div>
-                <div className="text-sm text-muted-foreground">Always here to help</div>
+                <div className="font-semibold text-foreground">Tools & Support</div>
+                <div className="text-sm text-muted-foreground">Calculators + expert help</div>
               </div>
             </div>
           </div>

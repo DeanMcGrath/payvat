@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock, TrendingUp, Shield, ArrowRight, Euro, Zap, Bell } from 'lucide-react'
+import { BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock, TrendingUp, Shield, ArrowRight, Euro, Zap, Bell, Building, Globe, Home, UtensilsCrossed } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -57,7 +57,7 @@ export default function VATGuidePage() {
               <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Expert VAT guidance
+                  Complete VAT & business guidance
                 </div>
                 
                 <div className="icon-premium mb-3 mx-auto">
@@ -73,8 +73,8 @@ export default function VATGuidePage() {
                 <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  A comprehensive business guide to VAT compliance in Ireland. 
-                  <span className="text-primary font-semibold">Master VAT with confidence.</span>
+                  A comprehensive guide to VAT compliance in Ireland with industry-specific guidance and business tools. 
+                  <span className="text-primary font-semibold">Master VAT with confidence and expert support.</span>
                 </p>
               </div>
               
@@ -280,6 +280,92 @@ export default function VATGuidePage() {
                   <li>• Know when customer accounts for VAT</li>
                 </ul>
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Industry-Specific VAT Guidance */}
+        <Card className="mb-4">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
+              <Users className="h-5 w-5 text-teal-500 mr-2" />
+              Industry-Specific VAT Guidance
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Get specialized VAT guidance tailored to your business type and industry requirements.</p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <a href="/freelancer-vat-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                <Users className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <div>
+                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">Freelancers</span>
+                  <p className="text-gray-600 text-sm">VAT obligations for freelancers</p>
+                </div>
+              </a>
+              <a href="/construction-vat-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                <Building className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <div>
+                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">Construction</span>
+                  <p className="text-gray-600 text-sm">RCT and VAT requirements</p>
+                </div>
+              </a>
+              <a href="/ecommerce-vat-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                <Globe className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <div>
+                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">E-commerce</span>
+                  <p className="text-gray-600 text-sm">Online sales VAT rules</p>
+                </div>
+              </a>
+              <a href="/property-rental-vat-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                <Home className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <div>
+                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">Property Rental</span>
+                  <p className="text-gray-600 text-sm">Rental property VAT guide</p>
+                </div>
+              </a>
+              <a href="/digital-services-vat-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                <Zap className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <div>
+                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">Digital Services</span>
+                  <p className="text-gray-600 text-sm">Tech and digital VAT rules</p>
+                </div>
+              </a>
+              <a href="/start-restaurant-business-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                <UtensilsCrossed className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <div>
+                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">Restaurants</span>
+                  <p className="text-gray-600 text-sm">Food service VAT rates</p>
+                </div>
+              </a>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* VAT Tools */}
+        <Card className="mb-4 border-blue-200 bg-blue-50">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold text-blue-800 flex items-center">
+              <Calculator className="h-5 w-5 text-blue-600 mr-2" />
+              VAT Tools & Calculators
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-blue-700 mb-4">Free tools to help you calculate VAT and check registration requirements.</p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <a href="/vat-calculator-ireland" className="flex items-center gap-3 p-4 bg-white rounded-lg border border-blue-200 hover:bg-blue-50 transition-colors group">
+                <Calculator className="h-6 w-6 text-blue-600 group-hover:scale-110 transition-transform" />
+                <div>
+                  <span className="font-semibold text-blue-800 group-hover:text-blue-600 transition-colors">VAT Calculator Ireland</span>
+                  <p className="text-blue-700 text-sm">Calculate VAT for Irish rates (23%, 13.5%, 9%, 0%)</p>
+                </div>
+              </a>
+              <a href="/vat-registration-checker" className="flex items-center gap-3 p-4 bg-white rounded-lg border border-blue-200 hover:bg-blue-50 transition-colors group">
+                <CheckCircle className="h-6 w-6 text-blue-600 group-hover:scale-110 transition-transform" />
+                <div>
+                  <span className="font-semibold text-blue-800 group-hover:text-blue-600 transition-colors">VAT Registration Checker</span>
+                  <p className="text-blue-700 text-sm">Check if your business needs VAT registration</p>
+                </div>
+              </a>
             </div>
           </CardContent>
         </Card>

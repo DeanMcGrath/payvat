@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, Zap, TrendingUp, ArrowRight, Bell } from 'lucide-react'
+import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, Zap, TrendingUp, ArrowRight, Bell, FileText, Building, Calculator, MapPin } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -56,7 +56,7 @@ export default function AboutPayVAT() {
               <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Founded by Irish entrepreneurs.
+                  Ireland's complete business resource - founded by Irish entrepreneurs.
                 </div>
                 
                 <div className="icon-premium mb-3 mx-auto">
@@ -64,16 +64,16 @@ export default function AboutPayVAT() {
                 </div>
                 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
-                  <span className="text-gradient-primary">Putting Control Back</span>
+                  <span className="text-gradient-primary">Complete Business</span>
                   <br />
-                  <span className="text-foreground">In Your Hands</span>
+                  <span className="text-foreground">Guidance & Control</span>
                 </h1>
                 
                 <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  PayVAT is an Irish fintech company on a mission to simplify VAT submissions for every business. 
-                  <span className="text-primary font-semibold">No more costly middlemen.</span>
+                  PayVAT is Ireland's comprehensive business guidance platform - from startup to compliance, we empower Irish entrepreneurs. 
+                  <span className="text-primary font-semibold">Everything you need, all in one place.</span>
                 </p>
               </div>
               
@@ -89,7 +89,7 @@ export default function AboutPayVAT() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-success" />
-                  <span> Trusted by Irish businesses</span>
+                  <span>40+ comprehensive guides</span>
                 </div>
               </div>
             </div>
@@ -120,10 +120,10 @@ export default function AboutPayVAT() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  PayVAT is an Irish company on a mission to put control of VAT submissions and payments back in the hands of Irish businesses. Founded by Irish and technologists, we grew frustrated watching small and medium-sized enterprises (SMEs) pay exorbitant fees to solicitors or third-party accountants, simply to file their VAT returns.
+                  PayVAT is an Irish company that grew from a simple mission: empower every Irish business with the knowledge and tools needed to succeed. Founded by Irish entrepreneurs and technologists, we started by solving VAT submission pain points, but quickly realized businesses needed much more.
                 </p>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  The old way is costly, slow, and opaque—so we built a better solution.
+                  Today, we're Ireland's most comprehensive business guidance platform - covering everything from initial business setup to ongoing compliance, with specialized expertise for every industry and business type.
                 </p>
                 
                 <div className="flex items-center gap-4 p-6 card-modern hover-scale">
@@ -131,8 +131,8 @@ export default function AboutPayVAT() {
                     <Award className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-1">Founded by Experts</h3>
-                    <p className="text-sm text-muted-foreground"> Irish entrepreneurs with a decade of experience</p>
+                    <h3 className="font-semibold text-foreground mb-1">Complete Business Expertise</h3>
+                    <p className="text-sm text-muted-foreground">Irish entrepreneurs with deep startup & compliance knowledge</p>
                   </div>
                 </div>
               </div>
@@ -143,16 +143,16 @@ export default function AboutPayVAT() {
                   <div className="text-sm text-muted-foreground">Monthly cost vs €500+ traditional</div>
                 </div>
                 <div className="text-center p-6 card-modern hover-scale">
-                  <div className="text-3xl font-bold text-primary mb-2">10k+</div>
-                  <div className="text-sm text-muted-foreground">Irish businesses trust us</div>
+                  <div className="text-3xl font-bold text-primary mb-2">40+</div>
+                  <div className="text-sm text-muted-foreground">Comprehensive business guides</div>
                 </div>
                 <div className="text-center p-6 card-modern hover-scale">
                   <div className="text-3xl font-bold text-primary mb-2">2019</div>
                   <div className="text-sm text-muted-foreground">Founded & works with ROS</div>
                 </div>
                 <div className="text-center p-6 card-modern hover-scale">
-                  <div className="text-3xl font-bold text-primary mb-2">95%</div>
-                  <div className="text-sm text-muted-foreground">Time saved vs manual process</div>
+                  <div className="text-3xl font-bold text-primary mb-2">100%</div>
+                  <div className="text-sm text-muted-foreground">Irish business focused</div>
                 </div>
               </div>
             </div>
@@ -174,7 +174,7 @@ export default function AboutPayVAT() {
             
             <div className="max-w-4xl mx-auto text-center">
               <p className="text-xl text-muted-foreground leading-relaxed mb-2">
-                We believe every Irish business, from startups to established SMEs, deserves an intuitive, secure, and affordable way to manage VAT. No more delays, no hidden fees, no hand-holding—just a streamlined platform that lets you submit and pay your VAT in minutes.
+                We believe every Irish business, from day-one startups to established SMEs, deserves comprehensive guidance and tools to succeed. From business setup to ongoing compliance - no more scattered resources, no costly consultants for basic questions, just everything you need in one trusted platform.
               </p>
               
               <div className="grid md:grid-cols-3 gap-8 mt-12">
@@ -182,25 +182,81 @@ export default function AboutPayVAT() {
                   <div className="icon-modern bg-blue-500 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
                     <Clock className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-1">Speed</h3>
-                  <p className="text-sm text-muted-foreground">Submit VAT returns in minutes, not hours</p>
+                  <h3 className="font-semibold text-foreground mb-1">Comprehensive</h3>
+                  <p className="text-sm text-muted-foreground">Everything from business setup to compliance</p>
                 </div>
                 
                 <div className="card-modern p-6 hover-lift group">
                   <div className="icon-modern bg-green-500 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
                     <Shield className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-1">Security</h3>
-                  <p className="text-sm text-muted-foreground">Secure encryption and compliance</p>
+                  <h3 className="font-semibold text-foreground mb-1">Irish-Focused</h3>
+                  <p className="text-sm text-muted-foreground">Built specifically for Irish businesses</p>
                 </div>
                 
                 <div className="card-modern p-6 hover-lift group">
                   <div className="icon-modern bg-purple-500 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
                     <Euro className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-1">Affordability</h3>
-                  <p className="text-sm text-muted-foreground">Transparent pricing with no hidden costs</p>
+                  <h3 className="font-semibold text-foreground mb-1">Expert Guidance</h3>
+                  <p className="text-sm text-muted-foreground">Professional advice at every step</p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Content Library Section */}
+        <section className="py-20" data-animate>
+          <div className="card-modern p-12 mb-2 hover-lift">
+            <div className="text-center mb-2">
+              <div className="icon-modern bg-primary mb-3 mx-auto">
+                <FileText className="h-10 w-10 text-white" />
+              </div>
+              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+                Ireland's Most <span className="text-gradient-primary">Comprehensive Business Library</span>
+              </h2>
+              <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                40+ expert guides covering every aspect of Irish business - from your first idea to ongoing compliance
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+              <div className="card-modern p-6 hover-lift group">
+                <div className="icon-modern bg-blue-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Building className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Business Setup</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">Complete guides for registration, structures, and legal requirements</p>
+                <div className="text-xs text-blue-600 font-medium">12+ Guides</div>
+              </div>
+
+              <div className="card-modern p-6 hover-lift group">
+                <div className="icon-modern bg-green-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Calculator className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">VAT & Tax</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">Expert VAT guidance, tools, and compliance resources</p>
+                <div className="text-xs text-green-600 font-medium">15+ Resources</div>
+              </div>
+
+              <div className="card-modern p-6 hover-lift group">
+                <div className="icon-modern bg-purple-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Users className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Industry-Specific</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">Specialized guidance for freelancers, construction, e-commerce, and more</p>
+                <div className="text-xs text-purple-600 font-medium">10+ Industries</div>
+              </div>
+
+              <div className="card-modern p-6 hover-lift group">
+                <div className="icon-modern bg-orange-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <MapPin className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Location Guides</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">City-specific registration and setup guides across Ireland</p>
+                <div className="text-xs text-orange-600 font-medium">Major Cities</div>
               </div>
             </div>
           </div>

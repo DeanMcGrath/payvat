@@ -32,7 +32,7 @@ export default function Footer() {
         <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* Column 1 - Company & Services */}
             <div className="animate-fade-in">
               <h4 className="text-xl font-bold text-white mb-2">Company & Services</h4>
@@ -76,9 +76,52 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Column 2 - VAT Resources */}
+            {/* Column 2 - Business Setup */}
             <div className="animate-fade-in" style={{animationDelay: '0.2s'}}>
-              <h4 className="text-xl font-bold text-white mb-2">VAT Resources</h4>
+              <h4 className="text-xl font-bold text-white mb-2">Business Setup</h4>
+              <ul className="space-y-4">
+                <li>
+                  <Link 
+                    href="/complete-business-setup-guide-ireland" 
+                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    Complete Business Setup Guide
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/start-a-business-ireland" 
+                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    Start a Business Ireland
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/company-vs-sole-trader-ireland" 
+                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    Company vs Sole Trader
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/dublin-business-registration" 
+                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    Dublin Business Registration
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Column 3 - VAT & Tax */}
+            <div className="animate-fade-in" style={{animationDelay: '0.4s'}}>
+              <h4 className="text-xl font-bold text-white mb-2">VAT & Tax</h4>
               <ul className="space-y-4">
                 <li>
                   <Link 
@@ -86,25 +129,70 @@ export default function Footer() {
                     className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Everything You Need to Know About VAT in Ireland
+                    Everything About VAT in Ireland
                   </Link>
                 </li>
                 <li>
                   <Link 
-                    href="/vat-registration" 
+                    href="/how-to-register-for-vat-ireland" 
                     className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    How to Apply for a VAT Number
+                    How to Register for VAT
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/vat-calculator-ireland" 
+                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    VAT Calculator Ireland
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/freelancer-vat-ireland" 
+                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    Freelancer VAT Ireland
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Column 3 - Legal & Compliance */}
-            <div className="animate-fade-in" style={{animationDelay: '0.4s'}}>
-              <h4 className="text-xl font-bold text-white mb-2">Legal & Compliance</h4>
+            {/* Column 4 - Industry & Tools */}
+            <div className="animate-fade-in" style={{animationDelay: '0.6s'}}>
+              <h4 className="text-xl font-bold text-white mb-2">Industry & Tools</h4>
               <ul className="space-y-4">
+                <li>
+                  <Link 
+                    href="/construction-vat-ireland" 
+                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    Construction VAT Ireland
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/ecommerce-vat-ireland" 
+                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    E-commerce VAT Ireland
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    href="/accountant-fees-vs-payvat-savings" 
+                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    PayVat vs Accountant Fees
+                  </Link>
+                </li>
                 <li>
                   <Link 
                     href="/privacy" 
@@ -112,15 +200,6 @@ export default function Footer() {
                   >
                     <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    href="/terms" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Terms of Service
                   </Link>
                 </li>
               </ul>
@@ -135,7 +214,7 @@ export default function Footer() {
                 © 2024 PayVAT. All rights reserved.
               </p>
               <div className="flex items-center space-x-4">
-                <span className="text-teal-100 text-center sm:text-right font-medium">Irish VAT compliance made simple</span>
+                <span className="text-teal-100 text-center sm:text-right font-medium">Ireland's complete business guidance platform</span>
               </div>
             </div>
           </div>

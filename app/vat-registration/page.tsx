@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock, ArrowRight, Download, Euro, Building, Mail, Phone, Loader2, AlertCircle as AlertCircleIcon, Shield, UserCheck } from 'lucide-react'
+import { BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock, ArrowRight, Download, Euro, Building, Mail, Phone, Loader2, AlertCircle as AlertCircleIcon, Shield, UserCheck, Globe, Home } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -84,7 +84,7 @@ export default function VATRegistrationPage() {
               <div className="mb-2">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Expert registration guidance
+                  Complete business setup + VAT registration guidance
                 </div>
                 
                 <div className="icon-premium mb-3 mx-auto">
@@ -100,8 +100,8 @@ export default function VATRegistrationPage() {
                 <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Complete step-by-step guide for new businesses to register for VAT in Ireland. 
-                  <span className="text-primary font-semibold">Revenue compliant and up-to-date.</span>
+                  Complete step-by-step guide for new businesses to register for VAT in Ireland, with comprehensive business setup context. 
+                  <span className="text-primary font-semibold">Revenue compliant, up-to-date, and business-focused.</span>
                 </p>
               </div>
               
@@ -131,6 +131,64 @@ export default function VATRegistrationPage() {
       </section>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
+
+        {/* Business Setup Context */}
+        <div className="mb-8">
+          <div className="card-premium p-8 mb-4">
+            <div className="text-center mb-6">
+              <div className="icon-premium mb-3 mx-auto">
+                <Building className="h-10 w-10 text-white" />
+              </div>
+              <h2 className="text-2xl lg:text-3xl font-bold text-foreground mb-2">
+                Complete Your <span className="text-gradient-primary">Business Setup First</span>
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Before applying for VAT registration, ensure your business structure and basic registrations are complete
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="card-modern p-6 hover-lift group">
+                <div className="icon-modern bg-blue-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <FileText className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Business Structure</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">Choose between sole trader, partnership, or limited company</p>
+                <a href="/company-vs-sole-trader-ireland" className="text-xs text-blue-600 font-medium hover:text-blue-700">Compare structures →</a>
+              </div>
+
+              <div className="card-modern p-6 hover-lift group">
+                <div className="icon-modern bg-green-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <UserCheck className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Business Registration</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">Register your business name and get required permits</p>
+                <a href="/complete-business-setup-guide-ireland" className="text-xs text-green-600 font-medium hover:text-green-700">Setup guide →</a>
+              </div>
+
+              <div className="card-modern p-6 hover-lift group">
+                <div className="icon-modern bg-purple-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Calculator className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Tax Registration</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">Get your PPS/TRN number and basic tax setup</p>
+                <a href="/start-a-business-ireland" className="text-xs text-purple-600 font-medium hover:text-purple-700">Business startup →</a>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="flex items-center gap-3">
+                <AlertTriangle className="h-5 w-5 text-yellow-600 flex-shrink-0" />
+                <div>
+                  <p className="text-yellow-800 font-medium">Important Note</p>
+                  <p className="text-yellow-700 text-sm mt-1">
+                    For companies: Complete your Corporation Tax registration first to get your TRN (Tax Registration Number) - you'll need this for VAT registration.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Step 1: Determine if You Need to Register */}
         <Card className="card-modern hover-lift mb-2" id="step-1">
@@ -639,6 +697,60 @@ export default function VATRegistrationPage() {
                 </h4>
                 <p className="text-red-700 text-sm">If your business ceases trading, falls below thresholds, or no longer requires a VAT number, notify Revenue promptly. <a href="https://www.revenue.ie/en/vat/registering-for-vat/cancelling-vat-registration.aspx" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-700 underline">Cancel VAT Registration</a></p>
                 <p className="text-red-700 text-sm mt-2">Note that cancellation may result in repaying excess VAT refunds.</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Industry-Specific Considerations */}
+        <Card className="card-modern hover-lift mb-4">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
+              <Users className="h-5 w-5 text-teal-500 mr-2" />
+              Industry-Specific VAT Registration Considerations
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-4">Different industries have specific VAT requirements and considerations in Ireland.</p>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Building className="h-5 w-5 text-teal-600" />
+                    <span className="font-medium text-gray-800">Construction</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">Must register for RCT and VAT, special reverse charge provisions apply</p>
+                  <a href="/construction-vat-ireland" className="text-xs text-teal-600 font-medium hover:text-teal-700">Construction VAT guide →</a>
+                </div>
+                
+                <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Globe className="h-5 w-5 text-teal-600" />
+                    <span className="font-medium text-gray-800">E-commerce</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">Distance selling rules, OSS registration for EU sales</p>
+                  <a href="/ecommerce-vat-ireland" className="text-xs text-teal-600 font-medium hover:text-teal-700">E-commerce VAT guide →</a>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Users className="h-5 w-5 text-teal-600" />
+                    <span className="font-medium text-gray-800">Freelancers</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">Service thresholds, professional service considerations</p>
+                  <a href="/freelancer-vat-ireland" className="text-xs text-teal-600 font-medium hover:text-teal-700">Freelancer VAT guide →</a>
+                </div>
+                
+                <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Home className="h-5 w-5 text-teal-600" />
+                    <span className="font-medium text-gray-800">Property</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">Rental property exemptions, development considerations</p>
+                  <a href="/property-rental-vat-ireland" className="text-xs text-teal-600 font-medium hover:text-teal-700">Property VAT guide →</a>
+                </div>
               </div>
             </div>
           </CardContent>
