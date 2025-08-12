@@ -1673,7 +1673,14 @@ export async function processDocument(
               isScanned: true,
               scanResult: `AI processed document successfully: ${aiResult.scanResult}`,
               extractedData: convertToLegacyFormat(aiResult.extractedData),
-              error: undefined
+              error: undefined,
+              processingSteps: [{
+                step: 'Enhanced AI Processing',
+                success: true,
+                duration: 2000,
+                details: 'Successfully processed with enhanced AI engine'
+              }],
+              qualityScore: aiResult.extractedData.confidence || 85
             }
           } else {
             console.log('⚠️ AI PROCESSING FAILED:')
@@ -1738,8 +1745,20 @@ export async function processDocument(
         vatRate: undefined,
         confidence: 0.1, // Low confidence due to processing failure
         extractedText: [`Processing failed: ${errorMessage}`],
-        documentType: 'OTHER'
-      }
+        documentType: 'OTHER',
+        processingMethod: 'FALLBACK',
+        processingTimeMs: processingTime,
+        validationFlags: ['PROCESSING_FAILED', 'REQUIRES_MANUAL_REVIEW'],
+        irishVATCompliant: false
+      },
+      processingSteps: [{
+        step: 'Error Fallback',
+        success: false,
+        duration: processingTime,
+        details: `Processing failed: ${errorMessage}`,
+        error: errorMessage
+      }],
+      qualityScore: 10
     }
   }
 }
@@ -1757,7 +1776,11 @@ function convertToLegacyFormat(enhancedData: any): ExtractedVATData | undefined 
     vatRate: enhancedData.vatRate,
     confidence: enhancedData.confidence || 0,
     extractedText: [enhancedData.extractedText || ''],
-    documentType: mapDocumentType(enhancedData.documentType)
+    documentType: mapDocumentType(enhancedData.documentType),
+    processingMethod: 'AI_VISION',
+    processingTimeMs: 2000,
+    validationFlags: ['LEGACY_FORMAT_CONVERSION'],
+    irishVATCompliant: enhancedData.irishVATCompliant || false
   }
 }
 
