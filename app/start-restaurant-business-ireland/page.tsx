@@ -223,7 +223,7 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Fire Safety Certificate</h4>
-                      <p className="text-gray-600">Building Control Authority certificate required for >30 occupancy</p>
+                      <p className="text-gray-600">Building Control Authority certificate required for &gt;30 occupancy</p>
                     </div>
                   </div>
                 </div>

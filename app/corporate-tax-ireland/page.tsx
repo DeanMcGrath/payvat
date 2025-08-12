@@ -257,7 +257,7 @@ export default function CorporateTaxIreland() {
                   </div>
                   
                   <div className="bg-red-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-red-900 mb-2">Large Companies (Turnover >€3m)</h4>
+                    <h4 className="font-semibold text-red-900 mb-2">Large Companies (Turnover &gt;€3m)</h4>
                     <ul className="text-red-800 text-sm space-y-1">
                       <li>• Pay in full 6 months after year end</li>
                       <li>• Preliminary tax due in month 6</li>

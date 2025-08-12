@@ -198,9 +198,9 @@ export default function ConstructionVatIreland() {
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-3">Two-Third Rule Application</h4>
                   <ul className="space-y-2 text-gray-700 text-sm">
-                    <li>• If services >2/3 of total: Apply 13.5% to entire supply</li>
-                    <li>• If materials >2/3 of total: Apply 23% to entire supply</li>
-                    <li>• If neither >2/3: Split and apply appropriate rates</li>
+                    <li>• If services &gt;2/3 of total: Apply 13.5% to entire supply</li>
+                    <li>• If materials &gt;2/3 of total: Apply 23% to entire supply</li>
+                    <li>• If neither &gt;2/3: Split and apply appropriate rates</li>
                     <li>• Must keep detailed records of breakdown</li>
                   </ul>
                 </div>
