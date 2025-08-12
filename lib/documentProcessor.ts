@@ -2395,6 +2395,9 @@ async function processWithAIVision(
   
   return {
     ...result.extractedData,
+    extractedText: Array.isArray(result.extractedData.extractedText) 
+      ? result.extractedData.extractedText 
+      : [result.extractedData.extractedText || ''],
     processingMethod: 'AI_VISION',
     processingTimeMs: 0, // Will be set by caller
     validationFlags: [],
