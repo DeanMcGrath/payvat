@@ -122,23 +122,23 @@ export default function BusinessStructureComparison() {
               
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">{structures[selectedStructure].name} Overview</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-6">{structures[selectedStructure as keyof typeof structures].name} Overview</h3>
                   <div className="space-y-4">
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="font-semibold text-gray-900 mb-2">Setup Complexity</h4>
-                      <p className="text-gray-700">{structures[selectedStructure].setup}</p>
+                      <p className="text-gray-700">{structures[selectedStructure as keyof typeof structures].setup}</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="font-semibold text-gray-900 mb-2">Liability</h4>
-                      <p className="text-gray-700">{structures[selectedStructure].liability}</p>
+                      <p className="text-gray-700">{structures[selectedStructure as keyof typeof structures].liability}</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="font-semibold text-gray-900 mb-2">Tax Rate</h4>
-                      <p className="text-gray-700">{structures[selectedStructure].tax}</p>
+                      <p className="text-gray-700">{structures[selectedStructure as keyof typeof structures].tax}</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <h4 className="font-semibold text-gray-900 mb-2">Setup Cost</h4>
-                      <p className="text-gray-700">{structures[selectedStructure].cost}</p>
+                      <p className="text-gray-700">{structures[selectedStructure as keyof typeof structures].cost}</p>
                     </div>
                   </div>
                 </div>
@@ -149,7 +149,7 @@ export default function BusinessStructureComparison() {
                     <div>
                       <h4 className="font-semibold text-green-900 mb-3">Advantages</h4>
                       <ul className="space-y-2">
-                        {structures[selectedStructure].advantages.map((advantage, index) => (
+                        {structures[selectedStructure as keyof typeof structures].advantages.map((advantage, index) => (
                           <li key={index} className="flex items-start space-x-2">
                             <span className="text-green-500 mt-1">✓</span>
                             <span className="text-green-800">{advantage}</span>
@@ -161,7 +161,7 @@ export default function BusinessStructureComparison() {
                     <div>
                       <h4 className="font-semibold text-red-900 mb-3">Disadvantages</h4>
                       <ul className="space-y-2">
-                        {structures[selectedStructure].disadvantages.map((disadvantage, index) => (
+                        {structures[selectedStructure as keyof typeof structures].disadvantages.map((disadvantage, index) => (
                           <li key={index} className="flex items-start space-x-2">
                             <span className="text-red-500 mt-1">×</span>
                             <span className="text-red-800">{disadvantage}</span>
