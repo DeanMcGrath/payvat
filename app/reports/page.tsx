@@ -176,18 +176,16 @@ export default function ReportsPage() {
   if (error) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card className="w-full max-w-md card-modern">
-          <CardContent className="p-8 text-center">
-            <h2 className="text-xl font-bold text-foreground mb-2">Error Loading Reports</h2>
-            <p className="text-muted-foreground mb-2">{error}</p>
-            <Button 
-              onClick={() => window.location.reload()}
-              className="btn-primary"
-            >
-              Try Again
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="error-card max-w-md mx-auto">
+          <h2 className="text-xl font-bold text-foreground mb-2">Error Loading Reports</h2>
+          <p className="text-muted-foreground mb-4">{error}</p>
+          <Button 
+            onClick={() => window.location.reload()}
+            className="btn-primary hover-lift"
+          >
+            Try Again
+          </Button>
+        </div>
       </div>
     )
   }
@@ -605,29 +603,8 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      {/* Live Chat */}
-
-      {/* Main Footer */}
-      <footer className="bg-teal-700 text-white">
-        {/* Navigation Bar */}
-        <div className="bg-teal-600 py-4">
-          <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <Link href="/dashboard" className="text-white hover:text-teal-200 underline">
-              Back to Dashboard
-            </Link>
-            <a href="#top" className="text-white hover:text-teal-200 underline flex items-center space-x-1">
-              <ArrowUp className="h-4 w-4" />
-              <span>Back to top</span>
-            </a>
-          </div>
-        </div>
-        {/* Copyright */}
-        <div className="bg-teal-800 py-4">
-          <div className="max-w-7xl mx-auto px-6 text-center">
-            <p className="text-sm font-thin">© PayVAT</p>
-          </div>
-        </div>
-      </footer>
+      
+      <Footer />
     </div>
   )
 }

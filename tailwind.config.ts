@@ -130,6 +130,15 @@ const config: Config = {
         'premium-hover': 'var(--shadow-premium-hover)',
         'dramatic': 'var(--shadow-dramatic)',
       },
+
+      // Enhanced spacing for consistent layouts
+      spacing: {
+        '18': '4.5rem',
+        '88': '22rem',
+        '100': '25rem',
+        '112': '28rem',
+        '128': '32rem',
+      },
       
       // Custom utilities for modern fintech design
       backdropBlur: {

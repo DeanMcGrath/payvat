@@ -56,7 +56,7 @@ export default function PricingPage() {
               <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Trusted by 10,000+ Irish businesses
+                  Trusted by Irish businesses
                 </div>
                 
                 <div className="icon-premium mb-3 mx-auto">

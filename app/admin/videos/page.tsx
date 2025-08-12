@@ -13,6 +13,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Progress } from '@/components/ui/progress'
 import { VideoAnalytics } from '@/components/video-analytics'
+import SiteHeader from '@/components/site-header'
+import Footer from '@/components/footer'
 import { 
   Upload, 
   Video, 
@@ -259,9 +261,12 @@ function AdminVideosContent() {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="page-container">
+        <div className="content-wrapper section-spacing">
+          <div className="flex items-center justify-center h-64">
+            <div className="loading-spinner"></div>
+            <span className="ml-3 text-muted-foreground">Loading videos...</span>
+          </div>
         </div>
       </div>
     )
@@ -269,33 +274,53 @@ function AdminVideosContent() {
 
   if (error) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Error Loading Videos</h2>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <Button onClick={fetchVideos}>Try Again</Button>
+      <div className="page-container">
+        <div className="content-wrapper section-spacing">
+          <div className="error-card">
+            <AlertCircle className="error-icon" />
+            <h2 className="text-xl font-semibold mb-2 text-foreground">Error Loading Videos</h2>
+            <p className="text-muted-foreground mb-4">{error}</p>
+            <Button onClick={fetchVideos} className="btn-primary">Try Again</Button>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Demo Videos</h1>
-          <p className="text-gray-600">Manage PayVAT demo videos and analytics</p>
+    <div className="page-container">
+      <SiteHeader 
+        searchPlaceholder="Search admin tools..."
+        currentPage="Admin Panel"
+        pageSubtitle="Video management system"
+      />
+      
+      <div className="content-wrapper">
+      {/* Modern Header Section */}
+      <section className="section-spacing">
+        <div className="text-center mb-12">
+          <div className="icon-premium mb-4 mx-auto">
+            <Video className="h-12 w-12 text-white" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-3">
+            <span className="text-gradient-primary">Demo Videos</span>
+            <br />
+            <span className="text-foreground">Management</span>
+          </h1>
+          <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Manage PayVAT demo videos and analytics with professional tools
+          </p>
         </div>
         
-        <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-700">
-              <Plus className="h-4 w-4 mr-2" />
-              Upload Video
-            </Button>
-          </DialogTrigger>
+        <div className="flex justify-center mb-8">
+          <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="btn-primary px-8 py-4 text-lg font-semibold hover-lift">
+                <Plus className="h-5 w-5 mr-2" />
+                Upload Video
+              </Button>
+            </DialogTrigger>
           <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle>Upload Demo Video</DialogTitle>
@@ -371,28 +396,29 @@ function AdminVideosContent() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </div>
+        </div>
+      </section>
 
       {/* Videos Grid */}
+      <section className="section-spacing-sm">
       {videos.length === 0 ? (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Video className="h-12 w-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Videos Yet</h3>
-            <p className="text-gray-600 text-center mb-4 max-w-md">
-              Upload your first demo video to get started. This video will be displayed on the PayVAT homepage.
-            </p>
-            <Button onClick={() => setUploadDialogOpen(true)}>
-              <Upload className="h-4 w-4 mr-2" />
-              Upload First Video
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="card-premium p-12 text-center">
+          <div className="icon-premium mb-6 mx-auto opacity-50">
+            <Video className="h-12 w-12 text-white" />
+          </div>
+          <h3 className="text-2xl font-semibold text-foreground mb-3">No Videos Yet</h3>
+          <p className="text-muted-foreground text-center mb-6 max-w-md mx-auto leading-relaxed">
+            Upload your first demo video to get started. This video will be displayed on the PayVAT homepage.
+          </p>
+          <Button onClick={() => setUploadDialogOpen(true)} className="btn-primary hover-lift">
+            <Upload className="h-5 w-5 mr-2" />
+            Upload First Video
+          </Button>
+        </div>
       ) : (
-        <div className="grid gap-6">
+        <div className="grid gap-8">
           {videos.map((video) => (
-            <Card key={video.id}>
-              <CardContent className="p-6">
+            <div key={video.id} className="card-premium p-8 hover-lift transition-all duration-300">
                 <div className="flex items-start space-x-4">
                   {/* Video Thumbnail/Preview */}
                   <div className="flex-shrink-0">
@@ -424,16 +450,12 @@ function AdminVideosContent() {
                       </div>
                       
                       <div className="flex items-center space-x-2 ml-4">
-                        <Badge
-                          variant={video.isActive ? "default" : "secondary"}
-                        >
+                        <div className={video.isActive ? 'status-success' : 'status-warning'}>
                           {video.isActive ? 'Active' : 'Inactive'}
-                        </Badge>
-                        <Badge
-                          variant={video.status === 'READY' ? "default" : "secondary"}
-                        >
+                        </div>
+                        <div className={video.status === 'READY' ? 'status-success' : 'status-info'}>
                           {video.status}
-                        </Badge>
+                        </div>
                       </div>
                     </div>
 
@@ -469,6 +491,7 @@ function AdminVideosContent() {
                           variant="outline"
                           size="sm"
                           onClick={() => window.open(video.videoUrl, '_blank')}
+                          className="hover-scale"
                         >
                           <Play className="h-4 w-4 mr-1" />
                           Preview
@@ -477,6 +500,7 @@ function AdminVideosContent() {
                           variant="outline"
                           size="sm"
                           onClick={() => setSelectedVideoForAnalytics(video.id)}
+                          className="hover-scale"
                         >
                           <BarChart3 className="h-4 w-4 mr-1" />
                           Analytics
@@ -485,6 +509,7 @@ function AdminVideosContent() {
                           variant="outline"
                           size="sm"
                           onClick={() => {/* TODO: Implement edit functionality */}}
+                          className="hover-scale"
                         >
                           <Edit className="h-4 w-4 mr-1" />
                           Edit
@@ -493,7 +518,7 @@ function AdminVideosContent() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteVideo(video.id)}
-                          className="text-red-600 hover:text-red-700"
+                          className="text-red-600 hover:text-red-700 hover-scale"
                         >
                           <Trash2 className="h-4 w-4 mr-1" />
                           Delete
@@ -502,11 +527,11 @@ function AdminVideosContent() {
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+            </div>
           ))}
         </div>
       )}
+      </section>
 
       {/* Analytics Modal */}
       {selectedVideoForAnalytics && (
@@ -531,6 +556,9 @@ function AdminVideosContent() {
           </DialogContent>
         </Dialog>
       )}
+    </div>
+    
+    <Footer />
     </div>
   )
 }

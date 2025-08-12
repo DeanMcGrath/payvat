@@ -22,6 +22,8 @@ import {
   Video
 } from 'lucide-react'
 import Link from 'next/link'
+import SiteHeader from '@/components/site-header'
+import Footer from '@/components/footer'
 
 interface AnalyticsData {
   overview: {
@@ -137,9 +139,17 @@ function AdminDashboardContent() {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="page-container">
+        <SiteHeader 
+          searchPlaceholder="Search admin tools..."
+          currentPage="Admin Dashboard"
+          pageSubtitle="System overview and analytics"
+        />
+        <div className="content-wrapper section-spacing">
+          <div className="flex items-center justify-center h-64">
+            <div className="loading-spinner"></div>
+            <span className="ml-3 text-muted-foreground">Loading dashboard...</span>
+          </div>
         </div>
       </div>
     )
@@ -147,18 +157,25 @@ function AdminDashboardContent() {
 
   if (error) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Error Loading Admin Dashboard</h2>
-          <p className="text-gray-600 mb-4 max-w-md mx-auto">{error}</p>
-          <div className="flex justify-center space-x-3">
-            <Button onClick={fetchAnalytics} disabled={loading}>
-              {loading ? 'Retrying...' : 'Try Again'}
-            </Button>
-            <Button variant="outline" onClick={() => window.location.href = '/admin-setup'}>
-              Admin Setup
-            </Button>
+      <div className="page-container">
+        <SiteHeader 
+          searchPlaceholder="Search admin tools..."
+          currentPage="Admin Dashboard"
+          pageSubtitle="System overview and analytics"
+        />
+        <div className="content-wrapper section-spacing">
+          <div className="error-card">
+            <AlertCircle className="error-icon" />
+            <h2 className="text-xl font-semibold mb-2 text-foreground">Error Loading Admin Dashboard</h2>
+            <p className="text-muted-foreground mb-4 max-w-md mx-auto">{error}</p>
+            <div className="flex justify-center space-x-3">
+              <Button onClick={fetchAnalytics} disabled={loading} className="btn-primary">
+                {loading ? 'Retrying...' : 'Try Again'}
+              </Button>
+              <Button variant="outline" onClick={() => window.location.href = '/admin-setup'} className="hover-scale">
+                Admin Setup
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -167,19 +184,28 @@ function AdminDashboardContent() {
 
   if (!analytics) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">No Data Available</h2>
-          <p className="text-gray-600 mb-4">Analytics data is not available. This could be because:</p>
-          <ul className="text-sm text-gray-500 mb-4 text-left max-w-md mx-auto">
-            <li>• No users have registered yet</li>
-            <li>• Database is empty</li>
-            <li>• Admin permissions not configured</li>
-          </ul>
-          <Button onClick={fetchAnalytics} disabled={loading}>
-            {loading ? 'Refreshing...' : 'Refresh Data'}
-          </Button>
+      <div className="page-container">
+        <SiteHeader 
+          searchPlaceholder="Search admin tools..."
+          currentPage="Admin Dashboard"
+          pageSubtitle="System overview and analytics"
+        />
+        <div className="content-wrapper section-spacing">
+          <div className="card-premium p-12 text-center">
+            <div className="icon-premium mb-6 mx-auto opacity-50">
+              <AlertCircle className="h-12 w-12 text-white" />
+            </div>
+            <h2 className="text-2xl font-semibold mb-3 text-foreground">No Data Available</h2>
+            <p className="text-muted-foreground mb-4">Analytics data is not available. This could be because:</p>
+            <ul className="text-sm text-muted-foreground mb-6 text-left max-w-md mx-auto space-y-2">
+              <li>• No users have registered yet</li>
+              <li>• Database is empty</li>
+              <li>• Admin permissions not configured</li>
+            </ul>
+            <Button onClick={fetchAnalytics} disabled={loading} className="btn-primary hover-lift">
+              {loading ? 'Refreshing...' : 'Refresh Data'}
+            </Button>
+          </div>
         </div>
       </div>
     )
@@ -225,91 +251,118 @@ function AdminDashboardContent() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600">System overview and analytics</p>
+    <div className="page-container">
+      <SiteHeader 
+        searchPlaceholder="Search admin tools..."
+        currentPage="Admin Dashboard"
+        pageSubtitle="System overview and analytics"
+      />
+      
+      <div className="content-wrapper">
+      {/* Modern Header Section */}
+      <section className="section-spacing">
+        <div className="text-center mb-12">
+          <div className="icon-premium mb-4 mx-auto">
+            <BarChart3 className="h-12 w-12 text-white" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-3">
+            <span className="text-gradient-primary">Admin Dashboard</span>
+            <br />
+            <span className="text-foreground">System Analytics</span>
+          </h1>
+          <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            PayVAT system overview and analytics for monitoring platform performance
+          </p>
         </div>
-        <div className="flex space-x-4">
+        
+        {/* Quick Action Buttons */}
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
           <Link href="/admin/users">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" className="hover-scale">
               <Users className="h-4 w-4 mr-2" />
               Manage Users
             </Button>
           </Link>
           <Link href="/admin/chat">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" className="hover-scale">
               <MessageCircle className="h-4 w-4 mr-2" />
               Live Chat
             </Button>
           </Link>
+          <Link href="/admin/videos">
+            <Button variant="outline" className="hover-scale">
+              <Video className="h-4 w-4 mr-2" />
+              Videos
+            </Button>
+          </Link>
           <Link href="/admin/analytics">
-            <Button variant="outline" size="sm">
+            <Button className="btn-primary hover-lift">
               <BarChart3 className="h-4 w-4 mr-2" />
               Full Analytics
             </Button>
           </Link>
         </div>
-      </div>
+      </section>
 
       {/* Key Metrics Cards */}
+      <section className="section-spacing-sm">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analytics.overview.totalUsers}</div>
-            <p className="text-xs text-muted-foreground">
-              {analytics.overview.activeUsers} active (30 days)
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">VAT Returns</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analytics.overview.totalVATReturns}</div>
-            <p className="text-xs text-muted-foreground">
-              +{analytics.overview.recentActivity.newReturns} this month
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Payments</CardTitle>
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{analytics.overview.totalPayments}</div>
-            <p className="text-xs text-muted-foreground">
-              +{analytics.overview.recentActivity.newPayments} this month
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Payment Volume</CardTitle>
-            <Euro className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {formatCurrency(analytics.overview.totalPaymentVolume)}
+        <div className="admin-stat-card hover-lift">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-sm font-medium text-muted-foreground">Total Users</h3>
+            <div className="icon-modern gradient-primary">
+              <Users className="h-4 w-4 text-white" />
             </div>
-            <p className="text-xs text-muted-foreground">
-              Total processed
-            </p>
-          </CardContent>
-        </Card>
+          </div>
+          <div className="text-2xl font-bold text-foreground">{analytics.overview.totalUsers}</div>
+          <p className="text-xs text-muted-foreground mt-1">
+            {analytics.overview.activeUsers} active (30 days)
+          </p>
+        </div>
+
+        <div className="admin-stat-card hover-lift">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-sm font-medium text-muted-foreground">VAT Returns</h3>
+            <div className="icon-modern bg-gradient-to-br from-blue-500 to-indigo-600">
+              <FileText className="h-4 w-4 text-white" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-foreground">{analytics.overview.totalVATReturns}</div>
+          <p className="text-xs text-success mt-1">
+            +{analytics.overview.recentActivity.newReturns} this month
+          </p>
+        </div>
+
+        <div className="admin-stat-card hover-lift">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-sm font-medium text-muted-foreground">Total Payments</h3>
+            <div className="icon-modern bg-gradient-to-br from-green-500 to-emerald-600">
+              <CreditCard className="h-4 w-4 text-white" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-foreground">{analytics.overview.totalPayments}</div>
+          <p className="text-xs text-success mt-1">
+            +{analytics.overview.recentActivity.newPayments} this month
+          </p>
+        </div>
+
+        <div className="admin-stat-card hover-lift">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-sm font-medium text-muted-foreground">Payment Volume</h3>
+            <div className="icon-modern bg-gradient-to-br from-purple-500 to-pink-600">
+              <Euro className="h-4 w-4 text-white" />
+            </div>
+          </div>
+          <div className="text-2xl font-bold text-foreground">
+            {formatCurrency(analytics.overview.totalPaymentVolume)}
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">
+            Total processed
+          </p>
+        </div>
       </div>
+      </section>
 
       {/* Tabs for Different Views */}
       <Tabs defaultValue="overview" className="space-y-4">
@@ -503,6 +556,9 @@ function AdminDashboardContent() {
           </div>
         </CardContent>
       </Card>
+    </div>
+    
+    <Footer />
     </div>
   )
 }
