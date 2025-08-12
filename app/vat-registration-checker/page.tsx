@@ -4,11 +4,21 @@ import { useState, useEffect } from 'react'
 import SiteHeader from '../../components/site-header'
 import Footer from '../../components/footer'
 
+interface VatRegistrationResult {
+  status: string
+  message: string
+  recommendation: string
+  timeline: string
+  threshold: number
+  turnover: number
+  businessType: string
+}
+
 export default function VatRegistrationChecker() {
   const [businessType, setBusinessType] = useState('')
   const [annualTurnover, setAnnualTurnover] = useState('')
   const [projectedTurnover, setProjectedTurnover] = useState('')
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState<VatRegistrationResult | null>(null)
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {

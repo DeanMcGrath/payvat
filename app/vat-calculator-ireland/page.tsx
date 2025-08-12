@@ -4,11 +4,18 @@ import { useState, useEffect } from 'react'
 import SiteHeader from '../../components/site-header'
 import Footer from '../../components/footer'
 
+interface VatResult {
+  net: string
+  vat: string
+  total: string
+  rate: string
+}
+
 export default function VatCalculatorIreland() {
   const [amount, setAmount] = useState('')
   const [vatRate, setVatRate] = useState('23')
   const [calculationType, setCalculationType] = useState('exclusive')
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState<VatResult | null>(null)
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
