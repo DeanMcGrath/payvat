@@ -368,23 +368,55 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       }
     }
     
-    // Process the document with AI enhancement and monitoring
+    // Process the document with enhanced AI engine and monitoring  
     let result: any
     const processingStartTime = Date.now()
     
     try {
-      console.log('📄 Starting document processing with monitoring...')
+      console.log('🚀 Starting ENHANCED document processing with real-time monitoring...')
       console.log(`   File: ${document.originalName}`)
       console.log(`   Category: ${document.category}`)
       console.log(`   User: ${user ? user.id : 'anonymous'}`)
+      console.log(`   Enhanced Engine: ${process.env.USE_ENHANCED_PROCESSING !== 'false' ? 'ENABLED' : 'DISABLED'}`)
       
-      result = await processDocument(
-        document.fileData,
-        document.mimeType,
-        document.originalName,
-        document.category,
-        user?.id // Pass user ID for AI usage tracking
-      )
+      // Try enhanced processing first (if enabled)
+      if (process.env.USE_ENHANCED_PROCESSING !== 'false') {
+        console.log('✨ Using Enhanced VAT Processing Engine v2.0...')
+        const { processDocumentEnhanced } = await import('@/lib/documentProcessor')
+        
+        try {
+          result = await processDocumentEnhanced(
+            document.fileData,
+            document.mimeType,
+            document.originalName,
+            document.category,
+            user?.id
+          )
+          console.log('🎉 Enhanced processing completed successfully!')
+        } catch (enhancedError) {
+          console.log('⚠️ Enhanced processing failed, falling back to legacy...')
+          console.log(`   Error: ${enhancedError instanceof Error ? enhancedError.message : enhancedError}`)
+          
+          // Fallback to original processing
+          result = await processDocument(
+            document.fileData,
+            document.mimeType,
+            document.originalName,
+            document.category,
+            user?.id
+          )
+        }
+      } else {
+        // Use legacy processing
+        console.log('🔄 Using legacy processing (enhanced engine disabled)...')
+        result = await processDocument(
+          document.fileData,
+          document.mimeType,
+          document.originalName,
+          document.category,
+          user?.id
+        )
+      }
       
       const processingTimeMs = Date.now() - processingStartTime
       console.log('✅ Document processing completed successfully')
@@ -681,7 +713,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       console.log(`   Has VAT amounts: ${(result.extractedData?.salesVAT?.length || 0) + (result.extractedData?.purchaseVAT?.length || 0) > 0}`)
     }
     
-    // Add AI status information to response for debugging
+    // Enhanced response data with real-time processing information
     const responseData = {
       success: true,
       document: {
@@ -692,16 +724,19 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         category: updatedDocument.category,
         extractedData: result.extractedData
       },
-      // Also include extractedData at root level for easier access
+      // Include extractedData at root level for easier access
       extractedData: result.extractedData,
-      // Include OpenAI API status for debugging
-      openAIStatus: openAIStatus,
-      // 🚨 EMERGENCY EMBEDDED PROMPT DIAGNOSTIC
-      promptDiagnostic: promptDiagnostic,
-      // Document validation results
-      validationCheck: validationCheck,
+      // Enhanced processing metadata (merged from both processing systems)
       processingInfo: {
+        // Enhanced processing fields
+        engine: result.processingSteps ? 'enhanced' : 'legacy',
+        processingSteps: result.processingSteps || [],
+        qualityScore: result.qualityScore || 0,
+        recommendedAction: result.recommendedAction || 'Ready for review',
+        totalProcessingTime: Date.now() - processingStartTime,
         timestamp: new Date().toISOString(),
+        irishVATCompliant: result.extractedData?.irishVATCompliant || false,
+        // Legacy processing fields
         processingType: result.scanResult.includes('AI') ? 'AI_ENHANCED' : 'LEGACY',
         hasAPIConnectivity: openAIStatus.connectivityTest?.success || false,
         taxComplianceStatus: validationCheck.complianceStatus,
@@ -716,6 +751,12 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         },
         warnings: [] as string[] // Initialize as empty array, will be populated below if needed
       },
+      // OpenAI API status for debugging
+      openAIStatus: openAIStatus,
+      // 🚨 EMERGENCY EMBEDDED PROMPT DIAGNOSTIC
+      promptDiagnostic: promptDiagnostic,
+      // Document validation results
+      validationCheck: validationCheck,
       // RAW TEXT DEBUG INFO (for tax compliance debugging) - with safe null handling
       debugInfo: (() => {
         try {

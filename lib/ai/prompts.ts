@@ -4,11 +4,18 @@
  */
 
 /**
- * Document Processing Prompts
+ * Document Processing Prompts - Optimized for Irish VAT Compliance
  */
 export const DOCUMENT_PROMPTS = {
-  // VAT Document Analysis - Enhanced for WooCommerce Tax Reports
-  VAT_EXTRACTION: `You are an expert international tax compliance assistant analyzing business documents, with specialized training in WooCommerce tax reports.
+  // Enhanced VAT Document Analysis - Optimized for Irish Tax Documents
+  VAT_EXTRACTION: `You are an expert Irish VAT compliance specialist analyzing business documents for accurate tax extraction.
+
+IRISH VAT COMPLIANCE PRIORITY:
+- Irish VAT rates: 0% (zero-rated), 13.5% (reduced), 23% (standard)
+- Irish VAT number format: IE followed by 7 digits and 1-2 letters (e.g., IE1234567T)
+- Focus on Euro (€) amounts - primary currency for Irish businesses
+- Date format: DD/MM/YYYY (Irish standard)
+- Look for "Revenue" references (Irish tax authority)
 
 WOOCOMMERCE TAX REPORT DETECTION (ENHANCED):
 If this document appears to be a WooCommerce tax report, look specifically for:
@@ -300,7 +307,51 @@ Check for:
 4. Required information presence
 5. Compliance with Irish VAT regulations
 
-Flag any issues or inconsistencies.`
+Flag any issues or inconsistencies.`,
+
+  // Optimized Irish VAT Extraction - High Speed & Accuracy
+  IRISH_VAT_OPTIMIZED: `You are an expert Irish VAT specialist. Extract VAT information from this document with maximum accuracy for Irish tax compliance.
+
+IRISH VAT FOCUS:
+- Irish VAT rates: 0%, 13.5%, 23%
+- Currency: Euro (€) 
+- VAT format: IE + 7 digits + 1-2 letters
+- Date: DD/MM/YYYY format
+
+EXTRACTION PRIORITIES:
+1. HIGHEST: Total VAT Amount, VAT Total, Total Tax
+2. HIGH: Individual VAT line items at 13.5% or 23%
+3. MEDIUM: VAT breakdown by category
+4. LOW: Estimated or calculated VAT
+
+QUICK SCAN PATTERNS:
+- "Total VAT €X.XX" or "VAT Total €X.XX"
+- "VAT Amount €X.XX" 
+- "Tax €X.XX" or "Tax Amount €X.XX"
+- Table columns: VAT, Tax, VAT Amt
+- Irish supplier names ending in "Ltd", "Limited"
+
+IGNORE THESE (NOT VAT):
+- Service charges, fees, prices
+- Total amounts including VAT
+- Lease payments, monthly payments
+- Delivery/shipping costs
+
+Return minimal JSON for speed:
+{
+  "salesVAT": [array of euro amounts],
+  "purchaseVAT": [array of euro amounts], 
+  "confidence": 0.0-1.0,
+  "vatNumber": "IE1234567T or null",
+  "invoiceDate": "YYYY-MM-DD or null",
+  "currency": "EUR",
+  "totalVAT": number,
+  "extractedText": "key text containing VAT amounts",
+  "irishCompliant": boolean,
+  "processingNotes": "brief extraction notes"
+}
+
+Focus on speed and accuracy - Irish businesses need reliable VAT extraction.`
 } as const
 
 /**

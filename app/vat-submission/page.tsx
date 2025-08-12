@@ -753,28 +753,80 @@ export default function VATSubmissionPage() {
                                         {Math.round(document.fileSize / 1024)}KB
                                       </p>
                                       
-                                      {/* VAT Amount Display */}
+                                      {/* Enhanced VAT Amount Display with Quality Indicators */}
                                       {document.isScanned && docVATData && vatAmounts.length > 0 && (
-                                        <div className="flex items-center text-xs">
-                                          <span className="inline-flex items-center text-teal-700 font-medium">
-                                            <CheckCircle className="h-3 w-3 mr-1" />
-                                            VAT: €{totalVAT.toFixed(2)} detected ({Math.round(confidence * 100)}% confidence)
-                                          </span>
+                                        <div className="flex flex-col space-y-1">
+                                          <div className="flex items-center text-xs">
+                                            <span className="inline-flex items-center text-teal-700 font-medium">
+                                              <CheckCircle className="h-3 w-3 mr-1" />
+                                              VAT: €{totalVAT.toFixed(2)} • {Math.round(confidence * 100)}% confidence
+                                            </span>
+                                          </div>
+                                          
+                                          {/* Quality Score Indicator */}
+                                          {(document as any).processingInfo?.qualityScore && (
+                                            <div className="flex items-center text-xs">
+                                              <div className="flex items-center mr-2">
+                                                {(document as any).processingInfo.qualityScore >= 80 ? (
+                                                  <Shield className="h-3 w-3 text-green-600 mr-1" />
+                                                ) : (document as any).processingInfo.qualityScore >= 60 ? (
+                                                  <AlertCircle className="h-3 w-3 text-yellow-600 mr-1" />
+                                                ) : (
+                                                  <AlertCircle className="h-3 w-3 text-red-600 mr-1" />
+                                                )}
+                                                <span className={`font-medium ${
+                                                  (document as any).processingInfo.qualityScore >= 80 ? 'text-green-600' :
+                                                  (document as any).processingInfo.qualityScore >= 60 ? 'text-yellow-600' : 'text-red-600'
+                                                }`}>
+                                                  Quality: {(document as any).processingInfo.qualityScore}/100
+                                                </span>
+                                              </div>
+                                              
+                                              {/* Irish VAT Compliance Indicator */}
+                                              {(document as any).processingInfo?.irishVATCompliant && (
+                                                <span className="inline-flex items-center text-green-600 text-xs ml-2">
+                                                  <span className="mr-1">🇮🇪</span>
+                                                  Irish VAT Compliant
+                                                </span>
+                                              )}
+                                              
+                                              {/* Processing Engine Indicator */}
+                                              {(document as any).processingInfo?.engine === 'enhanced' && (
+                                                <span className="inline-flex items-center text-blue-600 text-xs ml-2">
+                                                  <span className="mr-1">🚀</span>
+                                                  Enhanced AI
+                                                </span>
+                                              )}
+                                            </div>
+                                          )}
                                         </div>
                                       )}
                                       
                                       {document.isScanned && (!docVATData || vatAmounts.length === 0) && (
-                                        <span className="inline-flex items-center text-green-600 text-xs">
-                                          <CheckCircle className="h-3 w-3 mr-1" />
-                                          AI Processed
-                                        </span>
+                                        <div className="flex items-center justify-between">
+                                          <span className="inline-flex items-center text-green-600 text-xs">
+                                            <CheckCircle className="h-3 w-3 mr-1" />
+                                            AI Processed
+                                          </span>
+                                          
+                                          {/* Quality indicator for processed documents without VAT */}
+                                          {(document as any).processingInfo?.qualityScore && (
+                                            <span className={`text-xs font-medium ${
+                                              (document as any).processingInfo.qualityScore >= 60 ? 'text-green-600' : 'text-yellow-600'
+                                            }`}>
+                                              Quality: {(document as any).processingInfo.qualityScore}/100
+                                            </span>
+                                          )}
+                                        </div>
                                       )}
                                       
                                       {!document.isScanned && (
-                                        <span className="inline-flex items-center text-yellow-600 text-xs">
-                                          <AlertCircle className="h-3 w-3 mr-1" />
-                                          Processing...
-                                        </span>
+                                        <div className="flex items-center">
+                                          <span className="inline-flex items-center text-yellow-600 text-xs">
+                                            <div className="animate-spin rounded-full h-3 w-3 border border-yellow-600 border-t-transparent mr-2"></div>
+                                            AI Processing...
+                                          </span>
+                                        </div>
                                       )}
                                     </div>
                                   </div>
