@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -61,22 +61,23 @@ export default function LiveChat() {
     scrollToBottom()
   }, [messages])
 
-  // Persist chat open/closed state to localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('chat_is_open', isOpen.toString())
+  // Load messages for session
+  const loadMessages = useCallback(async (sessionId: string) => {
+    try {
+      const response = await fetch(`/api/chat?sessionId=${sessionId}`)
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && data.messages) {
+          setMessages(data.messages)
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load messages:', error)
     }
-  }, [isOpen])
-
-  // Auto-initialize chat if it was previously open
-  useEffect(() => {
-    if (isOpen && !session) {
-      initializeChat()
-    }
-  }, [isOpen, session])
+  }, [])
 
   // Initialize or load chat session
-  const initializeChat = async () => {
+  const initializeChat = useCallback(async () => {
     setIsLoading(true)
     try {
       // Check if we have a stored session
@@ -119,22 +120,21 @@ export default function LiveChat() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [loadMessages])
 
-  // Load messages for session
-  const loadMessages = async (sessionId: string) => {
-    try {
-      const response = await fetch(`/api/chat?sessionId=${sessionId}`)
-      if (response.ok) {
-        const data = await response.json()
-        if (data.success) {
-          setMessages(data.messages)
-        }
-      }
-    } catch (error) {
-      console.error('Failed to load messages:', error)
+  // Persist chat open/closed state to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('chat_is_open', isOpen.toString())
     }
-  }
+  }, [isOpen])
+
+  // Auto-initialize chat if it was previously open
+  useEffect(() => {
+    if (isOpen && !session) {
+      initializeChat()
+    }
+  }, [isOpen, session, initializeChat])
 
   // Send message
   const sendMessage = async () => {
