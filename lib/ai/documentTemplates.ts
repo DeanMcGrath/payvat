@@ -628,21 +628,148 @@ export class DocumentTemplateSystem {
   
   // Database operations (placeholder for implementation)
   private static async getActiveTemplates(): Promise<DocumentTemplate[]> {
-    console.log('TODO: Fetch active templates from database')
-    return []
+    try {
+      const templates = await prisma.documentTemplate.findMany({
+        where: { isActive: true },
+        include: {
+          fingerprint: true
+        },
+        orderBy: { successRate: 'desc' }
+      })
+      
+      return templates.map(template => ({
+        id: template.id,
+        name: template.name,
+        businessName: template.businessName,
+        templateType: template.templateType as any,
+        category: template.category as any,
+        confidence: template.confidence,
+        usageCount: template.usageCount,
+        successRate: template.successRate,
+        fingerprint: {
+          id: template.fingerprint.id,
+          documentId: template.fingerprint.documentId,
+          structuralHash: template.fingerprint.structuralHash,
+          textPatterns: template.fingerprint.textPatterns,
+          vatPatterns: template.fingerprint.vatPatterns as VATPattern,
+          businessSignatures: template.fingerprint.businessSignatures,
+          layoutFeatures: template.fingerprint.layoutFeatures as LayoutFeatures,
+          confidence: template.fingerprint.confidence,
+          successRate: template.fingerprint.successRate,
+          usageCount: template.fingerprint.usageCount,
+          createdAt: template.fingerprint.createdAt,
+          lastUsed: template.fingerprint.lastUsed,
+          updatedAt: template.fingerprint.updatedAt
+        },
+        extractionRules: template.extractionRules as ExtractionRule[],
+        validationRules: template.validationRules as ValidationRule[],
+        createdAt: template.createdAt,
+        lastUsed: template.lastUsed,
+        lastUpdated: template.lastUpdated,
+        createdFromDocuments: template.createdFromDocuments,
+        averageProcessingTime: 0,
+        averageConfidence: template.confidence,
+        errorPatterns: []
+      }))
+    } catch (error) {
+      console.error('Failed to fetch active templates:', error)
+      return []
+    }
   }
   
   private static async storeTemplateInDatabase(template: DocumentTemplate): Promise<void> {
-    console.log('TODO: Store template in database:', template.name)
+    try {
+      await prisma.documentTemplate.create({
+        data: {
+          id: template.id,
+          name: template.name,
+          businessName: template.businessName,
+          templateType: template.templateType,
+          category: template.category,
+          fingerprintId: template.fingerprint.id,
+          extractionRules: template.extractionRules,
+          validationRules: template.validationRules,
+          confidence: template.confidence,
+          usageCount: template.usageCount,
+          successRate: template.successRate,
+          averageProcessingTime: 5000, // Default value
+          averageConfidence: template.confidence,
+          createdFromDocuments: template.createdFromDocuments,
+          errorPatterns: {},
+          isActive: true
+        }
+      })
+      console.log('Successfully stored template in database:', template.name)
+    } catch (error) {
+      console.error('Failed to store template in database:', error)
+      throw error
+    }
   }
   
   private static async updateTemplateUsage(templateId: string): Promise<void> {
-    console.log('TODO: Update template usage count:', templateId)
+    try {
+      await prisma.documentTemplate.update({
+        where: { id: templateId },
+        data: {
+          usageCount: { increment: 1 },
+          lastUsed: new Date()
+        }
+      })
+      console.log('Successfully updated template usage count:', templateId)
+    } catch (error) {
+      console.error('Failed to update template usage:', error)
+      throw error
+    }
   }
   
   private static async getTemplateById(id: string): Promise<DocumentTemplate | null> {
-    console.log('TODO: Get template by ID:', id)
-    return null
+    try {
+      const template = await prisma.documentTemplate.findUnique({
+        where: { id },
+        include: {
+          fingerprint: true
+        }
+      })
+      
+      if (!template) {
+        return null
+      }
+      
+      return {
+        id: template.id,
+        name: template.name,
+        businessName: template.businessName,
+        templateType: template.templateType as any,
+        category: template.category as any,
+        confidence: template.confidence,
+        usageCount: template.usageCount,
+        successRate: template.successRate,
+        fingerprint: {
+          id: template.fingerprint.id,
+          documentId: template.fingerprint.documentId,
+          structuralHash: template.fingerprint.structuralHash,
+          textPatterns: template.fingerprint.textPatterns,
+          vatPatterns: template.fingerprint.vatPatterns as VATPattern,
+          businessSignatures: template.fingerprint.businessSignatures,
+          layoutFeatures: template.fingerprint.layoutFeatures as LayoutFeatures,
+          confidence: template.fingerprint.confidence,
+          successRate: template.fingerprint.successRate,
+          usageCount: template.fingerprint.usageCount,
+          createdAt: template.fingerprint.createdAt,
+          lastUsed: template.fingerprint.lastUsed,
+          updatedAt: template.fingerprint.updatedAt
+        },
+        extractionRules: template.extractionRules as ExtractionRule[],
+        validationRules: template.validationRules as ValidationRule[],
+        createdAt: template.createdAt,
+        lastUsed: template.lastUsed,
+        lastUpdated: template.lastUpdated,
+        createdFromDocuments: template.createdFromDocuments
+      }
+    } catch (error) {
+      console.error('Failed to get template by ID:', error)
+      return null
+    }
   }
   
   private static async getAllTemplates(): Promise<DocumentTemplate[]> {
