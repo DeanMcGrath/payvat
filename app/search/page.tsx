@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
+import { useState, useEffect, useCallback, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -42,6 +42,35 @@ function SearchPageContent() {
   const [userLoading, setUserLoading] = useState(true)
   const [userError, setUserError] = useState<string | null>(null)
 
+  const handleSearch = useCallback(async (searchQuery: string = query) => {
+    if (!searchQuery.trim()) return
+
+    setIsLoading(true)
+    setHasSearched(true)
+
+    try {
+      const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery.trim())}`)
+      const data = await response.json()
+
+      if (data.success) {
+        setResults(data.results)
+        setTotalResults(data.totalResults)
+        setSearchTime(data.searchTime)
+      } else {
+        setResults([])
+        setTotalResults(0)
+        setSearchTime(0)
+      }
+    } catch (error) {
+      console.error('Search error:', error)
+      setResults([])
+      setTotalResults(0)
+      setSearchTime(0)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [query])
+
   useEffect(() => {
     fetchUserProfile()
   }, [])
@@ -50,7 +79,7 @@ function SearchPageContent() {
     if (initialQuery) {
       handleSearch(initialQuery)
     }
-  }, [initialQuery]) // handleSearch is defined inline, so this is safe
+  }, [initialQuery, handleSearch])
   
   const fetchUserProfile = async () => {
     try {
@@ -88,35 +117,6 @@ function SearchPageContent() {
       window.location.href = '/login'
     } catch (err) {
       window.location.href = '/login'
-    }
-  }
-
-  const handleSearch = async (searchQuery: string = query) => {
-    if (!searchQuery.trim()) return
-
-    setIsLoading(true)
-    setHasSearched(true)
-
-    try {
-      const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery.trim())}`)
-      const data = await response.json()
-
-      if (data.success) {
-        setResults(data.results)
-        setTotalResults(data.totalResults)
-        setSearchTime(data.searchTime)
-      } else {
-        setResults([])
-        setTotalResults(0)
-        setSearchTime(0)
-      }
-    } catch (error) {
-      console.error('Search error:', error)
-      setResults([])
-      setTotalResults(0)
-      setSearchTime(0)
-    } finally {
-      setIsLoading(false)
     }
   }
 
