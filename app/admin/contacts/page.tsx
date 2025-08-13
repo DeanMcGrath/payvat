@@ -28,7 +28,8 @@ interface ContactSubmission {
   businessType?: string
   currentStage?: string
   source: string
-  timestamp: string
+  createdAt: string
+  updatedAt: string
 }
 
 export default function AdminContactsPage() {
@@ -65,8 +66,8 @@ export default function AdminContactsPage() {
     return matchesSearch && matchesSource
   })
 
-  const formatDate = (timestamp: string) => {
-    return new Date(timestamp).toLocaleString('en-IE', {
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleString('en-IE', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -180,7 +181,7 @@ export default function AdminContactsPage() {
                   <p className="text-sm text-gray-600">Today</p>
                   <p className="text-3xl font-bold text-gray-900">
                     {submissions.filter(s => 
-                      new Date(s.timestamp).toDateString() === new Date().toDateString()
+                      new Date(s.createdAt).toDateString() === new Date().toDateString()
                     ).length}
                   </p>
                 </div>
@@ -259,7 +260,7 @@ export default function AdminContactsPage() {
                     <div className="text-right text-sm text-gray-600">
                       <div className="flex items-center gap-1 mb-1">
                         <Calendar className="h-4 w-4" />
-                        {formatDate(submission.timestamp)}
+                        {formatDate(submission.createdAt)}
                       </div>
                     </div>
                   </div>

@@ -526,3 +526,20 @@ model BusinessLearningPattern {
   @@map("business_learning_patterns")
 }
 
+model ContactSubmission {
+  id           String   @id @default(cuid())
+  fullName     String
+  email        String
+  phone        String
+  companyName  String?
+  subject      String
+  message      String
+  businessType String?
+  currentStage String?
+  source       String   // Which page/form the submission came from
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("contact_submissions")
+}
+

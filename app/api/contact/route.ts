@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { PrismaClient } from '@/lib/generated/prisma'
+
+const prisma = new PrismaClient()
 
 interface ContactFormData {
   fullName: string
@@ -12,10 +15,6 @@ interface ContactFormData {
   source: string
   timestamp: string
 }
-
-// In-memory storage for demo purposes
-// In production, this would connect to a database
-let submissions: ContactFormData[] = []
 
 export async function POST(request: NextRequest) {
   try {
@@ -38,22 +37,22 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Add submission to storage
-    const submission = {
-      ...data,
-      timestamp: new Date().toISOString(),
-      id: Date.now().toString() // Simple ID generation for demo
-    }
-    
-    submissions.push(submission)
+    // Save to database
+    const submission = await prisma.contactSubmission.create({
+      data: {
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        companyName: data.companyName,
+        subject: data.subject,
+        message: data.message,
+        businessType: data.businessType,
+        currentStage: data.currentStage,
+        source: data.source,
+      },
+    })
 
-    // In production, you would:
-    // 1. Save to database
-    // 2. Send email notification to support team
-    // 3. Add to CRM system
-    // 4. Log for analytics
-
-    console.log('New contact form submission:', submission)
+    console.log('New contact form submission saved:', submission.id)
 
     return NextResponse.json(
       { 
@@ -70,15 +69,31 @@ export async function POST(request: NextRequest) {
       { error: 'Internal server error' },
       { status: 500 }
     )
+  } finally {
+    await prisma.$disconnect()
   }
 }
 
 export async function GET() {
-  // Return all submissions for admin panel
-  // In production, this would require authentication
-  return NextResponse.json({
-    submissions: submissions.sort((a, b) => 
-      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  try {
+    // Return all submissions for admin panel
+    // In production, this would require authentication
+    const submissions = await prisma.contactSubmission.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    return NextResponse.json({
+      submissions: submissions
+    })
+  } catch (error) {
+    console.error('Error fetching contact submissions:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
     )
-  })
+  } finally {
+    await prisma.$disconnect()
+  }
 }
