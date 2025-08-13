@@ -52,7 +52,7 @@ export default function CompanyVsSoleTraderIreland() {
             <div className="max-w-4xl mx-auto animate-fade-in">
               <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
+                  <div className="w-2 h-2 bg-primary rounded-full -gentle"></div>
                   Make the right choice from day one
                 </div>
                 
@@ -117,9 +117,9 @@ export default function CompanyVsSoleTraderIreland() {
               </p>
               
               <div className="grid lg:grid-cols-2 gap-8">
-                <div className="card-modern p-8 hover-lift border-l-4 border-green-500">
+                <div className="card-modern p-8 hover-lift border-l-4 border-teal-500">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="icon-modern bg-green-500">
+                    <div className="icon-modern bg-teal-600">
                       <UserCheck className="h-6 w-6 text-white" />
                     </div>
                     <h3 className="text-xl font-semibold text-foreground">Choose Sole Trader If:</h3>
@@ -152,16 +152,16 @@ export default function CompanyVsSoleTraderIreland() {
                     </div>
                   </div>
                   
-                  <div className="mt-6 p-4 bg-green-50 rounded-lg">
-                    <p className="text-sm text-green-800">
+                  <div className="mt-6 p-4 bg-teal-50 rounded-lg">
+                    <p className="text-sm text-teal-800">
                       <strong>Best for:</strong> Freelancers, consultants, tradespeople, creative professionals
                     </p>
                   </div>
                 </div>
 
-                <div className="card-modern p-8 hover-lift border-l-4 border-blue-500">
+                <div className="card-modern p-8 hover-lift border-l-4 border-teal-500">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="icon-modern bg-blue-500">
+                    <div className="icon-modern bg-gray-500">
                       <Building className="h-6 w-6 text-white" />
                     </div>
                     <h3 className="text-xl font-semibold text-foreground">Choose Limited Company If:</h3>
@@ -194,8 +194,8 @@ export default function CompanyVsSoleTraderIreland() {
                     </div>
                   </div>
                   
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-800">
+                  <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm text-teal-800">
                       <strong>Best for:</strong> Growth businesses, tech startups, retail, manufacturing, professional services
                     </p>
                   </div>
@@ -231,13 +231,13 @@ export default function CompanyVsSoleTraderIreland() {
                   <tbody className="text-sm">
                     <tr className="border-b border-gray-200">
                       <td className="p-4 font-medium text-foreground">Setup Time</td>
-                      <td className="p-4 text-center text-green-600">24-48 hours</td>
-                      <td className="p-4 text-center text-blue-600">7-10 days</td>
+                      <td className="p-4 text-center text-teal-600">24-48 hours</td>
+                      <td className="p-4 text-center text-teal-600">7-10 days</td>
                     </tr>
                     <tr className="border-b border-gray-200 bg-gray-50">
                       <td className="p-4 font-medium text-foreground">Setup Cost</td>
-                      <td className="p-4 text-center text-green-600">€0-50</td>
-                      <td className="p-4 text-center text-blue-600">€125-200</td>
+                      <td className="p-4 text-center text-teal-600">€0-50</td>
+                      <td className="p-4 text-center text-teal-600">€125-200</td>
                     </tr>
                     <tr className="border-b border-gray-200">
                       <td className="p-4 font-medium text-foreground">Personal Liability</td>
@@ -251,12 +251,12 @@ export default function CompanyVsSoleTraderIreland() {
                     </tr>
                     <tr className="border-b border-gray-200">
                       <td className="p-4 font-medium text-foreground">Annual Filings</td>
-                      <td className="p-4 text-center text-green-600">Tax return only</td>
-                      <td className="p-4 text-center text-blue-600">Annual return + accounts</td>
+                      <td className="p-4 text-center text-teal-600">Tax return only</td>
+                      <td className="p-4 text-center text-teal-600">Annual return + accounts</td>
                     </tr>
                     <tr className="border-b border-gray-200 bg-gray-50">
                       <td className="p-4 font-medium text-foreground">Business Credibility</td>
-                      <td className="p-4 text-center text-yellow-600">Moderate</td>
+                      <td className="p-4 text-center text-teal-600">Moderate</td>
                       <td className="p-4 text-center text-green-600">High</td>
                     </tr>
                     <tr className="border-b border-gray-200">
@@ -337,9 +337,9 @@ export default function CompanyVsSoleTraderIreland() {
                       </ul>
                     </div>
                     
-                    <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                      <h4 className="font-semibold text-blue-800 mb-2">Important Exceptions</h4>
-                      <ul className="text-sm text-blue-700 space-y-1">
+                    <div className="p-4 bg-gray-50 rounded-lg border-l-4 border-teal-500">
+                      <h4 className="font-semibold text-teal-800 mb-2">Important Exceptions</h4>
+                      <ul className="text-sm text-teal-700 space-y-1">
                         <li>• Personal guarantees on loans/leases</li>
                         <li>• Director wrongful trading</li>
                         <li>• Fraud or criminal activities</li>
@@ -350,7 +350,7 @@ export default function CompanyVsSoleTraderIreland() {
                 </div>
               </div>
               
-              <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-slate-50 rounded-lg">
+              <div className="mt-8 p-6 bg-gradient-to-r from-gray-50 to-slate-50 rounded-lg">
                 <h4 className="font-semibold text-foreground mb-3 text-center">Insurance vs Structure</h4>
                 <p className="text-sm text-muted-foreground text-center">
                   Professional indemnity and public liability insurance can protect sole traders, but company structure 
@@ -393,9 +393,9 @@ export default function CompanyVsSoleTraderIreland() {
                       </ul>
                     </div>
                     
-                    <div className="p-4 bg-yellow-50 rounded-lg">
-                      <h4 className="font-semibold text-yellow-800 mb-2">Tax Benefits</h4>
-                      <ul className="text-sm text-yellow-700 space-y-1">
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <h4 className="font-semibold text-teal-800 mb-2">Tax Benefits</h4>
+                      <ul className="text-sm text-teal-700 space-y-1">
                         <li>• Simple tax return process</li>
                         <li>• No separate corporate filings</li>
                         <li>• Access to personal tax credits</li>
@@ -417,9 +417,9 @@ export default function CompanyVsSoleTraderIreland() {
                       </ul>
                     </div>
                     
-                    <div className="p-4 bg-green-50 rounded-lg">
-                      <h4 className="font-semibold text-green-800 mb-2">Tax Planning Options</h4>
-                      <ul className="text-sm text-green-700 space-y-1">
+                    <div className="p-4 bg-teal-50 rounded-lg">
+                      <h4 className="font-semibold text-teal-800 mb-2">Tax Planning Options</h4>
+                      <ul className="text-sm text-teal-700 space-y-1">
                         <li>• Salary/dividend optimisation</li>
                         <li>• Pension contributions up to €115k</li>
                         <li>• Capital gains relief options</li>
@@ -429,7 +429,7 @@ export default function CompanyVsSoleTraderIreland() {
                 </div>
               </div>
               
-              <div className="mt-8 p-6 card-premium bg-gradient-to-r from-green-50 to-blue-50">
+              <div className="mt-8 p-6 card-premium bg-gradient-to-r from-gray-50 to-gray-100">
                 <h4 className="font-semibold text-foreground mb-3 text-center">Example: €80,000 Annual Profit</h4>
                 <div className="grid md:grid-cols-2 gap-6 text-center">
                   <div>
@@ -440,9 +440,9 @@ export default function CompanyVsSoleTraderIreland() {
                   </div>
                   <div>
                     <h5 className="font-semibold text-foreground mb-2">Limited Company</h5>
-                    <div className="text-2xl font-bold text-green-600 mb-1">€58,000</div>
+                    <div className="text-2xl font-bold text-teal-600 mb-1">€58,000</div>
                     <div className="text-sm text-muted-foreground">Take-home optimised</div>
-                    <div className="text-xs text-green-600 mt-1">Effective rate: 27.5%</div>
+                    <div className="text-xs text-teal-600 mt-1">Effective rate: 27.5%</div>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground text-center mt-4">
@@ -476,7 +476,7 @@ export default function CompanyVsSoleTraderIreland() {
                   <h3 className="text-xl font-semibold text-foreground mb-4">Registration Thresholds (2025)</h3>
                   <div className="space-y-4">
                     <div className="flex items-center gap-3 p-4 card-modern">
-                      <div className="icon-modern bg-blue-500">
+                      <div className="icon-modern bg-gray-500">
                         <Euro className="h-6 w-6 text-white" />
                       </div>
                       <div>
@@ -486,7 +486,7 @@ export default function CompanyVsSoleTraderIreland() {
                     </div>
                     
                     <div className="flex items-center gap-3 p-4 card-modern">
-                      <div className="icon-modern bg-green-500">
+                      <div className="icon-modern bg-teal-600">
                         <Euro className="h-6 w-6 text-white" />
                       </div>
                       <div>
@@ -496,9 +496,9 @@ export default function CompanyVsSoleTraderIreland() {
                     </div>
                   </div>
                   
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                    <h4 className="font-semibold text-blue-800 mb-2">Same Rules Apply</h4>
-                    <p className="text-sm text-blue-700">
+                  <div className="mt-6 p-4 bg-gray-50 rounded-lg border-l-4 border-teal-500">
+                    <h4 className="font-semibold text-teal-800 mb-2">Same Rules Apply</h4>
+                    <p className="text-sm text-teal-700">
                       Both sole traders and companies must register when turnover exceeds thresholds. 
                       Structure choice doesn't affect VAT obligations.
                     </p>
@@ -508,18 +508,18 @@ export default function CompanyVsSoleTraderIreland() {
                 <div>
                   <h3 className="text-xl font-semibold text-foreground mb-4">Strategic Differences</h3>
                   <div className="space-y-4">
-                    <div className="p-4 bg-yellow-50 rounded-lg">
-                      <h4 className="font-semibold text-yellow-800 mb-2">Sole Traders</h4>
-                      <ul className="text-sm text-yellow-700 space-y-1">
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <h4 className="font-semibold text-teal-800 mb-2">Sole Traders</h4>
+                      <ul className="text-sm text-teal-700 space-y-1">
                         <li>• May delay registration until threshold hit</li>
                         <li>• Simpler VAT return process</li>
                         <li>• Less likely to register voluntarily early</li>
                       </ul>
                     </div>
                     
-                    <div className="p-4 bg-green-50 rounded-lg">
-                      <h4 className="font-semibold text-green-800 mb-2">Limited Companies</h4>
-                      <ul className="text-sm text-green-700 space-y-1">
+                    <div className="p-4 bg-teal-50 rounded-lg">
+                      <h4 className="font-semibold text-teal-800 mb-2">Limited Companies</h4>
+                      <ul className="text-sm text-teal-700 space-y-1">
                         <li>• Often register early for credibility</li>
                         <li>• Can reclaim VAT on incorporation costs</li>
                         <li>• Better positioned for B2B contracts</li>
@@ -577,9 +577,9 @@ export default function CompanyVsSoleTraderIreland() {
                       </ul>
                     </div>
                     
-                    <div className="p-4 bg-yellow-50 rounded-lg">
-                      <h4 className="font-semibold text-yellow-800 mb-2">Considerations</h4>
-                      <ul className="text-sm text-yellow-700 space-y-1">
+                    <div className="p-4 bg-gray-50 rounded-lg">
+                      <h4 className="font-semibold text-teal-800 mb-2">Considerations</h4>
+                      <ul className="text-sm text-teal-700 space-y-1">
                         <li>• Potential capital gains tax</li>
                         <li>• VAT registration transfer</li>
                         <li>• Customer/supplier notifications</li>

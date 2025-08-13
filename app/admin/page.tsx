@@ -324,7 +324,7 @@ function AdminDashboardContent() {
         <div className="admin-stat-card hover-lift">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-medium text-muted-foreground">VAT Returns</h3>
-            <div className="icon-modern bg-gradient-to-br from-blue-500 to-indigo-600">
+            <div className="icon-modern bg-teal-600">
               <FileText className="h-4 w-4 text-white" />
             </div>
           </div>
@@ -337,7 +337,7 @@ function AdminDashboardContent() {
         <div className="admin-stat-card hover-lift">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-medium text-muted-foreground">Total Payments</h3>
-            <div className="icon-modern bg-gradient-to-br from-green-500 to-emerald-600">
+            <div className="icon-modern bg-teal-600">
               <CreditCard className="h-4 w-4 text-white" />
             </div>
           </div>

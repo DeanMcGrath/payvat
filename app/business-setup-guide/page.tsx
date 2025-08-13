@@ -235,7 +235,7 @@ export default function BusinessSetupGuidePage() {
       />
 
       {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden bg-gradient-to-br from-teal-50 to-cyan-50">
+      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden bg-gradient-to-br from-teal-50 to-teal-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center">
             <div className="max-w-4xl mx-auto animate-fade-in">
@@ -248,7 +248,7 @@ export default function BusinessSetupGuidePage() {
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
                 Start Your Irish Business
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-600 mt-2">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-700 mt-2">
                   The Right Way
                 </span>
               </h1>
@@ -261,8 +261,8 @@ export default function BusinessSetupGuidePage() {
           </div>
           
           {/* Decorative Elements */}
-          <div className="absolute top-20 right-10 w-24 h-24 bg-gradient-to-br from-teal-400 to-cyan-400 rounded-full blur-3xl opacity-20 animate-float"></div>
-          <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-cyan-400 to-teal-400 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute top-20 right-10 w-24 h-24 bg-gradient-to-br from-teal-400 to-teal-500 rounded-full blur-3xl opacity-20 animate-float"></div>
+          <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-teal-400 to-teal-500 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
         </div>
       </section>
 
@@ -315,7 +315,7 @@ export default function BusinessSetupGuidePage() {
               <div className="relative">
                 <div className="absolute left-0 top-0 h-2 w-full bg-gray-200 rounded-full"></div>
                 <div 
-                  className="absolute left-0 top-0 h-2 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-full transition-all duration-500"
+                  className="absolute left-0 top-0 h-2 bg-gradient-to-r from-teal-500 to-teal-700 rounded-full transition-all duration-500"
                   style={{ width: `${(completedSteps.length / setupSteps.length) * 100}%` }}
                 ></div>
               </div>
@@ -328,7 +328,7 @@ export default function BusinessSetupGuidePage() {
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                       completedSteps.includes(step.id) 
-                        ? 'bg-gradient-to-r from-teal-500 to-cyan-600 text-white' 
+                        ? 'bg-gradient-to-r from-teal-500 to-teal-700 text-white' 
                         : 'bg-gray-200 text-gray-500'
                     }`}>
                       {completedSteps.includes(step.id) ? (
@@ -355,7 +355,7 @@ export default function BusinessSetupGuidePage() {
                 key={step.id}
                 className={`overflow-hidden transition-all duration-300 ${
                   expandedSection === step.id ? 'shadow-2xl scale-[1.02]' : 'shadow-lg hover:shadow-xl'
-                } ${completedSteps.includes(step.id) ? 'border-green-200' : ''}`}
+                } ${completedSteps.includes(step.id) ? 'border-teal-200' : ''}`}
               >
                 <CardHeader 
                   className="cursor-pointer"
@@ -363,7 +363,7 @@ export default function BusinessSetupGuidePage() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-600 p-0.5`}>
+                      <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-teal-500 to-teal-700 p-0.5`}>
                         <div className="w-full h-full rounded-xl bg-white flex items-center justify-center">
                           <step.icon className="h-8 w-8 text-teal-600" />
                         </div>
@@ -372,7 +372,7 @@ export default function BusinessSetupGuidePage() {
                         <CardTitle className="text-2xl flex items-center gap-2">
                           Step {index + 1}: {step.title}
                           {completedSteps.includes(step.id) && (
-                            <CheckCircle className="h-5 w-5 text-green-600" />
+                            <CheckCircle className="h-5 w-5 text-teal-600" />
                           )}
                         </CardTitle>
                         <CardDescription className="text-base mt-1">
@@ -397,22 +397,22 @@ export default function BusinessSetupGuidePage() {
                           {step.id === 'structure' && 'pros' in item && (
                             <div className="space-y-3">
                               <div>
-                                <p className="text-sm font-medium text-green-700 mb-1">Pros:</p>
+                                <p className="text-sm font-medium text-gray-700 mb-1">Pros:</p>
                                 <ul className="text-sm text-gray-600 space-y-1">
                                   {item.pros?.map((pro, i) => (
                                     <li key={i} className="flex items-start gap-1">
-                                      <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                      <CheckCircle className="h-3 w-3 text-teal-600 mt-0.5 flex-shrink-0" />
                                       {pro}
                                     </li>
                                   ))}
                                 </ul>
                               </div>
                               <div>
-                                <p className="text-sm font-medium text-red-700 mb-1">Cons:</p>
+                                <p className="text-sm font-medium text-gray-700 mb-1">Cons:</p>
                                 <ul className="text-sm text-gray-600 space-y-1">
                                   {item.cons?.map((con, i) => (
                                     <li key={i} className="flex items-start gap-1">
-                                      <AlertCircle className="h-3 w-3 text-red-500 mt-0.5 flex-shrink-0" />
+                                      <AlertCircle className="h-3 w-3 text-gray-600 mt-0.5 flex-shrink-0" />
                                       {con}
                                     </li>
                                   ))}
@@ -508,7 +508,7 @@ export default function BusinessSetupGuidePage() {
                                   <ul className="text-gray-600 space-y-1">
                                     {item.requirements.map((req, i) => (
                                       <li key={i} className="flex items-start gap-1">
-                                        <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                        <CheckCircle className="h-3 w-3 text-teal-600 mt-0.5 flex-shrink-0" />
                                         {req}
                                       </li>
                                     ))}
@@ -548,7 +548,7 @@ export default function BusinessSetupGuidePage() {
                                 <ul className="text-gray-600 space-y-1">
                                   {item.items.map((itm, i) => (
                                     <li key={i} className="flex items-start gap-2">
-                                      <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                      <CheckCircle className="h-3 w-3 text-teal-600 mt-0.5 flex-shrink-0" />
                                       {itm}
                                     </li>
                                   ))}
@@ -576,8 +576,8 @@ export default function BusinessSetupGuidePage() {
                           toggleStep(step.id)
                         }}
                         className={completedSteps.includes(step.id) 
-                          ? "border-green-500 text-green-700 hover:bg-green-50" 
-                          : "bg-gradient-to-r from-teal-500 to-cyan-600 text-white"}
+                          ? "border-teal-500 text-teal-700 hover:bg-teal-50" 
+                          : "bg-gradient-to-r from-teal-600 to-teal-700 text-white"}
                       >
                         {completedSteps.includes(step.id) ? (
                           <>
@@ -627,7 +627,7 @@ export default function BusinessSetupGuidePage() {
             {resources.map((resource, index) => (
               <Card key={index} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <CardContent className="p-6">
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-600 p-0.5 mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-teal-500 to-teal-700 p-0.5 mb-4">
                     <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
                       <resource.icon className="h-6 w-6 text-teal-600" />
                     </div>

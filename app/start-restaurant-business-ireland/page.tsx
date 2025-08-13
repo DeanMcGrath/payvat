@@ -41,7 +41,7 @@ export default function StartRestaurantBusinessIreland() {
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Start a Restaurant Business in 
-              <span className="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-teal-600 to-teal-700 bg-clip-text text-transparent">
                 Ireland (2025)
               </span>
             </h1>
@@ -79,7 +79,7 @@ export default function StartRestaurantBusinessIreland() {
             
             <div className="grid md:grid-cols-3 gap-8">
               <div className="card-modern p-8 text-center hover:shadow-xl transition-all duration-300 group">
-                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-red-100 text-red-600 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-gray-100 text-gray-600 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -91,7 +91,7 @@ export default function StartRestaurantBusinessIreland() {
               </div>
               
               <div className="card-modern p-8 text-center hover:shadow-xl transition-all duration-300 group">
-                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-orange-100 text-orange-600 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-gray-100 text-gray-600 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H7m2 0v-4a2 2 0 012-2h2a2 2 0 012 2v4M7 7h10M7 11h10" />
                   </svg>
@@ -103,7 +103,7 @@ export default function StartRestaurantBusinessIreland() {
               </div>
               
               <div className="card-modern p-8 text-center hover:shadow-xl transition-all duration-300 group">
-                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-green-100 text-green-600 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-teal-100 text-teal-600 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                   </svg>
@@ -167,8 +167,8 @@ export default function StartRestaurantBusinessIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Phase 2: Food Business Registration (Weeks 2-6)</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-orange-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">FSAI Registration</h4>
@@ -176,8 +176,8 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-orange-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Local Authority Registration</h4>
@@ -185,8 +185,8 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-orange-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">HACCP Training</h4>
@@ -200,8 +200,8 @@ export default function StartRestaurantBusinessIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Phase 3: Premises & Licensing (Weeks 4-12)</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Planning Permission</h4>
@@ -209,8 +209,8 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Liquor License (if applicable)</h4>
@@ -218,8 +218,8 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-gray-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Fire Safety Certificate</h4>
@@ -233,8 +233,8 @@ export default function StartRestaurantBusinessIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Phase 4: Operational Setup (Weeks 8-16)</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-green-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Staff Registration</h4>
@@ -242,8 +242,8 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-green-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">VAT Compliance Setup</h4>
@@ -251,8 +251,8 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-green-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">POS System & VAT Compliance</h4>
@@ -295,7 +295,7 @@ export default function StartRestaurantBusinessIreland() {
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Alcohol</span>
-                    <span className="font-bold text-red-600">23%</span>
+                    <span className="font-bold text-gray-700">23%</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium text-gray-900">Catering Services</span>
@@ -481,43 +481,43 @@ export default function StartRestaurantBusinessIreland() {
             </div>
             
             <div className="space-y-6">
-              <div className="card-modern p-8 border-l-4 border-red-500">
-                <h3 className="text-xl font-bold text-red-600 mb-3">Mistake: Not Registering for VAT Early</h3>
+              <div className="card-modern p-8 border-l-4 border-gray-400">
+                <h3 className="text-xl font-bold text-gray-800 mb-3">Mistake: Not Registering for VAT Early</h3>
                 <p className="text-gray-700 mb-4">
                   Many restaurants wait until they hit the €85,000 threshold, missing out on reclaiming setup VAT on equipment and renovations.
                 </p>
-                <div className="bg-red-50 p-4 rounded-lg">
-                  <p className="text-red-800 font-semibold">Cost: €5,000-15,000 in non-recoverable VAT</p>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-gray-800 font-semibold">Cost: €5,000-15,000 in non-recoverable VAT</p>
                 </div>
               </div>
               
-              <div className="card-modern p-8 border-l-4 border-orange-500">
-                <h3 className="text-xl font-bold text-orange-600 mb-3">Mistake: Poor VAT Registration Timing</h3>
+              <div className="card-modern p-8 border-l-4 border-gray-400">
+                <h3 className="text-xl font-bold text-gray-800 mb-3">Mistake: Poor VAT Registration Timing</h3>
                 <p className="text-gray-700 mb-4">
                   Delaying VAT registration until mandatory threshold, missing opportunities to reclaim setup costs and establish professional credibility.
                 </p>
-                <div className="bg-orange-50 p-4 rounded-lg">
-                  <p className="text-orange-800 font-semibold">Cost: €10,000+ in non-recoverable setup VAT and credibility issues</p>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-gray-800 font-semibold">Cost: €10,000+ in non-recoverable setup VAT and credibility issues</p>
                 </div>
               </div>
               
-              <div className="card-modern p-8 border-l-4 border-yellow-500">
-                <h3 className="text-xl font-bold text-yellow-600 mb-3">Mistake: Poor Cash Flow Planning</h3>
+              <div className="card-modern p-8 border-l-4 border-gray-400">
+                <h3 className="text-xl font-bold text-gray-800 mb-3">Mistake: Poor Cash Flow Planning</h3>
                 <p className="text-gray-700 mb-4">
                   Underestimating working capital needs and not accounting for 3-6 month ramp-up period before profitability.
                 </p>
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <p className="text-yellow-800 font-semibold">Result: 40% of restaurants fail within first year due to cash flow</p>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-gray-800 font-semibold">Result: 40% of restaurants fail within first year due to cash flow</p>
                 </div>
               </div>
               
-              <div className="card-modern p-8 border-l-4 border-blue-500">
-                <h3 className="text-xl font-bold text-blue-600 mb-3">Mistake: Manual VAT Management</h3>
+              <div className="card-modern p-8 border-l-4 border-gray-400">
+                <h3 className="text-xl font-bold text-gray-800 mb-3">Mistake: Manual VAT Management</h3>
                 <p className="text-gray-700 mb-4">
                   Trying to handle complex restaurant VAT rates, different tax rates for dine-in vs takeaway, and bi-monthly filings manually.
                 </p>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <p className="text-blue-800 font-semibold">Cost: 15-20 hours per month + penalties for errors</p>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-gray-800 font-semibold">Cost: 15-20 hours per month + penalties for errors</p>
                 </div>
               </div>
             </div>
@@ -525,7 +525,7 @@ export default function StartRestaurantBusinessIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white">
+        <section className="scroll-section py-20 px-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Ready to Open Your Restaurant in Ireland?

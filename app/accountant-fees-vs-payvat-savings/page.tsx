@@ -214,7 +214,7 @@ export default function AccountantFeesVsPayVatSavings() {
                 </div>
               </div>
 
-              <div className="mt-8 p-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg border-2 border-green-200">
+              <div className="mt-8 p-8 bg-gray-50 rounded-lg border-2 border-green-200">
                 <div className="text-center">
                   <h4 className="text-2xl font-bold text-foreground mb-2">Your Annual Savings</h4>
                   <div className="text-5xl font-bold text-green-600 mb-2">€4,200</div>

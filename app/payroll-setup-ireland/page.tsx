@@ -51,13 +51,13 @@ export default function PayrollSetupIreland() {
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
         }`}>
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-sky-50 rounded-full text-sky-700 text-sm font-medium mb-6 animate-pulse">
-              <span className="w-2 h-2 bg-sky-500 rounded-full mr-2"></span>
+            <div className="inline-flex items-center px-4 py-2 bg-teal-50 rounded-full text-teal-700 text-sm font-medium mb-6 animate-pulse">
+              <span className="w-2 h-2 bg-teal-500 rounded-full mr-2"></span>
               Irish Payroll Setup Guide
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Payroll Setup in 
-              <span className="bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-teal-600 to-teal-700 bg-clip-text text-transparent">
                 Ireland (2025)
               </span>
             </h1>
@@ -73,7 +73,7 @@ export default function PayrollSetupIreland() {
               </a>
               <a 
                 href="#payroll-guide" 
-                className="px-8 py-4 text-lg font-semibold text-sky-600 border-2 border-sky-200 rounded-xl hover:bg-sky-50 transition-all duration-300"
+                className="px-8 py-4 text-lg font-semibold text-teal-600 border-2 border-teal-200 rounded-xl hover:bg-teal-50 transition-all duration-300"
               >
                 View Setup Steps
               </a>
@@ -101,8 +101,8 @@ export default function PayrollSetupIreland() {
                     onClick={() => setSelectedTopic(key)}
                     className={`p-4 text-center rounded-lg transition-all duration-300 ${
                       selectedTopic === key
-                        ? 'bg-sky-600 text-white shadow-lg scale-105'
-                        : 'bg-gray-100 text-gray-700 hover:bg-sky-50'
+                        ? 'bg-teal-600 text-white shadow-lg scale-105'
+                        : 'bg-gray-100 text-gray-700 hover:bg-teal-50'
                     }`}
                   >
                     <h3 className="font-bold">{topic.name}</h3>
@@ -118,7 +118,7 @@ export default function PayrollSetupIreland() {
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="font-semibold text-gray-900">{item.title}</h4>
                         {item.required && (
-                          <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-medium">
+                          <span className="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs font-medium">
                             Required
                           </span>
                         )}
@@ -149,8 +149,8 @@ export default function PayrollSetupIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Pre-Setup Requirements</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-sky-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-sky-600 font-bold text-sm">1</span>
+                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-teal-600 font-bold text-sm">1</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Company Registration</h4>
@@ -159,8 +159,8 @@ export default function PayrollSetupIreland() {
                   </div>
                   
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-sky-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-sky-600 font-bold text-sm">2</span>
+                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-teal-600 font-bold text-sm">2</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Employment Contracts</h4>
@@ -169,8 +169,8 @@ export default function PayrollSetupIreland() {
                   </div>
                   
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-sky-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-sky-600 font-bold text-sm">3</span>
+                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-teal-600 font-bold text-sm">3</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Employee Information</h4>
@@ -184,8 +184,8 @@ export default function PayrollSetupIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Revenue Registration</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-green-600 font-bold text-sm">4</span>
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-gray-600 font-bold text-sm">4</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">PAYE/PRSI Registration</h4>
@@ -194,8 +194,8 @@ export default function PayrollSetupIreland() {
                   </div>
                   
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-green-600 font-bold text-sm">5</span>
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-gray-600 font-bold text-sm">5</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">ROS Access Setup</h4>
@@ -204,8 +204,8 @@ export default function PayrollSetupIreland() {
                   </div>
                   
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-green-600 font-bold text-sm">6</span>
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-gray-600 font-bold text-sm">6</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Employer Registration Number</h4>
@@ -219,8 +219,8 @@ export default function PayrollSetupIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">System Setup</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">7</span>
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-gray-600 font-bold text-sm">7</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Choose Payroll Software</h4>
@@ -229,8 +229,8 @@ export default function PayrollSetupIreland() {
                   </div>
                   
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">8</span>
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-gray-600 font-bold text-sm">8</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Configure Tax Settings</h4>
@@ -239,8 +239,8 @@ export default function PayrollSetupIreland() {
                   </div>
                   
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">9</span>
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-gray-600 font-bold text-sm">9</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Test Payroll Run</h4>
@@ -269,9 +269,9 @@ export default function PayrollSetupIreland() {
               <div className="card-modern p-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Employee Deductions</h3>
                 <div className="space-y-4">
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">PAYE (Pay As You Earn)</h4>
-                    <ul className="text-blue-800 text-sm space-y-1">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 mb-2">PAYE (Pay As You Earn)</h4>
+                    <ul className="text-gray-800 text-sm space-y-1">
                       <li>• Single: 20% up to €42,000, 40% thereafter</li>
                       <li>• Married: 20% up to €84,000, 40% thereafter</li>
                       <li>• Personal credit: €1,875</li>
@@ -279,9 +279,9 @@ export default function PayrollSetupIreland() {
                     </ul>
                   </div>
                   
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-green-900 mb-2">PRSI Class A1</h4>
-                    <ul className="text-green-800 text-sm space-y-1">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 mb-2">PRSI Class A1</h4>
+                    <ul className="text-gray-800 text-sm space-y-1">
                       <li>• Employee: 4% on income over €352/week</li>
                       <li>• No upper limit</li>
                       <li>• Covers social welfare benefits</li>
@@ -290,8 +290,8 @@ export default function PayrollSetupIreland() {
                   </div>
                   
                   <div className="bg-teal-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-orange-900 mb-2">USC (Universal Social Charge)</h4>
-                    <ul className="text-orange-800 text-sm space-y-1">
+                    <h4 className="font-semibold text-gray-900 mb-2">USC (Universal Social Charge)</h4>
+                    <ul className="text-gray-800 text-sm space-y-1">
                       <li>• 0.5% on income up to €12,012</li>
                       <li>• 2% on income €12,013 to €22,920</li>
                       <li>• 4.5% on income over €22,920</li>
@@ -304,9 +304,9 @@ export default function PayrollSetupIreland() {
               <div className="card-modern p-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Employer Costs</h3>
                 <div className="space-y-4">
-                  <div className="bg-red-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-red-900 mb-2">PRSI Employer</h4>
-                    <ul className="text-red-800 text-sm space-y-1">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 mb-2">PRSI Employer</h4>
+                    <ul className="text-gray-800 text-sm space-y-1">
                       <li>• 11.05% on income over €352/week</li>
                       <li>• 8.8% on income €352-€424/week</li>
                       <li>• No upper limit</li>
@@ -324,9 +324,9 @@ export default function PayrollSetupIreland() {
                     </ul>
                   </div>
                   
-                  <div className="bg-yellow-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-yellow-900 mb-2">Statutory Benefits</h4>
-                    <ul className="text-yellow-800 text-sm space-y-1">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 mb-2">Statutory Benefits</h4>
+                    <ul className="text-gray-800 text-sm space-y-1">
                       <li>• Minimum 20 days annual leave</li>
                       <li>• 9 public holidays</li>
                       <li>• Sick leave (3 days statutory)</li>
@@ -354,22 +354,22 @@ export default function PayrollSetupIreland() {
             <div className="card-premium p-8">
               <div className="space-y-6">
                 <div className="grid md:grid-cols-3 gap-6">
-                  <div className="bg-red-50 p-4 rounded-lg text-center">
-                    <h3 className="text-lg font-bold text-red-900 mb-2">Monthly</h3>
-                    <div className="text-3xl font-bold text-red-600 mb-2">14th</div>
-                    <p className="text-red-800 text-sm">P30 return and payment due</p>
+                  <div className="bg-gray-50 p-4 rounded-lg text-center">
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">Monthly</h3>
+                    <div className="text-3xl font-bold text-gray-800 mb-2">14th</div>
+                    <p className="text-gray-800 text-sm">P30 return and payment due</p>
                   </div>
                   
                   <div className="bg-teal-50 p-4 rounded-lg text-center">
-                    <h3 className="text-lg font-bold text-orange-900 mb-2">February</h3>
-                    <div className="text-3xl font-bold text-orange-600 mb-2">15th</div>
-                    <p className="text-orange-800 text-sm">P60s to employees</p>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">February</h3>
+                    <div className="text-3xl font-bold text-gray-800 mb-2">15th</div>
+                    <p className="text-gray-800 text-sm">P60s to employees</p>
                   </div>
                   
-                  <div className="bg-blue-50 p-4 rounded-lg text-center">
-                    <h3 className="text-lg font-bold text-blue-900 mb-2">February</h3>
-                    <div className="text-3xl font-bold text-blue-600 mb-2">28th</div>
-                    <p className="text-blue-800 text-sm">P35 annual return due</p>
+                  <div className="bg-gray-50 p-4 rounded-lg text-center">
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">February</h3>
+                    <div className="text-3xl font-bold text-gray-800 mb-2">28th</div>
+                    <p className="text-gray-800 text-sm">P35 annual return due</p>
                   </div>
                 </div>
                 
@@ -378,29 +378,29 @@ export default function PayrollSetupIreland() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <ul className="text-gray-700 text-sm space-y-2">
                       <li className="flex items-start space-x-2">
-                        <span className="text-sky-500 mt-1">•</span>
+                        <span className="text-teal-500 mt-1">•</span>
                         <span>P45 when employee leaves</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-sky-500 mt-1">•</span>
+                        <span className="text-teal-500 mt-1">•</span>
                         <span>P46 for new employees without P45</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-sky-500 mt-1">•</span>
+                        <span className="text-teal-500 mt-1">•</span>
                         <span>Benefits-in-kind reporting</span>
                       </li>
                     </ul>
                     <ul className="text-gray-700 text-sm space-y-2">
                       <li className="flex items-start space-x-2">
-                        <span className="text-sky-500 mt-1">•</span>
+                        <span className="text-teal-500 mt-1">•</span>
                         <span>Pension auto-enrolment preparation</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-sky-500 mt-1">•</span>
+                        <span className="text-teal-500 mt-1">•</span>
                         <span>Employment permit compliance</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-sky-500 mt-1">•</span>
+                        <span className="text-teal-500 mt-1">•</span>
                         <span>Workplace Relations Commission</span>
                       </li>
                     </ul>
@@ -429,23 +429,23 @@ export default function PayrollSetupIreland() {
                   <h3 className="text-xl font-bold text-gray-900 mb-4">Core Features</h3>
                   <div className="space-y-3">
                     <div className="flex items-start space-x-3">
-                      <span className="text-sky-500 mt-1">✓</span>
+                      <span className="text-teal-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Automatic PAYE/PRSI/USC calculations</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-sky-500 mt-1">✓</span>
+                      <span className="text-teal-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">RPN (Revenue Payroll Notification) support</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-sky-500 mt-1">✓</span>
+                      <span className="text-teal-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">P30 return generation and submission</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-sky-500 mt-1">✓</span>
+                      <span className="text-teal-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Payslip generation and distribution</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-sky-500 mt-1">✓</span>
+                      <span className="text-teal-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Bank file generation for payments</span>
                     </div>
                   </div>
@@ -455,23 +455,23 @@ export default function PayrollSetupIreland() {
                   <h3 className="text-xl font-bold text-gray-900 mb-4">Advanced Features</h3>
                   <div className="space-y-3">
                     <div className="flex items-start space-x-3">
-                      <span className="text-sky-500 mt-1">✓</span>
+                      <span className="text-teal-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Employee self-service portal</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-sky-500 mt-1">✓</span>
+                      <span className="text-teal-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Leave management system</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-sky-500 mt-1">✓</span>
+                      <span className="text-teal-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Pension scheme integration</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-sky-500 mt-1">✓</span>
+                      <span className="text-teal-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Time and attendance tracking</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-sky-500 mt-1">✓</span>
+                      <span className="text-teal-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Benefits-in-kind reporting</span>
                     </div>
                   </div>
@@ -482,29 +482,29 @@ export default function PayrollSetupIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-gradient-to-r from-sky-600 to-blue-600 text-white">
+        <section className="py-20 px-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Simplify Your Irish Payroll Setup
             </h2>
-            <p className="text-xl mb-8 text-sky-100">
+            <p className="text-xl mb-8 text-teal-100">
               Need guidance on payroll setup? PayVat provides expert consultation and connects you with qualified payroll specialists for PAYE, PRSI, USC compliance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-sky-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-teal-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Get Payroll Guidance
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-sky-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-teal-600 transition-all duration-300"
               >
                 Contact for Advice
               </a>
             </div>
-            <p className="text-sm text-sky-200 mt-6">
+            <p className="text-sm text-teal-200 mt-6">
               Get expert guidance on payroll compliance and setup
             </p>
           </div>

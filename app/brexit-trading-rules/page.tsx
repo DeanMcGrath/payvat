@@ -60,7 +60,7 @@ export default function BrexitTradingRules() {
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Brexit Trading Rules for 
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-teal-600 to-teal-700 bg-clip-text text-transparent">
                 Ireland (2025)
               </span>
             </h1>
@@ -462,7 +462,7 @@ export default function BrexitTradingRules() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+        <section className="py-20 px-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Navigate Brexit Trading Complexity
