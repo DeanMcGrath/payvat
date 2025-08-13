@@ -9,11 +9,10 @@ import {
   FileText, 
   X, 
   CheckCircle, 
-  AlertCircle, 
-  Sparkles,
+  AlertCircle,
   Brain,
   TrendingUp,
-  Lightbulb
+  Info
 } from 'lucide-react'
 import { toast } from 'sonner'
 import DocumentFeedback from './DocumentFeedback'
@@ -63,7 +62,7 @@ export default function SmartDocumentUpload({
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileSelect = () => {
-    console.log('🔥 Smart file upload triggered')
+    console.log('Smart file upload triggered')
     fileInputRef.current?.click()
   }
 
@@ -95,7 +94,7 @@ export default function SmartDocumentUpload({
     if (validFiles.length === 0) return
     
     if (validFiles.length > 1) {
-      toast.success(`🧠 Starting AI processing of ${validFiles.length} files...`)
+      toast.success(`Starting AI processing of ${validFiles.length} files...`)
     }
 
     // Process files with enhanced AI
@@ -105,7 +104,7 @@ export default function SmartDocumentUpload({
   }
 
   const uploadFileWithEnhancedAI = async (file: File) => {
-    console.log('🧠 Enhanced AI upload started:', file.name)
+    console.log('Enhanced AI upload started:', file.name)
     setIsUploading(true)
 
     try {
@@ -117,7 +116,7 @@ export default function SmartDocumentUpload({
       if (vatReturnId) formData.append('vatReturnId', vatReturnId)
       if (userId) formData.append('userId', userId)
 
-      console.log('🚀 Sending to enhanced processing endpoint')
+      console.log('Sending to enhanced processing endpoint')
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
@@ -126,7 +125,7 @@ export default function SmartDocumentUpload({
       const result = await response.json()
 
       if (response.ok && result.success) {
-        console.log('✅ Enhanced upload successful:', result)
+        console.log('Enhanced upload successful:', result)
         
         const enhancedDocument: ProcessedDocument = {
           ...result.document,
@@ -144,9 +143,9 @@ export default function SmartDocumentUpload({
         
         // Show enhanced success message
         if (result.templateUsed) {
-          toast.success(`🎯 Document processed using learned template! ${result.confidenceScore ? `(${Math.round(result.confidenceScore * 100)}% confidence)` : ''}`)
+          toast.success(`Document processed using learned template. ${result.confidenceScore ? `(${Math.round(result.confidenceScore * 100)}% confidence)` : ''}`)
         } else if (result.aiProcessed) {
-          toast.success(`🤖 AI processed document successfully`)
+          toast.success(`AI processed document successfully`)
         } else {
           toast.success('File uploaded successfully')
         }
@@ -174,7 +173,7 @@ export default function SmartDocumentUpload({
 
   const triggerAIProcessing = async (documentId: string) => {
     try {
-      console.log('🔄 Triggering enhanced AI processing for:', documentId)
+      console.log('Triggering enhanced AI processing for:', documentId)
       
       const response = await fetch('/api/documents/process-enhanced', {
         method: 'POST',
@@ -190,7 +189,7 @@ export default function SmartDocumentUpload({
       const result = await response.json()
       
       if (response.ok && result.success) {
-        console.log('✅ Enhanced AI processing completed')
+        console.log('Enhanced AI processing completed')
         
         // Update document with AI results
         setUploadedFiles(prev => prev.map(doc => 
@@ -210,12 +209,12 @@ export default function SmartDocumentUpload({
         
         // Show processing results
         if (result.templateUsed) {
-          toast.success(`🎯 Applied learned template: ${result.templateUsed}`)
+          toast.success(`Applied learned template: ${result.templateUsed}`)
         }
         
         if (result.extractedData?.vatData?.totalVatAmount) {
           const vatAmount = result.extractedData.vatData.totalVatAmount
-          toast.success(`💰 AI extracted €${vatAmount.toFixed(2)} VAT`)
+          toast.success(`AI extracted €${vatAmount.toFixed(2)} VAT`)
         }
       }
     } catch (error) {
@@ -264,10 +263,10 @@ export default function SmartDocumentUpload({
     if (!strategy) return null
     
     const config = {
-      'TEMPLATE_MATCH': { color: 'bg-green-100 text-green-800', icon: '🎯', label: 'Template Match' },
-      'HYBRID': { color: 'bg-blue-100 text-blue-800', icon: '🔄', label: 'Hybrid AI' },
-      'AI_VISION': { color: 'bg-teal-100 text-teal-800', icon: '🤖', label: 'AI Vision' },
-      'FALLBACK': { color: 'bg-yellow-100 text-yellow-800', icon: '⚡', label: 'Fallback' }
+      'TEMPLATE_MATCH': { color: 'bg-green-100 text-green-800', icon: '✓', label: 'Template Match' },
+      'HYBRID': { color: 'bg-blue-100 text-blue-800', icon: '⇄', label: 'Hybrid AI' },
+      'AI_VISION': { color: 'bg-teal-100 text-teal-800', icon: 'AI', label: 'AI Vision' },
+      'FALLBACK': { color: 'bg-yellow-100 text-yellow-800', icon: '→', label: 'Fallback' }
     }
     
     const strategyConfig = config[strategy as keyof typeof config]
@@ -290,13 +289,10 @@ export default function SmartDocumentUpload({
       {/* Enhanced Upload Area */}
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-teal-300 transition-colors bg-gradient-to-br from-teal-50 to-blue-50">
         <div className="flex justify-center mb-3">
-          <div className="relative">
-            <Upload className="h-10 w-10 text-teal-600" />
-            <Sparkles className="h-4 w-4 text-yellow-500 absolute -top-1 -right-1" />
-          </div>
+          <Upload className="h-10 w-10 text-teal-600" />
         </div>
         <p className="text-gray-700 mb-2 font-medium">{description}</p>
-        <p className="text-sm text-gray-600 mb-1">✨ Enhanced with AI learning</p>
+        <p className="text-sm text-gray-600 mb-1">Enhanced with AI learning</p>
         <p className="text-xs text-gray-500 mb-4">Templates, pattern recognition, and continuous improvement</p>
         
         <Button 
@@ -308,7 +304,7 @@ export default function SmartDocumentUpload({
           {isUploading ? (
             <>
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-teal-600 border-t-transparent mr-2" />
-              🧠 AI Processing...
+              AI Processing...
             </>
           ) : (
             <>
@@ -392,7 +388,7 @@ export default function SmartDocumentUpload({
                           {/* Suggested Improvements */}
                           {file.suggestedImprovements && file.suggestedImprovements.length > 0 && (
                             <div className="flex items-center text-teal-600 text-xs">
-                              <Lightbulb className="h-3 w-3 mr-1" />
+                              <Info className="h-3 w-3 mr-1" />
                               {file.suggestedImprovements.length} suggestions
                             </div>
                           )}
@@ -409,7 +405,6 @@ export default function SmartDocumentUpload({
                           onClick={() => setSelectedFileForFeedback(file)}
                           className="text-blue-600 border-blue-200 hover:bg-blue-50"
                         >
-                          <Sparkles className="h-3 w-3 mr-1" />
                           Feedback
                         </Button>
                       )}
@@ -463,7 +458,6 @@ export default function SmartDocumentUpload({
       {/* Enhanced Guidelines */}
       <div className="mt-3 text-xs text-gray-500 bg-gray-50 p-3 rounded-lg">
         <div className="flex items-center mb-2">
-          <Sparkles className="h-3 w-3 mr-1 text-yellow-500" />
           <span className="font-medium">AI-Enhanced Processing</span>
         </div>
         <ul className="space-y-1">

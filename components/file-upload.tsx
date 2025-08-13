@@ -84,20 +84,20 @@ export default function FileUpload({
   }
 
   const handleFileSelect = () => {
-    console.log('🔥🔥🔥 HANDLEFILESELECT CALLED - User clicked upload button')
-    console.log('📁 File input ref exists:', !!fileInputRef.current)
+    console.log('HANDLEFILESELECT CALLED - User clicked upload button')
+    console.log('File input ref exists:', !!fileInputRef.current)
     fileInputRef.current?.click()
-    console.log('✅ File input click() triggered')
+    console.log('File input click() triggered')
   }
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('🔥🔥🔥 HANDLEFILECHANGE CALLED - Files were selected')
-    console.log('📂 Event target:', event.target)
-    console.log('📂 Event target files:', event.target.files)
+    console.log('HANDLEFILECHANGE CALLED - Files were selected')
+    console.log('Event target:', event.target)
+    console.log('Event target files:', event.target.files)
     const files = event.target.files
-    console.log('📂 Files count:', files?.length || 0)
+    console.log('Files count:', files?.length || 0)
     if (!files || files.length === 0) {
-      console.log('❌ No files selected, returning early')
+      console.log('No files selected, returning early')
       return
     }
 
@@ -133,17 +133,17 @@ export default function FileUpload({
     }
 
     // Upload files sequentially to avoid overwhelming the server
-    console.log(`🚀 Starting upload of ${validFiles.length} valid files`)
+    console.log(`Starting upload of ${validFiles.length} valid files`)
     for (const file of validFiles) {
-      console.log(`📤 About to upload file: ${file.name}`)
+      console.log(`About to upload file: ${file.name}`)
       await uploadFile(file)
-      console.log(`✅ Finished uploading file: ${file.name}`)
+      console.log(`Finished uploading file: ${file.name}`)
     }
   }
 
   const uploadFile = async (file: File) => {
-    console.log('🔥🔥🔥 UPLOADFILE FUNCTION CALLED')
-    console.log('📄 File details:', {
+    console.log('UPLOADFILE FUNCTION CALLED')
+    console.log('File details:', {
       name: file.name,
       size: file.size,
       type: file.type,
@@ -156,15 +156,15 @@ export default function FileUpload({
       formData.append('file', file)
       const categoryValue = getCategoryValue(category, file.name)
       formData.append('category', categoryValue)
-      console.log('📂 Category determined:', categoryValue)
+      console.log('Category determined:', categoryValue)
       
       if (vatReturnId) {
         formData.append('vatReturnId', vatReturnId)
-        console.log('🔑 VAT Return ID added:', vatReturnId)
+        console.log('VAT Return ID added:', vatReturnId)
       }
 
-      console.log('🌐🌐🌐 ABOUT TO SEND NETWORK REQUEST TO /api/upload')
-      console.log('📡 Request details:', {
+      console.log('ABOUT TO SEND NETWORK REQUEST TO /api/upload')
+      console.log('Request details:', {
         url: '/api/upload',
         method: 'POST',
         hasFormData: true,
@@ -178,15 +178,15 @@ export default function FileUpload({
         body: formData,
       })
 
-      console.log('🌐 NETWORK REQUEST COMPLETED')
-      console.log('📡 Response status:', response.status, response.statusText)
-      console.log('📡 Response ok:', response.ok)
+      console.log('NETWORK REQUEST COMPLETED')
+      console.log('Response status:', response.status, response.statusText)
+      console.log('Response ok:', response.ok)
 
       const result = await response.json()
-      console.log('📄 Response JSON:', result)
+      console.log('Response JSON:', result)
 
       if (response.ok && result.success) {
-        console.log('✅ Upload successful, processing response')
+        console.log('Upload successful, processing response')
         const newDocument: UploadedDocument = result.document
         setUploadedFiles(prev => [...prev, newDocument])
         toast.success('File uploaded successfully')
@@ -263,9 +263,9 @@ export default function FileUpload({
             }))
             
             if (vatAmount > 0) {
-              const engineEmoji = engine === 'enhanced' ? '🚀' : '🤖'
-              const complianceEmoji = isCompliant ? '🇮🇪' : '⚠️'
-              toast.success(`${engineEmoji} AI extracted €${vatAmount.toFixed(2)} VAT • Quality: ${qualityScore}/100 ${complianceEmoji}`)
+              const engineText = engine === 'enhanced' ? 'Enhanced AI' : 'AI'
+              const complianceText = isCompliant ? '(Irish VAT Compliant)' : '(Review Required)'
+              toast.success(`${engineText} extracted €${vatAmount.toFixed(2)} VAT • Quality: ${qualityScore}/100 ${complianceText}`)
             } else {
               toast.success(`Document processed successfully with ${engine} engine`)
             }
@@ -360,12 +360,12 @@ export default function FileUpload({
           onUploadSuccess?.(newDocument)
         }
       } else {
-        console.log('❌ Upload failed')
-        console.log('📄 Error details:', result)
+        console.log('Upload failed')
+        console.log('Error details:', result)
         toast.error(result.error || 'Upload failed')
       }
     } catch (error) {
-      console.error('🚨🚨🚨 UPLOAD ERROR CAUGHT:', error)
+      console.error('UPLOAD ERROR CAUGHT:', error)
       console.error('Error details:', {
         message: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : 'No stack trace',
@@ -434,7 +434,7 @@ export default function FileUpload({
     const files = Array.from(e.dataTransfer.files)
     if (files.length === 0) return
 
-    console.log('📂 Files dropped:', files.length)
+    console.log('Files dropped:', files.length)
     
     const allowedExtensions = ['pdf', 'csv', 'xlsx', 'xls', 'jpg', 'jpeg', 'png']
     const validFiles: File[] = []
@@ -461,7 +461,7 @@ export default function FileUpload({
     if (validFiles.length === 0) return
     
     // Show success message for drag and drop
-    toast.success(`🎯 ${validFiles.length} file(s) dropped successfully! Processing...`)
+    toast.success(`${validFiles.length} file(s) dropped successfully. Processing...`)
     
     // Upload files sequentially
     for (const file of validFiles) {
@@ -475,9 +475,9 @@ export default function FileUpload({
       
       {/* Enhanced Upload Area with Drag and Drop */}
       <div 
-        className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ${
+        className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-200 ${
           isDragOver 
-            ? 'border-teal-500 bg-teal-50 scale-105' 
+            ? 'border-teal-500 bg-teal-50' 
             : 'border-gray-300 hover:border-teal-300'
         } ${
           (isUploading || processingState.isProcessing) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
@@ -489,11 +489,11 @@ export default function FileUpload({
         onClick={() => !isUploading && !processingState.isProcessing && handleFileSelect()}
       >
         {isDragOver ? (
-          <div className="animate-bounce">
+          <div>
             <div className="h-10 w-10 mx-auto mb-3 rounded-full bg-teal-100 flex items-center justify-center">
               <Upload className="h-6 w-6 text-teal-600" />
             </div>
-            <p className="text-teal-700 font-semibold mb-2">Drop files here!</p>
+            <p className="text-teal-700 font-semibold mb-2">Drop files here</p>
             <p className="text-sm text-teal-600">Release to upload your VAT documents</p>
           </div>
         ) : (
@@ -517,7 +517,7 @@ export default function FileUpload({
           {isUploading ? (
             <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Uploading...</>
           ) : processingState.isProcessing ? (
-            <><Zap className="h-4 w-4 mr-2 animate-pulse" />AI Processing...</>
+            <><Zap className="h-4 w-4 mr-2" />AI Processing...</>
           ) : (
             `Choose ${category === 'SALES' ? 'Sales' : 'Purchase'} Files`
           )}
@@ -552,7 +552,7 @@ export default function FileUpload({
           <Progress value={processingState.progress} className="mb-3" />
           
           <div className="flex items-center text-sm text-teal-700">
-            <Zap className="h-4 w-4 mr-2 animate-pulse" />
+            <Zap className="h-4 w-4 mr-2" />
             {processingState.currentStep}
           </div>
           

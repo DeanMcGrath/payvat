@@ -86,8 +86,12 @@ export default function LandingPage() {
         pageSubtitle="Irish VAT compliance made simple"
       />
 
-      {/* Hero Section - Simplified and Elegant */}
-      <section className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden">
+      <main id="main-content" role="main" aria-label="PayVAT Ireland - VAT services">
+        {/* Hero Section - Simplified and Elegant */}
+        <section 
+          className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden"
+          aria-labelledby="hero-heading"
+        >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center">
             <div className="max-w-4xl mx-auto animate-fade-in">
@@ -98,7 +102,10 @@ export default function LandingPage() {
                 <Star className="w-4 h-4 fill-teal-500" />
               </div>
               
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-foreground">
+              <h1 
+                id="hero-heading"
+                className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-foreground"
+              >
                 Irish VAT compliance
                 <span className="block text-gradient-primary mt-2">made simple</span>
               </h1>
@@ -108,19 +115,36 @@ export default function LandingPage() {
                 we have everything you need.
               </p>
 
-              {/* Trust Indicators */}
-              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground mb-12">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-teal-600" />
-                  <span className="font-medium">Revenue Compliant</span>
+              {/* Enhanced Trust Indicators */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto mb-12">
+                <div className="flex items-center justify-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="p-2 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl">
+                    <Shield className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-gray-900 text-sm">Revenue Compliant</div>
+                    <div className="text-xs text-teal-600">✓ Officially approved</div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-teal-600" />
-                  <span className="font-medium">Trusted by Irish businesses</span>
+                
+                <div className="flex items-center justify-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="p-2 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl">
+                    <Users className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-gray-900 text-sm">5,000+ Businesses</div>
+                    <div className="text-xs text-teal-600">✓ Trust PayVAT</div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Award className="h-5 w-5 text-teal-600" />
-                  <span className="font-medium">Award-winning support</span>
+                
+                <div className="flex items-center justify-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="p-2 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl">
+                    <Award className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-gray-900 text-sm">Award-winning</div>
+                    <div className="text-xs text-teal-600">✓ Customer support</div>
+                  </div>
                 </div>
               </div>
 
@@ -130,9 +154,9 @@ export default function LandingPage() {
                   variant="outline"
                   size="lg"
                   onClick={() => setShowVideoModal(true)}
-                  className="border-teal-600 text-teal-600 hover:bg-teal-50 hover:border-teal-700 hover:text-teal-700 px-8 py-4 text-lg font-semibold transition-all duration-300 hover:shadow-lg"
+                  className="border-teal-600 text-teal-600 hover:bg-teal-50 hover:border-teal-700 hover:text-teal-700 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold transition-all duration-300 hover:shadow-lg min-h-[44px] hover:scale-105"
                 >
-                  <Play className="mr-3 h-5 w-5" />
+                  <Play className="mr-2 sm:mr-3 h-4 sm:h-5 w-4 sm:w-5" />
                   Watch Demo Video
                 </Button>
               </div>
@@ -167,11 +191,11 @@ export default function LandingPage() {
                   }}
                 />
                 
-                <Card className="relative h-full overflow-hidden border-2 border-gray-100 bg-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 rounded-2xl">
+                <Card className="relative h-full overflow-hidden border-2 border-gray-100 bg-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 rounded-2xl cursor-pointer active:scale-[0.98]">
                   <div className={`absolute top-0 inset-x-0 h-2 bg-gradient-to-r ${box.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
                   />
                   
-                  <CardContent className="p-8 space-y-6">
+                  <CardContent className="p-6 sm:p-8 space-y-4 sm:space-y-6">
                     {/* Icon Container */}
                     <div className="relative">
                       <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${box.gradient} p-0.5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
@@ -227,11 +251,11 @@ export default function LandingPage() {
                     {/* CTA Button */}
                     <Button 
                       size="lg" 
-                      className={`w-full font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105 bg-gradient-to-r ${box.gradient}`}
+                      className={`w-full font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105 bg-gradient-to-r ${box.gradient} min-h-[48px] text-base active:scale-95`}
                       onClick={() => window.location.href = box.link}
                     >
                       {box.buttonText}
-                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight className="ml-2 h-4 sm:h-5 w-4 sm:w-5 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </CardContent>
                 </Card>
@@ -241,61 +265,66 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Value Proposition Section */}
-      <section className="py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              Why choose <span className="text-gradient-primary">PayVAT?</span>
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Join thousands of Irish businesses who trust PayVAT for their compliance needs
-            </p>
+
+        {/* Value Proposition Section */}
+        <section 
+          className="py-20 lg:py-32"
+          aria-labelledby="value-proposition-heading"
+        >
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 id="value-proposition-heading" className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+                Why choose <span className="text-gradient-primary">PayVAT?</span>
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Join thousands of Irish businesses who trust PayVAT for their compliance needs
+              </p>
+            </div>
+            
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" data-animate>
+              <div className="flex items-center gap-4 p-4 sm:p-6 card-modern hover-scale group cursor-pointer min-h-[80px] active:scale-95 transition-all">
+                <div className="icon-modern group-hover:scale-110 transition-transform flex-shrink-0">
+                  <Clock className="h-5 sm:h-6 w-5 sm:w-6 text-white" />
+                </div>
+                <div className="min-w-0">
+                  <div className="font-semibold text-foreground text-sm sm:text-base">Save Time</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Automate VAT tasks</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4 p-4 sm:p-6 card-modern hover-scale group cursor-pointer min-h-[80px] active:scale-95 transition-all">
+                <div className="icon-modern group-hover:scale-110 transition-transform flex-shrink-0">
+                  <Shield className="h-5 sm:h-6 w-5 sm:w-6 text-white" />
+                </div>
+                <div className="min-w-0">
+                  <div className="font-semibold text-foreground text-sm sm:text-base">Stay Compliant</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Revenue approved</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4 p-4 sm:p-6 card-modern hover-scale group cursor-pointer min-h-[80px] active-scale-95 transition-all">
+                <div className="icon-modern group-hover:scale-110 transition-transform flex-shrink-0">
+                  <TrendingUp className="h-5 sm:h-6 w-5 sm:w-6 text-white" />
+                </div>
+                <div className="min-w-0">
+                  <div className="font-semibold text-foreground text-sm sm:text-base">Grow Faster</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Focus on business</div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4 p-4 sm:p-6 card-modern hover-scale group cursor-pointer min-h-[80px] active:scale-95 transition-all">
+                <div className="icon-modern group-hover:scale-110 transition-transform flex-shrink-0">
+                  <Users className="h-5 sm:h-6 w-5 sm:w-6 text-white" />
+                </div>
+                <div className="min-w-0">
+                  <div className="font-semibold text-foreground text-sm sm:text-base">Professional Support</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">Always here to help</div>
+                </div>
+              </div>
+            </div>
           </div>
-          
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-animate>
-            <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
-              <div className="icon-modern group-hover:scale-110 transition-transform">
-                <Clock className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <div className="font-semibold text-foreground">Save Time</div>
-                <div className="text-sm text-muted-foreground">Automate VAT tasks</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
-              <div className="icon-modern group-hover:scale-110 transition-transform">
-                <Shield className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <div className="font-semibold text-foreground">Stay Compliant</div>
-                <div className="text-sm text-muted-foreground">Revenue approved</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
-              <div className="icon-modern group-hover:scale-110 transition-transform">
-                <TrendingUp className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <div className="font-semibold text-foreground">Grow Faster</div>
-                <div className="text-sm text-muted-foreground">Focus on business</div>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
-              <div className="icon-modern group-hover:scale-110 transition-transform">
-                <Users className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <div className="font-semibold text-foreground">Professional Support</div>
-                <div className="text-sm text-muted-foreground">Always here to help</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       {/* Footer */}
       <Footer />

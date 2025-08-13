@@ -2,7 +2,7 @@
 
 A comprehensive web application for Irish businesses to submit and pay VAT returns, built with Next.js 15, TypeScript, and modern web technologies.
 
-## 🚀 Features
+## Features
 
 ### For Businesses
 - **VAT Return Management**: Create, submit, and track VAT returns
@@ -18,7 +18,7 @@ A comprehensive web application for Irish businesses to submit and pay VAT retur
 - **System Analytics**: Comprehensive reporting and performance metrics
 - **Audit Logging**: Full audit trail of all system activities
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 - **Frontend**: Next.js 15, React 19, TypeScript
 - **Styling**: Tailwind CSS, Radix UI Components
@@ -29,7 +29,7 @@ A comprehensive web application for Irish businesses to submit and pay VAT retur
 - **File Upload**: Secure multipart file handling
 - **Security**: Comprehensive security headers and validation
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── app/                    # Next.js App Router
@@ -44,7 +44,7 @@ A comprehensive web application for Irish businesses to submit and pay VAT retur
 └── uploads/              # File upload directory
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 18+ 
@@ -83,7 +83,7 @@ A comprehensive web application for Irish businesses to submit and pay VAT retur
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-## 🔧 Configuration
+## Configuration
 
 ### Required Environment Variables
 
@@ -114,7 +114,7 @@ Stripe is integrated for VAT payment processing:
 - Receipt generation and management
 - Failure tracking and retry logic
 
-## 🔐 Security Features
+## Security Features
 
 - **Authentication**: JWT-based with secure httpOnly cookies
 - **Authorization**: Role-based access control (User, Admin, Super Admin)
@@ -124,7 +124,7 @@ Stripe is integrated for VAT payment processing:
 - **Security Headers**: Comprehensive security headers configuration
 - **Audit Logging**: Complete activity tracking for compliance
 
-## 📊 Admin Features
+## Admin Features
 
 ### User Management
 - View all registered users with detailed statistics
@@ -150,7 +150,7 @@ Stripe is integrated for VAT payment processing:
 - Payment volume and success rate tracking
 - Monthly and yearly trend analysis
 
-## 🚀 Deployment
+## Deployment
 
 ### Vercel Deployment
 
@@ -179,7 +179,7 @@ Stripe is integrated for VAT payment processing:
 - Enable monitoring and error tracking
 - Configure backup and disaster recovery
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run linting
@@ -192,7 +192,7 @@ npx tsc --noEmit
 npm run build
 ```
 
-## 📝 API Documentation
+## API Documentation
 
 ### Authentication Endpoints
 - `POST /api/auth/register` - User registration
@@ -219,14 +219,14 @@ npm run build
 - `GET /api/admin/payments` - Payment monitoring
 - `GET /api/admin/analytics` - System analytics
 
-## 📄 License
+## License
 
 This project is proprietary software developed for Irish VAT compliance management.
 
-## 🤝 Support
+## Support
 
 For support and questions, please contact the development team.
 
 ---
 
-**Built with ❤️ for Irish businesses** 🍀
+**Built for Irish businesses**

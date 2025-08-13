@@ -18,15 +18,15 @@ print_status() {
 }
 
 print_success() {
-    echo -e "${GREEN}✅${NC} $1"
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠️${NC} $1"
+    echo -e "${YELLOW}[WARNING]${NC} $1"
 }
 
 print_error() {
-    echo -e "${RED}❌${NC} $1"
+    echo -e "${RED}[ERROR]${NC} $1"
 }
 
 # Function to check if there are changes to commit
@@ -60,14 +60,14 @@ run_tests() {
 
 # Main deployment process
 main() {
-    echo "🚀 PayVAT Automated Deployment Script"
+    echo "PayVAT Automated Deployment Script"
     echo "======================================"
     
     # Check for uncommitted changes
     check_changes
     
     # Get deployment message (optional)
-    COMMIT_MSG="${1:-"🚀 Automated deployment via deploy.sh"}"
+    COMMIT_MSG="${1:-"Automated deployment via deploy.sh"}"
     
     print_status "Starting deployment process..."
     
@@ -91,7 +91,7 @@ main() {
     FULL_MSG="$COMMIT_MSG
 
 Deployed at: $TIMESTAMP
-🤖 Generated with Automated Deploy Script
+Generated with Automated Deploy Script
 
 Co-Authored-By: Claude <noreply@anthropic.com>"
     
@@ -119,8 +119,8 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
     if [ -n "$DEPLOYMENT_URL" ]; then
         print_success "Deployment successful!"
         echo ""
-        echo "🌐 Production URL: $DEPLOYMENT_URL"
-        echo "📊 Dashboard: https://vercel.com/dashboard"
+        echo "Production URL: $DEPLOYMENT_URL"
+        echo "Dashboard: https://vercel.com/dashboard"
         
         # Optional: Open deployment in browser
         if command -v open &> /dev/null; then
@@ -134,13 +134,13 @@ Co-Authored-By: Claude <noreply@anthropic.com>"
     
     echo ""
     echo "======================================"
-    print_success "Deployment complete! 🎉"
+    print_success "Deployment complete!"
     echo ""
     echo "Summary:"
-    echo "  - Tests: ✅ Passed"
-    echo "  - Commit: ✅ $COMMIT_MSG"
-    echo "  - Push: ✅ GitHub"
-    echo "  - Deploy: ✅ Vercel Production"
+    echo "  - Tests: Passed"
+    echo "  - Commit: $COMMIT_MSG"
+    echo "  - Push: GitHub"
+    echo "  - Deploy: Vercel Production"
 }
 
 # Handle errors

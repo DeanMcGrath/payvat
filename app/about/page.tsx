@@ -120,7 +120,7 @@ export default function AboutPayVat() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  PayVat is an Irish company founded with a clear mission: simplify VAT compliance for Irish businesses. Founded by Irish entrepreneurs and technologists, we focus specifically on solving VAT submission challenges and helping businesses stay Revenue compliant.
+                  PayVat is an Irish company founded with a clear mission: simplify VAT compliance for Irish businesses. Founded by Irish entrepreneurs, we focus specifically on solving VAT submission challenges and helping businesses stay Revenue compliant.
                 </p>
                 <p className="text-lg text-muted-foreground leading-relaxed">
                   Today, we provide dedicated VAT services including automated calculations, submissions, and compliance monitoring, plus comprehensive business setup guidance to help new businesses get started with proper VAT registration from day one.

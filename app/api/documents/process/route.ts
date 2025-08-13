@@ -18,7 +18,7 @@ interface ProcessDocumentRequest {
  * POST /api/documents/process - Process a document for VAT extraction
  */
 async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
-  console.log('🚀 PROCESS DOCUMENT ENDPOINT CALLED')
+  console.log('PROCESS DOCUMENT ENDPOINT CALLED')
   console.log(`   User: ${user ? `${user.id} (${user.email})` : 'GUEST/ANONYMOUS'}`)
   console.log(`   Request method: ${request.method}`)
   console.log(`   Request URL: ${request.url}`)
@@ -32,7 +32,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     try {
       body = await request.json()
     } catch (jsonError) {
-      console.error('🚨 JSON PARSING ERROR:', jsonError)
+      console.error('JSON PARSING ERROR:', jsonError)
       return NextResponse.json(
         { 
           success: false,
@@ -66,14 +66,14 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         whereClause.userId = user.id
       }
       
-      console.log(`📄 Looking for document ${documentId}${user ? ` owned by user ${user.id}` : ' (no user)'}`)
+      console.log(`Looking for document ${documentId}${user ? ` owned by user ${user.id}` : ' (no user)'}`)
       
       document = await prisma.document.findFirst({
         where: whereClause
       })
       
       if (!document) {
-        console.error(`❌ Document ${documentId} not found${user ? ` for user ${user.id}` : ''}`)
+        console.error(`Document ${documentId} not found${user ? ` for user ${user.id}` : ''}`)
         return NextResponse.json(
           { 
             error: 'Document not found or not authorized',
@@ -84,9 +84,9 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         )
       }
       
-      console.log(`✅ Found document: ${document.originalName}`)
+      console.log(`Found document: ${document.originalName}`)
     } catch (dbError) {
-      console.error('🚨 Database error when fetching document:', dbError)
+      console.error('Database error when fetching document:', dbError)
       return NextResponse.json(
         { 
           error: 'Database error',
@@ -140,7 +140,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     }
     
     // CRITICAL DEBUG: Validate file data before processing
-    console.log('🔍 FILE DATA VALIDATION:')
+    console.log('FILE DATA VALIDATION:')
     console.log(`   Document: ${document.originalName} (${document.category})`)
     console.log(`   MIME Type: ${document.mimeType}`)
     console.log(`   File data exists: ${!!document.fileData}`)
@@ -159,7 +159,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
           console.log(`   PDF header check: "${pdfHeader}" (${pdfHeader.startsWith('%PDF') ? 'VALID' : 'INVALID'})`)
         }
       } catch (base64Error) {
-        console.error('🚨 CRITICAL: fileData base64 decode failed:', base64Error)
+        console.error('CRITICAL: fileData base64 decode failed:', base64Error)
         return NextResponse.json(
           { 
             error: 'Invalid file data format - not valid base64',
@@ -175,7 +175,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     }
     
     // IMMEDIATE OPENAI API STATUS CHECK - Show status to user via console and response
-    console.log('🔍 PRE-PROCESSING: Checking OpenAI API status...')
+    console.log('PRE-PROCESSING: Checking OpenAI API status...')
     const openAIStatus: any = {
       apiKeyConfigured: false,
       apiKeyFormat: 'invalid',
@@ -198,7 +198,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       openAIStatus.diagnosticMessage = aiStatus.reason
       
       if (!openAIStatus.apiEnabled) {
-        console.log('🚨 CRITICAL: AI PROCESSING DISABLED')
+        console.log('CRITICAL: AI PROCESSING DISABLED')
         console.log(`   Reason: ${aiStatus.reason}`)
         console.log(`   Suggestions:`)
         aiStatus.suggestions.forEach(suggestion => {
@@ -209,7 +209,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       }
       
       if (openAIStatus.apiEnabled) {
-        console.log('✅ OpenAI API key configured, testing connectivity...')
+        console.log('OpenAI API key configured, testing connectivity...')
         const connectivityResult = await quickConnectivityTest()
         openAIStatus.connectivityTest = {
           success: connectivityResult.success,
@@ -218,14 +218,14 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         }
         
         if (connectivityResult.success) {
-          console.log('✅ OpenAI API connectivity confirmed - AI processing will work!')
+          console.log('OpenAI API connectivity confirmed - AI processing will work!')
         } else {
-          console.error('🚨 OpenAI API connectivity failed:', connectivityResult.error)
+          console.error('OpenAI API connectivity failed:', connectivityResult.error)
           console.error('   Documents will fall back to legacy processing')
         }
       }
     } catch (statusError) {
-      console.error('⚠️ Failed to check OpenAI API status:', statusError)
+        console.error('Failed to check OpenAI API status:', statusError)
       openAIStatus.connectivityTest = {
         success: false,
         message: 'Status check failed',
@@ -233,12 +233,12 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       }
     }
     
-    console.log('🤖 OpenAI API Status Summary:', openAIStatus)
+    console.log('OpenAI API Status Summary:', openAIStatus)
     
     // 🚨 EMERGENCY EMBEDDED PROMPT DIAGNOSTIC - Simple vs Complex Test
     let promptDiagnostic: any = null
     if (debugMode && openAIStatus.apiEnabled && document.fileData) {
-      console.log('🧪🚨 EMERGENCY DEBUG MODE: Testing Simple vs Complex Prompts')
+      console.log('EMERGENCY DEBUG MODE: Testing Simple vs Complex Prompts')
       
       try {
         const { openai, AI_CONFIG } = await import('@/lib/ai/openai')
@@ -248,8 +248,8 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
                        document.originalName.toLowerCase().includes('volkswagen') ||
                        document.originalName.toLowerCase().includes('financial')
         
-        console.log(`🚗 VW Document Detection: ${isVWDoc}`)
-        console.log('🎯 Testing SIMPLE prompt: "What is the Total Amount VAT on this Volkswagen Financial Services invoice?"')
+        console.log(`VW Document Detection: ${isVWDoc}`)
+        console.log('Testing SIMPLE prompt: "What is the Total Amount VAT on this Volkswagen Financial Services invoice?"')
         
         // Test 1: Simple Prompt
         const simplePrompt = "What is the Total Amount VAT on this Volkswagen Financial Services invoice? Look for the field labeled 'Total Amount VAT' and extract only that euro amount. Return just the number."
@@ -278,13 +278,13 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         })
         
         const simpleResult = simpleResponse.choices[0]?.message?.content || 'No response'
-        console.log(`🎯 SIMPLE PROMPT RESULT: "${simpleResult}"`)
-        console.log(`🎯 Simple found €111.36: ${simpleResult.includes('111.36')}`)
-        console.log(`🎯 Simple found €103.16: ${simpleResult.includes('103.16')}`)
-        console.log(`🎯 Simple found €101.99: ${simpleResult.includes('101.99')}`)
+        console.log(`SIMPLE PROMPT RESULT: "${simpleResult}"`)
+        console.log(`Simple found €111.36: ${simpleResult.includes('111.36')}`)
+        console.log(`Simple found €103.16: ${simpleResult.includes('103.16')}`)
+        console.log(`Simple found €101.99: ${simpleResult.includes('101.99')}`)
         
         // Test 2: Complex Prompt (first 500 chars for comparison)
-        console.log('📊 Testing COMPLEX prompt (full VAT_EXTRACTION prompt)')
+        console.log('Testing COMPLEX prompt (full VAT_EXTRACTION prompt)')
         const complexPrompt = document.mimeType === 'application/pdf' 
           ? `${DOCUMENT_PROMPTS.VAT_EXTRACTION}\n\nNote: This is a PDF document. Please extract all visible text and VAT information from all pages.`
           : DOCUMENT_PROMPTS.VAT_EXTRACTION
@@ -314,11 +314,11 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         })
         
         const complexResult = complexResponse.choices[0]?.message?.content || 'No response'
-        console.log(`📊 COMPLEX PROMPT RESULT LENGTH: ${complexResult.length} chars`)
-        console.log(`📊 Complex found €111.36: ${complexResult.includes('111.36')}`)
-        console.log(`📊 Complex found €103.16: ${complexResult.includes('103.16')}`)
-        console.log(`📊 Complex found €101.99: ${complexResult.includes('101.99')}`)
-        console.log(`📊 COMPLEX RESULT PREVIEW: "${complexResult.substring(0, 300)}..."`)
+        console.log(`COMPLEX PROMPT RESULT LENGTH: ${complexResult.length} chars`)
+        console.log(`Complex found €111.36: ${complexResult.includes('111.36')}`)
+        console.log(`Complex found €103.16: ${complexResult.includes('103.16')}`)
+        console.log(`Complex found €101.99: ${complexResult.includes('101.99')}`)
+        console.log(`COMPLEX RESULT PREVIEW: "${complexResult.substring(0, 300)}..."`)
         
         // Comparison Results
         const comparison = {
@@ -332,19 +332,19 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         }
         
         if (comparison.simpleFound111_36 && !comparison.complexFound111_36) {
-          comparison.verdict = '🎯 SIMPLE PROMPT WINS - Found correct €111.36, complex failed'
+          comparison.verdict = 'SIMPLE PROMPT WINS - Found correct €111.36, complex failed'
         } else if (comparison.complexFound111_36 && !comparison.simpleFound111_36) {
-          comparison.verdict = '📊 COMPLEX PROMPT WINS - Found correct €111.36, simple failed'
+          comparison.verdict = 'COMPLEX PROMPT WINS - Found correct €111.36, simple failed'
         } else if (comparison.simpleFound111_36 && comparison.complexFound111_36) {
-          comparison.verdict = '✅ BOTH WORK - Both found €111.36'
+          comparison.verdict = 'BOTH WORK - Both found €111.36'
         } else {
-          comparison.verdict = '🚨 BOTH FAILED - Neither found €111.36'
+          comparison.verdict = 'BOTH FAILED - Neither found €111.36'
         }
         
-        console.log('🔍🚨 EMERGENCY DIAGNOSTIC RESULTS:')
-        console.log(`   🎯 Simple prompt result: "${simpleResult}"`)
-        console.log(`   📊 Complex prompt found €111.36: ${comparison.complexFound111_36}`)
-        console.log(`   ✅ VERDICT: ${comparison.verdict}`)
+        console.log('EMERGENCY DIAGNOSTIC RESULTS:')
+        console.log(`   Simple prompt result: "${simpleResult}"`)
+        console.log(`   Complex prompt found €111.36: ${comparison.complexFound111_36}`)
+        console.log(`   VERDICT: ${comparison.verdict}`)
         
         promptDiagnostic = {
           isVWDocument: isVWDoc,
@@ -360,7 +360,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         }
         
       } catch (debugError) {
-        console.error('🚨 EMERGENCY DEBUG FAILED:', debugError)
+        console.error('EMERGENCY DEBUG FAILED:', debugError)
         promptDiagnostic = {
           error: debugError instanceof Error ? debugError.message : 'Unknown error',
           failed: true
@@ -373,7 +373,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     const processingStartTime = Date.now()
     
     try {
-      console.log('🚀 Starting ENHANCED document processing with real-time monitoring...')
+      console.log('Starting ENHANCED document processing with real-time monitoring...')
       console.log(`   File: ${document.originalName}`)
       console.log(`   Category: ${document.category}`)
       console.log(`   User: ${user ? user.id : 'anonymous'}`)
@@ -381,7 +381,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       
       // Try enhanced processing first (if enabled)
       if (process.env.USE_ENHANCED_PROCESSING !== 'false') {
-        console.log('✨ Using Enhanced VAT Processing Engine v2.0...')
+        console.log('Using Enhanced VAT Processing Engine v2.0...')
         const { processDocumentEnhanced } = await import('@/lib/documentProcessor')
         
         try {
@@ -392,9 +392,9 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
             document.category,
             user?.id
           )
-          console.log('🎉 Enhanced processing completed successfully!')
+          console.log('Enhanced processing completed successfully!')
         } catch (enhancedError) {
-          console.log('⚠️ Enhanced processing failed, falling back to legacy...')
+          console.log('Enhanced processing failed, falling back to legacy...')
           console.log(`   Error: ${enhancedError instanceof Error ? enhancedError.message : enhancedError}`)
           
           // Fallback to original processing
@@ -408,7 +408,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         }
       } else {
         // Use legacy processing
-        console.log('🔄 Using legacy processing (enhanced engine disabled)...')
+        console.log('Using legacy processing (enhanced engine disabled)...')
         result = await processDocument(
           document.fileData,
           document.mimeType,

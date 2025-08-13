@@ -88,10 +88,10 @@ export default function VatCalculatorIreland() {
                 Irish VAT Calculator
               </h2>
               
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+                <div className="space-y-4 sm:space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">
                       Amount (€)
                     </label>
                     <input
@@ -99,18 +99,19 @@ export default function VatCalculatorIreland() {
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="Enter amount"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-lg"
+                      className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-base sm:text-lg min-h-[48px] transition-all duration-200 bg-white"
+                      inputMode="decimal"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">
                       VAT Rate
                     </label>
                     <select
                       value={vatRate}
                       onChange={(e) => setVatRate(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-lg"
+                      className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-base sm:text-lg min-h-[48px] bg-white transition-all duration-200"
                     >
                       <option value="23">23% - Standard Rate</option>
                       <option value="13.5">13.5% - Reduced Rate</option>
@@ -121,53 +122,56 @@ export default function VatCalculatorIreland() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">
                       Calculation Type
                     </label>
-                    <div className="space-y-2">
-                      <label className="flex items-center">
+                    <div className="space-y-3">
+                      <label className="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-teal-300 transition-colors min-h-[48px]">
                         <input
                           type="radio"
                           value="exclusive"
                           checked={calculationType === 'exclusive'}
                           onChange={(e) => setCalculationType(e.target.value)}
-                          className="mr-3 text-green-600"
+                          className="mr-3 text-teal-600 scale-125"
                         />
-                        <span>Amount is VAT exclusive (add VAT)</span>
+                        <span className="text-sm sm:text-base">Amount is VAT exclusive (add VAT)</span>
                       </label>
-                      <label className="flex items-center">
+                      <label className="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-teal-300 transition-colors min-h-[48px]">
                         <input
                           type="radio"
                           value="inclusive"
                           checked={calculationType === 'inclusive'}
                           onChange={(e) => setCalculationType(e.target.value)}
-                          className="mr-3 text-green-600"
+                          className="mr-3 text-teal-600 scale-125"
                         />
-                        <span>Amount is VAT inclusive (extract VAT)</span>
+                        <span className="text-sm sm:text-base">Amount is VAT inclusive (extract VAT)</span>
                       </label>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">VAT Calculation Result</h3>
+                <div className="bg-gradient-to-br from-teal-50 to-cyan-50 p-4 sm:p-6 rounded-2xl border border-teal-100">
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center">VAT Calculation Result</h3>
                   {result ? (
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center border-b border-gray-200 pb-2">
-                        <span className="font-medium text-gray-700">Net Amount:</span>
-                        <span className="font-bold text-gray-900">€{result.net}</span>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-gray-100 min-h-[48px]">
+                        <span className="font-semibold text-gray-700 text-sm sm:text-base">Net Amount:</span>
+                        <span className="font-bold text-gray-900 text-base sm:text-lg">€{result.net}</span>
                       </div>
-                      <div className="flex justify-between items-center border-b border-gray-200 pb-2">
-                        <span className="font-medium text-gray-700">VAT ({result.rate}%):</span>
-                        <span className="font-bold text-green-600">€{result.vat}</span>
+                      <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-teal-200 min-h-[48px]">
+                        <span className="font-semibold text-gray-700 text-sm sm:text-base">VAT ({result.rate}%):</span>
+                        <span className="font-bold text-teal-600 text-base sm:text-lg">€{result.vat}</span>
                       </div>
-                      <div className="flex justify-between items-center pt-2">
-                        <span className="font-bold text-gray-900">Total Amount:</span>
-                        <span className="font-bold text-gray-900 text-lg">€{result.total}</span>
+                      <div className="flex justify-between items-center bg-teal-600 text-white p-4 rounded-lg shadow-lg min-h-[56px]">
+                        <span className="font-bold text-base sm:text-lg">Total Amount:</span>
+                        <span className="font-bold text-xl sm:text-2xl">€{result.total}</span>
                       </div>
                     </div>
                   ) : (
-                    <p className="text-gray-500 text-center">Enter an amount to calculate VAT</p>
+                    <div className="text-center py-8">
+                      <div className="text-6xl mb-4 opacity-20">🧮</div>
+                      <p className="text-gray-500 text-sm sm:text-base">Enter an amount to calculate VAT</p>
+                    </div>
                   )}
                 </div>
               </div>

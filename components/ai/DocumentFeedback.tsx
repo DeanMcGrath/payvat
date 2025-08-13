@@ -14,7 +14,7 @@ import {
   CheckCircle, 
   Star,
   Send,
-  Lightbulb
+  Info
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -234,7 +234,7 @@ export default function DocumentFeedback({
           {insights.suggestions?.length > 0 && (
             <div>
               <h4 className="font-medium text-green-800 mb-2 flex items-center">
-                <Lightbulb className="h-4 w-4 mr-1" />
+                <Info className="h-4 w-4 mr-1" />
                 Suggestions
               </h4>
               <ul className="text-green-700 text-sm space-y-1">

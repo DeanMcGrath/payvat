@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { addSecurityHeaders } from '@/lib/security-utils'
 
 // Security: Rate limiting configuration
 const RATE_LIMIT_MAX_REQUESTS = 100 // requests per window
@@ -120,6 +121,9 @@ export function middleware(request: NextRequest) {
   response.headers.set('X-RateLimit-Limit', rateLimit.toString())
   response.headers.set('X-RateLimit-Remaining', rateLimitResult.remaining.toString())
   response.headers.set('X-RateLimit-Reset', rateLimitResult.resetTime.toString())
+  
+  // Add security headers to all responses
+  addSecurityHeaders(response.headers)
   
   return response
 }
