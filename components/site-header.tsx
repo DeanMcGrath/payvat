@@ -147,15 +147,7 @@ export default function SiteHeader({
                 )}
                 <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
                   <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
-                  <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
-                  <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>
-                  <Button 
-                    className="btn-primary px-4 py-2 text-sm font-semibold hover-lift"
-                    onClick={() => window.location.href = 'https://payvat.ie/signup'}
-                  >
-                    Get Started
-                  </Button>
-                  <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
+                  <a href="mailto:support@payvat.ie" className="hover:text-white transition-colors">Contact</a>
                 </div>
               </div>
               {pageSubtitle && (

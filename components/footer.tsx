@@ -73,6 +73,15 @@ export default function Footer() {
                     Pricing
                   </Link>
                 </li>
+                <li>
+                  <Link 
+                    href="/sitemap" 
+                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    Sitemap
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -166,15 +175,6 @@ export default function Footer() {
             <div className="animate-fade-in" style={{animationDelay: '0.6s'}}>
               <h4 className="text-xl font-bold text-white mb-2">Industry & Tools</h4>
               <ul className="space-y-4">
-                <li>
-                  <Link 
-                    href="/construction-vat-ireland" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Construction VAT Ireland
-                  </Link>
-                </li>
                 <li>
                   <Link 
                     href="/ecommerce-vat-ireland" 

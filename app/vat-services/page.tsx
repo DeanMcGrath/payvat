@@ -17,7 +17,7 @@ import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
 export default function VATServicesPage() {
-  const [selectedPlan, setSelectedPlan] = useState<string>("professional")
+  const [selectedPlan, setSelectedPlan] = useState<string>("annual")
   const [showCalculator, setShowCalculator] = useState(false)
 
   const services = [
@@ -79,61 +79,48 @@ export default function VATServicesPage() {
     }
   ]
 
-  const pricingPlans = [
+  const pricingOptions = [
     {
-      id: "starter",
-      name: "Starter",
-      price: "€29",
+      id: "monthly",
+      name: "Monthly Plan",
+      price: "€90",
       period: "/month",
-      description: "Perfect for small businesses and sole traders",
+      description: "Perfect for getting started",
       features: [
         "VAT calculations",
-        "Basic reporting",
-        "Email support",
-        "Up to 50 transactions/month",
-        "Mobile app access"
+        "VAT submissions via ROS",
+        "Payment processing",
+        "Priority support",
+        "Unlimited transactions",
+        "Basic and custom reporting",
+        "Mobile app access",
+        "Expert guidance when you need it"
       ],
       badge: null,
       buttonText: "Start Free Trial",
-      popular: false
+      popular: false,
+      savings: null
     },
     {
-      id: "professional",
-      name: "Professional",
-      price: "€79",
-      period: "/month",
-      description: "Ideal for growing businesses with regular VAT obligations",
+      id: "annual",
+      name: "Annual Plan",
+      price: "€900",
+      period: "/year",
+      description: "Best value for growing businesses",
       features: [
-        "Everything in Starter",
-        "VAT submissions",
+        "VAT calculations",
+        "VAT submissions via ROS",
         "Payment processing",
         "Priority support",
-        "Up to 500 transactions/month",
-        "API access",
-        "Custom reporting"
-      ],
-      badge: "Most Popular",
-      buttonText: "Start Free Trial",
-      popular: true
-    },
-    {
-      id: "enterprise",
-      name: "Enterprise",
-      price: "€199",
-      period: "/month",
-      description: "For large businesses with complex VAT requirements",
-      features: [
-        "Everything in Professional",
         "Unlimited transactions",
-        "Dedicated account manager",
-        "Custom integrations",
-        "Advanced analytics",
-        "Multi-entity support",
+        "Basic and custom reporting",
+        "Mobile app access",
         "Expert guidance when you need it"
       ],
-      badge: "Premium",
-      buttonText: "Contact Sales",
-      popular: false
+      badge: "Save €180",
+      buttonText: "Get Started",
+      popular: true,
+      savings: "Two months free!"
     }
   ]
 
@@ -303,8 +290,8 @@ export default function VATServicesPage() {
             </p>
           </div>
           
-          <div className="grid gap-8 md:grid-cols-3">
-            {pricingPlans.map((plan) => (
+          <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
+            {pricingOptions.map((plan) => (
               <Card 
                 key={plan.id}
                 className={`relative transition-all duration-300 ${
@@ -331,6 +318,9 @@ export default function VATServicesPage() {
                   <CardDescription className="text-base mt-2">
                     {plan.description}
                   </CardDescription>
+                  {plan.savings && (
+                    <p className="text-primary font-semibold text-sm mt-2">{plan.savings}</p>
+                  )}
                 </CardHeader>
                 
                 <CardContent className="space-y-4">
@@ -353,7 +343,7 @@ export default function VATServicesPage() {
                     variant={plan.popular ? "default" : "outline"}
                   >
                     {plan.buttonText}
-                    {plan.id !== "enterprise" && <ArrowRight className="ml-2 h-4 w-4" />}
+                    <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </CardContent>
               </Card>
@@ -421,7 +411,7 @@ export default function VATServicesPage() {
                     feature: "Cost per Month",
                     manual: "Your time (€25-50/hour)",
                     accountant: "€200-500",
-                    payvat: "€29-199"
+                    payvat: "€90/month or €900/year"
                   },
                   {
                     feature: "Error Rate",
