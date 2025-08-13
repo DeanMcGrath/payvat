@@ -657,8 +657,7 @@ export class DocumentTemplateSystem {
           confidence: template.fingerprint.confidence,
           successRate: template.fingerprint.successRate,
           createdAt: template.fingerprint.createdAt,
-          lastUsed: template.fingerprint.lastUsed,
-          updatedAt: template.fingerprint.updatedAt
+          lastUsed: template.fingerprint.lastUsed
         },
         extractionRules: template.extractionRules as unknown as ExtractionRule[],
         validationRules: template.validationRules as unknown as ValidationRule[],
@@ -754,8 +753,7 @@ export class DocumentTemplateSystem {
           confidence: template.fingerprint.confidence,
           successRate: template.fingerprint.successRate,
           createdAt: template.fingerprint.createdAt,
-          lastUsed: template.fingerprint.lastUsed,
-          updatedAt: template.fingerprint.updatedAt
+          lastUsed: template.fingerprint.lastUsed
         },
         extractionRules: template.extractionRules as unknown as ExtractionRule[],
         validationRules: template.validationRules as unknown as ValidationRule[],
