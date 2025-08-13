@@ -656,7 +656,6 @@ export class DocumentTemplateSystem {
           layoutFeatures: template.fingerprint.layoutFeatures as unknown as LayoutFeatures,
           confidence: template.fingerprint.confidence,
           successRate: template.fingerprint.successRate,
-          usageCount: template.fingerprint.usageCount,
           createdAt: template.fingerprint.createdAt,
           lastUsed: template.fingerprint.lastUsed,
           updatedAt: template.fingerprint.updatedAt
@@ -754,7 +753,6 @@ export class DocumentTemplateSystem {
           layoutFeatures: template.fingerprint.layoutFeatures as unknown as LayoutFeatures,
           confidence: template.fingerprint.confidence,
           successRate: template.fingerprint.successRate,
-          usageCount: template.fingerprint.usageCount,
           createdAt: template.fingerprint.createdAt,
           lastUsed: template.fingerprint.lastUsed,
           updatedAt: template.fingerprint.updatedAt
