@@ -2,23 +2,20 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { CheckCircle, Shield, Clock, FileText, Mail, Phone, MessageCircle, MapPin, Play, Bell, Calculator, Building, UserCheck, Euro } from 'lucide-react'
+import { Lightbulb, Building2, Lock, ArrowRight, CheckCircle, Shield, Clock, Users, TrendingUp, Award, Sparkles, Star } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Footer from "@/components/footer"
-import { VideoModal } from "@/components/video-modal"
 import SiteHeader from "@/components/site-header"
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false)
-  const [showVideoModal, setShowVideoModal] = useState(false)
+  const [hoveredBox, setHoveredBox] = useState<number | null>(null)
 
   useEffect(() => {
-    // Trigger animations after component mounts
     const timer = setTimeout(() => {
       setIsVisible(true)
     }, 100)
 
-    // Add scroll-triggered animations
     const handleScroll = () => {
       const elements = document.querySelectorAll('[data-animate]')
       elements.forEach((element) => {
@@ -33,13 +30,52 @@ export default function LandingPage() {
     }
 
     window.addEventListener('scroll', handleScroll)
-    handleScroll() // Run once on mount
+    handleScroll()
 
     return () => {
       clearTimeout(timer)
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
+  const navigationBoxes = [
+    {
+      id: 1,
+      title: "Startup?",
+      heading: "Thinking of creating a business?",
+      subtext: "Learn everything you need to know about starting a business in Ireland",
+      buttonText: "Get Started",
+      link: "/business-setup-guide",
+      icon: Lightbulb,
+      gradient: "from-amber-500 to-orange-600",
+      shadowColor: "rgba(251, 146, 60, 0.3)",
+      features: ["Complete guides", "Step-by-step process", "Expert advice"]
+    },
+    {
+      id: 2,
+      title: "Established Business?",
+      heading: "Looking to simplify VAT?",
+      subtext: "Discover how PayVAT streamlines your VAT submissions and payments",
+      buttonText: "Learn More",
+      link: "/vat-services",
+      icon: Building2,
+      gradient: "from-teal-500 to-cyan-600",
+      shadowColor: "rgba(20, 184, 166, 0.3)",
+      features: ["VAT automation", "Revenue compliance", "Save time & money"]
+    },
+    {
+      id: 3,
+      title: "Already signed up?",
+      heading: "Sign in now",
+      subtext: "Access your secure VAT dashboard",
+      buttonText: "Sign In",
+      link: "/login",
+      icon: Lock,
+      gradient: "from-indigo-500 to-purple-600",
+      shadowColor: "rgba(99, 102, 241, 0.3)",
+      features: ["Secure access", "Real-time updates", "24/7 availability"]
+    }
+  ]
 
   return (
     <div className="min-h-screen bg-background">
@@ -48,389 +84,211 @@ export default function LandingPage() {
         pageSubtitle="Irish VAT compliance made simple"
       />
 
-      {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
+      {/* Hero Section - Simplified and Elegant */}
+      <section className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center">
-            {/* Hero Content */}
             <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-2">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Ireland's Complete Business Compliance Hub
-                </div>
-                
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-3">
-                  <span className="text-gradient-primary">Complete Business</span>
-                  <br />
-                  <span className="text-foreground">Setup & VAT Compliance</span>
-                </h1>
-                
-                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
-                
-                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  From business registration to VAT compliance - everything Irish startups and SMEs need in one place. 
-                  <span className="text-primary font-semibold">40+ expert guides, tools, and professional services.</span>
-                </p>
+              {/* Premium Badge */}
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-200 text-teal-700 text-sm font-semibold mb-6 animate-bounce-gentle shadow-lg shadow-teal-500/10">
+                <Sparkles className="w-4 h-4" />
+                Ireland's Premium VAT Platform
+                <Star className="w-4 h-4 fill-teal-500" />
               </div>
               
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-3">
-                <Button size="lg" className="btn-primary px-8 py-4 text-lg font-semibold hover-lift" onClick={() => window.location.href = '/complete-business-setup-guide-ireland'}>
-                  Start Your Business
-                  <CheckCircle className="ml-2 h-5 w-5" />
-                </Button>
-                <Button variant="outline" size="lg" className="btn-outline px-8 py-4 text-lg" onClick={() => setShowVideoModal(true)}>
-                  <Play className="mr-2 h-5 w-5" />
-                  Watch Demo
-                </Button>
-              </div>
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-foreground">
+                Irish VAT compliance
+                <span className="block text-gradient-primary mt-2">made simple</span>
+              </h1>
               
+              <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
+                Whether you're starting a business or managing VAT for an established company, 
+                we have everything you need.
+              </p>
+
               {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm">
+              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground mb-12">
                 <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-success" />
-                  <span>Secure</span>
+                  <Shield className="h-5 w-5 text-teal-600" />
+                  <span className="font-medium">Revenue Compliant</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-success" />
-                  <span>Works with ROS</span>
+                  <Users className="h-5 w-5 text-teal-600" />
+                  <span className="font-medium">Trusted by 15,000+ Irish businesses</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-success" />
-                  <span>Expert support</span>
+                  <Award className="h-5 w-5 text-teal-600" />
+                  <span className="font-medium">Award-winning support</span>
                 </div>
               </div>
             </div>
           </div>
           
-          {/* Background Elements */}
-          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
-          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
-          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
+          {/* Decorative Elements */}
+          <div className="absolute top-10 left-10 w-20 h-20 bg-gradient-to-br from-teal-400 to-cyan-400 rounded-full blur-3xl opacity-20 animate-float"></div>
+          <div className="absolute top-40 right-20 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute bottom-10 left-1/3 w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-4s'}}></div>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Three Navigation Boxes - The Main Feature */}
+      <section className="relative py-8 -mt-20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid gap-8 md:grid-cols-3" data-animate>
+            {navigationBoxes.map((box, index) => (
+              <div
+                key={box.id}
+                className="group relative"
+                onMouseEnter={() => setHoveredBox(box.id)}
+                onMouseLeave={() => setHoveredBox(null)}
+                style={{
+                  animationDelay: `${index * 100}ms`
+                }}
+              >
+                <div 
+                  className="absolute inset-0 rounded-2xl bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"
+                  style={{
+                    background: `linear-gradient(135deg, ${box.shadowColor} 0%, transparent 100%)`,
+                  }}
+                />
+                
+                <Card className="relative h-full overflow-hidden border-2 border-gray-100 bg-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 rounded-2xl">
+                  <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500" 
+                       style={{
+                         backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))`,
+                       }}
+                       className={`bg-gradient-to-r ${box.gradient}`}
+                  />
+                  
+                  <CardContent className="p-8 space-y-6">
+                    {/* Icon Container */}
+                    <div className="relative">
+                      <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${box.gradient} p-0.5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                        <div className="w-full h-full rounded-2xl bg-white flex items-center justify-center">
+                          <box.icon className={`h-10 w-10 bg-gradient-to-br ${box.gradient} bg-clip-text text-transparent`} 
+                                    strokeWidth={2} 
+                                    style={{
+                                      stroke: `url(#${box.id}-gradient)`,
+                                    }}
+                          />
+                          <svg width="0" height="0">
+                            <defs>
+                              <linearGradient id={`${box.id}-gradient`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" className={box.gradient.includes('amber') ? 'text-amber-500' : box.gradient.includes('teal') ? 'text-teal-500' : 'text-indigo-500'} stopColor="currentColor" />
+                                <stop offset="100%" className={box.gradient.includes('amber') ? 'text-orange-600' : box.gradient.includes('teal') ? 'text-cyan-600' : 'text-purple-600'} stopColor="currentColor" />
+                              </linearGradient>
+                            </defs>
+                          </svg>
+                        </div>
+                      </div>
+                      
+                      {/* Premium Badge */}
+                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-amber-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {box.id === 1 ? 'NEW' : box.id === 2 ? 'POPULAR' : 'SECURE'}
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <h3 className="text-2xl font-bold text-foreground group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text transition-all duration-300"
+                            style={{
+                              backgroundImage: hoveredBox === box.id ? `linear-gradient(to right, var(--tw-gradient-stops))` : 'none',
+                            }}
+                            className={`group-hover:${box.gradient}`}>
+                          {box.heading}
+                        </h3>
+                        <p className="text-muted-foreground leading-relaxed">
+                          {box.subtext}
+                        </p>
+                      </div>
+
+                      {/* Features */}
+                      <div className="space-y-2 pt-2">
+                        {box.features.map((feature, idx) => (
+                          <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <CheckCircle className="h-4 w-4 text-teal-600 flex-shrink-0" />
+                            <span>{feature}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* CTA Button */}
+                    <Button 
+                      size="lg" 
+                      className={`w-full font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105 bg-gradient-to-r ${box.gradient}`}
+                      onClick={() => window.location.href = box.link}
+                    >
+                      {box.buttonText}
+                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Value Proposition Section */}
       <section className="py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          {/* Section Header */}
-          <div className="text-center mb-4 animate-slide-up">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
-              Everything You Need for 
-              <span className="text-gradient-primary"> Irish Business Success</span>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+              Why choose <span className="text-gradient-primary">PayVAT?</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              From business setup to VAT compliance - comprehensive guides and professional tools for Irish entrepreneurs
-            </p>
-          </div>
-
-          {/* Feature Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8" data-animate>
-            {/* Feature 1 */}
-            <div className="card-modern p-8 text-center hover-lift group cursor-pointer" onClick={() => window.location.href = '/complete-business-setup-guide-ireland'}>
-              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
-                <FileText className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Complete Business Setup</h3>
-              <p className="text-muted-foreground leading-relaxed mb-4">
-                Step-by-step guides covering registration, structures, compliance, and everything needed to start your Irish business
-              </p>
-              <div className="status-success inline-flex">
-                <CheckCircle className="h-4 w-4 mr-1" />
-                40+ Expert Guides
-              </div>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="card-modern p-8 text-center hover-lift group cursor-pointer" onClick={() => window.location.href = '/vat-calculator-ireland'}>
-              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
-                <Shield className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">VAT Tools & Services</h3>
-              <p className="text-muted-foreground leading-relaxed mb-4">
-                Professional VAT calculation, submission, and payment services with instant tools and Revenue-compliant processes
-              </p>
-              <div className="status-success inline-flex">
-                <Shield className="h-4 w-4 mr-1" />
-                Revenue Compliant
-              </div>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="card-modern p-8 text-center hover-lift group cursor-pointer" onClick={() => window.location.href = '/freelancer-vat-ireland'}>
-              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
-                <Clock className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">Industry Expertise</h3>
-              <p className="text-muted-foreground leading-relaxed mb-4">
-                Specialized guidance for freelancers, construction, e-commerce, property, and every Irish business type
-              </p>
-              <div className="status-success inline-flex">
-                <Clock className="h-4 w-4 mr-1" />
-                Every Industry Covered
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Popular Resources Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-4 animate-slide-up">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
-              Popular <span className="text-gradient-primary">Business Resources</span>
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Most accessed guides helping Irish businesses succeed
-            </p>
-          </div>
-          
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-animate>
-            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/start-a-business-ireland'}>
-              <div className="flex items-center gap-4">
-                <div className="icon-modern group-hover:scale-110 transition-transform">
-                  <FileText className="h-6 w-6 text-success" />
-                </div>
-                <div>
-                  <div className="font-semibold text-foreground">Start a Business in Ireland</div>
-                  <div className="text-sm text-muted-foreground">Complete startup guide</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/vat-calculator-ireland'}>
-              <div className="flex items-center gap-4">
-                <div className="icon-modern group-hover:scale-110 transition-transform">
-                  <Calculator className="h-6 w-6 text-success" />
-                </div>
-                <div>
-                  <div className="font-semibold text-foreground">VAT Calculator Ireland</div>
-                  <div className="text-sm text-muted-foreground">Instant VAT calculations</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/company-vs-sole-trader-ireland'}>
-              <div className="flex items-center gap-4">
-                <div className="icon-modern group-hover:scale-110 transition-transform">
-                  <Building className="h-6 w-6 text-success" />
-                </div>
-                <div>
-                  <div className="font-semibold text-foreground">Company vs Sole Trader</div>
-                  <div className="text-sm text-muted-foreground">Choose your structure</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/dublin-business-registration'}>
-              <div className="flex items-center gap-4">
-                <div className="icon-modern group-hover:scale-110 transition-transform">
-                  <MapPin className="h-6 w-6 text-success" />
-                </div>
-                <div>
-                  <div className="font-semibold text-foreground">Dublin Business Registration</div>
-                  <div className="text-sm text-muted-foreground">City-specific guide</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/how-to-register-for-vat-ireland'}>
-              <div className="flex items-center gap-4">
-                <div className="icon-modern group-hover:scale-110 transition-transform">
-                  <UserCheck className="h-6 w-6 text-success" />
-                </div>
-                <div>
-                  <div className="font-semibold text-foreground">How to Register for VAT</div>
-                  <div className="text-sm text-muted-foreground">Step-by-step VAT registration</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="card-modern p-6 hover-lift group cursor-pointer" onClick={() => window.location.href = '/accountant-fees-vs-payvat-savings'}>
-              <div className="flex items-center gap-4">
-                <div className="icon-modern group-hover:scale-110 transition-transform">
-                  <Euro className="h-6 w-6 text-success" />
-                </div>
-                <div>
-                  <div className="font-semibold text-foreground">PayVat vs Accountant Fees</div>
-                  <div className="text-sm text-muted-foreground">Cost comparison guide</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 relative">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <div className="card-premium p-12 text-center relative overflow-hidden">
-            {/* Background Elements */}
-            <div className="absolute inset-0 gradient-mesh opacity-10"></div>
-            
-            <div className="relative z-10">
-              <div className="mb-2">
-                <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
-                  Ready to Modernize Your
-                  <span className="text-gradient-primary"> VAT Process?</span>
-                </h3>
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                  Join Irish businesses streamlining their VAT compliance with PayVat
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-2">
-                <Button 
-                  size="lg"
-                  className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"
-                  onClick={() => window.location.href = '/vat-guide'}
-                >
-                  Get Started
-                  <CheckCircle className="ml-2 h-5 w-5" />
-                </Button>
-                <Button 
-                  variant="outline"
-                  size="lg"
-                  className="btn-outline px-12 py-4 text-lg min-w-[220px]"
-                  onClick={() => window.location.href = '/pricing'}
-                >
-                  View Pricing
-                </Button>
-              </div>
-              
-              <p className="text-sm text-muted-foreground">
-                ✓ Works with ROS (Revenue Online Service)  ✓ Expert support  ✓ Instant processing
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-4 animate-slide-up">
-            <h4 className="text-3xl font-bold text-foreground mb-2">
-              Why Choose <span className="text-gradient-primary">PayVat?</span>
-            </h4>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Ireland's most comprehensive business guidance and VAT compliance platform
+              Join thousands of Irish businesses who trust PayVAT for their compliance needs
             </p>
           </div>
           
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-animate>
             <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
               <div className="icon-modern group-hover:scale-110 transition-transform">
-                <CheckCircle className="h-6 w-6 text-success" />
+                <Clock className="h-6 w-6 text-white" />
               </div>
               <div>
-                <div className="font-semibold text-foreground">40+ Expert Guides</div>
-                <div className="text-sm text-muted-foreground">Complete business library</div>
+                <div className="font-semibold text-foreground">Save Time</div>
+                <div className="text-sm text-muted-foreground">Automate VAT tasks</div>
               </div>
             </div>
             
             <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
               <div className="icon-modern group-hover:scale-110 transition-transform">
-                <Shield className="h-6 w-6 text-success" />
+                <Shield className="h-6 w-6 text-white" />
               </div>
               <div>
-                <div className="font-semibold text-foreground">Revenue Compliant</div>
-                <div className="text-sm text-muted-foreground">Official ROS integration</div>
+                <div className="font-semibold text-foreground">Stay Compliant</div>
+                <div className="text-sm text-muted-foreground">Revenue approved</div>
               </div>
             </div>
             
             <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
               <div className="icon-modern group-hover:scale-110 transition-transform">
-                <Bell className="h-6 w-6 text-success" />
+                <TrendingUp className="h-6 w-6 text-white" />
               </div>
               <div>
-                <div className="font-semibold text-foreground">All Industries Covered</div>
-                <div className="text-sm text-muted-foreground">Specialized guidance</div>
+                <div className="font-semibold text-foreground">Grow Faster</div>
+                <div className="text-sm text-muted-foreground">Focus on business</div>
               </div>
             </div>
             
             <div className="flex items-center gap-4 p-6 card-modern hover-scale group">
               <div className="icon-modern group-hover:scale-110 transition-transform">
-                <MessageCircle className="h-6 w-6 text-success" />
+                <Users className="h-6 w-6 text-white" />
               </div>
               <div>
-                <div className="font-semibold text-foreground">Tools & Support</div>
-                <div className="text-sm text-muted-foreground">Calculators + expert help</div>
+                <div className="font-semibold text-foreground">Expert Support</div>
+                <div className="text-sm text-muted-foreground">Always here to help</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-4 animate-slide-up">
-            <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
-              Need Help? <span className="text-gradient-primary">We're Here</span>
-            </h3>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Expert support team ready to assist with all your VAT compliance questions
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-3" data-animate>
-            <div className="card-modern p-8 text-center hover-lift group">
-              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform">
-                <Mail className="h-8 w-8 text-white" />
-              </div>
-              <h4 className="text-xl font-semibold text-foreground mb-2">Email Support</h4>
-              <p className="text-muted-foreground mb-2 leading-relaxed">
-                Detailed help via email with expert guidance
-              </p>
-              <Button variant="outline" className="btn-outline">
-                <Mail className="h-4 w-4 mr-2" />
-                Email Us
-              </Button>
-            </div>
-
-            <div className="card-modern p-8 text-center hover-lift group">
-              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform">
-                <Phone className="h-8 w-8 text-white" />
-              </div>
-              <h4 className="text-xl font-semibold text-foreground mb-2">Phone Support</h4>
-              <p className="text-muted-foreground mb-2 leading-relaxed">
-                Direct line: Mon-Fri, 9AM-5PM IST
-              </p>
-              <Button variant="outline" className="btn-outline">
-                <Phone className="h-4 w-4 mr-2" />
-                Call Us
-              </Button>
-            </div>
-
-            <div className="card-modern p-8 text-center hover-lift group">
-              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform">
-                <MessageCircle className="h-8 w-8 text-white" />
-              </div>
-              <h4 className="text-xl font-semibold text-foreground mb-2">Live Chat</h4>
-              <p className="text-muted-foreground mb-2 leading-relaxed">
-                Instant help via our integrated chat system
-              </p>
-              <Button variant="outline" className="btn-outline">
-                <MessageCircle className="h-4 w-4 mr-2" />
-                Start Chat
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      
-      {/* Footer Component */}
+      {/* Footer */}
       <Footer />
-      
-      {/* Video Modal */}
-      <VideoModal 
-        isOpen={showVideoModal} 
-        onClose={() => setShowVideoModal(false)} 
-      />
     </div>
   )
 }
