@@ -584,7 +584,7 @@ export default function StartOnlineBusinessIreland() {
               </a>
             </div>
             <p className="text-sm text-purple-200 mt-6">
-              Join 2,100+ Irish online businesses using PayVat for EU compliance
+              Trusted by Irish online businesses for EU compliance
             </p>
           </div>
         </section>

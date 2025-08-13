@@ -201,9 +201,9 @@ export default function VatCalculatorIreland() {
                     </ul>
                   </div>
                   
-                  <div className="bg-orange-50 p-4 rounded-lg">
-                    <h4 className="font-bold text-orange-600 text-lg mb-2">13.5% - Reduced Rate</h4>
-                    <ul className="text-orange-800 text-sm space-y-1">
+                  <div className="bg-teal-50 p-4 rounded-lg">
+                    <h4 className="font-bold text-teal-600 text-lg mb-2">13.5% - Reduced Rate</h4>
+                    <ul className="text-teal-800 text-sm space-y-1">
                       <li>• Construction services</li>
                       <li>• Restaurant meals and catering</li>
                       <li>• Fuel and heating</li>
@@ -211,9 +211,9 @@ export default function VatCalculatorIreland() {
                     </ul>
                   </div>
                   
-                  <div className="bg-yellow-50 p-4 rounded-lg">
-                    <h4 className="font-bold text-yellow-600 text-lg mb-2">9% - Second Reduced Rate</h4>
-                    <ul className="text-yellow-800 text-sm space-y-1">
+                  <div className="bg-teal-50 p-4 rounded-lg">
+                    <h4 className="font-bold text-teal-600 text-lg mb-2">9% - Second Reduced Rate</h4>
+                    <ul className="text-teal-800 text-sm space-y-1">
                       <li>• Newspapers and magazines</li>
                       <li>• Sporting facilities</li>
                       <li>• Hairdressing services</li>
@@ -238,7 +238,7 @@ export default function VatCalculatorIreland() {
                   </div>
                   
                   <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-bold text-blue-600 text-lg mb-2">4.8% - Livestock Rate</h4>
+                    <h4 className="font-bold text-teal-600 text-lg mb-2">4.8% - Livestock Rate</h4>
                     <ul className="text-blue-800 text-sm space-y-1">
                       <li>• Cattle, sheep, pigs</li>
                       <li>• Horses for food production</li>
@@ -277,21 +277,21 @@ export default function VatCalculatorIreland() {
             <div className="card-premium p-8">
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-orange-600 mb-4">€42,500</div>
+                  <div className="text-5xl font-bold text-teal-600 mb-4">€42,500</div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Services Threshold</h3>
                   <p className="text-gray-600">Annual turnover for service providers including freelancers, consultants, and professionals.</p>
                 </div>
                 
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-blue-600 mb-4">€85,000</div>
+                  <div className="text-5xl font-bold text-teal-600 mb-4">€85,000</div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Goods Threshold</h3>
                   <p className="text-gray-600">Annual turnover for businesses selling physical goods including retailers and manufacturers.</p>
                 </div>
               </div>
               
               <div className="mt-8 text-center">
-                <div className="bg-yellow-50 p-4 rounded-lg mb-6">
-                  <p className="text-yellow-800 font-medium">
+                <div className="bg-teal-50 p-4 rounded-lg mb-6">
+                  <p className="text-teal-800 font-medium">
                     <strong>Important:</strong> You must register within 30 days of exceeding these thresholds. 
                     Many businesses register voluntarily before reaching thresholds to reclaim input VAT.
                   </p>

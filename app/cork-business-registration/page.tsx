@@ -491,7 +491,7 @@ export default function CorkBusinessRegistration() {
               </a>
             </div>
             <p className="text-sm text-red-200 mt-6">
-              Join 400+ Cork businesses using PayVat for compliance
+              Trusted by Cork businesses for VAT compliance
             </p>
           </div>
         </section>

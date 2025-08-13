@@ -11,7 +11,7 @@ export default function Footer() {
   return (
     <>
       {/* Utility Section */}
-      <div className="bg-gradient-to-r from-gray-50 to-blue-50 py-6 mt-12 sm:mt-16">
+      <div className="bg-gradient-to-r from-gray-50 to-teal-50 py-6 mt-12 sm:mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex justify-center">
             <button 
@@ -29,7 +29,7 @@ export default function Footer() {
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-br from-teal-700/20 to-transparent pointer-events-none"></div>
         <div className="absolute -top-10 -right-10 w-40 h-40 bg-teal-600/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-teal-600/10 rounded-full blur-3xl"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">

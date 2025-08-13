@@ -232,7 +232,7 @@ export default function StartRetailBusinessIreland() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Staff & Payroll Setup</h4>
-                      <p className="text-gray-600">Register employees with Revenue, setup payroll system, and employee contracts</p>
+                      <p className="text-gray-600">Register employees with Revenue, setup employee contracts and VAT compliance for staff expenses</p>
                     </div>
                   </div>
                 </div>

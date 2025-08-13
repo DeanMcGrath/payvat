@@ -144,7 +144,7 @@ export default function CompleteBusinessSetupGuideIreland() {
             
             <div className="grid lg:grid-cols-3 gap-8">
               <div className="card-modern p-6 hover-lift">
-                <div className="icon-modern bg-blue-500 mb-4">
+                <div className="icon-modern bg-teal-500 mb-4">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-foreground mb-3">Days 1-30: Foundation</h3>
@@ -194,7 +194,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               </div>
 
               <div className="card-modern p-6 hover-lift">
-                <div className="icon-modern bg-purple-500 mb-4">
+                <div className="icon-modern bg-teal-500 mb-4">
                   <Zap className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-foreground mb-3">Days 61-90: Launch Ready</h3>
@@ -303,7 +303,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
               </div>
               
-              <div className="mt-8 p-6 card-modern bg-blue-50 border-l-4 border-blue-500">
+              <div className="mt-8 p-6 card-modern bg-teal-50 border-l-4 border-teal-500">
                 <h4 className="font-semibold text-foreground mb-2">VAT Consideration</h4>
                 <p className="text-muted-foreground text-sm">
                   Both structures must register for VAT when turnover exceeds <strong>€42,500 (services)</strong> or <strong>€85,000 (goods)</strong> in any 12-month period. 
@@ -408,7 +408,7 @@ export default function CompleteBusinessSetupGuideIreland() {
             <div className="max-w-4xl mx-auto">
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="card-modern p-6 hover-lift text-center">
-                  <div className="icon-modern bg-blue-500 mb-4 mx-auto">
+                  <div className="icon-modern bg-teal-500 mb-4 mx-auto">
                     <FileText className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-2">Tax Reference Number</h3>
@@ -430,7 +430,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
 
                 <div className="card-modern p-6 hover-lift text-center">
-                  <div className="icon-modern bg-purple-500 mb-4 mx-auto">
+                  <div className="icon-modern bg-teal-500 mb-4 mx-auto">
                     <UserCheck className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-2">ROS Access</h3>
@@ -441,7 +441,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
               </div>
 
-              <div className="mt-8 p-6 card-premium bg-gradient-to-r from-blue-50 to-purple-50">
+              <div className="mt-8 p-6 card-premium bg-gradient-to-r from-teal-50 to-teal-50">
                 <h4 className="font-semibold text-foreground mb-3 text-center">Early VAT Registration Benefits</h4>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="flex items-center gap-2">

@@ -44,7 +44,7 @@ export default function AboutPayVat() {
       <SiteHeader 
         searchPlaceholder="Search company info..."
         currentPage="About PayVat"
-        pageSubtitle="Ireland's fintech VAT platform"
+        pageSubtitle="Simplifying Irish VAT compliance"
       />
 
       {/* Hero Section */}
@@ -56,7 +56,7 @@ export default function AboutPayVat() {
               <div className="mb-4">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
                   <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Ireland's complete business resource - founded by Irish entrepreneurs.
+                  Ireland's VAT compliance specialists - founded by Irish entrepreneurs.
                 </div>
                 
                 <div className="icon-premium mb-3 mx-auto">
@@ -64,16 +64,16 @@ export default function AboutPayVat() {
                 </div>
                 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
-                  <span className="text-gradient-primary">Complete Business</span>
+                  <span className="text-gradient-primary">Irish VAT</span>
                   <br />
-                  <span className="text-foreground">Guidance & Control</span>
+                  <span className="text-foreground">Compliance Made Simple</span>
                 </h1>
                 
                 <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  PayVat is Ireland's comprehensive business guidance platform - from startup to compliance, we empower Irish entrepreneurs. 
-                  <span className="text-primary font-semibold">Everything you need, all in one place.</span>
+                  PayVat specializes in VAT compliance for Irish businesses - from new startups to established companies, we simplify VAT management. 
+                  <span className="text-primary font-semibold">Focus on your business, we'll handle the VAT.</span>
                 </p>
               </div>
               
@@ -89,7 +89,7 @@ export default function AboutPayVat() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-success" />
-                  <span>40+ comprehensive guides</span>
+                  <span>VAT compliance expertise</span>
                 </div>
               </div>
             </div>
@@ -120,10 +120,10 @@ export default function AboutPayVat() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  PayVat is an Irish company that grew from a simple mission: empower every Irish business with the knowledge and tools needed to succeed. Founded by Irish entrepreneurs and technologists, we started by solving VAT submission pain points, but quickly realized businesses needed much more.
+                  PayVat is an Irish company founded with a clear mission: simplify VAT compliance for Irish businesses. Founded by Irish entrepreneurs and technologists, we focus specifically on solving VAT submission challenges and helping businesses stay Revenue compliant.
                 </p>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  Today, we're Ireland's most comprehensive business guidance platform - covering everything from initial business setup to ongoing compliance, with specialized expertise for every industry and business type.
+                  Today, we provide dedicated VAT services including automated calculations, submissions, and compliance monitoring, plus comprehensive business setup guidance to help new businesses get started with proper VAT registration from day one.
                 </p>
                 
                 <div className="flex items-center gap-4 p-6 card-modern hover-scale">
@@ -131,20 +131,20 @@ export default function AboutPayVat() {
                     <Award className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-1">Complete Business Expertise</h3>
-                    <p className="text-sm text-muted-foreground">Irish entrepreneurs with deep startup & compliance knowledge</p>
+                    <h3 className="font-semibold text-foreground mb-1">VAT Compliance Expertise</h3>
+                    <p className="text-sm text-muted-foreground">Irish entrepreneurs with deep VAT and Revenue compliance knowledge</p>
                   </div>
                 </div>
               </div>
               
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center p-6 card-modern hover-scale">
-                  <div className="text-3xl font-bold text-primary mb-2">€30</div>
-                  <div className="text-sm text-muted-foreground">Monthly cost vs €500+ traditional</div>
+                  <div className="text-3xl font-bold text-primary mb-2">€90</div>
+                  <div className="text-sm text-muted-foreground">Monthly VAT service cost</div>
                 </div>
                 <div className="text-center p-6 card-modern hover-scale">
-                  <div className="text-3xl font-bold text-primary mb-2">40+</div>
-                  <div className="text-sm text-muted-foreground">Comprehensive business guides</div>
+                  <div className="text-3xl font-bold text-primary mb-2">14</div>
+                  <div className="text-sm text-muted-foreground">Day free trial</div>
                 </div>
                 <div className="text-center p-6 card-modern hover-scale">
                   <div className="text-3xl font-bold text-primary mb-2">2019</div>
@@ -174,32 +174,32 @@ export default function AboutPayVat() {
             
             <div className="max-w-4xl mx-auto text-center">
               <p className="text-xl text-muted-foreground leading-relaxed mb-2">
-                We believe every Irish business, from day-one startups to established SMEs, deserves comprehensive guidance and tools to succeed. From business setup to ongoing compliance - no more scattered resources, no costly consultants for basic questions, just everything you need in one trusted platform.
+                We believe every Irish business deserves simple, reliable VAT compliance without the complexity and high costs. From new businesses getting their first VAT number to established companies managing ongoing submissions - we make VAT management straightforward and affordable.
               </p>
               
               <div className="grid md:grid-cols-3 gap-8 mt-12">
                 <div className="card-modern p-6 hover-lift group">
-                  <div className="icon-modern bg-blue-500 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                  <div className="icon-modern bg-teal-500 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
                     <Clock className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-1">Comprehensive</h3>
-                  <p className="text-sm text-muted-foreground">Everything from business setup to compliance</p>
+                  <h3 className="font-semibold text-foreground mb-1">Time-Saving</h3>
+                  <p className="text-sm text-muted-foreground">Automated VAT calculations and submissions</p>
                 </div>
                 
                 <div className="card-modern p-6 hover-lift group">
-                  <div className="icon-modern bg-green-500 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                  <div className="icon-modern bg-teal-600 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
                     <Shield className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-1">Irish-Focused</h3>
-                  <p className="text-sm text-muted-foreground">Built specifically for Irish businesses</p>
+                  <h3 className="font-semibold text-foreground mb-1">Revenue Compliant</h3>
+                  <p className="text-sm text-muted-foreground">Built specifically for Irish Revenue requirements</p>
                 </div>
                 
                 <div className="card-modern p-6 hover-lift group">
-                  <div className="icon-modern bg-purple-500 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                  <div className="icon-modern bg-teal-700 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
                     <Euro className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-1">Expert Guidance</h3>
-                  <p className="text-sm text-muted-foreground">Professional advice at every step</p>
+                  <h3 className="font-semibold text-foreground mb-1">Affordable</h3>
+                  <p className="text-sm text-muted-foreground">€90/month with no hidden fees</p>
                 </div>
               </div>
             </div>
@@ -214,49 +214,49 @@ export default function AboutPayVat() {
                 <FileText className="h-10 w-10 text-white" />
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
-                Ireland's Most <span className="text-gradient-primary">Comprehensive Business Library</span>
+                <span className="text-gradient-primary">VAT Compliance</span> Resources
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                40+ expert guides covering every aspect of Irish business - from your first idea to ongoing compliance
+                Expert guides and tools covering VAT registration, submissions, and compliance for Irish businesses
               </p>
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
               <div className="card-modern p-6 hover-lift group">
-                <div className="icon-modern bg-blue-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-teal-500 mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Building className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Business Setup</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-3">Complete guides for registration, structures, and legal requirements</p>
-                <div className="text-xs text-blue-600 font-medium">12+ Guides</div>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">€500 complete package with 6 months free VAT services</p>
+                <div className="text-xs text-teal-600 font-medium">Full Service</div>
               </div>
 
               <div className="card-modern p-6 hover-lift group">
-                <div className="icon-modern bg-green-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-teal-600 mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Calculator className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">VAT & Tax</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-3">Expert VAT guidance, tools, and compliance resources</p>
-                <div className="text-xs text-green-600 font-medium">15+ Resources</div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">VAT Services</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">Automated calculations, submissions, and deadline reminders</p>
+                <div className="text-xs text-teal-600 font-medium">€90/month</div>
               </div>
 
               <div className="card-modern p-6 hover-lift group">
-                <div className="icon-modern bg-purple-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-teal-700 mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Users className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Industry-Specific</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-3">Specialized guidance for freelancers, construction, e-commerce, and more</p>
-                <div className="text-xs text-purple-600 font-medium">10+ Industries</div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Expert Support</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">Irish-based team available to help with VAT questions and issues</p>
+                <div className="text-xs text-teal-600 font-medium">Always Available</div>
               </div>
 
               <div className="card-modern p-6 hover-lift group">
-                <div className="icon-modern bg-orange-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-teal-800 mb-4 group-hover:scale-110 transition-transform duration-300">
                   <MapPin className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Location Guides</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-3">City-specific registration and setup guides across Ireland</p>
-                <div className="text-xs text-orange-600 font-medium">Major Cities</div>
+                <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Free Trial</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-3">14-day free trial to test our VAT services with no commitment</p>
+                <div className="text-xs text-teal-600 font-medium">No Setup Fees</div>
               </div>
             </div>
           </div>
@@ -348,7 +348,7 @@ export default function AboutPayVat() {
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-primary font-medium text-sm">
                     <Euro className="h-4 w-4" />
-                    <span>€30/month or €300/year</span>
+                    <span>€90/month or €900/year</span>
                   </div>
                 </div>
               </div>
@@ -382,7 +382,7 @@ export default function AboutPayVat() {
                     <div>
                       <h3 className="text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">Save Money</h3>
                       <p className="text-muted-foreground leading-relaxed">
-                        At just €30/month (or €300/year), more cost-effective than traditional solutions
+                        At €90/month (or €900/year), more cost-effective than traditional accountant fees
                       </p>
                     </div>
                   </div>
@@ -404,7 +404,7 @@ export default function AboutPayVat() {
                 
                 <div className="card-modern p-8 hover-lift group">
                   <div className="flex items-start gap-4">
-                    <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
+                    <div className="icon-modern bg-teal-500 group-hover:scale-110 transition-transform duration-300">
                       <Clock className="h-6 w-6 text-white" />
                     </div>
                     <div>
@@ -418,7 +418,7 @@ export default function AboutPayVat() {
                 
                 <div className="card-modern p-8 hover-lift group">
                   <div className="flex items-start gap-4">
-                    <div className="icon-modern bg-purple-500 group-hover:scale-110 transition-transform duration-300">
+                    <div className="icon-modern bg-teal-600 group-hover:scale-110 transition-transform duration-300">
                       <Users className="h-6 w-6 text-white" />
                     </div>
                     <div>

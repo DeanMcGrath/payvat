@@ -158,7 +158,7 @@ export default function PricingPage() {
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
-                      <span className="text-foreground">Mobile app access</span>
+                      <span className="text-foreground">Deadline reminders</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />

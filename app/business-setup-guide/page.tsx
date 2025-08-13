@@ -2,6 +2,10 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { 
   FileText, Shield, Users, Building2, Euro, BanknoteIcon, 
   CheckCircle, ArrowRight, BookOpen, Calculator, Briefcase, 
@@ -10,12 +14,43 @@ import {
   Phone, Mail, MapPin, CreditCard, Receipt
 } from 'lucide-react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
+
+type ContactFormData = {
+  fullName: string
+  email: string
+  phone: string
+  businessType: string
+  currentStage: string
+  message?: string
+}
 
 export default function BusinessSetupGuidePage() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null)
   const [completedSteps, setCompletedSteps] = useState<string[]>([])
+  
+  const form = useForm<ContactFormData>({
+    defaultValues: {
+      fullName: '',
+      email: '',
+      phone: '',
+      businessType: '',
+      currentStage: '',
+      message: ''
+    }
+  })
+
+  const onSubmit = (data: ContactFormData) => {
+    console.log('Form submitted:', data)
+    // TODO: Handle form submission
+  }
+
+  const scrollToContactForm = () => {
+    const contactSection = document.getElementById('contact-form-section')
+    contactSection?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   const toggleStep = (stepId: string) => {
     setCompletedSteps(prev => 
@@ -60,7 +95,7 @@ export default function BusinessSetupGuidePage() {
       content: [
         {
           name: "Companies Registration Office (CRO)",
-          steps: ["Choose company name", "Prepare constitution", "Submit Form A1", "Pay €50-100 fee"],
+          steps: ["Choose company name", "Prepare constitution", "Submit Form A1"],
           timeline: "5-10 business days",
           link: "www.cro.ie"
         },
@@ -72,7 +107,7 @@ export default function BusinessSetupGuidePage() {
         },
         {
           name: "Business Name Registration",
-          steps: ["Check name availability", "Submit RBN1 form", "Pay €20 fee"],
+          steps: ["Check name availability", "Submit RBN1 form"],
           timeline: "5 business days",
           link: "www.cro.ie/rbn"
         }
@@ -126,35 +161,8 @@ export default function BusinessSetupGuidePage() {
           considerations: "Transaction fees, settlement times, integration options"
         },
         {
-          name: "Accounting Software",
-          recommended: ["Xero", "QuickBooks", "Sage", "Wave"],
+          name: "Accounting Software - Coming Soon",
           features: "Invoice generation, expense tracking, VAT reporting"
-        }
-      ]
-    },
-    {
-      id: "insurance",
-      title: "Business Insurance",
-      icon: Shield,
-      description: "Protect your business with appropriate coverage",
-      content: [
-        {
-          name: "Essential Coverage",
-          types: [
-            "Public Liability - €6.5M recommended",
-            "Professional Indemnity - For service businesses",
-            "Employer's Liability - If you have employees",
-            "Commercial Property - For premises"
-          ]
-        },
-        {
-          name: "Additional Protection",
-          types: [
-            "Cyber Insurance - Data breach protection",
-            "Business Interruption - Income protection",
-            "Key Person Insurance - Protect against loss of key staff",
-            "Directors & Officers - Board member protection"
-          ]
         }
       ]
     },
@@ -249,28 +257,44 @@ export default function BusinessSetupGuidePage() {
                 From choosing your business structure to VAT registration and compliance - 
                 we'll guide you through every step of starting your business in Ireland.
               </p>
-
-              {/* Quick Stats */}
-              <div className="flex flex-wrap items-center justify-center gap-8 text-sm">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
-                  <span className="font-medium">10,000+ businesses started</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-blue-600" />
-                  <span className="font-medium">Setup in 7-14 days</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-purple-600" />
-                  <span className="font-medium">100% compliant</span>
-                </div>
-              </div>
             </div>
           </div>
           
           {/* Decorative Elements */}
           <div className="absolute top-20 right-10 w-24 h-24 bg-gradient-to-br from-teal-400 to-cyan-400 rounded-full blur-3xl opacity-20 animate-float"></div>
           <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-cyan-400 to-teal-400 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
+        </div>
+      </section>
+
+      {/* Service Announcement */}
+      <section className="py-12 bg-teal-600">
+        <div className="max-w-6xl mx-auto px-6 lg:px-8">
+          <Card className="border-0 shadow-2xl">
+            <CardContent className="p-8 md:p-12">
+              <div className="text-center">
+                <h2 className="text-3xl md:text-4xl font-bold text-teal-800 mb-6">
+                  🚀 Let Us Handle Everything For You!
+                </h2>
+                <p className="text-lg text-gray-700 max-w-4xl mx-auto mb-6 leading-relaxed">
+                  Don't want to navigate the complexities alone? PayVAT offers a complete done-for-you business setup service. 
+                  We handle every step from company registration to VAT setup, so you can focus on growing your business.
+                </p>
+                <div className="bg-teal-50 rounded-lg p-6 mb-8 inline-block">
+                  <p className="text-2xl font-bold text-teal-800 mb-2">
+                    €500 Complete Package + 6 Months FREE VAT Services
+                  </p>
+                </div>
+                <Button 
+                  size="lg"
+                  onClick={scrollToContactForm}
+                  className="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-8"
+                >
+                  Learn More
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
@@ -503,12 +527,12 @@ export default function BusinessSetupGuidePage() {
                                   <p className="text-gray-600">{item.options.join(', ')}</p>
                                 </div>
                               )}
-                              {'recommended' in item && item.recommended && (
+                              {('recommended' in item && item.recommended && Array.isArray(item.recommended)) ? (
                                 <div>
                                   <p className="font-medium text-gray-700 mb-1">Recommended:</p>
                                   <p className="text-gray-600">{item.recommended.join(', ')}</p>
                                 </div>
-                              )}
+                              ) : null}
                               {'features' in item && item.features && (
                                 <p className="text-gray-600 italic">{item.features}</p>
                               )}
@@ -516,17 +540,6 @@ export default function BusinessSetupGuidePage() {
                                 <p className="text-gray-600 italic">{item.considerations}</p>
                               )}
                             </div>
-                          )}
-                          
-                          {step.id === 'insurance' && 'types' in item && (
-                            <ul className="text-sm text-gray-600 space-y-2">
-                              {item.types?.map((type, i) => (
-                                <li key={i} className="flex items-start gap-2">
-                                  <Shield className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
-                                  {type}
-                                </li>
-                              ))}
-                            </ul>
                           )}
                           
                           {step.id === 'compliance' && (
@@ -632,36 +645,155 @@ export default function BusinessSetupGuidePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-teal-600">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
-          <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12">
-            <Lightbulb className="h-16 w-16 text-white mx-auto mb-6" />
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-              Ready to Start Your Business?
-            </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Let PayVAT handle your VAT compliance from day one. Focus on growing your business while we manage the paperwork.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-white text-teal-600 hover:bg-gray-100 font-semibold px-8"
-                onClick={() => window.location.href = '/signup'}
-              >
-                Get Started Free
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-white text-white hover:bg-white/10 font-semibold px-8"
-                onClick={() => window.location.href = '/contact'}
-              >
-                <Phone className="mr-2 h-5 w-5" />
-                Talk to an Expert
-              </Button>
+      {/* Complete Service Offering & Contact Form */}
+      <section id="contact-form-section" className="py-20 bg-teal-600">
+        <div className="max-w-5xl mx-auto px-6 lg:px-8">
+          <div className="bg-white rounded-2xl p-8 md:p-12 shadow-2xl">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl lg:text-4xl font-bold text-teal-800 mb-4">
+                Complete Startup Package: €500
+              </h2>
+              <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+                We handle your entire business setup from start to finish, plus you get your first 6 months of PayVAT VAT processing and submission services FREE.
+              </p>
             </div>
+
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <div className="grid gap-6 md:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="fullName"
+                    rules={{ required: "Full name is required" }}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full Name *</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your full name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    rules={{ 
+                      required: "Email is required",
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: "Please enter a valid email address"
+                      }
+                    }}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email Address *</FormLabel>
+                        <FormControl>
+                          <Input type="email" placeholder="Enter your email" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    rules={{ required: "Phone number is required" }}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone Number *</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your phone number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="businessType"
+                    rules={{ required: "Please select a business type" }}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Business Type *</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select business type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="sole-trader">Sole Trader</SelectItem>
+                            <SelectItem value="limited-company">Limited Company</SelectItem>
+                            <SelectItem value="not-sure">Not Sure Yet</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="currentStage"
+                  rules={{ required: "Please select your current stage" }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Current Stage *</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your current stage" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="just-starting">Just Starting</SelectItem>
+                          <SelectItem value="name-registered">Name Registered</SelectItem>
+                          <SelectItem value="need-vat-number">Need VAT Number</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Message/Additional Information</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          placeholder="Tell us more about your business setup needs (optional)"
+                          rows={4}
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="text-center">
+                  <Button 
+                    type="submit"
+                    size="lg"
+                    className="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-12 py-3"
+                  >
+                    Get Your Startup Package
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </div>
+              </form>
+            </Form>
           </div>
         </div>
       </section>

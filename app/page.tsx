@@ -50,7 +50,7 @@ export default function LandingPage() {
       link: "/business-setup-guide",
       icon: Lightbulb,
       gradient: "from-teal-500 to-cyan-600",
-      shadowColor: "rgba(251, 146, 60, 0.3)",
+      shadowColor: "rgba(20, 184, 166, 0.3)",
       features: ["Complete guides", "Step-by-step process", "Expert advice"]
     },
     {

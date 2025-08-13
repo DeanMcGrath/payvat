@@ -246,7 +246,7 @@ export default function SignupPage() {
                   </div>
                 </div>
                 <div className="text-white/60 text-xs hidden sm:block">
-                  Join thousands of Irish businesses
+                  Trusted by Irish businesses
                 </div>
               </div>
             </div>
@@ -279,7 +279,7 @@ export default function SignupPage() {
                 <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Create your account and join thousands of Irish businesses managing VAT effortlessly. 
+                  Create your account and join Irish businesses managing VAT effortlessly. 
                   <span className="text-primary font-semibold">Get started in minutes.</span>
                 </p>
               </div>
@@ -316,7 +316,7 @@ export default function SignupPage() {
               <Building className="h-8 w-8 text-white" />
             </div>
             <h2 className="text-2xl font-bold text-foreground mb-1">Create Your Business Account</h2>
-            <p className="text-muted-foreground">Join thousands of Irish businesses</p>
+            <p className="text-muted-foreground">Trusted by Irish businesses</p>
           </div>
           
           {/* Success Message */}

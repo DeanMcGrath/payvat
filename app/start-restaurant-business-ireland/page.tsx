@@ -238,7 +238,7 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Staff Registration</h4>
-                      <p className="text-gray-600">Register employees with Revenue. Set up payroll system and employment contracts</p>
+                      <p className="text-gray-600">Register employees with Revenue. Setup employment contracts and VAT compliance for staff costs</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
@@ -246,8 +246,8 @@ export default function StartRestaurantBusinessIreland() {
                       <div className="w-3 h-3 bg-green-600 rounded-full"></div>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Insurance Coverage</h4>
-                      <p className="text-gray-600">Public liability (€2M+), employer liability, product liability, contents insurance</p>
+                      <h4 className="font-semibold text-gray-900">VAT Compliance Setup</h4>
+                      <p className="text-gray-600">Automated VAT calculation, compliance monitoring, and deadline reminders for restaurants</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
@@ -344,7 +344,7 @@ export default function StartRestaurantBusinessIreland() {
                 Automate Your Restaurant VAT Compliance
               </h3>
               <p className="text-lg text-gray-600 mb-6 max-w-3xl mx-auto">
-                PayVat integrates with restaurant POS systems to automatically calculate VAT, generate compliant receipts, and file bi-monthly returns. Save 15+ hours per month on compliance.
+                PayVat provides automated VAT calculation for restaurant sales, generates compliant receipts, and files bi-monthly returns. Save 15+ hours per month on compliance.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a 
@@ -397,8 +397,8 @@ export default function StartRestaurantBusinessIreland() {
                     <span className="font-semibold">€4,000-8,000</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-2">
-                    <span className="text-gray-700">Business Insurance</span>
-                    <span className="font-semibold">€2,000-5,000</span>
+                    <span className="text-gray-700">VAT Compliance Service</span>
+                    <span className="font-semibold">€500-1,200</span>
                   </div>
                   <div className="flex justify-between items-center font-bold text-lg pt-2">
                     <span className="text-gray-900">Legal/Admin Total</span>
@@ -492,12 +492,12 @@ export default function StartRestaurantBusinessIreland() {
               </div>
               
               <div className="card-modern p-8 border-l-4 border-orange-500">
-                <h3 className="text-xl font-bold text-orange-600 mb-3">Mistake: Inadequate Insurance Coverage</h3>
+                <h3 className="text-xl font-bold text-orange-600 mb-3">Mistake: Poor VAT Registration Timing</h3>
                 <p className="text-gray-700 mb-4">
-                  Choosing basic public liability only, without product liability, employer liability, or business interruption coverage.
+                  Delaying VAT registration until mandatory threshold, missing opportunities to reclaim setup costs and establish professional credibility.
                 </p>
                 <div className="bg-orange-50 p-4 rounded-lg">
-                  <p className="text-orange-800 font-semibold">Risk: Unlimited personal liability in claims up to €1M+</p>
+                  <p className="text-orange-800 font-semibold">Cost: €10,000+ in non-recoverable setup VAT and credibility issues</p>
                 </div>
               </div>
               
@@ -512,9 +512,9 @@ export default function StartRestaurantBusinessIreland() {
               </div>
               
               <div className="card-modern p-8 border-l-4 border-blue-500">
-                <h3 className="text-xl font-bold text-blue-600 mb-3">Mistake: Manual VAT and Payroll Management</h3>
+                <h3 className="text-xl font-bold text-blue-600 mb-3">Mistake: Manual VAT Management</h3>
                 <p className="text-gray-700 mb-4">
-                  Trying to handle complex restaurant VAT rates, tip distribution, and bi-monthly filings manually or with basic software.
+                  Trying to handle complex restaurant VAT rates, different tax rates for dine-in vs takeaway, and bi-monthly filings manually.
                 </p>
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <p className="text-blue-800 font-semibold">Cost: 15-20 hours per month + penalties for errors</p>

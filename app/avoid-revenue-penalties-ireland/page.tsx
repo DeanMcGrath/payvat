@@ -286,7 +286,7 @@ export default function AvoidRevenuePenaltiesIreland() {
             
             <div className="max-w-4xl mx-auto">
               <p className="text-lg text-muted-foreground leading-relaxed mb-8 text-center">
-                Follow this systematic approach to stay compliant and penalty-free. Used by 15,000+ Irish businesses.
+                Follow this systematic approach to stay compliant and penalty-free. Used by Irish businesses.
               </p>
               
               <div className="grid md:grid-cols-2 gap-8">
@@ -642,7 +642,7 @@ export default function AvoidRevenuePenaltiesIreland() {
                     Protect Your Business <span className="text-gradient-primary">Today</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                    Join 15,000+ Irish businesses with zero penalty records. Start your 14-day free trial and never worry about compliance again.
+                    Join Irish businesses with zero penalty records. Start your 14-day free trial and never worry about compliance again.
                   </p>
                 </div>
 

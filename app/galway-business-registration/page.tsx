@@ -579,7 +579,7 @@ export default function GalwayBusinessRegistration() {
               </a>
             </div>
             <p className="text-sm text-cyan-200 mt-6">
-              Join 300+ Galway businesses using PayVat for compliance
+              Trusted by Galway businesses for VAT compliance
             </p>
           </div>
         </section>

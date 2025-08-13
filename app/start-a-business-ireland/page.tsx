@@ -84,7 +84,7 @@ export default function StartABusinessIreland() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-success" />
-                  <span>15,000+ businesses launched</span>
+                  <span>Irish businesses supported</span>
                 </div>
               </div>
             </div>
@@ -113,7 +113,7 @@ export default function StartABusinessIreland() {
             
             <div className="max-w-6xl mx-auto">
               <p className="text-lg text-muted-foreground leading-relaxed mb-8 text-center">
-                Follow this proven roadmap used by 15,000+ successful Irish businesses. Each phase builds on the previous one.
+                Follow this proven roadmap used by successful Irish businesses. Each phase builds on the previous one.
               </p>
               
               <div className="grid lg:grid-cols-4 gap-6">
@@ -649,7 +649,7 @@ export default function StartABusinessIreland() {
                     Ready to <span className="text-gradient-primary">Start Your Business?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                    Join 15,000+ successful Irish entrepreneurs. Get your business setup right from day one with PayVat's comprehensive support.
+                    Join successful Irish entrepreneurs. Get your business setup right from day one with PayVat's comprehensive support.
                   </p>
                 </div>
 

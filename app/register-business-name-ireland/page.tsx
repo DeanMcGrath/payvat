@@ -84,7 +84,7 @@ export default function RegisterBusinessNameIreland() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-success" />
-                  <span>15,000+ businesses launched</span>
+                  <span>Irish businesses served</span>
                 </div>
               </div>
             </div>
@@ -610,7 +610,7 @@ export default function RegisterBusinessNameIreland() {
                     Ready to <span className="text-gradient-primary">Register Your Business?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                    Join 15,000+ Irish entrepreneurs. Get your business name registered and VAT-ready in one streamlined process.
+                    Join Irish entrepreneurs. Get your business name registered and VAT-ready in one streamlined process.
                   </p>
                 </div>
 

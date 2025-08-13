@@ -668,7 +668,7 @@ export default function VATDeadlinesIreland() {
                     Never Miss Another <span className="text-gradient-primary">Deadline</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                    Join 15,000+ Irish businesses with perfect compliance records. Automate your VAT deadlines and eliminate penalty risk.
+                    Join Irish businesses with perfect compliance records. Automate your VAT deadlines and eliminate penalty risk.
                   </p>
                 </div>
 

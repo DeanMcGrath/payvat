@@ -180,8 +180,8 @@ export default function StartServiceBusinessIreland() {
                       <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Professional Indemnity Insurance</h4>
-                      <p className="text-gray-600">Essential for advice-giving services. €500-5,000 annually depending on sector and cover level</p>
+                      <h4 className="font-semibold text-gray-900">VAT Registration & Compliance</h4>
+                      <p className="text-gray-600">Essential for service credibility. Early registration enables cost recovery and professional standing</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
@@ -389,7 +389,7 @@ export default function StartServiceBusinessIreland() {
                     <span className="font-semibold text-sm">€0</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-2">
-                    <span className="text-gray-700 text-sm">Professional Insurance</span>
+                    <span className="text-gray-700 text-sm">VAT Compliance Setup</span>
                     <span className="font-semibold text-sm">€500</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-2">
@@ -419,7 +419,7 @@ export default function StartServiceBusinessIreland() {
                     <span className="font-semibold text-sm">€200</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-2">
-                    <span className="text-gray-700 text-sm">Professional Insurance</span>
+                    <span className="text-gray-700 text-sm">VAT Compliance Setup</span>
                     <span className="font-semibold text-sm">€1,200</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-2">
@@ -478,7 +478,7 @@ export default function StartServiceBusinessIreland() {
               </h3>
               <div className="grid md:grid-cols-4 gap-4 mb-6">
                 <div>
-                  <div className="text-sm text-gray-600">Insurance</div>
+                  <div className="text-sm text-gray-600">VAT Compliance</div>
                   <div className="text-lg font-bold text-gray-900">€50-400</div>
                 </div>
                 <div>

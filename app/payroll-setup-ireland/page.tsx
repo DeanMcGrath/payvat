@@ -69,7 +69,7 @@ export default function PayrollSetupIreland() {
                 href="/signup" 
                 className="btn-primary px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
-                Get Payroll Setup Help
+                Get Payroll Guidance
               </a>
               <a 
                 href="#payroll-guide" 
@@ -488,24 +488,24 @@ export default function PayrollSetupIreland() {
               Simplify Your Irish Payroll Setup
             </h2>
             <p className="text-xl mb-8 text-sky-100">
-              Stop worrying about payroll compliance. PayVat handles PAYE, PRSI, USC calculations and all Revenue submissions automatically.
+              Need guidance on payroll setup? PayVat provides expert consultation and connects you with qualified payroll specialists for PAYE, PRSI, USC compliance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
                 className="bg-white text-sky-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
-                Get Payroll Setup Help
+                Get Payroll Guidance
               </a>
               <a 
                 href="/pricing" 
                 className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-sky-600 transition-all duration-300"
               >
-                View Payroll Plans
+                Contact for Advice
               </a>
             </div>
             <p className="text-sm text-sky-200 mt-6">
-              Join 800+ Irish employers using PayVat for payroll
+              Get expert guidance on payroll compliance and setup
             </p>
           </div>
         </section>

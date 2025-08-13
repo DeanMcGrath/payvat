@@ -326,7 +326,7 @@ export default function ExpenseTrackerIreland() {
                   <div className="bg-indigo-50 p-4 rounded-lg">
                     <h4 className="font-semibold text-indigo-900 mb-2">Accounting Software</h4>
                     <ul className="text-indigo-800 text-sm space-y-1">
-                      <li>• Bank feed integration</li>
+                      <li>• Bank transaction import</li>
                       <li>• Automatic categorization</li>
                       <li>• VAT tracking</li>
                       <li>• Report generation</li>
@@ -491,7 +491,7 @@ export default function ExpenseTrackerIreland() {
               Automate Your Expense Tracking
             </h2>
             <p className="text-xl mb-8 text-violet-100">
-              Stop losing money on missed deductions. PayVat automatically tracks expenses, calculates mileage, and maximizes your tax savings.
+              Stop losing money on missed deductions. PayVat helps you maintain compliant expense records and VAT documentation for maximum deductions.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 

@@ -33,7 +33,7 @@ export default function VATServicesPage() {
         "Bulk calculations",
         "Export to Excel/PDF"
       ],
-      color: "from-blue-500 to-cyan-600"
+      color: "from-teal-500 to-teal-600"
     },
     {
       id: "submission",
@@ -61,7 +61,7 @@ export default function VATServicesPage() {
         "Payment confirmations",
         "Late payment protection"
       ],
-      color: "from-purple-500 to-indigo-600"
+      color: "from-teal-600 to-teal-700"
     },
     {
       id: "compliance",
@@ -93,7 +93,7 @@ export default function VATServicesPage() {
         "Priority support",
         "Unlimited transactions",
         "Basic and custom reporting",
-        "Mobile app access",
+        "Deadline reminders",
         "Expert guidance when you need it"
       ],
       badge: null,
@@ -114,7 +114,7 @@ export default function VATServicesPage() {
         "Priority support",
         "Unlimited transactions",
         "Basic and custom reporting",
-        "Mobile app access",
+        "Deadline reminders",
         "Expert guidance when you need it"
       ],
       badge: "Save €180",
@@ -129,9 +129,9 @@ export default function VATServicesPage() {
       name: "Sarah Mitchell",
       company: "Mitchell Digital Agency",
       role: "Finance Director",
-      quote: "PayVAT saved us 15 hours per month on VAT processing. The automation is incredible and the support team is always helpful.",
+      quote: "PayVAT has streamlined our VAT processing significantly. The automation is incredible and the support team is always helpful.",
       rating: 5,
-      savings: "€2,400/year"
+      savings: "Time Saved"
     },
     {
       name: "James O'Connor",
@@ -139,7 +139,7 @@ export default function VATServicesPage() {
       role: "Managing Director", 
       quote: "Since switching to PayVAT, we've never missed a VAT deadline. The peace of mind is worth every penny.",
       rating: 5,
-      savings: "€1,800/year"
+      savings: "Peace of Mind"
     },
     {
       name: "Maria Santos",
@@ -147,7 +147,7 @@ export default function VATServicesPage() {
       role: "Founder",
       quote: "The VAT calculator alone pays for the subscription. Everything else is a bonus. Highly recommend to any Irish business.",
       rating: 5,
-      savings: "€3,200/year"
+      savings: "Great Value"
     }
   ]
 
@@ -453,7 +453,7 @@ export default function VATServicesPage() {
               What Our Customers Say
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Join thousands of Irish businesses saving time and money with PayVAT
+              Join Irish businesses who save time and money with PayVAT
             </p>
           </div>
           
@@ -463,7 +463,7 @@ export default function VATServicesPage() {
                 <CardContent className="p-8">
                   <div className="flex items-center gap-1 mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="h-5 w-5 fill-teal-400 text-teal-400" />
                     ))}
                   </div>
                   <blockquote className="text-gray-700 mb-6">
@@ -496,7 +496,7 @@ export default function VATServicesPage() {
               Ready to Simplify Your VAT?
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Join over 15,000 Irish businesses who trust PayVAT for their VAT compliance. 
+              Join Irish businesses who trust PayVAT for their VAT compliance. 
               Start your free trial today - no credit card required.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
