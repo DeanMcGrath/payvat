@@ -760,7 +760,10 @@ export class DocumentTemplateSystem {
         createdAt: template.createdAt,
         lastUsed: template.lastUsed,
         lastUpdated: template.lastUpdated,
-        createdFromDocuments: template.createdFromDocuments
+        createdFromDocuments: template.createdFromDocuments,
+        averageProcessingTime: 0,
+        averageConfidence: template.confidence,
+        errorPatterns: []
       }
     } catch (error) {
       console.error('Failed to get template by ID:', error)
