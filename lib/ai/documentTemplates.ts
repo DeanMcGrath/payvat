@@ -661,8 +661,8 @@ export class DocumentTemplateSystem {
           lastUsed: template.fingerprint.lastUsed,
           updatedAt: template.fingerprint.updatedAt
         },
-        extractionRules: template.extractionRules as ExtractionRule[],
-        validationRules: template.validationRules as ValidationRule[],
+        extractionRules: template.extractionRules as unknown as ExtractionRule[],
+        validationRules: template.validationRules as unknown as ValidationRule[],
         createdAt: template.createdAt,
         lastUsed: template.lastUsed,
         lastUpdated: template.lastUpdated,
@@ -759,8 +759,8 @@ export class DocumentTemplateSystem {
           lastUsed: template.fingerprint.lastUsed,
           updatedAt: template.fingerprint.updatedAt
         },
-        extractionRules: template.extractionRules as ExtractionRule[],
-        validationRules: template.validationRules as ValidationRule[],
+        extractionRules: template.extractionRules as unknown as ExtractionRule[],
+        validationRules: template.validationRules as unknown as ValidationRule[],
         createdAt: template.createdAt,
         lastUsed: template.lastUsed,
         lastUpdated: template.lastUpdated,
