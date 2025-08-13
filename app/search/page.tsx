@@ -157,7 +157,7 @@ function SearchPageContent() {
       case 'page':
         return 'bg-blue-100 text-blue-800 border-blue-200'
       case 'help':
-        return 'bg-purple-100 text-purple-800 border-purple-200'
+        return 'bg-teal-100 text-teal-800 border-teal-200'
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200'
     }
@@ -401,7 +401,7 @@ function SearchPageContent() {
 
               <Card className="hover:shadow-md transition-shadow">
                 <CardContent className="pt-6 text-center">
-                  <HelpCircle className="h-8 w-8 text-purple-600 mx-auto mb-3" />
+                  <HelpCircle className="h-8 w-8 text-teal-600 mx-auto mb-3" />
                   <h3 className="font-semibold text-gray-900 mb-2">Help & Support</h3>
                   <p className="text-gray-600 text-sm mb-4">Get answers to common questions and troubleshooting help</p>
                   <Button 

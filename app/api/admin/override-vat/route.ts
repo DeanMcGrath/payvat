@@ -5,6 +5,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { createAdminRoute } from '@/lib/middleware'
+import { AuthUser } from '@/lib/auth'
 
 interface VATOverrideRequest {
   documentId: string
@@ -16,7 +18,7 @@ interface VATOverrideRequest {
 /**
  * POST /api/admin/override-vat - Manually override VAT extraction
  */
-export async function POST(request: NextRequest) {
+async function postOverrideVAT(request: NextRequest, user: AuthUser) {
   try {
     const body: VATOverrideRequest = await request.json()
     const { documentId, correctVATAmount, reason, originalAmount } = body
@@ -51,7 +53,7 @@ export async function POST(request: NextRequest) {
     // Create override record for audit trail
     const override = await prisma.auditLog.create({
       data: {
-        userId: 'admin', // TODO: Get actual admin user ID from auth
+        userId: user.id, // Now using actual admin user ID from auth
         action: 'VAT_MANUAL_OVERRIDE',
         entityType: 'DOCUMENT',
         entityId: documentId,
@@ -113,7 +115,7 @@ export async function POST(request: NextRequest) {
 /**
  * GET /api/admin/override-vat?documentId=xxx - Get override history for a document
  */
-export async function GET(request: NextRequest) {
+async function getOverrideHistory(request: NextRequest, user: AuthUser) {
   try {
     const { searchParams } = new URL(request.url)
     const documentId = searchParams.get('documentId')
@@ -166,3 +168,7 @@ export async function GET(request: NextRequest) {
     }, { status: 500 })
   }
 }
+
+// Export handlers with admin middleware
+export const POST = createAdminRoute(postOverrideVAT)
+export const GET = createAdminRoute(getOverrideHistory)

@@ -244,9 +244,9 @@ export default function EcommerceVatIreland() {
                         <li>• Use Irish VAT number</li>
                       </ul>
                     </div>
-                    <div className="bg-purple-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-purple-900 mb-2">Documentation</h4>
-                      <p className="text-purple-800 text-sm">XI prefix for NI businesses. Verify status before applying EU rules.</p>
+                    <div className="bg-teal-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-teal-900 mb-2">Documentation</h4>
+                      <p className="text-teal-800 text-sm">XI prefix for NI businesses. Verify status before applying EU rules.</p>
                     </div>
                   </div>
                 </div>
@@ -352,29 +352,29 @@ export default function EcommerceVatIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+        <section className="scroll-section py-20 px-4 bg-teal-600 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Automate Your E-commerce VAT Compliance
             </h2>
-            <p className="text-xl mb-8 text-purple-100">
+            <p className="text-xl mb-8 text-teal-100">
               PayVat handles complex e-commerce VAT rules automatically. OSS registration, real-time calculations, and marketplace integration.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-purple-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-teal-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Start E-commerce VAT Setup
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-purple-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-teal-600 transition-all duration-300"
               >
                 View E-commerce Plans
               </a>
             </div>
-            <p className="text-sm text-purple-200 mt-6">
+            <p className="text-sm text-teal-200 mt-6">
               Join 3,200+ Irish e-commerce businesses using PayVat
             </p>
           </div>

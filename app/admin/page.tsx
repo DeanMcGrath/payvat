@@ -350,7 +350,7 @@ function AdminDashboardContent() {
         <div className="admin-stat-card hover-lift">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-sm font-medium text-muted-foreground">Payment Volume</h3>
-            <div className="icon-modern bg-gradient-to-br from-purple-500 to-pink-600">
+            <div className="icon-modern bg-gradient-to-br from-teal-500 to-teal-600">
               <Euro className="h-4 w-4 text-white" />
             </div>
           </div>

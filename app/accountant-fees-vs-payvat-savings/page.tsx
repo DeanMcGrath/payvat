@@ -205,7 +205,7 @@ export default function AccountantFeesVsPayVatSavings() {
                       <span className="text-sm font-semibold">Extra Benefits:</span>
                     </div>
                     <ul className="text-xs text-green-700 mt-2 space-y-1">
-                      <li>• File anytime, 24/7 availability</li>
+                      <li>• File anytime, always available</li>
                       <li>• Complete process transparency</li>
                       <li>• Instant compliance status</li>
                       <li>• Zero penalty risk with guarantees</li>
@@ -336,13 +336,13 @@ export default function AccountantFeesVsPayVatSavings() {
         <section className="py-20" data-animate>
           <div className="card-premium p-12 mb-2 hover-lift">
             <div className="text-center mb-2">
-              <div className="icon-premium mb-3 mx-auto" style={{background: 'linear-gradient(to bottom right, #dc2626, #991b1b)'}}>
+              <div className="icon-premium mb-3 mx-auto">
                 <FileText className="h-10 w-10 text-white" />
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
                 Hidden Costs of <span className="text-gradient-primary">Traditional Accountants</span>
               </h2>
-              <div className="w-24 h-1 bg-red-500 mx-auto mb-4 rounded-full"></div>
+              <div className="w-24 h-1 bg-teal-500 mx-auto mb-4 rounded-full"></div>
             </div>
             
             <div className="max-w-4xl mx-auto">
@@ -466,7 +466,7 @@ export default function AccountantFeesVsPayVatSavings() {
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-success" />
-                      <span className="text-sm">24/7 availability - file when convenient</span>
+                      <span className="text-sm">Always available - file when convenient</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-success" />
@@ -560,15 +560,15 @@ export default function AccountantFeesVsPayVatSavings() {
 
         {/* ROI Calculator */}
         <section className="py-20" data-animate>
-          <div className="card-premium p-12 mb-2 hover-lift" style={{background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(22, 163, 74, 0.1) 100%)'}}>
+          <div className="card-premium p-12 mb-2 hover-lift" style={{background: 'linear-gradient(135deg, rgba(74, 155, 142, 0.05) 0%, rgba(77, 184, 164, 0.1) 100%)'}}>
             <div className="text-center mb-2">
-              <div className="icon-premium mb-3 mx-auto" style={{background: 'linear-gradient(to bottom right, #16a34a, #15803d)'}}>
+              <div className="icon-premium mb-3 mx-auto">
                 <Calculator className="h-10 w-10 text-white" />
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
                 Your <span className="text-gradient-primary">ROI Calculator</span>
               </h2>
-              <div className="w-24 h-1 bg-green-500 mx-auto mb-4 rounded-full"></div>
+              <div className="w-24 h-1 bg-teal-500 mx-auto mb-4 rounded-full"></div>
             </div>
             
             <div className="max-w-4xl mx-auto">
@@ -660,7 +660,7 @@ export default function AccountantFeesVsPayVatSavings() {
                     Start Saving <span className="text-gradient-primary">€4,200+ Today</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                    Join 15,000+ Irish businesses who've taken control of their VAT compliance while saving thousands annually.
+                    Join Irish businesses who've taken control of their VAT compliance while saving costs annually.
                   </p>
                 </div>
 

@@ -266,7 +266,7 @@ export default function SmartDocumentUpload({
     const config = {
       'TEMPLATE_MATCH': { color: 'bg-green-100 text-green-800', icon: '🎯', label: 'Template Match' },
       'HYBRID': { color: 'bg-blue-100 text-blue-800', icon: '🔄', label: 'Hybrid AI' },
-      'AI_VISION': { color: 'bg-purple-100 text-purple-800', icon: '🤖', label: 'AI Vision' },
+      'AI_VISION': { color: 'bg-teal-100 text-teal-800', icon: '🤖', label: 'AI Vision' },
       'FALLBACK': { color: 'bg-yellow-100 text-yellow-800', icon: '⚡', label: 'Fallback' }
     }
     
@@ -383,7 +383,7 @@ export default function SmartDocumentUpload({
                           
                           {/* Matched Features */}
                           {file.matchedFeatures && file.matchedFeatures.length > 0 && (
-                            <div className="flex items-center text-blue-600 text-xs">
+                            <div className="flex items-center text-teal-600 text-xs">
                               <TrendingUp className="h-3 w-3 mr-1" />
                               {file.matchedFeatures.length} patterns matched
                             </div>
@@ -391,7 +391,7 @@ export default function SmartDocumentUpload({
                           
                           {/* Suggested Improvements */}
                           {file.suggestedImprovements && file.suggestedImprovements.length > 0 && (
-                            <div className="flex items-center text-purple-600 text-xs">
+                            <div className="flex items-center text-teal-600 text-xs">
                               <Lightbulb className="h-3 w-3 mr-1" />
                               {file.suggestedImprovements.length} suggestions
                             </div>

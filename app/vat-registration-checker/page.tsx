@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import SiteHeader from '../../components/site-header'
 import Footer from '../../components/footer'
 
@@ -25,7 +25,7 @@ export default function VatRegistrationChecker() {
     setIsVisible(true)
   }, [])
 
-  const checkVatRequirement = () => {
+  const checkVatRequirement = useCallback(() => {
     if (!businessType || !annualTurnover) return
 
     const turnover = parseFloat(annualTurnover)
@@ -68,13 +68,13 @@ export default function VatRegistrationChecker() {
       turnover,
       businessType
     })
-  }
+  }, [businessType, annualTurnover, projectedTurnover])
 
   useEffect(() => {
     if (businessType && annualTurnover) {
       checkVatRequirement()
     }
-  }, [businessType, annualTurnover, projectedTurnover])
+  }, [businessType, annualTurnover, projectedTurnover, checkVatRequirement])
 
   return (
     <>

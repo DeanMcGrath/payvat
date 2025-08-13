@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -89,15 +89,7 @@ export default function AITrainingDashboard() {
   const [error, setError] = useState<string | null>(null)
   const [refreshing, setRefreshing] = useState(false)
 
-  useEffect(() => {
-    loadDashboardData()
-    
-    // Set up auto-refresh every 30 seconds
-    const interval = setInterval(loadDashboardData, 30000)
-    return () => clearInterval(interval)
-  }, [])
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       if (!refreshing) setIsLoading(true)
       setError(null)
@@ -137,7 +129,15 @@ export default function AITrainingDashboard() {
       setIsLoading(false)
       setRefreshing(false)
     }
-  }
+  }, [refreshing])
+
+  useEffect(() => {
+    loadDashboardData()
+    
+    // Set up auto-refresh every 30 seconds
+    const interval = setInterval(loadDashboardData, 30000)
+    return () => clearInterval(interval)
+  }, [loadDashboardData])
 
   const handleRefresh = async () => {
     setRefreshing(true)
@@ -365,7 +365,7 @@ export default function AITrainingDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-purple-600">{pipelineStatus.currentJobs.length}</div>
+              <div className="text-2xl font-bold text-teal-600">{pipelineStatus.currentJobs.length}</div>
               <p className="text-xs text-gray-500 mt-1">Currently running</p>
             </CardContent>
           </Card>

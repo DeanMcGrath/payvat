@@ -446,18 +446,18 @@ export default function ConstructionVatIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-gradient-to-r from-orange-600 to-red-600 text-white">
+        <section className="scroll-section py-20 px-4 bg-teal-600 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Ready to Simplify Construction VAT & RCT Compliance?
             </h2>
-            <p className="text-xl mb-8 text-orange-100">
-              Join 1,800+ Irish construction businesses using PayVat for automated VAT and RCT compliance.
+            <p className="text-xl mb-8 text-teal-100">
+              Join Irish construction businesses using PayVat for automated VAT and RCT compliance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-orange-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-teal-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Get Started Free
               </a>

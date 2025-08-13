@@ -503,7 +503,7 @@ export default function ReportsPage() {
           <Card className="card-modern hover-lift group cursor-pointer">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                <div className="icon-modern bg-gradient-to-br from-purple-500 to-pink-600 mr-3">
+                <div className="icon-modern bg-gradient-to-br from-teal-500 to-teal-600 mr-3">
                   <BarChart3 className="h-5 w-5 text-white" />
                 </div>
                 Annual Reports

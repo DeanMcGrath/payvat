@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from 'react'
+import Image from 'next/image'
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { 
@@ -200,13 +201,17 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, onClose, compact = fals
       {/* Preview Content */}
       <div className="p-4">
         {file.mimeType.startsWith('image/') && file.previewUrl && !imageError ? (
-          <div className="mb-4">
-            <img
-              src={file.previewUrl}
-              alt={file.originalName}
-              className="max-w-full max-h-64 mx-auto rounded border border-gray-200"
-              onError={() => setImageError(true)}
-            />
+          <div className="mb-4 flex justify-center">
+            <div className="relative max-w-full max-h-64">
+              <Image
+                src={file.previewUrl}
+                alt={file.originalName}
+                width={600}
+                height={256}
+                className="max-w-full max-h-64 object-contain rounded border border-gray-200"
+                onError={() => setImageError(true)}
+              />
+            </div>
           </div>
         ) : (
           <div className="flex items-center justify-center h-32 bg-gray-50 rounded border-2 border-dashed border-gray-200 mb-4">

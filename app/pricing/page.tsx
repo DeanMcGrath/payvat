@@ -64,16 +64,16 @@ export default function PricingPage() {
                 </div>
                 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
-                  <span className="text-gradient-primary">Simple, Transparent</span>
+                  <span className="text-gradient-primary">PayVAT Service</span>
                   <br />
-                  <span className="text-foreground">Pricing Plans</span>
+                  <span className="text-foreground">Simple Pricing</span>
                 </h1>
                 
                 <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
                 
                 <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Choose the plan that fits your business needs. 
-                  <span className="text-primary font-semibold">No hidden fees, no surprises.</span>
+                  One complete VAT solution for Irish businesses. 
+                  <span className="text-primary font-semibold">Everything you need, nothing you don't.</span>
                 </p>
               </div>
               
@@ -109,68 +109,114 @@ export default function PricingPage() {
           {/* Pricing Cards */}
           <div className="text-center mb-2 animate-slide-up">
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-1">
-              Choose Your 
-              <span className="text-gradient-primary"> Perfect Plan</span>
+              <span className="text-gradient-primary">PayVAT Service</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Professional VAT management for Irish businesses of all sizes
+              Complete VAT management solution for Irish businesses
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-2 max-w-4xl mx-auto">
-            {/* Monthly Plan */}
-            <div className="card-modern p-8 text-center hover-lift group relative">
-              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
-                <Calendar className="h-8 w-8 text-white" />
+          <div className="max-w-5xl mx-auto">
+            <div className="card-premium p-12 text-center hover-lift relative overflow-hidden">
+              <div className="absolute inset-0 gradient-mesh opacity-10"></div>
+              
+              <div className="relative z-10">
+                <div className="icon-premium mb-6 mx-auto">
+                  <Euro className="h-12 w-12 text-white" />
+                </div>
+                
+                <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-8">PayVAT Service</h3>
+                
+                {/* Features List */}
+                <div className="grid md:grid-cols-2 gap-6 mb-12 text-left max-w-3xl mx-auto">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground">VAT calculations</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground">VAT submissions via ROS</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground">Payment processing</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground">Priority support</span>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground">Unlimited transactions</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground">Basic and custom reporting</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground">Mobile app access</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
+                      <span className="text-foreground">Expert guidance when you need it</span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Pricing Options */}
+                <div className="grid md:grid-cols-2 gap-8 mb-8">
+                  {/* Monthly Option */}
+                  <div className="card-modern p-8 text-center">
+                    <div className="flex items-center justify-center space-x-2 mb-4">
+                      <Euro className="h-8 w-8 text-primary" />
+                      <span className="text-5xl font-bold text-foreground">90</span>
+                      <span className="text-muted-foreground text-lg">/month</span>
+                    </div>
+                    <p className="text-muted-foreground mb-6">Perfect for getting started</p>
+                    <Button 
+                      size="lg"
+                      className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
+                      onClick={() => window.location.href = '/signup'}
+                    >
+                      Start Free Trial
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </div>
+                  
+                  {/* Annual Option */}
+                  <div className="card-modern p-8 text-center border-2 border-primary relative">
+                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                      <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-medium">
+                        Save €180
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-center space-x-2 mb-4">
+                      <Euro className="h-8 w-8 text-primary" />
+                      <span className="text-5xl font-bold text-foreground">900</span>
+                      <span className="text-muted-foreground text-lg">/year</span>
+                    </div>
+                    <p className="text-primary font-semibold mb-2">Two months free!</p>
+                    <p className="text-muted-foreground mb-6">Best value for growing businesses</p>
+                    <Button 
+                      size="lg"
+                      className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
+                      onClick={() => window.location.href = '/signup'}
+                    >
+                      Get Started
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Trust Message */}
+                <div className="text-center text-muted-foreground">
+                  <p className="text-lg">14-day free trial • No setup fees • Cancel anytime</p>
+                </div>
               </div>
-              <h3 className="text-2xl font-semibold text-foreground mb-1">Monthly Plan</h3>
-              <div className="flex items-center justify-center space-x-2 mb-4">
-                <Euro className="h-8 w-8 text-primary" />
-                <span className="text-5xl font-bold text-foreground">30</span>
-                <span className="text-muted-foreground text-lg">/month</span>
-              </div>
-              <p className="text-primary font-semibold mb-2">Cancel anytime</p>
-              <p className="text-muted-foreground leading-relaxed mb-2">
-                Perfect for seasonal businesses and short-term projects
-              </p>
-              <Button 
-                size="lg"
-                className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
-                onClick={() => window.location.href = '/vat-guide'}
-              >
-                Learn More
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </div>
-
-            {/* Annual Plan */}
-            <div className="card-premium p-8 text-center hover-lift group relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-medium">
-                  Most Popular
-                </span>
-              </div>
-              <div className="icon-premium mb-3 mx-auto group-hover:scale-110 transition-transform duration-300">
-                <Star className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-semibold text-foreground mb-1">Annual Plan</h3>
-              <div className="flex items-center justify-center space-x-2 mb-4">
-                <Euro className="h-8 w-8 text-primary" />
-                <span className="text-5xl font-bold text-foreground">300</span>
-                <span className="text-muted-foreground text-lg">/year</span>
-              </div>
-              <p className="text-primary font-semibold mb-2">Two months free!</p>
-              <p className="text-muted-foreground leading-relaxed mb-2">
-                Best value for steady-state SMEs and cost-savvy entrepreneurs
-              </p>
-              <Button 
-                size="lg"
-                className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
-                onClick={() => window.location.href = '/about'}
-              >
-                Contact Us
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
             </div>
           </div>
         </div>

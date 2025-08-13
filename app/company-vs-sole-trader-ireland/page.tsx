@@ -84,7 +84,7 @@ export default function CompanyVsSoleTraderIreland() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-success" />
-                  <span>15,000+ businesses advised</span>
+                  <span>Irish businesses advised</span>
                 </div>
               </div>
             </div>
@@ -350,7 +350,7 @@ export default function CompanyVsSoleTraderIreland() {
                 </div>
               </div>
               
-              <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+              <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-slate-50 rounded-lg">
                 <h4 className="font-semibold text-foreground mb-3 text-center">Insurance vs Structure</h4>
                 <p className="text-sm text-muted-foreground text-center">
                   Professional indemnity and public liability insurance can protect sole traders, but company structure 
@@ -549,7 +549,7 @@ export default function CompanyVsSoleTraderIreland() {
         <section className="py-20" data-animate>
           <div className="card-modern p-12 mb-2 hover-lift">
             <div className="text-center mb-2">
-              <div className="icon-modern bg-purple-500 mb-3 mx-auto">
+              <div className="icon-modern bg-teal-500 mb-3 mx-auto">
                 <ArrowRight className="h-10 w-10 text-white" />
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
@@ -615,12 +615,12 @@ export default function CompanyVsSoleTraderIreland() {
                 </div>
               </div>
               
-              <div className="mt-8 p-6 bg-gradient-to-r from-orange-50 to-red-50 rounded-lg border-l-4 border-orange-500">
+              <div className="mt-8 p-6 bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg border-l-4 border-slate-400">
                 <div className="flex items-start gap-3">
-                  <AlertTriangle className="h-5 w-5 text-orange-600 mt-0.5" />
+                  <AlertTriangle className="h-5 w-5 text-slate-600 mt-0.5" />
                   <div>
-                    <h4 className="font-semibold text-orange-800 mb-2">Key Takeaway</h4>
-                    <p className="text-sm text-orange-700">
+                    <h4 className="font-semibold text-slate-800 mb-2">Key Takeaway</h4>
+                    <p className="text-sm text-slate-700">
                       While changing structure is possible, it involves costs, complexity, and potential tax implications. 
                       It's usually better to choose the right structure from the start based on your 3-5 year business plan.
                     </p>

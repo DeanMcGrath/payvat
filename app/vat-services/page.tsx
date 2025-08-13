@@ -75,7 +75,7 @@ export default function VATServicesPage() {
         "Audit preparation",
         "Expert consultations"
       ],
-      color: "from-orange-500 to-red-600"
+      color: "from-teal-500 to-cyan-600"
     }
   ]
 
@@ -129,7 +129,7 @@ export default function VATServicesPage() {
         "Custom integrations",
         "Advanced analytics",
         "Multi-entity support",
-        "24/7 phone support"
+        "Expert guidance when you need it"
       ],
       badge: "Premium",
       buttonText: "Contact Sales",
@@ -165,10 +165,10 @@ export default function VATServicesPage() {
   ]
 
   const stats = [
-    { number: "15,000+", label: "Businesses served", icon: Building2 },
-    { number: "€2.3B", label: "VAT processed annually", icon: Euro },
-    { number: "99.9%", label: "Uptime guarantee", icon: Shield },
-    { number: "24/7", label: "Expert support", icon: HelpCircle }
+    { number: "Growing", label: "Irish business community", icon: Building2 },
+    { number: "Professional", label: "VAT compliance support", icon: Euro },
+    { number: "Reliable", label: "Service you can trust", icon: Shield },
+    { number: "Expert", label: "Guidance when needed", icon: HelpCircle }
   ]
 
   return (
@@ -439,7 +439,7 @@ export default function VATServicesPage() {
                     feature: "Support Availability",
                     manual: "❌ None",
                     accountant: "⚠️ Business hours",
-                    payvat: "✅ 24/7"
+                    payvat: "✅ Expert guidance"
                   }
                 ].map((row, index) => (
                   <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
@@ -527,7 +527,7 @@ export default function VATServicesPage() {
               </Button>
             </div>
             <p className="text-white/80 text-sm">
-              ✓ No setup fees  ✓ Cancel anytime  ✓ 24/7 support
+              ✓ No setup fees  ✓ Cancel anytime  ✓ Expert guidance
             </p>
           </div>
         </div>

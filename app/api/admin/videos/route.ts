@@ -4,7 +4,9 @@ import { put } from '@vercel/blob'
 import { prisma } from '@/lib/prisma'
 import { AuthUser } from '@/lib/auth'
 import { v4 as uuidv4 } from 'uuid'
-import crypto from 'crypto-js'
+import * as crypto from 'crypto-js'
+import { logger } from '@/lib/logger'
+import { generateThumbnailFromBuffer, getVideoMetadata } from '@/lib/video-thumbnail-generator'
 
 // GET - List all demo videos (admin only)
 async function getVideos(request: NextRequest, user: AuthUser) {
@@ -81,8 +83,8 @@ async function getVideos(request: NextRequest, user: AuthUser) {
 // POST - Upload new video (admin only)
 async function postVideo(request: NextRequest, user: AuthUser) {
   const uploadStartTime = Date.now()
-  console.log(`🎥 [VIDEO UPLOAD] Starting upload process at ${new Date().toISOString()}`)
-  console.log(`📊 [VIDEO UPLOAD] User ID: ${user.id}, Role: ${user.role}`)
+  logger.info('Starting video upload process', { userId: user.id, role: user.role, timestamp: new Date().toISOString() }, 'VIDEO_UPLOAD')
+  logger.debug('Video upload user details', { userId: user.id, role: user.role }, 'VIDEO_UPLOAD')
   
   try {
     // Log request headers for debugging
@@ -213,13 +215,31 @@ async function postVideo(request: NextRequest, user: AuthUser) {
       })
       console.log(`✅ [VIDEO UPLOAD] Successfully uploaded to Vercel Blob: ${videoBlob.url}`)
 
-      // Generate thumbnail from video (simplified - would need ffmpeg setup)
+      // Generate thumbnail from video
       let thumbnailUrl = null
+      let duration = null
+      let width = null
+      let height = null
+      let aspectRatio = null
+      let bitrate = null
+      let codec = null
+
       try {
-        // This would require ffmpeg binary to be available
-        // For now, we'll set it to null and handle thumbnail generation separately
-        console.log(`🖼️ [VIDEO UPLOAD] Thumbnail generation skipped (not implemented)`)
-        thumbnailUrl = null
+        console.log(`🖼️ [VIDEO UPLOAD] Generating thumbnail...`)
+        
+        // Generate thumbnail from video buffer
+        thumbnailUrl = await generateThumbnailFromBuffer(buffer, file.name, {
+          width: 320,
+          height: 180,
+          quality: 80,
+          timestamp: '00:00:05'
+        })
+
+        if (thumbnailUrl) {
+          console.log(`✅ [VIDEO UPLOAD] Thumbnail generated: ${thumbnailUrl}`)
+        } else {
+          console.warn(`⚠️ [VIDEO UPLOAD] Thumbnail generation returned null`)
+        }
       } catch (error) {
         console.warn(`⚠️ [VIDEO UPLOAD] Thumbnail generation failed:`, error)
       }
@@ -238,7 +258,13 @@ async function postVideo(request: NextRequest, user: AuthUser) {
           thumbnailUrl,
           fileHash,
           uploadedBy: user.id,
-          status: 'READY' // Since we're not doing complex processing initially
+          status: 'READY',
+          duration,
+          width,
+          height,
+          aspectRatio,
+          bitrate,
+          codec
         }
       })
       

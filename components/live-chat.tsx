@@ -310,8 +310,8 @@ export default function LiveChat() {
         <div className="fixed bottom-20 right-4 w-80 h-96 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] bg-white border border-gray-200 rounded-lg shadow-xl z-[9999]">
           {/* Drag and Drop Overlay */}
           {isDragOver && (
-            <div className="absolute inset-0 bg-blue-500 bg-opacity-20 border-2 border-dashed border-blue-400 rounded-lg flex items-center justify-center z-10">
-              <div className="text-center text-blue-600">
+            <div className="absolute inset-0 bg-teal-500 bg-opacity-20 border-2 border-dashed border-teal-400 rounded-lg flex items-center justify-center z-10">
+              <div className="text-center text-teal-600">
                 <Upload className="h-8 w-8 mx-auto mb-2" />
                 <p className="font-semibold">Drop file to upload</p>
                 <p className="text-sm">PDF, DOC, XLS, Images, CSV</p>
@@ -361,14 +361,14 @@ export default function LiveChat() {
                               ? 'bg-teal-500 text-white ml-auto'
                               : msg.senderType === 'admin'
                               ? isAI 
-                                ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-gray-800 border border-blue-200'
-                                : 'bg-blue-100 text-gray-800'
+                                ? 'bg-gradient-to-r from-teal-50 to-slate-50 text-gray-800 border border-teal-200'
+                                : 'bg-teal-100 text-gray-800'
                               : 'bg-gray-100 text-gray-800'
                           }`}
                         >
                           <div className="flex items-start space-x-2">
                             {isAI && (
-                              <Bot className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                              <Bot className="h-4 w-4 text-teal-600 mt-0.5 flex-shrink-0" />
                             )}
                             <div className="flex-1">
                               {/* Text message */}
@@ -441,7 +441,7 @@ export default function LiveChat() {
 
                 {/* Upload Progress */}
                 {isUploading && (
-                  <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-600 flex items-center space-x-2">
+                  <div className="mb-3 p-2 bg-teal-50 border border-teal-200 rounded text-sm text-teal-600 flex items-center space-x-2">
                     <Loader2 className="h-4 w-4 animate-spin" />
                     <span>Uploading file...</span>
                   </div>

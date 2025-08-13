@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import Image from 'next/image'
 import AdminRoute from '@/components/admin-route'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -422,12 +423,13 @@ function AdminVideosContent() {
                 <div className="flex items-start space-x-4">
                   {/* Video Thumbnail/Preview */}
                   <div className="flex-shrink-0">
-                    <div className="w-40 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
+                    <div className="relative w-40 h-24 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                       {video.thumbnailUrl ? (
-                        <img
+                        <Image
                           src={video.thumbnailUrl}
                           alt={video.title}
-                          className="w-full h-full object-cover rounded-lg"
+                          fill
+                          className="object-cover rounded-lg"
                         />
                       ) : (
                         <Video className="h-8 w-8 text-gray-400" />

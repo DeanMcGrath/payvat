@@ -84,7 +84,7 @@ export default function HowToRegisterForVATIreland() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-success" />
-                  <span>15,000+ businesses registered</span>
+                  <span>Irish businesses registered</span>
                 </div>
               </div>
             </div>

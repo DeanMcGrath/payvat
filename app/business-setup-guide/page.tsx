@@ -227,20 +227,20 @@ export default function BusinessSetupGuidePage() {
       />
 
       {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
+      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden bg-gradient-to-br from-teal-50 to-cyan-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center">
             <div className="max-w-4xl mx-auto animate-fade-in">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-800 text-sm font-medium mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-100 text-teal-800 text-sm font-medium mb-6">
                 <Rocket className="w-4 h-4" />
                 Complete Startup Guide
-                <Star className="w-4 h-4 fill-amber-600" />
+                <Star className="w-4 h-4 fill-teal-600" />
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
                 Start Your Irish Business
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600 mt-2">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-600 mt-2">
                   The Right Way
                 </span>
               </h1>
@@ -269,18 +269,18 @@ export default function BusinessSetupGuidePage() {
           </div>
           
           {/* Decorative Elements */}
-          <div className="absolute top-20 right-10 w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full blur-3xl opacity-20 animate-float"></div>
-          <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-yellow-400 to-amber-400 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute top-20 right-10 w-24 h-24 bg-gradient-to-br from-teal-400 to-cyan-400 rounded-full blur-3xl opacity-20 animate-float"></div>
+          <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-cyan-400 to-teal-400 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
         </div>
       </section>
 
       {/* Progress Tracker */}
       <section className="py-8 -mt-12 relative z-10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <Card className="shadow-xl border-2 border-amber-100">
+          <Card className="shadow-xl border-2 border-teal-100">
             <CardHeader>
               <CardTitle className="text-2xl flex items-center gap-2">
-                <Target className="h-6 w-6 text-amber-600" />
+                <Target className="h-6 w-6 text-teal-600" />
                 Your Setup Progress
               </CardTitle>
               <CardDescription>
@@ -291,7 +291,7 @@ export default function BusinessSetupGuidePage() {
               <div className="relative">
                 <div className="absolute left-0 top-0 h-2 w-full bg-gray-200 rounded-full"></div>
                 <div 
-                  className="absolute left-0 top-0 h-2 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full transition-all duration-500"
+                  className="absolute left-0 top-0 h-2 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-full transition-all duration-500"
                   style={{ width: `${(completedSteps.length / setupSteps.length) * 100}%` }}
                 ></div>
               </div>
@@ -304,7 +304,7 @@ export default function BusinessSetupGuidePage() {
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                       completedSteps.includes(step.id) 
-                        ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white' 
+                        ? 'bg-gradient-to-r from-teal-500 to-cyan-600 text-white' 
                         : 'bg-gray-200 text-gray-500'
                     }`}>
                       {completedSteps.includes(step.id) ? (
@@ -339,9 +339,9 @@ export default function BusinessSetupGuidePage() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 p-0.5`}>
+                      <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-600 p-0.5`}>
                         <div className="w-full h-full rounded-xl bg-white flex items-center justify-center">
-                          <step.icon className="h-8 w-8 text-amber-600" />
+                          <step.icon className="h-8 w-8 text-teal-600" />
                         </div>
                       </div>
                       <div>
@@ -407,7 +407,7 @@ export default function BusinessSetupGuidePage() {
                               <ol className="text-sm text-gray-600 space-y-2">
                                 {item.steps?.map((s, i) => (
                                   <li key={i} className="flex items-start gap-2">
-                                    <span className="font-medium text-amber-600">{i + 1}.</span>
+                                    <span className="font-medium text-teal-600">{i + 1}.</span>
                                     {s}
                                   </li>
                                 ))}
@@ -420,7 +420,7 @@ export default function BusinessSetupGuidePage() {
                               )}
                               {'link' in item && item.link && (
                                 <a href={`https://${item.link}`} target="_blank" rel="noopener noreferrer" 
-                                   className="text-sm text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1">
+                                   className="text-sm text-teal-600 hover:text-teal-700 font-medium flex items-center gap-1">
                                   Visit {item.link}
                                   <ArrowRight className="h-3 w-3" />
                                 </a>
@@ -441,7 +441,7 @@ export default function BusinessSetupGuidePage() {
                                 <ol className="text-sm text-gray-600 space-y-1">
                                   {item.steps.map((s, i) => (
                                     <li key={i} className="flex items-start gap-2">
-                                      <span className="font-medium text-amber-600">{i + 1}.</span>
+                                      <span className="font-medium text-teal-600">{i + 1}.</span>
                                       {s}
                                     </li>
                                   ))}
@@ -564,7 +564,7 @@ export default function BusinessSetupGuidePage() {
                         }}
                         className={completedSteps.includes(step.id) 
                           ? "border-green-500 text-green-700 hover:bg-green-50" 
-                          : "bg-gradient-to-r from-amber-500 to-orange-600 text-white"}
+                          : "bg-gradient-to-r from-teal-500 to-cyan-600 text-white"}
                       >
                         {completedSteps.includes(step.id) ? (
                           <>
@@ -583,7 +583,7 @@ export default function BusinessSetupGuidePage() {
                         <Button
                           variant="ghost"
                           onClick={() => setExpandedSection(setupSteps[index + 1].id)}
-                          className="text-amber-600 hover:text-amber-700"
+                          className="text-teal-600 hover:text-teal-700"
                         >
                           Next Step
                           <ArrowRight className="ml-2 h-4 w-4" />
@@ -614,14 +614,14 @@ export default function BusinessSetupGuidePage() {
             {resources.map((resource, index) => (
               <Card key={index} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <CardContent className="p-6">
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 p-0.5 mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-600 p-0.5 mb-4">
                     <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
-                      <resource.icon className="h-6 w-6 text-amber-600" />
+                      <resource.icon className="h-6 w-6 text-teal-600" />
                     </div>
                   </div>
                   <h3 className="font-semibold text-lg mb-2">{resource.title}</h3>
                   <p className="text-sm text-gray-600 mb-4">{resource.description}</p>
-                  <Button variant="outline" className="w-full text-amber-600 border-amber-600 hover:bg-amber-50">
+                  <Button variant="outline" className="w-full text-teal-600 border-teal-600 hover:bg-teal-50">
                     {resource.action}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -633,7 +633,7 @@ export default function BusinessSetupGuidePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-amber-500 to-orange-600">
+      <section className="py-20 bg-teal-600">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12">
             <Lightbulb className="h-16 w-16 text-white mx-auto mb-6" />
@@ -646,7 +646,7 @@ export default function BusinessSetupGuidePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="bg-white text-amber-600 hover:bg-gray-100 font-semibold px-8"
+                className="bg-white text-teal-600 hover:bg-gray-100 font-semibold px-8"
                 onClick={() => window.location.href = '/signup'}
               >
                 Get Started Free

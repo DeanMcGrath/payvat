@@ -460,7 +460,7 @@ export default function CorporateTaxIreland() {
               </a>
             </div>
             <p className="text-sm text-rose-200 mt-6">
-              Join 1,800+ Irish companies using PayVat for corporation tax
+              Join Irish companies using PayVat for corporation tax
             </p>
           </div>
         </section>

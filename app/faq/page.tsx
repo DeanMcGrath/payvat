@@ -100,7 +100,7 @@ export default function FAQPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-success" />
-                  <span>Expert support</span>
+                  <span>Professional guidance</span>
                 </div>
               </div>
             </div>
@@ -417,7 +417,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px gradient-primary mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  We provide live chat and email support 7 days a week; phone support Mon–Fri, 09:00–17:00 Ireland time. Our comprehensive Help Center is also available 24/7.
+                  We provide live chat and email support during business hours. Our comprehensive Help Center is always available for self-service support.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center p-4 card-modern hover-scale">
@@ -425,7 +425,7 @@ export default function FAQPage() {
                     <div className="text-sm text-muted-foreground">Live Chat & Email</div>
                   </div>
                   <div className="text-center p-4 card-modern hover-scale">
-                    <div className="text-2xl font-bold text-primary mb-1">24/7</div>
+                    <div className="text-2xl font-bold text-primary mb-1">Always</div>
                     <div className="text-sm text-muted-foreground">Help Center</div>
                   </div>
                 </div>
@@ -600,7 +600,7 @@ export default function FAQPage() {
                     Still Have <span className="text-gradient-primary">Questions?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                    Our expert support team is here to help you get started with PayVat
+                    Our support team is here to help you get started with PayVat
                   </p>
                 </div>
 

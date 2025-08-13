@@ -84,7 +84,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-4 w-4 text-success" />
-                  <span>15,000+ businesses launched</span>
+                  <span>Trusted by Irish businesses</span>
                 </div>
               </div>
             </div>
@@ -93,6 +93,37 @@ export default function CompleteBusinessSetupGuideIreland() {
           <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
           <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
           <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
+        </div>
+      </section>
+
+      {/* Service Announcement Section */}
+      <section className="py-12 bg-[#4A9B8E]">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8">
+          <div className="text-center text-white">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
+              Let Us Handle Everything For You!
+            </h2>
+            <p className="text-xl lg:text-2xl leading-relaxed mb-8 opacity-95">
+              Don't want to navigate the complexities alone? PayVAT offers a complete done-for-you business setup service. We handle every step from company registration to VAT setup, so you can focus on growing your business.
+            </p>
+            <div className="mb-8">
+              <div className="text-4xl font-bold mb-2">€500 Complete Package</div>
+              <div className="text-xl">+ 6 Months FREE VAT Services</div>
+            </div>
+            <Button 
+              size="lg"
+              className="bg-white text-[#4A9B8E] hover:bg-gray-100 px-12 py-4 text-lg font-semibold"
+              onClick={() => {
+                const contactSection = document.getElementById('contact-form');
+                if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              Learn More
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -153,7 +184,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-success" />
-                    <span>Get business insurance</span>
+                    <span>Complete compliance setup</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-success" />
@@ -170,7 +201,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-success" />
-                    <span>Set up accounting system</span>
+                    <span>Accounting Software - Coming Soon</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-success" />
@@ -312,7 +343,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                       <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">2</div>
                       <div>
                         <p className="font-medium text-foreground">Reserve your name</p>
-                        <p className="text-sm text-muted-foreground">€25 fee, valid for 28 days</p>
+                        <p className="text-sm text-muted-foreground">Valid for 28 days</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
@@ -566,12 +597,133 @@ export default function CompleteBusinessSetupGuideIreland() {
                   <div className="flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">6</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Delaying insurance coverage</h4>
-                      <p className="text-sm text-muted-foreground">Get professional indemnity and public liability from day one</p>
+                      <h4 className="font-semibold text-foreground mb-1">Not setting up proper systems</h4>
+                      <p className="text-sm text-muted-foreground">Establish accounting and compliance systems from the start</p>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Complete Startup Package Section */}
+        <section id="contact-form" className="py-20 bg-[#4A9B8E]">
+          <div className="max-w-4xl mx-auto px-6 lg:px-8">
+            <div className="text-center text-white mb-12">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+                Complete Startup Package: €500
+              </h2>
+              <p className="text-xl leading-relaxed">
+                We handle your entire business setup from start to finish, plus you get your first 6 months of PayVAT VAT processing and submission services FREE.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-2xl p-8 shadow-2xl">
+              <form className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+                      Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                      Email Address *
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                      placeholder="your@email.com"
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                      placeholder="+353..."
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="businessType" className="block text-sm font-medium text-gray-700 mb-2">
+                      Business Type *
+                    </label>
+                    <select
+                      id="businessType"
+                      name="businessType"
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                    >
+                      <option value="">Select business type</option>
+                      <option value="sole-trader">Sole Trader</option>
+                      <option value="limited-company">Limited Company</option>
+                      <option value="not-sure">Not Sure Yet</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div>
+                  <label htmlFor="currentStage" className="block text-sm font-medium text-gray-700 mb-2">
+                    Current Stage *
+                  </label>
+                  <select
+                    id="currentStage"
+                    name="currentStage"
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                  >
+                    <option value="">Select current stage</option>
+                    <option value="just-starting">Just Starting</option>
+                    <option value="name-registered">Name Registered</option>
+                    <option value="need-vat-number">Need VAT Number</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                    Message/Additional Information
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={4}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                    placeholder="Tell us about your business goals or any specific requirements..."
+                  ></textarea>
+                </div>
+                
+                <div className="text-center">
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="bg-[#4A9B8E] hover:bg-[#3A8B7E] text-white px-12 py-4 text-lg font-semibold"
+                  >
+                    Get Your Startup Package
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </div>
+              </form>
             </div>
           </div>
         </section>
@@ -592,7 +744,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                     Ready to <span className="text-gradient-primary">Launch Your Business?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                    Join 15,000+ Irish entrepreneurs who trust PayVat for their business setup and ongoing VAT compliance.
+                    Join Irish entrepreneurs who trust PayVat for their business setup and ongoing VAT compliance.
                   </p>
                 </div>
 

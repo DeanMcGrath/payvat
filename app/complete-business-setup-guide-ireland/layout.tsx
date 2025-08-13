@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Complete Business Setup Guide Ireland (2025) | PayVat',
-  description: 'The definitive step-by-step guide to starting your business in Ireland. From choosing your structure to VAT registration—everything in one place. Join 15,000+ entrepreneurs.',
+  description: 'The definitive step-by-step guide to starting your business in Ireland. From choosing your structure to VAT registration—everything in one place.',
   keywords: 'start business ireland, irish business setup, company registration ireland, sole trader ireland, vat registration ireland, business setup guide',
   authors: [{ name: 'PayVat Team' }],
   creator: 'PayVat',

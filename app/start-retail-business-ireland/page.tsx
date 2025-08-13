@@ -109,7 +109,7 @@ export default function StartRetailBusinessIreland() {
               </div>
               
               <div className="card-modern p-8 text-center hover:shadow-xl transition-all duration-300 group">
-                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-purple-100 text-purple-600 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-teal-100 text-teal-600 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 0v1m-2 0V5.5A2.5 2.5 0 109.5 8v.5m3 0V9a2 2 0 012 0 2 2 0 012 2v1a2 2 0 01-2 2 2 2 0 01-2-2" />
                   </svg>
@@ -209,8 +209,8 @@ export default function StartRetailBusinessIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Phase 3: Operational Setup (Weeks 4-10)</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">POS System & Equipment</h4>
@@ -218,8 +218,8 @@ export default function StartRetailBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Insurance Coverage</h4>
@@ -227,8 +227,8 @@ export default function StartRetailBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-purple-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Staff & Payroll Setup</h4>
@@ -242,8 +242,8 @@ export default function StartRetailBusinessIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Phase 4: Stock & Launch Preparation (Weeks 6-12)</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-orange-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Supplier Agreements</h4>
@@ -251,8 +251,8 @@ export default function StartRetailBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-orange-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Initial Stock Purchase</h4>
@@ -260,8 +260,8 @@ export default function StartRetailBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-orange-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Marketing & Launch</h4>

@@ -390,11 +390,11 @@ export default function TermsPage() {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="card-modern p-6 text-center hover-lift">
-                  <div className="text-3xl font-bold text-success mb-2">99.9%</div>
-                  <div className="text-sm text-muted-foreground">Target Uptime</div>
+                  <div className="text-3xl font-bold text-success mb-2">Reliable</div>
+                  <div className="text-sm text-muted-foreground">Service</div>
                 </div>
                 <div className="card-modern p-6 text-center hover-lift">
-                  <div className="text-3xl font-bold text-primary mb-2">24/7</div>
+                  <div className="text-3xl font-bold text-primary mb-2">Expert</div>
                   <div className="text-sm text-muted-foreground">Monitoring</div>
                 </div>
               </div>

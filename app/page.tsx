@@ -2,14 +2,16 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Lightbulb, Building2, Lock, ArrowRight, CheckCircle, Shield, Clock, Users, TrendingUp, Award, Sparkles, Star } from 'lucide-react'
+import { Lightbulb, Building2, Lock, ArrowRight, CheckCircle, Shield, Clock, Users, TrendingUp, Award, Sparkles, Star, Play } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
+import { VideoModal } from "@/components/video-modal"
 
 export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false)
   const [hoveredBox, setHoveredBox] = useState<number | null>(null)
+  const [showVideoModal, setShowVideoModal] = useState(false)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -47,7 +49,7 @@ export default function LandingPage() {
       buttonText: "Get Started",
       link: "/business-setup-guide",
       icon: Lightbulb,
-      gradient: "from-amber-500 to-orange-600",
+      gradient: "from-teal-500 to-cyan-600",
       shadowColor: "rgba(251, 146, 60, 0.3)",
       features: ["Complete guides", "Step-by-step process", "Expert advice"]
     },
@@ -71,9 +73,9 @@ export default function LandingPage() {
       buttonText: "Sign In",
       link: "/login",
       icon: Lock,
-      gradient: "from-indigo-500 to-purple-600",
+      gradient: "from-teal-500 to-teal-600",
       shadowColor: "rgba(99, 102, 241, 0.3)",
-      features: ["Secure access", "Real-time updates", "24/7 availability"]
+      features: ["Secure access", "Real-time updates", "Always available"]
     }
   ]
 
@@ -114,20 +116,33 @@ export default function LandingPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-teal-600" />
-                  <span className="font-medium">Trusted by 15,000+ Irish businesses</span>
+                  <span className="font-medium">Trusted by Irish businesses</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Award className="h-5 w-5 text-teal-600" />
                   <span className="font-medium">Award-winning support</span>
                 </div>
               </div>
+
+              {/* Watch Demo Video Button */}
+              <div className="flex justify-center">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => setShowVideoModal(true)}
+                  className="border-teal-600 text-teal-600 hover:bg-teal-50 hover:border-teal-700 hover:text-teal-700 px-8 py-4 text-lg font-semibold transition-all duration-300 hover:shadow-lg"
+                >
+                  <Play className="mr-3 h-5 w-5" />
+                  Watch Demo Video
+                </Button>
+              </div>
             </div>
           </div>
           
           {/* Decorative Elements */}
           <div className="absolute top-10 left-10 w-20 h-20 bg-gradient-to-br from-teal-400 to-cyan-400 rounded-full blur-3xl opacity-20 animate-float"></div>
-          <div className="absolute top-40 right-20 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
-          <div className="absolute bottom-10 left-1/3 w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-4s'}}></div>
+          <div className="absolute top-40 right-20 w-32 h-32 bg-gradient-to-br from-teal-400 to-teal-500 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
+          <div className="absolute bottom-10 left-1/3 w-24 h-24 bg-gradient-to-br from-teal-400 to-cyan-400 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-4s'}}></div>
         </div>
       </section>
 
@@ -170,8 +185,8 @@ export default function LandingPage() {
                           <svg width="0" height="0">
                             <defs>
                               <linearGradient id={`${box.id}-gradient`} x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" className={box.gradient.includes('amber') ? 'text-amber-500' : box.gradient.includes('teal') ? 'text-teal-500' : 'text-indigo-500'} stopColor="currentColor" />
-                                <stop offset="100%" className={box.gradient.includes('amber') ? 'text-orange-600' : box.gradient.includes('teal') ? 'text-cyan-600' : 'text-purple-600'} stopColor="currentColor" />
+                                <stop offset="0%" className={box.gradient.includes('teal') ? 'text-teal-500' : 'text-indigo-500'} stopColor="currentColor" />
+                                <stop offset="100%" className={box.gradient.includes('teal') ? 'text-cyan-600' : 'text-teal-600'} stopColor="currentColor" />
                               </linearGradient>
                             </defs>
                           </svg>
@@ -179,7 +194,7 @@ export default function LandingPage() {
                       </div>
                       
                       {/* Premium Badge */}
-                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-amber-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-teal-400 to-cyan-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         {box.id === 1 ? 'NEW' : box.id === 2 ? 'POPULAR' : 'SECURE'}
                       </div>
                     </div>
@@ -274,7 +289,7 @@ export default function LandingPage() {
                 <Users className="h-6 w-6 text-white" />
               </div>
               <div>
-                <div className="font-semibold text-foreground">Expert Support</div>
+                <div className="font-semibold text-foreground">Professional Support</div>
                 <div className="text-sm text-muted-foreground">Always here to help</div>
               </div>
             </div>
@@ -284,6 +299,12 @@ export default function LandingPage() {
 
       {/* Footer */}
       <Footer />
+
+      {/* Video Modal */}
+      <VideoModal 
+        isOpen={showVideoModal}
+        onClose={() => setShowVideoModal(false)}
+      />
     </div>
   )
 }

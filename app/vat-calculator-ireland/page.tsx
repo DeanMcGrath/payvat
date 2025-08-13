@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import SiteHeader from '../../components/site-header'
 import Footer from '../../components/footer'
 
@@ -22,7 +22,7 @@ export default function VatCalculatorIreland() {
     setIsVisible(true)
   }, [])
 
-  const calculateVat = () => {
+  const calculateVat = useCallback(() => {
     const numAmount = parseFloat(amount)
     if (isNaN(numAmount) || numAmount <= 0) return
 
@@ -47,13 +47,13 @@ export default function VatCalculatorIreland() {
       total: totalAmount.toFixed(2),
       rate: vatRate
     })
-  }
+  }, [amount, vatRate, calculationType])
 
   useEffect(() => {
     if (amount) {
       calculateVat()
     }
-  }, [amount, vatRate, calculationType])
+  }, [amount, vatRate, calculationType, calculateVat])
 
   return (
     <>

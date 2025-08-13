@@ -289,7 +289,7 @@ export default function PayrollSetupIreland() {
                     </ul>
                   </div>
                   
-                  <div className="bg-orange-50 p-4 rounded-lg">
+                  <div className="bg-teal-50 p-4 rounded-lg">
                     <h4 className="font-semibold text-orange-900 mb-2">USC (Universal Social Charge)</h4>
                     <ul className="text-orange-800 text-sm space-y-1">
                       <li>• 0.5% on income up to €12,012</li>
@@ -314,9 +314,9 @@ export default function PayrollSetupIreland() {
                     </ul>
                   </div>
                   
-                  <div className="bg-purple-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-purple-900 mb-2">Additional Costs</h4>
-                    <ul className="text-purple-800 text-sm space-y-1">
+                  <div className="bg-teal-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-teal-900 mb-2">Additional Costs</h4>
+                    <ul className="text-teal-800 text-sm space-y-1">
                       <li>• Employer liability insurance</li>
                       <li>• Workplace pension contributions</li>
                       <li>• Payroll software costs</li>
@@ -360,7 +360,7 @@ export default function PayrollSetupIreland() {
                     <p className="text-red-800 text-sm">P30 return and payment due</p>
                   </div>
                   
-                  <div className="bg-orange-50 p-4 rounded-lg text-center">
+                  <div className="bg-teal-50 p-4 rounded-lg text-center">
                     <h3 className="text-lg font-bold text-orange-900 mb-2">February</h3>
                     <div className="text-3xl font-bold text-orange-600 mb-2">15th</div>
                     <p className="text-orange-800 text-sm">P60s to employees</p>
