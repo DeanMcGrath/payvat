@@ -62,10 +62,6 @@ const nextConfig = {
             value: 'max-age=31536000; includeSubDomains; preload'
           },
           {
-            key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https://*.public.blob.vercel-storage.com blob: data:; connect-src 'self' https:; font-src 'self' data:; upgrade-insecure-requests;"
-          },
-          {
             key: 'Expect-CT',
             value: 'max-age=86400, enforce'
           },

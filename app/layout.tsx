@@ -4,6 +4,7 @@ import { ErrorBoundary } from '@/components/error-boundary'
 import { Toaster } from '@/components/ui/sonner'
 import LiveChat from '@/components/live-chat'
 import WebVitals from '@/components/web-vitals'
+import JsonLdSchema from '@/components/json-ld-schema'
 import '@/lib/env-validation' // Validate environment on startup
 import './globals.css'
 
@@ -16,97 +17,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "name": "PayVAT Ireland",
-              "description": "Professional VAT services for Irish businesses including VAT returns, compliance, and advisory services.",
-              "url": "https://payvat.ie",
-              "logo": "https://payvat.ie/logo.png",
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+353-1-XXX-XXXX",
-                "contactType": "customer service",
-                "areaServed": "IE",
-                "availableLanguage": "en"
-              },
-              "address": {
-                "@type": "PostalAddress",
-                "addressCountry": "IE",
-                "addressLocality": "Dublin"
-              },
-              "sameAs": [
-                "https://payvat.ie"
-              ],
-              "hasOfferCatalog": {
-                "@type": "OfferCatalog",
-                "name": "VAT Services",
-                "itemListElement": [
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "VAT Return Submission",
-                      "description": "Professional VAT return preparation and submission to Irish Revenue",
-                      "provider": {
-                        "@type": "Organization",
-                        "name": "PayVAT Ireland"
-                      },
-                      "areaServed": "IE",
-                      "availableChannel": {
-                        "@type": "ServiceChannel",
-                        "serviceUrl": "https://payvat.ie"
-                      }
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service", 
-                      "name": "VAT Compliance Services",
-                      "description": "Ongoing VAT compliance support for Irish businesses",
-                      "provider": {
-                        "@type": "Organization",
-                        "name": "PayVAT Ireland"
-                      },
-                      "areaServed": "IE"
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "VAT Registration",
-                      "description": "VAT registration assistance for new Irish businesses",
-                      "provider": {
-                        "@type": "Organization",
-                        "name": "PayVAT Ireland"
-                      },
-                      "areaServed": "IE"
-                    }
-                  }
-                ]
-              },
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.8",
-                "reviewCount": "1247",
-                "bestRating": "5",
-                "worstRating": "1"
-              },
-              "knowsAbout": [
-                "Irish VAT regulations",
-                "VAT compliance",
-                "Revenue.ie procedures",
-                "Business taxation Ireland",
-                "VAT returns Ireland"
-              ]
-            })
-          }}
-        />
       </head>
       <body>
         <ErrorBoundary>
@@ -118,6 +28,7 @@ export default function RootLayout({
           <Toaster />
           <LiveChat />
           <WebVitals />
+          <JsonLdSchema />
         </ErrorBoundary>
       </body>
     </html>
