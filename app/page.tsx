@@ -153,11 +153,7 @@ export default function LandingPage() {
                 />
                 
                 <Card className="relative h-full overflow-hidden border-2 border-gray-100 bg-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 rounded-2xl">
-                  <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r opacity-0 group-hover:opacity-100 transition-opacity duration-500" 
-                       style={{
-                         backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))`,
-                       }}
-                       className={`bg-gradient-to-r ${box.gradient}`}
+                  <div className={`absolute top-0 inset-x-0 h-2 bg-gradient-to-r ${box.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
                   />
                   
                   <CardContent className="p-8 space-y-6">
@@ -191,11 +187,10 @@ export default function LandingPage() {
                     {/* Content */}
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <h3 className="text-2xl font-bold text-foreground group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text transition-all duration-300"
+                        <h3 className={`text-2xl font-bold text-foreground group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text transition-all duration-300 group-hover:${box.gradient}`}
                             style={{
                               backgroundImage: hoveredBox === box.id ? `linear-gradient(to right, var(--tw-gradient-stops))` : 'none',
-                            }}
-                            className={`group-hover:${box.gradient}`}>
+                            }}>
                           {box.heading}
                         </h3>
                         <p className="text-muted-foreground leading-relaxed">
