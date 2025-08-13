@@ -412,13 +412,13 @@ export default function BusinessSetupGuidePage() {
                                   </li>
                                 ))}
                               </ol>
-                              {item.timeline && (
+                              {'timeline' in item && item.timeline && (
                                 <div className="flex items-center gap-2 pt-3 border-t">
                                   <Clock className="h-4 w-4 text-gray-500" />
                                   <span className="text-sm text-gray-600">Timeline: {item.timeline}</span>
                                 </div>
                               )}
-                              {item.link && (
+                              {'link' in item && item.link && (
                                 <a href={`https://${item.link}`} target="_blank" rel="noopener noreferrer" 
                                    className="text-sm text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1">
                                   Visit {item.link}
@@ -430,14 +430,14 @@ export default function BusinessSetupGuidePage() {
                           
                           {step.id === 'vat' && (
                             <div className="space-y-3">
-                              {item.services && (
+                              {'services' in item && item.services && (
                                 <div className="text-sm">
                                   <p className="text-gray-700"><span className="font-medium">Services:</span> {item.services}</p>
-                                  <p className="text-gray-700"><span className="font-medium">Goods:</span> {item.goods}</p>
-                                  {item.note && <p className="text-gray-600 italic mt-2">{item.note}</p>}
+                                  {'goods' in item && item.goods && <p className="text-gray-700"><span className="font-medium">Goods:</span> {item.goods}</p>}
+                                  {'note' in item && item.note && <p className="text-gray-600 italic mt-2">{item.note}</p>}
                                 </div>
                               )}
-                              {item.steps && (
+                              {'steps' in item && item.steps && (
                                 <ol className="text-sm text-gray-600 space-y-1">
                                   {item.steps.map((s, i) => (
                                     <li key={i} className="flex items-start gap-2">
@@ -447,24 +447,30 @@ export default function BusinessSetupGuidePage() {
                                   ))}
                                 </ol>
                               )}
-                              {item.standard && (
+                              {'standard' in item && item.standard && (
                                 <div className="space-y-2 text-sm">
                                   <div className="flex justify-between">
                                     <span className="text-gray-600">Standard:</span>
                                     <span className="font-medium">{item.standard}</span>
                                   </div>
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">Reduced:</span>
-                                    <span className="font-medium">{item.reduced}</span>
-                                  </div>
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">Special:</span>
-                                    <span className="font-medium">{item.special}</span>
-                                  </div>
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">Zero:</span>
-                                    <span className="font-medium">{item.zero}</span>
-                                  </div>
+                                  {'reduced' in item && item.reduced && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Reduced:</span>
+                                      <span className="font-medium">{item.reduced}</span>
+                                    </div>
+                                  )}
+                                  {'special' in item && item.special && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Special:</span>
+                                      <span className="font-medium">{item.special}</span>
+                                    </div>
+                                  )}
+                                  {'zero' in item && item.zero && (
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">Zero:</span>
+                                      <span className="font-medium">{item.zero}</span>
+                                    </div>
+                                  )}
                                 </div>
                               )}
                             </div>
@@ -472,7 +478,7 @@ export default function BusinessSetupGuidePage() {
                           
                           {step.id === 'banking' && (
                             <div className="space-y-3 text-sm">
-                              {item.requirements && (
+                              {'requirements' in item && item.requirements && (
                                 <div>
                                   <p className="font-medium text-gray-700 mb-2">Requirements:</p>
                                   <ul className="text-gray-600 space-y-1">
@@ -485,28 +491,28 @@ export default function BusinessSetupGuidePage() {
                                   </ul>
                                 </div>
                               )}
-                              {item.banks && (
+                              {'banks' in item && item.banks && (
                                 <div>
                                   <p className="font-medium text-gray-700 mb-1">Major Banks:</p>
                                   <p className="text-gray-600">{item.banks.join(', ')}</p>
                                 </div>
                               )}
-                              {item.options && (
+                              {'options' in item && item.options && (
                                 <div>
                                   <p className="font-medium text-gray-700 mb-1">Options:</p>
                                   <p className="text-gray-600">{item.options.join(', ')}</p>
                                 </div>
                               )}
-                              {item.recommended && (
+                              {'recommended' in item && item.recommended && (
                                 <div>
                                   <p className="font-medium text-gray-700 mb-1">Recommended:</p>
                                   <p className="text-gray-600">{item.recommended.join(', ')}</p>
                                 </div>
                               )}
-                              {item.features && (
+                              {'features' in item && item.features && (
                                 <p className="text-gray-600 italic">{item.features}</p>
                               )}
-                              {item.considerations && (
+                              {'considerations' in item && item.considerations && (
                                 <p className="text-gray-600 italic">{item.considerations}</p>
                               )}
                             </div>
@@ -525,7 +531,7 @@ export default function BusinessSetupGuidePage() {
                           
                           {step.id === 'compliance' && (
                             <div className="space-y-3 text-sm">
-                              {item.items && (
+                              {'items' in item && item.items && (
                                 <ul className="text-gray-600 space-y-1">
                                   {item.items.map((itm, i) => (
                                     <li key={i} className="flex items-start gap-2">
@@ -535,10 +541,10 @@ export default function BusinessSetupGuidePage() {
                                   ))}
                                 </ul>
                               )}
-                              {item.requirement && (
+                              {'requirement' in item && item.requirement && (
                                 <div className="pt-3 border-t">
                                   <p className="font-medium text-gray-700">Retention: {item.requirement}</p>
-                                  {item.includes && (
+                                  {'includes' in item && item.includes && (
                                     <p className="text-gray-600 mt-1">Includes: {item.includes.join(', ')}</p>
                                   )}
                                 </div>
