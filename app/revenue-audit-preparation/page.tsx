@@ -527,7 +527,7 @@ export default function RevenueAuditPreparation() {
               </a>
             </div>
             <p className="text-sm text-amber-200 mt-6">
-              Trusted by 500+ Irish businesses during Revenue audits
+              Trusted by Irish businesses during Revenue audits
             </p>
           </div>
         </section>

@@ -508,7 +508,7 @@ export default function ExpenseTrackerIreland() {
               </a>
             </div>
             <p className="text-sm text-teal-100 mt-6">
-              Join 2,800+ Irish businesses maximizing expense deductions
+              Trusted by Irish businesses maximizing expense deductions
             </p>
           </div>
         </section>

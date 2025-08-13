@@ -132,8 +132,8 @@ export default function LandingPage() {
                     <Users className="h-5 w-5 text-white" />
                   </div>
                   <div className="text-left">
-                    <div className="font-bold text-gray-900 text-sm">5,000+ Businesses</div>
-                    <div className="text-xs text-teal-600">✓ Trust PayVAT</div>
+                    <div className="font-bold text-gray-900 text-sm">Trust PayVAT</div>
+                    <div className="text-xs text-teal-600">✓ Professional Service</div>
                   </div>
                 </div>
                 
@@ -142,8 +142,8 @@ export default function LandingPage() {
                     <Award className="h-5 w-5 text-white" />
                   </div>
                   <div className="text-left">
-                    <div className="font-bold text-gray-900 text-sm">Award-winning</div>
-                    <div className="text-xs text-teal-600">✓ Customer support</div>
+                    <div className="font-bold text-gray-900 text-sm">Professional Support</div>
+                    <div className="text-xs text-teal-600">✓ Expert guidance</div>
                   </div>
                 </div>
               </div>
@@ -277,7 +277,7 @@ export default function LandingPage() {
                 Why choose <span className="text-gradient-primary">PayVAT?</span>
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Join thousands of Irish businesses who trust PayVAT for their compliance needs
+                Join Irish businesses who trust PayVAT for their compliance needs
               </p>
             </div>
             

@@ -186,7 +186,7 @@ export default function SiteHeader({
                 )}
                 <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
                   <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
-                  <a href="mailto:support@payvat.ie" className="hover:text-white transition-colors">Contact</a>
+                  <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/contact'}>Contact</button>
                 </div>
               </div>
               {pageSubtitle && (
@@ -274,13 +274,15 @@ export default function SiteHeader({
                 >
                   <span>About</span>
                 </button>
-                <a 
-                  href="mailto:support@payvat.ie"
+                <button 
+                  onClick={() => {
+                    setIsMobileMenuOpen(false)
+                    window.location.href = '/contact'
+                  }}
                   className="w-full block px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors min-h-[44px] flex items-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <span>Contact</span>
-                </a>
+                </button>
               </nav>
 
               {/* Mobile Action Buttons */}

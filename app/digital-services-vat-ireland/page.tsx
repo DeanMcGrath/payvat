@@ -526,7 +526,7 @@ export default function DigitalServicesVatIreland() {
               Ready to Simplify Digital Services VAT Compliance?
             </h2>
             <p className="text-xl mb-8 text-cyan-100">
-              Join 2,800+ Irish digital businesses using PayVat for automated EU VAT compliance.
+              Trusted by Irish digital businesses for automated EU VAT compliance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 

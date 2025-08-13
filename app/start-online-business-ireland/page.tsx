@@ -553,7 +553,7 @@ export default function StartOnlineBusinessIreland() {
                   Trying to track multi-currency sales, varying VAT rates, and platform fees manually without integrated accounting.
                 </p>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-gray-800 font-semibold">Impact: 20+ hours monthly on admin + accuracy errors costing thousands</p>
+                  <p className="text-gray-800 font-semibold">Impact: Significant time on admin + accuracy errors costing money</p>
                 </div>
               </div>
             </div>

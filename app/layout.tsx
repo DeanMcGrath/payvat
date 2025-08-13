@@ -40,7 +40,7 @@ export const metadata = {
     default: 'PayVAT Ireland - Professional VAT Services & Tax Solutions',
     template: '%s | PayVAT Ireland'
   },
-  description: 'Ireland\'s #1 VAT compliance platform. Trusted by 5,000+ businesses. Revenue-approved VAT returns, registration & compliance services. Start your free consultation today.',
+  description: 'Professional VAT compliance platform. Trusted by Irish businesses. Revenue-approved VAT returns, registration & compliance services. Start your free consultation today.',
   keywords: ['VAT services Ireland', 'Irish VAT compliance', 'VAT returns Dublin', 'Revenue.ie VAT', 'VAT submission Ireland', 'Irish VAT experts', 'VAT registration Ireland'],
   authors: [{ name: 'PayVAT Ireland' }],
   creator: 'PayVAT Ireland',

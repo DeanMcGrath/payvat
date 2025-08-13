@@ -504,7 +504,7 @@ export default function DublinBusinessRegistration() {
               </a>
             </div>
             <p className="text-sm text-teal-200 mt-6">
-              Join 45,000+ Dublin businesses using PayVat for seamless compliance
+              Trusted by Dublin businesses for seamless compliance
             </p>
           </div>
         </section>

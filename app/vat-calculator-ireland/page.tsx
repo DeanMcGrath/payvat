@@ -344,7 +344,7 @@ export default function VatCalculatorIreland() {
               </a>
             </div>
             <p className="text-sm text-green-200 mt-6">
-              Save 15+ hours monthly on VAT compliance • Never miss a deadline
+              Reliable VAT compliance service • Never miss a deadline
             </p>
           </div>
         </section>

@@ -375,7 +375,7 @@ export default function EcommerceVatIreland() {
               </a>
             </div>
             <p className="text-sm text-teal-200 mt-6">
-              Join 3,200+ Irish e-commerce businesses using PayVat
+              Trusted by Irish e-commerce businesses
             </p>
           </div>
         </section>

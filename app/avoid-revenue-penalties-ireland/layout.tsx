@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Avoid Revenue Penalties Ireland: Complete Guide | PayVat',
-  description: 'Protect your business from costly Revenue penalties. Learn penalty rates, common triggers, and prevention systems. Join 15,000+ penalty-free businesses.',
+  description: 'Protect your business from costly Revenue penalties. Learn penalty rates, common triggers, and prevention systems. Trusted by Irish businesses.',
   keywords: 'revenue penalties ireland, vat penalties ireland, late filing penalties, revenue compliance ireland, irish tax penalties, avoid penalties',
   authors: [{ name: 'PayVat Team' }],
   creator: 'PayVat',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Avoid Revenue Penalties Ireland: Complete Guide | PayVat',
-    description: 'Protect your business from costly Revenue penalties. Learn penalty rates, common triggers, and prevention systems. Join 15,000+ penalty-free businesses.',
+    description: 'Protect your business from costly Revenue penalties. Learn penalty rates, common triggers, and prevention systems. Trusted by Irish businesses.',
     url: '/avoid-revenue-penalties-ireland',
     siteName: 'PayVat',
     locale: 'en_IE',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Avoid Revenue Penalties Ireland: Complete Guide | PayVat',
-    description: 'Protect your business from costly Revenue penalties. Learn penalty rates, common triggers, and prevention systems. Join 15,000+ penalty-free businesses.',
+    description: 'Protect your business from costly Revenue penalties. Learn penalty rates, common triggers, and prevention systems. Trusted by Irish businesses.',
     creator: '@payvat_ie',
   },
   robots: {

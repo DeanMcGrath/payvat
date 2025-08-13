@@ -469,7 +469,7 @@ export default function ConstructionVatIreland() {
               </a>
             </div>
             <p className="text-sm text-teal-200 mt-6">
-              Save 20+ hours monthly on VAT and RCT compliance
+              Professional VAT and RCT compliance service
             </p>
           </div>
         </section>

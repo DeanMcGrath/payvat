@@ -596,7 +596,7 @@ export default function StartRetailBusinessIreland() {
               </a>
             </div>
             <p className="text-sm text-blue-200 mt-6">
-              Join 800+ Irish retailers using PayVat for seamless compliance
+              Trusted by Irish retailers for seamless compliance
             </p>
           </div>
         </section>

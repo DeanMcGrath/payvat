@@ -263,7 +263,7 @@ export default function FAQPage() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="text-2xl font-bold text-primary">€30</span>
+                        <span className="text-2xl font-bold text-primary">€90</span>
                         <span className="text-muted-foreground">/month</span>
                       </div>
                     </div>
@@ -282,14 +282,92 @@ export default function FAQPage() {
                         </div>
                         <div>
                           <span className="font-semibold text-foreground">Annual Plan</span>
-                          <p className="text-sm text-success font-medium">Two months free!</p>
+                          <p className="text-sm text-success font-medium">Save €180 with annual billing!</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="text-2xl font-bold text-primary">€300</span>
+                        <span className="text-2xl font-bold text-primary">€900</span>
                         <span className="text-muted-foreground">/year</span>
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(14)}>
+            <div className="flex items-center justify-between p-6">
+              <div className="flex items-center gap-4">
+                <div className="icon-modern bg-success group-hover:scale-110 transition-transform duration-300">
+                  <Clock className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                  Is there a free trial?
+                </h3>
+              </div>
+              <div className="text-muted-foreground group-hover:text-primary transition-colors">
+                {expandedItems.has(14) ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+              </div>
+            </div>
+            {expandedItems.has(14) && (
+              <div className="px-6 pb-6 animate-fade-in">
+                <div className="w-full h-px bg-success/30 mb-4"></div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Yes, 14-day free trial with no setup fees.
+                </p>
+                <div className="flex items-center gap-2 text-success font-medium">
+                  <CheckCircle className="h-4 w-4" />
+                  <span>No credit card required</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(13)}>
+            <div className="flex items-center justify-between p-6">
+              <div className="flex items-center gap-4">
+                <div className="icon-modern bg-teal-500 group-hover:scale-110 transition-transform duration-300">
+                  <CheckCircle className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                  What's included in the service?
+                </h3>
+              </div>
+              <div className="text-muted-foreground group-hover:text-primary transition-colors">
+                {expandedItems.has(13) ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+              </div>
+            </div>
+            {expandedItems.has(13) && (
+              <div className="px-6 pb-6 animate-fade-in">
+                <div className="w-full h-px bg-teal-500/30 mb-4"></div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  VAT calculations, submissions via ROS, payment processing, unlimited transactions, reporting, and expert support.
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>VAT calculations</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>ROS submissions</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>Payment processing</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>Unlimited transactions</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>VAT reporting</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>Expert support</span>
                   </div>
                 </div>
               </div>
@@ -440,7 +518,7 @@ export default function FAQPage() {
                   <Building className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                  Do you provide business setup guidance?
+                  Do you offer business setup?
                 </h3>
               </div>
               <div className="text-muted-foreground group-hover:text-primary transition-colors">
@@ -451,24 +529,24 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px bg-teal-500/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Yes! We offer comprehensive business setup guides covering everything from choosing your business structure to registering with Revenue. Our step-by-step guides cover sole traders, partnerships, and limited companies.
+                  Yes, €500 complete package that handles everything from company registration to VAT setup, plus 6 months free VAT services.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
-                    <span>Business registration guides</span>
+                    <span>Company registration</span>
                   </div>
                   <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
-                    <span>Structure comparisons</span>
+                    <span>VAT setup</span>
                   </div>
                   <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
-                    <span>City-specific guides</span>
+                    <span>6 months free VAT services</span>
                   </div>
                   <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
-                    <span>Industry expertise</span>
+                    <span>Complete done-for-you service</span>
                   </div>
                 </div>
               </div>

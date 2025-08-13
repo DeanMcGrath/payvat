@@ -587,7 +587,7 @@ export default function StartServiceBusinessIreland() {
               </a>
             </div>
             <p className="text-sm text-green-200 mt-6">
-              Join 3,400+ Irish service businesses using PayVat for seamless compliance
+              Trusted by Irish service businesses for seamless compliance
             </p>
           </div>
         </section>

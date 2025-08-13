@@ -42,9 +42,30 @@ export default function BusinessSetupGuidePage() {
     }
   })
 
-  const onSubmit = (data: ContactFormData) => {
-    console.log('Form submitted:', data)
-    // TODO: Handle form submission
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+          source: 'business-setup-guide',
+          timestamp: new Date().toISOString()
+        }),
+      })
+
+      if (response.ok) {
+        alert('Thank you! We will contact you within 24 hours to discuss your business setup package.')
+        // Reset form or redirect as needed
+      } else {
+        alert('Something went wrong. Please try again or contact us directly at support@payvat.ie')
+      }
+    } catch (error) {
+      console.error('Form submission error:', error)
+      alert('Something went wrong. Please try again or contact us directly at support@payvat.ie')
+    }
   }
 
   const scrollToContactForm = () => {
@@ -273,7 +294,7 @@ export default function BusinessSetupGuidePage() {
             <CardContent className="p-8 md:p-12">
               <div className="text-center">
                 <h2 className="text-3xl md:text-4xl font-bold text-teal-800 mb-6">
-                  🚀 Let Us Handle Everything For You!
+                  Let Us Handle Everything For You!
                 </h2>
                 <p className="text-lg text-gray-700 max-w-4xl mx-auto mb-6 leading-relaxed">
                   Don't want to navigate the complexities alone? PayVAT offers a complete done-for-you business setup service. 
@@ -754,8 +775,12 @@ export default function BusinessSetupGuidePage() {
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="just-starting">Just Starting</SelectItem>
-                          <SelectItem value="name-registered">Name Registered</SelectItem>
+                          <SelectItem value="researching-options">Researching Business Options</SelectItem>
+                          <SelectItem value="name-registered">Business Name Registered</SelectItem>
+                          <SelectItem value="company-incorporated">Company Incorporated</SelectItem>
                           <SelectItem value="need-vat-number">Need VAT Number</SelectItem>
+                          <SelectItem value="have-vat-need-help">Have VAT Number - Need Help with Compliance</SelectItem>
+                          <SelectItem value="switching-provider">Established Business - Switching VAT Provider</SelectItem>
                           <SelectItem value="other">Other</SelectItem>
                         </SelectContent>
                       </Select>

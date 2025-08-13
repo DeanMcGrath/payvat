@@ -485,7 +485,7 @@ export default function BrexitTradingRules() {
               </a>
             </div>
             <p className="text-sm text-blue-200 mt-6">
-              Trusted by 600+ Irish businesses trading with the UK
+              Trusted by Irish businesses trading with the UK
             </p>
           </div>
         </section>

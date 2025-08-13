@@ -47,13 +47,13 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <a 
-                    href="mailto:support@payvat.ie" 
+                  <Link 
+                    href="/contact" 
                     className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Contact Us
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <Link 

@@ -344,7 +344,7 @@ export default function StartRestaurantBusinessIreland() {
                 Automate Your Restaurant VAT Compliance
               </h3>
               <p className="text-lg text-gray-600 mb-6 max-w-3xl mx-auto">
-                PayVat provides automated VAT calculation for restaurant sales, generates compliant receipts, and files bi-monthly returns. Save 15+ hours per month on compliance.
+                PayVat provides automated VAT calculation for restaurant sales, generates compliant receipts, and files bi-monthly returns. Professional compliance service.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a 
