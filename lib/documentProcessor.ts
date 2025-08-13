@@ -210,7 +210,7 @@ async function extractPDFTextContent(buffer: Buffer): Promise<string> {
     // CRITICAL TEST: Search for our target amount in raw PDF
     const contains111_36 = pdfText.includes('111.36')
     const containsTotalAmountVAT = pdfText.includes('Total Amount VAT')
-    console.log(`🎯 RAW PDF SEARCH RESULTS:`)
+    console.log(`RAW PDF SEARCH RESULTS:`)
     console.log(`   - Contains "111.36": ${contains111_36}`)
     console.log(`   - Contains "Total Amount VAT": ${containsTotalAmountVAT}`)
     
@@ -229,10 +229,10 @@ async function extractPDFTextContent(buffer: Buffer): Promise<string> {
         
         // Check each block for our target amounts
         if (cleaned.includes('111.36')) {
-          console.log(`🎯 FOUND "111.36" in text block ${index + 1}!`)
+          console.log(`FOUND "111.36" in text block ${index + 1}!`)
         }
         if (cleaned.includes('Total Amount VAT')) {
-          console.log(`🎯 FOUND "Total Amount VAT" in text block ${index + 1}!`)
+          console.log(`FOUND "Total Amount VAT" in text block ${index + 1}!`)
         }
         
         return cleaned
@@ -435,7 +435,7 @@ async function extractTextFromCSV(base64Data: string): Promise<{ success: boolea
     })
     
     if (taxColumnDetails.length > 0) {
-      formattedText += `\n🎯 CALCULATED TOTAL TAX FROM ALL COLUMNS: €${overallTaxTotal.toFixed(2)}\n`
+      formattedText += `\nCALCULATED TOTAL TAX FROM ALL COLUMNS: €${overallTaxTotal.toFixed(2)}\n`
       formattedText += `This total combines all tax columns and should be used as the totalVatAmount.\n\n`
     }
     
@@ -569,7 +569,7 @@ VAT_EXTRACTION_MARKER: ${wooResult.totalVAT}`
     
     const firstSheetName = workbook.SheetNames[0]
     const worksheet = workbook.Sheets[firstSheetName]
-    console.log(`🎯 Processing sheet: "${firstSheetName}"`)
+    console.log(`Processing sheet: "${firstSheetName}"`)
     
     if (!worksheet['!ref']) {
       console.log('❌ CRITICAL ERROR: No data range found in Excel worksheet')
@@ -603,12 +603,12 @@ VAT_EXTRACTION_MARKER: ${wooResult.totalVAT}`
     
     if (isWooCommerceReport) {
       console.log('🏪 WOOCOMMERCE TAX REPORT DETECTED!')
-      console.log('🎯 Enhanced processing for multi-country tax aggregation')
-      console.log('🎯 TARGET: Sum all "Net Total Tax" columns by country')
+      console.log('Enhanced processing for multi-country tax aggregation')
+      console.log('TARGET: Sum all "Net Total Tax" columns by country')
     }
     
     console.log('🔍 STARTING VAT COLUMN DETECTION...')
-    console.log('🎯 TARGET PATTERNS: "Net Total Tax", "Shipping Tax Amt.", "Item Tax Amt."')
+    console.log('TARGET PATTERNS: "Net Total Tax", "Shipping Tax Amt.", "Item Tax Amt."')
     
     // 🚨 CRITICAL: Try WooCommerce processor first for known patterns with retry logic
     if (isWooCommerceReport) {
@@ -634,8 +634,8 @@ VAT_EXTRACTION_MARKER: ${wooResult.totalVAT}`
           const hasReasonableAmount = wooCommerceResult.totalVAT >= 1 && wooCommerceResult.totalVAT <= 100000
           
           if (isHighConfidence && hasValidAmount && hasReasonableAmount) {
-            console.log('🎉 WooCommerce processing succeeded with high confidence!')
-            console.log(`🎯 Extracted VAT amount: €${wooCommerceResult.totalVAT.toFixed(2)}`)
+            console.log('WooCommerce processing succeeded with high confidence!')
+            console.log(`Extracted VAT amount: €${wooCommerceResult.totalVAT.toFixed(2)}`)
             
             // Return WooCommerce-processed result
             return {
@@ -713,20 +713,20 @@ VAT_EXTRACTION_MARKER: ${wooResult.totalVAT}`
     })
 
     console.log('🚨🚨 FINAL RESULTS - DEBUG MODE 🚨🚨')
-    console.log(`🎯 FINAL TOTAL VAT CALCULATED: €${totalVAT.toFixed(2)}`)
+    console.log(`FINAL TOTAL VAT CALCULATED: €${totalVAT.toFixed(2)}`)
     console.log(`📊 Detection summary: ${vatColumns.length} VAT columns found, total €${totalVAT.toFixed(2)}`)
     
     // Expected result check - WooCommerce vs legacy files
     if (isWooCommerceReport) {
       if (totalVAT > 0) {
-        console.log(`🎉 WooCommerce processing succeeded: €${totalVAT.toFixed(2)}`)
+        console.log(`WooCommerce processing succeeded: €${totalVAT.toFixed(2)}`)
         console.log('✅ Successfully extracted VAT from WooCommerce tax report')
       } else {
         console.log('❌ CRITICAL: Total VAT is €0.00 - WooCommerce detection failed')
       }
     } else {
       if (totalVAT > 0) {
-        console.log(`🎉 Standard Excel processing succeeded: €${totalVAT.toFixed(2)}`)
+        console.log(`Standard Excel processing succeeded: €${totalVAT.toFixed(2)}`)
       } else {
         console.log('❌ CRITICAL: Total VAT is €0.00 - detection failed')
       }
@@ -758,7 +758,7 @@ VAT_EXTRACTION_MARKER: ${wooResult.totalVAT}`
       }
     })
     
-    formattedText += `\n🎯 CALCULATED TOTAL VAT FROM ALL COLUMNS: €${totalVAT.toFixed(2)}\n`
+    formattedText += `\nCALCULATED TOTAL VAT FROM ALL COLUMNS: €${totalVAT.toFixed(2)}\n`
     formattedText += `This total combines all VAT columns and should be used as the totalVatAmount.\n\n`
     
     console.log('✅ EXCEL PROCESSING COMPLETED SUCCESSFULLY')
@@ -2328,7 +2328,7 @@ export async function processDocumentEnhanced(
   const startTime = Date.now()
   const processingSteps: ProcessingStep[] = []
   
-  console.log('🚀 ENHANCED VAT PROCESSING ENGINE v2.0')
+  console.log('ENHANCED VAT PROCESSING ENGINE v2.0')
   console.log(`📄 Processing: ${fileName} (${category})`)
   
   try {

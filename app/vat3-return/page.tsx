@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
-import { Euro, Save, Send, ArrowUp, FileText, Shield, CheckCircle, Clock, Sparkles, AlertCircle, Loader2 } from "lucide-react"
+import { Euro, Save, Send, ArrowUp, FileText, Shield, CheckCircle, Clock, BadgeCheck, AlertCircle, Loader2 } from "lucide-react"
 import SiteHeader from "@/components/site-header"
 import { useVATData } from "@/contexts/vat-data-context"
 import { convertToWholeEurosString, calculatePeriodDates, formatEuroAmount } from "@/lib/vatUtils"
@@ -211,7 +211,7 @@ export default function VAT3ReturnForm() {
           variant="secondary" 
           className="absolute -top-2 -right-2 text-xs bg-green-100 text-green-800 hover:bg-green-100"
         >
-          <Sparkles className="h-3 w-3 mr-1" />
+          <BadgeCheck className="h-3 w-3 mr-1" />
           Auto-filled
         </Badge>
       )}
@@ -315,7 +315,7 @@ export default function VAT3ReturnForm() {
   }
 
   const handleSubmitReturn = async () => {
-    console.log('🚀 VAT3 Submit Return: Starting submission process')
+    console.log('VAT3 Submit Return: Starting submission process')
     
     // Browser compatibility checks
     if (typeof window === 'undefined') {

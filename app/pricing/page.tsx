@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Euro, CheckCircle, Calendar, CreditCard, Shield, Clock, HelpCircle, Star, ArrowRight } from 'lucide-react'
+import { Euro, CheckCircle, Calendar, CreditCard, Shield, Clock, HelpCircle, BadgeCheck, ArrowRight } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock, TrendingUp, Shield, ArrowRight, Euro, Zap, Bell, Building, Globe, Home, UtensilsCrossed } from 'lucide-react'
+import { BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock, TrendingUp, Shield, ArrowRight, Euro, ChevronRight, Bell, Building, Globe, Home, UtensilsCrossed } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -336,7 +336,7 @@ export default function VATGuidePage() {
                 </div>
               </a>
               <a href="/digital-services-vat-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
-                <Zap className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <ChevronRight className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
                 <div>
                   <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">Digital Services</span>
                   <p className="text-gray-600 text-sm">Tech and digital VAT rules</p>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { HelpCircle, CreditCard, Shield, Clock, Euro, FileText, ChevronDown, ChevronUp, CheckCircle, Star, Settings, Bell, Building, Users, Calculator } from 'lucide-react'
+import { HelpCircle, CreditCard, Shield, Clock, Euro, FileText, ChevronDown, ChevronUp, CheckCircle, BadgeCheck, Settings, Bell, Building, Users, Calculator } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -271,7 +271,7 @@ export default function FAQPage() {
                   <div className="card-premium p-4 hover-lift group relative">
                     <div className="absolute -top-2 -right-2">
                       <div className="bg-warning text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                        <Star className="h-3 w-3" />
+                        <BadgeCheck className="h-3 w-3" />
                         Popular
                       </div>
                     </div>

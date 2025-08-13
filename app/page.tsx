@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Lightbulb, Building2, Lock, ArrowRight, CheckCircle, Shield, Clock, Users, TrendingUp, Award, Sparkles, Star, Play } from 'lucide-react'
+import { Calculator, Building2, Lock, ArrowRight, CheckCircle, Shield, Clock, Users, TrendingUp, Award, BadgeCheck, Play } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
@@ -48,7 +48,7 @@ export default function LandingPage() {
       subtext: "Learn everything you need to know about starting a business in Ireland",
       buttonText: "Get Started",
       link: "/business-setup-guide",
-      icon: Lightbulb,
+      icon: Calculator,
       gradient: "from-teal-500 to-cyan-600",
       shadowColor: "rgba(20, 184, 166, 0.3)",
       features: ["Complete guides", "Step-by-step process", "Expert advice"]
@@ -97,9 +97,9 @@ export default function LandingPage() {
             <div className="max-w-4xl mx-auto animate-fade-in">
               {/* Premium Badge */}
               <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-200 text-teal-700 text-sm font-semibold mb-6 animate-bounce-gentle shadow-lg shadow-teal-500/10">
-                <Sparkles className="w-4 h-4" />
+                <Shield className="w-4 h-4" />
                 Ireland's Premium VAT Platform
-                <Star className="w-4 h-4 fill-teal-500" />
+                <BadgeCheck className="w-4 h-4" />
               </div>
               
               <h1 

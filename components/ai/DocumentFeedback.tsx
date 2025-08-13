@@ -12,7 +12,7 @@ import {
   ThumbsDown, 
   AlertTriangle, 
   CheckCircle, 
-  Star,
+  BadgeCheck,
   Send,
   Info
 } from 'lucide-react'
@@ -185,7 +185,7 @@ export default function DocumentFeedback({
                   : 'text-gray-300 hover:text-yellow-300'
               }`}
             >
-              <Star className="h-4 w-4 fill-current" />
+              <BadgeCheck className="h-4 w-4 fill-current" />
             </button>
           ))}
         </div>

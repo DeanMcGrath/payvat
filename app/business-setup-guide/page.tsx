@@ -10,7 +10,7 @@ import {
   FileText, Shield, Users, Building2, Euro, BanknoteIcon, 
   CheckCircle, ArrowRight, BookOpen, Calculator, Briefcase, 
   Globe, Home, Scale, Clock, AlertCircle, TrendingUp,
-  Lightbulb, Target, Rocket, Star, ChevronRight, Download,
+  Target, BadgeCheck, ChevronRight, Download,
   Phone, Mail, MapPin, CreditCard, Receipt
 } from 'lucide-react'
 import { useState } from 'react'
@@ -241,9 +241,9 @@ export default function BusinessSetupGuidePage() {
             <div className="max-w-4xl mx-auto animate-fade-in">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-100 text-teal-800 text-sm font-medium mb-6">
-                <Rocket className="w-4 h-4" />
+                <Shield className="w-4 h-4" />
                 Complete Startup Guide
-                <Star className="w-4 h-4 fill-teal-600" />
+                <BadgeCheck className="w-4 h-4" />
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, Zap, TrendingUp, ArrowRight, Bell, FileText, Building, UserCheck, AlertTriangle, Calculator, Calendar, DollarSign } from 'lucide-react'
+import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, ChevronRight, TrendingUp, ArrowRight, Bell, FileText, Building, UserCheck, AlertTriangle, Calculator, Calendar, DollarSign } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -617,7 +617,7 @@ export default function VATDeadlinesIreland() {
 
                 <div className="text-center p-6 card-modern hover-lift">
                   <div className="icon-modern bg-green-500 mb-4 mx-auto">
-                    <Zap className="h-6 w-6 text-white" />
+                    <ChevronRight className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-2">Auto Filing</h3>
                   <p className="text-sm text-muted-foreground">

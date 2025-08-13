@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { 
-  Calculator, Shield, Clock, TrendingUp, Zap, 
-  CheckCircle, ArrowRight, Star, Users, Award,
+  Calculator, Shield, Clock, TrendingUp, ChevronRight, 
+  CheckCircle, ArrowRight, BadgeCheck, Users, Award,
   FileText, BanknoteIcon, AlertCircle, Phone,
   Mail, Calendar, Download, Globe, Building2,
-  Briefcase, Target, Sparkles, Euro, Receipt,
+  Briefcase, Target, Euro, Receipt,
   BarChart3, PieChart, LineChart, DollarSign,
   Smartphone, Laptop, Tablet, HelpCircle
 } from 'lucide-react'
@@ -393,7 +393,7 @@ export default function VATServicesPage() {
                   <th className="border-b border-gray-200 px-6 py-4 text-center font-semibold">Traditional Accountant</th>
                   <th className="border-b border-gray-200 px-6 py-4 text-center font-semibold bg-teal-50">
                     <div className="flex items-center justify-center gap-2">
-                      <Sparkles className="h-5 w-5 text-teal-600" />
+                      <BadgeCheck className="h-5 w-5 text-teal-600" />
                       PayVAT
                     </div>
                   </th>
@@ -463,7 +463,7 @@ export default function VATServicesPage() {
                 <CardContent className="p-8">
                   <div className="flex items-center gap-1 mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 fill-teal-400 text-teal-400" />
+                      <BadgeCheck key={i} className="h-5 w-5 text-teal-400" />
                     ))}
                   </div>
                   <blockquote className="text-gray-700 mb-6">

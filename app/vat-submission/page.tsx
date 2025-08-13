@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Upload, Calculator, FileText, CheckCircle, Sparkles, RefreshCw, X, AlertCircle, Loader2, Shield } from 'lucide-react'
+import { ArrowLeft, Upload, Calculator, FileText, CheckCircle, BadgeCheck, RefreshCw, X, AlertCircle, Loader2, Shield } from 'lucide-react'
 import FileUpload from "@/components/file-upload"
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
@@ -418,7 +418,7 @@ export default function VATSubmissionPage() {
               <Card className="card-premium hover-lift">
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold text-teal-900 flex items-center">
-                    <Sparkles className="h-5 w-5 mr-2 text-teal-600" />
+                    <BadgeCheck className="h-5 w-5 mr-2 text-teal-600" />
                     VAT Data Extracted from Documents
                   </CardTitle>
                 </CardHeader>

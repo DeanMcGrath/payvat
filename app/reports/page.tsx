@@ -10,7 +10,7 @@ import {
   ArrowLeft, TrendingUp, FileText, Calendar, Download, Eye, 
   BarChart3, PieChart, LineChart, Euro, Bell, Settings, LogOut, 
   Search, Loader2, AlertCircle, Shield, CheckCircle, Clock,
-  ChevronRight, Sparkles, ArrowUp
+  ChevronRight, BadgeCheck, ArrowUp
 } from 'lucide-react'
 import Footer from "@/components/footer"
 
@@ -474,7 +474,7 @@ export default function ReportsPage() {
                 Comprehensive VAT summaries by period with breakdowns of sales and purchase VAT.
               </p>
               <Button className="w-full btn-primary hover-scale">
-                <Sparkles className="h-4 w-4 mr-2" />
+                <BadgeCheck className="h-4 w-4 mr-2" />
                 View VAT Summaries
               </Button>
             </CardContent>

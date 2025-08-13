@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, Zap, TrendingUp, ArrowRight, Bell, FileText, Building, Calculator, MapPin } from 'lucide-react'
+import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, ChevronRight, TrendingUp, ArrowRight, Bell, FileText, Building, Calculator, MapPin } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -391,7 +391,7 @@ export default function AboutPayVat() {
                 <div className="card-modern p-8 hover-lift group">
                   <div className="flex items-start gap-4">
                     <div className="icon-modern bg-primary group-hover:scale-110 transition-transform duration-300">
-                      <Zap className="h-6 w-6 text-white" />
+                      <ChevronRight className="h-6 w-6 text-white" />
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">Gain Control</h3>

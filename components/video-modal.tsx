@@ -264,7 +264,7 @@ export function VideoModal({ isOpen, onClose, className }: VideoModalProps) {
               </div>
               <h3 className="text-lg font-semibold mb-2">Demo Coming Soon</h3>
               <p className="text-gray-300 mb-4">
-                We're preparing an amazing demo video to show you how PayVAT works. 
+                We're preparing a comprehensive demo video to show you how PayVAT works. 
                 Check back soon!
               </p>
               <div className="flex gap-3 justify-center">

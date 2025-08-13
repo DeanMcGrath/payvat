@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, Zap, TrendingUp, ArrowRight, Bell, FileText, Building, UserCheck, Calculator, DollarSign, Minus, Plus } from 'lucide-react'
+import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, ChevronRight, TrendingUp, ArrowRight, Bell, FileText, Building, UserCheck, Calculator, DollarSign, Minus, Plus } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -440,7 +440,7 @@ export default function AccountantFeesVsPayVatSavings() {
           <div className="card-modern p-12 mb-2 hover-lift">
             <div className="text-center mb-2">
               <div className="icon-modern bg-success mb-3 mx-auto">
-                <Zap className="h-10 w-10 text-white" />
+                <ChevronRight className="h-10 w-10 text-white" />
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
                 Why PayVat <span className="text-gradient-primary">Wins</span>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, Zap, TrendingUp, ArrowRight, Bell, FileText, Building, UserCheck, CreditCard } from 'lucide-react'
+import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, ChevronRight, TrendingUp, ArrowRight, Bell, FileText, Building, UserCheck, CreditCard } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -195,7 +195,7 @@ export default function CompleteBusinessSetupGuideIreland() {
 
               <div className="card-modern p-6 hover-lift">
                 <div className="icon-modern bg-teal-500 mb-4">
-                  <Zap className="h-6 w-6 text-white" />
+                  <ChevronRight className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-foreground mb-3">Days 61-90: Launch Ready</h3>
                 <ul className="space-y-2 text-muted-foreground">

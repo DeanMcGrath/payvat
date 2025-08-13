@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { Upload, FileText, X, CheckCircle, AlertCircle, Loader2, Zap } from 'lucide-react'
+import { Upload, FileText, X, CheckCircle, AlertCircle, Loader2, ArrowRight } from 'lucide-react'
 import { toast } from 'sonner'
 import { Progress } from '@/components/ui/progress'
 
@@ -517,7 +517,7 @@ export default function FileUpload({
           {isUploading ? (
             <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Uploading...</>
           ) : processingState.isProcessing ? (
-            <><Zap className="h-4 w-4 mr-2" />AI Processing...</>
+            <><ArrowRight className="h-4 w-4 mr-2" />AI Processing...</>
           ) : (
             `Choose ${category === 'SALES' ? 'Sales' : 'Purchase'} Files`
           )}
@@ -552,7 +552,7 @@ export default function FileUpload({
           <Progress value={processingState.progress} className="mb-3" />
           
           <div className="flex items-center text-sm text-teal-700">
-            <Zap className="h-4 w-4 mr-2" />
+            <ArrowRight className="h-4 w-4 mr-2" />
             {processingState.currentStep}
           </div>
           

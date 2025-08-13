@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, Zap, TrendingUp, ArrowRight, Bell, FileText, Building, UserCheck, AlertTriangle, Calculator, Calendar, Globe, Lightbulb } from 'lucide-react'
+import { Shield, Clock, Users, Target, CheckCircle, Euro, Award, ChevronRight, TrendingUp, ArrowRight, Bell, FileText, Building, UserCheck, AlertTriangle, Calculator, Calendar, Globe, Settings } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -57,7 +57,7 @@ export default function StartABusinessIreland() {
                 </div>
                 
                 <div className="icon-premium mb-3 mx-auto">
-                  <Lightbulb className="h-12 w-12 text-white" />
+                  <Settings className="h-12 w-12 text-white" />
                 </div>
                 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
@@ -119,7 +119,7 @@ export default function StartABusinessIreland() {
               <div className="grid lg:grid-cols-4 gap-6">
                 <div className="card-modern p-6 hover-lift text-center">
                   <div className="icon-modern bg-blue-500 mb-4 mx-auto">
-                    <Lightbulb className="h-6 w-6 text-white" />
+                    <Settings className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-2">1. Planning</h3>
                   <p className="text-sm text-muted-foreground mb-3">Business idea validation, market research, business plan</p>
@@ -146,7 +146,7 @@ export default function StartABusinessIreland() {
 
                 <div className="card-modern p-6 hover-lift text-center">
                   <div className="icon-modern bg-warning mb-4 mx-auto">
-                    <Zap className="h-6 w-6 text-white" />
+                    <ChevronRight className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-2">4. Launch</h3>
                   <p className="text-sm text-muted-foreground mb-3">Marketing, first customers, operations, growth</p>
