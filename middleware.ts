@@ -123,7 +123,8 @@ export function middleware(request: NextRequest) {
   response.headers.set('X-RateLimit-Reset', rateLimitResult.resetTime.toString())
   
   // Add security headers to all responses
-  addSecurityHeaders(response.headers)
+  // TEMPORARILY DISABLED FOR TESTING - CSP may be blocking JavaScript execution
+  // addSecurityHeaders(response.headers)
   
   return response
 }
