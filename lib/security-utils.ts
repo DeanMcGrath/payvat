@@ -90,20 +90,22 @@ export class SecureEnv {
   }
 }
 
-// Content Security Policy headers
+// Content Security Policy headers - Next.js compatible
 export const getCSPHeaders = () => {
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net",
+    // More permissive script-src for Next.js hydration and webpack chunks
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://vercel.live",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' https://fonts.gstatic.com",
-    "img-src 'self' data: https:",
-    "connect-src 'self' https://api.stripe.com https://api.openai.com",
+    "font-src 'self' https://fonts.gstatic.com data:",
+    "img-src 'self' data: https: blob:",
+    // More permissive connect-src for Next.js and development
+    "connect-src 'self' https: wss: https://api.stripe.com https://api.openai.com",
     "frame-src 'none'",
     "object-src 'none'",
     "base-uri 'self'",
-    "form-action 'self'",
-    "upgrade-insecure-requests"
+    "form-action 'self'"
+    // Removed upgrade-insecure-requests as it might interfere with Next.js
   ].join('; ')
 
   return {
