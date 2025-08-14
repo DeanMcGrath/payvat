@@ -61,51 +61,93 @@ export default function SmartDocumentUpload({
   const [selectedFileForFeedback, setSelectedFileForFeedback] = useState<ProcessedDocument | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleFileSelect = () => {
+  const handleFileSelect = (event?: React.MouseEvent) => {
+    // Prevent double-triggering from multiple event handlers
+    if (event) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    
+    // Prevent action if already uploading
+    if (isUploading) {
+      console.log('Smart upload blocked - already in progress')
+      return
+    }
+    
     console.log('Smart file upload triggered')
-    fileInputRef.current?.click()
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    } else {
+      toast.error('Upload initialization failed. Please try again.')
+    }
   }
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
+    
+    // Prevent processing if already uploading
+    if (isUploading) {
+      console.log('Smart file change blocked - upload already in progress')
+      return
+    }
+    
     if (!files || files.length === 0) return
 
-    const allowedExtensions = ['pdf', 'csv', 'xlsx', 'xls', 'jpg', 'jpeg', 'png']
-    const validFiles: File[] = []
+    // Set uploading state immediately to prevent double-clicks
+    setIsUploading(true)
+
+    try {
+      const allowedExtensions = ['pdf', 'csv', 'xlsx', 'xls', 'jpg', 'jpeg', 'png']
+      const validFiles: File[] = []
     
-    // Validate files
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
+      // Validate files
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        
+        if (file.size > 10 * 1024 * 1024) {
+          toast.error(`File "${file.name}" is too large. Must be less than 10MB`)
+          continue
+        }
+
+        const extension = file.name.split('.').pop()?.toLowerCase()
+        if (!extension || !allowedExtensions.includes(extension)) {
+          toast.error(`File "${file.name}" has invalid type. Please upload PDF, Excel, CSV, or image files.`)
+          continue
+        }
+        
+        validFiles.push(file)
+      }
       
-      if (file.size > 10 * 1024 * 1024) {
-        toast.error(`File "${file.name}" is too large. Must be less than 10MB`)
-        continue
+      if (validFiles.length === 0) {
+        setIsUploading(false)
+        return
+      }
+      
+      if (validFiles.length > 1) {
+        toast.success(`Starting AI processing of ${validFiles.length} files...`)
       }
 
-      const extension = file.name.split('.').pop()?.toLowerCase()
-      if (!extension || !allowedExtensions.includes(extension)) {
-        toast.error(`File "${file.name}" has invalid type. Please upload PDF, Excel, CSV, or image files.`)
-        continue
+      // Process files with enhanced AI
+      for (const file of validFiles) {
+        await uploadFileWithEnhancedAI(file)
       }
       
-      validFiles.push(file)
-    }
-    
-    if (validFiles.length === 0) return
-    
-    if (validFiles.length > 1) {
-      toast.success(`Starting AI processing of ${validFiles.length} files...`)
-    }
-
-    // Process files with enhanced AI
-    for (const file of validFiles) {
-      await uploadFileWithEnhancedAI(file)
+      // Reset file input after successful uploads
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+      
+    } catch (error) {
+      console.error('Smart upload error:', error)
+      toast.error('Upload failed. Please try again.')
+    } finally {
+      setIsUploading(false)
     }
   }
 
   const uploadFileWithEnhancedAI = async (file: File) => {
     console.log('Enhanced AI upload started:', file.name)
-    setIsUploading(true)
+    // Note: isUploading is already set to true in handleFileChange
 
     try {
       const formData = new FormData()
@@ -163,12 +205,9 @@ export default function SmartDocumentUpload({
     } catch (error) {
       console.error('Enhanced upload error:', error)
       toast.error('Upload failed. Please try again.')
-    } finally {
-      setIsUploading(false)
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
+      throw error // Re-throw to be caught by handleFileChange
     }
+    // Note: Don't manage isUploading state here - let handleFileChange manage it
   }
 
   const triggerAIProcessing = async (documentId: string) => {
@@ -298,7 +337,10 @@ export default function SmartDocumentUpload({
         <Button 
           variant="outline" 
           className="border-teal-300 text-teal-700 hover:bg-teal-50 font-medium"
-          onClick={handleFileSelect}
+          onClick={(event) => {
+            event.stopPropagation() // Prevent event bubbling
+            handleFileSelect(event)
+          }}
           disabled={isUploading}
         >
           {isUploading ? (

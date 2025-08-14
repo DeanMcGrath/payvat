@@ -83,17 +83,45 @@ export default function FileUpload({
     }
   }
 
-  const handleFileSelect = () => {
+  const handleFileSelect = (event?: React.MouseEvent) => {
+    // Prevent double-triggering from multiple event handlers
+    if (event) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    
+    // Prevent action if already uploading or processing
+    if (isUploading || processingState.isProcessing) {
+      console.log('Upload blocked - already in progress')
+      return
+    }
+    
     console.log('HANDLEFILESELECT CALLED - User clicked upload button')
     console.log('File input ref exists:', !!fileInputRef.current)
-    fileInputRef.current?.click()
-    console.log('File input click() triggered')
+    console.log('Current uploading state:', isUploading)
+    console.log('Current processing state:', processingState.isProcessing)
+    
+    // Ensure file input exists before clicking
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+      console.log('File input click() triggered successfully')
+    } else {
+      console.error('File input ref not available')
+      toast.error('Upload initialization failed. Please try again.')
+    }
   }
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log('HANDLEFILECHANGE CALLED - Files were selected')
     console.log('Event target:', event.target)
     console.log('Event target files:', event.target.files)
+    
+    // Prevent processing if already uploading
+    if (isUploading || processingState.isProcessing) {
+      console.log('File change blocked - upload already in progress')
+      return
+    }
+    
     const files = event.target.files
     console.log('Files count:', files?.length || 0)
     if (!files || files.length === 0) {
@@ -101,43 +129,73 @@ export default function FileUpload({
       return
     }
 
-    const allowedExtensions = ['pdf', 'csv', 'xlsx', 'xls', 'jpg', 'jpeg', 'png']
-    const validFiles: File[] = []
-    
-    // Validate all selected files
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
+    // Set uploading state immediately to prevent double-clicks
+    console.log('Setting isUploading to true to prevent concurrent uploads')
+    setIsUploading(true)
+
+    try {
+      const allowedExtensions = ['pdf', 'csv', 'xlsx', 'xls', 'jpg', 'jpeg', 'png']
+      const validFiles: File[] = []
       
-      // Validate file size (10MB)
-      if (file.size > 10 * 1024 * 1024) {
-        toast.error(`File "${file.name}" is too large. Must be less than 10MB`)
-        continue
+      // Validate all selected files
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        
+        // Validate file size (10MB)
+        if (file.size > 10 * 1024 * 1024) {
+          toast.error(`File "${file.name}" is too large. Must be less than 10MB`)
+          continue
+        }
+
+        // Validate file type
+        const extension = file.name.split('.').pop()?.toLowerCase()
+        
+        if (!extension || !allowedExtensions.includes(extension)) {
+          toast.error(`File "${file.name}" has invalid type. Please upload PDF, Excel, CSV, or image files.`)
+          continue
+        }
+        
+        validFiles.push(file)
+      }
+      
+      if (validFiles.length === 0) {
+        console.log('No valid files to upload, resetting upload state')
+        setIsUploading(false)
+        return
+      }
+      
+      // Show progress toast for multiple files
+      if (validFiles.length > 1) {
+        toast.success(`Starting upload of ${validFiles.length} files...`)
       }
 
-      // Validate file type
-      const extension = file.name.split('.').pop()?.toLowerCase()
-      
-      if (!extension || !allowedExtensions.includes(extension)) {
-        toast.error(`File "${file.name}" has invalid type. Please upload PDF, Excel, CSV, or image files.`)
-        continue
+      // Upload files sequentially to avoid overwhelming the server
+      console.log(`Starting upload of ${validFiles.length} valid files`)
+      for (const file of validFiles) {
+        console.log(`About to upload file: ${file.name}`)
+        await uploadFile(file)
+        console.log(`Finished uploading file: ${file.name}`)
       }
       
-      validFiles.push(file)
-    }
-    
-    if (validFiles.length === 0) return
-    
-    // Show progress toast for multiple files
-    if (validFiles.length > 1) {
-      toast.success(`Starting upload of ${validFiles.length} files...`)
-    }
-
-    // Upload files sequentially to avoid overwhelming the server
-    console.log(`Starting upload of ${validFiles.length} valid files`)
-    for (const file of validFiles) {
-      console.log(`About to upload file: ${file.name}`)
-      await uploadFile(file)
-      console.log(`Finished uploading file: ${file.name}`)
+      // All files uploaded successfully - reset states
+      console.log('All files uploaded successfully, resetting upload state')
+      setIsUploading(false)
+      
+      // Reset file input to allow re-selection of the same files if needed
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+        console.log('File input reset for future uploads')
+      }
+      
+    } catch (error) {
+      console.error('File validation/upload error:', error)
+      toast.error('Upload failed. Please try again.')
+      setIsUploading(false)
+      
+      // Don't reset file input on error - allow retry with same files
+      console.log('Upload failed, keeping file selection for retry')
+    } finally {
+      console.log('File change handler completed')
     }
   }
 
@@ -149,7 +207,9 @@ export default function FileUpload({
       type: file.type,
       lastModified: file.lastModified
     })
-    setIsUploading(true)
+    
+    // Note: isUploading is already set to true in handleFileChange
+    // Don't set it again here to avoid state conflicts
 
     try {
       const formData = new FormData()
@@ -373,11 +433,10 @@ export default function FileUpload({
       })
       toast.error('Upload failed. Please try again.')
     } finally {
-      setIsUploading(false)
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ''
-      }
+      // Note: Don't set isUploading to false here since we might be processing multiple files
+      // The handleFileChange function will manage the overall upload state
+      // Only reset file input if this is the last file or there was an error
+      console.log('Upload file function completed for:', file.name)
     }
   }
 
@@ -486,7 +545,12 @@ export default function FileUpload({
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        onClick={() => !isUploading && !processingState.isProcessing && handleFileSelect()}
+        onClick={(event) => {
+          // Only handle click if not uploading and not from the button
+          if (!isUploading && !processingState.isProcessing && event.target === event.currentTarget) {
+            handleFileSelect(event)
+          }
+        }}
       >
         {isDragOver ? (
           <div>
@@ -511,7 +575,10 @@ export default function FileUpload({
         <Button 
           variant="outline" 
           className="border-teal-200 text-teal-700 hover:bg-teal-50"
-          onClick={handleFileSelect}
+          onClick={(event) => {
+            event.stopPropagation() // Prevent event bubbling to parent div
+            handleFileSelect(event)
+          }}
           disabled={isUploading || processingState.isProcessing}
         >
           {isUploading ? (
