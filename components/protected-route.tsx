@@ -29,8 +29,10 @@ export default function ProtectedRoute({
     if (requiresAuth) {
       checkAuthentication()
     } else {
+      // Skip auth entirely when not required
       setAuthLoading(false)
       setIsAuthenticated(true)
+      setAuthError(null)
     }
   }, [requiresAuth])
 
@@ -52,6 +54,7 @@ export default function ProtectedRoute({
         const data = await response.json()
         if (data.success && data.user) {
           setIsAuthenticated(true)
+          setAuthError(null)
         } else {
           setAuthError('Authentication failed')
         }
@@ -61,7 +64,8 @@ export default function ProtectedRoute({
         setAuthError('Authentication verification failed')
       }
     } catch (err) {
-      setAuthError('Network error occurred')
+      console.error('Authentication check failed:', err)
+      setAuthError('Network error occurred - please check your connection')
     } finally {
       setAuthLoading(false)
     }
@@ -79,8 +83,8 @@ export default function ProtectedRoute({
     )
   }
 
-  // Show authentication error
-  if (authError || !isAuthenticated) {
+  // Show authentication error only if auth is required
+  if (requiresAuth && (authError || !isAuthenticated)) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <Card className="w-full max-w-md border-red-200">

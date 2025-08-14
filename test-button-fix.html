@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test - PayVAT Ireland</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 2rem;
+            background-color: #f8fafc;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .test-button {
+            background: linear-gradient(to right, #4A9B8E, #0d9488);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 8px;
+        }
+        .test-button:hover {
+            background: linear-gradient(to right, #0d9488, #0f766e);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 155, 142, 0.3);
+        }
+        .test-button:active {
+            transform: translateY(0px) scale(0.98);
+        }
+        .status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: #f0fdfa;
+            border: 1px solid #14b8a6;
+            color: #0f766e;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>PayVAT Button Test Page</h1>
+        <p>This page tests if buttons work outside of React/Next.js framework:</p>
+        
+        <button class="test-button" onclick="testClick('HTML Button 1')">
+            HTML Test Button 1
+        </button>
+        
+        <button class="test-button" onclick="testClick('HTML Button 2')">
+            HTML Test Button 2
+        </button>
+        
+        <button class="test-button" onclick="navigateToLogin()">
+            Navigate to Login
+        </button>
+        
+        <button class="test-button" onclick="navigateToSignup()">
+            Navigate to Signup
+        </button>
+        
+        <div id="status" class="status" style="display: none;">
+            No clicks detected yet.
+        </div>
+    </div>
+
+    <script>
+        function testClick(buttonName) {
+            const status = document.getElementById('status');
+            status.style.display = 'block';
+            status.innerHTML = `✅ ${buttonName} clicked successfully at ${new Date().toLocaleTimeString()}`;
+            console.log('Button clicked:', buttonName);
+        }
+        
+        function navigateToLogin() {
+            testClick('Login Navigation');
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 1000);
+        }
+        
+        function navigateToSignup() {
+            testClick('Signup Navigation');
+            setTimeout(() => {
+                window.location.href = '/signup';
+            }, 1000);
+        }
+        
+        // Test if JavaScript is working
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test page loaded successfully');
+            const status = document.getElementById('status');
+            status.style.display = 'block';
+            status.innerHTML = '✅ JavaScript is working. Click buttons above to test.';
+        });
+    </script>
+</body>
+</html>
