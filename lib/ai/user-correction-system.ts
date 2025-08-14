@@ -3,9 +3,9 @@
  * Allows users to correct VAT extractions and trains AI to improve accuracy
  */
 
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+// Lazy import Prisma to avoid build-time issues
+// const { PrismaClient } = require('@prisma/client')
+// const prisma = new PrismaClient()
 
 // User correction data structures
 export interface VATCorrection {
