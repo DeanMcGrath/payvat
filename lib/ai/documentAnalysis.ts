@@ -7,6 +7,8 @@ import { openai, AI_CONFIG, isAIEnabled, handleOpenAIError, logAIUsage } from '.
 import { DOCUMENT_PROMPTS, formatPrompt } from './prompts'
 import { quickConnectivityTest, testDocumentProcessingDiagnostics, compareTextExtractionWithAIVision } from './diagnostics'
 import { extractTextFromExcel } from '../documentProcessor'
+import { rateLimitManager } from './rate-limit-manager'
+import { userCorrectionSystem } from './user-correction-system'
 
 // Enhanced VAT data structure
 export interface EnhancedVATData {
@@ -722,29 +724,35 @@ Find the total tax amount clearly labeled on the document using any of the above
       const visionModel = model.includes('gpt-4o') ? model : 'gpt-4o'
       console.log(`🔍 Using vision model: ${visionModel} (original: ${model})`)
       
-      response = await openai.chat.completions.create({
-        model: visionModel,
-        max_tokens: 1500, // Reduced for more reliable responses
-        temperature: 0.1, // Low for consistency
-        messages: [
-          {
-            role: "user",
-            content: [
-              {
-                type: "text",
-                text: prompt
-              },
-              {
-                type: "image_url",
-                image_url: {
-                  url: `data:${mimeType};base64,${fileData}`,
-                  detail: "high"
+      // 🚦 CRITICAL FIX: Use rate limit manager to prevent 429 errors for BRIANC-0008
+      console.log('🚦 Using rate limit manager to prevent API failures')
+      response = await rateLimitManager.executeRequest(
+        () => openai.chat.completions.create({
+          model: visionModel,
+          max_tokens: 1500, // Reduced for more reliable responses
+          temperature: 0.1, // Low for consistency
+          messages: [
+            {
+              role: "user",
+              content: [
+                {
+                  type: "text",
+                  text: prompt
+                },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: `data:${mimeType};base64,${fileData}`,
+                    detail: "high"
+                  }
                 }
-              }
-            ]
-          }
-        ]
-      })
+              ]
+            }
+          ]
+        }),
+        2000, // Estimated tokens for vision request
+        'high' // High priority for document processing
+      )
       
       console.log('✅ OPENAI VISION API RESPONSE RECEIVED')
       console.log(`   Tokens used: ${response.usage?.total_tokens || 'unknown'}`)
@@ -940,8 +948,35 @@ Find the total tax amount clearly labeled on the document using any of the above
     }
 
     // Convert to enhanced VAT data structure - pass all data for comprehensive hardcoded test
-    const enhancedData = convertToEnhancedVATDataWithAllSources(parsedData, category, '', aiResult)
+    let enhancedData = convertToEnhancedVATDataWithAllSources(parsedData, category, '', aiResult)
     
+    // 🧠 CRITICAL FIX: Apply learned patterns from user corrections for BRIANC-0008
+    console.log('🧠 Applying learned patterns from user corrections...')
+    try {
+      const documentText = aiResult || '' // Full extracted text
+      const documentType = fileName.includes('BRIANC') ? 'BRIANC_SERIES' : 'GENERAL'
+      
+      const learnings = await userCorrectionSystem.applyLearnings(
+        documentText,
+        documentType,
+        enhancedData
+      )
+      
+      if (learnings.appliedPatterns.length > 0) {
+        console.log(`✅ Applied ${learnings.appliedPatterns.length} learned patterns`)
+        enhancedData = learnings.improvedExtraction
+      }
+      
+      if (learnings.confidenceAdjustment !== 1.0) {
+        const oldConfidence = enhancedData.confidence
+        enhancedData.confidence = Math.min(enhancedData.confidence * learnings.confidenceAdjustment, 1.0)
+        console.log(`📊 Confidence calibrated: ${oldConfidence} → ${enhancedData.confidence}`)
+      }
+      
+    } catch (correctionError) {
+      console.warn('⚠️ User correction system failed (non-critical):', correctionError)
+    }
+
     // Generate scan result summary
     const vatAmounts = [...enhancedData.salesVAT, ...enhancedData.purchaseVAT]
     const scanResult = vatAmounts.length > 0 
