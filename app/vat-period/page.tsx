@@ -391,7 +391,7 @@ function VATPeriodContent() {
 
 export default function VATPeriodPage() {
   return (
-    <ProtectedRoute requiresSubscription={false}>
+    <ProtectedRoute requiresSubscription={false} requiresAuth={false}>
       <VATPeriodContent />
     </ProtectedRoute>
   )

@@ -113,12 +113,17 @@ export default function VATSubmissionPage() {
           setUserError('Failed to load user profile')
         }
       } else if (response.status === 401) {
-        router.push('/login')
+        // User not logged in - this is okay, just set user as null
+        setUser(null)
+        setUserError(null) // Clear any error since this is expected for anonymous users
       } else {
         setUserError('Failed to fetch user profile')
       }
     } catch (err) {
-      setUserError('Network error occurred')
+      // For anonymous users, network errors during auth checks are not critical
+      console.log('Authentication check failed:', err)
+      setUser(null)
+      setUserError(null) // Don't show error for failed auth checks
     } finally {
       setUserLoading(false)
     }
@@ -321,7 +326,7 @@ export default function VATSubmissionPage() {
     )
   }
 
-  if (userError || !user) {
+  if (userError) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <Card className="w-full max-w-md border-red-200">
