@@ -173,7 +173,7 @@ export default function ConfirmationPayment() {
           <div className="lg:col-span-2 space-y-4 lg:space-y-6 order-2 lg:order-1">
             
             {/* Business Information */}
-            <Card className="card-premium hover-lift">
+            <Card className="card-premium ">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold text-foreground flex items-center">
                   <Building className="h-5 w-5 mr-2 text-primary" />
@@ -203,7 +203,7 @@ export default function ConfirmationPayment() {
             </Card>
 
             {/* Period Information */}
-            <Card className="card-premium hover-lift">
+            <Card className="card-premium ">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold text-foreground flex items-center">
                   <Calendar className="h-5 w-5 mr-2 text-primary" />
@@ -227,7 +227,7 @@ export default function ConfirmationPayment() {
             </Card>
 
             {/* VAT Amounts */}
-            <Card className="card-premium hover-lift">
+            <Card className="card-premium ">
               <CardHeader>
                 <CardTitle className="text-xl font-semibold text-foreground flex items-center">
                   <Euro className="h-5 w-5 mr-2 text-primary" />

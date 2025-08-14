@@ -312,7 +312,7 @@ export default function SignupPage() {
       </section>
 
       <div className="max-w-lg mx-auto px-6 py-8 -mt-16 relative z-10">
-        <div className="card-premium p-8 hover-lift">
+        <div className="card-premium p-8">
           <div className="text-center mb-4">
             <div className="icon-premium mb-4 mx-auto">
               <Building className="h-8 w-8 text-white" />
@@ -449,7 +449,8 @@ export default function SignupPage() {
             
             <div className="pt-4">
               <Button 
-                className="w-full btn-primary py-4 font-semibold text-lg hover-lift disabled:opacity-50 disabled:cursor-not-allowed"
+                type="button"
+                className="w-full btn-primary py-4 font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleRegister}
                 disabled={isLoading || success}
               >
@@ -469,6 +470,7 @@ export default function SignupPage() {
                 Already have an account?
               </p>
               <Button 
+                type="button"
                 variant="outline"
                 className="btn-outline font-medium"
                 onClick={() => router.push('/login')}

@@ -570,7 +570,7 @@ export default function VAT3ReturnForm() {
 
         <div className="space-y-6">
           {/* Registration Details */}
-          <Card className="card-modern hover-lift">
+          <Card className="card-modern ">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-foreground">Registration Details</CardTitle>
             </CardHeader>
@@ -601,7 +601,7 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Filing Frequency */}
-          <Card className="card-modern hover-lift">
+          <Card className="card-modern ">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-foreground">Filing Frequency</CardTitle>
             </CardHeader>
@@ -643,7 +643,7 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Period Details */}
-          <Card className="card-modern hover-lift">
+          <Card className="card-modern ">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-foreground">Period Details</CardTitle>
             </CardHeader>
@@ -681,7 +681,7 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Return Details */}
-          <Card className="card-modern hover-lift">
+          <Card className="card-modern ">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-foreground">Return Details</CardTitle>
             </CardHeader>
@@ -719,7 +719,7 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* VAT3 Details */}
-          <Card className="card-modern hover-lift">
+          <Card className="card-modern ">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-foreground">VAT3 Details</CardTitle>
             </CardHeader>
@@ -769,7 +769,7 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Unusual Expenditure */}
-          <Card className="card-modern hover-lift">
+          <Card className="card-modern ">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-foreground">Unusual Expenditure</CardTitle>
             </CardHeader>
@@ -838,7 +838,7 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Net Amounts */}
-          <Card className="card-modern hover-lift">
+          <Card className="card-modern ">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-foreground">Net Amounts</CardTitle>
             </CardHeader>
@@ -879,7 +879,7 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Intra-EU Trade */}
-          <Card className="card-modern hover-lift">
+          <Card className="card-modern ">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-foreground">Intra-EU Trade (INTRASTAT)</CardTitle>
             </CardHeader>
@@ -962,7 +962,7 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Non EU Trade */}
-          <Card className="card-modern hover-lift">
+          <Card className="card-modern ">
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-foreground">Non EU Trade</CardTitle>
             </CardHeader>
@@ -989,7 +989,7 @@ export default function VAT3ReturnForm() {
           </Card>
 
           {/* Action Buttons */}
-          <Card className="card-modern hover-lift">
+          <Card className="card-modern ">
             <CardContent className="p-6">
               <div className="flex justify-end gap-4">
                 <Button

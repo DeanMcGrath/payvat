@@ -422,7 +422,7 @@ export default function VATSubmissionPage() {
           <div className="lg:col-span-2 space-y-6">
             {/* Extracted VAT Data Card */}
             {extractedVATData && extractedVATData.processedDocuments > 0 && (
-              <Card className="card-premium hover-lift">
+              <Card className="card-premium ">
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold text-teal-900 flex items-center">
                     <BadgeCheck className="h-5 w-5 mr-2 text-teal-600" />
@@ -489,7 +489,7 @@ export default function VATSubmissionPage() {
               </Card>
             )}
 
-            <Card className="card-modern hover-lift">
+            <Card className="card-modern ">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-foreground flex items-center">
                   <Calculator className="h-5 w-5 mr-2 text-teal-600" />
@@ -572,7 +572,7 @@ export default function VATSubmissionPage() {
               </CardContent>
             </Card>
 
-            <Card className="card-modern hover-lift">
+            <Card className="card-modern ">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-foreground flex items-center">
                   <Upload className="h-5 w-5 mr-2 text-teal-600" />
@@ -681,7 +681,7 @@ export default function VATSubmissionPage() {
               <>
                 {/* Sales Documents Section */}
                 {uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length > 0 && (
-                  <Card className="card-modern hover-lift border-teal-200">
+                  <Card className="card-modern  border-teal-200">
                     <CardHeader className="bg-teal-50">
                       <CardTitle className="text-lg font-semibold text-teal-900 flex items-center justify-between">
                         <div className="flex items-center">
@@ -831,7 +831,7 @@ export default function VATSubmissionPage() {
                 
                 {/* Purchase Documents Section */}
                 {uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length > 0 && (
-                  <Card className="card-modern hover-lift border-green-200">
+                  <Card className="card-modern  border-green-200">
                     <CardHeader className="bg-green-50">
                       <CardTitle className="text-lg font-semibold text-green-900 flex items-center justify-between">
                         <div className="flex items-center">
@@ -929,7 +929,7 @@ export default function VATSubmissionPage() {
                 
                 {/* Other Documents Section (if any exist that aren't SALES or PURCHASE) */}
                 {uploadedDocuments.filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE')).length > 0 && (
-                  <Card className="card-modern hover-lift border-gray-200">
+                  <Card className="card-modern  border-gray-200">
                     <CardHeader>
                       <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
                         <FileText className="h-5 w-5 mr-2 text-gray-600" />
@@ -997,7 +997,7 @@ export default function VATSubmissionPage() {
 
           {/* Summary Sidebar */}
           <div className="space-y-6">
-            <Card className="card-modern hover-lift">
+            <Card className="card-modern ">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-foreground">Return Summary</CardTitle>
               </CardHeader>
@@ -1025,7 +1025,7 @@ export default function VATSubmissionPage() {
               </CardContent>
             </Card>
 
-            <Card className="card-modern hover-lift">
+            <Card className="card-modern ">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-foreground">Checklist</CardTitle>
               </CardHeader>
@@ -1049,7 +1049,7 @@ export default function VATSubmissionPage() {
               </CardContent>
             </Card>
 
-            <Card className="card-premium hover-lift">
+            <Card className="card-premium ">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-foreground">Actions</CardTitle>
               </CardHeader>

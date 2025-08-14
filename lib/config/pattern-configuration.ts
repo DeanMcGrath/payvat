@@ -186,21 +186,18 @@ export class PatternConfigurationManager extends EventEmitter {
     }
 
     // Apply updates
-    Object.assign(foundPattern, updates, {
-      metadata: {
-        ...foundPattern.metadata,
-        updatedAt: new Date().toISOString(),
-        version: this.incrementVersion(foundPattern.metadata.version)
-      }
-    })
+    const updatedPattern = foundPattern as VATPatternConfig
+    Object.assign(updatedPattern, updates)
+    updatedPattern.metadata.updatedAt = new Date().toISOString()
+    updatedPattern.metadata.version = this.incrementVersion(updatedPattern.metadata.version)
 
     // Validate updated pattern
-    this.validatePattern(foundPattern)
+    this.validatePattern(updatedPattern)
 
     await this.saveConfiguration()
 
-    console.log(`✅ Updated pattern '${foundPattern.name}'`)
-    this.emit('patternUpdated', { patternSetName: foundPatternSet, pattern: foundPattern })
+    console.log(`✅ Updated pattern '${updatedPattern.name}'`)
+    this.emit('patternUpdated', { patternSetName: foundPatternSet, pattern: updatedPattern })
   }
 
   // Remove pattern
@@ -244,10 +241,11 @@ export class PatternConfigurationManager extends EventEmitter {
     let passed = 0
     let failed = 0
 
-    // Test each test case
-    pattern.testCases.forEach((testCase, index) => {
+    // Test each test case  
+    const testPattern = pattern as VATPatternConfig
+    testPattern.testCases?.forEach((testCase: any, index: number) => {
       try {
-        const regex = new RegExp(pattern!.pattern, 'gi')
+        const regex = new RegExp(testPattern.pattern, 'gi')
         const matches = testCase.input.match(regex)
         
         if (matches && matches.includes(testCase.expectedMatch)) {
@@ -280,7 +278,7 @@ export class PatternConfigurationManager extends EventEmitter {
       }
     })
 
-    console.log(`🧪 Pattern '${pattern.name}' test results: ${passed} passed, ${failed} failed`)
+    console.log(`🧪 Pattern '${testPattern.name}' test results: ${passed} passed, ${failed} failed`)
 
     return { passed, failed, results }
   }
@@ -526,6 +524,6 @@ export const patternConfigurationManager = new PatternConfigurationManager()
 // Initialize configuration on module load
 patternConfigurationManager.on('configurationLoaded', (config) => {
   console.log(`📋 Loaded ${Object.keys(config.patternSets).length} pattern sets with ${
-    Object.values(config.patternSets).reduce((sum, set) => sum + set.patterns.length, 0)
+    Object.values(config.patternSets).reduce((sum: number, set: any) => sum + set.patterns.length, 0)
   } total patterns`)
 })

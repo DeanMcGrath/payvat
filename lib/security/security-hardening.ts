@@ -4,7 +4,7 @@
  */
 
 import crypto from 'crypto'
-import { rateLimit } from 'express-rate-limit'
+// Note: express-rate-limit would be imported in actual implementation
 
 // Security configuration
 export interface SecurityConfig {
@@ -277,7 +277,7 @@ export class SecurityHardening {
 
       // 3. Remove script tags
       if (this.config.inputSanitization.removeScriptTags) {
-        const scriptPattern = /<script[^>]*>.*?<\/script>/gis
+        const scriptPattern = /<script[^>]*>[\s\S]*?<\/script>/gi
         if (scriptPattern.test(sanitized)) {
           violations.push({
             type: 'MALICIOUS_CONTENT',
@@ -370,7 +370,7 @@ export class SecurityHardening {
     const encryptionKey = key ? Buffer.from(key) : crypto.randomBytes(this.config.encryption.keyLength)
     const iv = crypto.randomBytes(this.config.encryption.ivLength)
 
-    const cipher = crypto.createCipher(algorithm, encryptionKey)
+    const cipher = crypto.createCipheriv('aes-256-gcm', encryptionKey, iv)
     let encrypted = cipher.update(data, 'utf8', 'hex')
     encrypted += cipher.final('hex')
 
@@ -386,7 +386,7 @@ export class SecurityHardening {
     const encryptionKey = Buffer.from(key)
     const ivBuffer = Buffer.from(iv, 'hex')
 
-    const decipher = crypto.createDecipher(algorithm, encryptionKey)
+    const decipher = crypto.createDecipheriv('aes-256-gcm', encryptionKey, ivBuffer)
     let decrypted = decipher.update(encryptedData, 'hex', 'utf8')
     decrypted += decipher.final('utf8')
 
@@ -538,7 +538,7 @@ export class SecurityHardening {
 
       // Check for embedded executables
       const executablePatterns = [
-        /\x4d\x5a.{0,100}\x50\x45\x00\x00/s, // PE header
+        /\x4d\x5a[\s\S]{0,100}\x50\x45\x00\x00/, // PE header
         /#!/, // Script shebang
       ]
 

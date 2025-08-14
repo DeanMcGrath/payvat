@@ -576,7 +576,5 @@ export class DataQualityAssessor {
 
 // Export validation utilities
 export {
-  IrishVATValidator as VATValidator,
-  CrossValidationEngine,
-  DataQualityAssessor
+  IrishVATValidator as VATValidator
 }

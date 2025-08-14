@@ -139,11 +139,11 @@ body {
     mask-composite: subtract;
     opacity: 0;
     transition: opacity 0.4s ease;
+    pointer-events: none;
   }
   
   .card-premium:hover {
     box-shadow: var(--shadow-dramatic);
-    transform: translateY(-3px);
   }
   
   .card-premium:hover::after {
@@ -248,7 +248,6 @@ body {
   .btn-primary:hover {
     box-shadow: var(--shadow-premium);
     background: linear-gradient(to right, #0d9488, #0f766e);
-    transform: translateY(-2px);
   }
   
   .btn-primary:hover::before {
@@ -257,7 +256,7 @@ body {
   }
   
   .btn-primary:active {
-    transform: translateY(0px) scale(0.98);
+    opacity: 0.9;
   }
   
   .btn-outline {
@@ -271,12 +270,11 @@ body {
   .btn-outline:hover {
     background-color: #f9fafb;
     border-color: #4A9B8E;
-    transform: translateY(-1px);
     box-shadow: var(--shadow-soft);
   }
   
   .btn-outline:active {
-    transform: translateY(0px) scale(0.98);
+    opacity: 0.9;
   }
   
   /* Status Indicators */

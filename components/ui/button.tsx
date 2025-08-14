@@ -10,18 +10,18 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-soft hover:shadow-premium hover:bg-primary-hover hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0",
+          "bg-primary text-primary-foreground shadow-soft hover:shadow-premium hover:bg-primary-hover",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-soft hover:shadow-premium hover:bg-destructive/90 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0",
+          "bg-destructive text-destructive-foreground shadow-soft hover:shadow-premium hover:bg-destructive/90",
         outline:
-          "border border-border bg-background shadow-soft hover:shadow-soft hover:bg-accent hover:text-accent-foreground hover:border-primary/30 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0",
+          "border border-border bg-background shadow-soft hover:shadow-soft hover:bg-accent hover:text-accent-foreground hover:border-primary/30",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-soft hover:shadow-soft hover:bg-secondary/80 hover:scale-[1.02] hover:-translate-y-0.5 active:scale-100 active:translate-y-0",
+          "bg-secondary text-secondary-foreground shadow-soft hover:shadow-soft hover:bg-secondary/80",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] transition-all duration-200",
+          "hover:bg-accent hover:text-accent-foreground transition-all duration-200",
         link: "text-primary underline-offset-4 hover:underline hover:text-primary-hover transition-colors",
         premium:
-          "bg-gradient-to-r from-primary to-primary-hover text-primary-foreground shadow-premium hover:shadow-dramatic hover:scale-[1.02] hover:-translate-y-1 active:scale-100 active:translate-y-0 border border-white/20",
+          "bg-gradient-to-r from-primary to-primary-hover text-primary-foreground shadow-premium hover:shadow-dramatic border border-white/20",
       },
       size: {
         default: "h-10 px-4 py-2 has-[>svg]:px-3",

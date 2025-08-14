@@ -316,7 +316,7 @@ function VATPeriodContent() {
                 </div>
               </div>
               {/* Status Information */}
-              <div className="card-modern p-6 mb-2 group hover-lift">
+              <div className="card-modern p-6 mb-2 group">
                 <div className="flex items-start gap-4">
                   <div className={`icon-modern ${status.type === 'past' ? 'bg-blue-500' : 'bg-primary'}`}>
                     {status.type === 'past' ? 
@@ -336,7 +336,7 @@ function VATPeriodContent() {
               </div>
 
               {/* Due Date Card */}
-              <div className="card-modern p-6 mb-2 group hover-lift">
+              <div className="card-modern p-6 mb-2 group">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className={`icon-modern ${isPastPeriod(selectedYear, selectedPeriod) ? 'bg-muted' : 'bg-warning'}`}>
@@ -363,7 +363,7 @@ function VATPeriodContent() {
               <div className="flex justify-center mb-2">
                 <Button 
                   size="lg"
-                  className="btn-primary px-8 py-4 text-lg font-semibold hover-lift"
+                  className="btn-primary px-8 py-4 text-lg font-semibold"
                   onClick={() => router.push('/vat-submission')}
                 >
                   {isPastPeriod(selectedYear, selectedPeriod) ? "View Past Submission" : "Continue to VAT Submission"}

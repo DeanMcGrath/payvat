@@ -369,7 +369,7 @@ export class MetricsCollector extends EventEmitter {
     if (lateThroughput > earlyThroughput * 1.1) throughputTrend = 'INCREASING'
     else if (lateThroughput < earlyThroughput * 0.9) throughputTrend = 'DECREASING'
 
-    return { processingTimeRend, qualityTrend, throughputTrend }
+    return { processingTimetrend: processingTimeRend, qualityTrend, throughputTrend }
   }
 
   private enforceMetricsLimits(type: 'processing' | 'system' | 'quality'): void {

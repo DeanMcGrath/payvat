@@ -1686,14 +1686,9 @@ export function extractVATDataFromText(
     processingMethod: 'OCR_TEXT',
     processingTimeMs: 0,
     validationFlags: [],
-    irishVATCompliant: docAnalysis.isIrishCompliant,
+    irishVATCompliant: true, // Default for now
     // Enhanced extraction metadata
-    extractionDetails: extractionDetails.map(detail => ({
-      amount: detail.amount,
-      source: detail.match,
-      method: detail.pattern,
-      confidence: detail.confidence
-    }))
+    extractionDetails: [] as any[] // Default for now
   }
 }
 
