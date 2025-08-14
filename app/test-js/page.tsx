@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
+import { DebugButton } from "@/components/ui/debug-button"
 
 export default function TestJSPage() {
   const [clickCount, setClickCount] = useState(0)
@@ -68,17 +69,47 @@ export default function TestJSPage() {
         <h2>Button Tests</h2>
         
         <div style={{ marginBottom: '1rem' }}>
-          <h3>1. React Button Component (ui/button):</h3>
+          <h3>1. Original React Button Component:</h3>
           <Button 
             onClick={handleTestClick}
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
-            React Button (Clicked {clickCount} times)
+            Original Button (Clicked {clickCount} times)
           </Button>
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
-          <h3>2. Native HTML Button:</h3>
+          <h3>2. Test Button - Simple Red:</h3>
+          <DebugButton 
+            variant="test1"
+            onClick={handleTestClick}
+          >
+            Simple Test Button (Clicked {clickCount} times)
+          </DebugButton>
+        </div>
+
+        <div style={{ marginBottom: '1rem' }}>
+          <h3>3. Test Button - No Transforms:</h3>
+          <DebugButton 
+            variant="test2"
+            onClick={handleTestClick}
+          >
+            No Transform Button (Clicked {clickCount} times)
+          </DebugButton>
+        </div>
+
+        <div style={{ marginBottom: '1rem' }}>
+          <h3>4. Test Button - With pointer-events:</h3>
+          <DebugButton 
+            variant="test3"
+            onClick={handleTestClick}
+          >
+            Pointer Events Button (Clicked {clickCount} times)
+          </DebugButton>
+        </div>
+
+        <div style={{ marginBottom: '1rem' }}>
+          <h3>5. Native HTML Button:</h3>
           <button 
             onClick={handleNativeClick}
             style={{ 
@@ -95,7 +126,7 @@ export default function TestJSPage() {
         </div>
 
         <div style={{ marginBottom: '1rem' }}>
-          <h3>3. Inline onClick Test:</h3>
+          <h3>6. Inline onClick Test:</h3>
           <button 
             onClick={() => {
               console.log("🔘 Inline onClick works!")
