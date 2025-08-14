@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 
 export default function TestJSPage() {
@@ -8,8 +8,8 @@ export default function TestJSPage() {
   const [jsStatus, setJsStatus] = useState("Loading...")
   const [errorMessage, setErrorMessage] = useState("")
 
-  // Test basic JavaScript execution
-  useState(() => {
+  // Test basic JavaScript execution using useEffect
+  useEffect(() => {
     setJsStatus("✅ React useState hook working")
     console.log("✅ Test page loaded - JavaScript is executing")
     
