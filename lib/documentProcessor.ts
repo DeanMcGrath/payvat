@@ -8,6 +8,16 @@ import { processDocumentWithAI, type AIDocumentProcessingResult } from './ai/doc
 import { isAIEnabled } from './ai/openai'
 import { processWooCommerceVATReport, detectWooCommerceFormat, WOOCOMMERCE_PATTERNS } from './woocommerce-processor'
 import * as XLSX from 'xlsx'
+import { 
+  VATExtractionError, 
+  CircuitBreaker, 
+  RetryHandler, 
+  ErrorContext, 
+  ErrorReporter,
+  InputValidator,
+  ResourceMonitor,
+  GracefulDegradation
+} from './error-handling/vat-extraction-errors'
 
 export interface ExtractedVATData {
   salesVAT: number[]
@@ -25,6 +35,18 @@ export interface ExtractedVATData {
   processingTimeMs: number
   validationFlags: string[]
   irishVATCompliant: boolean
+  // Enhanced error handling metadata
+  extractionDetails?: Array<{
+    amount: number
+    source: string
+    method: string
+    confidence: number
+  }>
+  errorRecovery?: {
+    hadErrors: boolean
+    recoveryMethod?: string
+    fallbacksUsed: string[]
+  }
 }
 
 export interface DocumentProcessingResult {
@@ -119,15 +141,29 @@ export async function extractTextFromDocument(
     console.log(`   Extension: ${fileExtension}`)
     console.log('   Supported types: Excel (.xlsx/.xls), PDF, images, CSV, text')
     
-    return {
-      success: false,
-      error: `Unsupported file type: ${mimeType} (${fileName}). Supported: Excel (.xlsx/.xls), PDF, images, CSV, text files.`
-    }
+    throw new VATExtractionError(
+      `Unsupported file type: ${mimeType}`,
+      'UNSUPPORTED_FILE_TYPE',
+      false,
+      { mimeType, fileName, supportedTypes: ['Excel', 'PDF', 'Images', 'CSV', 'Text'] }
+    )
+    
   } catch (error) {
-    console.error('🚨 Text extraction error:', error)
-    return {
-      success: false,
-      error: 'Failed to extract text from document'
+    if (error instanceof VATExtractionError) {
+      throw error // Re-throw VAT extraction errors
+    }
+    
+    // Try fallback processing
+    console.log('🔄 Attempting fallback processing...')
+    try {
+      return await GracefulDegradation.executeFallback('text_extraction', fileData, mimeType, fileName)
+    } catch (fallbackError) {
+      throw new VATExtractionError(
+        `Text extraction failed: ${(error as Error).message}`,
+        'TEXT_EXTRACTION_FAILED',
+        true,
+        { originalError: (error as Error).message, fileName, mimeType }
+      )
     }
   }
 }
@@ -1352,28 +1388,46 @@ export function extractVATDataFromText(
   // Analyze document type for smart categorization
   const docAnalysis = analyzeDocumentType(text)
   
-  // Prioritized VAT amount patterns - high priority patterns first
+  // ENHANCED: Prioritized VAT amount patterns with comprehensive format coverage
   const highPriorityVATPatterns = [
+    // Pattern 1: VAT (23.00%): €92.00 (for BRIANC-0008.pdf format)
+    /VAT\s*\(([0-9.]+)%?\)\s*:\s*€([0-9,]+\.?[0-9]*)/gi,
+    
+    // Pattern 2: VAT 23%: €92.00
+    /VAT\s*([0-9.]+)%?\s*:\s*€([0-9,]+\.?[0-9]*)/gi,
+    
     // Explicit total VAT amount patterns (highest priority)
     /total\s+(?:amount\s+)?vat[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /total\s+vat\s+amount[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s+total[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*amount[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     
-    // VAT with percentage in parentheses - HIGH PRIORITY (for BRIANC-0008.pdf format)
-    /vat\s*\([0-9.]+%\)[:\s]*€?([0-9,]+\.?[0-9]*)/gi,  // VAT (23.00%): €92.00
+    // Pattern 3: VAT: €92.00
+    /VAT\s*:\s*€([0-9,]+\.?[0-9]*)/gi,
+    
+    // Pattern 4: Total VAT €92.00
+    /Total\s*VAT\s*€([0-9,]+\.?[0-9]*)/gi,
+    
+    // Pattern 5: VAT Amount: €92.00
+    /VAT\s*Amount\s*:\s*€([0-9,]+\.?[0-9]*)/gi,
     
     // VAT breakdown table totals
     /(?:total\s+)?(?:vat|tax)\s*(?:breakdown|summary|details)[^€]*total[^€]*€?([0-9,]+\.?[0-9]*)/gi,
   ]
   
   const standardVATPatterns = [
+    // Pattern 6: 23% VAT €92.00
+    /([0-9.]+)%?\s*VAT\s*€([0-9,]+\.?[0-9]*)/gi,
+    
+    // Pattern 7: Tax €92.00
+    /Tax\s*€([0-9,]+\.?[0-9]*)/gi,
+    
     // VAT with specific rates
     /vat\s*@?\s*23%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*@?\s*13\.5%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*@?\s*9%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     
-    // CRITICAL: VAT with percentage in parentheses (like BRIANC-0008.pdf)
+    // Enhanced: VAT with percentage in parentheses (like BRIANC-0008.pdf)
     /vat\s*\(23\.?0?0?%?\)[:\s]*€?([0-9,]+\.?[0-9]*)/gi,  // VAT (23.00%): €92.00
     /vat\s*\(13\.5%?\)[:\s]*€?([0-9,]+\.?[0-9]*)/gi,      // VAT (13.5%): €XX
     /vat\s*\(9\.?0?%?\)[:\s]*€?([0-9,]+\.?[0-9]*)/gi,     // VAT (9%): €XX
@@ -1388,6 +1442,15 @@ export function extractVATDataFromText(
   ]
   
   const genericVATPatterns = [
+    // Pattern 8: VAT 92.00 (without currency symbol)
+    /VAT\s*([0-9,]+\.?[0-9]*)/gi,
+    
+    // Pattern 9: Multiple currency formats
+    /VAT[^0-9]*([0-9,]+\.?[0-9]*)/gi,
+    
+    // Pattern 10: Line items with percentages
+    /([0-9.]+)%[^€]*€([0-9,]+\.?[0-9]*)/gi,
+    
     // Generic VAT patterns (lower priority)
     /(?:total\s+)?vat[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /(?:total\s+)?tax[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
@@ -1623,7 +1686,14 @@ export function extractVATDataFromText(
     processingMethod: 'OCR_TEXT',
     processingTimeMs: 0,
     validationFlags: [],
-    irishVATCompliant: false
+    irishVATCompliant: docAnalysis.isIrishCompliant,
+    // Enhanced extraction metadata
+    extractionDetails: extractionDetails.map(detail => ({
+      amount: detail.amount,
+      source: detail.match,
+      method: detail.pattern,
+      confidence: detail.confidence
+    }))
   }
 }
 
