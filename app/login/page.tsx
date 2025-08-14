@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,6 +31,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [loginAttempts, setLoginAttempts] = useState(0)
+  const router = useRouter()
 
   // Security: Handle login with proper validation and rate limiting
   const handleLogin = async () => {
@@ -82,7 +84,7 @@ export default function LoginPage() {
         // Success - redirect to dashboard
         toast.success('Login successful! Redirecting to dashboard...')
         setTimeout(() => {
-          window.location.href = '/dashboard'
+          router.push('/dashboard')
         }, 1000)
       } else {
         const errorMessage = "Invalid email or password"
@@ -182,10 +184,10 @@ export default function LoginPage() {
                     <span>Secure Login</span>
                   </span>
                   <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/about'}>About</button>
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/pricing'}>Pricing</button>
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-guide'}>VAT Guide</button>
-                    <button className="hover:text-white transition-colors" onClick={() => window.location.href = '/vat-registration'}>Get VAT Number</button>
+                    <button className="hover:text-white transition-colors" onClick={() => router.push('/about')}>About</button>
+                    <button className="hover:text-white transition-colors" onClick={() => router.push('/pricing')}>Pricing</button>
+                    <button className="hover:text-white transition-colors" onClick={() => router.push('/vat-guide')}>VAT Guide</button>
+                    <button className="hover:text-white transition-colors" onClick={() => router.push('/vat-registration')}>Get VAT Number</button>
                   </div>
                 </div>
                 <div className="text-white/60 text-xs hidden sm:block">
@@ -344,7 +346,7 @@ export default function LoginPage() {
               <Button 
                 variant="outline"
                 className="btn-outline font-medium"
-                onClick={() => window.location.href = '/signup'}
+                onClick={() => router.push('/signup')}
               >
                 Create Account
               </Button>

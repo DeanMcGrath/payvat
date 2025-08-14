@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Calculator, Building2, Lock, ArrowRight, CheckCircle, Shield, Clock, Users, TrendingUp, Award, BadgeCheck, Play } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 import { VideoModal } from "@/components/video-modal"
@@ -12,6 +13,7 @@ export default function LandingPage() {
   const [isVisible, setIsVisible] = useState(false)
   const [hoveredBox, setHoveredBox] = useState<number | null>(null)
   const [showVideoModal, setShowVideoModal] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -252,7 +254,7 @@ export default function LandingPage() {
                     <Button 
                       size="lg" 
                       className={`w-full font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105 bg-gradient-to-r ${box.gradient} min-h-[48px] text-base active:scale-95`}
-                      onClick={() => window.location.href = box.link}
+                      onClick={() => router.push(box.link)}
                     >
                       {box.buttonText}
                       <ArrowRight className="ml-2 h-4 sm:h-5 w-4 sm:w-5 group-hover:translate-x-1 transition-transform" />
@@ -302,7 +304,7 @@ export default function LandingPage() {
                 </div>
               </div>
               
-              <div className="flex items-center gap-4 p-4 sm:p-6 card-modern hover-scale group cursor-pointer min-h-[80px] active-scale-95 transition-all">
+              <div className="flex items-center gap-4 p-4 sm:p-6 card-modern hover-scale group cursor-pointer min-h-[80px] active:scale-95 transition-all">
                 <div className="icon-modern group-hover:scale-110 transition-transform flex-shrink-0">
                   <TrendingUp className="h-5 sm:h-6 w-5 sm:w-6 text-white" />
                 </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Euro, CheckCircle, Calendar, CreditCard, Shield, Clock, HelpCircle, BadgeCheck, ArrowRight } from 'lucide-react'
@@ -9,6 +10,7 @@ import SiteHeader from "@/components/site-header"
 
 export default function PricingPage() {
   const [isVisible, setIsVisible] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     // Trigger animations after component mounts
@@ -180,7 +182,7 @@ export default function PricingPage() {
                     <Button 
                       size="lg"
                       className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
-                      onClick={() => window.location.href = '/signup'}
+                      onClick={() => router.push('/signup')}
                     >
                       Start Free Trial
                       <ArrowRight className="ml-2 h-5 w-5" />
@@ -204,7 +206,7 @@ export default function PricingPage() {
                     <Button 
                       size="lg"
                       className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
-                      onClick={() => window.location.href = '/signup'}
+                      onClick={() => router.push('/signup')}
                     >
                       Get Started
                       <ArrowRight className="ml-2 h-5 w-5" />

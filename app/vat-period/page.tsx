@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -18,6 +19,7 @@ function VATPeriodContent() {
   const [selectedYear, setSelectedYear] = useState(contextYear || "2025")
   const [selectedPeriod, setSelectedPeriod] = useState(contextPeriod || "jan-feb")
   const [isVisible, setIsVisible] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     // Trigger animations after component mounts
@@ -186,7 +188,7 @@ function VATPeriodContent() {
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    onClick={() => window.location.href = '/dashboard'}
+                    onClick={() => router.push('/dashboard')}
                     className="text-white/90 hover:text-white flex items-center space-x-2 transition-colors"
                   >
                     <ArrowLeft className="h-4 w-4" />
@@ -362,7 +364,7 @@ function VATPeriodContent() {
                 <Button 
                   size="lg"
                   className="btn-primary px-8 py-4 text-lg font-semibold hover-lift"
-                  onClick={() => window.location.href = '/vat-submission'}
+                  onClick={() => router.push('/vat-submission')}
                 >
                   {isPastPeriod(selectedYear, selectedPeriod) ? "View Past Submission" : "Continue to VAT Submission"}
                   <ArrowRight className="h-5 w-5 ml-2" />

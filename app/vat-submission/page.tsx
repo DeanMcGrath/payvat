@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -26,6 +27,7 @@ interface UserProfile {
 
 export default function VATSubmissionPage() {
   const { selectedYear, selectedPeriod, setVATAmounts, totalSalesVAT: contextSalesVAT, totalPurchaseVAT: contextPurchaseVAT } = useVATData()
+  const router = useRouter()
   const [salesVAT, setSalesVAT] = useState("0.00")
   const [purchaseVAT, setPurchaseVAT] = useState("0.00")
   const [netVAT, setNetVAT] = useState("0.00")
@@ -111,7 +113,7 @@ export default function VATSubmissionPage() {
           setUserError('Failed to load user profile')
         }
       } else if (response.status === 401) {
-        window.location.href = '/login'
+        router.push('/login')
       } else {
         setUserError('Failed to fetch user profile')
       }
@@ -128,9 +130,9 @@ export default function VATSubmissionPage() {
         method: 'POST',
         credentials: 'include'
       })
-      window.location.href = '/login'
+      router.push('/login')
     } catch (err) {
-      window.location.href = '/login'
+      router.push('/login')
     }
   }
   
@@ -333,7 +335,7 @@ export default function VATSubmissionPage() {
               <Button onClick={fetchUserProfile} className="flex-1">
                 Try Again
               </Button>
-              <Button onClick={() => window.location.href = '/'} variant="outline" className="flex-1">
+              <Button onClick={() => router.push('/')} variant="outline" className="flex-1">
                 Go Home
               </Button>
             </div>
@@ -1061,7 +1063,7 @@ export default function VATSubmissionPage() {
                     
                     // Navigate to VAT3 return page
                     setTimeout(() => {
-                      window.location.href = '/vat3-return'
+                      router.push('/vat3-return')
                     }, 100) // Small delay to ensure context updates
                   }}
                 >
