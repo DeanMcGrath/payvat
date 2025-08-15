@@ -80,7 +80,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
     if (extractedVAT) {
       validateVATData()
     }
-  }, [extractedVAT, period, validateVATData])
+  }, [extractedVAT, period])
 
   const validateVATData = useCallback(async () => {
     if (!extractedVAT) return
@@ -118,7 +118,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
     } finally {
       setIsValidating(false)
     }
-  }, [extractedVAT, period, validateAmounts, validateVATRates, validateConfidenceScores, validatePeriodConsistency, validateDuplicates, validateSequence, validateCompleteness, calculateValidationScore])
+  }, [extractedVAT, period])
 
   const validateAmounts = (data: VATValidationData, issues: ValidationIssue[]) => {
     const allAmounts = [
