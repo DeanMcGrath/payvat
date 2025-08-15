@@ -184,8 +184,10 @@ async function getDashboardStats(request: NextRequest, user?: AuthUser) {
     })
 
     dashboardStats.learning.recentCorrections = recentFeedback.map(fb => {
-      const originalTotal = [...fb.originalExtraction.salesVAT, ...fb.originalExtraction.purchaseVAT].reduce((sum: number, val: number) => sum + val, 0)
-      const correctedTotal = [...fb.correctedExtraction.salesVAT, ...fb.correctedExtraction.purchaseVAT].reduce((sum: number, val: number) => sum + val, 0)
+      const originalExtraction = fb.originalExtraction as any || { salesVAT: [], purchaseVAT: [] }
+      const correctedExtraction = fb.correctedExtraction as any || { salesVAT: [], purchaseVAT: [] }
+      const originalTotal = [...originalExtraction.salesVAT, ...originalExtraction.purchaseVAT].reduce((sum: number, val: number) => sum + val, 0)
+      const correctedTotal = [...correctedExtraction.salesVAT, ...correctedExtraction.purchaseVAT].reduce((sum: number, val: number) => sum + val, 0)
 
       return {
         documentName: fb.document?.originalName || 'Unknown',
