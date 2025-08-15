@@ -299,7 +299,7 @@ export class ConfidenceMonitor {
     
     Object.keys(typeGroups).forEach(type => {
       const docs = typeGroups[type]
-      const totalConfidence = docs.reduce((sum, doc) => sum + doc.confidence, 0)
+      const totalConfidence = docs.reduce((sum: number, doc: any) => sum + doc.confidence, 0)
       const successfulDocs = docs.filter(doc => doc.confidence > 0.7).length
       
       metrics[type] = {
@@ -324,8 +324,8 @@ export class ConfidenceMonitor {
     
     Object.keys(methodGroups).forEach(method => {
       const docs = methodGroups[method]
-      const totalConfidence = docs.reduce((sum, doc) => sum + doc.confidence, 0)
-      const totalProcessingTime = docs.reduce((sum, doc) => sum + (doc.processingTime || 0), 0)
+      const totalConfidence = docs.reduce((sum: number, doc: any) => sum + doc.confidence, 0)
+      const totalProcessingTime = docs.reduce((sum: number, doc: any) => sum + (doc.processingTime || 0), 0)
       
       metrics[method] = {
         averageConfidence: totalConfidence / docs.length,
@@ -339,7 +339,7 @@ export class ConfidenceMonitor {
   
   private static calculateQualityMetrics(documents: any[]): ConfidenceMetrics['qualityMetrics'] {
     const compliantDocs = documents.filter(doc => doc.irishVATCompliant).length
-    const totalQuality = documents.reduce((sum, doc) => sum + (doc.qualityScore || 50), 0)
+    const totalQuality = documents.reduce((sum: number, doc: any) => sum + (doc.qualityScore || 50), 0)
     
     return {
       irishVATCompliance: documents.length > 0 ? (compliantDocs / documents.length) * 100 : 0,
@@ -355,10 +355,10 @@ export class ConfidenceMonitor {
   private static calculateUserFeedbackMetrics(corrections: any[], documents: any[]): ConfidenceMetrics['userFeedback'] {
     const totalCorrections = corrections.length
     const accuracyImprovement = corrections.length > 0 
-      ? corrections.reduce((sum, c) => sum + (c.actualAccuracy - c.originalConfidence), 0) / corrections.length
+      ? corrections.reduce((sum: number, c: any) => sum + (c.actualAccuracy - c.originalConfidence), 0) / corrections.length
       : 0
     
-    const correctionTypes = corrections.reduce((types, c) => {
+    const correctionTypes = corrections.reduce((types: Record<string, number>, c: any) => {
       types[c.correctionType] = (types[c.correctionType] || 0) + 1
       return types
     }, {} as Record<string, number>)
@@ -383,7 +383,7 @@ export class ConfidenceMonitor {
       { week: 'Week 2', confidence: 0.88, volume: 180 }
     ]
     
-    const avgConfidence = documents.reduce((sum, doc) => sum + doc.confidence, 0) / (documents.length || 1)
+    const avgConfidence = documents.reduce((sum: number, doc: any) => sum + doc.confidence, 0) / (documents.length || 1)
     const systemHealth = avgConfidence > 0.9 ? 'excellent' : avgConfidence > 0.8 ? 'good' : avgConfidence > 0.6 ? 'fair' : 'poor'
     
     return {
