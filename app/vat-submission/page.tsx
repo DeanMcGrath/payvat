@@ -488,7 +488,7 @@ export default function VATSubmissionPage() {
     toast.success(`Successfully uploaded ${documents.length} documents`)
     
     // Refresh document list and extracted VAT data
-    await loadDocuments()
+    await loadUploadedDocuments()
     await loadExtractedVATData()
     
     setShowBatchUpload(false)
