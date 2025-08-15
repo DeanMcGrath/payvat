@@ -3,7 +3,7 @@
  * Improves confidence calculations based on user feedback and corrections
  */
 
-import { prisma } from '@/lib/prisma'
+// import { prisma } from '@/lib/prisma' // Disabled until learningPattern model is added
 
 export interface ConfidencePattern {
   id: string
@@ -155,30 +155,9 @@ export class ConfidenceLearningSystem {
     
     this.calibrationFactors.set(key, newFactor)
     
-    // Persist to database
-    try {
-      await prisma.learningPattern.upsert({
-        where: {
-          patternKey: key
-        },
-        update: {
-          confidence: newFactor,
-          frequency: { increment: 1 },
-          lastUsed: new Date()
-        },
-        create: {
-          patternKey: key,
-          patternType: 'CALIBRATION',
-          documentType: key.split('_')[0],
-          patternData: { calibrationFactor: newFactor },
-          confidence: newFactor,
-          frequency: 1,
-          lastUsed: new Date()
-        }
-      })
-    } catch (error) {
-      console.warn('Failed to persist calibration factor:', error)
-    }
+    // Note: Database persistence disabled until learningPattern model is added to Prisma schema
+    // TODO: Add learningPattern model to schema and enable persistence
+    console.log(`📊 Calibration factor updated: ${key} = ${newFactor.toFixed(3)} (in-memory only)`)
   }
 
   /**
@@ -218,21 +197,11 @@ export class ConfidenceLearningSystem {
 
   /**
    * Load calibration factors from database
+   * Currently disabled until learningPattern model is added to Prisma schema
    */
   async loadCalibrationFactors(): Promise<void> {
-    try {
-      const patterns = await prisma.learningPattern.findMany({
-        where: { patternType: 'CALIBRATION' }
-      })
-      
-      patterns.forEach(pattern => {
-        this.calibrationFactors.set(pattern.patternKey, pattern.confidence)
-      })
-      
-      console.log(`🧠 Loaded ${patterns.length} calibration factors from database`)
-    } catch (error) {
-      console.warn('Failed to load calibration factors:', error)
-    }
+    console.log('🧠 Calibration factors loading disabled (in-memory only mode)')
+    // TODO: Implement when learningPattern model is added to Prisma schema
   }
 
   /**
