@@ -88,7 +88,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
     if (extractedVAT) {
       calculateTotalsWithCorrections()
     }
-  }, [extractedVAT, documentCorrections, calculateTotalsWithCorrections])
+  }, [extractedVAT, documentCorrections])
 
   const calculateTotalsWithCorrections = useCallback(() => {
     if (!extractedVAT) return
