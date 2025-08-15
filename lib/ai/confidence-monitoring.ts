@@ -300,7 +300,7 @@ export class ConfidenceMonitor {
     Object.keys(typeGroups).forEach(type => {
       const docs = typeGroups[type]
       const totalConfidence = docs.reduce((sum: number, doc: any) => sum + doc.confidence, 0)
-      const successfulDocs = docs.filter(doc => doc.confidence > 0.7).length
+      const successfulDocs = docs.filter((doc: any) => doc.confidence > 0.7).length
       
       metrics[type] = {
         averageConfidence: totalConfidence / docs.length,
@@ -338,7 +338,7 @@ export class ConfidenceMonitor {
   }
   
   private static calculateQualityMetrics(documents: any[]): ConfidenceMetrics['qualityMetrics'] {
-    const compliantDocs = documents.filter(doc => doc.irishVATCompliant).length
+    const compliantDocs = documents.filter((doc: any) => doc.irishVATCompliant).length
     const totalQuality = documents.reduce((sum: number, doc: any) => sum + (doc.qualityScore || 50), 0)
     
     return {
