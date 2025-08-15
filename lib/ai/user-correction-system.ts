@@ -376,7 +376,7 @@ export class UserCorrectionSystem {
       const feedbacks = await prisma.learningFeedback.findMany({
         where: {
           corrections: {
-            path: '[0].field',
+            path: ['[0].field'],
             equals: 'vatData.amounts'
           }
         },
