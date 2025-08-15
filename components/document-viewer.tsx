@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -98,9 +98,9 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
     if (document && isOpen) {
       loadDocument()
     }
-  }, [document, isOpen])
+  }, [document, isOpen, loadDocument])
 
-  const loadDocument = async () => {
+  const loadDocument = useCallback(async () => {
     if (!document) return
     
     setLoading(true)
@@ -123,7 +123,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
     } finally {
       setLoading(false)
     }
-  }
+  }, [document])
 
   const handleDownload = async () => {
     if (!document) return
@@ -293,7 +293,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
         <div className="relative bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center" style={{ height: '500px' }}>
           <img
             src={documentUrl}
-            alt={document?.originalName}
+            alt={document?.originalName || 'Document preview'}
             className="max-w-full max-h-full object-contain"
             style={{
               transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,

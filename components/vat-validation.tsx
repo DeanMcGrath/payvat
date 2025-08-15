@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -80,9 +80,9 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
     if (extractedVAT) {
       validateVATData()
     }
-  }, [extractedVAT, period])
+  }, [extractedVAT, period, validateVATData])
 
-  const validateVATData = async () => {
+  const validateVATData = useCallback(async () => {
     if (!extractedVAT) return
 
     setIsValidating(true)
@@ -118,7 +118,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
     } finally {
       setIsValidating(false)
     }
-  }
+  }, [extractedVAT, period, validateAmounts, validateVATRates, validateConfidenceScores, validatePeriodConsistency, validateDuplicates, validateSequence, validateCompleteness, calculateValidationScore])
 
   const validateAmounts = (data: VATValidationData, issues: ValidationIssue[]) => {
     const allAmounts = [

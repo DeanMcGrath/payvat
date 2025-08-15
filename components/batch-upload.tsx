@@ -46,6 +46,56 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
   const [autoStart, setAutoStart] = useState(true)
   const [maxConcurrent, setMaxConcurrent] = useState(3)
 
+  const startBatchUpload = useCallback(async (filesToUpload = files) => {
+    if (isUploading) return
+
+    setIsUploading(true)
+    const pendingFiles = filesToUpload.filter(f => f.status === 'pending')
+    
+    if (pendingFiles.length === 0) {
+      setIsUploading(false)
+      return
+    }
+
+    toast.info(`Starting upload of ${pendingFiles.length} files...`)
+
+    // Process files in chunks to limit concurrent uploads
+    const chunks = []
+    for (let i = 0; i < pendingFiles.length; i += maxConcurrent) {
+      chunks.push(pendingFiles.slice(i, i + maxConcurrent))
+    }
+
+    try {
+      for (const chunk of chunks) {
+        await Promise.all(chunk.map(file => uploadSingleFile(file)))
+      }
+
+      const completedFiles = files.filter(f => f.status === 'completed')
+      const errorFiles = files.filter(f => f.status === 'error')
+
+      if (completedFiles.length > 0) {
+        toast.success(`Successfully uploaded ${completedFiles.length} files`)
+        
+        // Notify parent component
+        const documents = completedFiles
+          .filter(f => f.documentId)
+          .map(f => ({ id: f.documentId, fileName: f.file.name, category: f.category }))
+        
+        onUploadComplete(documents)
+      }
+
+      if (errorFiles.length > 0) {
+        toast.error(`${errorFiles.length} files failed to upload`)
+      }
+
+    } catch (error) {
+      console.error('Batch upload error:', error)
+      toast.error('Batch upload failed')
+    } finally {
+      setIsUploading(false)
+    }
+  }, [files, isUploading, maxConcurrent, onUploadComplete, uploadSingleFile])
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles: BatchFile[] = acceptedFiles.map(file => ({
       id: `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -62,7 +112,7 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
     }
 
     toast.success(`Added ${acceptedFiles.length} files to batch upload queue`)
-  }, [defaultCategory, autoStart, files, isUploading])
+  }, [defaultCategory, autoStart, files, isUploading, startBatchUpload])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -168,55 +218,6 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
     console.warn(`Processing timeout for document ${documentId}`)
   }
 
-  const startBatchUpload = async (filesToUpload = files) => {
-    if (isUploading) return
-
-    setIsUploading(true)
-    const pendingFiles = filesToUpload.filter(f => f.status === 'pending')
-    
-    if (pendingFiles.length === 0) {
-      setIsUploading(false)
-      return
-    }
-
-    toast.info(`Starting upload of ${pendingFiles.length} files...`)
-
-    // Process files in chunks to limit concurrent uploads
-    const chunks = []
-    for (let i = 0; i < pendingFiles.length; i += maxConcurrent) {
-      chunks.push(pendingFiles.slice(i, i + maxConcurrent))
-    }
-
-    try {
-      for (const chunk of chunks) {
-        await Promise.all(chunk.map(file => uploadSingleFile(file)))
-      }
-
-      const completedFiles = files.filter(f => f.status === 'completed')
-      const errorFiles = files.filter(f => f.status === 'error')
-
-      if (completedFiles.length > 0) {
-        toast.success(`Successfully uploaded ${completedFiles.length} files`)
-        
-        // Notify parent component
-        const documents = completedFiles
-          .filter(f => f.documentId)
-          .map(f => ({ id: f.documentId, fileName: f.file.name, category: f.category }))
-        
-        onUploadComplete(documents)
-      }
-
-      if (errorFiles.length > 0) {
-        toast.error(`${errorFiles.length} files failed to upload`)
-      }
-
-    } catch (error) {
-      console.error('Batch upload error:', error)
-      toast.error('Batch upload failed')
-    } finally {
-      setIsUploading(false)
-    }
-  }
 
   const pauseUpload = () => {
     setIsUploading(false)
@@ -246,7 +247,7 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
 
   const getFileIcon = (file: File) => {
     if (file.type.includes('pdf')) return <FileText className="h-6 w-6 text-red-500" />
-    if (file.type.includes('image')) return <Image className="h-6 w-6 text-blue-500" />
+    if (file.type.includes('image')) return <Image className="h-6 w-6 text-blue-500" alt="" />
     return <File className="h-6 w-6 text-gray-500" />
   }
 

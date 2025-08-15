@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -88,9 +88,9 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
     if (extractedVAT) {
       calculateTotalsWithCorrections()
     }
-  }, [extractedVAT, documentCorrections])
+  }, [extractedVAT, documentCorrections, calculateTotalsWithCorrections])
 
-  const calculateTotalsWithCorrections = () => {
+  const calculateTotalsWithCorrections = useCallback(() => {
     if (!extractedVAT) return
 
     let totalSalesVAT = 0
@@ -121,7 +121,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
       purchaseVAT: totalPurchaseVAT,
       netVAT: totalSalesVAT - totalPurchaseVAT
     })
-  }
+  }, [extractedVAT, documentCorrections])
 
   const selectDocumentForCorrection = (documentId: string, type: 'sales' | 'purchase') => {
     setSelectedDocument(documentId)
