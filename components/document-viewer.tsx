@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
+import * as XLSX from 'xlsx'
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -107,64 +108,207 @@ const SimplePDFViewer = ({ fileUrl, fileName }: { fileUrl: string, fileName: str
   );
 };
 
-// CSV Table Renderer Component
-const CSVTableRenderer = ({ fileUrl, fileName }: { fileUrl: string, fileName: string }) => {
-  const [csvData, setCsvData] = useState<string[][]>([]);
+
+// Enhanced Spreadsheet Viewer Component using XLSX library
+const SpreadsheetViewer = ({ fileUrl, fileName }: { fileUrl: string, fileName: string }) => {
+  const [workbookData, setWorkbookData] = useState<{
+    sheets: string[];
+    currentSheet: string;
+    data: any[][];
+    workbook: XLSX.WorkBook;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortConfig, setSortConfig] = useState<{ column: number; direction: 'asc' | 'desc' } | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  const ROWS_PER_PAGE = 50;
+
+  // Helper function to format cell values
+  const formatCellValue = (value: any): string => {
+    if (value === null || value === undefined) return '';
+    
+    const str = String(value);
+    
+    // Check if it's a number
+    const num = parseFloat(str);
+    if (!isNaN(num) && isFinite(num)) {
+      // If it looks like a currency or has more than 2 decimal places, format as currency
+      if (str.includes('€') || str.includes('$') || str.includes('£') || num > 100 || (str.includes('.') && str.split('.')[1]?.length <= 2)) {
+        return num.toLocaleString('en-IE', { 
+          minimumFractionDigits: num % 1 === 0 ? 0 : 2,
+          maximumFractionDigits: 2 
+        });
+      }
+      // For other numbers, show as-is but with locale formatting
+      return num.toLocaleString('en-IE');
+    }
+    
+    return str.trim();
+  };
 
   useEffect(() => {
-    const loadCSVData = async () => {
+    const loadSpreadsheet = async () => {
+      setLoading(true);
+      setError(null);
+      
       try {
         const response = await fetch(fileUrl);
-        if (!response.ok) throw new Error('Failed to load CSV');
+        if (!response.ok) throw new Error(`Failed to fetch: ${response.statusText}`);
         
-        const text = await response.text();
-        const rows = text.split('\n').map(row => {
-          // Simple CSV parsing - handles basic CSV format
-          const cells = [];
-          let current = '';
-          let inQuotes = false;
-          
-          for (let i = 0; i < row.length; i++) {
-            const char = row[i];
-            const nextChar = row[i + 1];
-            
-            if (char === '"' && !inQuotes) {
-              inQuotes = true;
-            } else if (char === '"' && inQuotes && nextChar === '"') {
-              current += '"';
-              i++; // Skip next quote
-            } else if (char === '"' && inQuotes) {
-              inQuotes = false;
-            } else if (char === ',' && !inQuotes) {
-              cells.push(current.trim());
-              current = '';
-            } else {
-              current += char;
-            }
-          }
-          cells.push(current.trim());
-          return cells;
-        }).filter(row => row.some(cell => cell.length > 0));
-
-        setCsvData(rows);
+        const arrayBuffer = await response.arrayBuffer();
+        
+        // Determine file type and parse accordingly
+        const isCSV = fileName.toLowerCase().endsWith('.csv');
+        
+        let workbook: XLSX.WorkBook;
+        
+        if (isCSV) {
+          // For CSV files, convert to text first then parse
+          const text = new TextDecoder('utf-8').decode(arrayBuffer);
+          workbook = XLSX.read(text, { 
+            type: 'string',
+            raw: true,
+            dateNF: 'yyyy-mm-dd'
+          });
+        } else {
+          // For Excel files, parse binary
+          workbook = XLSX.read(arrayBuffer, { 
+            type: 'array',
+            cellStyles: true,
+            cellDates: true,
+            cellFormula: true,
+            raw: false
+          });
+        }
+        
+        const sheetNames = workbook.SheetNames;
+        if (sheetNames.length === 0) throw new Error('No sheets found in workbook');
+        
+        const firstSheetName = sheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        const data = XLSX.utils.sheet_to_json(worksheet, { 
+          header: 1,
+          defval: '',
+          raw: false,
+          blankrows: false
+        }) as any[][];
+        
+        // Clean up empty rows and columns
+        const cleanedData = data.filter(row => 
+          row.some(cell => cell !== null && cell !== undefined && String(cell).trim() !== '')
+        );
+        
+        setWorkbookData({
+          sheets: sheetNames,
+          currentSheet: firstSheetName,
+          data: cleanedData,
+          workbook
+        });
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to parse CSV');
+        setError(err instanceof Error ? err.message : 'Failed to load spreadsheet');
       } finally {
         setLoading(false);
       }
     };
 
-    loadCSVData();
+    loadSpreadsheet();
   }, [fileUrl]);
+
+  const switchSheet = (sheetName: string) => {
+    if (!workbookData) return;
+    
+    const worksheet = workbookData.workbook.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(worksheet, { 
+      header: 1,
+      defval: '',
+      raw: false,
+      blankrows: false
+    }) as any[][];
+    
+    // Clean up empty rows
+    const cleanedData = data.filter(row => 
+      row.some(cell => cell !== null && cell !== undefined && String(cell).trim() !== '')
+    );
+    
+    setWorkbookData({
+      ...workbookData,
+      currentSheet: sheetName,
+      data: cleanedData
+    });
+    setCurrentPage(1);
+    setSortConfig(null);
+    setSearchTerm('');
+  };
+
+  const handleSort = (columnIndex: number) => {
+    if (!workbookData?.data.length) return;
+    
+    const direction = sortConfig?.column === columnIndex && sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    setSortConfig({ column: columnIndex, direction });
+    setCurrentPage(1);
+  };
+
+  // Apply search filter and sorting
+  const filteredAndSortedData = React.useMemo(() => {
+    if (!workbookData?.data.length) return [];
+    
+    let processedData = [...workbookData.data];
+    
+    // Apply search filter (skip header row)
+    if (searchTerm) {
+      const headerRow = processedData[0] || [];
+      const filteredRows = processedData.slice(1).filter(row => 
+        row.some(cell => 
+          String(cell || '').toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+      processedData = [headerRow, ...filteredRows];
+    }
+    
+    // Apply sorting (skip header row)
+    if (sortConfig && processedData.length > 1) {
+      const headerRow = processedData[0];
+      const dataRows = processedData.slice(1).sort((a, b) => {
+        const aVal = String(a[sortConfig.column] || '');
+        const bVal = String(b[sortConfig.column] || '');
+        
+        // Try numeric comparison first
+        const aNum = parseFloat(aVal);
+        const bNum = parseFloat(bVal);
+        
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+          return sortConfig.direction === 'asc' ? aNum - bNum : bNum - aNum;
+        }
+        
+        // String comparison
+        return sortConfig.direction === 'asc' 
+          ? aVal.localeCompare(bVal)
+          : bVal.localeCompare(aVal);
+      });
+      
+      processedData = [headerRow, ...dataRows];
+    }
+    
+    return processedData;
+  }, [workbookData?.data, searchTerm, sortConfig]);
+
+  // Pagination
+  const totalRows = filteredAndSortedData.length - 1; // Exclude header
+  const totalPages = Math.ceil(totalRows / ROWS_PER_PAGE);
+  const startRow = (currentPage - 1) * ROWS_PER_PAGE + 1; // +1 to skip header
+  const endRow = Math.min(startRow + ROWS_PER_PAGE - 1, filteredAndSortedData.length - 1);
+  const currentPageData = filteredAndSortedData.length > 0 
+    ? [filteredAndSortedData[0], ...filteredAndSortedData.slice(startRow, endRow + 1)]
+    : [];
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh] p-8">
         <div className="text-center">
           <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-2 text-green-600" />
-          <p className="text-gray-600">Parsing CSV data...</p>
+          <p className="text-gray-600">Parsing spreadsheet...</p>
         </div>
       </div>
     );
@@ -177,7 +321,7 @@ const CSVTableRenderer = ({ fileUrl, fileName }: { fileUrl: string, fileName: st
           <div className="bg-red-200 rounded-full p-6 mb-4 inline-block">
             <FileText className="h-16 w-16 text-red-600" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">CSV Parse Error</h3>
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">Spreadsheet Parse Error</h3>
           <p className="text-gray-600 mb-4">{error}</p>
           <Button 
             onClick={() => window.open(fileUrl, '_blank')} 
@@ -192,135 +336,148 @@ const CSVTableRenderer = ({ fileUrl, fileName }: { fileUrl: string, fileName: st
     );
   }
 
-  return (
-    <div className="w-full border rounded overflow-hidden bg-white" style={{ minHeight: '400px', maxHeight: '600px' }}>
-      <div className="p-4 bg-gray-50 border-b">
-        <h4 className="font-medium text-gray-900">{fileName}</h4>
-        <p className="text-sm text-gray-600">{csvData.length} rows</p>
-      </div>
-      <div className="overflow-auto" style={{ maxHeight: '500px' }}>
-        <table className="w-full text-sm">
-          <thead className="bg-gray-100 sticky top-0">
-            {csvData.length > 0 && (
-              <tr>
-                {csvData[0].map((header, index) => (
-                  <th key={index} className="px-3 py-2 text-left font-medium text-gray-900 border-b">
-                    {header || `Column ${index + 1}`}
-                  </th>
-                ))}
-              </tr>
-            )}
-          </thead>
-          <tbody>
-            {csvData.slice(1, 101).map((row, rowIndex) => ( // Limit to 100 rows for performance
-              <tr key={rowIndex} className="border-b hover:bg-gray-50">
-                {row.map((cell, cellIndex) => (
-                  <td key={cellIndex} className="px-3 py-2 text-gray-700 border-r last:border-r-0">
-                    {cell}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {csvData.length > 101 && (
-          <div className="p-4 text-center text-gray-500 border-t">
-            Showing first 100 rows of {csvData.length - 1} total rows
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-
-// Spreadsheet Viewer Component
-const SpreadsheetViewer = ({ fileUrl, fileName }: { fileUrl: string, fileName: string }) => {
-  const [viewerType, setViewerType] = useState<'google' | 'csv-table' | 'fallback'>('google');
-  const [loading, setLoading] = useState(true);
-  
-  const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
-  const isCSV = fileName.toLowerCase().endsWith('.csv');
-  
-  const handleIframeLoad = () => {
-    setLoading(false);
-  };
-  
-  const handleIframeError = () => {
-    setLoading(false);
-    if (isCSV) {
-      setViewerType('csv-table');
-    } else {
-      setViewerType('fallback');
-    }
-  };
-
-  // For CSV files, try the table renderer first if Google viewer fails
-  if (viewerType === 'csv-table' && isCSV) {
-    return <CSVTableRenderer fileUrl={fileUrl} fileName={fileName} />;
-  }
-
-  if (viewerType === 'fallback') {
+  if (!workbookData || !currentPageData.length) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh] sm:min-h-[70vh] bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border-2 border-dashed border-gray-300">
-        <div className="text-center p-8">
-          <div className="bg-green-200 rounded-full p-6 mb-4 inline-block">
-            <FileText className="h-16 w-16 text-green-600" />
-          </div>
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">Spreadsheet Preview</h3>
-          <p className="text-gray-600 mb-4">This spreadsheet can be downloaded for full functionality</p>
-          <div className="flex flex-col sm:flex-row gap-2 justify-center">
-            <Button 
-              onClick={() => window.open(fileUrl, '_blank')} 
-              size="lg"
-              className="bg-green-600 hover:bg-green-700"
-            >
-              <Download className="h-5 w-5 mr-2" />
-              Download to View
-            </Button>
-            {isCSV && (
-              <Button 
-                onClick={() => setViewerType('csv-table')} 
-                size="lg"
-                variant="outline"
-              >
-                <FileText className="h-5 w-5 mr-2" />
-                Try Table View
-              </Button>
-            )}
-            <Button 
-              onClick={() => setViewerType('google')} 
-              size="lg"
-              variant="outline"
-            >
-              <RefreshCw className="h-5 w-5 mr-2" />
-              Try Viewer Again
-            </Button>
-          </div>
-        </div>
+      <div className="text-center p-8">
+        <p className="text-gray-500">No data found in spreadsheet</p>
       </div>
     );
   }
 
+  const maxColumns = Math.max(...currentPageData.map(row => row.length));
+
   return (
-    <div className="w-full h-96 border rounded overflow-hidden relative">
-      {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
-          <div className="text-center">
-            <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-2 text-green-600" />
-            <p className="text-gray-600">Loading spreadsheet...</p>
+    <div className="w-full border rounded overflow-hidden bg-white" style={{ minHeight: '400px', maxHeight: '600px' }}>
+      {/* Header with controls */}
+      <div className="p-4 bg-gray-50 border-b space-y-3">
+        <div className="flex justify-between items-start">
+          <div>
+            <h4 className="font-medium text-gray-900">{fileName}</h4>
+            <p className="text-sm text-gray-600">
+              {totalRows} rows • {maxColumns} columns
+              {workbookData.sheets.length > 1 && ` • Sheet: ${workbookData.currentSheet}`}
+            </p>
+          </div>
+          <Button 
+            onClick={() => window.open(fileUrl, '_blank')} 
+            size="sm"
+            variant="outline"
+          >
+            <Download className="h-4 w-4 mr-1" />
+            Download
+          </Button>
+        </div>
+
+        {/* Search and sheet controls */}
+        <div className="flex gap-2 flex-wrap">
+          <Input
+            placeholder="Search spreadsheet..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="flex-1 min-w-48"
+          />
+          
+          {workbookData.sheets.length > 1 && (
+            <select 
+              value={workbookData.currentSheet}
+              onChange={(e) => switchSheet(e.target.value)}
+              className="px-3 py-2 border rounded-md text-sm bg-white"
+            >
+              {workbookData.sheets.map(sheetName => (
+                <option key={sheetName} value={sheetName}>
+                  Sheet: {sheetName}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="overflow-auto" style={{ maxHeight: '450px' }}>
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100 sticky top-0">
+            {currentPageData.length > 0 && (
+              <tr>
+                {Array.from({ length: maxColumns }, (_, colIndex) => {
+                  const header = currentPageData[0]?.[colIndex] || `Column ${colIndex + 1}`;
+                  const isSorted = sortConfig?.column === colIndex;
+                  
+                  return (
+                    <th 
+                      key={colIndex} 
+                      className="px-3 py-2 text-left font-medium text-gray-900 border-b cursor-pointer hover:bg-gray-200"
+                      onClick={() => handleSort(colIndex)}
+                    >
+                      <div className="flex items-center gap-1">
+                        <span>{header}</span>
+                        {isSorted && (
+                          <span className="text-xs">
+                            {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </div>
+                    </th>
+                  );
+                })}
+              </tr>
+            )}
+          </thead>
+          <tbody>
+            {currentPageData.slice(1).map((row, rowIndex) => (
+              <tr key={rowIndex} className="border-b hover:bg-gray-50">
+                {Array.from({ length: maxColumns }, (_, colIndex) => {
+                  const cellValue = row[colIndex];
+                  const formattedValue = formatCellValue(cellValue);
+                  const isNumeric = !isNaN(parseFloat(String(cellValue))) && isFinite(parseFloat(String(cellValue)));
+                  
+                  return (
+                    <td 
+                      key={colIndex} 
+                      className={`px-3 py-2 text-gray-700 border-r last:border-r-0 ${isNumeric ? 'text-right font-mono' : ''}`}
+                    >
+                      {formattedValue}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="p-3 bg-gray-50 border-t flex items-center justify-between">
+          <div className="text-sm text-gray-600">
+            Showing {startRow} to {endRow} of {totalRows} rows
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </Button>
+            <span className="text-sm px-2">
+              {currentPage} of {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </Button>
           </div>
         </div>
       )}
-      <iframe
-        src={googleViewerUrl}
-        title={`Spreadsheet Viewer - ${fileName}`}
-        width="100%"
-        height="100%"
-        className="border-0"
-        style={{ minHeight: '400px' }}
-        onLoad={handleIframeLoad}
-        onError={handleIframeError}
-      />
     </div>
   );
 };
