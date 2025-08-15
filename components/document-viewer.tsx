@@ -98,7 +98,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
     if (document && isOpen) {
       loadDocument()
     }
-  }, [document, isOpen, loadDocument])
+  }, [document, isOpen])
 
   const loadDocument = useCallback(async () => {
     if (!document) return
