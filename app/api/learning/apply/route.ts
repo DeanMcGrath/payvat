@@ -17,7 +17,7 @@ async function applyLearning(request: NextRequest, user?: AuthUser) {
     logAudit('LEARNING_APPLICATION_STARTED', {
       userId: user?.id,
       operation: 'apply-learning',
-      result: 'STARTED'
+      result: 'SUCCESS'
     })
 
     const body: ApplyLearningRequest = await request.json()

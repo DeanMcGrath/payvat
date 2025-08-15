@@ -33,7 +33,7 @@ async function submitLearningFeedback(request: NextRequest, user?: AuthUser) {
     logAudit('LEARNING_FEEDBACK_SUBMITTED', {
       userId: user?.id,
       operation: 'learning-feedback',
-      result: 'STARTED'
+      result: 'SUCCESS'
     })
 
     const body: LearningFeedbackRequest = await request.json()

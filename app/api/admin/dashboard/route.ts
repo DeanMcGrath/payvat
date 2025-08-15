@@ -58,7 +58,7 @@ async function getDashboardStats(request: NextRequest, user?: AuthUser) {
     logAudit('ADMIN_DASHBOARD_ACCESS', {
       userId: user?.id,
       operation: 'admin-dashboard',
-      result: 'STARTED'
+      result: 'SUCCESS'
     })
 
     const dashboardStats: DashboardStats = {

@@ -54,7 +54,7 @@ async function healthCheck(request: NextRequest, user?: AuthUser) {
     logAudit('HEALTH_CHECK_STARTED', {
       userId: user?.id,
       operation: 'health-check',
-      result: 'STARTED'
+      result: 'SUCCESS'
     })
 
     const startTime = Date.now()
@@ -286,7 +286,7 @@ async function performRecovery(request: NextRequest, user?: AuthUser) {
       userId: user?.id,
       action,
       operation: 'system-recovery',
-      result: 'STARTED'
+      result: 'SUCCESS'
     })
 
     const results: any[] = []
