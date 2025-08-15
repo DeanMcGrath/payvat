@@ -247,7 +247,7 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
 
   const getFileIcon = (file: File) => {
     if (file.type.includes('pdf')) return <FileText className="h-6 w-6 text-red-500" />
-    if (file.type.includes('image')) return <Image className="h-6 w-6 text-blue-500" alt="" />
+    if (file.type.includes('image')) return <Image className="h-6 w-6 text-blue-500" />
     return <File className="h-6 w-6 text-gray-500" />
   }
 
