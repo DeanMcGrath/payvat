@@ -1009,7 +1009,7 @@ Find the total tax amount clearly labeled on the document using any of the above
     }
 
     // Convert to enhanced VAT data structure - pass all data for comprehensive hardcoded test
-    let enhancedData = convertToEnhancedVATDataWithAllSources(parsedData, category, '', aiResult)
+    let enhancedData = await convertToEnhancedVATDataWithAllSources(parsedData, category, '', aiResult)
     
     // 🧠 CRITICAL FIX: Apply learned patterns from user corrections for BRIANC-0008
     console.log('🧠 Applying learned patterns from user corrections...')
