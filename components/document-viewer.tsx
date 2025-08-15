@@ -1,9 +1,21 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Document, Page, pdfjs } from 'react-pdf'
-import 'react-pdf/dist/Page/AnnotationLayer.css'
-import 'react-pdf/dist/Page/TextLayer.css'
+import dynamic from 'next/dynamic'
+
+// Dynamically import react-pdf to avoid SSR issues
+const Document = dynamic(
+  () => import('react-pdf').then((mod) => mod.Document),
+  { ssr: false }
+)
+
+const Page = dynamic(
+  () => import('react-pdf').then((mod) => mod.Page),
+  { ssr: false }
+)
+
+// Import pdfjs configuration
+import { pdfjs } from 'react-pdf'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -34,9 +46,13 @@ import {
 } from 'lucide-react'
 import { toast } from "sonner"
 
-// Configure PDF.js worker
+// Configure PDF.js worker and styles
 if (typeof window !== 'undefined') {
   pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
+  
+  // Import CSS styles for react-pdf
+  import('react-pdf/dist/Page/AnnotationLayer.css')
+  import('react-pdf/dist/Page/TextLayer.css')
 }
 
 interface DocumentData {
@@ -85,6 +101,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
   const [numPages, setNumPages] = useState<number | null>(null)
   const [pageNumber, setPageNumber] = useState(1)
   const [pdfError, setPdfError] = useState<string | null>(null)
+  const [isClient, setIsClient] = useState(false)
   
   // Correction state
   const [correctedSalesVAT, setCorrectedSalesVAT] = useState<string[]>([])
@@ -112,6 +129,11 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
     setZoom(100)
     setRotation(0)
   }, [document, extractedVAT])
+
+  // Set client-side flag
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   // Load document for viewing
   useEffect(() => {
@@ -361,6 +383,11 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                     Download PDF
                   </Button>
                 </div>
+              </div>
+            ) : !isClient ? (
+              <div className="flex items-center justify-center p-8">
+                <RefreshCw className="h-8 w-8 animate-spin text-teal-600 mr-3" />
+                <span className="text-gray-600">Loading PDF viewer...</span>
               </div>
             ) : (
               <div 
