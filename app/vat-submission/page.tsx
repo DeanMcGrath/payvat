@@ -689,7 +689,7 @@ export default function VATSubmissionPage() {
             <Card className="card-modern ">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                  <Upload className="h-5 w-5 mr-2 text-teal-600" />
+                  <FileText className="h-5 w-5 mr-2 text-teal-600" />
                   Supporting Documents
                 </CardTitle>
               </CardHeader>
@@ -863,7 +863,7 @@ export default function VATSubmissionPage() {
                                             <div className="flex items-center text-xs">
                                               <div className="flex items-center mr-2">
                                                 {(document as any).processingInfo.qualityScore >= 80 ? (
-                                                  <Shield className="h-3 w-3 text-green-600 mr-1" />
+                                                  <CheckCircle className="h-3 w-3 text-green-600 mr-1" />
                                                 ) : (document as any).processingInfo.qualityScore >= 60 ? (
                                                   <AlertCircle className="h-3 w-3 text-yellow-600 mr-1" />
                                                 ) : (
