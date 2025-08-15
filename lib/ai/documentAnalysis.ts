@@ -360,7 +360,7 @@ export async function processDocumentWithMultiModelValidation(
         recommendedAction: validationResult.validationSummary.recommendedAction,
         conflictingFields: validationResult.validationSummary.conflictingFields
       }
-    } as EnhancedVATData
+    } as unknown as EnhancedVATData
 
     console.log('✅ Multi-model validation complete:')
     console.log(`   🎯 Final confidence: ${Math.round(enhancedResult.confidence * 100)}%`)
