@@ -46,13 +46,9 @@ import {
 } from 'lucide-react'
 import { toast } from "sonner"
 
-// Configure PDF.js worker and styles
+// Configure PDF.js worker
 if (typeof window !== 'undefined') {
   pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
-  
-  // Import CSS styles for react-pdf
-  import('react-pdf/dist/Page/AnnotationLayer.css')
-  import('react-pdf/dist/Page/TextLayer.css')
 }
 
 interface DocumentData {
