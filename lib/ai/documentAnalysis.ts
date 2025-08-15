@@ -373,7 +373,8 @@ export async function processDocumentWithMultiModelValidation(
     console.error('❌ Multi-model validation failed, falling back to single AI processing:', error)
     
     // Fallback to standard AI processing
-    return await processDocumentWithAI(fileData, mimeType, fileName, category, userId)
+    const fallbackResult = await processDocumentWithAI(fileData, mimeType, fileName, category, userId)
+    return fallbackResult.extractedData || ({} as EnhancedVATData)
   }
 }
 
