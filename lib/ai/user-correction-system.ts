@@ -3,9 +3,8 @@
  * Allows users to correct VAT extractions and trains AI to improve accuracy
  */
 
-// Lazy import Prisma to avoid build-time issues
-// const { PrismaClient } = require('@prisma/client')
-// const prisma = new PrismaClient()
+// Import Prisma client
+import { prisma } from '@/lib/prisma'
 
 // User correction data structures
 export interface VATCorrection {
@@ -275,37 +274,198 @@ export class UserCorrectionSystem {
   // Private helper methods
 
   private async saveCorrection(correction: VATCorrection): Promise<void> {
-    // In production, save to database
     console.log(`💾 Saving correction ${correction.id} to database`)
     
-    // For now, store in memory/file system
     try {
-      const fs = require('fs').promises
-      const path = `/tmp/corrections/${correction.id}.json`
-      await fs.mkdir('/tmp/corrections', { recursive: true })
-      await fs.writeFile(path, JSON.stringify(correction, null, 2))
+      // Save to database using LearningFeedback table
+      await prisma.learningFeedback.create({
+        data: {
+          documentId: correction.documentId,
+          userId: correction.userId === 'anonymous' ? 'anonymous' : correction.userId,
+          originalExtraction: {
+            salesVAT: correction.originalExtraction.salesVAT,
+            purchaseVAT: correction.originalExtraction.purchaseVAT,
+            confidence: correction.originalExtraction.confidence,
+            extractionMethod: correction.originalExtraction.extractionMethod
+          },
+          correctedExtraction: {
+            salesVAT: correction.correctedExtraction.salesVAT,
+            purchaseVAT: correction.correctedExtraction.purchaseVAT,
+            confidence: correction.correctedExtraction.confidence,
+            notes: correction.correctedExtraction.notes
+          },
+          feedback: this.mapCorrectionReasonToFeedback(correction.correctionReason),
+          corrections: [{
+            field: 'vatData.amounts',
+            originalValue: {
+              salesVAT: correction.originalExtraction.salesVAT,
+              purchaseVAT: correction.originalExtraction.purchaseVAT
+            },
+            correctedValue: {
+              salesVAT: correction.correctedExtraction.salesVAT,
+              purchaseVAT: correction.correctedExtraction.purchaseVAT
+            },
+            confidence: correction.correctedExtraction.confidence
+          }],
+          confidenceScore: correction.correctedExtraction.confidence,
+          notes: correction.userFeedback,
+          wasProcessed: false,
+          improvementMade: false
+        }
+      })
+
+      // Also create an audit log
+      await prisma.auditLog.create({
+        data: {
+          userId: correction.userId,
+          action: 'VAT_CORRECTION_SUBMITTED',
+          entityType: 'DOCUMENT',
+          entityId: correction.documentId,
+          ipAddress: 'system',
+          userAgent: 'user-correction-system',
+          metadata: {
+            correctionId: correction.id,
+            correctionReason: correction.correctionReason,
+            documentType: correction.documentType,
+            fileName: correction.fileName,
+            originalAmounts: {
+              salesVAT: correction.originalExtraction.salesVAT,
+              purchaseVAT: correction.originalExtraction.purchaseVAT
+            },
+            correctedAmounts: {
+              salesVAT: correction.correctedExtraction.salesVAT,
+              purchaseVAT: correction.correctedExtraction.purchaseVAT
+            },
+            timestamp: correction.timestamp.toISOString()
+          }
+        }
+      })
+
+      console.log(`✅ Correction ${correction.id} saved to database successfully`)
     } catch (error) {
-      console.error('Error saving correction:', error)
+      console.error('Error saving correction to database:', error)
+      // Fallback to file system for reliability
+      try {
+        const fs = require('fs').promises
+        const path = `/tmp/corrections/${correction.id}.json`
+        await fs.mkdir('/tmp/corrections', { recursive: true })
+        await fs.writeFile(path, JSON.stringify(correction, null, 2))
+        console.log(`📁 Correction ${correction.id} saved to fallback file system`)
+      } catch (fileError) {
+        console.error('Error saving correction to file system:', fileError)
+      }
+    }
+  }
+
+  private mapCorrectionReasonToFeedback(reason: string): 'CORRECT' | 'INCORRECT' | 'PARTIALLY_CORRECT' {
+    switch (reason) {
+      case 'WRONG_AMOUNT':
+      case 'MISSING_VAT':
+        return 'INCORRECT'
+      case 'WRONG_CATEGORY':
+      case 'DUPLICATE_VAT':
+        return 'PARTIALLY_CORRECT'
+      default:
+        return 'PARTIALLY_CORRECT'
     }
   }
 
   private async loadStoredCorrections(): Promise<VATCorrection[]> {
-    // In production, load from database
     try {
-      const fs = require('fs').promises
-      const files = await fs.readdir('/tmp/corrections').catch(() => [])
-      const corrections: VATCorrection[] = []
-      
-      for (const file of files) {
-        if (file.endsWith('.json')) {
-          const data = await fs.readFile(`/tmp/corrections/${file}`, 'utf-8')
-          corrections.push(JSON.parse(data))
+      // Load from database
+      const feedbacks = await prisma.learningFeedback.findMany({
+        where: {
+          corrections: {
+            path: '[0].field',
+            equals: 'vatData.amounts'
+          }
+        },
+        include: {
+          document: {
+            select: {
+              originalName: true,
+              category: true,
+              scanResult: true
+            }
+          },
+          user: {
+            select: {
+              id: true
+            }
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
         }
-      }
-      
+      })
+
+      // Convert database records to VATCorrection format
+      const corrections: VATCorrection[] = feedbacks.map(feedback => {
+        const originalExtraction = feedback.originalExtraction as any
+        const correctedExtraction = feedback.correctedExtraction as any
+        
+        return {
+          id: `db_${feedback.id}`,
+          documentId: feedback.documentId,
+          originalExtraction: {
+            salesVAT: originalExtraction.salesVAT || [],
+            purchaseVAT: originalExtraction.purchaseVAT || [],
+            confidence: originalExtraction.confidence || 0.5,
+            extractionMethod: originalExtraction.extractionMethod || 'AI_VISION'
+          },
+          correctedExtraction: {
+            salesVAT: correctedExtraction.salesVAT || [],
+            purchaseVAT: correctedExtraction.purchaseVAT || [],
+            confidence: correctedExtraction.confidence || 1.0,
+            notes: correctedExtraction.notes
+          },
+          correctionReason: this.mapFeedbackToCorrectionReason(feedback.feedback),
+          userFeedback: feedback.notes || 'Database correction',
+          documentText: feedback.document?.scanResult,
+          documentType: feedback.document?.category || 'UNKNOWN',
+          fileName: feedback.document?.originalName || 'Unknown',
+          userId: feedback.user?.id || feedback.userId,
+          timestamp: feedback.createdAt,
+          validated: feedback.wasProcessed,
+          usedForTraining: feedback.improvementMade
+        }
+      })
+
+      console.log(`📊 Loaded ${corrections.length} corrections from database`)
       return corrections
     } catch (error) {
-      return []
+      console.error('Error loading corrections from database:', error)
+      
+      // Fallback to file system
+      try {
+        const fs = require('fs').promises
+        const files = await fs.readdir('/tmp/corrections').catch(() => [])
+        const corrections: VATCorrection[] = []
+        
+        for (const file of files) {
+          if (file.endsWith('.json')) {
+            const data = await fs.readFile(`/tmp/corrections/${file}`, 'utf-8')
+            corrections.push(JSON.parse(data))
+          }
+        }
+        
+        console.log(`📁 Loaded ${corrections.length} corrections from file system fallback`)
+        return corrections
+      } catch (fileError) {
+        console.error('Error loading corrections from file system:', fileError)
+        return []
+      }
+    }
+  }
+
+  private mapFeedbackToCorrectionReason(feedback: string): 'WRONG_AMOUNT' | 'WRONG_CATEGORY' | 'MISSING_VAT' | 'DUPLICATE_VAT' | 'OTHER' {
+    switch (feedback) {
+      case 'INCORRECT':
+        return 'WRONG_AMOUNT'
+      case 'PARTIALLY_CORRECT':
+        return 'WRONG_CATEGORY'
+      default:
+        return 'OTHER'
     }
   }
 

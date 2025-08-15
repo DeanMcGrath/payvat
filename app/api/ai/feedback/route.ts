@@ -21,6 +21,15 @@ interface FeedbackRequest {
   userNotes?: string
   confidenceRating?: number // 1-5 scale
   processingTime?: number
+  // Enhanced VAT correction support
+  vatCorrection?: {
+    originalSalesVAT: number[]
+    originalPurchaseVAT: number[]
+    correctedSalesVAT: number[]
+    correctedPurchaseVAT: number[]
+    correctionReason: 'WRONG_AMOUNT' | 'WRONG_CATEGORY' | 'MISSING_VAT' | 'DUPLICATE_VAT' | 'OTHER'
+    extractionMethod?: string
+  }
 }
 
 /**
@@ -38,8 +47,20 @@ async function collectFeedback(request: NextRequest, user?: AuthUser) {
       feedback: body.feedback,
       correctionsCount: body.specificCorrections?.length || 0,
       hasNotes: !!body.userNotes,
-      confidenceRating: body.confidenceRating
+      confidenceRating: body.confidenceRating,
+      hasVATCorrection: !!body.vatCorrection
     })
+    
+    // Enhanced logging for VAT corrections
+    if (body.vatCorrection) {
+      console.log('💰 VAT Correction details:', {
+        originalSalesVAT: body.vatCorrection.originalSalesVAT,
+        correctedSalesVAT: body.vatCorrection.correctedSalesVAT,
+        originalPurchaseVAT: body.vatCorrection.originalPurchaseVAT,
+        correctedPurchaseVAT: body.vatCorrection.correctedPurchaseVAT,
+        reason: body.vatCorrection.correctionReason
+      })
+    }
     
     // Validate required fields
     if (!body.documentId || !body.feedback) {
@@ -82,7 +103,7 @@ async function collectFeedback(request: NextRequest, user?: AuthUser) {
       )
     }
     
-    // Store feedback in database
+    // Store feedback in database with enhanced VAT correction data
     const feedbackRecord = await prisma.learningFeedback.create({
       data: {
         documentId: body.documentId,
@@ -90,7 +111,21 @@ async function collectFeedback(request: NextRequest, user?: AuthUser) {
         originalExtraction: body.originalExtraction,
         correctedExtraction: body.correctedExtraction,
         feedback: body.feedback,
-        corrections: body.specificCorrections || [],
+        corrections: [
+          ...(body.specificCorrections || []),
+          // Add VAT-specific corrections if provided
+          ...(body.vatCorrection ? [{
+            field: 'vatData.salesVAT',
+            originalValue: body.vatCorrection.originalSalesVAT,
+            correctedValue: body.vatCorrection.correctedSalesVAT,
+            confidence: body.confidenceRating
+          }, {
+            field: 'vatData.purchaseVAT',
+            originalValue: body.vatCorrection.originalPurchaseVAT,
+            correctedValue: body.vatCorrection.correctedPurchaseVAT,
+            confidence: body.confidenceRating
+          }] : [])
+        ],
         confidenceScore: body.confidenceRating,
         processingTime: body.processingTime,
         notes: body.userNotes
@@ -98,6 +133,41 @@ async function collectFeedback(request: NextRequest, user?: AuthUser) {
     })
     
     console.log(`✅ Feedback stored with ID: ${feedbackRecord.id}`)
+    
+    // Process VAT corrections through user correction system if provided
+    if (body.vatCorrection) {
+      try {
+        console.log('💰 Processing VAT correction through correction system...')
+        const { userCorrectionSystem } = await import('@/lib/ai/user-correction-system')
+        
+        await userCorrectionSystem.submitCorrection({
+          documentId: body.documentId,
+          fileName: document.originalName,
+          documentType: document.category,
+          userId: user?.id || 'anonymous',
+          originalExtraction: {
+            salesVAT: body.vatCorrection.originalSalesVAT,
+            purchaseVAT: body.vatCorrection.originalPurchaseVAT,
+            confidence: body.confidenceRating || 0.5,
+            extractionMethod: body.vatCorrection.extractionMethod || 'AI_VISION'
+          },
+          correctedExtraction: {
+            salesVAT: body.vatCorrection.correctedSalesVAT,
+            purchaseVAT: body.vatCorrection.correctedPurchaseVAT,
+            confidence: 1.0, // User corrections are always high confidence
+            notes: body.userNotes
+          },
+          correctionReason: body.vatCorrection.correctionReason,
+          userFeedback: body.userNotes || 'User VAT correction',
+          documentText: document.scanResult || undefined
+        })
+        
+        console.log('✅ VAT correction processed successfully')
+      } catch (correctionError) {
+        console.error('Error processing VAT correction:', correctionError)
+        // Don't fail the whole request if VAT correction processing fails
+      }
+    }
     
     // Process feedback through learning system
     try {

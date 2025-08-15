@@ -7,10 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Upload, Calculator, FileText, CheckCircle, BadgeCheck, RefreshCw, X, AlertCircle, Loader2, Shield } from 'lucide-react'
+import { ArrowLeft, Upload, Calculator, FileText, CheckCircle, BadgeCheck, RefreshCw, X, AlertCircle, Loader2, Shield, Eye, Edit3 } from 'lucide-react'
 import FileUpload from "@/components/file-upload"
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
+import DocumentViewer from "@/components/document-viewer"
+import VATCorrectionPanel from "@/components/vat-correction-panel"
+import BatchUpload from "@/components/batch-upload"
+import VATValidation from "@/components/vat-validation"
 import { toast } from "sonner"
 import { logger } from "@/lib/logger"
 import { useVATData } from "@/contexts/vat-data-context"
@@ -39,6 +43,15 @@ export default function VATSubmissionPage() {
   const [user, setUser] = useState<UserProfile | null>(null)
   const [userLoading, setUserLoading] = useState(true)
   const [userError, setUserError] = useState<string | null>(null)
+  
+  // Document viewer and correction state
+  const [selectedDocument, setSelectedDocument] = useState<any | null>(null)
+  const [documentViewerOpen, setDocumentViewerOpen] = useState(false)
+  const [corrections, setCorrections] = useState<Map<string, any>>(new Map())
+  
+  // Phase 3 features state
+  const [showBatchUpload, setShowBatchUpload] = useState(false)
+  const [showValidation, setShowValidation] = useState(true)
 
   // Use period data from context or fallback
   // Calculate current period if none selected
@@ -315,6 +328,191 @@ export default function VATSubmissionPage() {
     }
   }
 
+  // Document viewer handlers
+  const handleViewDocument = (document: any) => {
+    setSelectedDocument(document)
+    setDocumentViewerOpen(true)
+  }
+
+  const handleCloseDocumentViewer = () => {
+    setDocumentViewerOpen(false)
+    setSelectedDocument(null)
+  }
+
+  // VAT correction handlers
+  const handleVATCorrection = async (correctionData: any) => {
+    try {
+      console.log('🔧 Submitting VAT correction:', correctionData)
+      
+      // Determine correction reason based on feedback
+      let correctionReason = 'OTHER'
+      if (correctionData.feedback === 'INCORRECT') {
+        correctionReason = 'WRONG_AMOUNT'
+      } else if (correctionData.feedback === 'PARTIALLY_CORRECT') {
+        correctionReason = 'WRONG_AMOUNT'
+      }
+
+      // Submit feedback with VAT correction data
+      const response = await fetch('/api/ai/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          documentId: selectedDocument?.id,
+          originalExtraction: {
+            salesVAT: extractedVATData?.salesDocuments?.find((doc: any) => doc.id === selectedDocument?.id)?.extractedAmounts || [],
+            purchaseVAT: extractedVATData?.purchaseDocuments?.find((doc: any) => doc.id === selectedDocument?.id)?.extractedAmounts || []
+          },
+          correctedExtraction: {
+            salesVAT: correctionData.salesVAT,
+            purchaseVAT: correctionData.purchaseVAT
+          },
+          feedback: correctionData.feedback,
+          userNotes: correctionData.notes,
+          vatCorrection: {
+            originalSalesVAT: extractedVATData?.salesDocuments?.find((doc: any) => doc.id === selectedDocument?.id)?.extractedAmounts || [],
+            originalPurchaseVAT: extractedVATData?.purchaseDocuments?.find((doc: any) => doc.id === selectedDocument?.id)?.extractedAmounts || [],
+            correctedSalesVAT: correctionData.salesVAT,
+            correctedPurchaseVAT: correctionData.purchaseVAT,
+            correctionReason: correctionReason,
+            extractionMethod: 'AI_VISION'
+          }
+        })
+      })
+
+      if (response.ok) {
+        // Store correction locally
+        const newCorrections = new Map(corrections)
+        newCorrections.set(selectedDocument?.id, correctionData)
+        setCorrections(newCorrections)
+
+        // Refresh extracted VAT data
+        await loadExtractedVATData()
+        
+        toast.success('VAT correction saved successfully!')
+      } else {
+        const error = await response.json()
+        toast.error(`Failed to save correction: ${error.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error('Error submitting VAT correction:', error)
+      toast.error('Failed to submit VAT correction')
+    }
+  }
+
+  const handleCorrectionPanelCorrection = async (correctionData: any) => {
+    try {
+      console.log('🔧 Panel correction submitted:', correctionData)
+      
+      // Submit feedback for the correction
+      const response = await fetch('/api/ai/feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          documentId: correctionData.documentId,
+          originalExtraction: {
+            salesVAT: correctionData.originalSalesVAT,
+            purchaseVAT: correctionData.originalPurchaseVAT
+          },
+          correctedExtraction: {
+            salesVAT: correctionData.correctedSalesVAT,
+            purchaseVAT: correctionData.correctedPurchaseVAT
+          },
+          feedback: correctionData.feedback,
+          userNotes: correctionData.notes,
+          vatCorrection: {
+            originalSalesVAT: correctionData.originalSalesVAT,
+            originalPurchaseVAT: correctionData.originalPurchaseVAT,
+            correctedSalesVAT: correctionData.correctedSalesVAT,
+            correctedPurchaseVAT: correctionData.correctedPurchaseVAT,
+            correctionReason: 'WRONG_AMOUNT',
+            extractionMethod: 'AI_VISION'
+          }
+        })
+      })
+
+      if (response.ok) {
+        // Store correction locally
+        const newCorrections = new Map(corrections)
+        newCorrections.set(correctionData.documentId, correctionData)
+        setCorrections(newCorrections)
+
+        // Refresh extracted VAT data
+        await loadExtractedVATData()
+        
+        toast.success('VAT correction processed successfully!')
+      } else {
+        const error = await response.json()
+        toast.error(`Failed to process correction: ${error.error || 'Unknown error'}`)
+      }
+    } catch (error) {
+      console.error('Error processing correction:', error)
+      toast.error('Failed to process VAT correction')
+    }
+  }
+
+  // Helper function to get VAT extraction data for a document
+  const getDocumentVATExtraction = (documentId: string) => {
+    const salesDoc = extractedVATData?.salesDocuments?.find((doc: any) => doc.id === documentId)
+    const purchaseDoc = extractedVATData?.purchaseDocuments?.find((doc: any) => doc.id === documentId)
+    
+    if (salesDoc) {
+      return {
+        salesVAT: salesDoc.extractedAmounts,
+        purchaseVAT: [],
+        confidence: salesDoc.confidence,
+        totalSalesVAT: salesDoc.extractedAmounts.reduce((sum: number, amount: number) => sum + amount, 0),
+        totalPurchaseVAT: 0
+      }
+    } else if (purchaseDoc) {
+      return {
+        salesVAT: [],
+        purchaseVAT: purchaseDoc.extractedAmounts,
+        confidence: purchaseDoc.confidence,
+        totalSalesVAT: 0,
+        totalPurchaseVAT: purchaseDoc.extractedAmounts.reduce((sum: number, amount: number) => sum + amount, 0)
+      }
+    }
+    
+    return null
+  }
+
+  // Phase 3 feature handlers
+  const handleBatchUploadComplete = async (documents: any[]) => {
+    console.log('🎉 Batch upload completed:', documents)
+    toast.success(`Successfully uploaded ${documents.length} documents`)
+    
+    // Refresh document list and extracted VAT data
+    await loadDocuments()
+    await loadExtractedVATData()
+    
+    setShowBatchUpload(false)
+  }
+
+  const handleValidationIssueClick = (issue: any) => {
+    console.log('⚠️ Validation issue clicked:', issue)
+    
+    if (issue.documentId) {
+      // Find and open the document with the issue
+      const document = uploadedDocuments.find(doc => doc.id === issue.documentId)
+      if (document) {
+        handleViewDocument(document)
+      }
+    }
+    
+    toast.info(`Issue: ${issue.title}`)
+  }
+
+  const handleAutoFixIssue = (issueId: string) => {
+    console.log('🔧 Auto-fixing issue:', issueId)
+    toast.info('Auto-fix functionality coming soon')
+  }
+
   if (userLoading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -488,6 +686,69 @@ export default function VATSubmissionPage() {
                 </CardContent>
               </Card>
             )}
+
+            {/* Feature Controls Panel */}
+            <Card className="card-modern border-blue-200 bg-blue-50/50">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg font-semibold text-blue-900 flex items-center">
+                  <Calculator className="h-5 w-5 mr-2 text-blue-600" />
+                  VAT Tools & Features
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Button
+                    onClick={() => setShowBatchUpload(!showBatchUpload)}
+                    variant={showBatchUpload ? "default" : "outline"}
+                    className="flex items-center gap-2"
+                  >
+                    <Upload className="h-4 w-4" />
+                    {showBatchUpload ? 'Hide' : 'Show'} Batch Upload
+                  </Button>
+
+                  <Button
+                    onClick={() => setShowValidation(!showValidation)}
+                    variant={showValidation ? "default" : "outline"}
+                    className="flex items-center gap-2"
+                    disabled={!extractedVATData || extractedVATData.processedDocuments === 0}
+                  >
+                    <Shield className="h-4 w-4" />
+                    {showValidation ? 'Hide' : 'Show'} Validation
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Batch Upload Panel */}
+            {showBatchUpload && (
+              <BatchUpload
+                onUploadComplete={handleBatchUploadComplete}
+                onUploadProgress={(files) => console.log('📊 Upload progress:', files)}
+              />
+            )}
+
+            {/* VAT Validation Panel */}
+            {showValidation && extractedVATData && extractedVATData.processedDocuments > 0 && (
+              <VATValidation
+                extractedVAT={extractedVATData}
+                period={{
+                  year: finalSelectedYear,
+                  period: finalSelectedPeriod
+                }}
+                onIssueClick={handleValidationIssueClick}
+                onAutoFix={handleAutoFixIssue}
+              />
+            )}
+
+            {/* VAT Correction Panel */}
+            {extractedVATData && extractedVATData.processedDocuments > 0 && (
+              <VATCorrectionPanel
+                extractedVAT={extractedVATData}
+                onCorrection={handleCorrectionPanelCorrection}
+                onRecalculate={calculateNetVAT}
+              />
+            )}
+
 
             <Card className="card-modern ">
               <CardHeader>
@@ -813,14 +1074,26 @@ export default function VATSubmissionPage() {
                                   </div>
                                 </div>
                                 
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => removeDocument(document.id)}
-                                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                                >
-                                  <X className="h-4 w-4" />
-                                </Button>
+                                <div className="flex gap-1">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleViewDocument(document)}
+                                    className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
+                                    title="Review Document"
+                                  >
+                                    <Eye className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => removeDocument(document.id)}
+                                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    title="Remove Document"
+                                  >
+                                    <X className="h-4 w-4" />
+                                  </Button>
+                                </div>
                               </div>
                             );
                           })}
@@ -911,14 +1184,26 @@ export default function VATSubmissionPage() {
                                   </div>
                                 </div>
                                 
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => removeDocument(document.id)}
-                                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                                >
-                                  <X className="h-4 w-4" />
-                                </Button>
+                                <div className="flex gap-1">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleViewDocument(document)}
+                                    className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
+                                    title="Review Document"
+                                  >
+                                    <Eye className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => removeDocument(document.id)}
+                                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    title="Remove Document"
+                                  >
+                                    <X className="h-4 w-4" />
+                                  </Button>
+                                </div>
                               </div>
                             );
                           })}
@@ -1079,6 +1364,15 @@ export default function VATSubmissionPage() {
           </div>
         </div>
       </div>
+
+      {/* Document Viewer Modal */}
+      <DocumentViewer
+        isOpen={documentViewerOpen}
+        onClose={handleCloseDocumentViewer}
+        document={selectedDocument}
+        extractedVAT={selectedDocument ? getDocumentVATExtraction(selectedDocument.id) : null}
+        onVATCorrection={handleVATCorrection}
+      />
 
       {/* Footer */}
       <Footer />
