@@ -99,9 +99,10 @@ export const getCSPHeaders = () => {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: https: blob:",
+    "media-src 'self' blob: https://*.public.blob.vercel-storage.com",
     // More permissive connect-src for Next.js and development
     "connect-src 'self' https: wss: https://api.stripe.com https://api.openai.com",
-    "frame-src 'none'",
+    "frame-src 'self' blob:",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'"
