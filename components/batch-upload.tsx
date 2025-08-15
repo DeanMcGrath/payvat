@@ -94,7 +94,7 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
     } finally {
       setIsUploading(false)
     }
-  }, [files, isUploading, maxConcurrent, onUploadComplete, uploadSingleFile])
+  }, [files, isUploading, maxConcurrent, onUploadComplete])
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles: BatchFile[] = acceptedFiles.map(file => ({
