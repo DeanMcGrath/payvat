@@ -732,8 +732,8 @@ export default function VATSubmissionPage() {
               <VATValidation
                 extractedVAT={extractedVATData}
                 period={{
-                  year: finalSelectedYear,
-                  period: finalSelectedPeriod
+                  year: selectedYear ? parseInt(selectedYear) : currentYear,
+                  period: selectedPeriod || defaultPeriod
                 }}
                 onIssueClick={handleValidationIssueClick}
                 onAutoFix={handleAutoFixIssue}
