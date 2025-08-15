@@ -421,7 +421,7 @@ export class UserCorrectionSystem {
           },
           correctionReason: this.mapFeedbackToCorrectionReason(feedback.feedback),
           userFeedback: feedback.notes || 'Database correction',
-          documentText: feedback.document?.scanResult,
+          documentText: feedback.document?.scanResult || undefined,
           documentType: feedback.document?.category || 'UNKNOWN',
           fileName: feedback.document?.originalName || 'Unknown',
           userId: feedback.user?.id || feedback.userId,
