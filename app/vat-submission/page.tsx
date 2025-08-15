@@ -563,7 +563,7 @@ export default function VATSubmissionPage() {
                     <div className="bg-white p-3 rounded-lg border border-teal-200">
                       <div className="text-sm text-gray-600">Confidence</div>
                       <div className="text-lg font-semibold text-teal-600">
-                        {extractedVATData.averageConfidence.toFixed(0)}%
+                        {(extractedVATData.averageConfidence * 100).toFixed(0)}%
                       </div>
                       <div className="text-xs text-gray-500">
                         {extractedVATData.processedDocuments} processed

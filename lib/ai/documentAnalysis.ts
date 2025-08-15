@@ -8,7 +8,10 @@ import { DOCUMENT_PROMPTS, formatPrompt } from './prompts'
 import { quickConnectivityTest, testDocumentProcessingDiagnostics, compareTextExtractionWithAIVision } from './diagnostics'
 import { extractTextFromExcel } from '../documentProcessor'
 import { rateLimitManager } from './rate-limit-manager'
+import { confidenceLearning } from './confidence-learning'
+import { QualityScorer } from './enhanced-quality-scoring'
 import { userCorrectionSystem } from './user-correction-system'
+import { MultiModelValidator } from './multi-model-validation'
 
 // Enhanced VAT data structure
 export interface EnhancedVATData {
@@ -43,6 +46,15 @@ export interface EnhancedVATData {
   }
   validationFlags: string[]
   extractedText: string
+  
+  // Multi-model validation metadata (optional)
+  multiModelValidation?: {
+    consensusReached: boolean
+    agreementScore: number
+    methodsUsed: string[]
+    recommendedAction: string
+    conflictingFields: string[]
+  }
   
   // Legacy compatibility fields
   salesVAT: number[]
@@ -314,6 +326,54 @@ export async function processDocumentWithAI(
       error: error instanceof Error ? error.message : 'Unknown critical error',
       aiProcessed: false
     }
+  }
+}
+
+/**
+ * Process document using multi-model validation for enhanced accuracy and confidence
+ * Use this for high-value documents or when maximum accuracy is required
+ */
+export async function processDocumentWithMultiModelValidation(
+  fileData: string,
+  mimeType: string,
+  fileName: string,
+  category: string,
+  userId?: string
+): Promise<EnhancedVATData> {
+  console.log('🔍 Processing with multi-model validation:', fileName)
+  
+  try {
+    // Use multi-model validation to get the most accurate result
+    const validationResult = await MultiModelValidator.validateWithMultipleMethods(
+      fileData, mimeType, fileName, category
+    )
+
+    // Enhance the final result with validation metadata
+    const enhancedResult: EnhancedVATData = {
+      ...validationResult.finalResult,
+      confidence: validationResult.confidence,
+      // Add multi-model validation metadata
+      multiModelValidation: {
+        consensusReached: validationResult.consensusReached,
+        agreementScore: validationResult.agreementScore,
+        methodsUsed: validationResult.methodResults.map(r => r.method),
+        recommendedAction: validationResult.validationSummary.recommendedAction,
+        conflictingFields: validationResult.validationSummary.conflictingFields
+      }
+    }
+
+    console.log('✅ Multi-model validation complete:')
+    console.log(`   🎯 Final confidence: ${Math.round(enhancedResult.confidence * 100)}%`)
+    console.log(`   🤝 Consensus reached: ${validationResult.consensusReached}`)
+    console.log(`   📊 Methods used: ${validationResult.methodResults.length}`)
+
+    return enhancedResult
+
+  } catch (error) {
+    console.error('❌ Multi-model validation failed, falling back to single AI processing:', error)
+    
+    // Fallback to standard AI processing
+    return await processDocumentWithAI(fileData, mimeType, fileName, category, userId)
   }
 }
 
@@ -1069,7 +1129,11 @@ function analyzeDocumentTypeForAI(text: string): {
     businessType = 'FINANCIAL_SERVICES'
     // Lease invoices are typically purchases (you're buying a service)
     suggestedCategory = 'PURCHASES'
-    confidence = 0.8
+    
+    // Calculate confidence based on pattern strength
+    const matchCount = leasePatterns.filter(pattern => pattern.test(normalizedText)).length +
+                      financialServicePatterns.filter(pattern => pattern.test(normalizedText)).length
+    confidence = 0.6 + Math.min(matchCount * 0.1, 0.3) // Base 60% + up to 30% based on matches
   }
   
   // Additional business type detection
@@ -1160,7 +1224,7 @@ function shouldExcludeAmount(amount: number, text: string): boolean {
 /**
  * Convert AI response to enhanced VAT data structure with smart categorization and all data sources
  */
-function convertToEnhancedVATDataWithAllSources(aiData: any, category: string, extractedPDFText?: string, aiResponse?: string): EnhancedVATData {
+async function convertToEnhancedVATDataWithAllSources(aiData: any, category: string, extractedPDFText?: string, aiResponse?: string): Promise<EnhancedVATData> {
   const salesVAT: number[] = []
   const purchaseVAT: number[] = []
   
@@ -1168,13 +1232,13 @@ function convertToEnhancedVATDataWithAllSources(aiData: any, category: string, e
   extractRawTextForDebugging(aiData.extractedText || '', extractedPDFText, aiResponse)
   
   // Continue with normal VAT data processing
-  return convertToEnhancedVATData(aiData, category)
+  return await convertToEnhancedVATData(aiData, category)
 }
 
 /**
  * Convert AI response to enhanced VAT data structure with smart categorization (original function)
  */
-function convertToEnhancedVATData(aiData: any, category: string): EnhancedVATData {
+async function convertToEnhancedVATData(aiData: any, category: string): Promise<EnhancedVATData> {
   const salesVAT: number[] = []
   const purchaseVAT: number[] = []
   
@@ -1380,63 +1444,90 @@ function convertToEnhancedVATData(aiData: any, category: string): EnhancedVATDat
     purchaseVAT,
     totalAmount: aiData.vatData?.grandTotal,
     vatRate: aiData.vatData?.lineItems?.[0]?.vatRate,
-    confidence: calculateConfidence(aiData, salesVAT, purchaseVAT, docAnalysis)
+    confidence: await calculateConfidence(aiData, salesVAT, purchaseVAT, docAnalysis)
   }
 }
 
 /**
  * Calculate confidence score based on the quality and consistency of extracted VAT data
  */
-function calculateConfidence(aiData: any, salesVAT: number[], purchaseVAT: number[], docAnalysis?: any): number {
+async function calculateConfidence(aiData: any, salesVAT: number[], purchaseVAT: number[], docAnalysis?: any): Promise<number> {
   let confidence = 0.5
   const allVATAmounts = [...salesVAT, ...purchaseVAT]
   
-  console.log('📊 Calculating Confidence Score:')
+  console.log('📊 Calculating Dynamic Confidence Score:')
   
-  // HIGHEST CONFIDENCE: Perfect match to expected VW Financial VAT (€111.36)
-  if (allVATAmounts.length === 1 && Math.abs(allVATAmounts[0] - 111.36) < 0.01) {
-    confidence = 0.98
-    console.log(`   🎯 PERFECT VAT MATCH: €${allVATAmounts[0]} = 98% confidence`)
-  }
-  // HIGH CONFIDENCE: Multiple VAT items that sum to €111.36
-  else if (allVATAmounts.length > 1) {
-    const sum = allVATAmounts.reduce((total, amount) => total + amount, 0)
-    if (Math.abs(sum - 111.36) < 0.01) {
-      confidence = 0.95
-      console.log(`   🎯 PERFECT BREAKDOWN SUM: €${sum.toFixed(2)} = 95% confidence`)
-    } else {
-      confidence = 0.7 + (allVATAmounts.length * 0.05) // Base + small boost per item
-      console.log(`   ✅ Multiple VAT items found: ${confidence * 100}% confidence`)
-    }
-  }
-  // MEDIUM CONFIDENCE: Single VAT amount found but not exact match
-  else if (allVATAmounts.length === 1) {
-    const amount = allVATAmounts[0]
-    if (amount > 50 && amount < 200) { // Reasonable VAT amount range
-      confidence = 0.75
-      console.log(`   ✅ Reasonable single VAT: €${amount} = 75% confidence`)
-    } else {
-      confidence = 0.6
-      console.log(`   ⚠️  Questionable VAT amount: €${amount} = 60% confidence`)
-    }
-  }
-  // LOW CONFIDENCE: No VAT amounts found
-  else {
+  // Base confidence on number of VAT amounts found
+  if (allVATAmounts.length === 0) {
     confidence = 0.1
     console.log(`   ❌ No VAT amounts found = 10% confidence`)
+  } else if (allVATAmounts.length === 1) {
+    const amount = allVATAmounts[0]
+    // Dynamic range based on Irish VAT rates and typical business amounts
+    if (amount >= 0.50 && amount <= 50000) { // Reasonable VAT amount range
+      confidence = 0.75
+      console.log(`   ✅ Single VAT amount in reasonable range: €${amount} = 75% confidence`)
+    } else if (amount > 0) {
+      confidence = 0.6
+      console.log(`   ⚠️  VAT amount outside typical range: €${amount} = 60% confidence`)
+    } else {
+      confidence = 0.2
+      console.log(`   ❌ Invalid VAT amount: €${amount} = 20% confidence`)
+    }
+  } else {
+    // Multiple VAT amounts - higher confidence
+    confidence = 0.8 + Math.min(allVATAmounts.length * 0.02, 0.15) // Base + boost per item, capped
+    console.log(`   ✅ Multiple VAT items (${allVATAmounts.length}) found: ${(confidence * 100).toFixed(0)}% confidence`)
   }
   
-  // Boost confidence based on document type analysis (lease detection)
+  // Boost confidence based on Irish VAT rate validation
+  const validIrishVATRates = [0.09, 0.135, 0.23] // 9%, 13.5%, 23%
+  if (aiData.vatData?.vatRate) {
+    const detectedRate = aiData.vatData.vatRate / 100
+    const isValidIrishRate = validIrishVATRates.some(rate => Math.abs(rate - detectedRate) < 0.001)
+    if (isValidIrishRate) {
+      confidence += 0.1
+      console.log(`   🇮🇪 Valid Irish VAT rate detected (${aiData.vatData.vatRate}%): +10% confidence`)
+    }
+  }
+  
+  // Boost confidence based on document structure quality
+  if (aiData.vatData?.lineItems?.length > 0) {
+    confidence += 0.05
+    console.log(`   📄 Structured line items found: +5% confidence`)
+  }
+  
+  // Boost confidence if explicit VAT fields are found
+  if (aiData.vatData?.totalVatAmount && aiData.vatData.totalVatAmount > 0) {
+    confidence += 0.1
+    console.log(`   🎯 Explicit "Total VAT Amount" field found: +10% confidence`)
+  }
+  
+  // Boost confidence based on document type analysis
   if (docAnalysis && docAnalysis.confidence > 0.7) {
-    const boost = 0.05
+    const boost = Math.min(docAnalysis.confidence * 0.1, 0.1) // Max 10% boost
     confidence = Math.min(confidence + boost, 0.99)
-    console.log(`   🏢 Document type boost: +${boost * 100}% (lease/financial detected)`)
+    console.log(`   🏢 Document type analysis boost: +${(boost * 100).toFixed(1)}%`)
   }
-  
-  // MASSIVE confidence boost if AI found "Total Amount VAT" field explicitly
-  if (aiData.vatData?.totalVatAmount && Math.abs(aiData.vatData.totalVatAmount - 111.36) < 0.01) {
-    confidence = 0.98
-    console.log(`   🎯 EXPLICIT "Total Amount VAT" field found with correct amount = 98% confidence`)
+
+  // Boost confidence based on processing quality score (if available)
+  if (aiData.processingInfo?.qualityScore) {
+    const qualityScore = aiData.processingInfo.qualityScore / 100 // Convert to 0-1 scale
+    const qualityBoost = Math.min(qualityScore * 0.2, 0.2) // Up to 20% boost
+    confidence += qualityBoost
+    console.log(`   📊 Processing quality boost: +${(qualityBoost * 100).toFixed(1)}% (quality: ${aiData.processingInfo.qualityScore}/100)`)
+  }
+
+  // Boost for Irish VAT compliance
+  if (aiData.processingInfo?.irishVATCompliant) {
+    confidence += 0.05
+    console.log(`   🇮🇪 Irish VAT compliance boost: +5%`)
+  }
+
+  // Boost for enhanced AI processing
+  if (aiData.processingInfo?.engine === 'enhanced') {
+    confidence += 0.05
+    console.log(`   🚀 Enhanced AI engine boost: +5%`)
   }
   
   // Penalize heavily if validation flags indicate issues
@@ -1446,9 +1537,81 @@ function calculateConfidence(aiData: any, salesVAT: number[], purchaseVAT: numbe
     console.log(`   ⚠️  Validation issues penalty: -${penalty * 100}%`)
   }
   
-  const finalConfidence = Math.round(confidence * 100) / 100
-  console.log(`   🎯 FINAL CONFIDENCE: ${Math.round(finalConfidence * 100)}%`)
+  let finalConfidence = Math.round(confidence * 100) / 100
+  console.log(`   🎯 BASE CONFIDENCE: ${Math.round(finalConfidence * 100)}%`)
   
+  // Apply enhanced quality scoring assessment
+  try {
+    console.log('🏆 Applying Enhanced Quality Assessment:')
+    const vatData = {
+      salesVAT,
+      purchaseVAT,
+      documentType: docAnalysis?.documentType || 'INVOICE',
+      businessDetails: aiData.businessDetails || {},
+      transactionData: aiData.transactionData || {},
+      vatData: aiData.vatData || {},
+      totalAmount: aiData.vatData?.grandTotal,
+      vatRate: aiData.vatData?.lineItems?.[0]?.vatRate,
+      confidence: finalConfidence,
+      processingMethod: aiData.processingInfo?.engine || 'AI_VISION',
+      extractedText: aiData.extractedText || [],
+      processingTimeMs: 0,
+      validationFlags: aiData.validationFlags || [],
+      irishVATCompliant: false // Will be set by quality scorer
+    }
+
+    const qualityAssessment = QualityScorer.assessDocumentQuality(vatData, aiData.processingInfo)
+    
+    console.log(`   📊 Quality Score: ${qualityAssessment.overallScore}/100`)
+    console.log(`   🇮🇪 Irish VAT Compliant: ${qualityAssessment.irishVATCompliant ? 'Yes' : 'No'}`)
+    console.log(`   🎯 Quality Boost Factor: ${qualityAssessment.confidenceBoost.toFixed(2)}x`)
+    
+    // Apply quality-based confidence boost
+    const qualityBoostedConfidence = finalConfidence * qualityAssessment.confidenceBoost
+    if (Math.abs(qualityBoostedConfidence - finalConfidence) > 0.01) {
+      console.log(`   🏆 QUALITY-BOOSTED CONFIDENCE: ${Math.round(qualityBoostedConfidence * 100)}%`)
+      finalConfidence = qualityBoostedConfidence
+    }
+
+    // Add quality assessment to aiData for downstream use
+    aiData.qualityAssessment = qualityAssessment
+    if (aiData.processingInfo) {
+      aiData.processingInfo.irishVATCompliant = qualityAssessment.irishVATCompliant
+      aiData.processingInfo.qualityScore = qualityAssessment.overallScore
+    }
+    
+    // Report quality issues
+    if (qualityAssessment.issues.length > 0) {
+      console.log(`   ⚠️  Quality Issues Found:`)
+      qualityAssessment.issues.forEach(issue => {
+        console.log(`      - ${issue.severity.toUpperCase()}: ${issue.message}`)
+      })
+    }
+    
+  } catch (error) {
+    console.warn('Failed to apply enhanced quality assessment:', error)
+  }
+
+  // Apply machine learning calibration based on user corrections
+  try {
+    const documentType = docAnalysis?.documentType || 'INVOICE'
+    const extractionMethod = aiData.processingInfo?.engine || 'AI_VISION'
+    const calibratedConfidence = await confidenceLearning.calibrateConfidence(
+      finalConfidence,
+      documentType,
+      extractionMethod,
+      allVATAmounts
+    )
+    
+    if (Math.abs(calibratedConfidence - finalConfidence) > 0.01) {
+      console.log(`   🧠 LEARNING-CALIBRATED CONFIDENCE: ${Math.round(calibratedConfidence * 100)}%`)
+      finalConfidence = calibratedConfidence
+    }
+  } catch (error) {
+    console.warn('Failed to apply confidence learning calibration:', error)
+  }
+  
+  console.log(`   🎯 FINAL CONFIDENCE: ${Math.round(finalConfidence * 100)}%`)
   return finalConfidence
 }
 
@@ -1656,7 +1819,7 @@ async function processPDFWithTextExtraction(
       throw new Error('Invalid AI response format for PDF processing')
     }
     
-    const enhancedData = convertToEnhancedVATData(parsedData, category)
+    const enhancedData = await convertToEnhancedVATData(parsedData, category)
     enhancedData.extractedText = extractedText // Include original extracted text
     
     const vatAmounts = [...enhancedData.salesVAT, ...enhancedData.purchaseVAT]
@@ -2324,7 +2487,7 @@ Focus on finding the "Total Amount VAT" field specifically. Be accurate - this i
     }
     
     // Convert to enhanced VAT data structure
-    const enhancedData = convertToEnhancedVATData(parsedData, category)
+    const enhancedData = await convertToEnhancedVATData(parsedData, category)
     
     // Add the original extracted PDF text for reference
     enhancedData.extractedText = extractedText

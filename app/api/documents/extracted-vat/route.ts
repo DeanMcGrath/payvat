@@ -167,6 +167,8 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         let guestTotalPurchaseVAT = 0
         let guestProcessedDocuments = 0
         let guestTotalConfidence = 0
+        let guestWeightedConfidenceSum = 0 // For weighted confidence calculation
+        let guestTotalVATAmount = 0 // For weighting
         const guestSalesDocuments: ExtractedVATSummary['salesDocuments'] = []
         const guestPurchaseDocuments: ExtractedVATSummary['purchaseDocuments'] = []
         
@@ -267,7 +269,10 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
               })
             }
             
+            // Weight confidence by VAT amount for more accurate overall confidence
             guestTotalConfidence += confidence
+            guestWeightedConfidenceSum += confidence * vatTotal
+            guestTotalVATAmount += vatTotal
             guestProcessedDocuments++
           } else if (wasProcessed) {
             // Document was processed but no VAT found - still include it
@@ -297,13 +302,18 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         const docsWithVAT = guestSalesDocuments.filter(d => d.extractedAmounts.length > 0).length + 
                            guestPurchaseDocuments.filter(d => d.extractedAmounts.length > 0).length
         
+        // Calculate weighted average confidence based on VAT amounts
+        const weightedAverageConfidence = guestTotalVATAmount > 0 
+          ? guestWeightedConfidenceSum / guestTotalVATAmount
+          : (docsWithVAT > 0 ? guestTotalConfidence / docsWithVAT : 0)
+
         const guestSummary: ExtractedVATSummary = {
           totalSalesVAT: Math.round(guestTotalSalesVAT * 100) / 100,
           totalPurchaseVAT: Math.round(guestTotalPurchaseVAT * 100) / 100,
           totalNetVAT: Math.round((guestTotalSalesVAT - guestTotalPurchaseVAT) * 100) / 100,
           documentCount: finalGuestDocs.length,
           processedDocuments: guestProcessedDocuments,
-          averageConfidence: docsWithVAT > 0 ? guestTotalConfidence / docsWithVAT : 0,
+          averageConfidence: weightedAverageConfidence,
           salesDocuments: guestSalesDocuments,
           purchaseDocuments: guestPurchaseDocuments
         }
@@ -523,6 +533,8 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     let totalSalesVAT = 0
     let totalPurchaseVAT = 0
     let totalConfidence = 0
+    let weightedConfidenceSum = 0 // For weighted confidence calculation
+    let totalVATAmount = 0 // For weighting
     let processedDocuments = 0
     
     const salesDocuments: ExtractedVATSummary['salesDocuments'] = []
@@ -555,6 +567,11 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           totalSalesVAT += salesTotal
           totalPurchaseVAT += purchaseTotal
           totalConfidence += confidence
+          
+          // Weight confidence by VAT amount for more accurate overall confidence
+          const vatTotal = salesTotal + purchaseTotal
+          weightedConfidenceSum += confidence * vatTotal
+          totalVATAmount += vatTotal
           processedDocuments++
           
           // Categorize documents - prioritize by VAT amounts first, then by category
@@ -667,6 +684,10 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           }
           
           totalConfidence += confidence
+          
+          // Weight confidence by VAT amount for more accurate overall confidence  
+          weightedConfidenceSum += confidence * vatTotal
+          totalVATAmount += vatTotal
           processedDocuments++
         } else {
           console.log(`      No VAT amounts found in scan result`)
@@ -675,7 +696,11 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     }
     
     const totalNetVAT = totalSalesVAT - totalPurchaseVAT
-    const averageConfidence = processedDocuments > 0 ? totalConfidence / processedDocuments : 0
+    
+    // Calculate weighted average confidence based on VAT amounts
+    const averageConfidence = totalVATAmount > 0 
+      ? weightedConfidenceSum / totalVATAmount
+      : (processedDocuments > 0 ? totalConfidence / processedDocuments : 0)
     
     const summary: ExtractedVATSummary = {
       totalSalesVAT: Math.round(totalSalesVAT * 100) / 100,
