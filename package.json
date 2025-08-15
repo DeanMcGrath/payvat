@@ -90,6 +90,7 @@
     "react-dom": "^19",
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.60.0",
+    "react-pdf": "^10.0.1",
     "react-resizable-panels": "^2.1.7",
     "recharts": "2.15.4",
     "sharp": "^0.34.3",

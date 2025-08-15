@@ -1,6 +1,9 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { Document, Page, pdfjs } from 'react-pdf'
+import 'react-pdf/dist/Page/AnnotationLayer.css'
+import 'react-pdf/dist/Page/TextLayer.css'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -30,6 +33,11 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { toast } from "sonner"
+
+// Configure PDF.js worker
+if (typeof window !== 'undefined') {
+  pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
+}
 
 interface DocumentData {
   id: string
@@ -73,6 +81,11 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
   const [documentUrl, setDocumentUrl] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   
+  // PDF-specific state
+  const [numPages, setNumPages] = useState<number | null>(null)
+  const [pageNumber, setPageNumber] = useState(1)
+  const [pdfError, setPdfError] = useState<string | null>(null)
+  
   // Correction state
   const [correctedSalesVAT, setCorrectedSalesVAT] = useState<string[]>([])
   const [correctedPurchaseVAT, setCorrectedPurchaseVAT] = useState<string[]>([])
@@ -91,6 +104,13 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
     setCorrectionNotes("")
     setFeedback('CORRECT')
     setViewMode('view')
+    
+    // Reset PDF state when document changes
+    setNumPages(null)
+    setPageNumber(1)
+    setPdfError(null)
+    setZoom(100)
+    setRotation(0)
   }, [document, extractedVAT])
 
   // Load document for viewing
@@ -299,25 +319,104 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
       )
     }
 
-    const isPDF = document?.mimeType?.includes('pdf')
-    const isImage = document?.mimeType?.includes('image')
+    // Debug mimeType detection
+    console.log('🔍 DOCUMENT VIEWER DEBUG:', {
+      fileName: document?.originalName || document?.fileName,
+      mimeType: document?.mimeType,
+      documentKeys: document ? Object.keys(document) : []
+    })
+    
+    // Improved PDF detection with multiple fallbacks
+    const isPDF = document?.mimeType?.toLowerCase()?.includes('pdf') || 
+                  document?.originalName?.toLowerCase()?.endsWith('.pdf') ||
+                  document?.fileName?.toLowerCase()?.endsWith('.pdf')
+    
+    const isImage = document?.mimeType?.toLowerCase()?.includes('image')
 
     if (isPDF) {
+      const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+        setNumPages(numPages)
+        setPageNumber(1)
+        setPdfError(null)
+        console.log('✅ PDF loaded successfully:', { numPages })
+      }
+
+      const onDocumentLoadError = (error: any) => {
+        console.error('❌ PDF load error:', error)
+        setPdfError(error.message || 'Failed to load PDF')
+        setNumPages(null)
+      }
+
       return (
         <div className="relative bg-white rounded-lg border overflow-hidden min-h-[50vh] sm:min-h-[70vh] flex flex-col">
-          <div className="flex-1 relative">
-            <iframe
-              src={documentUrl}
-              className="absolute inset-0 w-full h-full border-0"
-              style={{
-                transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
-                transformOrigin: 'center center'
-              }}
-              title={document?.originalName || 'Document preview'}
-              allow="fullscreen"
-              sandbox="allow-same-origin allow-scripts"
-            />
+          <div className="flex-1 relative overflow-auto">
+            {pdfError ? (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center p-8">
+                  <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">PDF Load Error</h3>
+                  <p className="text-gray-600 mb-4">{pdfError}</p>
+                  <Button onClick={handleDownload} className="bg-teal-600 hover:bg-teal-700">
+                    <Download className="h-4 w-4 mr-2" />
+                    Download PDF
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div 
+                className="flex justify-center items-center min-h-full p-4"
+                style={{
+                  transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
+                  transformOrigin: 'center center'
+                }}
+              >
+                <Document
+                  file={documentUrl}
+                  onLoadSuccess={onDocumentLoadSuccess}
+                  onLoadError={onDocumentLoadError}
+                  loading={
+                    <div className="flex items-center justify-center p-8">
+                      <RefreshCw className="h-8 w-8 animate-spin text-teal-600 mr-3" />
+                      <span className="text-gray-600">Loading PDF...</span>
+                    </div>
+                  }
+                >
+                  <Page 
+                    pageNumber={pageNumber}
+                    width={typeof window !== 'undefined' ? Math.min(800, window.innerWidth - 100) : 800}
+                    className="shadow-lg"
+                  />
+                </Document>
+              </div>
+            )}
           </div>
+          
+          {/* PDF Controls */}
+          {numPages && (
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-full text-sm flex items-center gap-3">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setPageNumber(Math.max(1, pageNumber - 1))}
+                disabled={pageNumber <= 1}
+                className="text-white hover:bg-white/20 h-6 w-6 p-0"
+              >
+                ←
+              </Button>
+              <span>{pageNumber} of {numPages}</span>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setPageNumber(Math.min(numPages, pageNumber + 1))}
+                disabled={pageNumber >= numPages}
+                className="text-white hover:bg-white/20 h-6 w-6 p-0"
+              >
+                →
+              </Button>
+            </div>
+          )}
+          
+          {/* Zoom/Rotation indicator */}
           {zoom !== 100 || rotation !== 0 ? (
             <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
               {zoom}% {rotation > 0 && `• ${rotation}°`}
