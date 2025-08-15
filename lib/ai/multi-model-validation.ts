@@ -49,14 +49,34 @@ export class MultiModelValidator {
     try {
       console.log('   📊 Method 1: AI Vision processing...')
       const aiResult = await processDocumentWithAI(fileData, mimeType, fileName, category)
-      methodResults.push({
-        method: 'AI_VISION',
-        result: aiResult,
-        confidence: aiResult.confidence,
-        weight: 1.0, // Highest weight for AI Vision
-        processingTime: Date.now() - startTime,
-        quality: this.assessMethodQuality(aiResult, 'AI_VISION')
-      })
+      if (aiResult.success && aiResult.extractedData) {
+        // Convert EnhancedVATData to ExtractedVATData
+        const extractedData: ExtractedVATData = {
+          salesVAT: aiResult.extractedData.salesVAT,
+          purchaseVAT: aiResult.extractedData.purchaseVAT,
+          totalAmount: aiResult.extractedData.totalAmount,
+          vatRate: aiResult.extractedData.vatRate,
+          confidence: aiResult.extractedData.confidence,
+          extractedText: [aiResult.extractedData.extractedText],
+          documentType: this.mapDocumentType(aiResult.extractedData.documentType),
+          vatNumber: aiResult.extractedData.businessDetails?.vatNumber || undefined,
+          invoiceDate: aiResult.extractedData.transactionData?.date || undefined,
+          supplierName: aiResult.extractedData.businessDetails?.businessName || undefined,
+          processingMethod: 'AI_VISION',
+          processingTimeMs: Date.now() - startTime,
+          validationFlags: aiResult.extractedData.validationFlags,
+          irishVATCompliant: !aiResult.extractedData.validationFlags.includes('NON_IRISH_VAT')
+        }
+        
+        methodResults.push({
+          method: 'AI_VISION',
+          result: extractedData,
+          confidence: extractedData.confidence,
+          weight: 1.0, // Highest weight for AI Vision
+          processingTime: Date.now() - startTime,
+          quality: this.assessMethodQuality(extractedData, 'AI_VISION')
+        })
+      }
     } catch (error) {
       console.warn('   ❌ AI Vision processing failed:', error)
     }
@@ -151,7 +171,7 @@ export class MultiModelValidator {
     ) / 3
 
     // Choose best result based on weighted scoring
-    const bestResult = this.selectBestResult(methodResults, agreementScore)
+    const bestResult = this.selectBestResult(methodResults)
     
     // Adjust confidence based on agreement
     const confidenceMultiplier = this.calculateConfidenceMultiplier(agreementScore, methodResults.length)
@@ -226,16 +246,16 @@ export class MultiModelValidator {
     let agreements = 0
     let comparisons = 0
 
-    // Compare business names
-    const businessNames = results.map(r => r.result.businessDetails?.businessName).filter(Boolean)
+    // Compare business names (using actual ExtractedVATData structure)
+    const businessNames = results.map(r => r.result.supplierName).filter(Boolean)
     if (businessNames.length > 1) {
       const uniqueNames = [...new Set(businessNames)]
       agreements += uniqueNames.length === 1 ? 1 : 0.5
       comparisons += 1
     }
 
-    // Compare VAT numbers
-    const vatNumbers = results.map(r => r.result.businessDetails?.vatNumber).filter(Boolean)
+    // Compare VAT numbers (using actual ExtractedVATData structure)
+    const vatNumbers = results.map(r => r.result.vatNumber).filter(Boolean)
     if (vatNumbers.length > 1) {
       const uniqueVATNumbers = [...new Set(vatNumbers)]
       agreements += uniqueVATNumbers.length === 1 ? 1 : 0.3
@@ -312,8 +332,8 @@ export class MultiModelValidator {
     if (vatCount > 0) quality += 10
     if (vatCount > 3) quality += 5
 
-    if (result.businessDetails?.businessName) quality += 5
-    if (result.businessDetails?.vatNumber) quality += 10
+    if (result.supplierName) quality += 5
+    if (result.vatNumber) quality += 10
     if (result.documentType && result.documentType !== 'OTHER') quality += 5
 
     return Math.min(100, quality)
@@ -345,6 +365,24 @@ export class MultiModelValidator {
     // For now, return null to indicate not implemented
     console.log('   📝 OCR pattern matching not yet integrated')
     return null
+  }
+
+  /**
+   * Map EnhancedVATData document type to ExtractedVATData document type
+   */
+  private static mapDocumentType(enhancedType: string): ExtractedVATData['documentType'] {
+    switch (enhancedType) {
+      case 'INVOICE':
+        return 'SALES_INVOICE'
+      case 'RECEIPT':
+        return 'SALES_RECEIPT'
+      case 'CREDIT_NOTE':
+        return 'PURCHASE_INVOICE'
+      case 'STATEMENT':
+        return 'PURCHASE_RECEIPT'
+      default:
+        return 'OTHER'
+    }
   }
 }
 

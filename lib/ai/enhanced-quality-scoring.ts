@@ -196,8 +196,8 @@ export class EnhancedQualityScorer {
       score -= 15
     }
 
-    // Check for business details
-    if (!data.businessDetails?.businessName) {
+    // Check for business details (using actual ExtractedVATData structure)
+    if (!data.supplierName) {
       issues.push({
         severity: 'low',
         type: 'NO_BUSINESS_NAME',
@@ -207,7 +207,7 @@ export class EnhancedQualityScorer {
       score -= 10
     }
 
-    if (!data.businessDetails?.vatNumber) {
+    if (!data.vatNumber) {
       issues.push({
         severity: 'medium',
         type: 'NO_VAT_NUMBER',
@@ -217,8 +217,8 @@ export class EnhancedQualityScorer {
       score -= 15
     }
 
-    // Check for transaction details
-    if (!data.transactionData?.date) {
+    // Check for transaction details (using actual ExtractedVATData structure)
+    if (!data.invoiceDate) {
       issues.push({
         severity: 'low',
         type: 'NO_DATE',
@@ -250,29 +250,25 @@ export class EnhancedQualityScorer {
     // Irish VAT rates: 0%, 9%, 13.5%, 23%
     const validIrishVATRates = [0, 0.09, 0.135, 0.23]
 
-    // Check if VAT amounts align with typical Irish VAT calculations
-    if (allVAT.length > 0 && data.vatData?.lineItems) {
-      data.vatData.lineItems.forEach((item: any, index: number) => {
-        if (item.vatRate) {
-          const declaredRate = item.vatRate / 100
-          const isValidIrishRate = validIrishVATRates.some(rate => Math.abs(rate - declaredRate) < 0.001)
-          
-          if (!isValidIrishRate) {
-            issues.push({
-              severity: 'high',
-              type: 'INVALID_IRISH_VAT_RATE',
-              message: `Non-standard Irish VAT rate detected: ${item.vatRate}%`,
-              impact: 25
-            })
-            score -= 25
-          }
-        }
-      })
+    // Check if VAT rate aligns with typical Irish VAT rates
+    if (data.vatRate !== undefined) {
+      const declaredRate = data.vatRate / 100
+      const isValidIrishRate = validIrishVATRates.some(rate => Math.abs(rate - declaredRate) < 0.001)
+      
+      if (!isValidIrishRate) {
+        issues.push({
+          severity: 'high',
+          type: 'INVALID_IRISH_VAT_RATE',
+          message: `Non-standard Irish VAT rate detected: ${data.vatRate}%`,
+          impact: 25
+        })
+        score -= 25
+      }
     }
 
     // Check VAT number format (Irish format starts with IE)
-    if (data.businessDetails?.vatNumber) {
-      const vatNumber = data.businessDetails.vatNumber.toUpperCase()
+    if (data.vatNumber) {
+      const vatNumber = data.vatNumber.toUpperCase()
       if (!vatNumber.startsWith('IE')) {
         issues.push({
           severity: 'medium',
@@ -296,17 +292,9 @@ export class EnhancedQualityScorer {
       }
     }
 
-    // Check currency (should be EUR for Irish documents)
-    if (data.transactionData?.currency && data.transactionData.currency !== 'EUR') {
-      issues.push({
-        severity: 'medium',
-        type: 'NON_EUR_CURRENCY',
-        message: `Non-Euro currency detected: ${data.transactionData.currency}`,
-        impact: 20
-      })
-      recommendations.push('Verify currency conversion if applicable for Irish VAT')
-      score -= 20
-    }
+    // Note: Currency checking would require additional field in ExtractedVATData
+    // For now, assume EUR currency for Irish documents
+    // TODO: Add currency field to ExtractedVATData interface if needed
 
     return Math.max(0, Math.min(100, score))
   }
@@ -379,40 +367,39 @@ export class EnhancedQualityScorer {
   ): number {
     let score = 100
 
-    // Check if totals are consistent
-    if (data.vatData?.grandTotal && data.vatData?.subtotal && data.vatData?.totalVatAmount) {
-      const calculatedTotal = data.vatData.subtotal + data.vatData.totalVatAmount
-      const difference = Math.abs(calculatedTotal - data.vatData.grandTotal)
+    // Check if totals are consistent (using available fields)
+    if (data.totalAmount !== undefined) {
+      const extractedVATTotal = [...data.salesVAT, ...data.purchaseVAT].reduce((sum, amount) => sum + amount, 0)
       
-      if (difference > 0.01) {
+      // If we have a total amount, check if VAT seems reasonable relative to it
+      if (extractedVATTotal > data.totalAmount) {
         issues.push({
           severity: 'high',
-          type: 'TOTAL_MISMATCH',
-          message: `Total amount mismatch: expected €${calculatedTotal.toFixed(2)}, found €${data.vatData.grandTotal.toFixed(2)}`,
-          impact: 25
+          type: 'VAT_EXCEEDS_TOTAL',
+          message: `VAT amount (€${extractedVATTotal.toFixed(2)}) exceeds total amount (€${data.totalAmount.toFixed(2)})`,
+          impact: 30
         })
-        score -= 25
-      }
-    }
-
-    // Check if VAT amounts match line items
-    if (data.vatData?.lineItems?.length > 0) {
-      const lineItemVATTotal = data.vatData.lineItems.reduce((sum: number, item: any) => {
-        return sum + (item.vatAmount || 0)
-      }, 0)
-      
-      const extractedVATTotal = [...data.salesVAT, ...data.purchaseVAT].reduce((sum, amount) => sum + amount, 0)
-      const difference = Math.abs(lineItemVATTotal - extractedVATTotal)
-      
-      if (difference > 1.00) { // Allow €1 tolerance for rounding
+        score -= 30
+      } else if (data.totalAmount > 0 && extractedVATTotal > data.totalAmount * 0.5) {
         issues.push({
           severity: 'medium',
-          type: 'VAT_LINE_ITEM_MISMATCH',
-          message: `VAT total from line items (€${lineItemVATTotal.toFixed(2)}) differs from extracted total (€${extractedVATTotal.toFixed(2)})`,
+          type: 'HIGH_VAT_RATIO',
+          message: `VAT represents more than 50% of total amount - please verify`,
           impact: 15
         })
         score -= 15
       }
+    }
+
+    // Basic consistency check: ensure sales and purchase VAT arrays are not conflicting
+    if (data.salesVAT.length > 0 && data.purchaseVAT.length > 0) {
+      issues.push({
+        severity: 'low',
+        type: 'MIXED_VAT_TYPES',
+        message: 'Document contains both sales and purchase VAT - verify document type',
+        impact: 5
+      })
+      score -= 5
     }
 
     return Math.max(0, Math.min(100, score))

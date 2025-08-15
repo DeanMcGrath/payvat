@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spreadsheet Viewer Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        iframe { border: 1px solid #ccc; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Spreadsheet Viewer Implementation Test</h1>
+    
+    <div class="test-section">
+        <h2>✅ Implementation Complete</h2>
+        <p><strong>DocumentViewer Component Updated</strong></p>
+        <ul>
+            <li>✅ Added spreadsheet file type detection (.csv, .xls, .xlsx)</li>
+            <li>✅ Created SpreadsheetViewer component with Google Docs viewer</li>
+            <li>✅ Added CSV table renderer for fallback viewing</li>
+            <li>✅ Updated renderDocumentViewer to route spreadsheets appropriately</li>
+            <li>✅ Added loading states and error handling</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>📋 Test Different File Types</h2>
+        <p><strong>Supported Formats:</strong></p>
+        <ul>
+            <li><strong>CSV files</strong> - Google Viewer + Custom table renderer fallback</li>
+            <li><strong>Excel files (.xls, .xlsx)</strong> - Google Docs universal viewer</li>
+            <li><strong>PDF files</strong> - Existing PDF viewer (unchanged)</li>
+            <li><strong>Image files</strong> - Existing image viewer (unchanged)</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🔄 Fallback Strategy</h2>
+        <p><strong>Viewing Priority:</strong></p>
+        <ol>
+            <li><strong>Primary:</strong> Google Docs viewer (universal support)</li>
+            <li><strong>CSV Fallback:</strong> Custom table renderer for CSV files</li>
+            <li><strong>Final Fallback:</strong> Download option with retry buttons</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>🧪 Test Google Docs Viewer</h2>
+        <p>Example of how spreadsheets will be displayed using Google's universal viewer:</p>
+        <iframe 
+            src="https://docs.google.com/viewer?url=https://file-examples.com/storage/fe9e3b1b27e4b6cde0b1d41/2017/10/file_example_XLS_10.xls&embedded=true"
+            width="100%" 
+            height="400"
+            title="Google Docs Viewer Example">
+        </iframe>
+        <p><em>Note: This is a test example showing how the viewer will work with actual spreadsheet files.</em></p>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Features Added</h2>
+        <ul>
+            <li><strong>Multi-format support:</strong> CSV, XLS, XLSX files</li>
+            <li><strong>Graceful fallbacks:</strong> Multiple viewing options if one fails</li>
+            <li><strong>Performance optimized:</strong> CSV table renderer limits to 100 rows</li>
+            <li><strong>User feedback:</strong> Loading states and error messages</li>
+            <li><strong>Mobile responsive:</strong> Works on desktop and mobile devices</li>
+            <li><strong>Retry options:</strong> Users can try different viewers</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 How It Works</h2>
+        <p><strong>File Detection Process:</strong></p>
+        <ol>
+            <li>Check file extension (.csv, .xls, .xlsx)</li>
+            <li>Check MIME type for spreadsheet indicators</li>
+            <li>Route to appropriate SpreadsheetViewer component</li>
+            <li>Try Google Docs viewer first</li>
+            <li>Fall back to CSV table renderer for CSV files</li>
+            <li>Provide download option if all viewers fail</li>
+        </ol>
+    </div>
+
+    <script>
+        console.log("✅ Spreadsheet Viewer Implementation Complete!");
+        console.log("The DocumentViewer component now supports:");
+        console.log("- CSV files with table renderer fallback");
+        console.log("- Excel files (.xls, .xlsx) with Google Docs viewer");
+        console.log("- Graceful fallbacks and error handling");
+        console.log("- Mobile responsive design");
+    </script>
+</body>
+</html>

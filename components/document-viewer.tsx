@@ -1,21 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import dynamic from 'next/dynamic'
 
-// Dynamically import react-pdf to avoid SSR issues
-const Document = dynamic(
-  () => import('react-pdf').then((mod) => mod.Document),
-  { ssr: false }
-)
-
-const Page = dynamic(
-  () => import('react-pdf').then((mod) => mod.Page),
-  { ssr: false }
-)
-
-// Import pdfjs configuration
-import { pdfjs } from 'react-pdf'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -28,9 +14,6 @@ import { Separator } from "@/components/ui/separator"
 import { 
   FileText, 
   Download, 
-  ZoomIn, 
-  ZoomOut, 
-  RotateCw, 
   Eye, 
   Edit3, 
   Check, 
@@ -46,10 +29,6 @@ import {
 } from 'lucide-react'
 import { toast } from "sonner"
 
-// Configure PDF.js worker
-if (typeof window !== 'undefined') {
-  pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
-}
 
 interface DocumentData {
   id: string
@@ -86,18 +65,270 @@ interface DocumentViewerProps {
   }) => void
 }
 
+// Simple PDF Viewer Component with iframe approach
+const SimplePDFViewer = ({ fileUrl, fileName }: { fileUrl: string, fileName: string }) => {
+  const [useGoogleViewer, setUseGoogleViewer] = useState(false);
+  
+  if (useGoogleViewer) {
+    const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
+    return (
+      <div className="w-full h-96 border rounded overflow-hidden">
+        <iframe
+          src={googleViewerUrl}
+          title={`PDF Viewer (Google Docs) - ${fileName}`}
+          width="100%"
+          height="100%"
+          className="border-0"
+          style={{ minHeight: '400px' }}
+        />
+      </div>
+    );
+  }
+  
+  return (
+    <div className="w-full h-96 border rounded overflow-hidden">
+      <iframe
+        src={fileUrl}
+        title={`PDF Viewer - ${fileName}`}
+        width="100%"
+        height="100%"
+        className="border-0"
+        style={{ minHeight: '400px' }}
+        onError={() => setUseGoogleViewer(true)}
+      >
+        <p>
+          PDF cannot be displayed in this browser.
+          <a href={fileUrl} download={fileName} className="text-blue-500 underline ml-2">
+            Download {fileName}
+          </a>
+        </p>
+      </iframe>
+    </div>
+  );
+};
+
+// CSV Table Renderer Component
+const CSVTableRenderer = ({ fileUrl, fileName }: { fileUrl: string, fileName: string }) => {
+  const [csvData, setCsvData] = useState<string[][]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadCSVData = async () => {
+      try {
+        const response = await fetch(fileUrl);
+        if (!response.ok) throw new Error('Failed to load CSV');
+        
+        const text = await response.text();
+        const rows = text.split('\n').map(row => {
+          // Simple CSV parsing - handles basic CSV format
+          const cells = [];
+          let current = '';
+          let inQuotes = false;
+          
+          for (let i = 0; i < row.length; i++) {
+            const char = row[i];
+            const nextChar = row[i + 1];
+            
+            if (char === '"' && !inQuotes) {
+              inQuotes = true;
+            } else if (char === '"' && inQuotes && nextChar === '"') {
+              current += '"';
+              i++; // Skip next quote
+            } else if (char === '"' && inQuotes) {
+              inQuotes = false;
+            } else if (char === ',' && !inQuotes) {
+              cells.push(current.trim());
+              current = '';
+            } else {
+              current += char;
+            }
+          }
+          cells.push(current.trim());
+          return cells;
+        }).filter(row => row.some(cell => cell.length > 0));
+
+        setCsvData(rows);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to parse CSV');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCSVData();
+  }, [fileUrl]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh] p-8">
+        <div className="text-center">
+          <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-2 text-green-600" />
+          <p className="text-gray-600">Parsing CSV data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh] bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border-2 border-dashed border-gray-300">
+        <div className="text-center p-8">
+          <div className="bg-red-200 rounded-full p-6 mb-4 inline-block">
+            <FileText className="h-16 w-16 text-red-600" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">CSV Parse Error</h3>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <Button 
+            onClick={() => window.open(fileUrl, '_blank')} 
+            size="lg"
+            className="bg-green-600 hover:bg-green-700"
+          >
+            <Download className="h-5 w-5 mr-2" />
+            Download to View
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full border rounded overflow-hidden bg-white" style={{ minHeight: '400px', maxHeight: '600px' }}>
+      <div className="p-4 bg-gray-50 border-b">
+        <h4 className="font-medium text-gray-900">{fileName}</h4>
+        <p className="text-sm text-gray-600">{csvData.length} rows</p>
+      </div>
+      <div className="overflow-auto" style={{ maxHeight: '500px' }}>
+        <table className="w-full text-sm">
+          <thead className="bg-gray-100 sticky top-0">
+            {csvData.length > 0 && (
+              <tr>
+                {csvData[0].map((header, index) => (
+                  <th key={index} className="px-3 py-2 text-left font-medium text-gray-900 border-b">
+                    {header || `Column ${index + 1}`}
+                  </th>
+                ))}
+              </tr>
+            )}
+          </thead>
+          <tbody>
+            {csvData.slice(1, 101).map((row, rowIndex) => ( // Limit to 100 rows for performance
+              <tr key={rowIndex} className="border-b hover:bg-gray-50">
+                {row.map((cell, cellIndex) => (
+                  <td key={cellIndex} className="px-3 py-2 text-gray-700 border-r last:border-r-0">
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {csvData.length > 101 && (
+          <div className="p-4 text-center text-gray-500 border-t">
+            Showing first 100 rows of {csvData.length - 1} total rows
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Spreadsheet Viewer Component
+const SpreadsheetViewer = ({ fileUrl, fileName }: { fileUrl: string, fileName: string }) => {
+  const [viewerType, setViewerType] = useState<'google' | 'csv-table' | 'fallback'>('google');
+  const [loading, setLoading] = useState(true);
+  
+  const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
+  const isCSV = fileName.toLowerCase().endsWith('.csv');
+  
+  const handleIframeLoad = () => {
+    setLoading(false);
+  };
+  
+  const handleIframeError = () => {
+    setLoading(false);
+    if (isCSV) {
+      setViewerType('csv-table');
+    } else {
+      setViewerType('fallback');
+    }
+  };
+
+  // For CSV files, try the table renderer first if Google viewer fails
+  if (viewerType === 'csv-table' && isCSV) {
+    return <CSVTableRenderer fileUrl={fileUrl} fileName={fileName} />;
+  }
+
+  if (viewerType === 'fallback') {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh] sm:min-h-[70vh] bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border-2 border-dashed border-gray-300">
+        <div className="text-center p-8">
+          <div className="bg-green-200 rounded-full p-6 mb-4 inline-block">
+            <FileText className="h-16 w-16 text-green-600" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">Spreadsheet Preview</h3>
+          <p className="text-gray-600 mb-4">This spreadsheet can be downloaded for full functionality</p>
+          <div className="flex flex-col sm:flex-row gap-2 justify-center">
+            <Button 
+              onClick={() => window.open(fileUrl, '_blank')} 
+              size="lg"
+              className="bg-green-600 hover:bg-green-700"
+            >
+              <Download className="h-5 w-5 mr-2" />
+              Download to View
+            </Button>
+            {isCSV && (
+              <Button 
+                onClick={() => setViewerType('csv-table')} 
+                size="lg"
+                variant="outline"
+              >
+                <FileText className="h-5 w-5 mr-2" />
+                Try Table View
+              </Button>
+            )}
+            <Button 
+              onClick={() => setViewerType('google')} 
+              size="lg"
+              variant="outline"
+            >
+              <RefreshCw className="h-5 w-5 mr-2" />
+              Try Viewer Again
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full h-96 border rounded overflow-hidden relative">
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
+          <div className="text-center">
+            <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-2 text-green-600" />
+            <p className="text-gray-600">Loading spreadsheet...</p>
+          </div>
+        </div>
+      )}
+      <iframe
+        src={googleViewerUrl}
+        title={`Spreadsheet Viewer - ${fileName}`}
+        width="100%"
+        height="100%"
+        className="border-0"
+        style={{ minHeight: '400px' }}
+        onLoad={handleIframeLoad}
+        onError={handleIframeError}
+      />
+    </div>
+  );
+};
+
 export default function DocumentViewer({ isOpen, onClose, document, extractedVAT, onVATCorrection }: DocumentViewerProps) {
-  const [zoom, setZoom] = useState(100)
-  const [rotation, setRotation] = useState(0)
   const [viewMode, setViewMode] = useState<'view' | 'correct'>('view')
   const [documentUrl, setDocumentUrl] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  
-  // PDF-specific state
-  const [numPages, setNumPages] = useState<number | null>(null)
-  const [pageNumber, setPageNumber] = useState(1)
-  const [pdfError, setPdfError] = useState<string | null>(null)
-  const [isClient, setIsClient] = useState(false)
   
   // Correction state
   const [correctedSalesVAT, setCorrectedSalesVAT] = useState<string[]>([])
@@ -117,19 +348,8 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
     setCorrectionNotes("")
     setFeedback('CORRECT')
     setViewMode('view')
-    
-    // Reset PDF state when document changes
-    setNumPages(null)
-    setPageNumber(1)
-    setPdfError(null)
-    setZoom(100)
-    setRotation(0)
   }, [document, extractedVAT])
 
-  // Set client-side flag
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
 
   // Load document for viewing
   useEffect(() => {
@@ -302,6 +522,20 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
     return 'Low'
   }
 
+  // File type detection helper functions
+  const getFileExtension = (filename: string) => {
+    return filename?.split('.').pop()?.toLowerCase() || '';
+  };
+
+  const isSpreadsheet = (document: DocumentData) => {
+    const ext = getFileExtension(document.originalName || document.fileName);
+    const spreadsheetExts = ['xls', 'xlsx', 'csv'];
+    const spreadsheetMimes = ['spreadsheet', 'excel', 'csv'];
+    
+    return spreadsheetExts.includes(ext) || 
+           spreadsheetMimes.some(m => document.mimeType?.toLowerCase().includes(m));
+  };
+
   const renderDocumentViewer = () => {
     if (loading) {
       return (
@@ -351,100 +585,25 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
     
     const isImage = document?.mimeType?.toLowerCase()?.includes('image')
 
-    if (isPDF) {
-      const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
-        setNumPages(numPages)
-        setPageNumber(1)
-        setPdfError(null)
-        console.log('✅ PDF loaded successfully:', { numPages })
-      }
-
-      const onDocumentLoadError = (error: any) => {
-        console.error('❌ PDF load error:', error)
-        setPdfError(error.message || 'Failed to load PDF')
-        setNumPages(null)
-      }
-
+    // Spreadsheet detection and rendering
+    if (document && isSpreadsheet(document)) {
       return (
-        <div className="relative bg-white rounded-lg border overflow-hidden min-h-[50vh] sm:min-h-[70vh] flex flex-col">
-          <div className="flex-1 relative overflow-auto">
-            {pdfError ? (
-              <div className="flex items-center justify-center h-full">
-                <div className="text-center p-8">
-                  <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">PDF Load Error</h3>
-                  <p className="text-gray-600 mb-4">{pdfError}</p>
-                  <Button onClick={handleDownload} className="bg-teal-600 hover:bg-teal-700">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download PDF
-                  </Button>
-                </div>
-              </div>
-            ) : !isClient ? (
-              <div className="flex items-center justify-center p-8">
-                <RefreshCw className="h-8 w-8 animate-spin text-teal-600 mr-3" />
-                <span className="text-gray-600">Loading PDF viewer...</span>
-              </div>
-            ) : (
-              <div 
-                className="flex justify-center items-center min-h-full p-4"
-                style={{
-                  transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
-                  transformOrigin: 'center center'
-                }}
-              >
-                <Document
-                  file={documentUrl}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                  onLoadError={onDocumentLoadError}
-                  loading={
-                    <div className="flex items-center justify-center p-8">
-                      <RefreshCw className="h-8 w-8 animate-spin text-teal-600 mr-3" />
-                      <span className="text-gray-600">Loading PDF...</span>
-                    </div>
-                  }
-                >
-                  <Page 
-                    pageNumber={pageNumber}
-                    width={typeof window !== 'undefined' ? Math.min(800, window.innerWidth - 100) : 800}
-                    className="shadow-lg"
-                  />
-                </Document>
-              </div>
-            )}
-          </div>
-          
-          {/* PDF Controls */}
-          {numPages && (
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-full text-sm flex items-center gap-3">
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => setPageNumber(Math.max(1, pageNumber - 1))}
-                disabled={pageNumber <= 1}
-                className="text-white hover:bg-white/20 h-6 w-6 p-0"
-              >
-                ←
-              </Button>
-              <span>{pageNumber} of {numPages}</span>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => setPageNumber(Math.min(numPages, pageNumber + 1))}
-                disabled={pageNumber >= numPages}
-                className="text-white hover:bg-white/20 h-6 w-6 p-0"
-              >
-                →
-              </Button>
-            </div>
-          )}
-          
-          {/* Zoom/Rotation indicator */}
-          {zoom !== 100 || rotation !== 0 ? (
-            <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
-              {zoom}% {rotation > 0 && `• ${rotation}°`}
-            </div>
-          ) : null}
+        <div className="relative bg-white rounded-lg border overflow-hidden min-h-[50vh] sm:min-h-[70vh]">
+          <SpreadsheetViewer 
+            fileUrl={documentUrl}
+            fileName={document.originalName || 'spreadsheet'}
+          />
+        </div>
+      )
+    }
+
+    if (isPDF) {
+      return (
+        <div className="relative bg-white rounded-lg border overflow-hidden min-h-[50vh] sm:min-h-[70vh]">
+          <SimplePDFViewer 
+            fileUrl={documentUrl}
+            fileName={document?.originalName || 'document.pdf'}
+          />
         </div>
       )
     }
@@ -457,16 +616,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
             src={documentUrl}
             alt={document?.originalName || 'Document preview'}
             className="relative z-10 max-w-full max-h-full object-contain shadow-lg rounded"
-            style={{
-              transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
-              transformOrigin: 'center center'
-            }}
           />
-          {zoom !== 100 || rotation !== 0 ? (
-            <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm z-20">
-              {zoom}% {rotation > 0 && `• ${rotation}°`}
-            </div>
-          ) : null}
         </div>
       )
     }
@@ -515,36 +665,6 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
             <div className="flex-shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <h3 className="text-lg font-semibold">Document Preview</h3>
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <div className="flex items-center gap-1 bg-gray-50 rounded-md p-1">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => setZoom(Math.max(50, zoom - 25))}
-                    className="h-8 w-8 p-0 touch-manipulation"
-                    title="Zoom Out"
-                  >
-                    <ZoomOut className="h-4 w-4" />
-                  </Button>
-                  <span className="text-sm min-w-12 text-center font-medium px-1">{zoom}%</span>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => setZoom(Math.min(200, zoom + 25))}
-                    className="h-8 w-8 p-0 touch-manipulation"
-                    title="Zoom In"
-                  >
-                    <ZoomIn className="h-4 w-4" />
-                  </Button>
-                </div>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => setRotation((rotation + 90) % 360)}
-                  className="h-8 w-8 p-0 touch-manipulation"
-                  title="Rotate"
-                >
-                  <RotateCw className="h-4 w-4" />
-                </Button>
                 <Button 
                   variant="default" 
                   size="sm" 
