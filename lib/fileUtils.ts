@@ -127,10 +127,32 @@ export async function saveFile(file: File, userId: string): Promise<UploadedFile
 export async function deleteFile(filePath: string): Promise<void> {
   try {
     const fullPath = path.resolve(process.cwd(), filePath)
+    
+    // Check if file exists first
+    try {
+      await fs.access(fullPath)
+    } catch (accessError: any) {
+      if (accessError.code === 'ENOENT') {
+        console.log(`File already deleted or doesn't exist: ${filePath}`)
+        return // File doesn't exist, consider it successfully "deleted"
+      }
+      throw accessError // Re-throw other access errors
+    }
+    
+    // File exists, proceed with deletion
     await fs.unlink(fullPath)
-  } catch (error) {
+    console.log(`Successfully deleted file: ${filePath}`)
+  } catch (error: any) {
     console.error('Error deleting file:', error)
+    
     // Don't throw error if file doesn't exist
+    if (error.code === 'ENOENT') {
+      console.log(`File not found during deletion (already gone): ${filePath}`)
+      return
+    }
+    
+    // For other errors, throw them so caller can handle appropriately
+    throw new Error(`Failed to delete file ${filePath}: ${error.message}`)
   }
 }
 

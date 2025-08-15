@@ -314,10 +314,41 @@ export class UserCorrectionSystem {
         }
       })
 
-      // Also create an audit log
+      // CRITICAL: Create an audit log with corrected VAT data that will be used by extracted-vat API
       await prisma.auditLog.create({
         data: {
-          userId: correction.userId,
+          userId: correction.userId === 'anonymous' ? 'anonymous' : correction.userId,
+          action: 'VAT_DATA_EXTRACTED',
+          entityType: 'DOCUMENT',
+          entityId: correction.documentId,
+          ipAddress: 'system',
+          userAgent: 'VAT_CORRECTION_SYSTEM',
+          metadata: {
+            correctedData: true,
+            correctionId: correction.id,
+            extractedData: {
+              salesVAT: correction.correctedExtraction.salesVAT,
+              purchaseVAT: correction.correctedExtraction.purchaseVAT,
+              confidence: correction.correctedExtraction.confidence
+            },
+            originalData: {
+              salesVAT: correction.originalExtraction.salesVAT,
+              purchaseVAT: correction.originalExtraction.purchaseVAT,
+              confidence: correction.originalExtraction.confidence
+            },
+            correctionReason: correction.correctionReason,
+            userFeedback: correction.userFeedback,
+            documentType: correction.documentType,
+            fileName: correction.fileName,
+            timestamp: correction.timestamp.toISOString()
+          }
+        }
+      })
+
+      // Also create a separate audit log for correction tracking
+      await prisma.auditLog.create({
+        data: {
+          userId: correction.userId === 'anonymous' ? 'anonymous' : correction.userId,
           action: 'VAT_CORRECTION_SUBMITTED',
           entityType: 'DOCUMENT',
           entityId: correction.documentId,

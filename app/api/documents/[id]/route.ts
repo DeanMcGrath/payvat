@@ -105,9 +105,50 @@ async function deleteDocument(request: NextRequest, user: AuthUser) {
       }
     }
     
-    // Delete file from disk (only if filePath exists for legacy documents)
+    // Delete file from disk with improved error handling
+    let fileDeleteError: string | null = null
+    
     if (document.filePath) {
-      await deleteFile(document.filePath)
+      try {
+        await deleteFile(document.filePath)
+        console.log(`✅ Successfully deleted file: ${document.filePath}`)
+      } catch (fileError) {
+        console.warn(`⚠️ File deletion warning for ${document.filePath}:`, fileError)
+        fileDeleteError = `File cleanup failed: ${fileError}`
+        // Continue with database deletion even if file deletion fails
+      }
+    } else if (document.fileData) {
+      // For base64 stored files, no physical file to delete
+      console.log(`📄 Document uses base64 storage, no physical file to delete`)
+    } else {
+      console.warn(`⚠️ Document has no filePath or fileData - unusual but proceeding`)
+    }
+    
+    // Delete related audit logs first to avoid foreign key constraints
+    try {
+      const deletedAuditLogs = await prisma.auditLog.deleteMany({
+        where: {
+          entityType: 'DOCUMENT',
+          entityId: id
+        }
+      })
+      console.log(`🗑️ Deleted ${deletedAuditLogs.count} related audit logs`)
+    } catch (auditError) {
+      console.warn(`⚠️ Failed to delete audit logs for document ${id}:`, auditError)
+      // Continue anyway
+    }
+    
+    // Delete related learning feedback
+    try {
+      const deletedFeedback = await prisma.learningFeedback.deleteMany({
+        where: {
+          documentId: id
+        }
+      })
+      console.log(`🗑️ Deleted ${deletedFeedback.count} related learning feedback records`)
+    } catch (feedbackError) {
+      console.warn(`⚠️ Failed to delete learning feedback for document ${id}:`, feedbackError)
+      // Continue anyway
     }
     
     // Delete document from database
@@ -134,7 +175,8 @@ async function deleteDocument(request: NextRequest, user: AuthUser) {
     
     return NextResponse.json({
       success: true,
-      message: 'Document deleted successfully'
+      message: 'Document deleted successfully',
+      warnings: fileDeleteError ? [fileDeleteError] : undefined
     })
     
   } catch (error) {

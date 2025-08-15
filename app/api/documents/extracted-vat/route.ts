@@ -504,8 +504,14 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       console.log(`   - ${doc.originalName} (${doc.category}) - Scanned: ${doc.isScanned}, Result: ${doc.scanResult}`)
     })
     
-    // Get audit logs with extracted VAT data for all documents (user and guest)
-    const auditLogs = await prisma.auditLog.findMany({
+    // Get the most recent audit log with extracted VAT data for each document
+    console.log(`🔍 Fetching most recent audit logs for ${documents.length} documents...`)
+    
+    // Create a map to store the most recent audit log per document
+    const auditLogMap = new Map<string, any>()
+    
+    // Fetch audit logs for all documents and filter to most recent per document
+    const allAuditLogs = await prisma.auditLog.findMany({
       where: {
         action: 'VAT_DATA_EXTRACTED',
         entityType: 'DOCUMENT',
@@ -517,6 +523,16 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         createdAt: 'desc'
       }
     })
+    
+    // Keep only the most recent audit log per document
+    allAuditLogs.forEach(log => {
+      if (log.entityId && !auditLogMap.has(log.entityId)) {
+        auditLogMap.set(log.entityId, log)
+      }
+    })
+    
+    const auditLogs = Array.from(auditLogMap.values())
+    console.log(`📊 Filtered to ${auditLogs.length} most recent audit logs from ${allAuditLogs.length} total`)
     
     console.log(`📊 Found ${auditLogs.length} audit logs with VAT data:`)
     auditLogs.forEach(log => {
@@ -533,12 +549,16 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     let totalSalesVAT = 0
     let totalPurchaseVAT = 0
     let totalConfidence = 0
+    let confidenceCount = 0 // Count of documents with confidence scores
     let weightedConfidenceSum = 0 // For weighted confidence calculation
     let totalVATAmount = 0 // For weighting
-    let processedDocuments = 0
     
     const salesDocuments: ExtractedVATSummary['salesDocuments'] = []
     const purchaseDocuments: ExtractedVATSummary['purchaseDocuments'] = []
+    
+    // Count processed documents (all scanned documents are considered processed)
+    const processedDocuments = documents.filter(doc => doc.isScanned).length
+    console.log(`📊 Found ${processedDocuments} processed documents out of ${documents.length} total`)
     
     // Process each document
     console.log(`💰 Processing VAT data from documents:`)
@@ -567,12 +587,12 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           totalSalesVAT += salesTotal
           totalPurchaseVAT += purchaseTotal
           totalConfidence += confidence
+          confidenceCount++
           
           // Weight confidence by VAT amount for more accurate overall confidence
           const vatTotal = salesTotal + purchaseTotal
           weightedConfidenceSum += confidence * vatTotal
           totalVATAmount += vatTotal
-          processedDocuments++
           
           // Categorize documents - prioritize by VAT amounts first, then by category
           const isSalesDocument = document.category.includes('SALES')
@@ -684,11 +704,11 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           }
           
           totalConfidence += confidence
+          confidenceCount++
           
           // Weight confidence by VAT amount for more accurate overall confidence  
           weightedConfidenceSum += confidence * vatTotal
           totalVATAmount += vatTotal
-          processedDocuments++
         } else {
           console.log(`      No VAT amounts found in scan result`)
         }
@@ -700,7 +720,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     // Calculate weighted average confidence based on VAT amounts
     const averageConfidence = totalVATAmount > 0 
       ? weightedConfidenceSum / totalVATAmount
-      : (processedDocuments > 0 ? totalConfidence / processedDocuments : 0)
+      : (confidenceCount > 0 ? totalConfidence / confidenceCount : 0)
     
     const summary: ExtractedVATSummary = {
       totalSalesVAT: Math.round(totalSalesVAT * 100) / 100,

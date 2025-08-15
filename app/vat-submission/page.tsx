@@ -382,10 +382,35 @@ export default function VATSubmissionPage() {
         newCorrections.set(selectedDocument?.id, correctionData)
         setCorrections(newCorrections)
 
-        // Refresh extracted VAT data
-        await loadExtractedVATData()
+        // Force refresh of extracted VAT data with cache busting
+        console.log('🔄 FRONTEND: Forcing refresh of VAT data after correction...')
         
-        toast.success('VAT correction saved successfully!')
+        // Clear any local state that might be cached
+        setExtractedVATData(null)
+        
+        // Wait a moment for the backend to process the audit log
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        
+        // Force reload with cache busting
+        const refreshedData = await loadExtractedVATData()
+        
+        if (refreshedData && (refreshedData.totalSalesVAT > 0 || refreshedData.totalPurchaseVAT > 0)) {
+          console.log('✅ FRONTEND: VAT data refreshed successfully with corrected values')
+          
+          // Auto-apply the updated extracted data to the calculator
+          setSalesVAT(refreshedData.totalSalesVAT.toFixed(2))
+          setPurchaseVAT(refreshedData.totalPurchaseVAT.toFixed(2))
+          setNetVAT(refreshedData.totalNetVAT.toFixed(2))
+          setUseExtractedData(true)
+          
+          // Update context for VAT3 form
+          setVATAmounts(refreshedData.totalSalesVAT, refreshedData.totalPurchaseVAT)
+          
+          toast.success('VAT correction applied! Updated totals are now displayed.')
+        } else {
+          console.log('⚠️ FRONTEND: VAT data refresh completed but no amounts found')
+          toast.success('VAT correction saved successfully!')
+        }
       } else {
         const error = await response.json()
         toast.error(`Failed to save correction: ${error.error || 'Unknown error'}`)
