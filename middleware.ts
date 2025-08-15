@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { addSecurityHeaders } from '@/lib/security-utils'
+import { blockDebugEndpoints, validateDebugSecurity } from '@/lib/security/debug-blocker'
+import { logWarn, logError } from '@/lib/secure-logger'
 
 // Security: Rate limiting configuration
 const RATE_LIMIT_MAX_REQUESTS = 100 // requests per window
@@ -71,9 +73,17 @@ export function middleware(request: NextRequest) {
     cleanupRateLimit()
   }
   
-  // Block debug endpoints in production
-  if (process.env.NODE_ENV === 'production' && pathname.startsWith('/api/debug/')) {
-    return new Response('Not found', { status: 404 })
+  // CRITICAL SECURITY: Block ALL debug endpoints in production
+  const debugBlockResponse = blockDebugEndpoints(request)
+  if (debugBlockResponse) {
+    return debugBlockResponse
+  }
+  
+  // Validate debug security on startup
+  if (!validateDebugSecurity()) {
+    logError('CRITICAL: Debug security validation failed', null, {
+      operation: 'middleware-security-check'
+    })
   }
   
   // Skip middleware for static files and Next.js internals
@@ -97,7 +107,10 @@ export function middleware(request: NextRequest) {
   const rateLimitResult = checkRateLimit(clientIP, rateLimit, windowMs)
   
   if (!rateLimitResult.allowed) {
-    console.warn(`🚨 Rate limit exceeded for IP ${clientIP} on ${pathname}`)
+    logWarn('Rate limit exceeded', {
+      operation: 'rate-limit-exceeded',
+      sessionId: request.headers.get('x-session-id') || 'unknown'
+    })
     return new Response(
       JSON.stringify({ 
         error: 'Rate limit exceeded', 

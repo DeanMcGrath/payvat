@@ -22,6 +22,7 @@ import {
   Eye,
   RefreshCw
 } from 'lucide-react'
+import { formatCurrency } from '@/lib/vatUtils'
 
 interface ValidationIssue {
   id: string
@@ -142,7 +143,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
           type: 'warning',
           category: 'amount',
           title: 'Unusual VAT Amount',
-          description: `VAT amount of €${amount.toFixed(2)} is significantly higher than typical amounts`,
+          description: `VAT amount of ${formatCurrency(amount)} is significantly higher than typical amounts`,
           suggestion: 'Please verify this amount is correct',
           documentId: document?.id,
           documentName: document?.fileName,
@@ -162,7 +163,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
           type: 'info',
           category: 'amount',
           title: 'Round VAT Amount',
-          description: `VAT amount of €${amount.toFixed(2)} is suspiciously round`,
+          description: `VAT amount of ${formatCurrency(amount)} is suspiciously round`,
           suggestion: 'Verify this is not an estimated or placeholder amount',
           documentId: document?.id,
           documentName: document?.fileName,
@@ -193,7 +194,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
               type: 'warning',
               category: 'rate',
               title: 'Unusual VAT Rate',
-              description: `VAT amount of €${vatAmount.toFixed(2)} may not match standard Irish VAT rates`,
+              description: `VAT amount of ${formatCurrency(vatAmount)} may not match standard Irish VAT rates`,
               suggestion: 'Verify the VAT rate used (0%, 9.5%, 13.5%, or 23%)',
               documentId: doc.id,
               documentName: doc.fileName,
@@ -540,7 +541,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
                       {issue.title}
                       {issue.affectedAmount && (
                         <Badge variant="outline" className="ml-2">
-                          €{issue.affectedAmount.toFixed(2)}
+{formatCurrency(issue.affectedAmount)}
                         </Badge>
                       )}
                     </AlertTitle>
@@ -607,7 +608,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
           </div>
           <div>
             <span className="text-gray-600">Net VAT:</span>
-            <span className="ml-1 font-medium">€{extractedVAT.totalNetVAT?.toFixed(2)}</span>
+            <span className="ml-1 font-medium">{formatCurrency(extractedVAT.totalNetVAT || 0)}</span>
           </div>
         </div>
       </CardContent>

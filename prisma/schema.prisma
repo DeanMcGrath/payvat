@@ -410,7 +410,7 @@ model TemplateUsage {
   
   // Relations
   template              DocumentTemplate @relation(fields: [templateId], references: [id])
-  document              Document    @relation(fields: [documentId], references: [id])
+  document              Document    @relation(fields: [documentId], references: [id], onDelete: Cascade)
   user                  User?       @relation(fields: [userId], references: [id])
   
   @@map("template_usage")
@@ -445,7 +445,7 @@ model LearningFeedback {
   updatedAt             DateTime    @updatedAt
   
   // Relations
-  document              Document    @relation(fields: [documentId], references: [id])
+  document              Document    @relation(fields: [documentId], references: [id], onDelete: Cascade)
   fingerprint           DocumentFingerprint? @relation(fields: [fingerprintId], references: [id])
   template              DocumentTemplate? @relation(fields: [templateId], references: [id])
   user                  User        @relation(fields: [userId], references: [id])
@@ -489,7 +489,7 @@ model AIProcessingAnalytics {
   feedbackAt            DateTime?   // When user provided feedback
   
   // Relations
-  document              Document    @relation(fields: [documentId], references: [id])
+  document              Document    @relation(fields: [documentId], references: [id], onDelete: Cascade)
   user                  User?       @relation(fields: [userId], references: [id])
   
   @@map("ai_processing_analytics")

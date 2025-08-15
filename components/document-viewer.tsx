@@ -29,6 +29,7 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { toast } from "sonner"
+import { formatCurrency } from "@/lib/vatUtils"
 
 
 interface DocumentData {
@@ -910,11 +911,11 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                         {extractedVAT.salesVAT.map((amount, index) => (
                           <div key={index} className="flex items-center gap-2">
                             <Euro className="h-3 w-3 text-gray-400" />
-                            <span className="text-sm">{amount.toFixed(2)}</span>
+                            <span className="text-sm">{formatCurrency(amount).replace('€', '')}</span>
                           </div>
                         ))}
                         <div className="border-t pt-2 mt-2">
-                          <span className="text-sm font-medium">Total: €{extractedVAT.totalSalesVAT.toFixed(2)}</span>
+                          <span className="text-sm font-medium">Total: {formatCurrency(extractedVAT.totalSalesVAT)}</span>
                         </div>
                       </div>
                     ) : (
@@ -931,11 +932,11 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                         {extractedVAT.purchaseVAT.map((amount, index) => (
                           <div key={index} className="flex items-center gap-2">
                             <Euro className="h-3 w-3 text-gray-400" />
-                            <span className="text-sm">{amount.toFixed(2)}</span>
+                            <span className="text-sm">{formatCurrency(amount).replace('€', '')}</span>
                           </div>
                         ))}
                         <div className="border-t pt-2 mt-2">
-                          <span className="text-sm font-medium">Total: €{extractedVAT.totalPurchaseVAT.toFixed(2)}</span>
+                          <span className="text-sm font-medium">Total: {formatCurrency(extractedVAT.totalPurchaseVAT)}</span>
                         </div>
                       </div>
                     ) : (

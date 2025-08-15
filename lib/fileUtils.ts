@@ -1,6 +1,7 @@
 import crypto from 'crypto'
 import fs from 'fs/promises'
 import path from 'path'
+import { logError, logWarn, logInfo } from './secure-logger'
 
 // File validation configuration
 export const FILE_CONFIG = {
@@ -133,7 +134,10 @@ export async function deleteFile(filePath: string): Promise<void> {
       await fs.access(fullPath)
     } catch (accessError: any) {
       if (accessError.code === 'ENOENT') {
-        console.log(`File already deleted or doesn't exist: ${filePath}`)
+        logInfo('File already deleted or does not exist', {
+          filePath,
+          operation: 'file-deletion'
+        })
         return // File doesn't exist, consider it successfully "deleted"
       }
       throw accessError // Re-throw other access errors
@@ -141,13 +145,22 @@ export async function deleteFile(filePath: string): Promise<void> {
     
     // File exists, proceed with deletion
     await fs.unlink(fullPath)
-    console.log(`Successfully deleted file: ${filePath}`)
+    logInfo('Successfully deleted file', {
+      filePath,
+      operation: 'file-deletion'
+    })
   } catch (error: any) {
-    console.error('Error deleting file:', error)
+    logError('Error deleting file', error, {
+      filePath,
+      operation: 'file-deletion'
+    })
     
     // Don't throw error if file doesn't exist
     if (error.code === 'ENOENT') {
-      console.log(`File not found during deletion (already gone): ${filePath}`)
+      logInfo('File not found during deletion (already gone)', {
+        filePath,
+        operation: 'file-deletion'
+      })
       return
     }
     

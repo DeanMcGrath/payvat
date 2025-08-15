@@ -1332,7 +1332,7 @@ async function convertToEnhancedVATData(aiData: any, category: string): Promise<
   console.log(`     aiData.totalVatAmount: ${aiData.totalVatAmount}`)
   console.log(`     Final totalVatAmount: ${totalVatAmount}`)
   
-  if (salesVAT.length === 0 && purchaseVAT.length === 0 && totalVatAmount && totalVatAmount > 0) {
+  if (salesVAT.length === 0 && purchaseVAT.length === 0 && totalVatAmount !== null && totalVatAmount >= 0) {
     console.log(`   Found total VAT: €${totalVatAmount}`)
     
     // Skip if this total amount should be excluded
@@ -1464,8 +1464,29 @@ async function calculateConfidence(aiData: any, salesVAT: number[], purchaseVAT:
     console.log(`   ❌ No VAT amounts found = 10% confidence`)
   } else if (allVATAmounts.length === 1) {
     const amount = allVATAmounts[0]
+    
+    // Handle zero VAT as a valid amount with good confidence if VAT rate is 0%
+    if (amount === 0) {
+      // Check if document explicitly shows 0% VAT rate
+      const extractedText = aiData.extractedText || ''
+      const hasZeroVATRate = extractedText && (
+        extractedText.includes('VAT (0%)') || 
+        extractedText.includes('VAT 0%') ||
+        extractedText.includes('Zero VAT') ||
+        extractedText.includes('Zero-rated') ||
+        extractedText.toLowerCase().includes('vat rate: 0')
+      )
+      
+      if (hasZeroVATRate) {
+        confidence = 0.8
+        console.log(`   ✅ Zero VAT with explicit 0% rate: €${amount} = 80% confidence`)
+      } else {
+        confidence = 0.3
+        console.log(`   ⚠️  Zero VAT without clear 0% rate indication: €${amount} = 30% confidence`)
+      }
+    }
     // Dynamic range based on Irish VAT rates and typical business amounts
-    if (amount >= 0.50 && amount <= 50000) { // Reasonable VAT amount range
+    else if (amount >= 0.50 && amount <= 50000) { // Reasonable VAT amount range
       confidence = 0.75
       console.log(`   ✅ Single VAT amount in reasonable range: €${amount} = 75% confidence`)
     } else if (amount > 0) {
@@ -1482,7 +1503,7 @@ async function calculateConfidence(aiData: any, salesVAT: number[], purchaseVAT:
   }
   
   // Boost confidence based on Irish VAT rate validation
-  const validIrishVATRates = [0.09, 0.135, 0.23] // 9%, 13.5%, 23%
+  const validIrishVATRates = [0.0, 0.09, 0.135, 0.23] // 0%, 9%, 13.5%, 23%
   if (aiData.vatData?.vatRate) {
     const detectedRate = aiData.vatData.vatRate / 100
     const isValidIrishRate = validIrishVATRates.some(rate => Math.abs(rate - detectedRate) < 0.001)

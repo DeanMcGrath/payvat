@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { deleteFile } from '@/lib/fileUtils'
 import { base64ToBuffer } from '@/lib/serverlessFileUtils'
 import { AuthUser } from '@/lib/auth'
+import { logError, logWarn, logInfo, logAudit } from '@/lib/secure-logger'
 import fs from 'fs/promises'
 import path from 'path'
 
@@ -51,7 +52,10 @@ async function getDocument(request: NextRequest, user: AuthUser) {
     })
     
   } catch (error) {
-    console.error('Document fetch error:', error)
+    logError('Document fetch error', error, {
+      userId: user.id,
+      operation: 'document-fetch'
+    })
     return NextResponse.json(
       { error: 'Failed to fetch document' },
       { status: 500 }
@@ -61,10 +65,10 @@ async function getDocument(request: NextRequest, user: AuthUser) {
 
 // DELETE /api/documents/[id] - Delete document
 async function deleteDocument(request: NextRequest, user: AuthUser) {
+  const url = new URL(request.url)
+  const id = url.pathname.split('/').pop()
+  
   try {
-    const url = new URL(request.url)
-    const id = url.pathname.split('/').pop()
-    
     if (!id) {
       return NextResponse.json(
         { error: 'Document ID is required' },
@@ -111,20 +115,112 @@ async function deleteDocument(request: NextRequest, user: AuthUser) {
     if (document.filePath) {
       try {
         await deleteFile(document.filePath)
-        console.log(`✅ Successfully deleted file: ${document.filePath}`)
+        logInfo('Successfully deleted file', {
+          userId: user.id,
+          documentId: id,
+          filePath: document.filePath,
+          operation: 'file-deletion'
+        })
       } catch (fileError) {
-        console.warn(`⚠️ File deletion warning for ${document.filePath}:`, fileError)
+        logWarn('File deletion warning', {
+          userId: user.id,
+          documentId: id,
+          filePath: document.filePath,
+          operation: 'file-deletion'
+        })
         fileDeleteError = `File cleanup failed: ${fileError}`
         // Continue with database deletion even if file deletion fails
       }
     } else if (document.fileData) {
       // For base64 stored files, no physical file to delete
-      console.log(`📄 Document uses base64 storage, no physical file to delete`)
+      logInfo('Document uses base64 storage, no physical file to delete', {
+        userId: user.id,
+        documentId: id,
+        operation: 'file-deletion'
+      })
     } else {
-      console.warn(`⚠️ Document has no filePath or fileData - unusual but proceeding`)
+      logWarn('Document has no filePath or fileData - unusual but proceeding', {
+        userId: user.id,
+        documentId: id,
+        operation: 'file-deletion'
+      })
     }
     
-    // Delete related audit logs first to avoid foreign key constraints
+    // Delete all related records first to avoid foreign key constraints
+    
+    // Delete related document fingerprint
+    try {
+      const deletedFingerprint = await prisma.documentFingerprint.deleteMany({
+        where: {
+          documentId: id
+        }
+      })
+      if (deletedFingerprint.count > 0) {
+        logInfo('Deleted related document fingerprint', {
+          userId: user.id,
+          documentId: id,
+          count: deletedFingerprint.count,
+          operation: 'fingerprint-deletion'
+        })
+      }
+    } catch (fingerprintError) {
+      logWarn('Failed to delete document fingerprint', {
+        userId: user.id,
+        documentId: id,
+        operation: 'fingerprint-deletion'
+      })
+      // Continue anyway
+    }
+    
+    // Delete related template usages
+    try {
+      const deletedUsages = await prisma.templateUsage.deleteMany({
+        where: {
+          documentId: id
+        }
+      })
+      if (deletedUsages.count > 0) {
+        logInfo('Deleted related template usages', {
+          userId: user.id,
+          documentId: id,
+          count: deletedUsages.count,
+          operation: 'template-usage-deletion'
+        })
+      }
+    } catch (usageError) {
+      logWarn('Failed to delete template usages for document', {
+        userId: user.id,
+        documentId: id,
+        operation: 'template-usage-deletion'
+      })
+      // Continue anyway
+    }
+    
+    // Delete related AI processing analytics
+    try {
+      const deletedAnalytics = await prisma.aIProcessingAnalytics.deleteMany({
+        where: {
+          documentId: id
+        }
+      })
+      if (deletedAnalytics.count > 0) {
+        logInfo('Deleted related AI processing analytics', {
+          userId: user.id,
+          documentId: id,
+          count: deletedAnalytics.count,
+          operation: 'ai-analytics-deletion'
+        })
+      }
+    } catch (analyticsError) {
+      logWarn('Failed to delete AI processing analytics for document', {
+        userId: user.id,
+        documentId: id,
+        operation: 'ai-analytics-deletion'
+      })
+      // Continue anyway
+    }
+    
+    // Delete related audit logs
     try {
       const deletedAuditLogs = await prisma.auditLog.deleteMany({
         where: {
@@ -132,9 +228,20 @@ async function deleteDocument(request: NextRequest, user: AuthUser) {
           entityId: id
         }
       })
-      console.log(`🗑️ Deleted ${deletedAuditLogs.count} related audit logs`)
+      if (deletedAuditLogs.count > 0) {
+        logInfo('Deleted related audit logs', {
+          userId: user.id,
+          documentId: id,
+          count: deletedAuditLogs.count,
+          operation: 'audit-logs-deletion'
+        })
+      }
     } catch (auditError) {
-      console.warn(`⚠️ Failed to delete audit logs for document ${id}:`, auditError)
+      logWarn('Failed to delete audit logs for document', {
+        userId: user.id,
+        documentId: id,
+        operation: 'audit-logs-deletion'
+      })
       // Continue anyway
     }
     
@@ -145,9 +252,18 @@ async function deleteDocument(request: NextRequest, user: AuthUser) {
           documentId: id
         }
       })
-      console.log(`🗑️ Deleted ${deletedFeedback.count} related learning feedback records`)
+      logInfo('Deleted related learning feedback records', {
+        userId: user.id,
+        documentId: id,
+        count: deletedFeedback.count,
+        operation: 'learning-feedback-deletion'
+      })
     } catch (feedbackError) {
-      console.warn(`⚠️ Failed to delete learning feedback for document ${id}:`, feedbackError)
+      logWarn('Failed to delete learning feedback for document', {
+        userId: user.id,
+        documentId: id,
+        operation: 'learning-feedback-deletion'
+      })
       // Continue anyway
     }
     
@@ -157,20 +273,11 @@ async function deleteDocument(request: NextRequest, user: AuthUser) {
     })
     
     // Create audit log
-    await prisma.auditLog.create({
-      data: {
-        userId: user.id,
-        action: 'DELETE_DOCUMENT',
-        entityType: 'DOCUMENT',
-        entityId: id,
-        ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-        userAgent: request.headers.get('user-agent') || 'unknown',
-        metadata: {
-          fileName: document.originalName,
-          category: document.category,
-          timestamp: new Date().toISOString()
-        }
-      }
+    await logAudit('DELETE_DOCUMENT', {
+      userId: user.id,
+      documentId: id,
+      operation: 'document-deletion',
+      result: 'SUCCESS'
     })
     
     return NextResponse.json({
@@ -180,9 +287,29 @@ async function deleteDocument(request: NextRequest, user: AuthUser) {
     })
     
   } catch (error) {
-    console.error('Document deletion error:', error)
+    logError('Document deletion error', error, {
+      userId: user.id,
+      documentId: id,
+      operation: 'document-deletion'
+    })
+    
+    // Provide more specific error messages based on error type
+    let errorMessage = 'Failed to delete document'
+    if (error instanceof Error) {
+      if (error.message.includes('Foreign key constraint')) {
+        errorMessage = 'Cannot delete document due to related data constraints'
+      } else if (error.message.includes('Record not found')) {
+        errorMessage = 'Document not found or already deleted'
+      } else if (error.message.includes('permission')) {
+        errorMessage = 'Insufficient permissions to delete document'
+      }
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to delete document' },
+      { 
+        error: errorMessage,
+        details: process.env.NODE_ENV === 'development' ? (error as Error)?.message : undefined
+      },
       { status: 500 }
     )
   }
@@ -281,7 +408,10 @@ async function downloadDocument(request: NextRequest, user: AuthUser) {
     }
     
   } catch (error) {
-    console.error('Document download error:', error)
+    logError('Document download error', error, {
+      userId: user.id,
+      operation: 'document-download'
+    })
     return NextResponse.json(
       { error: 'Failed to download document' },
       { status: 500 }

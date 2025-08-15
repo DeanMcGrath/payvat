@@ -6,13 +6,15 @@ import { validateFile, processFileForServerless, getDocumentType } from '@/lib/s
 import { processDocument } from '@/lib/documentProcessor'
 import { AuthUser } from '@/lib/auth'
 import { logger } from '@/lib/logger'
+import { logError, logWarn, logInfo, logAudit, logPerformance } from '@/lib/secure-logger'
 
 async function uploadFile(request: NextRequest, user?: AuthUser) {
-  console.log('UPLOAD API CALLED - STARTING FUNCTION')
-  console.log(`   Request method: ${request.method}`)
-  console.log(`   Request URL: ${request.url}`)
-  console.log(`   User exists: ${!!user}`)
-  console.log(`   Timestamp: ${new Date().toISOString()}`)
+  const startTime = Date.now()
+  logAudit('FILE_UPLOAD_STARTED', {
+    userId: user?.id,
+    operation: 'file-upload',
+    result: 'SUCCESS'
+  })
   
   let processingResult: any = null // Track processing result for debugging
   let processingError: any = null // Track processing errors
@@ -27,21 +29,15 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       )
     }
     
-    console.log('PARSING FORM DATA...')
+    // Parsing form data
     const formData = await request.formData()
-    console.log('Form data parsed successfully')
+    // Form data parsed
     
     const file = formData.get('file') as File
     const category = formData.get('category') as string
     const vatReturnId = formData.get('vatReturnId') as string | null
     
-    console.log('FORM DATA EXTRACTED:')
-    console.log(`   File exists: ${!!file}`)
-    console.log(`   File name: ${file?.name || 'no file'}`)
-    console.log(`   File size: ${file?.size || 0} bytes`)
-    console.log(`   File type: ${file?.type || 'unknown'}`)
-    console.log(`   Category: ${category}`)
-    console.log(`   VAT Return ID: ${vatReturnId || 'none'}`)
+    // Form data extracted and validated
     
     if (!file) {
       return NextResponse.json(
@@ -102,7 +98,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         }
       });
       userId = guestUser.id;
-      console.log(`Created guest user for upload: ${userId}`);
+      logInfo('Created guest user for upload', { operation: 'guest-user-creation' });
     }
     
     // Validate VAT return ownership if provided and user is authenticated
@@ -126,7 +122,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     const processedFile = await processFileForServerless(file, userId)
     
     // Save document metadata to database
-    console.log('CREATING DOCUMENT RECORD IN DATABASE...')
+    // Creating document record
     const document = await prisma.document.create({
       data: {
         userId: userId,
@@ -144,21 +140,12 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       }
     })
     
-    console.log('DOCUMENT RECORD CREATED SUCCESSFULLY')
-    console.log(`   Document ID: ${document.id}`)
-    console.log(`   Document filename: ${document.fileName}`)
-    console.log(`   Now starting automatic processing...`)
+    // Document record created successfully
     
     // Process document immediately after upload for VAT extraction
     logger.info('Starting document processing', { fileName: processedFile.originalName }, 'UPLOAD_API')
     
-    console.log('UPLOAD API - STARTING DOCUMENT PROCESSING')
-    console.log(`File: ${processedFile.originalName}`)
-    console.log(`Category: ${category}`)
-    console.log(`MIME: ${processedFile.mimeType}`)
-    console.log(`Size: ${Math.round(processedFile.fileData.length / 1024)}KB`)
-    console.log(`User: ${userId}`)
-    console.log('Calling processDocument()...')
+    // Starting document processing
     
     try {
       processingResult = await processDocument(
@@ -168,20 +155,13 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         category
       )
       
-      console.log('PROCESSING RESULT RECEIVED:')
-      console.log(`Success: ${processingResult.success}`)
-      console.log(`IsScanned: ${processingResult.isScanned}`)
-      console.log(`ScanResult: ${processingResult.scanResult}`)
-      console.log(`Has ExtractedData: ${!!processingResult.extractedData}`)
+      // Processing result received
       if (processingResult.extractedData) {
         const salesVAT = processingResult.extractedData.salesVAT || []
         const purchaseVAT = processingResult.extractedData.purchaseVAT || []
-        console.log(`Sales VAT: [${salesVAT.join(', ')}] (${salesVAT.length} items)`)
-        console.log(`Purchase VAT: [${purchaseVAT.join(', ')}] (${purchaseVAT.length} items)`)
-        console.log(`Confidence: ${processingResult.extractedData.confidence}`)
+        // VAT data processed
       }
-      console.log(`Error: ${processingResult.error || 'none'}`)
-      console.log('PROCESSING COMPLETE - ANALYZING RESULTS...')
+      // Processing complete
       
       if (processingResult.success) {
         // Update document with processing results
@@ -195,22 +175,13 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         
         // 🔧 CRITICAL FIX: Log extracted VAT data for audit trail (NOW INCLUDING GUESTS!)
         // This was the root cause of "processedDocuments": 0 - guest users weren't getting audit logs
-        console.log('CHECKING IF VAT DATA SHOULD BE LOGGED...')
-        console.log(`   ExtractedData exists: ${!!processingResult.extractedData}`)
-        console.log(`   Sales VAT count: ${processingResult.extractedData?.salesVAT?.length || 0}`)
-        console.log(`   Purchase VAT count: ${processingResult.extractedData?.purchaseVAT?.length || 0}`)
+        // Checking VAT data for audit logging
         
         if (processingResult.extractedData && 
             (processingResult.extractedData.salesVAT.length > 0 || 
              processingResult.extractedData.purchaseVAT.length > 0)) {
           
-          console.log('VAT DATA FOUND - CREATING AUDIT LOG')
-          console.log('CREATING VAT AUDIT LOG FOR USER:', userId)
-          console.log(`   Document: ${processedFile.originalName}`)
-          console.log(`   Sales VAT: [${processingResult.extractedData.salesVAT.join(', ')}]`)
-          console.log(`   Purchase VAT: [${processingResult.extractedData.purchaseVAT.join(', ')}]`)
-          console.log(`   User Type: ${user ? 'AUTHENTICATED' : 'GUEST'}`)
-          console.log(`   This audit log enables VAT extraction API to find the data!`)
+          // Creating VAT audit log
           
           try {
             await prisma.auditLog.create({
@@ -232,28 +203,24 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
               }
             })
             
-            console.log('VAT AUDIT LOG CREATED SUCCESSFULLY')
-            console.log('   This should fix "processedDocuments": 0 issue!')
+            // VAT audit log created
             
           } catch (auditError) {
-            console.error('AUDIT LOG CREATION FAILED:', auditError)
-            console.error('   This may cause VAT extraction to fail for this document')
+            logError('Audit log creation failed', auditError, {
+              userId,
+              operation: 'vat-audit-log-creation'
+            })
           }
         } else {
-          console.log('NO VAT DATA FOUND - NO AUDIT LOG CREATED')
-          console.log('   This is why "processedDocuments" count will be 0!')
-          console.log('NO VAT DATA TO LOG:')
-          console.log(`   Has extracted data: ${!!processingResult.extractedData}`)
-          console.log(`   Sales VAT count: ${processingResult.extractedData?.salesVAT?.length || 0}`)
-          console.log(`   Purchase VAT count: ${processingResult.extractedData?.purchaseVAT?.length || 0}`)
+          // No VAT data found, no audit log created
         }
         
         logger.info('Document processing completed', { scanResult: processingResult.scanResult }, 'UPLOAD_API')
       } else {
-        console.log('❌❌❌ DOCUMENT PROCESSING FAILED')
-        console.log(`   Reason: ${processingResult.error || 'Unknown error'}`)
-        console.log(`   ScanResult: ${processingResult.scanResult || 'No scan result'}`)
-        console.log('   This document will NOT be counted as processed!')
+        logError('Document processing failed', processingResult.error, {
+          userId,
+          operation: 'document-processing'
+        })
         logger.warn('Document processing failed', { error: processingResult.error }, 'UPLOAD_API')
         // Update with failed status
         await prisma.document.update({
@@ -266,10 +233,10 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       }
     } catch (docProcessingError) {
       processingError = docProcessingError
-      console.log('🚨🚨🚨 DOCUMENT PROCESSING EXCEPTION CAUGHT')
-      console.log(`   Error: ${docProcessingError instanceof Error ? docProcessingError.message : 'Unknown error'}`)
-      console.log(`   Stack: ${docProcessingError instanceof Error ? docProcessingError.stack : 'No stack trace'}`)
-      console.log('   This document will NOT be counted as processed!')
+      logError('Document processing exception', docProcessingError, {
+        userId,
+        operation: 'document-processing-exception'
+      })
       logger.error('Document processing error', docProcessingError, 'UPLOAD_API')
       // Update with error status
       await prisma.document.update({
@@ -282,8 +249,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     }
     
     // Create audit log for document upload (now including guests for consistency)
-    console.log('📝 CREATING UPLOAD AUDIT LOG FOR USER:', userId)
-    console.log(`   User Type: ${user ? 'AUTHENTICATED' : 'GUEST'}`)
+    // Creating upload audit log
     
     try {
       await prisma.auditLog.create({
@@ -305,11 +271,13 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         }
       })
       
-      console.log('✅ UPLOAD AUDIT LOG CREATED SUCCESSFULLY')
+      // Upload audit log created
       
     } catch (uploadAuditError) {
-      console.error('🚨 UPLOAD AUDIT LOG CREATION FAILED:', uploadAuditError)
-      console.error('   This won\'t prevent upload but may affect audit trail')
+      logError('Upload audit log creation failed', uploadAuditError, {
+        userId,
+        operation: 'upload-audit-log'
+      })
     }
     
     // Fetch updated document status
@@ -318,12 +286,18 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     })
 
     // 🔑 CRITICAL: Log document ID prominently for debugging
-    console.log('🔑🔑🔑 DOCUMENT UPLOADED SUCCESSFULLY 🔑🔑🔑')
-    console.log(`🔑 USE THIS DOCUMENT ID FOR DEBUGGING: ${document.id}`)
-    console.log(`📄 File: ${document.originalName}`)
-    console.log(`📂 Category: ${document.category}`)
-    console.log(`🔍 For diagnostic testing, use: /api/debug/prompt-test?documentId=${document.id}&testtype=compare_both`)
-    console.log('🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑🔑')
+    // Document uploaded successfully
+    logAudit('DOCUMENT_UPLOADED', {
+      userId,
+      documentId: document.id,
+      operation: 'file-upload',
+      result: 'SUCCESS'
+    })
+    
+    logPerformance('file-upload', Date.now() - startTime, {
+      userId,
+      operation: 'file-upload'
+    })
 
     return NextResponse.json({
       success: true,
@@ -363,11 +337,9 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     })
     
   } catch (error) {
-    console.log('🚨🚨🚨 UPLOAD API EXCEPTION CAUGHT AT TOP LEVEL')
-    console.log(`   Error name: ${error instanceof Error ? error.name : 'Unknown'}`)
-    console.log(`   Error message: ${error instanceof Error ? error.message : 'Unknown error'}`)
-    console.log(`   Error stack: ${error instanceof Error ? error.stack : 'No stack trace'}`)
-    console.log('   This prevents ALL processing!')
+    logError('Upload API exception at top level', error, {
+      operation: 'file-upload-top-level'
+    })
     
     logger.error('File upload error', error, 'UPLOAD_API')
     return NextResponse.json(

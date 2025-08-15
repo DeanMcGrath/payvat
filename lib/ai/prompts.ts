@@ -17,6 +17,15 @@ IRISH VAT COMPLIANCE PRIORITY:
 - Date format: DD/MM/YYYY (Irish standard)
 - Look for "Revenue" references (Irish tax authority)
 
+CRITICAL ZERO VAT HANDLING:
+- If document shows "VAT (0%)", "VAT 0%", "Zero VAT", or "Zero Rated", the VAT amount is €0.00
+- When VAT rate is 0%, ONLY extract €0.00 as the VAT amount - ignore other monetary amounts
+- Do NOT confuse product prices, service fees, or totals with VAT when rate is 0%
+- Examples of 0% VAT patterns:
+  * "VAT (0%): €0.00" → Extract €0.00
+  * "Zero-rated VAT: €0.00" → Extract €0.00
+  * "VAT Rate: 0%" → VAT amount is €0.00
+
 WOOCOMMERCE TAX REPORT DETECTION (ENHANCED):
 If this document appears to be a WooCommerce tax report, look specifically for:
 - "Net Total Tax" columns (HIGHEST PRIORITY) - sum these for country summary reports
@@ -183,6 +192,13 @@ WOOCOMMERCE-SPECIFIC PATTERNS (ENHANCED):
    - Convert amounts to numbers (remove €, commas)
    - Assume EUR if currency not specified
    - Handle both "€123.45" and "123.45" formats
+   - CRITICAL: For zero VAT, always return exactly 0.00 (not null, not undefined)
+
+7. Zero VAT validation rules:
+   - If VAT rate is 0% → VAT amount MUST be 0.00
+   - If document shows "VAT (0%)" → Extract rate as 0 and amount as 0.00
+   - If document shows "Zero-rated" or "Zero VAT" → Extract 0.00
+   - Do NOT extract non-VAT amounts when VAT is clearly marked as 0%
 
 7. LEASE INVOICE RECOGNITION:
    - Identify lease/rental invoices from financial services companies
@@ -270,6 +286,7 @@ Instructions:
    - "VAT", "Tax", "Sales Tax", "GST", "HST", "Total Tax", "Tax Amount"
    - "VAT (XX%): €XX" or "VAT (XX.XX%): €XX.XX" format with percentage in parentheses
    - Tax amounts following patterns like "VAT (23.00%): €92.00"
+   - ZERO VAT patterns: "VAT (0%)", "VAT 0%", "Zero VAT", "Zero-rated"
 3. Extract the exact amounts as written on the document (€, $, £, etc.)
 4. Do NOT make assumptions or corrections - extract exactly what you see
 5. If multiple tax amounts exist, include them all in lineItems
@@ -278,6 +295,7 @@ Instructions:
 8. Include all raw text in extractedText for verification
 
 CRITICAL: Look for VAT patterns with percentage in parentheses like "VAT (23.00%): €92.00"
+CRITICAL: For zero VAT - "VAT (0%)" means totalVatAmount should be 0.00 (not null)
 
 Be accurate and precise - this is for tax filing purposes.`,
 

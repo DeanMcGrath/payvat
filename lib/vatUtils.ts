@@ -379,3 +379,71 @@ export function formatEuroAmount(amount: number): string {
     maximumFractionDigits: 2
   }).format(amount)
 }
+
+// Zero VAT validation utilities
+export interface ZeroVATValidationResult {
+  isValid: boolean
+  shouldBeZero: boolean
+  errors: string[]
+  warnings: string[]
+}
+
+export function validateZeroVAT(
+  vatAmount: number, 
+  vatRate: number | null, 
+  extractedText: string = ''
+): ZeroVATValidationResult {
+  const result: ZeroVATValidationResult = {
+    isValid: true,
+    shouldBeZero: false,
+    errors: [],
+    warnings: []
+  }
+  
+  // Check if document indicates 0% VAT
+  const zeroVATIndicators = [
+    'VAT (0%)',
+    'VAT 0%',
+    'Zero VAT',
+    'Zero-rated',
+    'VAT Rate: 0',
+    'VAT rate 0%'
+  ]
+  
+  const hasZeroVATIndicator = zeroVATIndicators.some(indicator => 
+    extractedText.toLowerCase().includes(indicator.toLowerCase())
+  )
+  
+  // If VAT rate is explicitly 0%
+  if (vatRate === 0) {
+    result.shouldBeZero = true
+    if (vatAmount !== 0) {
+      result.isValid = false
+      result.errors.push('VAT amount should be €0.00 when VAT rate is 0%')
+    }
+  }
+  
+  // If document shows zero VAT indicators
+  if (hasZeroVATIndicator) {
+    result.shouldBeZero = true
+    if (vatAmount !== 0) {
+      result.isValid = false
+      result.errors.push('VAT amount should be €0.00 when document shows zero VAT rate')
+    }
+  }
+  
+  // If VAT amount is 0 but no clear zero rate indication
+  if (vatAmount === 0 && !hasZeroVATIndicator && vatRate !== 0) {
+    result.warnings.push('Zero VAT amount detected - please verify this is correct')
+  }
+  
+  return result
+}
+
+export function formatVATAmount(amount: number): string {
+  // Always ensure proper formatting with 2 decimal places
+  if (amount === 0) {
+    return '€0.00'
+  }
+  return formatCurrency(amount)
+}

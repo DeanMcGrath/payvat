@@ -1,7 +1,10 @@
 /**
  * Security Utilities
  * Provides secure handling of sensitive data and validation
+ * Enhanced for production security
  */
+
+import { logWarn, logError } from './secure-logger'
 
 // Security-focused environment variable access
 export class SecureEnv {
@@ -39,7 +42,9 @@ export class SecureEnv {
   get(key: string): string | undefined {
     if (this.secureKeys.has(key) && process.env.NODE_ENV === 'production') {
       // Additional security logging in production
-      console.warn(`⚠️ Secure environment variable ${key} accessed in production`)
+      logWarn('Secure environment variable accessed in production', {
+        operation: 'env-variable-access'
+      })
     }
     return process.env[key]
   }
@@ -90,33 +95,53 @@ export class SecureEnv {
   }
 }
 
-// Content Security Policy headers - Next.js compatible
+// Content Security Policy headers - Production hardened for financial data
 export const getCSPHeaders = () => {
+  const isProduction = process.env.NODE_ENV === 'production'
+  
   const csp = [
     "default-src 'self'",
-    // More permissive script-src for Next.js hydration and webpack chunks
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://vercel.live",
+    // Strict script policy for production
+    isProduction 
+      ? "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net"
+      : "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://vercel.live",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: https: blob:",
     "media-src 'self' blob: https://*.public.blob.vercel-storage.com",
-    // More permissive connect-src for Next.js and development
-    "connect-src 'self' https: wss: https://api.stripe.com https://api.openai.com",
-    "frame-src 'self' blob: data:",
+    // Strict connect policy for production
+    isProduction
+      ? "connect-src 'self' https://api.stripe.com https://api.openai.com https://*.payvat.ie"
+      : "connect-src 'self' https: wss: https://api.stripe.com https://api.openai.com",
+    "frame-src 'none'", // No iframes for security
     "object-src 'none'",
     "base-uri 'self'",
-    "form-action 'self'"
-    // Removed upgrade-insecure-requests as it might interfere with Next.js
+    "form-action 'self'",
+    "upgrade-insecure-requests"
   ].join('; ')
 
-  return {
+  const headers: Record<string, string> = {
     'Content-Security-Policy': csp,
     'X-Content-Type-Options': 'nosniff',
     'X-Frame-Options': 'DENY',
     'X-XSS-Protection': '1; mode=block',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
-    'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
+    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+    'X-Robots-Tag': 'noindex, nofollow', // Prevent search engine indexing of app
+    'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+    'Pragma': 'no-cache'
   }
+
+  // Additional production headers
+  if (isProduction) {
+    headers['Cross-Origin-Embedder-Policy'] = 'require-corp'
+    headers['Cross-Origin-Opener-Policy'] = 'same-origin'
+    headers['Cross-Origin-Resource-Policy'] = 'same-origin'
+    headers['X-Permitted-Cross-Domain-Policies'] = 'none'
+  }
+
+  return headers
 }
 
 // Generate cryptographically secure nonce
