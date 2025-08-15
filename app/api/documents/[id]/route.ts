@@ -153,7 +153,7 @@ async function downloadDocument(request: NextRequest, user: AuthUser) {
     const id = url.pathname.split('/').pop()
     const action = url.searchParams.get('action')
     
-    if (action !== 'download') {
+    if (action !== 'download' && action !== 'preview') {
       return getDocument(request, user)
     }
     
@@ -212,11 +212,22 @@ async function downloadDocument(request: NextRequest, user: AuthUser) {
         }
       })
       
+      // Determine content disposition based on action
+      const isPreview = action === 'preview'
+      const contentDisposition = isPreview 
+        ? 'inline' 
+        : `attachment; filename="${document.originalName}"`
+      
       return new NextResponse(new Uint8Array(fileBuffer), {
         headers: {
           'Content-Type': document.mimeType,
-          'Content-Disposition': `attachment; filename="${document.originalName}"`,
+          'Content-Disposition': contentDisposition,
           'Content-Length': document.fileSize.toString(),
+          // Add headers for better PDF viewing
+          ...(isPreview && document.mimeType === 'application/pdf' && {
+            'X-Frame-Options': 'SAMEORIGIN',
+            'Cache-Control': 'private, max-age=300'
+          })
         }
       })
       

@@ -102,7 +102,7 @@ export const getCSPHeaders = () => {
     "media-src 'self' blob: https://*.public.blob.vercel-storage.com",
     // More permissive connect-src for Next.js and development
     "connect-src 'self' https: wss: https://api.stripe.com https://api.openai.com",
-    "frame-src 'self' blob:",
+    "frame-src 'self' blob: data:",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'"

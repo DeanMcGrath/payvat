@@ -4,7 +4,7 @@ import { addSecurityHeaders } from '@/lib/security-utils'
 // Security: Rate limiting configuration
 const RATE_LIMIT_MAX_REQUESTS = 100 // requests per window
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000 // 15 minutes
-const LOGIN_RATE_LIMIT = 20 // login attempts per window (increased from 5 to prevent blocking legitimate users)
+const LOGIN_RATE_LIMIT = process.env.NODE_ENV === 'development' ? 1000 : 20 // higher limit in development
 const PAYMENT_RATE_LIMIT = 10 // payment attempts per window
 
 // In-memory store for rate limiting (in production, use Redis or similar)

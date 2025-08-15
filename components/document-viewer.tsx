@@ -98,14 +98,31 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
     if (document && isOpen) {
       loadDocument()
     }
+    
+    // Cleanup blob URL when component unmounts or document changes
+    return () => {
+      if (documentUrl) {
+        URL.revokeObjectURL(documentUrl)
+      }
+    }
   }, [document, isOpen])
+  
+  // Cleanup blob URL when component unmounts
+  useEffect(() => {
+    return () => {
+      if (documentUrl) {
+        URL.revokeObjectURL(documentUrl)
+      }
+    }
+  }, [documentUrl])
 
   const loadDocument = useCallback(async () => {
     if (!document) return
     
     setLoading(true)
     try {
-      const response = await fetch(`/api/documents/${document.id}?action=download`, {
+      // Use preview action for viewing, not download
+      const response = await fetch(`/api/documents/${document.id}?action=preview`, {
         method: 'GET',
         credentials: 'include'
       })
@@ -290,13 +307,15 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
         <div className="relative bg-white rounded-lg border overflow-hidden min-h-[50vh] sm:min-h-[70vh] flex flex-col">
           <div className="flex-1 relative">
             <iframe
-              src={`${documentUrl}#view=FitH&navpanes=0&scrollbar=1&toolbar=1`}
+              src={documentUrl}
               className="absolute inset-0 w-full h-full border-0"
               style={{
                 transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
                 transformOrigin: 'center center'
               }}
               title={document?.originalName || 'Document preview'}
+              allow="fullscreen"
+              sandbox="allow-same-origin allow-scripts"
             />
           </div>
           {zoom !== 100 || rotation !== 0 ? (
