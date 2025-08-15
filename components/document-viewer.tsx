@@ -250,10 +250,11 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
   const renderDocumentViewer = () => {
     if (loading) {
       return (
-        <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg">
-          <div className="text-center">
-            <RefreshCw className="h-8 w-8 animate-spin mx-auto mb-2 text-teal-600" />
-            <p className="text-gray-600">Loading document...</p>
+        <div className="flex items-center justify-center min-h-[50vh] sm:min-h-[70vh] bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border">
+          <div className="text-center p-8">
+            <RefreshCw className="h-12 w-12 animate-spin mx-auto mb-4 text-teal-600" />
+            <p className="text-gray-600 text-lg">Loading document...</p>
+            <p className="text-gray-500 text-sm mt-2">Please wait while we prepare the preview</p>
           </div>
         </div>
       )
@@ -261,10 +262,21 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
 
     if (!documentUrl) {
       return (
-        <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg">
-          <div className="text-center">
-            <FileText className="h-12 w-12 mx-auto mb-2 text-gray-400" />
-            <p className="text-gray-600">Document preview not available</p>
+        <div className="flex items-center justify-center min-h-[50vh] sm:min-h-[70vh] bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border-2 border-dashed border-gray-300">
+          <div className="text-center p-8">
+            <div className="bg-gray-200 rounded-full p-6 mb-4 inline-block">
+              <FileText className="h-16 w-16 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Preview Not Available</h3>
+            <p className="text-gray-600 mb-4">The document preview couldn't be loaded</p>
+            <Button 
+              onClick={handleDownload} 
+              size="lg"
+              className="bg-teal-600 hover:bg-teal-700"
+            >
+              <Download className="h-5 w-5 mr-2" />
+              Download to View
+            </Button>
           </div>
         </div>
       )
@@ -275,42 +287,63 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
 
     if (isPDF) {
       return (
-        <div className="relative bg-gray-50 rounded-lg overflow-hidden" style={{ height: '500px' }}>
-          <iframe
-            src={documentUrl}
-            className="w-full h-full"
-            style={{
-              transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
-              transformOrigin: 'center center'
-            }}
-          />
+        <div className="relative bg-white rounded-lg border overflow-hidden min-h-[50vh] sm:min-h-[70vh] flex flex-col">
+          <div className="flex-1 relative">
+            <iframe
+              src={`${documentUrl}#view=FitH&navpanes=0&scrollbar=1&toolbar=1`}
+              className="absolute inset-0 w-full h-full border-0"
+              style={{
+                transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
+                transformOrigin: 'center center'
+              }}
+              title={document?.originalName || 'Document preview'}
+            />
+          </div>
+          {zoom !== 100 || rotation !== 0 ? (
+            <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
+              {zoom}% {rotation > 0 && `• ${rotation}°`}
+            </div>
+          ) : null}
         </div>
       )
     }
 
     if (isImage) {
       return (
-        <div className="relative bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center" style={{ height: '500px' }}>
+        <div className="relative bg-white rounded-lg border overflow-hidden min-h-[50vh] sm:min-h-[70vh] flex items-center justify-center">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 opacity-50"></div>
           <img
             src={documentUrl}
             alt={document?.originalName || 'Document preview'}
-            className="max-w-full max-h-full object-contain"
+            className="relative z-10 max-w-full max-h-full object-contain shadow-lg rounded"
             style={{
               transform: `scale(${zoom / 100}) rotate(${rotation}deg)`,
               transformOrigin: 'center center'
             }}
           />
+          {zoom !== 100 || rotation !== 0 ? (
+            <div className="absolute top-4 left-4 bg-black/70 text-white px-3 py-1 rounded-full text-sm z-20">
+              {zoom}% {rotation > 0 && `• ${rotation}°`}
+            </div>
+          ) : null}
         </div>
       )
     }
 
     return (
-      <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg">
-        <div className="text-center">
-          <FileText className="h-12 w-12 mx-auto mb-2 text-gray-400" />
-          <p className="text-gray-600">Preview not available for this file type</p>
-          <Button onClick={handleDownload} className="mt-2">
-            <Download className="h-4 w-4 mr-2" />
+      <div className="flex items-center justify-center min-h-[50vh] sm:min-h-[70vh] bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border-2 border-dashed border-gray-300">
+        <div className="text-center p-8">
+          <div className="bg-gray-200 rounded-full p-6 mb-4 inline-block">
+            <FileText className="h-16 w-16 text-gray-400" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">File Type Not Supported</h3>
+          <p className="text-gray-600 mb-4">Preview not available for this file type</p>
+          <Button 
+            onClick={handleDownload} 
+            size="lg"
+            className="bg-teal-600 hover:bg-teal-700"
+          >
+            <Download className="h-5 w-5 mr-2" />
             Download to View
           </Button>
         </div>
@@ -324,8 +357,8 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="flex flex-col overflow-hidden">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5" />
             {document.originalName}
@@ -335,51 +368,81 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Document Viewer */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
+        <div className="flex-1 grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6 min-h-0 overflow-hidden">
+          {/* Document Viewer - Takes 2/3 width on desktop, full width on mobile */}
+          <div className="xl:col-span-2 flex flex-col space-y-4 min-h-0">
+            <div className="flex-shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <h3 className="text-lg font-semibold">Document Preview</h3>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => setZoom(Math.max(50, zoom - 25))}>
-                  <ZoomOut className="h-4 w-4" />
-                </Button>
-                <span className="text-sm min-w-12 text-center">{zoom}%</span>
-                <Button variant="outline" size="sm" onClick={() => setZoom(Math.min(200, zoom + 25))}>
-                  <ZoomIn className="h-4 w-4" />
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => setRotation((rotation + 90) % 360)}>
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                <div className="flex items-center gap-1 bg-gray-50 rounded-md p-1">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setZoom(Math.max(50, zoom - 25))}
+                    className="h-8 w-8 p-0 touch-manipulation"
+                    title="Zoom Out"
+                  >
+                    <ZoomOut className="h-4 w-4" />
+                  </Button>
+                  <span className="text-sm min-w-12 text-center font-medium px-1">{zoom}%</span>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setZoom(Math.min(200, zoom + 25))}
+                    className="h-8 w-8 p-0 touch-manipulation"
+                    title="Zoom In"
+                  >
+                    <ZoomIn className="h-4 w-4" />
+                  </Button>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setRotation((rotation + 90) % 360)}
+                  className="h-8 w-8 p-0 touch-manipulation"
+                  title="Rotate"
+                >
                   <RotateCw className="h-4 w-4" />
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleDownload}>
-                  <Download className="h-4 w-4" />
+                <Button 
+                  variant="default" 
+                  size="sm" 
+                  onClick={handleDownload}
+                  className="bg-teal-600 hover:bg-teal-700 touch-manipulation"
+                >
+                  <Download className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Download</span>
                 </Button>
               </div>
             </div>
 
-            {renderDocumentViewer()}
+            <div className="flex-1 min-h-0">
+              {renderDocumentViewer()}
+            </div>
           </div>
 
-          {/* VAT Data and Correction Panel */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
+          {/* VAT Data and Correction Panel - Takes 1/3 width on desktop, full width on mobile */}
+          <div className="xl:col-span-1 flex flex-col space-y-4 min-h-0 overflow-y-auto">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <h3 className="text-lg font-semibold">VAT Information</h3>
               <div className="flex gap-2">
                 <Button
                   variant={viewMode === 'view' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setViewMode('view')}
+                  className="touch-manipulation"
                 >
-                  <Eye className="h-4 w-4 mr-1" />
-                  View
+                  <Eye className="h-4 w-4 sm:mr-1" />
+                  <span className="hidden sm:inline">View</span>
                 </Button>
                 <Button
                   variant={viewMode === 'correct' ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setViewMode('correct')}
+                  className="touch-manipulation"
                 >
-                  <Edit3 className="h-4 w-4 mr-1" />
-                  Correct
+                  <Edit3 className="h-4 w-4 sm:mr-1" />
+                  <span className="hidden sm:inline">Correct</span>
                 </Button>
               </div>
             </div>
