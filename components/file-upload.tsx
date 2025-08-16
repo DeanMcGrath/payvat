@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { Upload, FileText, X, CheckCircle, AlertCircle, Loader2, ArrowRight } from 'lucide-react'
+import { Upload, FileText, X, CheckCircle, AlertCircle, Loader2, ArrowRight, Pause, Play, RotateCcw, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Progress } from '@/components/ui/progress'
 
@@ -47,6 +47,10 @@ interface FileUploadProps {
   acceptedFiles: string[]
   onUploadSuccess?: (document: UploadedDocument) => void
   vatReturnId?: string
+  // New batch upload options
+  enableBatchMode?: boolean
+  maxConcurrentUploads?: number
+  showBatchProgress?: boolean
 }
 
 export default function FileUpload({
@@ -55,7 +59,10 @@ export default function FileUpload({
   description,
   acceptedFiles,
   onUploadSuccess,
-  vatReturnId
+  vatReturnId,
+  enableBatchMode = false,
+  maxConcurrentUploads = 3,
+  showBatchProgress = true
 }: FileUploadProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState<UploadedDocument[]>([])
@@ -67,6 +74,31 @@ export default function FileUpload({
   })
   const [isDragOver, setIsDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  // Batch upload state
+  const [uploadQueue, setUploadQueue] = useState<File[]>([])
+  const [currentUploads, setCurrentUploads] = useState<Set<string>>(new Set())
+  const [uploadResults, setUploadResults] = useState<Map<string, {status: 'success' | 'error' | 'uploading', document?: UploadedDocument, error?: string}>>(new Map())
+  const [batchProgress, setBatchProgress] = useState({ completed: 0, total: 0, failed: 0 })
+  const [isPaused, setIsPaused] = useState(false)
+
+  // Smart file categorization based on file name patterns
+  const getSmartCategory = (fileName: string): 'SALES' | 'PURCHASES' => {
+    const lower = fileName.toLowerCase()
+    
+    // Sales indicators
+    const salesKeywords = ['sales', 'invoice', 'receipt', 'customer', 'payment_received', 'income', 'revenue']
+    const purchaseKeywords = ['purchase', 'expense', 'supplier', 'vendor', 'bill', 'paid', 'cost', 'woocommerce']
+    
+    const salesScore = salesKeywords.reduce((score, keyword) => score + (lower.includes(keyword) ? 1 : 0), 0)
+    const purchaseScore = purchaseKeywords.reduce((score, keyword) => score + (lower.includes(keyword) ? 1 : 0), 0)
+    
+    // Default to category prop, but use smart detection if confidence is high
+    if (purchaseScore > salesScore && purchaseScore > 0) return 'PURCHASES'
+    if (salesScore > purchaseScore && salesScore > 0) return 'SALES'
+    
+    return category // Fallback to prop
+  }
 
   // Map category to backend enum values
   const getCategoryValue = (fileCategory: 'SALES' | 'PURCHASES', fileName: string) => {
@@ -169,12 +201,22 @@ export default function FileUpload({
         toast.success(`Starting upload of ${validFiles.length} files...`)
       }
 
-      // Upload files sequentially to avoid overwhelming the server
+      // Handle batch or sequential upload based on mode
       console.log(`Starting upload of ${validFiles.length} valid files`)
-      for (const file of validFiles) {
-        console.log(`About to upload file: ${file.name}`)
-        await uploadFile(file)
-        console.log(`Finished uploading file: ${file.name}`)
+      if (enableBatchMode && validFiles.length > 1) {
+        // Initialize batch progress
+        setBatchProgress({ completed: 0, total: validFiles.length, failed: 0 })
+        setUploadQueue(validFiles)
+        
+        // Start concurrent uploads
+        processBatchQueue(validFiles)
+      } else {
+        // Sequential upload for single files or when batch mode is disabled
+        for (const file of validFiles) {
+          console.log(`About to upload file: ${file.name}`)
+          await uploadFile(file)
+          console.log(`Finished uploading file: ${file.name}`)
+        }
       }
       
       // All files uploaded successfully - reset states
@@ -196,6 +238,124 @@ export default function FileUpload({
       console.log('Upload failed, keeping file selection for retry')
     } finally {
       console.log('File change handler completed')
+    }
+  }
+
+  // Batch queue processing with concurrent uploads
+  const processBatchQueue = async (files: File[]) => {
+    const activeUploads = new Set<string>()
+    const results = new Map<string, any>()
+    let completedCount = 0
+    let failedCount = 0
+
+    const processFile = async (file: File) => {
+      const fileId = `${file.name}_${file.lastModified}`
+      activeUploads.add(fileId)
+      setCurrentUploads(new Set(activeUploads))
+      
+      // Update upload results to show uploading status
+      results.set(fileId, { status: 'uploading' })
+      setUploadResults(new Map(results))
+
+      try {
+        // Use smart categorization if enabled
+        const smartCategory = enableBatchMode ? getSmartCategory(file.name) : category
+        const uploadedDocument = await uploadFileBatch(file, smartCategory)
+        
+        results.set(fileId, { status: 'success', document: uploadedDocument })
+        completedCount++
+        
+        if (enableBatchMode) {
+          toast.success(`✅ ${file.name} uploaded successfully${smartCategory !== category ? ` (auto-categorized as ${smartCategory})` : ''}`)
+        }
+      } catch (error) {
+        results.set(fileId, { status: 'error', error: error instanceof Error ? error.message : 'Upload failed' })
+        failedCount++
+        toast.error(`❌ ${file.name} upload failed`)
+      } finally {
+        activeUploads.delete(fileId)
+        setCurrentUploads(new Set(activeUploads))
+        setUploadResults(new Map(results))
+        setBatchProgress({ completed: completedCount, total: files.length, failed: failedCount })
+      }
+    }
+
+    // Process files with concurrent limit
+    const chunks = []
+    for (let i = 0; i < files.length; i += maxConcurrentUploads) {
+      chunks.push(files.slice(i, i + maxConcurrentUploads))
+    }
+
+    for (const chunk of chunks) {
+      if (isPaused) break
+      await Promise.all(chunk.map(processFile))
+    }
+
+    // Show batch completion summary
+    if (completedCount > 0 || failedCount > 0) {
+      const summary = `Batch upload complete: ${completedCount} successful, ${failedCount} failed`
+      failedCount > 0 ? toast.error(summary) : toast.success(summary)
+    }
+  }
+
+  const uploadFileBatch = async (file: File, fileCategory: 'SALES' | 'PURCHASES'): Promise<UploadedDocument> => {
+    const formData = new FormData()
+    formData.append('file', file)
+    const categoryValue = getCategoryValue(fileCategory, file.name)
+    formData.append('category', categoryValue)
+    
+    if (vatReturnId) {
+      formData.append('vatReturnId', vatReturnId)
+    }
+
+    const response = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    })
+
+    const result = await response.json()
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || 'Upload failed')
+    }
+
+    const newDocument: UploadedDocument = result.document
+    setUploadedFiles(prev => [...prev, newDocument])
+    
+    // Trigger processing without blocking
+    processDocumentInBackground(newDocument)
+    
+    return newDocument
+  }
+
+  const processDocumentInBackground = async (document: UploadedDocument) => {
+    try {
+      const processResponse = await fetch('/api/documents/process', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ documentId: document.id })
+      })
+      
+      if (processResponse.ok) {
+        const processResult = await processResponse.json()
+        if (processResult.success) {
+          // Update the document with processing results
+          const updatedDocument = {
+            ...document,
+            isScanned: true,
+            scanResult: processResult.scanResult || 'Processed with AI',
+            processingInfo: processResult.processingInfo
+          }
+          
+          setUploadedFiles(prev => prev.map(doc => 
+            doc.id === document.id ? updatedDocument : doc
+          ))
+          
+          onUploadSuccess?.(updatedDocument)
+        }
+      }
+    } catch (error) {
+      console.error('Background processing failed:', error)
     }
   }
 
@@ -520,11 +680,66 @@ export default function FileUpload({
     if (validFiles.length === 0) return
     
     // Show success message for drag and drop
-    toast.success(`${validFiles.length} file(s) dropped successfully. Processing...`)
+    const smartCategorized = enableBatchMode ? validFiles.filter(f => getSmartCategory(f.name) !== category).length : 0
+    toast.success(`${validFiles.length} file(s) dropped successfully${smartCategorized > 0 ? ` (${smartCategorized} auto-categorized)` : ''}`)
     
-    // Upload files sequentially
-    for (const file of validFiles) {
-      await uploadFile(file)
+    setIsUploading(true)
+    
+    // Handle batch or sequential upload
+    if (enableBatchMode && validFiles.length > 1) {
+      setBatchProgress({ completed: 0, total: validFiles.length, failed: 0 })
+      processBatchQueue(validFiles)
+    } else {
+      // Sequential upload for single files or non-batch mode
+      for (const file of validFiles) {
+        await uploadFile(file)
+      }
+      setIsUploading(false)
+    }
+  }
+
+  // Batch control functions
+  const pauseBatch = () => {
+    setIsPaused(true)
+    toast.info('Batch upload paused')
+  }
+
+  const resumeBatch = () => {
+    setIsPaused(false)
+    toast.info('Batch upload resumed')
+  }
+
+  const clearBatch = () => {
+    setUploadQueue([])
+    setCurrentUploads(new Set())
+    setUploadResults(new Map())
+    setBatchProgress({ completed: 0, total: 0, failed: 0 })
+    setIsPaused(false)
+    toast.info('Batch queue cleared')
+  }
+
+  const retryFailed = () => {
+    const failedFiles = Array.from(uploadResults.entries())
+      .filter(([, result]) => result.status === 'error')
+      .map(([fileId]) => {
+        // Extract file info from fileId (this is a simplified approach)
+        const fileName = fileId.split('_')[0]
+        return uploadQueue.find(f => f.name === fileName)
+      })
+      .filter(Boolean) as File[]
+
+    if (failedFiles.length > 0) {
+      // Reset failed files in results
+      const newResults = new Map(uploadResults)
+      failedFiles.forEach(file => {
+        const fileId = `${file.name}_${file.lastModified}`
+        newResults.delete(fileId)
+      })
+      setUploadResults(newResults)
+      
+      // Restart upload for failed files
+      processBatchQueue(failedFiles)
+      toast.info(`Retrying ${failedFiles.length} failed uploads`)
     }
   }
 
@@ -568,6 +783,9 @@ export default function FileUpload({
             <p className="text-gray-600 mb-2">{description}</p>
             <p className="text-sm text-gray-500 mb-3">
               Drag & drop files here, or click to select • PDF, Excel, CSV, Images • Up to 10MB each
+              {enableBatchMode && <span className="block text-teal-600 mt-1">
+                ⚡ Batch mode: Upload multiple files with smart categorization and concurrent processing
+              </span>}
             </p>
           </>
         )}
@@ -627,6 +845,101 @@ export default function FileUpload({
             <div className="mt-3 flex items-center text-sm text-green-700">
               <CheckCircle className="h-4 w-4 mr-2" />
               Processing complete! Irish VAT compliance validated.
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Batch Progress and Controls */}
+      {enableBatchMode && showBatchProgress && batchProgress.total > 0 && (
+        <div className="mt-4 p-4 bg-gradient-to-r from-teal-50 to-blue-50 rounded-lg border border-teal-200">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm font-medium text-teal-800">Batch Upload Progress</span>
+                <span className="px-2 py-1 bg-teal-100 text-teal-700 rounded-full text-xs font-medium">
+                  {batchProgress.completed}/{batchProgress.total} files
+                </span>
+                {batchProgress.failed > 0 && (
+                  <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
+                    {batchProgress.failed} failed
+                  </span>
+                )}
+              </div>
+            </div>
+            <span className="text-sm text-teal-600">
+              {Math.round((batchProgress.completed / batchProgress.total) * 100)}%
+            </span>
+          </div>
+          
+          <Progress 
+            value={(batchProgress.completed / batchProgress.total) * 100} 
+            className="mb-3" 
+          />
+          
+          <div className="flex items-center justify-between">
+            <div className="flex items-center text-sm text-teal-700">
+              <ArrowRight className="h-4 w-4 mr-2" />
+              {currentUploads.size > 0 ? `Uploading ${currentUploads.size} files...` : 
+               batchProgress.completed === batchProgress.total ? 'Batch complete!' : 'Ready to upload'}
+            </div>
+            
+            {/* Batch Control Buttons */}
+            <div className="flex space-x-2">
+              {isUploading && !isPaused && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={pauseBatch}
+                  className="text-yellow-600 hover:text-yellow-700"
+                >
+                  <Pause className="h-3 w-3 mr-1" />
+                  Pause
+                </Button>
+              )}
+              
+              {isPaused && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={resumeBatch}
+                  className="text-green-600 hover:text-green-700"
+                >
+                  <Play className="h-3 w-3 mr-1" />
+                  Resume
+                </Button>
+              )}
+              
+              {batchProgress.failed > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={retryFailed}
+                  className="text-blue-600 hover:text-blue-700"
+                >
+                  <RotateCcw className="h-3 w-3 mr-1" />
+                  Retry Failed
+                </Button>
+              )}
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={clearBatch}
+                disabled={isUploading && !isPaused}
+                className="text-red-500 hover:text-red-700"
+              >
+                <Trash2 className="h-3 w-3 mr-1" />
+                Clear
+              </Button>
+            </div>
+          </div>
+          
+          {/* Active uploads indicator */}
+          {currentUploads.size > 0 && (
+            <div className="mt-3 text-xs text-teal-600">
+              Currently uploading: {Array.from(currentUploads).map(fileId => 
+                fileId.split('_')[0]).join(', ')}
             </div>
           )}
         </div>

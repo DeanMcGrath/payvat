@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Calculator, FileText, CheckCircle, BadgeCheck, RefreshCw, X, AlertCircle, Loader2, Eye, Edit3 } from 'lucide-react'
 import FileUpload from "@/components/file-upload"
 import Footer from "@/components/footer"
@@ -51,6 +53,10 @@ export default function VATSubmissionPage() {
   const [fetchTimeout, setFetchTimeout] = useState<NodeJS.Timeout | null>(null)
   const [cachedVATData, setCachedVATData] = useState<{data: any, timestamp: number} | null>(null)
   const [isRefreshDisabled, setIsRefreshDisabled] = useState(false)
+  
+  // Batch upload state
+  const [enableBatchMode, setEnableBatchMode] = useState(false)
+  const [maxConcurrentUploads, setMaxConcurrentUploads] = useState(3)
   
 
   // Use period data from context or fallback
@@ -775,12 +781,65 @@ export default function VATSubmissionPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
+                {/* Batch Upload Settings */}
+                <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-lg p-4 border border-teal-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h4 className="text-sm font-semibold text-teal-800 mb-1">Upload Settings</h4>
+                      <p className="text-xs text-teal-600">Configure how documents are processed</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="batch-mode"
+                        checked={enableBatchMode}
+                        onCheckedChange={(checked) => setEnableBatchMode(checked as boolean)}
+                      />
+                      <Label htmlFor="batch-mode" className="text-sm font-medium text-teal-700">
+                        Enable Batch Mode
+                      </Label>
+                    </div>
+                  </div>
+                  
+                  {enableBatchMode && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label className="text-xs font-medium text-teal-700 mb-1 block">
+                          Concurrent Uploads
+                        </Label>
+                        <Select 
+                          value={maxConcurrentUploads.toString()} 
+                          onValueChange={(value) => setMaxConcurrentUploads(parseInt(value))}
+                        >
+                          <SelectTrigger className="h-8">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">1 file at a time</SelectItem>
+                            <SelectItem value="2">2 files at a time</SelectItem>
+                            <SelectItem value="3">3 files at a time</SelectItem>
+                            <SelectItem value="5">5 files at a time</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      <div className="text-xs text-teal-600 space-y-1">
+                        <p>✅ Smart file categorization</p>
+                        <p>✅ Concurrent processing</p>
+                        <p>✅ Pause/resume controls</p>
+                        <p>✅ Automatic retry on failures</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 {/* VAT on Sales Documents */}
                 <FileUpload
                   category="SALES"
                   title="Section 1: VAT on Sales Documents"
                   description="Upload sales-related documents"
                   acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
+                  enableBatchMode={enableBatchMode}
+                  maxConcurrentUploads={maxConcurrentUploads}
+                  showBatchProgress={true}
                   onUploadSuccess={(doc) => {
                     console.log('📤 FRONTEND: Sales document uploaded:', doc.fileName)
                     logger.info('Sales document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
@@ -810,6 +869,9 @@ export default function VATSubmissionPage() {
                   title="Section 2: VAT on Purchases Documents"
                   description="Upload purchase-related documents"
                   acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
+                  enableBatchMode={enableBatchMode}
+                  maxConcurrentUploads={maxConcurrentUploads}
+                  showBatchProgress={true}
                   onUploadSuccess={(doc) => {
                     console.log('📤 FRONTEND: Purchase document uploaded:', doc.fileName)
                     logger.info('Purchase document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
