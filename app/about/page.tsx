@@ -41,11 +41,7 @@ export default function AboutPayVat() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader 
-        searchPlaceholder="Search company info..."
-        currentPage="About PayVat"
-        pageSubtitle="Simplifying Irish VAT compliance"
-      />
+      <SiteHeader />
 
 
       <div className="max-w-7xl mx-auto px-6 py-8">

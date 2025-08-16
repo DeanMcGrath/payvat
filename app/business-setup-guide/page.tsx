@@ -271,41 +271,37 @@ export default function BusinessSetupGuidePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="px-4 sm:px-6">
-              {/* Progress Bar Container with proper spacing */}
-              <div className="relative mb-8">
-                <div className="absolute left-0 top-0 h-2 w-full bg-gray-200 rounded-full"></div>
-                <div 
-                  className="absolute left-0 top-0 h-2 bg-gradient-to-r from-[#0085D1] to-[#005A91] rounded-full transition-all duration-500"
-                  style={{ width: `${(completedSteps.length / setupSteps.length) * 100}%` }}
-                ></div>
-              </div>
-              
-              {/* Progress Steps with improved responsive layout */}
-              <div className="grid grid-cols-5 gap-2 sm:gap-4 max-w-full">
+              {/* Progress Tracker with connecting line */}
+              <div className="progress-tracker">
+                {/* Progress Line */}
+                <div className="progress-line">
+                  <div 
+                    className="progress-line-fill"
+                    style={{ width: `${(completedSteps.length / setupSteps.length) * 100}%` }}
+                  ></div>
+                </div>
+                
+                {/* Progress Steps */}
                 {setupSteps.map((step, index) => (
                   <div 
                     key={step.id}
-                    className="flex flex-col items-center cursor-pointer group"
+                    className="progress-step cursor-pointer"
                     onClick={() => toggleStep(step.id)}
                   >
-                    {/* Step Circle with responsive sizing */}
-                    <div className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 ${
-                      completedSteps.includes(step.id) 
-                        ? 'bg-gradient-to-r from-[#0085D1] to-[#005A91] text-white shadow-md' 
-                        : 'bg-gray-200 text-gray-500 group-hover:bg-gray-300'
+                    {/* Step Circle */}
+                    <div className={`step-circle ${
+                      completedSteps.includes(step.id) ? 'completed' : ''
                     }`}>
                       {completedSteps.includes(step.id) ? (
-                        <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" />
+                        <CheckCircle className="h-5 w-5" />
                       ) : (
-                        <span className="text-xs sm:text-sm font-semibold">{index + 1}</span>
+                        <span>{index + 1}</span>
                       )}
                     </div>
                     
-                    {/* Step Label with responsive text */}
-                    <span className={`text-xs sm:text-sm mt-2 text-center leading-tight transition-colors duration-200 ${
-                      completedSteps.includes(step.id) 
-                        ? 'text-[#0072B1] font-medium' 
-                        : 'text-gray-600 group-hover:text-gray-800'
+                    {/* Step Label */}
+                    <span className={`step-label ${
+                      completedSteps.includes(step.id) ? 'completed' : ''
                     }`}>
                       {/* Show abbreviated text on mobile, full word on larger screens */}
                       <span className="block sm:hidden">{step.title.split(' ')[0].substring(0, 4)}</span>

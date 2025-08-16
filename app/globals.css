@@ -570,6 +570,15 @@ body {
   .animate-pulse-ring {
     animation: pulseRing 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
   }
+
+  /* Brand Animation */
+  .animate-fade-in-scale {
+    animation: fade-in-scale 2s ease-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slide-in-left 1.5s ease-out;
+  }
 }
 
 @keyframes fadeIn {
@@ -668,6 +677,45 @@ body {
   }
 }
 
+/* Updated fade-in-scale animation to be more professional and elegant for fintech */
+@keyframes fade-in-scale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Added left-to-right slide animation for brand opening */
+@keyframes slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Icon Rendering Optimizations */
+.icon-crisp {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated; /* fallback */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* SVG Icon Quality */
+svg {
+  shape-rendering: geometricPrecision;
+  text-rendering: optimizeLegibility;
+}
+
 /* Typography Enhancements */
 .text-balance {
   text-wrap: balance;
@@ -712,9 +760,128 @@ body {
   color: hsl(var(--muted-foreground));
 }
 
+/* Progress Tracker Components */
+.progress-tracker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: 0 20px;
+  margin: 20px 0;
+}
+
+.progress-line {
+  position: absolute;
+  top: 50%;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background-color: #e5e7eb;
+  z-index: 1;
+  transform: translateY(-50%);
+  border-radius: 1px;
+}
+
+.progress-line-fill {
+  height: 100%;
+  background: linear-gradient(to right, #0085D1, #005A91);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 1px;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  background: white;
+  padding: 0 10px;
+  flex: 1;
+  max-width: none;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 2px solid #e5e7eb;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-weight: 600;
+  font-size: 14px;
+  color: #6b7280;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.step-circle:hover {
+  transform: scale(1.05);
+  border-color: #0072B1;
+  box-shadow: 0 4px 12px 0 rgba(0, 114, 177, 0.15);
+}
+
+.step-circle.completed {
+  background: linear-gradient(135deg, #0085D1, #005A91);
+  border-color: #0085D1;
+  color: white;
+  box-shadow: 0 4px 12px 0 rgba(0, 114, 177, 0.25);
+}
+
+.step-label {
+  margin-top: 8px;
+  font-size: 14px;
+  text-align: center;
+  white-space: nowrap;
+  color: #6b7280;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.step-label.completed {
+  color: #0072B1;
+  font-weight: 600;
+}
+
+.progress-step:hover .step-label {
+  color: #374151;
+}
+
+.progress-step:hover .step-label.completed {
+  color: #005A91;
+}
+
 /* Responsive Design Helpers */
 @media (max-width: 640px) {
   .card-modern {
     @apply rounded-lg shadow-soft;
+  }
+  
+  .progress-tracker {
+    padding: 0 10px;
+  }
+  
+  .progress-line {
+    left: 20px;
+    right: 20px;
+  }
+  
+  .progress-step {
+    padding: 0 5px;
+  }
+  
+  .step-circle {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  
+  .step-label {
+    font-size: 12px;
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

@@ -92,15 +92,13 @@ export default function SiteHeader({
                 
                 {!user && (
                   <>
-                    {/* Sign Up Button */}
-                    <Button 
-                      size="sm"
-                      className="bg-white text-[#0072B1] hover:bg-white/90 font-semibold px-4 py-2 min-h-[44px]"
+                    {/* Sign Up Link */}
+                    <button 
+                      className="text-white/90 hover:text-white transition-colors font-medium"
                       onClick={() => window.location.href = '/signup'}
                     >
-                      <UserPlus className="h-4 w-4 mr-2" />
                       Sign Up
-                    </Button>
+                    </button>
                     
                     {/* Sign In Icon */}
                     <Button 
