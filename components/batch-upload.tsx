@@ -6,8 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
 import { 
   Upload, 
   FileText, 
@@ -42,9 +40,9 @@ interface BatchUploadProps {
 export default function BatchUpload({ onUploadComplete, onUploadProgress }: BatchUploadProps) {
   const [files, setFiles] = useState<BatchFile[]>([])
   const [isUploading, setIsUploading] = useState(false)
-  const [defaultCategory, setDefaultCategory] = useState<'SALES' | 'PURCHASES'>('SALES')
-  const [autoStart, setAutoStart] = useState(true)
-  const [maxConcurrent, setMaxConcurrent] = useState(3)
+  const defaultCategory = 'SALES'
+  const autoStart = true
+  const maxConcurrent = 3
 
   const startBatchUpload = useCallback(async (filesToUpload = files) => {
     if (isUploading) return
@@ -127,11 +125,6 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
     maxSize: 10 * 1024 * 1024 // 10MB
   })
 
-  const updateFileCategory = (fileId: string, category: 'SALES' | 'PURCHASES') => {
-    setFiles(prev => prev.map(f => 
-      f.id === fileId ? { ...f, category } : f
-    ))
-  }
 
   const removeFile = (fileId: string) => {
     setFiles(prev => prev.filter(f => f.id !== fileId))
@@ -293,45 +286,6 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Upload Settings */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="text-sm font-medium mb-2 block">Default Category</label>
-            <Select value={defaultCategory} onValueChange={(value: 'SALES' | 'PURCHASES') => setDefaultCategory(value)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="SALES">Sales Documents</SelectItem>
-                <SelectItem value="PURCHASES">Purchase Documents</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <label className="text-sm font-medium mb-2 block">Max Concurrent</label>
-            <Select value={maxConcurrent.toString()} onValueChange={(value) => setMaxConcurrent(parseInt(value))}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">1 file at a time</SelectItem>
-                <SelectItem value="2">2 files at a time</SelectItem>
-                <SelectItem value="3">3 files at a time</SelectItem>
-                <SelectItem value="5">5 files at a time</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex items-center space-x-2 pt-6">
-            <Checkbox 
-              id="auto-start"
-              checked={autoStart}
-              onCheckedChange={(checked) => setAutoStart(checked as boolean)}
-            />
-            <label htmlFor="auto-start" className="text-sm font-medium">Auto-start upload</label>
-          </div>
-        </div>
 
         {/* Drop Zone */}
         <div
@@ -350,6 +304,7 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
             <div>
               <p className="text-lg text-gray-600 mb-2">Drag & drop files here, or click to select</p>
               <p className="text-sm text-gray-500">Supports PDF, Images, Excel, CSV (max 10MB per file)</p>
+              <p className="text-sm text-blue-600 mt-2">⚡ Smart batch upload with automatic categorization and concurrent processing</p>
             </div>
           )}
         </div>
@@ -422,19 +377,9 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
                     <div className="flex items-center gap-4 text-xs text-gray-500">
                       <span>{Math.round(batchFile.file.size / 1024)}KB</span>
                       
-                      <Select
-                        value={batchFile.category}
-                        onValueChange={(value: 'SALES' | 'PURCHASES') => updateFileCategory(batchFile.id, value)}
-                        disabled={batchFile.status !== 'pending'}
-                      >
-                        <SelectTrigger className="w-32 h-6 text-xs">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="SALES">Sales</SelectItem>
-                          <SelectItem value="PURCHASES">Purchases</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">
+                        {batchFile.category === 'SALES' ? 'Sales' : 'Purchase'} (auto)
+                      </span>
 
                       {batchFile.status === 'uploading' || batchFile.status === 'processing' ? (
                         <div className="flex items-center gap-1">

@@ -60,7 +60,7 @@ export default function FileUpload({
   acceptedFiles,
   onUploadSuccess,
   vatReturnId,
-  enableBatchMode = false,
+  enableBatchMode = true,
   maxConcurrentUploads = 3,
   showBatchProgress = true
 }: FileUploadProps) {
@@ -201,17 +201,17 @@ export default function FileUpload({
         toast.success(`Starting upload of ${validFiles.length} files...`)
       }
 
-      // Handle batch or sequential upload based on mode
+      // Handle batch or sequential upload based on file count
       console.log(`Starting upload of ${validFiles.length} valid files`)
-      if (enableBatchMode && validFiles.length > 1) {
-        // Initialize batch progress
+      if (validFiles.length > 1) {
+        // Initialize batch progress for multiple files
         setBatchProgress({ completed: 0, total: validFiles.length, failed: 0 })
         setUploadQueue(validFiles)
         
         // Start concurrent uploads
         processBatchQueue(validFiles)
       } else {
-        // Sequential upload for single files or when batch mode is disabled
+        // Sequential upload for single files
         for (const file of validFiles) {
           console.log(`About to upload file: ${file.name}`)
           await uploadFile(file)
@@ -258,16 +258,14 @@ export default function FileUpload({
       setUploadResults(new Map(results))
 
       try {
-        // Use smart categorization if enabled
-        const smartCategory = enableBatchMode ? getSmartCategory(file.name) : category
+        // Use smart categorization
+        const smartCategory = getSmartCategory(file.name)
         const uploadedDocument = await uploadFileBatch(file, smartCategory)
         
         results.set(fileId, { status: 'success', document: uploadedDocument })
         completedCount++
         
-        if (enableBatchMode) {
-          toast.success(`✅ ${file.name} uploaded successfully${smartCategory !== category ? ` (auto-categorized as ${smartCategory})` : ''}`)
-        }
+        toast.success(`✅ ${file.name} uploaded successfully${smartCategory !== category ? ` (auto-categorized as ${smartCategory})` : ''}`)
       } catch (error) {
         results.set(fileId, { status: 'error', error: error instanceof Error ? error.message : 'Upload failed' })
         failedCount++
@@ -680,17 +678,17 @@ export default function FileUpload({
     if (validFiles.length === 0) return
     
     // Show success message for drag and drop
-    const smartCategorized = enableBatchMode ? validFiles.filter(f => getSmartCategory(f.name) !== category).length : 0
+    const smartCategorized = validFiles.filter(f => getSmartCategory(f.name) !== category).length
     toast.success(`${validFiles.length} file(s) dropped successfully${smartCategorized > 0 ? ` (${smartCategorized} auto-categorized)` : ''}`)
     
     setIsUploading(true)
     
-    // Handle batch or sequential upload
-    if (enableBatchMode && validFiles.length > 1) {
+    // Handle batch or sequential upload based on file count
+    if (validFiles.length > 1) {
       setBatchProgress({ completed: 0, total: validFiles.length, failed: 0 })
       processBatchQueue(validFiles)
     } else {
-      // Sequential upload for single files or non-batch mode
+      // Sequential upload for single files
       for (const file of validFiles) {
         await uploadFile(file)
       }
@@ -783,9 +781,9 @@ export default function FileUpload({
             <p className="text-gray-600 mb-2">{description}</p>
             <p className="text-sm text-gray-500 mb-3">
               Drag & drop files here, or click to select • PDF, Excel, CSV, Images • Up to 10MB each
-              {enableBatchMode && <span className="block text-[#0072B1] mt-1">
-                ⚡ Batch mode: Upload multiple files with smart categorization and concurrent processing
-              </span>}
+              <span className="block text-[#0072B1] mt-1">
+                ⚡ Smart upload: Multiple files with automatic categorization and concurrent processing
+              </span>
             </p>
           </>
         )}
