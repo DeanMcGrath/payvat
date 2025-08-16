@@ -598,24 +598,6 @@ export default function FileUpload({
     }
   }
 
-  const removeFile = async (documentId: string) => {
-    try {
-      const response = await fetch(`/api/documents/${documentId}`, {
-        method: 'DELETE',
-      })
-
-      if (response.ok) {
-        setUploadedFiles(prev => prev.filter(doc => doc.id !== documentId))
-        toast.success('File removed successfully')
-      } else {
-        const result = await response.json()
-        toast.error(result.error || 'Failed to remove file')
-      }
-    } catch (error) {
-      console.error('Delete error:', error)
-      toast.error('Failed to remove file')
-    }
-  }
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes'
@@ -940,51 +922,6 @@ export default function FileUpload({
                 fileId.split('_')[0]).join(', ')}
             </div>
           )}
-        </div>
-      )}
-      
-      {/* File List */}
-      {uploadedFiles.length > 0 && (
-        <div className="mt-4 space-y-2">
-          {uploadedFiles.map((file) => (
-            <div key={file.id} className="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <FileText className="h-5 w-5 text-gray-500" />
-                <div>
-                  <p className="text-sm font-medium text-gray-900">{file.fileName}</p>
-                  <p className="text-xs text-gray-500">
-                    {formatFileSize(file.fileSize)} • {file.category.replace('_', ' ')}
-                  </p>
-                  <div className="text-xs mt-1">
-                    {file.isScanned && (
-                      <span className="inline-flex items-center text-green-600">
-                        <CheckCircle className="h-3 w-3 mr-1" />
-                        {file.scanResult?.includes('€') ? (
-                          <span className="font-medium">{file.scanResult}</span>
-                        ) : (
-                          'Processed'
-                        )}
-                      </span>
-                    )}
-                    {!file.isScanned && (
-                      <span className="inline-flex items-center text-yellow-600">
-                        <AlertCircle className="h-3 w-3 mr-1" />
-                        Processing document...
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => removeFile(file.id)}
-                className="text-red-500 hover:text-red-700"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
         </div>
       )}
       
