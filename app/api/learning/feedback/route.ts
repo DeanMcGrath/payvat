@@ -263,10 +263,10 @@ async function processLearningFeedback(feedbackId: string): Promise<void> {
         frequency: existingPattern.frequency + 1,
         confidence: Math.min(existingPattern.confidence + 0.1, 1.0),
         patternData: {
-          ...existingPattern.patternData,
+          ...(existingPattern.patternData as any || {}),
           recentCorrections: [
-            ...(Array.isArray(existingPattern.patternData.recentCorrections) 
-              ? existingPattern.patternData.recentCorrections.slice(-4) 
+            ...(Array.isArray((existingPattern.patternData as any)?.recentCorrections) 
+              ? (existingPattern.patternData as any).recentCorrections.slice(-4) 
               : []),
             patternData
           ]
