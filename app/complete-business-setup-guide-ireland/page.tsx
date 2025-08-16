@@ -64,7 +64,7 @@ export default function CompleteBusinessSetupGuideIreland() {
             
             <div className="grid lg:grid-cols-3 gap-8">
               <div className="card-modern p-6 hover-lift">
-                <div className="icon-modern bg-[#0072B1] mb-4">
+                <div className="icon-modern bg-[#73C2FB] mb-4">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-foreground mb-3">Days 1-30: Foundation</h3>
@@ -114,7 +114,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               </div>
 
               <div className="card-modern p-6 hover-lift">
-                <div className="icon-modern bg-[#0072B1] mb-4">
+                <div className="icon-modern bg-[#73C2FB] mb-4">
                   <ChevronRight className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-foreground mb-3">Days 61-90: Launch Ready</h3>
@@ -223,7 +223,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
               </div>
               
-              <div className="mt-8 p-6 card-modern bg-blue-50 border-l-4 border-[#0085D1]">
+              <div className="mt-8 p-6 card-modern bg-blue-50 border-l-4 border-[#8FD0FC]">
                 <h4 className="font-semibold text-foreground mb-2">VAT Consideration</h4>
                 <p className="text-muted-foreground text-sm">
                   Both structures must register for VAT when turnover exceeds <strong>€42,500 (services)</strong> or <strong>€85,000 (goods)</strong> in any 12-month period. 
@@ -328,7 +328,7 @@ export default function CompleteBusinessSetupGuideIreland() {
             <div className="max-w-4xl mx-auto">
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="card-modern p-6 hover-lift text-center">
-                  <div className="icon-modern bg-[#0072B1] mb-4 mx-auto">
+                  <div className="icon-modern bg-[#73C2FB] mb-4 mx-auto">
                     <FileText className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-2">Tax Reference Number</h3>
@@ -350,7 +350,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
 
                 <div className="card-modern p-6 hover-lift text-center">
-                  <div className="icon-modern bg-[#0072B1] mb-4 mx-auto">
+                  <div className="icon-modern bg-[#73C2FB] mb-4 mx-auto">
                     <UserCheck className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-2">ROS Access</h3>
@@ -528,7 +528,7 @@ export default function CompleteBusinessSetupGuideIreland() {
         </section>
 
         {/* Complete Startup Package Section */}
-        <section id="contact-form" className="py-20 bg-[#0072B1]">
+        <section id="contact-form" className="py-20 bg-[#73C2FB]">
           <div className="max-w-4xl mx-auto px-6 lg:px-8">
             <div className="text-center text-white mb-12">
               <h2 className="text-3xl lg:text-4xl font-bold mb-4">
@@ -551,7 +551,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                       id="fullName"
                       name="fullName"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
                       placeholder="Enter your full name"
                     />
                   </div>
@@ -564,7 +564,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                       id="email"
                       name="email"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -580,7 +580,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                       id="phone"
                       name="phone"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
                       placeholder="+353..."
                     />
                   </div>
@@ -592,7 +592,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                       id="businessType"
                       name="businessType"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
                     >
                       <option value="">Select business type</option>
                       <option value="sole-trader">Sole Trader</option>
@@ -610,7 +610,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                     id="currentStage"
                     name="currentStage"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
                   >
                     <option value="">Select current stage</option>
                     <option value="just-starting">Just Starting</option>
@@ -628,7 +628,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                     id="message"
                     name="message"
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
                     placeholder="Tell us about your business goals or any specific requirements..."
                   ></textarea>
                 </div>
@@ -637,7 +637,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                   <Button
                     type="submit"
                     size="lg"
-                    className="bg-[#0072B1] hover:bg-[#005A91] text-white px-12 py-4 text-lg font-semibold"
+                    className="bg-[#73C2FB] hover:bg-[#5BADEA] text-white px-12 py-4 text-lg font-semibold"
                   >
                     Get Your FREE Guide
                     <ArrowRight className="ml-2 h-5 w-5" />

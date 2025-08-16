@@ -131,7 +131,7 @@ export function VideoModal({ isOpen, onClose, className }: VideoModalProps) {
         </DialogHeader>
         
         {/* Custom Header with Close Button */}
-        <div className="absolute top-4 right-4 z-50">
+        <div className="absolute top-4 right-4 z-[1002]">
           <Button
             variant="ghost"
             size="sm"

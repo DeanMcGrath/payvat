@@ -16,7 +16,7 @@ export default function Footer() {
           <div className="flex justify-center">
             <button 
               onClick={scrollToTop}
-              className="group text-gray-600 hover:text-[#005A91] font-medium transition-all duration-300 flex items-center gap-2 py-2 px-4 rounded-full hover:bg-white hover:shadow-md"
+              className="group text-gray-600 hover:text-[#5BADEA] font-medium transition-all duration-300 flex items-center gap-2 py-2 px-4 rounded-full hover:bg-white hover:shadow-md"
             >
               Back to Top <ArrowUp className="h-4 w-4 group-hover:-translate-y-0.5 transition-transform" />
             </button>
@@ -27,9 +27,9 @@ export default function Footer() {
       {/* Main Footer */}
       <footer className="gradient-primary text-white py-12 sm:py-16 relative overflow-hidden">
         {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#005A91]/20 to-transparent pointer-events-none"></div>
-        <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#0072B1]/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#0072B1]/10 rounded-full blur-3xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#5BADEA]/20 to-transparent pointer-events-none"></div>
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#73C2FB]/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#73C2FB]/10 rounded-full blur-3xl"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
@@ -208,7 +208,7 @@ export default function Footer() {
           </div>
           
           {/* Bottom Section */}
-          <div className="mt-12 pt-8 border-t border-[#0072B1]/30">
+          <div className="mt-12 pt-8 border-t border-[#73C2FB]/30">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
               <p className="text-blue-100 text-center sm:text-left">
                 © 2025 Don't Be Like Me. All rights reserved.

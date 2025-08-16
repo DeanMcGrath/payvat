@@ -511,7 +511,7 @@ export default function VATSubmissionPage() {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="flex items-center space-x-2">
-          <Loader2 className="h-6 w-6 animate-spin text-[#005A91]" />
+          <Loader2 className="h-6 w-6 animate-spin text-[#5BADEA]" />
           <span className="text-gray-600">Loading...</span>
         </div>
       </div>
@@ -564,7 +564,7 @@ export default function VATSubmissionPage() {
               <Card className="card-premium ">
                 <CardHeader>
                   <CardTitle className="text-lg font-semibold text-blue-900 flex items-center">
-                    <BadgeCheck className="h-5 w-5 mr-2 text-[#0072B1]" />
+                    <BadgeCheck className="h-5 w-5 mr-2 text-[#73C2FB]" />
                     VAT Data Extracted from Documents
                   </CardTitle>
                 </CardHeader>
@@ -572,7 +572,7 @@ export default function VATSubmissionPage() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-white p-3 rounded-lg border border-[#99D3FF]">
                       <div className="text-sm text-gray-600">Sales VAT</div>
-                      <div className="text-lg font-semibold text-[#0072B1]">
+                      <div className="text-lg font-semibold text-[#73C2FB]">
 {formatCurrency(extractedVATData.totalSalesVAT)}
                       </div>
                       <div className="text-xs text-gray-500">
@@ -582,7 +582,7 @@ export default function VATSubmissionPage() {
                     
                     <div className="bg-white p-3 rounded-lg border border-[#99D3FF]">
                       <div className="text-sm text-gray-600">Purchase VAT</div>
-                      <div className="text-lg font-semibold text-[#0072B1]">
+                      <div className="text-lg font-semibold text-[#73C2FB]">
 {formatCurrency(extractedVATData.totalPurchaseVAT)}
                       </div>
                       <div className="text-xs text-gray-500">
@@ -592,7 +592,7 @@ export default function VATSubmissionPage() {
                     
                     <div className="bg-white p-3 rounded-lg border border-[#99D3FF]">
                       <div className="text-sm text-gray-600">Confidence</div>
-                      <div className="text-lg font-semibold text-[#0072B1]">
+                      <div className="text-lg font-semibold text-[#73C2FB]">
                         {(extractedVATData.averageConfidence * 100).toFixed(0)}%
                       </div>
                       <div className="text-xs text-gray-500">
@@ -604,7 +604,7 @@ export default function VATSubmissionPage() {
                   <div className="flex space-x-2">
                     <Button 
                       onClick={useExtractedVATData}
-                      className="bg-[#0072B1] hover:bg-[#0072B1] text-white"
+                      className="bg-[#73C2FB] hover:bg-[#73C2FB] text-white"
                       disabled={useExtractedData}
                     >
                       <Calculator className="h-4 w-4 mr-2" />
@@ -621,7 +621,7 @@ export default function VATSubmissionPage() {
                         })
                       }}
                       variant="outline" 
-                      className="border-[#99D3FF] text-[#005A91]"
+                      className="border-[#99D3FF] text-[#5BADEA]"
                       disabled={loadingExtractedData || isRefreshDisabled}
                     >
                       <RefreshCw className={`h-4 w-4 mr-2 ${loadingExtractedData ? 'animate-spin' : ''}`} />
@@ -640,7 +640,7 @@ export default function VATSubmissionPage() {
             <Card className="card-modern ">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                  <Calculator className="h-5 w-5 mr-2 text-[#0072B1]" />
+                  <Calculator className="h-5 w-5 mr-2 text-[#73C2FB]" />
                   VAT Calculation
                   {useExtractedData && (
                     <Badge className="ml-2 bg-[#CCE7FF] text-[#004A75]">
@@ -668,7 +668,7 @@ export default function VATSubmissionPage() {
                           const purchaseValue = parseFloat(purchaseVAT) || 0
                           setVATAmounts(salesValue, purchaseValue)
                         }}
-                        className="pl-8 bg-white border-gray-300 focus:border-[#0072B1] focus:ring-[#0072B1]"
+                        className="pl-8 bg-white border-gray-300 focus:border-[#73C2FB] focus:ring-[#73C2FB]"
                       />
                     </div>
                     <p className="text-xs text-gray-500">Total VAT collected on sales</p>
@@ -691,7 +691,7 @@ export default function VATSubmissionPage() {
                           const purchaseValue = parseFloat(e.target.value) || 0
                           setVATAmounts(salesValue, purchaseValue)
                         }}
-                        className="pl-8 bg-white border-gray-300 focus:border-[#0072B1] focus:ring-[#0072B1]"
+                        className="pl-8 bg-white border-gray-300 focus:border-[#73C2FB] focus:ring-[#73C2FB]"
                       />
                     </div>
                     <p className="text-xs text-gray-500">Total VAT paid on purchases</p>
@@ -703,16 +703,16 @@ export default function VATSubmissionPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-lg font-semibold text-blue-900">Net VAT Due</Label>
-                        <p className="text-sm text-[#005A91]">Amount to pay to Revenue</p>
+                        <p className="text-sm text-[#5BADEA]">Amount to pay to Revenue</p>
                       </div>
-                      <div className="text-3xl font-bold text-[#0072B1]">€{netVAT}</div>
+                      <div className="text-3xl font-bold text-[#73C2FB]">€{netVAT}</div>
                     </div>
                   </div>
                 </div>
 
                 <Button 
                   onClick={calculateNetVAT}
-                  className="w-full bg-[#0072B1] hover:bg-[#0072B1] text-white"
+                  className="w-full bg-[#73C2FB] hover:bg-[#73C2FB] text-white"
                 >
                   <Calculator className="h-4 w-4 mr-2" />
                   Recalculate VAT
@@ -726,14 +726,14 @@ export default function VATSubmissionPage() {
               <CardHeader className="bg-[#E6F4FF]">
                 <CardTitle className="text-lg font-semibold text-blue-900 flex items-center justify-between">
                   <div className="flex items-center">
-                    <FileText className="h-5 w-5 mr-2 text-[#0072B1]" />
+                    <FileText className="h-5 w-5 mr-2 text-[#73C2FB]" />
                     Section 1: Sales Documents {uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length > 0 && (
                       <>({uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length})</>
                     )}
                   </div>
                   {extractedVATData?.totalSalesVAT && extractedVATData.totalSalesVAT > 0 && (
                     <div className="text-right">
-                      <div className="text-sm font-medium text-[#0072B1]">
+                      <div className="text-sm font-medium text-[#73C2FB]">
                         Sales VAT Total: {formatCurrency(extractedVATData.totalSalesVAT)}
                       </div>
                     </div>
@@ -795,7 +795,7 @@ export default function VATSubmissionPage() {
                                     {document.mimeType?.includes('pdf') ? (
                                       <FileText className="h-8 w-8 text-red-500" />
                                     ) : document.mimeType?.includes('image') ? (
-                                      <FileText className="h-8 w-8 text-[#0085D1]" />
+                                      <FileText className="h-8 w-8 text-[#8FD0FC]" />
                                     ) : (
                                       <FileText className="h-8 w-8 text-green-500" />
                                     )}
@@ -814,7 +814,7 @@ export default function VATSubmissionPage() {
                                       {document.isScanned && docVATData && vatAmounts.length > 0 && (
                                         <div className="flex flex-col space-y-1">
                                           <div className="flex items-center text-xs">
-                                            <span className="inline-flex items-center text-[#005A91] font-medium">
+                                            <span className="inline-flex items-center text-[#5BADEA] font-medium">
                                               <CheckCircle className="h-3 w-3 mr-1" />
                                               VAT: {formatCurrency(totalVAT)} • {Math.round(confidence * 100)}% confidence
                                             </span>
@@ -849,7 +849,7 @@ export default function VATSubmissionPage() {
                                               
                                               {/* Processing Engine Indicator */}
                                               {(document as any).processingInfo?.engine === 'enhanced' && (
-                                                <span className="inline-flex items-center text-[#0072B1] text-xs ml-2">
+                                                <span className="inline-flex items-center text-[#73C2FB] text-xs ml-2">
                                                   <span className="mr-1">🚀</span>
                                                   Enhanced AI
                                                 </span>
@@ -894,7 +894,7 @@ export default function VATSubmissionPage() {
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => handleViewDocument(document)}
-                                    className="text-[#0085D1] hover:text-[#005A91] hover:bg-[#E6F4FF]"
+                                    className="text-[#8FD0FC] hover:text-[#5BADEA] hover:bg-[#E6F4FF]"
                                     title="Review Document"
                                   >
                                     <Eye className="h-4 w-4" />
@@ -991,7 +991,7 @@ export default function VATSubmissionPage() {
                                     {document.mimeType?.includes('pdf') ? (
                                       <FileText className="h-8 w-8 text-red-500" />
                                     ) : document.mimeType?.includes('image') ? (
-                                      <FileText className="h-8 w-8 text-[#0085D1]" />
+                                      <FileText className="h-8 w-8 text-[#8FD0FC]" />
                                     ) : (
                                       <FileText className="h-8 w-8 text-green-500" />
                                     )}
@@ -1038,7 +1038,7 @@ export default function VATSubmissionPage() {
                                     variant="ghost"
                                     size="sm"
                                     onClick={() => handleViewDocument(document)}
-                                    className="text-[#0085D1] hover:text-[#005A91] hover:bg-[#E6F4FF]"
+                                    className="text-[#8FD0FC] hover:text-[#5BADEA] hover:bg-[#E6F4FF]"
                                     title="Review Document"
                                   >
                                     <Eye className="h-4 w-4" />
@@ -1081,7 +1081,7 @@ export default function VATSubmissionPage() {
                               {document.mimeType?.includes('pdf') ? (
                                 <FileText className="h-8 w-8 text-red-500" />
                               ) : document.mimeType?.includes('image') ? (
-                                <FileText className="h-8 w-8 text-[#0085D1]" />
+                                <FileText className="h-8 w-8 text-[#8FD0FC]" />
                               ) : (
                                 <FileText className="h-8 w-8 text-green-500" />
                               )}
@@ -1151,7 +1151,7 @@ export default function VATSubmissionPage() {
                 <div className="border-t pt-4">
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Total Due:</span>
-                    <span className="text-[#0072B1]">€{netVAT}</span>
+                    <span className="text-[#73C2FB]">€{netVAT}</span>
                   </div>
                 </div>
               </CardContent>
@@ -1163,11 +1163,11 @@ export default function VATSubmissionPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-[#0072B1]" />
+                  <CheckCircle className="h-4 w-4 text-[#73C2FB]" />
                   <span className="text-sm text-gray-700">Period selected</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-[#0072B1]" />
+                  <CheckCircle className="h-4 w-4 text-[#73C2FB]" />
                   <span className="text-sm text-gray-700">VAT amounts entered</span>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -1191,7 +1191,7 @@ export default function VATSubmissionPage() {
                   Save as Draft
                 </Button>
                 <Button 
-                  className="w-full bg-[#0072B1] hover:bg-[#0072B1] text-white justify-start"
+                  className="w-full bg-[#73C2FB] hover:bg-[#73C2FB] text-white justify-start"
                   onClick={() => {
                     // Save current VAT amounts to context before navigating
                     const salesValue = parseFloat(salesVAT) || 0

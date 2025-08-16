@@ -312,7 +312,7 @@ export default function ReportsPage() {
           <Card className="card-premium hover-lift">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Total VAT Paid (2024)</CardTitle>
-              <div className="icon-modern bg-[#0072B1]">
+              <div className="icon-modern bg-[#73C2FB]">
                 <Euro className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
@@ -358,7 +358,7 @@ export default function ReportsPage() {
           <Card className="card-premium hover-lift">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Average VAT</CardTitle>
-              <div className="icon-modern bg-[#0072B1]">
+              <div className="icon-modern bg-[#73C2FB]">
                 <BarChart3 className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
@@ -379,7 +379,7 @@ export default function ReportsPage() {
           <Card className="card-premium hover-lift">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">On-Time Payments</CardTitle>
-              <div className="icon-modern bg-[#0072B1]">
+              <div className="icon-modern bg-[#73C2FB]">
                 <Calendar className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
@@ -429,7 +429,7 @@ export default function ReportsPage() {
           <Card className="card-modern hover-lift group cursor-pointer">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                <div className="icon-modern bg-[#0072B1] mr-3">
+                <div className="icon-modern bg-[#73C2FB] mr-3">
                   <LineChart className="h-5 w-5 text-white" />
                 </div>
                 Trend Analysis
@@ -449,7 +449,7 @@ export default function ReportsPage() {
           <Card className="card-modern hover-lift group cursor-pointer">
             <CardHeader>
               <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                <div className="icon-modern bg-[#0072B1] mr-3">
+                <div className="icon-modern bg-[#73C2FB] mr-3">
                   <BarChart3 className="h-5 w-5 text-white" />
                 </div>
                 Annual Reports

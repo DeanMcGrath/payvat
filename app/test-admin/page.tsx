@@ -141,7 +141,7 @@ export default function TestAdmin() {
     return (
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0072B1]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#73C2FB]"></div>
           <span className="ml-2">Loading users...</span>
         </div>
       </div>
@@ -190,7 +190,7 @@ export default function TestAdmin() {
                 <div 
                   key={user.id} 
                   className={`border rounded-lg p-4 cursor-pointer transition-colors hover:bg-gray-50 ${
-                    selectedUser?.id === user.id ? 'border-[#0072B1] bg-blue-50' : ''
+                    selectedUser?.id === user.id ? 'border-[#73C2FB] bg-blue-50' : ''
                   }`}
                   onClick={() => fetchUserDetails(user.id)}
                 >
@@ -238,7 +238,7 @@ export default function TestAdmin() {
           <CardContent>
             {detailLoading ? (
               <div className="flex items-center justify-center h-32">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#0072B1]"></div>
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#73C2FB]"></div>
                 <span className="ml-2">Loading details...</span>
               </div>
             ) : selectedUser ? (
@@ -273,8 +273,8 @@ export default function TestAdmin() {
                       <div className="text-sm text-purple-800">Payments</div>
                     </div>
                     <div className="bg-blue-50 p-3 rounded text-center">
-                      <div className="text-lg font-bold text-[#0072B1]">{formatCurrency(selectedUser.stats.totalVATPaid)}</div>
-                      <div className="text-sm text-[#005A91]">VAT Paid</div>
+                      <div className="text-lg font-bold text-[#73C2FB]">{formatCurrency(selectedUser.stats.totalVATPaid)}</div>
+                      <div className="text-sm text-[#5BADEA]">VAT Paid</div>
                     </div>
                   </div>
                 </div>

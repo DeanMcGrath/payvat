@@ -11,8 +11,8 @@
   --shadow-dramatic: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 35px 65px -15px rgba(0, 0, 0, 0.15);
   
   /* Professional Business Gradients */
-  --gradient-primary: linear-gradient(135deg, #0072B1 0%, #005A91 50%, #0085D1 100%);
-  --gradient-accent: linear-gradient(135deg, #005A91 0%, #0072B1 50%, #004A73 100%);
+  --gradient-primary: linear-gradient(135deg, #73C2FB 0%, #5BADEA 50%, #8FD0FC 100%);
+  --gradient-accent: linear-gradient(135deg, #5BADEA 0%, #73C2FB 50%, #4A9EE5 100%);
   --gradient-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
   --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
 
@@ -154,7 +154,7 @@ body {
   .icon-modern {
     width: 3rem;
     height: 3rem;
-    background: linear-gradient(135deg, #0072B1 0%, #005A91 50%, #0085D1 100%);
+    background: linear-gradient(135deg, #73C2FB 0%, #5BADEA 50%, #8FD0FC 100%);
     border-radius: 1rem;
     display: flex;
     align-items: center;
@@ -191,7 +191,7 @@ body {
   .icon-premium {
     width: 4rem;
     height: 4rem;
-    background: linear-gradient(135deg, #0072B1 0%, #005A91 30%, #0085D1 70%, #004A73 100%);
+    background: linear-gradient(135deg, #73C2FB 0%, #5BADEA 30%, #8FD0FC 70%, #4A9EE5 100%);
     border-radius: 1.25rem;
     display: flex;
     align-items: center;
@@ -223,7 +223,7 @@ body {
   
   /* Enhanced Buttons */
   .btn-primary {
-    background: linear-gradient(to right, #0072B1, #005A91);
+    background: linear-gradient(to right, #73C2FB, #5BADEA);
     color: white;
     box-shadow: var(--shadow-soft);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -247,7 +247,7 @@ body {
   
   .btn-primary:hover {
     box-shadow: var(--shadow-premium);
-    background: linear-gradient(to right, #005A91, #004A73);
+    background: linear-gradient(to right, #5BADEA, #4A9EE5);
   }
   
   .btn-primary:hover::before {
@@ -269,7 +269,7 @@ body {
   
   .btn-outline:hover {
     background-color: #f9fafb;
-    border-color: #0072B1;
+    border-color: #73C2FB;
     box-shadow: var(--shadow-soft);
   }
   
@@ -513,7 +513,7 @@ body {
   }
   
   .text-gradient-primary {
-    background: linear-gradient(to right, #0072B1, #005A91);
+    background: linear-gradient(to right, #73C2FB, #5BADEA);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
@@ -784,7 +784,7 @@ svg {
 
 .progress-line-fill {
   height: 100%;
-  background: linear-gradient(to right, #0085D1, #005A91);
+  background: linear-gradient(to right, #8FD0FC, #5BADEA);
   transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   border-radius: 1px;
 }
@@ -819,13 +819,13 @@ svg {
 
 .step-circle:hover {
   transform: scale(1.05);
-  border-color: #0072B1;
+  border-color: #73C2FB;
   box-shadow: 0 4px 12px 0 rgba(0, 114, 177, 0.15);
 }
 
 .step-circle.completed {
-  background: linear-gradient(135deg, #0085D1, #005A91);
-  border-color: #0085D1;
+  background: linear-gradient(135deg, #8FD0FC, #5BADEA);
+  border-color: #8FD0FC;
   color: white;
   box-shadow: 0 4px 12px 0 rgba(0, 114, 177, 0.25);
 }
@@ -841,7 +841,7 @@ svg {
 }
 
 .step-label.completed {
-  color: #0072B1;
+  color: #73C2FB;
   font-weight: 600;
 }
 
@@ -850,7 +850,36 @@ svg {
 }
 
 .progress-step:hover .step-label.completed {
-  color: #005A91;
+  color: #5BADEA;
+}
+
+/* Z-Index Management - Header and Modal Hierarchy */
+.header-navigation {
+  z-index: 9999 !important;
+  position: relative;
+}
+
+/* Modal z-index management */
+.modal-backdrop {
+  z-index: 1000 !important;
+}
+
+.modal-content {
+  z-index: 1001 !important;
+}
+
+/* Chat widget below header */
+.chat-widget {
+  z-index: 900 !important;
+}
+
+.chat-button {
+  z-index: 899 !important;
+}
+
+/* Opening animation above everything temporarily */
+.opening-animation {
+  z-index: 10000 !important;
 }
 
 /* Responsive Design Helpers */

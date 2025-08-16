@@ -304,7 +304,7 @@ export default function SmartDocumentUpload({
     const config = {
       'TEMPLATE_MATCH': { color: 'bg-green-100 text-green-800', icon: '✓', label: 'Template Match' },
       'HYBRID': { color: 'bg-blue-100 text-blue-800', icon: '⇄', label: 'Hybrid AI' },
-      'AI_VISION': { color: 'bg-blue-100 text-[#005A91]', icon: 'AI', label: 'AI Vision' },
+      'AI_VISION': { color: 'bg-blue-100 text-[#5BADEA]', icon: 'AI', label: 'AI Vision' },
       'FALLBACK': { color: 'bg-yellow-100 text-yellow-800', icon: '→', label: 'Fallback' }
     }
     
@@ -326,7 +326,7 @@ export default function SmartDocumentUpload({
       </h4>
       
       {/* Enhanced Upload Area */}
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#0072B1] transition-colors bg-gradient-to-br from-blue-50 to-blue-50">
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#73C2FB] transition-colors bg-gradient-to-br from-blue-50 to-blue-50">
         <div className="flex justify-center mb-3">
           <Upload className="h-10 w-10 text-blue-600" />
         </div>
@@ -336,7 +336,7 @@ export default function SmartDocumentUpload({
         
         <Button 
           variant="outline" 
-          className="border-[#0072B1] text-[#005A91] hover:bg-blue-50 font-medium"
+          className="border-[#73C2FB] text-[#5BADEA] hover:bg-blue-50 font-medium"
           onClick={(event) => {
             event.stopPropagation() // Prevent event bubbling
             handleFileSelect(event)
@@ -345,7 +345,7 @@ export default function SmartDocumentUpload({
         >
           {isUploading ? (
             <>
-              <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#0072B1] border-t-transparent mr-2" />
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#73C2FB] border-t-transparent mr-2" />
               AI Processing...
             </>
           ) : (
@@ -471,7 +471,7 @@ export default function SmartDocumentUpload({
       
       {/* Feedback Modal */}
       {selectedFileForFeedback && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[1001] modal-content">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="p-4 border-b flex items-center justify-between">
               <h3 className="text-lg font-semibold">Provide Feedback</h3>

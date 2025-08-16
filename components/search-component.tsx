@@ -67,7 +67,7 @@ export default function SearchComponent({
       <Button 
         variant="ghost" 
         size="sm" 
-        className={`text-white hover:bg-[#0072B1] p-2 min-w-[44px] min-h-[44px] ${className}`}
+        className={`text-white hover:bg-[#73C2FB] p-2 min-w-[44px] min-h-[44px] ${className}`}
         onClick={handleMobileSearch}
         title="Search"
       >

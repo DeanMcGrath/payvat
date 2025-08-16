@@ -155,7 +155,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
         <Card className="w-full max-w-md">
           <CardContent className="pt-6">
             <div className="flex items-center justify-center space-x-2">
-              <Shield className="h-5 w-5 text-[#0072B1] animate-spin" />
+              <Shield className="h-5 w-5 text-[#73C2FB] animate-spin" />
               <span className="text-gray-600">Verifying admin access...</span>
             </div>
             <div className="mt-4 text-center">
@@ -202,7 +202,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
                 <p className="text-sm text-gray-600 mb-3">Please log in with an admin account</p>
                 <Button 
                   onClick={() => window.location.href = '/login'}
-                  className="bg-[#0072B1] hover:bg-[#005A91] text-white"
+                  className="bg-[#73C2FB] hover:bg-[#5BADEA] text-white"
                 >
                   Go to Login
                 </Button>
@@ -248,7 +248,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
         <Card className="w-full max-w-md">
           <CardContent className="pt-6">
             <div className="flex items-center justify-center space-x-2">
-              <Shield className="h-5 w-5 text-[#0072B1] animate-spin" />
+              <Shield className="h-5 w-5 text-[#73C2FB] animate-spin" />
               <span className="text-gray-600">Initializing admin panel...</span>
             </div>
           </CardContent>
@@ -260,12 +260,12 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
   return (
     <div className="admin-context">
       {/* Admin Header Bar */}
-      <div className="bg-gradient-to-r from-[#0072B1] to-[#005A91] text-white py-2 px-4">
+      <div className="bg-gradient-to-r from-[#73C2FB] to-[#5BADEA] text-white py-2 px-4">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center space-x-3">
             <Shield className="h-4 w-4" />
             <span className="text-sm font-medium">Admin Panel</span>
-            <span className="text-xs bg-[#0072B1] px-2 py-1 rounded">{user.role}</span>
+            <span className="text-xs bg-[#73C2FB] px-2 py-1 rounded">{user.role}</span>
           </div>
           <div className="text-sm">
             {user.businessName} • {user.email}

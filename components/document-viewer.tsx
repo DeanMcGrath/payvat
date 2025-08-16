@@ -719,7 +719,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
             <Button 
               onClick={handleDownload} 
               size="lg"
-              className="bg-[#0072B1] hover:bg-[#005A91]"
+              className="bg-[#73C2FB] hover:bg-[#5BADEA]"
             >
               <Download className="h-5 w-5 mr-2" />
               Download to View
@@ -790,7 +790,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
           <Button 
             onClick={handleDownload} 
             size="lg"
-            className="bg-[#0072B1] hover:bg-[#005A91]"
+            className="bg-[#73C2FB] hover:bg-[#5BADEA]"
           >
             <Download className="h-5 w-5 mr-2" />
             Download to View
@@ -827,7 +827,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                   variant="default" 
                   size="sm" 
                   onClick={handleDownload}
-                  className="bg-[#0072B1] hover:bg-[#005A91] touch-manipulation"
+                  className="bg-[#73C2FB] hover:bg-[#5BADEA] touch-manipulation"
                 >
                   <Download className="h-4 w-4 sm:mr-2" />
                   <span className="hidden sm:inline">Download</span>

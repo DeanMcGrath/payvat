@@ -82,7 +82,7 @@ export default function ExpenseTrackerIreland() {
                     onClick={() => setSelectedCategory(key)}
                     className={`p-4 text-center rounded-lg transition-all duration-300 ${
                       selectedCategory === key
-                        ? 'bg-[#0072B1] text-white shadow-lg scale-105'
+                        ? 'bg-[#73C2FB] text-white shadow-lg scale-105'
                         : 'bg-gray-100 text-gray-700 hover:bg-blue-50'
                     }`}
                   >
@@ -98,7 +98,7 @@ export default function ExpenseTrackerIreland() {
                     onClick={() => setSelectedCategory(key)}
                     className={`p-4 text-center rounded-lg transition-all duration-300 ${
                       selectedCategory === key
-                        ? 'bg-[#0072B1] text-white shadow-lg scale-105'
+                        ? 'bg-[#73C2FB] text-white shadow-lg scale-105'
                         : 'bg-gray-100 text-gray-700 hover:bg-blue-50'
                     }`}
                   >
@@ -451,7 +451,7 @@ export default function ExpenseTrackerIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-[#0072B1] text-white">
+        <section className="py-20 px-4 bg-[#73C2FB] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Automate Your Expense Tracking

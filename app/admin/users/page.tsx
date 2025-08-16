@@ -382,7 +382,7 @@ function AdminUsersContent() {
     return (
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0072B1]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#73C2FB]"></div>
           <span className="ml-2 text-gray-600">Loading users...</span>
         </div>
       </div>
@@ -566,7 +566,7 @@ function AdminUsersContent() {
                         <div>
                           <div className="flex items-center space-x-2">
                             <Link href={`/admin/users/${user.id}`}>
-                              <h3 className="font-semibold text-lg hover:text-[#0072B1] cursor-pointer">
+                              <h3 className="font-semibold text-lg hover:text-[#73C2FB] cursor-pointer">
                                 {user.firstName && user.lastName 
                                   ? `${user.firstName} ${user.lastName}` 
                                   : user.businessName}

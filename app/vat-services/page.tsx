@@ -33,7 +33,7 @@ export default function VATServicesPage() {
         "Bulk calculations",
         "Export to Excel/PDF"
       ],
-      color: "from-[#0085D1] to-[#0072B1]"
+      color: "from-[#8FD0FC] to-[#73C2FB]"
     },
     {
       id: "submission",
@@ -47,7 +47,7 @@ export default function VATServicesPage() {
         "Deadline reminders",
         "Amendment support"
       ],
-      color: "from-[#0085D1] to-green-600"
+      color: "from-[#8FD0FC] to-green-600"
     },
     {
       id: "payment",
@@ -61,7 +61,7 @@ export default function VATServicesPage() {
         "Payment confirmations",
         "Late payment protection"
       ],
-      color: "from-[#0072B1] to-[#005A91]"
+      color: "from-[#73C2FB] to-[#5BADEA]"
     },
     {
       id: "compliance",
@@ -75,7 +75,7 @@ export default function VATServicesPage() {
         "Audit preparation",
         "Expert consultations"
       ],
-      color: "from-[#0085D1] to-cyan-600"
+      color: "from-[#8FD0FC] to-cyan-600"
     }
   ]
 
@@ -245,7 +245,7 @@ export default function VATServicesPage() {
               >
                 {plan.badge && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-gradient-to-r from-[#0072B1] to-cyan-600 text-white px-4 py-1">
+                    <Badge className="bg-gradient-to-r from-[#73C2FB] to-cyan-600 text-white px-4 py-1">
                       {plan.badge}
                     </Badge>
                   </div>
@@ -279,7 +279,7 @@ export default function VATServicesPage() {
                     size="lg" 
                     className={`w-full font-semibold ${
                       plan.popular 
-                        ? 'bg-gradient-to-r from-[#0072B1] to-cyan-600 text-white' 
+                        ? 'bg-gradient-to-r from-[#73C2FB] to-cyan-600 text-white' 
                         : 'border border-blue-600 text-blue-600 hover:bg-blue-50'
                     }`}
                     variant={plan.popular ? "default" : "outline"}
@@ -405,7 +405,7 @@ export default function VATServicesPage() {
                 <CardContent className="p-8">
                   <div className="flex items-center gap-1 mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <BadgeCheck key={i} className="h-5 w-5 text-[#0085D1]" />
+                      <BadgeCheck key={i} className="h-5 w-5 text-[#8FD0FC]" />
                     ))}
                   </div>
                   <blockquote className="text-gray-700 mb-6">
@@ -430,7 +430,7 @@ export default function VATServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-[#0072B1] to-cyan-600">
+      <section className="py-20 bg-gradient-to-br from-[#73C2FB] to-cyan-600">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12">
             <Calculator className="h-16 w-16 text-white mx-auto mb-6" />

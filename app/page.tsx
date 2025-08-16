@@ -37,7 +37,7 @@ export default function LandingPage() {
       setTimeout(() => {
         setBrandAnimationComplete(true)
       }, 1000)
-    }, 3500)
+    }, 4000)
 
     const timer = setTimeout(() => {
       setIsVisible(true)
@@ -98,9 +98,9 @@ export default function LandingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#0072B1] relative">
+    <div className="min-h-screen bg-[#73C2FB] relative">
       {showFullScreenBrand && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0072B1]">
+        <div className="fixed inset-0 z-[10000] opening-animation flex items-center justify-center bg-[#73C2FB]">
           <div className="text-center">
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold font-mono text-white drop-shadow-2xl">
               {typewriterText}
@@ -143,7 +143,7 @@ export default function LandingPage() {
                         <div className="space-y-3 pt-2">
                           {box.features.map((feature, idx) => (
                             <div key={idx} className="flex items-center gap-3 text-sm text-slate-600">
-                              <div className="w-5 h-5 rounded-full bg-[#0072B1] flex items-center justify-center flex-shrink-0">
+                              <div className="w-5 h-5 rounded-full bg-[#73C2FB] flex items-center justify-center flex-shrink-0">
                                 <CheckCircle className="h-3 w-3 text-white" />
                               </div>
                               <span className="font-sans font-medium">{feature}</span>
@@ -154,7 +154,7 @@ export default function LandingPage() {
 
                       <Button
                         size="lg"
-                        className="w-full font-semibold font-sans text-white bg-[#0072B1] hover:bg-[#005a8b] shadow-md hover:shadow-lg transition-all duration-300 min-h-[52px] text-base rounded-lg"
+                        className="w-full font-semibold font-sans text-white bg-[#73C2FB] hover:bg-[#005a8b] shadow-md hover:shadow-lg transition-all duration-300 min-h-[52px] text-base rounded-lg"
                         onClick={() => router.push(box.link)}
                       >
                         <span className="font-bold">{box.buttonText}</span>

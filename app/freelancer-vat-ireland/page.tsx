@@ -109,7 +109,7 @@ export default function FreelancerVatIreland() {
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
                     <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-[#0072B1] rounded-full"></div>
+                      <div className="w-3 h-3 bg-[#73C2FB] rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Obtain Tax Reference Number (TRN)</h4>
@@ -118,7 +118,7 @@ export default function FreelancerVatIreland() {
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-[#0072B1] rounded-full"></div>
+                      <div className="w-3 h-3 bg-[#73C2FB] rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">VAT Registration Application</h4>
@@ -127,7 +127,7 @@ export default function FreelancerVatIreland() {
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-[#0072B1] rounded-full"></div>
+                      <div className="w-3 h-3 bg-[#73C2FB] rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Receive VAT Number</h4>
@@ -364,7 +364,7 @@ export default function FreelancerVatIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-[#0072B1] text-white">
+        <section className="scroll-section py-20 px-4 bg-[#73C2FB] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Ready to Simplify Your Freelancer VAT Compliance?

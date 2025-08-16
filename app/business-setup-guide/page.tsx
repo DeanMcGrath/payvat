@@ -263,7 +263,7 @@ export default function BusinessSetupGuidePage() {
           <Card className="shadow-xl border-2 border-blue-100 overflow-hidden">
             <CardHeader className="pb-4">
               <CardTitle className="text-xl sm:text-2xl flex items-center gap-2">
-                <Target className="h-5 w-5 sm:h-6 sm:w-6 text-[#0072B1]" />
+                <Target className="h-5 w-5 sm:h-6 sm:w-6 text-[#73C2FB]" />
                 Your Setup Progress
               </CardTitle>
               <CardDescription className="text-sm sm:text-base">
@@ -332,16 +332,16 @@ export default function BusinessSetupGuidePage() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-[#0085D1] to-[#005A91] p-0.5`}>
+                      <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-[#8FD0FC] to-[#5BADEA] p-0.5`}>
                         <div className="w-full h-full rounded-xl bg-white flex items-center justify-center">
-                          <step.icon className="h-8 w-8 text-[#0072B1]" />
+                          <step.icon className="h-8 w-8 text-[#73C2FB]" />
                         </div>
                       </div>
                       <div>
                         <CardTitle className="text-2xl flex items-center gap-2">
                           Step {index + 1}: {step.title}
                           {completedSteps.includes(step.id) && (
-                            <CheckCircle className="h-5 w-5 text-[#0072B1]" />
+                            <CheckCircle className="h-5 w-5 text-[#73C2FB]" />
                           )}
                         </CardTitle>
                         <CardDescription className="text-base mt-1">
@@ -370,7 +370,7 @@ export default function BusinessSetupGuidePage() {
                                 <ul className="text-sm text-gray-600 space-y-1">
                                   {item.pros?.map((pro, i) => (
                                     <li key={i} className="flex items-start gap-1">
-                                      <CheckCircle className="h-3 w-3 text-[#0072B1] mt-0.5 flex-shrink-0" />
+                                      <CheckCircle className="h-3 w-3 text-[#73C2FB] mt-0.5 flex-shrink-0" />
                                       {pro}
                                     </li>
                                   ))}
@@ -400,7 +400,7 @@ export default function BusinessSetupGuidePage() {
                               <ol className="text-sm text-gray-600 space-y-2">
                                 {item.steps?.map((s, i) => (
                                   <li key={i} className="flex items-start gap-2">
-                                    <span className="font-medium text-[#0072B1]">{i + 1}.</span>
+                                    <span className="font-medium text-[#73C2FB]">{i + 1}.</span>
                                     {s}
                                   </li>
                                 ))}
@@ -413,7 +413,7 @@ export default function BusinessSetupGuidePage() {
                               )}
                               {'link' in item && item.link && (
                                 <a href={`https://${item.link}`} target="_blank" rel="noopener noreferrer" 
-                                   className="text-sm text-[#0072B1] hover:text-[#005A91] font-medium flex items-center gap-1">
+                                   className="text-sm text-[#73C2FB] hover:text-[#5BADEA] font-medium flex items-center gap-1">
                                   Visit {item.link}
                                   <ArrowRight className="h-3 w-3" />
                                 </a>
@@ -434,7 +434,7 @@ export default function BusinessSetupGuidePage() {
                                 <ol className="text-sm text-gray-600 space-y-1">
                                   {item.steps.map((s, i) => (
                                     <li key={i} className="flex items-start gap-2">
-                                      <span className="font-medium text-[#0072B1]">{i + 1}.</span>
+                                      <span className="font-medium text-[#73C2FB]">{i + 1}.</span>
                                       {s}
                                     </li>
                                   ))}
@@ -477,7 +477,7 @@ export default function BusinessSetupGuidePage() {
                                   <ul className="text-gray-600 space-y-1">
                                     {item.requirements.map((req, i) => (
                                       <li key={i} className="flex items-start gap-1">
-                                        <CheckCircle className="h-3 w-3 text-[#0072B1] mt-0.5 flex-shrink-0" />
+                                        <CheckCircle className="h-3 w-3 text-[#73C2FB] mt-0.5 flex-shrink-0" />
                                         {req}
                                       </li>
                                     ))}
@@ -517,7 +517,7 @@ export default function BusinessSetupGuidePage() {
                                 <ul className="text-gray-600 space-y-1">
                                   {item.items.map((itm, i) => (
                                     <li key={i} className="flex items-start gap-2">
-                                      <CheckCircle className="h-3 w-3 text-[#0072B1] mt-0.5 flex-shrink-0" />
+                                      <CheckCircle className="h-3 w-3 text-[#73C2FB] mt-0.5 flex-shrink-0" />
                                       {itm}
                                     </li>
                                   ))}
@@ -545,8 +545,8 @@ export default function BusinessSetupGuidePage() {
                           toggleStep(step.id)
                         }}
                         className={completedSteps.includes(step.id) 
-                          ? "border-[#0085D1] text-[#005A91] hover:bg-blue-50" 
-                          : "bg-gradient-to-r from-[#0072B1] to-[#005A91] text-white"}
+                          ? "border-[#8FD0FC] text-[#5BADEA] hover:bg-blue-50" 
+                          : "bg-gradient-to-r from-[#73C2FB] to-[#5BADEA] text-white"}
                       >
                         {completedSteps.includes(step.id) ? (
                           <>
@@ -565,7 +565,7 @@ export default function BusinessSetupGuidePage() {
                         <Button
                           variant="ghost"
                           onClick={() => setExpandedSection(setupSteps[index + 1].id)}
-                          className="text-[#0072B1] hover:text-[#005A91]"
+                          className="text-[#73C2FB] hover:text-[#5BADEA]"
                         >
                           Next Step
                           <ArrowRight className="ml-2 h-4 w-4" />
@@ -596,14 +596,14 @@ export default function BusinessSetupGuidePage() {
             {resources.map((resource, index) => (
               <Card key={index} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <CardContent className="p-6">
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#0085D1] to-[#005A91] p-0.5 mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#5BADEA] p-0.5 mb-4">
                     <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
-                      <resource.icon className="h-6 w-6 text-[#0072B1]" />
+                      <resource.icon className="h-6 w-6 text-[#73C2FB]" />
                     </div>
                   </div>
                   <h3 className="font-semibold text-lg mb-2">{resource.title}</h3>
                   <p className="text-sm text-gray-600 mb-4">{resource.description}</p>
-                  <Button variant="outline" className="w-full text-[#0072B1] border-[#0072B1] hover:bg-blue-50">
+                  <Button variant="outline" className="w-full text-[#73C2FB] border-[#73C2FB] hover:bg-blue-50">
                     {resource.action}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -615,11 +615,11 @@ export default function BusinessSetupGuidePage() {
       </section>
 
       {/* Complete Service Offering & Contact Form */}
-      <section id="contact-form-section" className="py-20 bg-[#0072B1]">
+      <section id="contact-form-section" className="py-20 bg-[#73C2FB]">
         <div className="max-w-5xl mx-auto px-6 lg:px-8">
           <div className="bg-white rounded-2xl p-8 md:p-12 shadow-2xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#005A91] mb-4">
+              <h2 className="text-3xl lg:text-4xl font-bold text-[#5BADEA] mb-4">
                 Complete Startup Guide For FREE!
               </h2>
               <p className="text-xl text-gray-700 max-w-3xl mx-auto">
@@ -759,7 +759,7 @@ export default function BusinessSetupGuidePage() {
                   <Button 
                     type="submit"
                     size="lg"
-                    className="bg-[#0072B1] hover:bg-[#005A91] text-white font-semibold px-12 py-3"
+                    className="bg-[#73C2FB] hover:bg-[#5BADEA] text-white font-semibold px-12 py-3"
                   >
                     Get Your FREE Guide
                     <ArrowRight className="ml-2 h-5 w-5" />

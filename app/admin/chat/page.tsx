@@ -346,7 +346,7 @@ function AdminChatPage() {
                   <div className="space-y-0 max-h-[650px] overflow-y-auto">
                     {isLoading ? (
                       <div className="flex items-center justify-center py-12">
-                        <Loader2 className="h-6 w-6 animate-spin text-[#0072B1]" />
+                        <Loader2 className="h-6 w-6 animate-spin text-[#73C2FB]" />
                       </div>
                     ) : sessions.length === 0 ? (
                       <div className="text-center py-12 text-gray-500">
@@ -358,7 +358,7 @@ function AdminChatPage() {
                         <div
                           key={session.id}
                           className={`border-b p-4 cursor-pointer hover:bg-gray-100 ${
-                            selectedSession?.id === session.id ? 'bg-blue-50 border-l-4 border-l-[#0072B1]' : ''
+                            selectedSession?.id === session.id ? 'bg-blue-50 border-l-4 border-l-[#73C2FB]' : ''
                           }`}
                           onClick={() => setSelectedSession(session)}
                         >
@@ -383,7 +383,7 @@ function AdminChatPage() {
                                   Resolved
                                 </Badge>
                               ) : session.isActive ? (
-                                <Badge variant="default" className="text-xs bg-[#0072B1]">
+                                <Badge variant="default" className="text-xs bg-[#73C2FB]">
                                   <Clock className="h-3 w-3 mr-1" />
                                   Active
                                 </Badge>
@@ -455,7 +455,7 @@ function AdminChatPage() {
                     <div className="flex-1 p-4 overflow-y-auto">
                       {isLoadingMessages ? (
                         <div className="flex items-center justify-center h-full">
-                          <Loader2 className="h-6 w-6 animate-spin text-[#0072B1]" />
+                          <Loader2 className="h-6 w-6 animate-spin text-[#73C2FB]" />
                           <span className="ml-2 text-sm text-gray-600">Loading messages...</span>
                         </div>
                       ) : (

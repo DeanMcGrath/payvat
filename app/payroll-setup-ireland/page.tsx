@@ -67,7 +67,7 @@ export default function PayrollSetupIreland() {
                     onClick={() => setSelectedTopic(key)}
                     className={`p-4 text-center rounded-lg transition-all duration-300 ${
                       selectedTopic === key
-                        ? 'bg-[#0072B1] text-white shadow-lg scale-105'
+                        ? 'bg-[#73C2FB] text-white shadow-lg scale-105'
                         : 'bg-gray-100 text-gray-700 hover:bg-blue-50'
                     }`}
                   >
@@ -116,7 +116,7 @@ export default function PayrollSetupIreland() {
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-[#0072B1] font-bold text-sm">1</span>
+                      <span className="text-[#73C2FB] font-bold text-sm">1</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Company Registration</h4>
@@ -126,7 +126,7 @@ export default function PayrollSetupIreland() {
                   
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-[#0072B1] font-bold text-sm">2</span>
+                      <span className="text-[#73C2FB] font-bold text-sm">2</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Employment Contracts</h4>
@@ -136,7 +136,7 @@ export default function PayrollSetupIreland() {
                   
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-[#0072B1] font-bold text-sm">3</span>
+                      <span className="text-[#73C2FB] font-bold text-sm">3</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Employee Information</h4>
@@ -344,29 +344,29 @@ export default function PayrollSetupIreland() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <ul className="text-gray-700 text-sm space-y-2">
                       <li className="flex items-start space-x-2">
-                        <span className="text-[#0085D1] mt-1">•</span>
+                        <span className="text-[#8FD0FC] mt-1">•</span>
                         <span>P45 when employee leaves</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-[#0085D1] mt-1">•</span>
+                        <span className="text-[#8FD0FC] mt-1">•</span>
                         <span>P46 for new employees without P45</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-[#0085D1] mt-1">•</span>
+                        <span className="text-[#8FD0FC] mt-1">•</span>
                         <span>Benefits-in-kind reporting</span>
                       </li>
                     </ul>
                     <ul className="text-gray-700 text-sm space-y-2">
                       <li className="flex items-start space-x-2">
-                        <span className="text-[#0085D1] mt-1">•</span>
+                        <span className="text-[#8FD0FC] mt-1">•</span>
                         <span>Pension auto-enrolment preparation</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-[#0085D1] mt-1">•</span>
+                        <span className="text-[#8FD0FC] mt-1">•</span>
                         <span>Employment permit compliance</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-[#0085D1] mt-1">•</span>
+                        <span className="text-[#8FD0FC] mt-1">•</span>
                         <span>Workplace Relations Commission</span>
                       </li>
                     </ul>
@@ -395,23 +395,23 @@ export default function PayrollSetupIreland() {
                   <h3 className="text-xl font-bold text-gray-900 mb-4">Core Features</h3>
                   <div className="space-y-3">
                     <div className="flex items-start space-x-3">
-                      <span className="text-[#0085D1] mt-1">✓</span>
+                      <span className="text-[#8FD0FC] mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Automatic PAYE/PRSI/USC calculations</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-[#0085D1] mt-1">✓</span>
+                      <span className="text-[#8FD0FC] mt-1">✓</span>
                       <span className="text-gray-700 text-sm">RPN (Revenue Payroll Notification) support</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-[#0085D1] mt-1">✓</span>
+                      <span className="text-[#8FD0FC] mt-1">✓</span>
                       <span className="text-gray-700 text-sm">P30 return generation and submission</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-[#0085D1] mt-1">✓</span>
+                      <span className="text-[#8FD0FC] mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Payslip generation and distribution</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-[#0085D1] mt-1">✓</span>
+                      <span className="text-[#8FD0FC] mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Bank file generation for payments</span>
                     </div>
                   </div>
@@ -421,23 +421,23 @@ export default function PayrollSetupIreland() {
                   <h3 className="text-xl font-bold text-gray-900 mb-4">Advanced Features</h3>
                   <div className="space-y-3">
                     <div className="flex items-start space-x-3">
-                      <span className="text-[#0085D1] mt-1">✓</span>
+                      <span className="text-[#8FD0FC] mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Employee self-service portal</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-[#0085D1] mt-1">✓</span>
+                      <span className="text-[#8FD0FC] mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Leave management system</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-[#0085D1] mt-1">✓</span>
+                      <span className="text-[#8FD0FC] mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Pension scheme integration</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-[#0085D1] mt-1">✓</span>
+                      <span className="text-[#8FD0FC] mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Time and attendance tracking</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-[#0085D1] mt-1">✓</span>
+                      <span className="text-[#8FD0FC] mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Benefits-in-kind reporting</span>
                     </div>
                   </div>
@@ -448,7 +448,7 @@ export default function PayrollSetupIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-gradient-to-r from-[#0072B1] to-[#005A91] text-white">
+        <section className="py-20 px-4 bg-gradient-to-r from-[#73C2FB] to-[#5BADEA] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Simplify Your Irish Payroll Setup
@@ -459,13 +459,13 @@ export default function PayrollSetupIreland() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-[#0072B1] px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-[#73C2FB] px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Get Payroll Guidance
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-[#0072B1] transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-[#73C2FB] transition-all duration-300"
               >
                 Contact for Advice
               </a>

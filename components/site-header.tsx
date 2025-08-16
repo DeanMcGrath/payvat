@@ -45,11 +45,11 @@ export default function SiteHeader({
         </a>
       </div>
 
-      <header className="gradient-primary relative overflow-hidden" role="banner">
+      <header className="gradient-primary relative overflow-hidden header-navigation" role="banner">
         {/* Background Pattern */}
         <div className="absolute inset-0 gradient-mesh opacity-30" aria-hidden="true"></div>
       
-      <div className="relative z-10">
+      <div className="relative z-[9999]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -169,7 +169,7 @@ export default function SiteHeader({
           />
           
           {/* Mobile Menu */}
-          <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gradient-to-br from-[#0072B1] to-[#005A91] shadow-2xl z-50 md:hidden animate-slide-in-right">
+          <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gradient-to-br from-[#73C2FB] to-[#5BADEA] shadow-2xl z-50 md:hidden animate-slide-in-right">
             <div className="p-6 space-y-6">
               {/* Mobile Menu Header */}
               <div className="flex items-center justify-between pb-4 border-b border-white/20">
@@ -226,7 +226,7 @@ export default function SiteHeader({
                   <>
                     {/* Sign Up */}
                     <Button 
-                      className="w-full bg-white text-[#0072B1] hover:bg-white/90 font-semibold min-h-[44px]"
+                      className="w-full bg-white text-[#73C2FB] hover:bg-white/90 font-semibold min-h-[44px]"
                       onClick={() => {
                         window.location.href = '/signup'
                         setIsMobileMenuOpen(false)

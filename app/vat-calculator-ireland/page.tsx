@@ -142,7 +142,7 @@ export default function VatCalculatorIreland() {
                         <span className="font-semibold text-gray-700 text-sm sm:text-base">VAT ({result.rate}%):</span>
                         <span className="font-bold text-blue-600 text-base sm:text-lg">€{result.vat}</span>
                       </div>
-                      <div className="flex justify-between items-center bg-[#0072B1] text-white p-4 rounded-lg shadow-lg min-h-[56px]">
+                      <div className="flex justify-between items-center bg-[#73C2FB] text-white p-4 rounded-lg shadow-lg min-h-[56px]">
                         <span className="font-bold text-base sm:text-lg">Total Amount:</span>
                         <span className="font-bold text-xl sm:text-2xl">€{result.total}</span>
                       </div>
@@ -301,7 +301,7 @@ export default function VatCalculatorIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-[#0072B1] text-white">
+        <section className="py-20 px-4 bg-[#73C2FB] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Need More Than Just VAT Calculation?

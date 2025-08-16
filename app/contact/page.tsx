@@ -226,7 +226,7 @@ export default function ContactPage() {
                       type="submit"
                       size="lg"
                       disabled={isSubmitting}
-                      className="bg-[#0072B1] hover:bg-[#005a8b] text-white font-semibold px-12 py-3 min-w-[200px]"
+                      className="bg-[#73C2FB] hover:bg-[#005a8b] text-white font-semibold px-12 py-3 min-w-[200px]"
                     >
                       {isSubmitting ? (
                         <>
@@ -268,7 +268,7 @@ export default function ContactPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2 text-slate-800">Email Support</h3>
                 <p className="text-slate-600 mb-4">Get a response within 24 hours</p>
-                <a href="mailto:support@payvat.ie" className="text-[#0072B1] font-medium hover:text-[#005a8b] transition-colors">
+                <a href="mailto:support@payvat.ie" className="text-[#73C2FB] font-medium hover:text-[#005a8b] transition-colors">
                   support@payvat.ie
                 </a>
               </CardContent>
@@ -281,7 +281,7 @@ export default function ContactPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2 text-slate-800">Phone Support</h3>
                 <p className="text-slate-600 mb-4">Monday - Friday, 9:00 AM - 5:00 PM</p>
-                <p className="text-[#0072B1] font-medium">Available via contact form</p>
+                <p className="text-[#73C2FB] font-medium">Available via contact form</p>
               </CardContent>
             </Card>
 
@@ -292,7 +292,7 @@ export default function ContactPage() {
                 </div>
                 <h3 className="text-xl font-semibold mb-2 text-slate-800">Live Chat</h3>
                 <p className="text-slate-600 mb-4">Real-time assistance available</p>
-                <p className="text-[#0072B1] font-medium">Check bottom right corner</p>
+                <p className="text-[#73C2FB] font-medium">Check bottom right corner</p>
               </CardContent>
             </Card>
           </div>

@@ -50,7 +50,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <Card className="w-full max-w-2xl bg-white shadow-2xl">
-        <CardHeader className="relative bg-gradient-to-r from-[#0072B1] to-[#005A91] text-white rounded-t-lg">
+        <CardHeader className="relative bg-gradient-to-r from-[#73C2FB] to-[#5BADEA] text-white rounded-t-lg">
           <Button
             variant="ghost"
             size="sm"
@@ -110,7 +110,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
               {/* Pricing Plans */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Monthly Plan */}
-                <Card className="border-2 border-gray-200 hover:border-[#0072B1] transition-colors">
+                <Card className="border-2 border-gray-200 hover:border-[#73C2FB] transition-colors">
                   <CardHeader className="text-center pb-4">
                     <CardTitle className="text-lg font-semibold text-gray-900">Monthly Plan</CardTitle>
                     <div className="text-3xl font-bold text-gray-900">€90</div>
@@ -120,7 +120,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
                     <Button 
                       onClick={() => handleSubscribe('monthly')}
                       disabled={isProcessing}
-                      className="w-full bg-[#0085D1] hover:bg-[#0072B1] text-white"
+                      className="w-full bg-[#8FD0FC] hover:bg-[#73C2FB] text-white"
                     >
                       {isProcessing ? "Processing..." : "Choose Monthly"}
                     </Button>
@@ -131,13 +131,13 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
                 </Card>
 
                 {/* Annual Plan */}
-                <Card className="border-2 border-[#0072B1] bg-blue-50 relative">
-                  <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-[#0085D1] text-white">
+                <Card className="border-2 border-[#73C2FB] bg-blue-50 relative">
+                  <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-[#8FD0FC] text-white">
                     Save €180
                   </Badge>
                   <CardHeader className="text-center pb-4">
-                    <CardTitle className="text-lg font-semibold text-[#005A91]">Annual Plan</CardTitle>
-                    <div className="text-3xl font-bold text-[#005A91]">€900</div>
+                    <CardTitle className="text-lg font-semibold text-[#5BADEA]">Annual Plan</CardTitle>
+                    <div className="text-3xl font-bold text-[#5BADEA]">€900</div>
                     <p className="text-sm text-blue-700">per year</p>
                     <p className="text-xs text-blue-600">€75/month when paid annually</p>
                   </CardHeader>
@@ -145,7 +145,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
                     <Button 
                       onClick={() => handleSubscribe('annual')}
                       disabled={isProcessing}
-                      className="w-full bg-[#0072B1] hover:bg-[#005A91] text-white"
+                      className="w-full bg-[#73C2FB] hover:bg-[#5BADEA] text-white"
                     >
                       {isProcessing ? "Processing..." : "Choose Annual"}
                     </Button>

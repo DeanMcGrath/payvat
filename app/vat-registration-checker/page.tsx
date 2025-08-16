@@ -372,7 +372,7 @@ export default function VatRegistrationChecker() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-gradient-to-r from-emerald-600 to-[#0072B1] text-white">
+        <section className="py-20 px-4 bg-gradient-to-r from-emerald-600 to-[#73C2FB] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Need Help with VAT Registration?

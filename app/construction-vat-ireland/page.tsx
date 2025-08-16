@@ -278,28 +278,28 @@ export default function ConstructionVatIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">VAT Registration Benefits</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-[#8FD0FC] rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">High Input VAT Recovery</h4>
                       <p className="text-gray-600 text-sm">Reclaim 23% VAT on equipment, vehicles, materials purchases</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-[#8FD0FC] rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Professional Credibility</h4>
                       <p className="text-gray-600 text-sm">VAT number essential for commercial contracts and tenders</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-[#8FD0FC] rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Supplier Relationships</h4>
                       <p className="text-gray-600 text-sm">Access to trade suppliers offering VAT-exclusive pricing</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-[#8FD0FC] rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Cash Flow Management</h4>
                       <p className="text-gray-600 text-sm">Monthly VAT refunds during equipment purchase phases</p>
@@ -350,19 +350,19 @@ export default function ConstructionVatIreland() {
                   <h3 className="text-xl font-bold text-gray-900 mb-4">VAT Automation</h3>
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
+                      <div className="w-2 h-2 bg-[#8FD0FC] rounded-full mt-2"></div>
                       <span>Automatic 13.5% vs 23% VAT calculation</span>
                     </li>
                     <li className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
+                      <div className="w-2 h-2 bg-[#8FD0FC] rounded-full mt-2"></div>
                       <span>Two-third rule application for mixed supplies</span>
                     </li>
                     <li className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
+                      <div className="w-2 h-2 bg-[#8FD0FC] rounded-full mt-2"></div>
                       <span>Input VAT tracking for materials and equipment</span>
                     </li>
                     <li className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
+                      <div className="w-2 h-2 bg-[#8FD0FC] rounded-full mt-2"></div>
                       <span>Bi-monthly VAT return generation</span>
                     </li>
                   </ul>
@@ -412,7 +412,7 @@ export default function ConstructionVatIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-[#0072B1] text-white">
+        <section className="scroll-section py-20 px-4 bg-[#73C2FB] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Ready to Simplify Construction VAT & RCT Compliance?

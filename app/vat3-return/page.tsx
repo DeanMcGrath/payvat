@@ -969,9 +969,9 @@ export default function VAT3ReturnForm() {
       {/* Live Chat */}
 
       {/* Main Footer */}
-      <footer className="bg-[#005A91] text-white">
+      <footer className="bg-[#5BADEA] text-white">
         {/* Navigation Bar */}
-        <div className="bg-[#0072B1] py-4">
+        <div className="bg-[#73C2FB] py-4">
           <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <Link href="/" className="text-white hover:text-blue-200 underline">
               Back

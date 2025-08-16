@@ -318,7 +318,7 @@ export default function EcommerceVatIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-[#0072B1] text-white">
+        <section className="scroll-section py-20 px-4 bg-[#73C2FB] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Automate Your E-commerce VAT Compliance
