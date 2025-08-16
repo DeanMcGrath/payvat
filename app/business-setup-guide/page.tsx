@@ -259,44 +259,58 @@ export default function BusinessSetupGuidePage() {
 
       {/* Progress Tracker */}
       <section className="py-8 -mt-12 relative z-10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <Card className="shadow-xl border-2 border-blue-100">
-            <CardHeader>
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <Target className="h-6 w-6 text-[#0072B1]" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Card className="shadow-xl border-2 border-blue-100 overflow-hidden">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-xl sm:text-2xl flex items-center gap-2">
+                <Target className="h-5 w-5 sm:h-6 sm:w-6 text-[#0072B1]" />
                 Your Setup Progress
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-sm sm:text-base">
                 Track your business setup journey - {completedSteps.length} of {setupSteps.length} steps completed
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="relative">
+            <CardContent className="px-4 sm:px-6">
+              {/* Progress Bar Container with proper spacing */}
+              <div className="relative mb-8">
                 <div className="absolute left-0 top-0 h-2 w-full bg-gray-200 rounded-full"></div>
                 <div 
                   className="absolute left-0 top-0 h-2 bg-gradient-to-r from-[#0085D1] to-[#005A91] rounded-full transition-all duration-500"
                   style={{ width: `${(completedSteps.length / setupSteps.length) * 100}%` }}
                 ></div>
               </div>
-              <div className="flex justify-between mt-6">
+              
+              {/* Progress Steps with improved responsive layout */}
+              <div className="grid grid-cols-5 gap-2 sm:gap-4 max-w-full">
                 {setupSteps.map((step, index) => (
                   <div 
                     key={step.id}
-                    className="flex flex-col items-center cursor-pointer"
+                    className="flex flex-col items-center cursor-pointer group"
                     onClick={() => toggleStep(step.id)}
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                    {/* Step Circle with responsive sizing */}
+                    <div className={`w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 ${
                       completedSteps.includes(step.id) 
-                        ? 'bg-gradient-to-r from-[#0085D1] to-[#005A91] text-white' 
-                        : 'bg-gray-200 text-gray-500'
+                        ? 'bg-gradient-to-r from-[#0085D1] to-[#005A91] text-white shadow-md' 
+                        : 'bg-gray-200 text-gray-500 group-hover:bg-gray-300'
                     }`}>
                       {completedSteps.includes(step.id) ? (
-                        <CheckCircle className="h-5 w-5" />
+                        <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                       ) : (
-                        <span className="text-sm font-semibold">{index + 1}</span>
+                        <span className="text-xs sm:text-sm font-semibold">{index + 1}</span>
                       )}
                     </div>
-                    <span className="text-xs mt-2 text-gray-600 hidden md:block">{step.title.split(' ')[0]}</span>
+                    
+                    {/* Step Label with responsive text */}
+                    <span className={`text-xs sm:text-sm mt-2 text-center leading-tight transition-colors duration-200 ${
+                      completedSteps.includes(step.id) 
+                        ? 'text-[#0072B1] font-medium' 
+                        : 'text-gray-600 group-hover:text-gray-800'
+                    }`}>
+                      {/* Show abbreviated text on mobile, full word on larger screens */}
+                      <span className="block sm:hidden">{step.title.split(' ')[0].substring(0, 4)}</span>
+                      <span className="hidden sm:block">{step.title.split(' ')[0]}</span>
+                    </span>
                   </div>
                 ))}
               </div>
