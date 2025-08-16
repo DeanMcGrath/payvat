@@ -58,26 +58,26 @@ class ExtractionMonitor {
   logAttempt(attempt: ExtractionAttempt): void {
     this.attempts.set(attempt.id, attempt)
     
-    console.log('📊 EXTRACTION MONITOR: Logged attempt')
-    console.log(`   ID: ${attempt.id}`)
-    console.log(`   File: ${attempt.fileName}`)
-    console.log(`   Method: ${attempt.processingMethod}`)
-    console.log(`   Success: ${attempt.success}`)
-    console.log(`   Amount: €${attempt.extractedAmount}`)
-    console.log(`   Confidence: ${Math.round(attempt.confidence * 100)}%`)
-    console.log(`   Processing time: ${attempt.processingTimeMs}ms`)
+    // console.log('📊 EXTRACTION MONITOR: Logged attempt')
+    // console.log(`   ID: ${attempt.id}`)
+    // console.log(`   File: ${attempt.fileName}`)
+    // console.log(`   Method: ${attempt.processingMethod}`)
+    // console.log(`   Success: ${attempt.success}`)
+    // console.log(`   Amount: €${attempt.extractedAmount}`)
+    // console.log(`   Confidence: ${Math.round(attempt.confidence * 100)}%`)
+    // console.log(`   Processing time: ${attempt.processingTimeMs}ms`)
     
     // Automatic alerts for issues
     if (!attempt.success) {
-      console.warn(`⚠️ EXTRACTION FAILED: ${attempt.fileName} - ${attempt.errors.join(', ')}`)
+      // console.warn(`⚠️ EXTRACTION FAILED: ${attempt.fileName} - ${attempt.errors.join(', ')}`)
     }
     
     if (attempt.success && attempt.confidence < 0.5) {
-      console.warn(`⚠️ LOW CONFIDENCE: ${attempt.fileName} - ${Math.round(attempt.confidence * 100)}%`)
+      // console.warn(`⚠️ LOW CONFIDENCE: ${attempt.fileName} - ${Math.round(attempt.confidence * 100)}%`)
     }
     
     if (attempt.accuracy && attempt.accuracy < 90) {
-      console.warn(`⚠️ LOW ACCURACY: ${attempt.fileName} - ${attempt.accuracy.toFixed(1)}%`)
+      // console.warn(`⚠️ LOW ACCURACY: ${attempt.fileName} - ${attempt.accuracy.toFixed(1)}%`)
     }
   }
 
@@ -284,7 +284,7 @@ class ExtractionMonitor {
       }
     }
     
-    console.log(`🧹 Cleaned up monitoring data older than ${daysToKeep} days`)
+    // console.log(`🧹 Cleaned up monitoring data older than ${daysToKeep} days`)
   }
 
   /**
