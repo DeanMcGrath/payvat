@@ -228,8 +228,10 @@ async function processLearningFeedback(feedbackId: string): Promise<void> {
   }
 
   // Extract learning patterns from the correction
-  const originalVAT = [...feedback.originalExtraction.salesVAT, ...feedback.originalExtraction.purchaseVAT]
-  const correctedVAT = [...feedback.correctedExtraction.salesVAT, ...feedback.correctedExtraction.purchaseVAT]
+  const originalExtraction = feedback.originalExtraction as any || { salesVAT: [], purchaseVAT: [] }
+  const correctedExtraction = feedback.correctedExtraction as any || { salesVAT: [], purchaseVAT: [] }
+  const originalVAT = [...originalExtraction.salesVAT, ...originalExtraction.purchaseVAT]
+  const correctedVAT = [...correctedExtraction.salesVAT, ...correctedExtraction.purchaseVAT]
 
   // Create or update business learning patterns
   const businessName = feedback.user?.businessName || 'Unknown'
