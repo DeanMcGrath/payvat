@@ -91,13 +91,17 @@ async function applyLearning(request: NextRequest, user?: AuthUser) {
         frequency: pattern.frequency,
         insights: extractPatternInsights(pattern.patternData)
       })),
-      recentCorrections: recentFeedback.map(fb => ({
-        documentName: fb.document.originalName,
-        originalAmounts: [...fb.originalExtraction.salesVAT, ...fb.originalExtraction.purchaseVAT],
-        correctedAmounts: [...fb.correctedExtraction.salesVAT, ...fb.correctedExtraction.purchaseVAT],
-        feedback: fb.feedback,
-        corrections: fb.corrections
-      })),
+      recentCorrections: recentFeedback.map(fb => {
+        const originalExtraction = fb.originalExtraction as any || { salesVAT: [], purchaseVAT: [] }
+        const correctedExtraction = fb.correctedExtraction as any || { salesVAT: [], purchaseVAT: [] }
+        return {
+          documentName: fb.document.originalName,
+          originalAmounts: [...originalExtraction.salesVAT, ...originalExtraction.purchaseVAT],
+          correctedAmounts: [...correctedExtraction.salesVAT, ...correctedExtraction.purchaseVAT],
+          feedback: fb.feedback,
+          corrections: fb.corrections
+        }
+      }),
       recommendations: generateRecommendations(learningPatterns, recentFeedback, document)
     }
 
