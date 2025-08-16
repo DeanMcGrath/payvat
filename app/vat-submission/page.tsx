@@ -720,100 +720,63 @@ export default function VATSubmissionPage() {
               </CardContent>
             </Card>
 
-            <Card className="card-modern ">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                  <FileText className="h-5 w-5 mr-2 text-[#0072B1]" />
-                  Supporting Documents
+
+            {/* Sales Documents Section - Always visible */}
+            <Card className="card-modern border-[#99D3FF]">
+              <CardHeader className="bg-[#E6F4FF]">
+                <CardTitle className="text-lg font-semibold text-blue-900 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FileText className="h-5 w-5 mr-2 text-[#0072B1]" />
+                    Section 1: Sales Documents {uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length > 0 && (
+                      <>({uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length})</>
+                    )}
+                  </div>
+                  {extractedVATData?.totalSalesVAT && extractedVATData.totalSalesVAT > 0 && (
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-[#0072B1]">
+                        Sales VAT Total: {formatCurrency(extractedVATData.totalSalesVAT)}
+                      </div>
+                    </div>
+                  )}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                {/* VAT on Sales Documents */}
-                <FileUpload
-                  category="SALES"
-                  title="Section 1: VAT on Sales Documents"
-                  description="Upload sales-related documents"
-                  acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
-                  enableBatchMode={true}
-                  maxConcurrentUploads={maxConcurrentUploads}
-                  showBatchProgress={true}
-                  onUploadSuccess={(doc) => {
-                    console.log('📤 FRONTEND: Sales document uploaded:', doc.fileName)
-                    logger.info('Sales document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
-                    // Add to uploaded documents list
-                    setUploadedDocuments(prev => [...prev, doc])
-                    
-                    console.log('⏳ FRONTEND: Document uploaded, scheduling debounced VAT data refresh...')
-                    // Use debounced refresh to avoid rate limiting
-                    debouncedRefreshVATData(5000) // 5 second delay for AI processing
-                    
-                    // Auto-populate when data is available (this will happen via the next refresh)
-                    setTimeout(() => {
-                      if (extractedVATData && extractedVATData.processedDocuments > 0) {
-                        console.log('✅ FRONTEND: Auto-populating calculator with available VAT data')
-                        setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
-                        setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
-                        setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
-                        setUseExtractedData(true)
-                      }
-                    }, 6000) // Check after the refresh completes
-                  }}
-                />
+              <CardContent className="pt-4">
+                {/* Sales Upload Area */}
+                <div className="mb-6">
+                  <FileUpload
+                    category="SALES"
+                    title="Upload Sales Documents"
+                    description="Upload sales-related documents including invoices, receipts, and payment records"
+                    acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
+                    enableBatchMode={true}
+                    maxConcurrentUploads={maxConcurrentUploads}
+                    showBatchProgress={true}
+                    onUploadSuccess={(doc) => {
+                      console.log('📤 FRONTEND: Sales document uploaded:', doc.fileName)
+                      logger.info('Sales document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
+                      // Add to uploaded documents list
+                      setUploadedDocuments(prev => [...prev, doc])
+                      
+                      console.log('⏳ FRONTEND: Document uploaded, scheduling debounced VAT data refresh...')
+                      // Use debounced refresh to avoid rate limiting
+                      debouncedRefreshVATData(5000) // 5 second delay for AI processing
+                      
+                      // Auto-populate when data is available (this will happen via the next refresh)
+                      setTimeout(() => {
+                        if (extractedVATData && extractedVATData.processedDocuments > 0) {
+                          console.log('✅ FRONTEND: Auto-populating calculator with available VAT data')
+                          setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
+                          setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
+                          setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
+                          setUseExtractedData(true)
+                        }
+                      }, 6000) // Check after the refresh completes
+                    }}
+                  />
+                </div>
 
-                {/* VAT on Purchases Documents */}
-                <FileUpload
-                  category="PURCHASES"
-                  title="Section 2: VAT on Purchases Documents"
-                  description="Upload purchase-related documents"
-                  acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
-                  enableBatchMode={true}
-                  maxConcurrentUploads={maxConcurrentUploads}
-                  showBatchProgress={true}
-                  onUploadSuccess={(doc) => {
-                    console.log('📤 FRONTEND: Purchase document uploaded:', doc.fileName)
-                    logger.info('Purchase document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
-                    // Add to uploaded documents list
-                    setUploadedDocuments(prev => [...prev, doc])
-                    
-                    console.log('⏳ FRONTEND: Document uploaded, scheduling debounced VAT data refresh...')
-                    // Use debounced refresh to avoid rate limiting
-                    debouncedRefreshVATData(5000) // 5 second delay for AI processing
-                    
-                    // Auto-populate when data is available (this will happen via the next refresh)
-                    setTimeout(() => {
-                      if (extractedVATData && extractedVATData.processedDocuments > 0) {
-                        console.log('✅ FRONTEND: Auto-populating calculator with available VAT data')
-                        setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
-                        setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
-                        setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
-                        setUseExtractedData(true)
-                      }
-                    }, 6000) // Check after the refresh completes
-                  }}
-                />
-              </CardContent>
-            </Card>
-
-            {/* Uploaded Documents Display - Separated by Category */}
-            {uploadedDocuments.length > 0 && (
-              <>
-                {/* Sales Documents Section */}
+                {/* Uploaded Sales Documents List */}
                 {uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length > 0 && (
-                  <Card className="card-modern  border-[#99D3FF]">
-                    <CardHeader className="bg-[#E6F4FF]">
-                      <CardTitle className="text-lg font-semibold text-blue-900 flex items-center justify-between">
-                        <div className="flex items-center">
-                          <FileText className="h-5 w-5 mr-2 text-[#0072B1]" />
-                          Section 1: VAT on Sales Documents ({uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length})
-                        </div>
-                        <div className="text-right">
-                          <div className="text-sm font-medium text-[#0072B1]">
-                            Sales VAT Total: {formatCurrency(extractedVATData?.totalSalesVAT || 0)}
-                          </div>
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-4">
                       <div className="space-y-3">
                         {uploadedDocuments
                           .filter(doc => doc.category?.includes('SALES'))
@@ -955,27 +918,66 @@ export default function VATSubmissionPage() {
                             );
                           })}
                       </div>
-                    </CardContent>
-                  </Card>
                 )}
-                
-                {/* Purchase Documents Section */}
+              </CardContent>
+            </Card>
+
+            {/* Purchase Documents Section - Always visible */}
+            <Card className="card-modern border-green-200">
+              <CardHeader className="bg-green-50">
+                <CardTitle className="text-lg font-semibold text-green-900 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FileText className="h-5 w-5 mr-2 text-green-600" />
+                    Section 2: Purchase Documents {uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length > 0 && (
+                      <>({uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length})</>
+                    )}
+                  </div>
+                  {extractedVATData?.totalPurchaseVAT && extractedVATData.totalPurchaseVAT > 0 && (
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-green-600">
+                        Purchase VAT Total: {formatCurrency(extractedVATData.totalPurchaseVAT)}
+                      </div>
+                    </div>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-4">
+                {/* Purchase Upload Area */}
+                <div className="mb-6">
+                  <FileUpload
+                    category="PURCHASES"
+                    title="Upload Purchase Documents"
+                    description="Upload purchase-related documents including invoices, receipts, and expense records"
+                    acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
+                    enableBatchMode={true}
+                    maxConcurrentUploads={maxConcurrentUploads}
+                    showBatchProgress={true}
+                    onUploadSuccess={(doc) => {
+                      console.log('📤 FRONTEND: Purchase document uploaded:', doc.fileName)
+                      logger.info('Purchase document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
+                      // Add to uploaded documents list
+                      setUploadedDocuments(prev => [...prev, doc])
+                      
+                      console.log('⏳ FRONTEND: Document uploaded, scheduling debounced VAT data refresh...')
+                      // Use debounced refresh to avoid rate limiting
+                      debouncedRefreshVATData(5000) // 5 second delay for AI processing
+                      
+                      // Auto-populate when data is available (this will happen via the next refresh)
+                      setTimeout(() => {
+                        if (extractedVATData && extractedVATData.processedDocuments > 0) {
+                          console.log('✅ FRONTEND: Auto-populating calculator with available VAT data')
+                          setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
+                          setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
+                          setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
+                          setUseExtractedData(true)
+                        }
+                      }, 6000) // Check after the refresh completes
+                    }}
+                  />
+                </div>
+
+                {/* Uploaded Purchase Documents List */}
                 {uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length > 0 && (
-                  <Card className="card-modern  border-green-200">
-                    <CardHeader className="bg-green-50">
-                      <CardTitle className="text-lg font-semibold text-green-900 flex items-center justify-between">
-                        <div className="flex items-center">
-                          <FileText className="h-5 w-5 mr-2 text-green-600" />
-                          Section 2: VAT on Purchases Documents ({uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length})
-                        </div>
-                        <div className="text-right">
-                          <div className="text-sm font-medium text-green-600">
-                            Purchase VAT Total: {formatCurrency(extractedVATData?.totalPurchaseVAT || 0)}
-                          </div>
-                        </div>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-4">
                       <div className="space-y-3">
                         {uploadedDocuments
                           .filter(doc => doc.category?.includes('PURCHASE'))
@@ -1065,75 +1067,73 @@ export default function VATSubmissionPage() {
                             );
                           })}
                       </div>
-                    </CardContent>
-                  </Card>
                 )}
-                
-                {/* Other Documents Section (if any exist that aren't SALES or PURCHASE) */}
-                {uploadedDocuments.filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE')).length > 0 && (
-                  <Card className="card-modern  border-gray-200">
-                    <CardHeader>
-                      <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-                        <FileText className="h-5 w-5 mr-2 text-gray-600" />
-                        Other Documents ({uploadedDocuments.filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE')).length})
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        {uploadedDocuments
-                          .filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE'))
-                          .map((document) => (
-                            <div key={document.id} className="flex items-center justify-between p-4 bg-gray-100 rounded-lg border">
-                              <div className="flex items-center space-x-4">
-                                <div className="flex-shrink-0">
-                                  {document.mimeType?.includes('pdf') ? (
-                                    <FileText className="h-8 w-8 text-red-500" />
-                                  ) : document.mimeType?.includes('image') ? (
-                                    <FileText className="h-8 w-8 text-[#0085D1]" />
-                                  ) : (
-                                    <FileText className="h-8 w-8 text-green-500" />
-                                  )}
-                                </div>
-                                
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-gray-900 truncate">
-                                    {document.originalName || document.fileName}
-                                  </p>
-                                  <div className="flex items-center space-x-4 mt-1">
-                                    <p className="text-xs text-gray-500">
-                                      {Math.round(document.fileSize / 1024)}KB • {document.category?.replace('_', ' ')}
-                                    </p>
-                                    {document.isScanned && (
-                                      <span className="inline-flex items-center text-green-600 text-xs">
-                                        <CheckCircle className="h-3 w-3 mr-1" />
-                                        AI Processed
-                                      </span>
-                                    )}
-                                    {!document.isScanned && (
-                                      <span className="inline-flex items-center text-yellow-600 text-xs">
-                                        <AlertCircle className="h-3 w-3 mr-1" />
-                                        Processing...
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                              
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => removeDocument(document.id)}
-                                className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                              >
-                                <X className="h-4 w-4" />
-                              </Button>
+              </CardContent>
+            </Card>
+
+            {/* Other Documents Section (if any exist that aren't SALES or PURCHASE) */}
+            {uploadedDocuments.filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE')).length > 0 && (
+              <Card className="card-modern border-gray-200">
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
+                    <FileText className="h-5 w-5 mr-2 text-gray-600" />
+                    Other Documents ({uploadedDocuments.filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE')).length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {uploadedDocuments
+                      .filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE'))
+                      .map((document) => (
+                        <div key={document.id} className="flex items-center justify-between p-4 bg-gray-100 rounded-lg border">
+                          <div className="flex items-center space-x-4">
+                            <div className="flex-shrink-0">
+                              {document.mimeType?.includes('pdf') ? (
+                                <FileText className="h-8 w-8 text-red-500" />
+                              ) : document.mimeType?.includes('image') ? (
+                                <FileText className="h-8 w-8 text-[#0085D1]" />
+                              ) : (
+                                <FileText className="h-8 w-8 text-green-500" />
+                              )}
                             </div>
-                          ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </>
+                            
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-gray-900 truncate">
+                                {document.originalName || document.fileName}
+                              </p>
+                              <div className="flex items-center space-x-4 mt-1">
+                                <p className="text-xs text-gray-500">
+                                  {Math.round(document.fileSize / 1024)}KB • {document.category?.replace('_', ' ')}
+                                </p>
+                                {document.isScanned && (
+                                  <span className="inline-flex items-center text-green-600 text-xs">
+                                    <CheckCircle className="h-3 w-3 mr-1" />
+                                    AI Processed
+                                  </span>
+                                )}
+                                {!document.isScanned && (
+                                  <span className="inline-flex items-center text-yellow-600 text-xs">
+                                    <AlertCircle className="h-3 w-3 mr-1" />
+                                    Processing...
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeDocument(document.id)}
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                  </div>
+                </CardContent>
+              </Card>
             )}
           </div>
 
