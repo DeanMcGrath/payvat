@@ -151,11 +151,11 @@ async function processDocumentEnhanced(request: NextRequest, user?: AuthUser) {
       )
       
       // console.log('✅ Enhanced processing completed:', {
-        success: result.success,
-        strategy: result.processingStrategy,
-        confidence: result.extractedData?.confidence,
-        processingTime: result.processingTime
-      })
+      //   success: result.success,
+      //   strategy: result.processingStrategy,
+      //   confidence: result.extractedData?.confidence,
+      //   processingTime: result.processingTime
+      // })
       
     } catch (processingError: any) {
       console.error('Enhanced processing failed:', processingError)

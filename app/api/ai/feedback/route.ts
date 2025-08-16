@@ -54,12 +54,12 @@ async function collectFeedback(request: NextRequest, user?: AuthUser) {
     // Enhanced logging for VAT corrections
     if (body.vatCorrection) {
       // console.log('💰 VAT Correction details:', {
-        originalSalesVAT: body.vatCorrection.originalSalesVAT,
-        correctedSalesVAT: body.vatCorrection.correctedSalesVAT,
-        originalPurchaseVAT: body.vatCorrection.originalPurchaseVAT,
-        correctedPurchaseVAT: body.vatCorrection.correctedPurchaseVAT,
-        reason: body.vatCorrection.correctionReason
-      })
+      //   originalSalesVAT: body.vatCorrection.originalSalesVAT,
+      //   correctedSalesVAT: body.vatCorrection.correctedSalesVAT,
+      //   originalPurchaseVAT: body.vatCorrection.originalPurchaseVAT,
+      //   correctedPurchaseVAT: body.vatCorrection.correctedPurchaseVAT,
+      //   reason: body.vatCorrection.correctionReason
+      // })
     }
     
     // Validate required fields
