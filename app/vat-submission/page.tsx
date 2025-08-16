@@ -781,13 +781,8 @@ export default function VATSubmissionPage() {
                         {uploadedDocuments
                           .filter(doc => doc.category?.includes('SALES'))
                           .map((document) => {
-                            // Find VAT data for this document - check sales documents first, then purchase as fallback
+                            // Find VAT data for this document - check sales documents only
                             let docVATData = extractedVATData?.salesDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
-                            
-                            // If not found in sales, check purchase documents (in case of miscategorization)
-                            if (!docVATData) {
-                              docVATData = extractedVATData?.purchaseDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
-                            }
                             
                             const vatAmounts = docVATData?.extractedAmounts || [];
                             const confidence = docVATData?.confidence || 0;
@@ -982,13 +977,8 @@ export default function VATSubmissionPage() {
                         {uploadedDocuments
                           .filter(doc => doc.category?.includes('PURCHASE'))
                           .map((document) => {
-                            // Find VAT data for this document - check purchase documents first, then sales as fallback
+                            // Find VAT data for this document - check purchase documents only
                             let docVATData = extractedVATData?.purchaseDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
-                            
-                            // If not found in purchase, check sales documents (in case of miscategorization)
-                            if (!docVATData) {
-                              docVATData = extractedVATData?.salesDocuments?.find((vatDoc: any) => vatDoc.id === document.id);
-                            }
                             
                             const vatAmounts = docVATData?.extractedAmounts || [];
                             const confidence = docVATData?.confidence || 0;
