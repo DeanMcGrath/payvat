@@ -18,13 +18,13 @@ interface ProcessDocumentRequest {
  * POST /api/documents/process - Process a document for VAT extraction
  */
 async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
-  console.log('PROCESS DOCUMENT ENDPOINT CALLED')
-  console.log(`   User: ${user ? `${user.id} (${user.email})` : 'GUEST/ANONYMOUS'}`)
-  console.log(`   Request method: ${request.method}`)
-  console.log(`   Request URL: ${request.url}`)
-  console.log(`   User Agent: ${request.headers.get('user-agent')}`)
-  console.log(`   Referer: ${request.headers.get('referer')}`)
-  console.log(`   Timestamp: ${new Date().toISOString()}`)
+  // console.log('PROCESS DOCUMENT ENDPOINT CALLED')
+  // console.log(`   User: ${user ? `${user.id} (${user.email})` : 'GUEST/ANONYMOUS'}`)
+  // console.log(`   Request method: ${request.method}`)
+  // console.log(`   Request URL: ${request.url}`)
+  // console.log(`   User Agent: ${request.headers.get('user-agent')}`)
+  // console.log(`   Referer: ${request.headers.get('referer')}`)
+  // console.log(`   Timestamp: ${new Date().toISOString()}`)
   
   try {
     // Parse JSON with proper error handling
@@ -66,7 +66,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         whereClause.userId = user.id
       }
       
-      console.log(`Looking for document ${documentId}${user ? ` owned by user ${user.id}` : ' (no user)'}`)
+      // console.log(`Looking for document ${documentId}${user ? ` owned by user ${user.id}` : ' (no user)'}`)
       
       document = await prisma.document.findFirst({
         where: whereClause
@@ -84,7 +84,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         )
       }
       
-      console.log(`Found document: ${document.originalName}`)
+      // console.log(`Found document: ${document.originalName}`)
     } catch (dbError) {
       console.error('Database error when fetching document:', dbError)
       return NextResponse.json(
@@ -140,23 +140,23 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     }
     
     // CRITICAL DEBUG: Validate file data before processing
-    console.log('FILE DATA VALIDATION:')
-    console.log(`   Document: ${document.originalName} (${document.category})`)
-    console.log(`   MIME Type: ${document.mimeType}`)
-    console.log(`   File data exists: ${!!document.fileData}`)
-    console.log(`   File data type: ${typeof document.fileData}`)
-    console.log(`   File data length: ${document.fileData?.length || 0} characters`)
+    // console.log('FILE DATA VALIDATION:')
+    // console.log(`   Document: ${document.originalName} (${document.category})`)
+    // console.log(`   MIME Type: ${document.mimeType}`)
+    // console.log(`   File data exists: ${!!document.fileData}`)
+    // console.log(`   File data type: ${typeof document.fileData}`)
+    // console.log(`   File data length: ${document.fileData?.length || 0} characters`)
     
     // Check if fileData is valid base64
     if (document.fileData) {
       try {
         const testBuffer = Buffer.from(document.fileData, 'base64')
-        console.log(`   Base64 decode test: SUCCESS (${testBuffer.length} bytes)`)
+        // console.log(`   Base64 decode test: SUCCESS (${testBuffer.length} bytes)`)
         
         // For PDFs, check the header
         if (document.mimeType === 'application/pdf') {
           const pdfHeader = testBuffer.subarray(0, 4).toString('ascii')
-          console.log(`   PDF header check: "${pdfHeader}" (${pdfHeader.startsWith('%PDF') ? 'VALID' : 'INVALID'})`)
+          // console.log(`   PDF header check: "${pdfHeader}" (${pdfHeader.startsWith('%PDF') ? 'VALID' : 'INVALID'})`)
         }
       } catch (base64Error) {
         console.error('CRITICAL: fileData base64 decode failed:', base64Error)
@@ -175,7 +175,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     }
     
     // IMMEDIATE OPENAI API STATUS CHECK - Show status to user via console and response
-    console.log('PRE-PROCESSING: Checking OpenAI API status...')
+    // console.log('PRE-PROCESSING: Checking OpenAI API status...')
     const openAIStatus: any = {
       apiKeyConfigured: false,
       apiKeyFormat: 'invalid',
@@ -198,18 +198,18 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       openAIStatus.diagnosticMessage = aiStatus.reason
       
       if (!openAIStatus.apiEnabled) {
-        console.log('CRITICAL: AI PROCESSING DISABLED')
-        console.log(`   Reason: ${aiStatus.reason}`)
-        console.log(`   Suggestions:`)
+        // console.log('CRITICAL: AI PROCESSING DISABLED')
+        // console.log(`   Reason: ${aiStatus.reason}`)
+        // console.log(`   Suggestions:`)
         aiStatus.suggestions.forEach(suggestion => {
-          console.log(`     - ${suggestion}`)
+          // console.log(`     - ${suggestion}`)
         })
-        console.log('   Impact: Document will be uploaded but NOT processed')
-        console.log('   Result: "processedDocuments": 0 in API response')
+        // console.log('   Impact: Document will be uploaded but NOT processed')
+        // console.log('   Result: "processedDocuments": 0 in API response')
       }
       
       if (openAIStatus.apiEnabled) {
-        console.log('OpenAI API key configured, testing connectivity...')
+        // console.log('OpenAI API key configured, testing connectivity...')
         const connectivityResult = await quickConnectivityTest()
         openAIStatus.connectivityTest = {
           success: connectivityResult.success,
@@ -218,7 +218,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         }
         
         if (connectivityResult.success) {
-          console.log('OpenAI API connectivity confirmed - AI processing will work!')
+          // console.log('OpenAI API connectivity confirmed - AI processing will work!')
         } else {
           console.error('OpenAI API connectivity failed:', connectivityResult.error)
           console.error('   Documents will fall back to legacy processing')
@@ -233,12 +233,12 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       }
     }
     
-    console.log('OpenAI API Status Summary:', openAIStatus)
+    // console.log('OpenAI API Status Summary:', openAIStatus)
     
     // 🚨 EMERGENCY EMBEDDED PROMPT DIAGNOSTIC - Simple vs Complex Test
     let promptDiagnostic: any = null
     if (debugMode && openAIStatus.apiEnabled && document.fileData) {
-      console.log('EMERGENCY DEBUG MODE: Testing Simple vs Complex Prompts')
+      // console.log('EMERGENCY DEBUG MODE: Testing Simple vs Complex Prompts')
       
       try {
         const { openai, AI_CONFIG } = await import('@/lib/ai/openai')
@@ -248,8 +248,8 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
                        document.originalName.toLowerCase().includes('volkswagen') ||
                        document.originalName.toLowerCase().includes('financial')
         
-        console.log(`VW Document Detection: ${isVWDoc}`)
-        console.log('Testing SIMPLE prompt: "What is the Total Amount VAT on this Volkswagen Financial Services invoice?"')
+        // console.log(`VW Document Detection: ${isVWDoc}`)
+        // console.log('Testing SIMPLE prompt: "What is the Total Amount VAT on this Volkswagen Financial Services invoice?"')
         
         // Test 1: Simple Prompt
         const simplePrompt = "What is the Total Amount VAT on this Volkswagen Financial Services invoice? Look for the field labeled 'Total Amount VAT' and extract only that euro amount. Return just the number."
@@ -278,13 +278,13 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         })
         
         const simpleResult = simpleResponse.choices[0]?.message?.content || 'No response'
-        console.log(`SIMPLE PROMPT RESULT: "${simpleResult}"`)
-        console.log(`Simple found €111.36: ${simpleResult.includes('111.36')}`)
-        console.log(`Simple found €103.16: ${simpleResult.includes('103.16')}`)
-        console.log(`Simple found €101.99: ${simpleResult.includes('101.99')}`)
+        // console.log(`SIMPLE PROMPT RESULT: "${simpleResult}"`)
+        // console.log(`Simple found €111.36: ${simpleResult.includes('111.36')}`)
+        // console.log(`Simple found €103.16: ${simpleResult.includes('103.16')}`)
+        // console.log(`Simple found €101.99: ${simpleResult.includes('101.99')}`)
         
         // Test 2: Complex Prompt (first 500 chars for comparison)
-        console.log('Testing COMPLEX prompt (full VAT_EXTRACTION prompt)')
+        // console.log('Testing COMPLEX prompt (full VAT_EXTRACTION prompt)')
         const complexPrompt = document.mimeType === 'application/pdf' 
           ? `${DOCUMENT_PROMPTS.VAT_EXTRACTION}\n\nNote: This is a PDF document. Please extract all visible text and VAT information from all pages.`
           : DOCUMENT_PROMPTS.VAT_EXTRACTION
@@ -314,11 +314,11 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         })
         
         const complexResult = complexResponse.choices[0]?.message?.content || 'No response'
-        console.log(`COMPLEX PROMPT RESULT LENGTH: ${complexResult.length} chars`)
-        console.log(`Complex found €111.36: ${complexResult.includes('111.36')}`)
-        console.log(`Complex found €103.16: ${complexResult.includes('103.16')}`)
-        console.log(`Complex found €101.99: ${complexResult.includes('101.99')}`)
-        console.log(`COMPLEX RESULT PREVIEW: "${complexResult.substring(0, 300)}..."`)
+        // console.log(`COMPLEX PROMPT RESULT LENGTH: ${complexResult.length} chars`)
+        // console.log(`Complex found €111.36: ${complexResult.includes('111.36')}`)
+        // console.log(`Complex found €103.16: ${complexResult.includes('103.16')}`)
+        // console.log(`Complex found €101.99: ${complexResult.includes('101.99')}`)
+        // console.log(`COMPLEX RESULT PREVIEW: "${complexResult.substring(0, 300)}..."`)
         
         // Comparison Results
         const comparison = {
@@ -341,10 +341,10 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
           comparison.verdict = 'BOTH FAILED - Neither found €111.36'
         }
         
-        console.log('EMERGENCY DIAGNOSTIC RESULTS:')
-        console.log(`   Simple prompt result: "${simpleResult}"`)
-        console.log(`   Complex prompt found €111.36: ${comparison.complexFound111_36}`)
-        console.log(`   VERDICT: ${comparison.verdict}`)
+        // console.log('EMERGENCY DIAGNOSTIC RESULTS:')
+        // console.log(`   Simple prompt result: "${simpleResult}"`)
+        // console.log(`   Complex prompt found €111.36: ${comparison.complexFound111_36}`)
+        // console.log(`   VERDICT: ${comparison.verdict}`)
         
         promptDiagnostic = {
           isVWDocument: isVWDoc,
@@ -373,15 +373,15 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     const processingStartTime = Date.now()
     
     try {
-      console.log('Starting ENHANCED document processing with real-time monitoring...')
-      console.log(`   File: ${document.originalName}`)
-      console.log(`   Category: ${document.category}`)
-      console.log(`   User: ${user ? user.id : 'anonymous'}`)
-      console.log(`   Enhanced Engine: ${process.env.USE_ENHANCED_PROCESSING !== 'false' ? 'ENABLED' : 'DISABLED'}`)
+      // console.log('Starting ENHANCED document processing with real-time monitoring...')
+      // console.log(`   File: ${document.originalName}`)
+      // console.log(`   Category: ${document.category}`)
+      // console.log(`   User: ${user ? user.id : 'anonymous'}`)
+      // console.log(`   Enhanced Engine: ${process.env.USE_ENHANCED_PROCESSING !== 'false' ? 'ENABLED' : 'DISABLED'}`)
       
       // Try enhanced processing first (if enabled)
       if (process.env.USE_ENHANCED_PROCESSING !== 'false') {
-        console.log('Using Enhanced VAT Processing Engine v2.0...')
+        // console.log('Using Enhanced VAT Processing Engine v2.0...')
         const { processDocumentEnhanced } = await import('@/lib/documentProcessor')
         
         try {
@@ -392,10 +392,10 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
             document.category,
             user?.id
           )
-          console.log('Enhanced processing completed successfully!')
+          // console.log('Enhanced processing completed successfully!')
         } catch (enhancedError) {
-          console.log('Enhanced processing failed, falling back to legacy...')
-          console.log(`   Error: ${enhancedError instanceof Error ? enhancedError.message : enhancedError}`)
+          // console.log('Enhanced processing failed, falling back to legacy...')
+          // console.log(`   Error: ${enhancedError instanceof Error ? enhancedError.message : enhancedError}`)
           
           // Fallback to original processing
           result = await processDocument(
@@ -408,7 +408,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         }
       } else {
         // Use legacy processing
-        console.log('Using legacy processing (enhanced engine disabled)...')
+        // console.log('Using legacy processing (enhanced engine disabled)...')
         result = await processDocument(
           document.fileData,
           document.mimeType,
@@ -419,8 +419,8 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       }
       
       const processingTimeMs = Date.now() - processingStartTime
-      console.log('✅ Document processing completed successfully')
-      console.log(`   Processing time: ${processingTimeMs}ms`)
+      // console.log('✅ Document processing completed successfully')
+      // console.log(`   Processing time: ${processingTimeMs}ms`)
 
       // 🚨 NEW: Create extraction attempt for monitoring
       if (result.success && result.extractedData) {
@@ -478,13 +478,13 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
 
         extractionMonitor.logAttempt(extractionAttempt)
         
-        console.log('📊 MONITORING: Extraction attempt logged')
-        console.log(`   Amount: €${extractedAmount.toFixed(2)}`)
-        console.log(`   Method: ${processingMethod}`)
-        console.log(`   Confidence: ${Math.round((result.extractedData.confidence || 0.8) * 100)}%`)
+        // console.log('📊 MONITORING: Extraction attempt logged')
+        // console.log(`   Amount: €${extractedAmount.toFixed(2)}`)
+        // console.log(`   Method: ${processingMethod}`)
+        // console.log(`   Confidence: ${Math.round((result.extractedData.confidence || 0.8) * 100)}%`)
         if (expectedAmount) {
           const accuracy = Math.max(0, 100 - (Math.abs(extractedAmount - expectedAmount) / expectedAmount) * 100)
-          console.log(`   Accuracy: ${accuracy.toFixed(1)}%`)
+          // console.log(`   Accuracy: ${accuracy.toFixed(1)}%`)
         }
       }
       
@@ -522,7 +522,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       )
 
       extractionMonitor.logAttempt(failedAttempt)
-      console.log('📊 MONITORING: Failed extraction attempt logged')
+      // console.log('📊 MONITORING: Failed extraction attempt logged')
       
       // Return a structured error response
       return NextResponse.json(
@@ -546,7 +546,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     }
     
     // 🔍 DOCUMENT PROCESSING VALIDATION
-    console.log('🔍 DOCUMENT PROCESSING VALIDATION: Checking extraction results...')
+    // console.log('🔍 DOCUMENT PROCESSING VALIDATION: Checking extraction results...')
     const validationCheck = {
       extractedAmounts: [] as number[],
       hasValidExtraction: false,
@@ -563,28 +563,28 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       if (validationCheck.hasValidExtraction) {
         if (validationCheck.confidence >= 0.8) {
           validationCheck.complianceStatus = 'COMPLIANT'
-          console.log('✅ HIGH CONFIDENCE EXTRACTION: VAT data extracted with good confidence')
+          // console.log('✅ HIGH CONFIDENCE EXTRACTION: VAT data extracted with good confidence')
         } else if (validationCheck.confidence >= 0.5) {
           validationCheck.complianceStatus = 'WARNING'  
-          console.log('⚠️ MEDIUM CONFIDENCE: Manual review recommended')
+          // console.log('⚠️ MEDIUM CONFIDENCE: Manual review recommended')
         } else {
           validationCheck.complianceStatus = 'WARNING'
-          console.log('⚠️ LOW CONFIDENCE: Extraction may be inaccurate')
+          // console.log('⚠️ LOW CONFIDENCE: Extraction may be inaccurate')
         }
       } else {
         validationCheck.complianceStatus = 'ERROR'
-        console.log('🚨 NO VAT DATA EXTRACTED')
+        // console.log('🚨 NO VAT DATA EXTRACTED')
       }
     } else {
       validationCheck.complianceStatus = 'ERROR'
-      console.log('🚨 DOCUMENT PROCESSING FAILED')
+      // console.log('🚨 DOCUMENT PROCESSING FAILED')
     }
     
-    console.log('🔍 VALIDATION SUMMARY:')
-    console.log(`   Extracted amounts: €${validationCheck.extractedAmounts.join(', €') || 'none'}`)
-    console.log(`   Confidence: ${Math.round(validationCheck.confidence * 100)}%`)
-    console.log(`   Status: ${validationCheck.complianceStatus}`)
-    console.log(`   Ready for review: ${validationCheck.hasValidExtraction ? 'Yes' : 'No'}`)
+    // console.log('🔍 VALIDATION SUMMARY:')
+    // console.log(`   Extracted amounts: €${validationCheck.extractedAmounts.join(', €') || 'none'}`)
+    // console.log(`   Confidence: ${Math.round(validationCheck.confidence * 100)}%`)
+    // console.log(`   Status: ${validationCheck.complianceStatus}`)
+    // console.log(`   Ready for review: ${validationCheck.hasValidExtraction ? 'Yes' : 'No'}`)
     
     if (!result.success) {
       // Provide user-friendly error messages based on error type
@@ -652,33 +652,33 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     // Store extracted VAT data in a separate table for easy querying (skip for guests) - with safe error handling
     if (user && result.extractedData && (result.extractedData.salesVAT?.length > 0 || result.extractedData.purchaseVAT?.length > 0)) {
       try {
-        console.log('💾 CREATING AUDIT LOG: VAT data extracted successfully')
-        console.log(`   User: ${user.id}`)
-        console.log(`   Document: ${document.originalName} (${documentId})`)
-        console.log(`   Document Category: ${document.category}`)
+        // console.log('💾 CREATING AUDIT LOG: VAT data extracted successfully')
+        // console.log(`   User: ${user.id}`)
+        // console.log(`   Document: ${document.originalName} (${documentId})`)
+        // console.log(`   Document Category: ${document.category}`)
         
         // 🚨 CRITICAL DEBUG: Audit Log VAT Data Storage
-        console.log(`\n🔍 AUDIT LOG VAT DATA DEBUG:`)
-        console.log(`   📊 Full extracted data structure:`, JSON.stringify(result.extractedData, null, 2))
-        console.log(`   💰 Sales VAT array: [${result.extractedData.salesVAT?.join(', ') || 'EMPTY'}] (${result.extractedData.salesVAT?.length || 0} items)`)
-        console.log(`   💰 Purchase VAT array: [${result.extractedData.purchaseVAT?.join(', ') || 'EMPTY'}] (${result.extractedData.purchaseVAT?.length || 0} items)`)
-        console.log(`   📈 Confidence: ${Math.round((result.extractedData.confidence || 0) * 100)}%`)
-        console.log(`   🏷️  Classification: ${result.extractedData.classification?.category || 'UNKNOWN'}`)
-        console.log(`   📝 Expected behavior: ${document.category.includes('SALES') ? 'Sales amounts should be in salesVAT array' : 'Purchase amounts should be in purchaseVAT array'}`)
-        console.log(``)
+        // console.log(`\n🔍 AUDIT LOG VAT DATA DEBUG:`)
+        // console.log(`   📊 Full extracted data structure:`, JSON.stringify(result.extractedData, null, 2))
+        // console.log(`   💰 Sales VAT array: [${result.extractedData.salesVAT?.join(', ') || 'EMPTY'}] (${result.extractedData.salesVAT?.length || 0} items)`)
+        // console.log(`   💰 Purchase VAT array: [${result.extractedData.purchaseVAT?.join(', ') || 'EMPTY'}] (${result.extractedData.purchaseVAT?.length || 0} items)`)
+        // console.log(`   📈 Confidence: ${Math.round((result.extractedData.confidence || 0) * 100)}%`)
+        // console.log(`   🏷️  Classification: ${result.extractedData.classification?.category || 'UNKNOWN'}`)
+        // console.log(`   📝 Expected behavior: ${document.category.includes('SALES') ? 'Sales amounts should be in salesVAT array' : 'Purchase amounts should be in purchaseVAT array'}`)
+        // console.log(``)
         
         // Validate the data before storing
         const totalSalesAmount = (result.extractedData.salesVAT || []).reduce((sum: number, val: number) => sum + val, 0)
         const totalPurchaseAmount = (result.extractedData.purchaseVAT || []).reduce((sum: number, val: number) => sum + val, 0)
-        console.log(`   🧮 Total Sales VAT: €${totalSalesAmount}`)
-        console.log(`   🧮 Total Purchase VAT: €${totalPurchaseAmount}`)
+        // console.log(`   🧮 Total Sales VAT: €${totalSalesAmount}`)
+        // console.log(`   🧮 Total Purchase VAT: €${totalPurchaseAmount}`)
         
         if (document.category.includes('SALES') && totalSalesAmount === 0 && totalPurchaseAmount > 0) {
-          console.log(`   🚨 POTENTIAL BUG: Sales document has VAT in purchase array!`)
+          // console.log(`   🚨 POTENTIAL BUG: Sales document has VAT in purchase array!`)
         } else if (document.category.includes('PURCHASE') && totalPurchaseAmount === 0 && totalSalesAmount > 0) {
-          console.log(`   🚨 POTENTIAL BUG: Purchase document has VAT in sales array!`)
+          // console.log(`   🚨 POTENTIAL BUG: Purchase document has VAT in sales array!`)
         } else {
-          console.log(`   ✅ VAT categorization appears correct for document category`)
+          // console.log(`   ✅ VAT categorization appears correct for document category`)
         }
         
         await prisma.auditLog.create({
@@ -699,7 +699,7 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
           }
         })
         
-        console.log('✅ AUDIT LOG CREATED SUCCESSFULLY')
+        // console.log('✅ AUDIT LOG CREATED SUCCESSFULLY')
       } catch (auditError) {
         console.error('🚨 AUDIT LOG CREATION FAILED:', auditError)
         console.error('   This will not prevent document processing from succeeding')
@@ -707,10 +707,10 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         // Don't throw - allow processing to continue even if audit log fails
       }
     } else {
-      console.log('ℹ️ SKIPPING AUDIT LOG:')
-      console.log(`   User authenticated: ${!!user}`)
-      console.log(`   Has extracted data: ${!!result.extractedData}`)
-      console.log(`   Has VAT amounts: ${(result.extractedData?.salesVAT?.length || 0) + (result.extractedData?.purchaseVAT?.length || 0) > 0}`)
+      // console.log('ℹ️ SKIPPING AUDIT LOG:')
+      // console.log(`   User authenticated: ${!!user}`)
+      // console.log(`   Has extracted data: ${!!result.extractedData}`)
+      // console.log(`   Has VAT amounts: ${(result.extractedData?.salesVAT?.length || 0) + (result.extractedData?.purchaseVAT?.length || 0) > 0}`)
     }
     
     // Enhanced response data with real-time processing information
