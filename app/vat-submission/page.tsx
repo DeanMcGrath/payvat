@@ -511,7 +511,7 @@ export default function VATSubmissionPage() {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="flex items-center space-x-2">
-          <Loader2 className="h-6 w-6 animate-spin text-teal-700" />
+          <Loader2 className="h-6 w-6 animate-spin text-blue-700" />
           <span className="text-gray-600">Loading...</span>
         </div>
       </div>
@@ -552,60 +552,6 @@ export default function VATSubmissionPage() {
         onLogout={handleLogout}
       />
 
-      {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center">
-            {/* Hero Content */}
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Smart VAT calculations
-                </div>
-                
-                <div className="icon-premium mb-3 mx-auto">
-                  <Calculator className="h-12 w-12 text-white" />
-                </div>
-                
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
-                  <span className="text-gradient-primary">VAT Return</span>
-                  <br />
-                  <span className="text-foreground">Submission</span>
-                </h1>
-                
-                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
-                
-                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Complete your VAT calculations with AI-powered document scanning. 
-                  <span className="text-primary font-semibold">Submit directly to Revenue.</span>
-                </p>
-              </div>
-              
-              {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-success" />
-                  <span>AI document scanning</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-success" />
-                  <span>Auto calculations</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-success" />
-                  <span>Works with ROS</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Background Elements */}
-          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
-          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
-          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
-        </div>
-      </section>
 
       <div className="max-w-6xl mx-auto px-6 py-8">
 
@@ -616,16 +562,16 @@ export default function VATSubmissionPage() {
             {extractedVATData && extractedVATData.processedDocuments > 0 && (
               <Card className="card-premium ">
                 <CardHeader>
-                  <CardTitle className="text-lg font-semibold text-teal-900 flex items-center">
-                    <BadgeCheck className="h-5 w-5 mr-2 text-teal-600" />
+                  <CardTitle className="text-lg font-semibold text-blue-900 flex items-center">
+                    <BadgeCheck className="h-5 w-5 mr-2 text-blue-600" />
                     VAT Data Extracted from Documents
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-white p-3 rounded-lg border border-teal-200">
+                    <div className="bg-white p-3 rounded-lg border border-blue-200">
                       <div className="text-sm text-gray-600">Sales VAT</div>
-                      <div className="text-lg font-semibold text-teal-600">
+                      <div className="text-lg font-semibold text-blue-600">
 {formatCurrency(extractedVATData.totalSalesVAT)}
                       </div>
                       <div className="text-xs text-gray-500">
@@ -633,9 +579,9 @@ export default function VATSubmissionPage() {
                       </div>
                     </div>
                     
-                    <div className="bg-white p-3 rounded-lg border border-teal-200">
+                    <div className="bg-white p-3 rounded-lg border border-blue-200">
                       <div className="text-sm text-gray-600">Purchase VAT</div>
-                      <div className="text-lg font-semibold text-teal-600">
+                      <div className="text-lg font-semibold text-blue-600">
 {formatCurrency(extractedVATData.totalPurchaseVAT)}
                       </div>
                       <div className="text-xs text-gray-500">
@@ -643,9 +589,9 @@ export default function VATSubmissionPage() {
                       </div>
                     </div>
                     
-                    <div className="bg-white p-3 rounded-lg border border-teal-200">
+                    <div className="bg-white p-3 rounded-lg border border-blue-200">
                       <div className="text-sm text-gray-600">Confidence</div>
-                      <div className="text-lg font-semibold text-teal-600">
+                      <div className="text-lg font-semibold text-blue-600">
                         {(extractedVATData.averageConfidence * 100).toFixed(0)}%
                       </div>
                       <div className="text-xs text-gray-500">
@@ -657,7 +603,7 @@ export default function VATSubmissionPage() {
                   <div className="flex space-x-2">
                     <Button 
                       onClick={useExtractedVATData}
-                      className="bg-teal-600 hover:bg-teal-600 text-white"
+                      className="bg-blue-600 hover:bg-blue-600 text-white"
                       disabled={useExtractedData}
                     >
                       <Calculator className="h-4 w-4 mr-2" />
@@ -674,7 +620,7 @@ export default function VATSubmissionPage() {
                         })
                       }}
                       variant="outline" 
-                      className="border-teal-200 text-teal-700"
+                      className="border-blue-200 text-blue-700"
                       disabled={loadingExtractedData || isRefreshDisabled}
                     >
                       <RefreshCw className={`h-4 w-4 mr-2 ${loadingExtractedData ? 'animate-spin' : ''}`} />
@@ -693,10 +639,10 @@ export default function VATSubmissionPage() {
             <Card className="card-modern ">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                  <Calculator className="h-5 w-5 mr-2 text-teal-600" />
+                  <Calculator className="h-5 w-5 mr-2 text-blue-600" />
                   VAT Calculation
                   {useExtractedData && (
-                    <Badge className="ml-2 bg-teal-100 text-teal-800">
+                    <Badge className="ml-2 bg-blue-100 text-blue-800">
                       From Documents
                     </Badge>
                   )}
@@ -721,7 +667,7 @@ export default function VATSubmissionPage() {
                           const purchaseValue = parseFloat(purchaseVAT) || 0
                           setVATAmounts(salesValue, purchaseValue)
                         }}
-                        className="pl-8 bg-white border-gray-300 focus:border-teal-600 focus:ring-teal-600"
+                        className="pl-8 bg-white border-gray-300 focus:border-blue-600 focus:ring-blue-600"
                       />
                     </div>
                     <p className="text-xs text-gray-500">Total VAT collected on sales</p>
@@ -744,7 +690,7 @@ export default function VATSubmissionPage() {
                           const purchaseValue = parseFloat(e.target.value) || 0
                           setVATAmounts(salesValue, purchaseValue)
                         }}
-                        className="pl-8 bg-white border-gray-300 focus:border-teal-600 focus:ring-teal-600"
+                        className="pl-8 bg-white border-gray-300 focus:border-blue-600 focus:ring-blue-600"
                       />
                     </div>
                     <p className="text-xs text-gray-500">Total VAT paid on purchases</p>
@@ -752,20 +698,20 @@ export default function VATSubmissionPage() {
                 </div>
 
                 <div className="border-t pt-6">
-                  <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label className="text-lg font-semibold text-teal-900">Net VAT Due</Label>
-                        <p className="text-sm text-teal-700">Amount to pay to Revenue</p>
+                        <Label className="text-lg font-semibold text-blue-900">Net VAT Due</Label>
+                        <p className="text-sm text-blue-700">Amount to pay to Revenue</p>
                       </div>
-                      <div className="text-3xl font-bold text-teal-600">€{netVAT}</div>
+                      <div className="text-3xl font-bold text-blue-600">€{netVAT}</div>
                     </div>
                   </div>
                 </div>
 
                 <Button 
                   onClick={calculateNetVAT}
-                  className="w-full bg-teal-600 hover:bg-teal-600 text-white"
+                  className="w-full bg-blue-600 hover:bg-blue-600 text-white"
                 >
                   <Calculator className="h-4 w-4 mr-2" />
                   Recalculate VAT
@@ -776,17 +722,17 @@ export default function VATSubmissionPage() {
             <Card className="card-modern ">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                  <FileText className="h-5 w-5 mr-2 text-teal-600" />
+                  <FileText className="h-5 w-5 mr-2 text-blue-600" />
                   Supporting Documents
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Batch Upload Settings */}
-                <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-lg p-4 border border-teal-200">
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h4 className="text-sm font-semibold text-teal-800 mb-1">Upload Settings</h4>
-                      <p className="text-xs text-teal-600">Configure how documents are processed</p>
+                      <h4 className="text-sm font-semibold text-blue-800 mb-1">Upload Settings</h4>
+                      <p className="text-xs text-blue-600">Configure how documents are processed</p>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Checkbox 
@@ -794,7 +740,7 @@ export default function VATSubmissionPage() {
                         checked={enableBatchMode}
                         onCheckedChange={(checked) => setEnableBatchMode(checked as boolean)}
                       />
-                      <Label htmlFor="batch-mode" className="text-sm font-medium text-teal-700">
+                      <Label htmlFor="batch-mode" className="text-sm font-medium text-blue-700">
                         Enable Batch Mode
                       </Label>
                     </div>
@@ -803,7 +749,7 @@ export default function VATSubmissionPage() {
                   {enableBatchMode && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-xs font-medium text-teal-700 mb-1 block">
+                        <Label className="text-xs font-medium text-blue-700 mb-1 block">
                           Concurrent Uploads
                         </Label>
                         <Select 
@@ -822,7 +768,7 @@ export default function VATSubmissionPage() {
                         </Select>
                       </div>
                       
-                      <div className="text-xs text-teal-600 space-y-1">
+                      <div className="text-xs text-blue-600 space-y-1">
                         <p>✅ Smart file categorization</p>
                         <p>✅ Concurrent processing</p>
                         <p>✅ Pause/resume controls</p>
@@ -902,15 +848,15 @@ export default function VATSubmissionPage() {
               <>
                 {/* Sales Documents Section */}
                 {uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length > 0 && (
-                  <Card className="card-modern  border-teal-200">
-                    <CardHeader className="bg-teal-50">
-                      <CardTitle className="text-lg font-semibold text-teal-900 flex items-center justify-between">
+                  <Card className="card-modern  border-blue-200">
+                    <CardHeader className="bg-blue-50">
+                      <CardTitle className="text-lg font-semibold text-blue-900 flex items-center justify-between">
                         <div className="flex items-center">
-                          <FileText className="h-5 w-5 mr-2 text-teal-600" />
+                          <FileText className="h-5 w-5 mr-2 text-blue-600" />
                           Section 1: VAT on Sales Documents ({uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length})
                         </div>
                         <div className="text-right">
-                          <div className="text-sm font-medium text-teal-600">
+                          <div className="text-sm font-medium text-blue-600">
                             Sales VAT Total: {formatCurrency(extractedVATData?.totalSalesVAT || 0)}
                           </div>
                         </div>
@@ -934,7 +880,7 @@ export default function VATSubmissionPage() {
                             const totalVAT = vatAmounts.reduce((sum: number, amount: number) => sum + amount, 0);
                             
                             return (
-                              <div key={document.id} className="flex items-center justify-between p-4 bg-teal-50 rounded-lg border border-teal-200">
+                              <div key={document.id} className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
                                 <div className="flex items-center space-x-4">
                                   <div className="flex-shrink-0">
                                     {document.mimeType?.includes('pdf') ? (
@@ -959,7 +905,7 @@ export default function VATSubmissionPage() {
                                       {document.isScanned && docVATData && vatAmounts.length > 0 && (
                                         <div className="flex flex-col space-y-1">
                                           <div className="flex items-center text-xs">
-                                            <span className="inline-flex items-center text-teal-700 font-medium">
+                                            <span className="inline-flex items-center text-blue-700 font-medium">
                                               <CheckCircle className="h-3 w-3 mr-1" />
                                               VAT: {formatCurrency(totalVAT)} • {Math.round(confidence * 100)}% confidence
                                             </span>
@@ -1264,7 +1210,7 @@ export default function VATSubmissionPage() {
                 <div className="border-t pt-4">
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Total Due:</span>
-                    <span className="text-teal-600">€{netVAT}</span>
+                    <span className="text-blue-600">€{netVAT}</span>
                   </div>
                 </div>
               </CardContent>
@@ -1276,11 +1222,11 @@ export default function VATSubmissionPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-teal-600" />
+                  <CheckCircle className="h-4 w-4 text-blue-600" />
                   <span className="text-sm text-gray-700">Period selected</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-teal-600" />
+                  <CheckCircle className="h-4 w-4 text-blue-600" />
                   <span className="text-sm text-gray-700">VAT amounts entered</span>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -1304,7 +1250,7 @@ export default function VATSubmissionPage() {
                   Save as Draft
                 </Button>
                 <Button 
-                  className="w-full bg-teal-600 hover:bg-teal-600 text-white justify-start"
+                  className="w-full bg-blue-600 hover:bg-blue-600 text-white justify-start"
                   onClick={() => {
                     // Save current VAT amounts to context before navigating
                     const salesValue = parseFloat(salesVAT) || 0

@@ -51,20 +51,20 @@ export default function LandingPage() {
       buttonText: "Get Started",
       link: "/business-setup-guide",
       icon: Calculator,
-      gradient: "from-teal-500 to-cyan-600",
-      shadowColor: "rgba(20, 184, 166, 0.3)",
+      gradient: "from-blue-500 to-blue-600",
+      shadowColor: "rgba(37, 99, 235, 0.3)",
       features: ["Complete guides", "Step-by-step process", "Expert advice"]
     },
     {
       id: 2,
       title: "Established Business?",
       heading: "Looking to simplify VAT?",
-      subtext: "Discover how PayVAT streamlines your VAT submissions and payments",
+      subtext: "Discover how Don't Be Like Me streamlines your VAT submissions and payments",
       buttonText: "Learn More",
       link: "/vat-services",
       icon: Building2,
-      gradient: "from-teal-500 to-cyan-600",
-      shadowColor: "rgba(20, 184, 166, 0.3)",
+      gradient: "from-blue-500 to-blue-600",
+      shadowColor: "rgba(37, 99, 235, 0.3)",
       features: ["VAT automation", "Revenue compliance", "Save time & money"]
     },
     {
@@ -75,7 +75,7 @@ export default function LandingPage() {
       buttonText: "Sign In",
       link: "/login",
       icon: Lock,
-      gradient: "from-teal-500 to-teal-600",
+      gradient: "from-blue-500 to-blue-600",
       shadowColor: "rgba(99, 102, 241, 0.3)",
       features: ["Secure access", "Real-time updates", "Always available"]
     }
@@ -88,92 +88,9 @@ export default function LandingPage() {
         pageSubtitle="Irish VAT compliance made simple"
       />
 
-      <main id="main-content" role="main" aria-label="PayVAT Ireland - VAT services">
-        {/* Hero Section - Simplified and Elegant */}
-        <section 
-          className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden"
-          aria-labelledby="hero-heading"
-        >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center">
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              {/* Premium Badge */}
-              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-teal-50 to-cyan-50 border border-teal-200 text-teal-700 text-sm font-semibold mb-6 animate-bounce-gentle shadow-lg shadow-teal-500/10">
-                <Shield className="w-4 h-4" />
-                Ireland's Premium VAT Platform
-                <BadgeCheck className="w-4 h-4" />
-              </div>
-              
-              <h1 
-                id="hero-heading"
-                className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-foreground"
-              >
-                Irish VAT compliance
-                <span className="block text-gradient-primary mt-2">made simple</span>
-              </h1>
-              
-              <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
-                Whether you're starting a business or managing VAT for an established company, 
-                we have everything you need.
-              </p>
-
-              {/* Enhanced Trust Indicators */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto mb-12">
-                <div className="flex items-center justify-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <div className="p-2 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl">
-                    <Shield className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="text-left">
-                    <div className="font-bold text-gray-900 text-sm">Revenue Compliant</div>
-                    <div className="text-xs text-teal-600">✓ Officially approved</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <div className="p-2 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl">
-                    <Users className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="text-left">
-                    <div className="font-bold text-gray-900 text-sm">Trust PayVAT</div>
-                    <div className="text-xs text-teal-600">✓ Professional Service</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-teal-100 shadow-lg hover:shadow-xl transition-all duration-300">
-                  <div className="p-2 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-xl">
-                    <Award className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="text-left">
-                    <div className="font-bold text-gray-900 text-sm">Professional Support</div>
-                    <div className="text-xs text-teal-600">✓ Expert guidance</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Watch Demo Video Button */}
-              <div className="flex justify-center">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => setShowVideoModal(true)}
-                  className="border-teal-600 text-teal-600 hover:bg-teal-50 hover:border-teal-700 hover:text-teal-700 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold transition-all duration-300 hover:shadow-lg min-h-[44px] hover:scale-105"
-                >
-                  <Play className="mr-2 sm:mr-3 h-4 sm:h-5 w-4 sm:w-5" />
-                  Watch Demo Video
-                </Button>
-              </div>
-            </div>
-          </div>
-          
-          {/* Decorative Elements */}
-          <div className="absolute top-10 left-10 w-20 h-20 bg-gradient-to-br from-teal-400 to-cyan-400 rounded-full blur-3xl opacity-20 animate-float"></div>
-          <div className="absolute top-40 right-20 w-32 h-32 bg-gradient-to-br from-teal-400 to-teal-500 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
-          <div className="absolute bottom-10 left-1/3 w-24 h-24 bg-gradient-to-br from-teal-400 to-cyan-400 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-4s'}}></div>
-        </div>
-      </section>
-
-      {/* Three Navigation Boxes - The Main Feature */}
-      <section className="relative py-8 -mt-20">
+      <main id="main-content" role="main" aria-label="Don't Be Like Me Ireland - VAT services">
+        {/* Three Navigation Boxes - The Main Feature */}
+        <section className="relative py-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-3" data-animate>
             {navigationBoxes.map((box, index) => (
@@ -211,8 +128,8 @@ export default function LandingPage() {
                           <svg width="0" height="0">
                             <defs>
                               <linearGradient id={`${box.id}-gradient`} x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" className="text-teal-500" stopColor="currentColor" />
-                                <stop offset="100%" className="text-teal-600" stopColor="currentColor" />
+                                <stop offset="0%" className="text-blue-500" stopColor="currentColor" />
+                                <stop offset="100%" className="text-blue-600" stopColor="currentColor" />
                               </linearGradient>
                             </defs>
                           </svg>
@@ -243,7 +160,7 @@ export default function LandingPage() {
                       <div className="space-y-2 pt-2">
                         {box.features.map((feature, idx) => (
                           <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <CheckCircle className="h-4 w-4 text-teal-600 flex-shrink-0" />
+                            <CheckCircle className="h-4 w-4 text-blue-600 flex-shrink-0" />
                             <span>{feature}</span>
                           </div>
                         ))}
@@ -276,10 +193,10 @@ export default function LandingPage() {
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 id="value-proposition-heading" className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-                Why choose <span className="text-gradient-primary">PayVAT?</span>
+                Why choose <span className="text-gradient-primary">Don't Be Like Me?</span>
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Join Irish businesses who trust PayVAT for their compliance needs
+                Join Irish businesses who trust Don't Be Like Me for their compliance needs
               </p>
             </div>
             

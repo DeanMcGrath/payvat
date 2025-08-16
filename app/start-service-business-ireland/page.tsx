@@ -30,40 +30,6 @@ export default function StartServiceBusinessIreland() {
     <>
       <SiteHeader />
       <main className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        {/* Hero Section */}
-        <section className={`relative py-20 px-4 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-green-50 rounded-full text-green-700 text-sm font-medium mb-6 animate-pulse">
-              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-              Service Business Setup Guide
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Start a Service Business in 
-              <span className="bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
-                Ireland (2025)
-              </span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Complete guide to launching your service business in Ireland. From professional qualifications and VAT compliance to client acquisition and scaling strategies.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="/signup" 
-                className="btn-primary px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl"
-              >
-                Start Your Service Business
-              </a>
-              <a 
-                href="#service-checklist" 
-                className="px-8 py-4 text-lg font-semibold text-green-600 border-2 border-green-200 rounded-xl hover:bg-green-50 transition-all duration-300"
-              >
-                View Setup Checklist
-              </a>
-            </div>
-          </div>
-        </section>
 
         {/* Service Business Types */}
         <section className="scroll-section py-16 px-4" id="service-types">

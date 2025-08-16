@@ -45,56 +45,6 @@ export default function VATDeadlinesIreland() {
         pageSubtitle="Never miss a VAT deadline with this complete guide"
       />
 
-      {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center">
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Next VAT deadline: Always 19th (23rd for ROS users)
-                </div>
-                
-                <div className="icon-premium mb-3 mx-auto">
-                  <Calendar className="h-12 w-12 text-white" />
-                </div>
-                
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
-                  <span className="text-gradient-primary">VAT Deadlines</span>
-                  <br />
-                  <span className="text-foreground">in Ireland</span>
-                </h1>
-                
-                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
-                
-                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Complete guide to Irish VAT deadlines, filing periods, and penalty avoidance. Know exactly when to file and pay to stay compliant and penalty-free.
-                </p>
-              </div>
-              
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-success" />
-                  <span>2025 calendar</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-success" />
-                  <span>All return periods</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-success" />
-                  <span>Zero late filings with PayVat</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
-          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
-          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
-        </div>
-      </section>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
 

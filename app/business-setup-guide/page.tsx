@@ -255,37 +255,6 @@ export default function BusinessSetupGuidePage() {
         pageSubtitle="Everything you need to start your Irish business"
       />
 
-      {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden bg-gradient-to-br from-teal-50 to-teal-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center">
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-100 text-teal-800 text-sm font-medium mb-6">
-                <Shield className="w-4 h-4" />
-                Complete Startup Guide
-                <BadgeCheck className="w-4 h-4" />
-              </div>
-              
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-                Start Your Irish Business
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-700 mt-2">
-                  The Right Way
-                </span>
-              </h1>
-              
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
-                From choosing your business structure to VAT registration and compliance - 
-                we'll guide you through every step of starting your business in Ireland.
-              </p>
-            </div>
-          </div>
-          
-          {/* Decorative Elements */}
-          <div className="absolute top-20 right-10 w-24 h-24 bg-gradient-to-br from-teal-400 to-teal-500 rounded-full blur-3xl opacity-20 animate-float"></div>
-          <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-teal-400 to-teal-500 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
-        </div>
-      </section>
 
       {/* Service Announcement */}
       <section className="py-12 bg-teal-600">

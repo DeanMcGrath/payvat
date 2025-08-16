@@ -30,40 +30,6 @@ export default function StartRestaurantBusinessIreland() {
     <>
       <SiteHeader />
       <main className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        {/* Hero Section */}
-        <section className={`relative py-20 px-4 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-teal-50 rounded-full text-teal-700 text-sm font-medium mb-6 animate-pulse">
-              <span className="w-2 h-2 bg-teal-500 rounded-full mr-2"></span>
-              Restaurant Business Setup Guide
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Start a Restaurant Business in 
-              <span className="bg-gradient-to-r from-teal-600 to-teal-700 bg-clip-text text-transparent">
-                Ireland (2025)
-              </span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Complete guide to launching your restaurant in Ireland. From licenses and VAT compliance to food safety and profitability strategies.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="/signup" 
-                className="btn-primary px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl"
-              >
-                Start Your Restaurant Setup
-              </a>
-              <a 
-                href="#restaurant-checklist" 
-                className="px-8 py-4 text-lg font-semibold text-teal-600 border-2 border-teal-200 rounded-xl hover:bg-teal-50 transition-all duration-300"
-              >
-                View Setup Checklist
-              </a>
-            </div>
-          </div>
-        </section>
 
         {/* Restaurant Requirements Overview */}
         <section className="scroll-section py-16 px-4" id="restaurant-requirements">
@@ -103,7 +69,7 @@ export default function StartRestaurantBusinessIreland() {
               </div>
               
               <div className="card-modern p-8 text-center hover:shadow-xl transition-all duration-300 group">
-                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-teal-100 text-teal-600 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-blue-100 text-blue-600 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                   </svg>
@@ -134,8 +100,8 @@ export default function StartRestaurantBusinessIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Phase 1: Business Foundation (Weeks 1-4)</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Business Structure & Registration</h4>
@@ -143,8 +109,8 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Business Bank Account</h4>
@@ -152,8 +118,8 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Tax Registration</h4>
@@ -233,8 +199,8 @@ export default function StartRestaurantBusinessIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Phase 4: Operational Setup (Weeks 8-16)</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Staff Registration</h4>
@@ -242,8 +208,8 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">VAT Compliance Setup</h4>
@@ -251,8 +217,8 @@ export default function StartRestaurantBusinessIreland() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-6 h-6 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-teal-600 rounded-full"></div>
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">POS System & VAT Compliance</h4>
@@ -283,11 +249,11 @@ export default function StartRestaurantBusinessIreland() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Restaurant Meals (dine-in)</span>
-                    <span className="font-bold text-teal-600">13.5%</span>
+                    <span className="font-bold text-blue-600">13.5%</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Hot Takeaway Food</span>
-                    <span className="font-bold text-teal-600">13.5%</span>
+                    <span className="font-bold text-blue-600">13.5%</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Cold Takeaway Food</span>
@@ -299,7 +265,7 @@ export default function StartRestaurantBusinessIreland() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium text-gray-900">Catering Services</span>
-                    <span className="font-bold text-teal-600">13.5%</span>
+                    <span className="font-bold text-blue-600">13.5%</span>
                   </div>
                 </div>
               </div>
@@ -308,28 +274,28 @@ export default function StartRestaurantBusinessIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">VAT Registration Benefits</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Reclaim Setup VAT</h4>
                       <p className="text-gray-600 text-sm">Equipment, fixtures, renovations - typically €10,000-50,000 in recoverable VAT</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Professional Credibility</h4>
                       <p className="text-gray-600 text-sm">VAT number signals established business to suppliers and customers</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Cash Flow Management</h4>
                       <p className="text-gray-600 text-sm">Bi-monthly filings help manage seasonal restaurant cash flows</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">B2B Opportunities</h4>
                       <p className="text-gray-600 text-sm">Catering contracts, corporate accounts often require VAT registration</p>
@@ -355,7 +321,7 @@ export default function StartRestaurantBusinessIreland() {
                 </a>
                 <a 
                   href="/pricing" 
-                  className="px-8 py-4 text-lg font-semibold text-teal-600 border-2 border-teal-200 rounded-xl hover:bg-teal-50 transition-all duration-300"
+                  className="px-8 py-4 text-lg font-semibold text-blue-600 border-2 border-blue-200 rounded-xl hover:bg-blue-50 transition-all duration-300"
                 >
                   View Restaurant Pricing
                 </a>
@@ -402,7 +368,7 @@ export default function StartRestaurantBusinessIreland() {
                   </div>
                   <div className="flex justify-between items-center font-bold text-lg pt-2">
                     <span className="text-gray-900">Legal/Admin Total</span>
-                    <span className="text-teal-600">€6,000-14,000</span>
+                    <span className="text-blue-600">€6,000-14,000</span>
                   </div>
                 </div>
               </div>
@@ -432,7 +398,7 @@ export default function StartRestaurantBusinessIreland() {
                   </div>
                   <div className="flex justify-between items-center font-bold text-lg pt-2">
                     <span className="text-gray-900">Operational Total</span>
-                    <span className="text-teal-600">€51,000-148,000</span>
+                    <span className="text-blue-600">€51,000-148,000</span>
                   </div>
                 </div>
               </div>
@@ -446,12 +412,12 @@ export default function StartRestaurantBusinessIreland() {
                 <div className="flex justify-center items-center gap-4 mb-6">
                   <div className="text-center">
                     <div className="text-sm text-gray-600">Minimum</div>
-                    <div className="text-3xl font-bold text-teal-600">€57,000</div>
+                    <div className="text-3xl font-bold text-blue-600">€57,000</div>
                   </div>
                   <div className="text-gray-400 text-2xl">-</div>
                   <div className="text-center">
                     <div className="text-sm text-gray-600">Typical</div>
-                    <div className="text-3xl font-bold text-teal-600">€162,000</div>
+                    <div className="text-3xl font-bold text-blue-600">€162,000</div>
                   </div>
                 </div>
                 <p className="text-gray-600 mb-6">
@@ -525,29 +491,29 @@ export default function StartRestaurantBusinessIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white">
+        <section className="scroll-section py-20 px-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Ready to Open Your Restaurant in Ireland?
             </h2>
-            <p className="text-xl mb-8 text-teal-100">
+            <p className="text-xl mb-8 text-blue-100">
               Get your complete restaurant business setup with automated VAT compliance, from day one.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-teal-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Start Restaurant Setup Now
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-teal-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
               >
                 View Restaurant Plans
               </a>
             </div>
-            <p className="text-sm text-teal-200 mt-6">
+            <p className="text-sm text-blue-200 mt-6">
               Join 1,200+ Irish restaurants using PayVat for seamless compliance
             </p>
           </div>

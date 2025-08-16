@@ -75,38 +75,13 @@ export default function ContactPage() {
         pageSubtitle="Get in touch with our team"
       />
 
-      {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden bg-gradient-to-br from-teal-50 to-teal-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center">
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="icon-premium mb-6 mx-auto">
-                <MessageCircle className="h-12 w-12 text-white" />
-              </div>
-              
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-teal-700">Get in Touch</span>
-                <span className="block text-foreground mt-2">We're Here to Help</span>
-              </h1>
-              
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
-                Have questions about VAT compliance or business setup? Our expert team is ready to provide the guidance you need.
-              </p>
-            </div>
-          </div>
-          
-          {/* Decorative Elements */}
-          <div className="absolute top-20 right-10 w-24 h-24 bg-gradient-to-br from-teal-400 to-teal-500 rounded-full blur-3xl opacity-20 animate-float"></div>
-          <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-teal-400 to-teal-500 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
-        </div>
-      </section>
 
       {/* Contact Form Section */}
-      <section className="py-16 -mt-20 relative z-10">
+      <section className="py-16 relative z-10">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <Card className="shadow-2xl border-0 bg-white">
             <CardHeader className="text-center pb-8">
-              <CardTitle className="text-3xl font-bold text-teal-800 mb-4">
+              <CardTitle className="text-3xl font-bold text-blue-800 mb-4">
                 Contact Our Team
               </CardTitle>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -255,7 +230,7 @@ export default function ContactPage() {
                       type="submit"
                       size="lg"
                       disabled={isSubmitting}
-                      className="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-12 py-3 min-w-[200px]"
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-12 py-3 min-w-[200px]"
                     >
                       {isSubmitting ? (
                         <>
@@ -292,12 +267,12 @@ export default function ContactPage() {
           <div className="grid gap-8 md:grid-cols-3">
             <Card className="text-center">
               <CardContent className="p-8">
-                <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Mail className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Email Support</h3>
                 <p className="text-gray-600 mb-4">Get a response within 24 hours</p>
-                <a href="mailto:support@payvat.ie" className="text-teal-600 font-medium hover:text-teal-700">
+                <a href="mailto:support@payvat.ie" className="text-blue-600 font-medium hover:text-blue-700">
                   support@payvat.ie
                 </a>
               </CardContent>
@@ -305,23 +280,23 @@ export default function ContactPage() {
 
             <Card className="text-center">
               <CardContent className="p-8">
-                <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Phone className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Phone Support</h3>
                 <p className="text-gray-600 mb-4">Monday - Friday, 9:00 AM - 5:00 PM</p>
-                <p className="text-teal-600 font-medium">Available via contact form</p>
+                <p className="text-blue-600 font-medium">Available via contact form</p>
               </CardContent>
             </Card>
 
             <Card className="text-center">
               <CardContent className="p-8">
-                <div className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                   <MessageCircle className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Live Chat</h3>
                 <p className="text-gray-600 mb-4">Real-time assistance available</p>
-                <p className="text-teal-600 font-medium">Check bottom right corner</p>
+                <p className="text-blue-600 font-medium">Check bottom right corner</p>
               </CardContent>
             </Card>
           </div>

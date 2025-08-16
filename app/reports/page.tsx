@@ -305,60 +305,6 @@ export default function ReportsPage() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center">
-            {/* Hero Content */}
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Real-time analytics & insights
-                </div>
-                
-                <div className="icon-premium mb-3 mx-auto">
-                  <TrendingUp className="h-12 w-12 text-white" />
-                </div>
-                
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
-                  <span className="text-gradient-primary">VAT Reports</span>
-                  <br />
-                  <span className="text-foreground">& Analytics</span>
-                </h1>
-                
-                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
-                
-                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Comprehensive reporting and analytics for your VAT compliance. 
-                  <span className="text-primary font-semibold">Export-ready reports at your fingertips.</span>
-                </p>
-              </div>
-              
-              {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-success" />
-                  <span>Works with ROS</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-success" />
-                  <span>Real-time data</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-success" />
-                  <span>Historical tracking</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Background Elements */}
-          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
-          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
-          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
-        </div>
-      </section>
 
       <div className="px-6 lg:px-8 max-w-7xl mx-auto -mt-8">
         {/* Quick Stats */}

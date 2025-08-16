@@ -46,40 +46,6 @@ export default function RevenueAuditPreparation() {
     <>
       <SiteHeader />
       <main className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        {/* Hero Section */}
-        <section className={`relative py-20 px-4 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-amber-50 rounded-full text-amber-700 text-sm font-medium mb-6 animate-pulse">
-              <span className="w-2 h-2 bg-amber-500 rounded-full mr-2"></span>
-              Revenue Audit Preparation Guide
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Revenue Audit Preparation for 
-              <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                Ireland (2025)
-              </span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Complete guide to preparing for Irish Revenue audits. Documentation requirements, audit process, rights and obligations, and professional representation.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="/signup" 
-                className="btn-primary px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl"
-              >
-                Get Audit Support
-              </a>
-              <a 
-                href="#audit-preparation" 
-                className="px-8 py-4 text-lg font-semibold text-amber-600 border-2 border-amber-200 rounded-xl hover:bg-amber-50 transition-all duration-300"
-              >
-                View Preparation Steps
-              </a>
-            </div>
-          </div>
-        </section>
 
         {/* Interactive Audit Guide */}
         <section className="py-16 px-4" id="audit-preparation">

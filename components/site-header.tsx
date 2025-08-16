@@ -50,13 +50,13 @@ export default function SiteHeader({
       <div className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 z-50">
         <a 
           href="#main-content" 
-          className="bg-teal-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
           Skip to main content
         </a>
         <a 
           href="#navigation" 
-          className="bg-teal-600 text-white px-4 py-2 ml-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
+          className="bg-blue-600 text-white px-4 py-2 ml-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
           Skip to navigation
         </a>
@@ -72,7 +72,7 @@ export default function SiteHeader({
             {/* Logo */}
             <div className="flex items-center">
               <Link href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
-                PayVAT
+                Don't Be Like Me
               </Link>
             </div>
             
@@ -87,7 +87,7 @@ export default function SiteHeader({
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleSearchKeyPress}
                     className="w-48 lg:w-56 xl:w-72 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40 transition-all duration-200"
-                    aria-label="Search PayVAT guides, tools, and VAT help"
+                    aria-label="Search business guides, tools, and VAT help"
                     autoComplete="off"
                     role="searchbox"
                   />
@@ -145,7 +145,7 @@ export default function SiteHeader({
                     variant="ghost" 
                     size="sm" 
                     className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 min-h-[44px] min-w-[44px]"
-                    onClick={() => window.location.href = 'https://payvat.ie/login'}
+                    onClick={() => window.location.href = '/login'}
                     aria-label="Login"
                   >
                     <User className="h-5 w-5" />
@@ -243,7 +243,7 @@ export default function SiteHeader({
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleSearchKeyPress}
                     className="w-full bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
-                    aria-label="Search PayVAT guides, tools, and VAT help"
+                    aria-label="Search business guides, tools, and VAT help"
                     autoComplete="off"
                     role="searchbox"
                   />

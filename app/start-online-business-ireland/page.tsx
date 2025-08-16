@@ -30,40 +30,6 @@ export default function StartOnlineBusinessIreland() {
     <>
       <SiteHeader />
       <main className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        {/* Hero Section */}
-        <section className={`relative py-20 px-4 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-gray-50 rounded-full text-teal-700 text-sm font-medium mb-6 ">
-              <span className="w-2 h-2 bg-gray-500 rounded-full mr-2"></span>
-              Online Business Setup Guide
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Start an Online Business in 
-              <span className="bg-teal-600 bg-clip-text text-transparent">
-                Ireland (2025)
-              </span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Complete guide to launching your online business in Ireland. From e-commerce VAT compliance to digital marketing and EU regulations.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="/signup" 
-                className="btn-primary px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl"
-              >
-                Start Your Online Business
-              </a>
-              <a 
-                href="#online-checklist" 
-                className="px-8 py-4 text-lg font-semibold text-teal-600 border-2 border-teal-200 rounded-xl hover:bg-gray-50 transition-all duration-300"
-              >
-                View Setup Checklist
-              </a>
-            </div>
-          </div>
-        </section>
 
         {/* Online Business Types */}
         <section className="scroll-section py-16 px-4" id="online-types">
@@ -109,7 +75,7 @@ export default function StartOnlineBusinessIreland() {
               </div>
               
               <div className="card-modern p-8 text-center hover:shadow-xl transition-all duration-300 group">
-                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-gray-100 text-teal-600 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-gray-100 text-blue-600 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
@@ -315,8 +281,8 @@ export default function StartOnlineBusinessIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">B2B Sales (to Businesses)</h3>
                 <div className="space-y-4">
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-teal-900 mb-2">Goods & Services</h4>
-                    <ul className="text-teal-800 text-sm space-y-1">
+                    <h4 className="font-semibold text-blue-900 mb-2">Goods & Services</h4>
+                    <ul className="text-blue-800 text-sm space-y-1">
                       <li>• Reverse charge mechanism</li>
                       <li>• 0% VAT if valid EU VAT number</li>
                       <li>• Customer pays VAT in their country</li>
@@ -352,7 +318,7 @@ export default function StartOnlineBusinessIreland() {
                 </a>
                 <a 
                   href="/pricing" 
-                  className="px-8 py-4 text-lg font-semibold text-teal-600 border-2 border-teal-200 rounded-xl hover:bg-gray-50 transition-all duration-300"
+                  className="px-8 py-4 text-lg font-semibold text-blue-600 border-2 border-blue-200 rounded-xl hover:bg-gray-50 transition-all duration-300"
                 >
                   View Online Business Plans
                 </a>
@@ -399,12 +365,12 @@ export default function StartOnlineBusinessIreland() {
                   </div>
                   <div className="flex justify-between items-center font-bold pt-2">
                     <span className="text-gray-900">Total</span>
-                    <span className="text-teal-600">€5,300</span>
+                    <span className="text-blue-600">€5,300</span>
                   </div>
                 </div>
               </div>
               
-              <div className="card-modern p-6 border-2 border-teal-200">
+              <div className="card-modern p-6 border-2 border-blue-200">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Professional Store</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center border-b border-gray-200 pb-2">
@@ -429,7 +395,7 @@ export default function StartOnlineBusinessIreland() {
                   </div>
                   <div className="flex justify-between items-center font-bold pt-2">
                     <span className="text-gray-900">Total</span>
-                    <span className="text-teal-600">€16,400</span>
+                    <span className="text-blue-600">€16,400</span>
                   </div>
                 </div>
               </div>
@@ -459,7 +425,7 @@ export default function StartOnlineBusinessIreland() {
                   </div>
                   <div className="flex justify-between items-center font-bold pt-2">
                     <span className="text-gray-900">Total</span>
-                    <span className="text-teal-600">€50,200</span>
+                    <span className="text-blue-600">€50,200</span>
                   </div>
                 </div>
               </div>
@@ -547,7 +513,7 @@ export default function StartOnlineBusinessIreland() {
                 </div>
               </div>
               
-              <div className="card-modern p-8 border-l-4 border-teal-500">
+              <div className="card-modern p-8 border-l-4 border-blue-500">
                 <h3 className="text-xl font-bold text-gray-600 mb-3">Mistake: Manual Financial Management</h3>
                 <p className="text-gray-700 mb-4">
                   Trying to track multi-currency sales, varying VAT rates, and platform fees manually without integrated accounting.
@@ -561,29 +527,29 @@ export default function StartOnlineBusinessIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-teal-600 text-white">
+        <section className="scroll-section py-20 px-4 bg-blue-600 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Ready to Launch Your Online Business in Ireland?
             </h2>
-            <p className="text-xl mb-8 text-teal-100">
+            <p className="text-xl mb-8 text-blue-100">
               Get your complete online business setup with automated EU VAT compliance from day one.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-teal-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Start Online Business Setup
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-teal-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
               >
                 View Online Business Plans
               </a>
             </div>
-            <p className="text-sm text-teal-200 mt-6">
+            <p className="text-sm text-blue-200 mt-6">
               Trusted by Irish online businesses for EU compliance
             </p>
           </div>

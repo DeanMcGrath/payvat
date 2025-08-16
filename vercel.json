@@ -34,7 +34,7 @@
           "value": "http"
         }
       ],
-      "destination": "https://payvat.ie/$1",
+      "destination": "https://dontbelikeme.ie/$1",
       "permanent": true
     }
   ],
@@ -50,7 +50,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://payvat.ie"
+          "value": "https://dontbelikeme.ie"
         },
         {
           "key": "Access-Control-Allow-Methods", 

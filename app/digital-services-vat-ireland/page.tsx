@@ -30,40 +30,6 @@ export default function DigitalServicesVatIreland() {
     <>
       <SiteHeader />
       <main className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        {/* Hero Section */}
-        <section className={`relative py-20 px-4 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-cyan-50 rounded-full text-cyan-700 text-sm font-medium mb-6 animate-pulse">
-              <span className="w-2 h-2 bg-cyan-500 rounded-full mr-2"></span>
-              Digital Services VAT Ireland Guide
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Digital Services VAT in 
-              <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
-                Ireland (2025)
-              </span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Complete VAT compliance guide for digital services. B2B/B2C rules, place of supply, OSS registration, and EU cross-border compliance.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="/signup" 
-                className="btn-primary px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl"
-              >
-                Setup Digital Services VAT
-              </a>
-              <a 
-                href="#digital-vat-guide" 
-                className="px-8 py-4 text-lg font-semibold text-cyan-600 border-2 border-cyan-200 rounded-xl hover:bg-cyan-50 transition-all duration-300"
-              >
-                View Place of Supply Rules
-              </a>
-            </div>
-          </div>
-        </section>
 
         {/* Digital Services Definition */}
         <section className="scroll-section py-16 px-4" id="digital-services-definition">

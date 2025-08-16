@@ -11,12 +11,12 @@ export default function Footer() {
   return (
     <>
       {/* Utility Section */}
-      <div className="bg-gradient-to-r from-gray-50 to-teal-50 py-6 mt-12 sm:mt-16">
+      <div className="bg-gradient-to-r from-gray-50 to-blue-50 py-6 mt-12 sm:mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex justify-center">
             <button 
               onClick={scrollToTop}
-              className="group text-gray-600 hover:text-teal-700 font-medium transition-all duration-300 flex items-center gap-2 py-2 px-4 rounded-full hover:bg-white hover:shadow-md"
+              className="group text-gray-600 hover:text-blue-700 font-medium transition-all duration-300 flex items-center gap-2 py-2 px-4 rounded-full hover:bg-white hover:shadow-md"
             >
               Back to Top <ArrowUp className="h-4 w-4 group-hover:-translate-y-0.5 transition-transform" />
             </button>
@@ -27,9 +27,9 @@ export default function Footer() {
       {/* Main Footer */}
       <footer className="gradient-primary text-white py-12 sm:py-16 relative overflow-hidden">
         {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-700/20 to-transparent pointer-events-none"></div>
-        <div className="absolute -top-10 -right-10 w-40 h-40 bg-teal-600/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-teal-600/10 rounded-full blur-3xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-700/20 to-transparent pointer-events-none"></div>
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-600/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
@@ -40,45 +40,45 @@ export default function Footer() {
                 <li>
                   <Link 
                     href="/about" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    About PayVat
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    About Don't Be Like Me
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/contact" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Contact Us
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/faq" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     FAQ
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/pricing" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Pricing
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/sitemap" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Sitemap
                   </Link>
                 </li>
@@ -92,36 +92,36 @@ export default function Footer() {
                 <li>
                   <Link 
                     href="/complete-business-setup-guide-ireland" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Complete Business Setup Guide
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/start-a-business-ireland" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Start a Business Ireland
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/company-vs-sole-trader-ireland" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Company vs Sole Trader
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/dublin-business-registration" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Dublin Business Registration
                   </Link>
                 </li>
@@ -135,36 +135,36 @@ export default function Footer() {
                 <li>
                   <Link 
                     href="/vat-guide" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Everything About VAT in Ireland
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/how-to-register-for-vat-ireland" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     How to Register for VAT
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/vat-calculator-ireland" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     VAT Calculator Ireland
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/freelancer-vat-ireland" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Freelancer VAT Ireland
                   </Link>
                 </li>
@@ -178,27 +178,27 @@ export default function Footer() {
                 <li>
                   <Link 
                     href="/ecommerce-vat-ireland" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     E-commerce VAT Ireland
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/accountant-fees-vs-payvat-savings" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     PayVat vs Accountant Fees
                   </Link>
                 </li>
                 <li>
                   <Link 
                     href="/privacy" 
-                    className="text-teal-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
-                    <span className="w-1 h-1 bg-teal-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Privacy Policy
                   </Link>
                 </li>
@@ -208,13 +208,13 @@ export default function Footer() {
           </div>
           
           {/* Bottom Section */}
-          <div className="mt-12 pt-8 border-t border-teal-600/30">
+          <div className="mt-12 pt-8 border-t border-blue-600/30">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
-              <p className="text-teal-100 text-center sm:text-left">
-                © 2025 PayVat. All rights reserved.
+              <p className="text-blue-100 text-center sm:text-left">
+                © 2025 Don't Be Like Me. All rights reserved.
               </p>
               <div className="flex items-center space-x-4">
-                <span className="text-teal-100 text-center sm:text-right font-medium">Ireland's complete business guidance platform</span>
+                <span className="text-blue-100 text-center sm:text-right font-medium">Ireland's complete business guidance platform</span>
               </div>
             </div>
           </div>

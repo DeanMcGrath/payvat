@@ -117,54 +117,6 @@ export default function ConfirmationPayment() {
         pageSubtitle="Review and submit your VAT return"
       />
 
-      {/* Hero Section - Optimized for mobile */}
-      <section className="relative pt-8 pb-12 lg:pt-16 lg:pb-20 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8">
-          <div className="text-center">
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-6 lg:mb-8">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 lg:px-4 lg:py-2 rounded-full bg-primary/10 text-primary text-xs lg:text-sm font-medium mb-3 lg:mb-4 animate-bounce-gentle">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Final Review Required
-                </div>
-                
-                <div className="icon-premium mb-3 lg:mb-4 mx-auto">
-                  <FileText className="h-8 w-8 lg:h-12 lg:w-12 text-white" />
-                </div>
-                
-                <h1 className="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight mb-2 lg:mb-3">
-                  <span className="text-gradient-primary">Confirm Your</span>
-                  <br />
-                  <span className="text-foreground">VAT Return Submission</span>
-                </h1>
-                
-                <div className="w-24 lg:w-32 h-1 gradient-primary mx-auto mb-3 lg:mb-4 rounded-full"></div>
-                
-                <p className="text-base lg:text-xl xl:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
-                  Review your VAT3 return details below before final submission.
-                  <span className="text-primary font-semibold"> All information must be accurate and complete.</span>
-                </p>
-              </div>
-              
-              {/* Trust Indicators - Responsive */}
-              <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-8 text-muted-foreground text-xs lg:text-sm mb-8 lg:mb-12">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-3 w-3 lg:h-4 lg:w-4 text-success" />
-                  <span>Works with ROS</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-3 w-3 lg:h-4 lg:w-4 text-success" />
-                  <span>Secure transmission</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-3 w-3 lg:h-4 lg:w-4 text-success" />
-                  <span>Instant processing</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Main Content Area - Improved responsive layout */}
       <div className="max-w-6xl mx-auto px-4 lg:px-6 pb-12 min-h-screen">

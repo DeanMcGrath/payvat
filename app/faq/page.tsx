@@ -58,60 +58,6 @@ export default function FAQPage() {
         pageSubtitle="Frequently asked questions"
       />
 
-      {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center">
-            {/* Hero Content */}
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Get instant business answers
-                </div>
-                
-                <div className="icon-premium mb-3 mx-auto">
-                  <HelpCircle className="h-12 w-12 text-white" />
-                </div>
-                
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
-                  <span className="text-gradient-primary">Frequently Asked</span>
-                  <br />
-                  <span className="text-foreground">Questions</span>
-                </h1>
-                
-                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
-                
-                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Everything you need to know about Irish business setup and PayVat services. 
-                  <span className="text-primary font-semibold">Quick answers for entrepreneurs and business owners.</span>
-                </p>
-              </div>
-              
-              {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-success" />
-                  <span>Complete business guidance + VAT expertise</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-success" />
-                  <span>Works with ROS</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-success" />
-                  <span>Professional guidance</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Background Elements */}
-          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
-          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
-          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
-        </div>
-      </section>
 
       <div className="max-w-4xl mx-auto px-6 py-8">
 
@@ -125,7 +71,7 @@ export default function FAQPage() {
                   <HelpCircle className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                  What is PayVat?
+                  What is Don't Be Like Me?
                 </h3>
               </div>
               <div className="text-muted-foreground group-hover:text-primary transition-colors">
@@ -136,7 +82,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px gradient-primary mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed">
-                  PayVat is an online platform that lets Irish businesses complete their VAT submissions and make payments directly to the Revenue Commissioners—without paying hefty third-party fees.
+                  Don't Be Like Me is an online platform that lets Irish businesses complete their VAT submissions and make payments directly to the Revenue Commissioners—without paying hefty third-party fees.
                 </p>
               </div>
             )}
@@ -145,11 +91,11 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(1)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-teal-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                  Who can use PayVat?
+                  Who can use Don't Be Like Me?
                 </h3>
               </div>
               <div className="text-muted-foreground group-hover:text-primary transition-colors">
@@ -158,9 +104,9 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(1) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-teal-500/30 mb-4"></div>
+                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Any Irish-registered business required to Submit VAT returns can use PayVat. Whether you're a micro-enterprise, an SME, or a growing startup, our platform scales to suit your needs.
+                  Any Irish-registered business required to Submit VAT returns can use Don't Be Like Me. Whether you're a micro-enterprise, an SME, or a growing startup, our platform scales to suit your needs.
                 </p>
               </div>
             )}
@@ -186,7 +132,7 @@ export default function FAQPage() {
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
-                    <span className="text-muted-foreground">Visit PayVat.ie/about for contact information</span>
+                    <span className="text-muted-foreground">Visit Don't Be Like Me.ie/about for contact information</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
@@ -208,7 +154,7 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(3)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-teal-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
                   <CreditCard className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
@@ -221,9 +167,9 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(3) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-teal-500/30 mb-4"></div>
+                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  After you submit your VAT return through PayVat, you can initiate your VAT payment via Revenue's Online Service (ROS) with one click—no need to log in separately.
+                  After you submit your VAT return through Don't Be Like Me, you can initiate your VAT payment via Revenue's Online Service (ROS) with one click—no need to log in separately.
                 </p>
                 <div className="flex items-center gap-2 text-success font-medium">
                   <Shield className="h-4 w-4" />
@@ -327,7 +273,7 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(13)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-teal-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
                   <CheckCircle className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
@@ -340,32 +286,32 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(13) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-teal-500/30 mb-4"></div>
+                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   VAT calculations, submissions via ROS, payment processing, unlimited transactions, reporting, and expert support.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
                     <span>VAT calculations</span>
                   </div>
-                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
                     <span>ROS submissions</span>
                   </div>
-                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
                     <span>Payment processing</span>
                   </div>
-                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
                     <span>Unlimited transactions</span>
                   </div>
-                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
                     <span>VAT reporting</span>
                   </div>
-                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
                     <span>Expert support</span>
                   </div>
@@ -434,7 +380,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px bg-warning/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  PayVat will send you automated reminders well before your filing and payment deadlines. If you do miss a deadline, you'll need to contact Revenue directly for extensions or penalties.
+                  Don't Be Like Me will send you automated reminders well before your filing and payment deadlines. If you do miss a deadline, you'll need to contact Revenue directly for extensions or penalties.
                 </p>
                 <div className="card-modern p-4 bg-warning/10 border-warning/20">
                   <div className="flex items-center gap-3">
@@ -452,7 +398,7 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(7)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-teal-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
                   <Settings className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
@@ -465,11 +411,11 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(7) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-teal-500/30 mb-4"></div>
+                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   Yes—upgrade or downgrade at any time from your account settings. Changes to billing take effect at your next renewal date.
                 </p>
-                <div className="flex items-center gap-2 text-teal-500 font-medium">
+                <div className="flex items-center gap-2 text-blue-500 font-medium">
                   <CheckCircle className="h-4 w-4" />
                   <span>No cancellation fees</span>
                 </div>
@@ -514,7 +460,7 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(9)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-teal-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
                   <Building className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
@@ -527,24 +473,24 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(9) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-teal-500/30 mb-4"></div>
+                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   Yes, €500 complete package that handles everything from company registration to VAT setup, plus 6 months free VAT services.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
                     <span>Company registration</span>
                   </div>
-                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
                     <span>VAT setup</span>
                   </div>
-                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
                     <span>6 months free VAT services</span>
                   </div>
-                  <div className="flex items-center gap-2 text-teal-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
                     <CheckCircle className="h-4 w-4" />
                     <span>Complete done-for-you service</span>
                   </div>
@@ -594,7 +540,7 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(11)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-teal-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
                   <Calculator className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
@@ -607,24 +553,24 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(11) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-teal-500/30 mb-4"></div>
+                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   Yes! We provide free business tools including a VAT calculator, VAT registration checker, and various business planning resources.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-3 bg-teal-50 rounded-lg border border-teal-200">
+                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
                     <div className="flex items-center gap-2 mb-2">
-                      <Calculator className="h-4 w-4 text-teal-600" />
-                      <span className="font-medium text-teal-800">VAT Calculator</span>
+                      <Calculator className="h-4 w-4 text-blue-600" />
+                      <span className="font-medium text-blue-800">VAT Calculator</span>
                     </div>
-                    <div className="text-xs text-teal-600">Instant VAT calculations for Irish rates</div>
+                    <div className="text-xs text-blue-600">Instant VAT calculations for Irish rates</div>
                   </div>
-                  <div className="p-3 bg-teal-50 rounded-lg border border-teal-200">
+                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
                     <div className="flex items-center gap-2 mb-2">
-                      <Settings className="h-4 w-4 text-teal-600" />
-                      <span className="font-medium text-teal-800">Registration Checker</span>
+                      <Settings className="h-4 w-4 text-blue-600" />
+                      <span className="font-medium text-blue-800">Registration Checker</span>
                     </div>
-                    <div className="text-xs text-teal-600">Check if you need VAT registration</div>
+                    <div className="text-xs text-blue-600">Check if you need VAT registration</div>
                   </div>
                 </div>
               </div>
@@ -634,7 +580,7 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(12)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-teal-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
                   <Euro className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
@@ -647,11 +593,11 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(12) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-teal-500/30 mb-4"></div>
+                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   All our business guides, tools, and resources are completely free to access. Our comprehensive library of 40+ guides costs nothing - we believe every Irish entrepreneur deserves access to quality business information.
                 </p>
-                <div className="flex items-center gap-2 text-teal-500 font-medium">
+                <div className="flex items-center gap-2 text-blue-500 font-medium">
                   <CheckCircle className="h-4 w-4" />
                   <span>100% free business guidance and resources</span>
                 </div>
@@ -678,7 +624,7 @@ export default function FAQPage() {
                     Still Have <span className="text-gradient-primary">Questions?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                    Our support team is here to help you get started with PayVat
+                    Our support team is here to help you get started with Don't Be Like Me
                   </p>
                 </div>
 

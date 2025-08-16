@@ -80,26 +80,6 @@ export default function VatRegistrationChecker() {
     <>
       <SiteHeader />
       <main className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        {/* Hero Section */}
-        <section className={`relative py-20 px-4 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-emerald-50 rounded-full text-emerald-700 text-sm font-medium mb-6 animate-pulse">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span>
-              VAT Registration Checker Tool
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              VAT Registration 
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                Checker Ireland
-              </span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Free tool to check if you need VAT registration in Ireland. Instant analysis based on your business type and turnover with personalized recommendations.
-            </p>
-          </div>
-        </section>
 
         {/* VAT Registration Checker Tool */}
         <section className="py-16 px-4" id="vat-checker">

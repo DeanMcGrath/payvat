@@ -1,10 +1,10 @@
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "PayVAT Ireland",
+  "name": "Don't Be Like Me Ireland",
   "description": "Professional VAT services for Irish businesses including VAT returns, compliance, and advisory services.",
-  "url": "https://payvat.ie",
-  "logo": "https://payvat.ie/logo.png",
+  "url": "https://dontbelikeme.ie",
+  "logo": "https://dontbelikeme.ie/logo.png",
   "contactPoint": {
     "@type": "ContactPoint",
     "telephone": "+353-1-XXX-XXXX",
@@ -18,7 +18,7 @@
     "addressLocality": "Dublin"
   },
   "sameAs": [
-    "https://payvat.ie"
+    "https://dontbelikeme.ie"
   ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
@@ -32,12 +32,12 @@
           "description": "Professional VAT return preparation and submission to Irish Revenue",
           "provider": {
             "@type": "Organization",
-            "name": "PayVAT Ireland"
+            "name": "Don't Be Like Me Ireland"
           },
           "areaServed": "IE",
           "availableChannel": {
             "@type": "ServiceChannel",
-            "serviceUrl": "https://payvat.ie"
+            "serviceUrl": "https://dontbelikeme.ie"
           }
         }
       },
@@ -49,7 +49,7 @@
           "description": "Ongoing VAT compliance support for Irish businesses",
           "provider": {
             "@type": "Organization",
-            "name": "PayVAT Ireland"
+            "name": "Don't Be Like Me Ireland"
           },
           "areaServed": "IE"
         }
@@ -62,7 +62,7 @@
           "description": "VAT registration assistance for new Irish businesses",
           "provider": {
             "@type": "Organization",
-            "name": "PayVAT Ireland"
+            "name": "Don't Be Like Me Ireland"
           },
           "areaServed": "IE"
         }

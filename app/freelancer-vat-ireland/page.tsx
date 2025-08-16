@@ -30,40 +30,6 @@ export default function FreelancerVatIreland() {
     <>
       <SiteHeader />
       <main className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        {/* Hero Section */}
-        <section className={`relative py-20 px-4 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-6">
-              <span className="w-2 h-2 bg-primary rounded-full mr-2"></span>
-              Freelancer VAT Guide Ireland
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Freelancer VAT Rules in 
-              <span className="text-gradient-primary">
-                Ireland (2025)
-              </span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Complete VAT compliance guide for Irish freelancers. Thresholds, registration, invoicing, expenses, and cross-border client rules.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="/signup" 
-                className="btn-primary px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl"
-              >
-                Setup Freelancer VAT
-              </a>
-              <a 
-                href="#freelancer-guide" 
-                className="px-8 py-4 text-lg font-semibold text-primary border-2 border-primary/20 rounded-xl hover:bg-primary/10 transition-all duration-300"
-              >
-                View VAT Requirements
-              </a>
-            </div>
-          </div>
-        </section>
 
         {/* Freelancer VAT Thresholds */}
         <section className="scroll-section py-16 px-4" id="freelancer-thresholds">

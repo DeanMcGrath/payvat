@@ -55,40 +55,6 @@ export default function CorporateTaxIreland() {
     <>
       <SiteHeader />
       <main className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        {/* Hero Section */}
-        <section className={`relative py-20 px-4 transition-all duration-1000 ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}>
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center px-4 py-2 bg-rose-50 rounded-full text-rose-700 text-sm font-medium mb-6 animate-pulse">
-              <span className="w-2 h-2 bg-rose-500 rounded-full mr-2"></span>
-              Irish Corporation Tax Guide
-            </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Corporation Tax in 
-              <span className="bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
-                Ireland (2025)
-              </span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Complete guide to Irish corporation tax. 12.5% trading rate, filing deadlines, tax reliefs, and compliance requirements for Irish companies.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="/signup" 
-                className="btn-primary px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-xl"
-              >
-                Get Corporation Tax Help
-              </a>
-              <a 
-                href="#corporation-tax-guide" 
-                className="px-8 py-4 text-lg font-semibold text-rose-600 border-2 border-rose-200 rounded-xl hover:bg-rose-50 transition-all duration-300"
-              >
-                View Tax Rates
-              </a>
-            </div>
-          </div>
-        </section>
 
         {/* Interactive Tax Guide */}
         <section className="py-16 px-4" id="corporation-tax-guide">

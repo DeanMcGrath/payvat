@@ -166,64 +166,6 @@ export default function VATServicesPage() {
         pageSubtitle="Streamline your VAT compliance with PayVAT"
       />
 
-      {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden bg-gradient-to-br from-teal-50 to-cyan-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center">
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-100 text-teal-800 text-sm font-medium mb-6">
-                <Building2 className="w-4 h-4" />
-                For Established Businesses
-                <Award className="w-4 h-4 fill-teal-600" />
-              </div>
-              
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-                Simplify Your VAT
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-600 mt-2">
-                  Save Time & Money
-                </span>
-              </h1>
-              
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-8">
-                Automate your VAT calculations, submissions, and payments with Ireland's most trusted VAT compliance platform. 
-                Focus on growing your business while we handle the paperwork.
-              </p>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-                <Button size="lg" className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-8 py-4 text-lg font-semibold hover:shadow-xl">
-                  Start Free Trial
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button variant="outline" size="lg" className="border-teal-600 text-teal-600 hover:bg-teal-50 px-8 py-4 text-lg">
-                  <Calculator className="mr-2 h-5 w-5" />
-                  Try VAT Calculator
-                </Button>
-              </div>
-
-              {/* Quick Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                {stats.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-600 p-0.5 mx-auto mb-2">
-                      <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
-                        <stat.icon className="h-6 w-6 text-teal-600" />
-                      </div>
-                    </div>
-                    <div className="text-2xl font-bold text-gray-900">{stat.number}</div>
-                    <div className="text-sm text-gray-600">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          {/* Decorative Elements */}
-          <div className="absolute top-20 right-10 w-24 h-24 bg-gradient-to-br from-teal-400 to-cyan-400 rounded-full blur-3xl opacity-20 animate-float"></div>
-          <div className="absolute bottom-20 left-10 w-32 h-32 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-full blur-3xl opacity-20 animate-float" style={{animationDelay: '-2s'}}></div>
-        </div>
-      </section>
 
       {/* Services Section */}
       <section className="py-20">

@@ -48,60 +48,6 @@ export default function VATGuidePage() {
         pageSubtitle="Complete guide to Irish VAT compliance"
       />
 
-      {/* Hero Section */}
-      <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center">
-            {/* Hero Content */}
-            <div className="max-w-4xl mx-auto animate-fade-in">
-              <div className="mb-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-3 animate-bounce-gentle">
-                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse-gentle"></div>
-                  Complete VAT & business guidance
-                </div>
-                
-                <div className="icon-premium mb-3 mx-auto">
-                  <BookOpen className="h-12 w-12 text-white" />
-                </div>
-                
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-2">
-                  <span className="text-gradient-primary">Everything About</span>
-                  <br />
-                  <span className="text-foreground">VAT in Ireland</span>
-                </h1>
-                
-                <div className="w-32 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
-                
-                <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  A comprehensive guide to VAT compliance in Ireland with industry-specific guidance and business tools. 
-                  <span className="text-primary font-semibold">Master VAT with confidence and expert support.</span>
-                </p>
-              </div>
-              
-              {/* Trust Indicators */}
-              <div className="flex items-center justify-center gap-8 text-muted-foreground text-sm mb-2">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-success" />
-                  <span>Works with ROS</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-success" />
-                  <span>Expert guidance</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-success" />
-                  <span>Always updated</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Background Elements */}
-          <div className="absolute top-20 left-10 w-16 h-16 gradient-accent rounded-full blur-xl opacity-20 animate-float"></div>
-          <div className="absolute top-32 right-20 w-12 h-12 gradient-primary rounded-full blur-lg opacity-30 animate-float" style={{animationDelay: '-2s'}}></div>
-          <div className="absolute bottom-20 left-20 w-20 h-20 gradient-glass rounded-full blur-2xl opacity-25 animate-float" style={{animationDelay: '-4s'}}></div>
-        </div>
-      </section>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
 
@@ -109,7 +55,7 @@ export default function VATGuidePage() {
         <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-              <BookOpen className="h-5 w-5 text-teal-500 mr-2" />
+              <BookOpen className="h-5 w-5 text-blue-500 mr-2" />
               1. What Is VAT?
             </CardTitle>
           </CardHeader>
@@ -124,7 +70,7 @@ export default function VATGuidePage() {
         <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-              <Users className="h-5 w-5 text-teal-500 mr-2" />
+              <Users className="h-5 w-5 text-blue-500 mr-2" />
               2. VAT Registration Thresholds
             </CardTitle>
           </CardHeader>
@@ -143,15 +89,15 @@ export default function VATGuidePage() {
             <p className="text-gray-600 mb-4">If you're likely to exceed your threshold in the current or previous calendar year, register.</p>
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <CheckCircle className="h-4 w-4 text-teal-600 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-blue-600 flex-shrink-0" />
                 <span className="text-gray-600">Distance sales into Ireland exceeding €10,000 annually</span>
               </div>
               <div className="flex items-center gap-3">
-                <CheckCircle className="h-4 w-4 text-teal-600 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-blue-600 flex-shrink-0" />
                 <span className="text-gray-600">Voluntary registration to reclaim VAT on business purchases</span>
               </div>
               <div className="flex items-center gap-3">
-                <CheckCircle className="h-4 w-4 text-teal-600 flex-shrink-0" />
+                <CheckCircle className="h-4 w-4 text-blue-600 flex-shrink-0" />
                 <span className="text-gray-600">Cash basis eligibility: ≤€2m turnover OR ≥90% supplies to customers not entitled to full VAT deduction</span>
               </div>
             </div>
@@ -162,15 +108,15 @@ export default function VATGuidePage() {
         <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-              <Calculator className="h-5 w-5 text-teal-500 mr-2" />
+              <Calculator className="h-5 w-5 text-blue-500 mr-2" />
               3. VAT Rates in Ireland
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-4">
-              <div className="p-4 bg-teal-50 rounded-lg border border-teal-200">
-                <h4 className="font-semibold text-teal-800 mb-1">Standard Rate: 23%</h4>
-                <p className="text-teal-700 text-sm">Most goods and services</p>
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <h4 className="font-semibold text-blue-800 mb-1">Standard Rate: 23%</h4>
+                <p className="text-blue-700 text-sm">Most goods and services</p>
               </div>
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <h4 className="font-semibold text-blue-800 mb-1">Reduced Rate: 13.5%</h4>
@@ -192,21 +138,21 @@ export default function VATGuidePage() {
         <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-              <Calendar className="h-5 w-5 text-teal-500 mr-2" />
+              <Calendar className="h-5 w-5 text-blue-500 mr-2" />
               4. Filing Requirements
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <Calendar className="h-4 w-4 text-teal-600 flex-shrink-0 mt-1" />
+                <Calendar className="h-4 w-4 text-blue-600 flex-shrink-0 mt-1" />
                 <div>
                   <span className="font-medium text-gray-800">Periodic Returns:</span>
                   <span className="text-gray-600 ml-1">Typically every two months</span>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Clock className="h-4 w-4 text-teal-600 flex-shrink-0 mt-1" />
+                <Clock className="h-4 w-4 text-blue-600 flex-shrink-0 mt-1" />
                 <div>
                   <span className="font-medium text-gray-800">Submission Deadline:</span>
                   <span className="text-gray-600 ml-1">Due by the 19th; extended to the 23rd for ROS filers</span>
@@ -220,7 +166,7 @@ export default function VATGuidePage() {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <Calendar className="h-4 w-4 text-teal-600 flex-shrink-0 mt-1" />
+                <Calendar className="h-4 w-4 text-blue-600 flex-shrink-0 mt-1" />
                 <div>
                   <span className="font-medium text-gray-800">RTD (Return of Trading Details):</span>
                   <span className="text-gray-600 ml-1">Due by the 23rd of the month after your accounting period ends (filed in ROS)</span>
@@ -234,30 +180,30 @@ export default function VATGuidePage() {
         <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-              <FileText className="h-5 w-5 text-teal-500 mr-2" />
+              <FileText className="h-5 w-5 text-blue-500 mr-2" />
               5. VAT Return Preparation Steps
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                <span className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                <span className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
                 <span className="text-gray-700">Gather sales data (output VAT)</span>
               </div>
               <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                <span className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                <span className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
                 <span className="text-gray-700">Collect purchase data (input VAT)</span>
               </div>
               <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                <span className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                <span className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">3</span>
                 <span className="text-gray-700">Calculate net VAT</span>
               </div>
               <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                <span className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
+                <span className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
                 <span className="text-gray-700">Review accuracy</span>
               </div>
               <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                <span className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
+                <span className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
                 <span className="text-gray-700">Compile supporting documents</span>
               </div>
             </div>
@@ -300,7 +246,7 @@ export default function VATGuidePage() {
         <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-              <Users className="h-5 w-5 text-teal-500 mr-2" />
+              <Users className="h-5 w-5 text-blue-500 mr-2" />
               Industry-Specific VAT Guidance
             </CardTitle>
           </CardHeader>
@@ -308,44 +254,44 @@ export default function VATGuidePage() {
             <p className="text-gray-600 mb-4">Get specialized VAT guidance tailored to your business type and industry requirements.</p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               <a href="/freelancer-vat-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
-                <Users className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <Users className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
                 <div>
-                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">Freelancers</span>
+                  <span className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors">Freelancers</span>
                   <p className="text-gray-600 text-sm">VAT obligations for freelancers</p>
                 </div>
               </a>
               <a href="/construction-vat-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
-                <Building className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <Building className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
                 <div>
-                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">Construction</span>
+                  <span className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors">Construction</span>
                   <p className="text-gray-600 text-sm">RCT and VAT requirements</p>
                 </div>
               </a>
               <a href="/ecommerce-vat-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
-                <Globe className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <Globe className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
                 <div>
-                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">E-commerce</span>
+                  <span className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors">E-commerce</span>
                   <p className="text-gray-600 text-sm">Online sales VAT rules</p>
                 </div>
               </a>
               <a href="/property-rental-vat-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
-                <Home className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <Home className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
                 <div>
-                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">Property Rental</span>
+                  <span className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors">Property Rental</span>
                   <p className="text-gray-600 text-sm">Rental property VAT guide</p>
                 </div>
               </a>
               <a href="/digital-services-vat-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
-                <ChevronRight className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <ChevronRight className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
                 <div>
-                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">Digital Services</span>
+                  <span className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors">Digital Services</span>
                   <p className="text-gray-600 text-sm">Tech and digital VAT rules</p>
                 </div>
               </a>
               <a href="/start-restaurant-business-ireland" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
-                <UtensilsCrossed className="h-4 w-4 text-teal-600 group-hover:scale-110 transition-transform" />
+                <UtensilsCrossed className="h-4 w-4 text-blue-600 group-hover:scale-110 transition-transform" />
                 <div>
-                  <span className="font-medium text-gray-800 group-hover:text-teal-600 transition-colors">Restaurants</span>
+                  <span className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors">Restaurants</span>
                   <p className="text-gray-600 text-sm">Food service VAT rates</p>
                 </div>
               </a>
@@ -382,42 +328,42 @@ export default function VATGuidePage() {
           </CardContent>
         </Card>
 
-        {/* How PayVat Simplifies VAT */}
-        <Card className="mb-2 border-teal-200 bg-teal-50">
+        {/* How Don't Be Like Me Simplifies VAT */}
+        <Card className="mb-2 border-blue-200 bg-blue-50">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-teal-800 flex items-center">
-              <CheckCircle className="h-5 w-5 text-teal-600 mr-2" />
-              7. How PayVat Simplifies VAT
+            <CardTitle className="text-lg font-semibold text-blue-800 flex items-center">
+              <CheckCircle className="h-5 w-5 text-blue-600 mr-2" />
+              7. How Don't Be Like Me Simplifies VAT
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="flex items-center gap-3">
-                <Calculator className="h-5 w-5 text-teal-600 flex-shrink-0" />
+                <Calculator className="h-5 w-5 text-blue-600 flex-shrink-0" />
                 <div>
-                  <span className="font-medium text-teal-800">Automatic Calculations</span>
-                  <p className="text-teal-700 text-sm">Upload or enter invoices and let PayVat compute net VAT</p>
+                  <span className="font-medium text-blue-800">Automatic Calculations</span>
+                  <p className="text-blue-700 text-sm">Upload or enter invoices and let Don't Be Like Me compute net VAT</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Bell className="h-5 w-5 text-teal-600 flex-shrink-0" />
+                <Bell className="h-5 w-5 text-blue-600 flex-shrink-0" />
                 <div>
-                  <span className="font-medium text-teal-800">Deadline Reminders</span>
-                  <p className="text-teal-700 text-sm">Custom email and in-app alerts</p>
+                  <span className="font-medium text-blue-800">Deadline Reminders</span>
+                  <p className="text-blue-700 text-sm">Custom email and in-app alerts</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <FileText className="h-5 w-5 text-teal-600 flex-shrink-0" />
+                <FileText className="h-5 w-5 text-blue-600 flex-shrink-0" />
                 <div>
-                  <span className="font-medium text-teal-800">One-Click Submission</span>
-                  <p className="text-teal-700 text-sm">File directly to Revenue via ROS</p>
+                  <span className="font-medium text-blue-800">One-Click Submission</span>
+                  <p className="text-blue-700 text-sm">File directly to Revenue via ROS</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <BookOpen className="h-5 w-5 text-teal-600 flex-shrink-0" />
+                <BookOpen className="h-5 w-5 text-blue-600 flex-shrink-0" />
                 <div>
-                  <span className="font-medium text-teal-800">Built-In Guidance</span>
-                  <p className="text-teal-700 text-sm">Context-sensitive help at every step</p>
+                  <span className="font-medium text-blue-800">Built-In Guidance</span>
+                  <p className="text-blue-700 text-sm">Context-sensitive help at every step</p>
                 </div>
               </div>
             </div>
@@ -428,31 +374,31 @@ export default function VATGuidePage() {
         <Card className="mb-4">
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
-              <ExternalLink className="h-5 w-5 text-teal-500 mr-2" />
+              <ExternalLink className="h-5 w-5 text-blue-500 mr-2" />
               8. Further Resources
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               <a href="https://revenue.ie" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <ExternalLink className="h-4 w-4 text-teal-600" />
+                <ExternalLink className="h-4 w-4 text-blue-600" />
                 <div>
                   <span className="font-medium text-gray-800">Revenue Commissioners VAT Guide</span>
                   <p className="text-gray-600 text-sm">Official government VAT resources</p>
                 </div>
               </a>
               <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg">
-                <BookOpen className="h-4 w-4 text-teal-600" />
+                <BookOpen className="h-4 w-4 text-blue-600" />
                 <div>
                   <span className="font-medium text-gray-800">Irish Tax Institute FAQs</span>
                   <p className="text-gray-600 text-sm">Professional tax guidance</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 border border-teal-200 rounded-lg bg-teal-50">
-                <CheckCircle className="h-4 w-4 text-teal-600" />
+              <div className="flex items-center gap-3 p-3 border border-blue-200 rounded-lg bg-blue-50">
+                <CheckCircle className="h-4 w-4 text-blue-600" />
                 <div>
-                  <span className="font-medium text-teal-800">PayVat Help Center</span>
-                  <p className="text-teal-700 text-sm">Accessible once you register</p>
+                  <span className="font-medium text-blue-800">Don't Be Like Me Help Center</span>
+                  <p className="text-blue-700 text-sm">Accessible once you register</p>
                 </div>
               </div>
             </div>
@@ -463,9 +409,9 @@ export default function VATGuidePage() {
         <Card className="text-center">
           <CardContent className="p-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-1">Ready to Simplify Your VAT?</h3>
-            <p className="text-gray-600 mb-2">Let PayVat handle the complexity while you focus on growing your business</p>
+            <p className="text-gray-600 mb-2">Let Don't Be Like Me handle the complexity while you focus on growing your business</p>
             <Button 
-              className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 text-lg"
               onClick={() => window.location.href = '/about'}
             >
               Contact Us

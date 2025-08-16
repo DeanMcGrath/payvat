@@ -6,7 +6,7 @@
 
   <!-- Homepage - Highest Priority -->
   <url>
-    <loc>https://payvat.ie/</loc>
+    <loc>https://dontbelikeme.ie/</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -14,28 +14,28 @@
 
   <!-- Core User Pages - High Priority -->
   <url>
-    <loc>https://payvat.ie/dashboard</loc>
+    <loc>https://dontbelikeme.ie/dashboard</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/signup</loc>
+    <loc>https://dontbelikeme.ie/signup</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/login</loc>
+    <loc>https://dontbelikeme.ie/login</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/pricing</loc>
+    <loc>https://dontbelikeme.ie/pricing</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -43,42 +43,42 @@
 
   <!-- Information & Service Pages - Medium-High Priority -->
   <url>
-    <loc>https://payvat.ie/about</loc>
+    <loc>https://dontbelikeme.ie/about</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/faq</loc>
+    <loc>https://dontbelikeme.ie/faq</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/vat-guide</loc>
+    <loc>https://dontbelikeme.ie/vat-guide</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/vat-registration</loc>
+    <loc>https://dontbelikeme.ie/vat-registration</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/vat-filing</loc>
+    <loc>https://dontbelikeme.ie/vat-filing</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/submit-return</loc>
+    <loc>https://dontbelikeme.ie/submit-return</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -86,49 +86,49 @@
 
   <!-- Functional Pages - Medium Priority -->
   <url>
-    <loc>https://payvat.ie/payment</loc>
+    <loc>https://dontbelikeme.ie/payment</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/secure-payment</loc>
+    <loc>https://dontbelikeme.ie/secure-payment</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/payment-confirmed</loc>
+    <loc>https://dontbelikeme.ie/payment-confirmed</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/reports</loc>
+    <loc>https://dontbelikeme.ie/reports</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/search</loc>
+    <loc>https://dontbelikeme.ie/search</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/vat-submission</loc>
+    <loc>https://dontbelikeme.ie/vat-submission</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://payvat.ie/vat-period</loc>
+    <loc>https://dontbelikeme.ie/vat-period</loc>
     <lastmod>2025-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
