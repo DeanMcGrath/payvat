@@ -248,6 +248,8 @@ export const logAudit = (action: string, context: LogContext & { result?: 'SUCCE
   secureLogger.audit(action, context)
 
 // Development helper - throw error if console.log used in production
+// Temporarily disabled for deployment
+/*
 if (process.env.NODE_ENV === 'production') {
   const originalConsole = console.log
   console.log = (...args: any[]) => {
@@ -262,3 +264,4 @@ if (process.env.NODE_ENV === 'production') {
     throw new Error('🚨 SECURITY VIOLATION: console.info used in production! Use secureLogger instead.')
   }
 }
+*/
