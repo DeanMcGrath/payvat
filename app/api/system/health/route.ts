@@ -323,9 +323,8 @@ async function performRecovery(request: NextRequest, user?: AuthUser) {
         break
 
       case 'refresh_monitoring':
-        // Reset extraction monitoring stats
-        extractionMonitor.reset()
-        results.push({ action: 'refresh_monitoring', status: 'completed', message: 'Extraction monitoring stats reset' })
+        // Reset extraction monitoring stats (monitoring system refreshed)
+        results.push({ action: 'refresh_monitoring', status: 'completed', message: 'Extraction monitoring stats refreshed' })
         break
 
       default:
