@@ -304,7 +304,7 @@ export default function SmartDocumentUpload({
     const config = {
       'TEMPLATE_MATCH': { color: 'bg-green-100 text-green-800', icon: '✓', label: 'Template Match' },
       'HYBRID': { color: 'bg-blue-100 text-blue-800', icon: '⇄', label: 'Hybrid AI' },
-      'AI_VISION': { color: 'bg-blue-100 text-teal-800', icon: 'AI', label: 'AI Vision' },
+      'AI_VISION': { color: 'bg-blue-100 text-[#005A91]', icon: 'AI', label: 'AI Vision' },
       'FALLBACK': { color: 'bg-yellow-100 text-yellow-800', icon: '→', label: 'Fallback' }
     }
     
@@ -326,7 +326,7 @@ export default function SmartDocumentUpload({
       </h4>
       
       {/* Enhanced Upload Area */}
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-teal-300 transition-colors bg-gradient-to-br from-teal-50 to-blue-50">
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#0072B1] transition-colors bg-gradient-to-br from-blue-50 to-blue-50">
         <div className="flex justify-center mb-3">
           <Upload className="h-10 w-10 text-blue-600" />
         </div>
@@ -336,7 +336,7 @@ export default function SmartDocumentUpload({
         
         <Button 
           variant="outline" 
-          className="border-teal-300 text-blue-700 hover:bg-blue-50 font-medium"
+          className="border-[#0072B1] text-[#005A91] hover:bg-blue-50 font-medium"
           onClick={(event) => {
             event.stopPropagation() // Prevent event bubbling
             handleFileSelect(event)
@@ -345,7 +345,7 @@ export default function SmartDocumentUpload({
         >
           {isUploading ? (
             <>
-              <div className="animate-spin rounded-full h-4 w-4 border-2 border-teal-600 border-t-transparent mr-2" />
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#0072B1] border-t-transparent mr-2" />
               AI Processing...
             </>
           ) : (

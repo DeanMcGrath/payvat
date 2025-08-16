@@ -50,7 +50,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <Card className="w-full max-w-2xl bg-white shadow-2xl">
-        <CardHeader className="relative bg-gradient-to-r from-teal-500 to-green-600 text-white rounded-t-lg">
+        <CardHeader className="relative bg-gradient-to-r from-[#0072B1] to-[#005A91] text-white rounded-t-lg">
           <Button
             variant="ghost"
             size="sm"
@@ -64,7 +64,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
               <Crown className="h-8 w-8 text-white" />
             </div>
             <CardTitle className="text-2xl font-bold mb-2">Unlock Premium VAT Features</CardTitle>
-            <p className="text-teal-100">
+            <p className="text-blue-100">
               Get full access to VAT submissions, payments, and advanced reporting
             </p>
           </div>
@@ -110,7 +110,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
               {/* Pricing Plans */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Monthly Plan */}
-                <Card className="border-2 border-gray-200 hover:border-teal-300 transition-colors">
+                <Card className="border-2 border-gray-200 hover:border-[#0072B1] transition-colors">
                   <CardHeader className="text-center pb-4">
                     <CardTitle className="text-lg font-semibold text-gray-900">Monthly Plan</CardTitle>
                     <div className="text-3xl font-bold text-gray-900">€90</div>
@@ -131,13 +131,13 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
                 </Card>
 
                 {/* Annual Plan */}
-                <Card className="border-2 border-teal-300 bg-blue-50 relative">
+                <Card className="border-2 border-[#0072B1] bg-blue-50 relative">
                   <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-[#0085D1] text-white">
                     Save €180
                   </Badge>
                   <CardHeader className="text-center pb-4">
-                    <CardTitle className="text-lg font-semibold text-teal-900">Annual Plan</CardTitle>
-                    <div className="text-3xl font-bold text-teal-900">€900</div>
+                    <CardTitle className="text-lg font-semibold text-[#005A91]">Annual Plan</CardTitle>
+                    <div className="text-3xl font-bold text-[#005A91]">€900</div>
                     <p className="text-sm text-blue-700">per year</p>
                     <p className="text-xs text-blue-600">€75/month when paid annually</p>
                   </CardHeader>

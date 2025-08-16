@@ -412,7 +412,7 @@ export default function BusinessStructureComparison() {
                 Complete Setup Guide
               </a>
             </div>
-            <p className="text-sm text-teal-100 mt-6">
+            <p className="text-sm text-blue-100 mt-6">
               Trusted by Irish entrepreneurs choosing the right structure
             </p>
           </div>

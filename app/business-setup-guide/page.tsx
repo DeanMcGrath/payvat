@@ -623,7 +623,7 @@ export default function BusinessSetupGuidePage() {
         <div className="max-w-5xl mx-auto px-6 lg:px-8">
           <div className="bg-white rounded-2xl p-8 md:p-12 shadow-2xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl lg:text-4xl font-bold text-teal-800 mb-4">
+              <h2 className="text-3xl lg:text-4xl font-bold text-[#005A91] mb-4">
                 Complete Startup Guide For FREE!
               </h2>
               <p className="text-xl text-gray-700 max-w-3xl mx-auto">

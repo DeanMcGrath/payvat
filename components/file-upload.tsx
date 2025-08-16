@@ -752,7 +752,7 @@ export default function FileUpload({
         className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-200 ${
           isDragOver 
             ? 'border-[#0085D1] bg-blue-50' 
-            : 'border-gray-300 hover:border-teal-300'
+            : 'border-gray-300 hover:border-[#0072B1]'
         } ${
           (isUploading || processingState.isProcessing) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
         }`}
@@ -792,7 +792,7 @@ export default function FileUpload({
         
         <Button 
           variant="outline" 
-          className="border-teal-200 text-[#005A91] hover:bg-blue-50"
+          className="border-[#0072B1] text-[#005A91] hover:bg-blue-50"
           onClick={(event) => {
             event.stopPropagation() // Prevent event bubbling to parent div
             handleFileSelect(event)
@@ -820,11 +820,11 @@ export default function FileUpload({
 
       {/* Real-time Processing Indicator */}
       {processingState.isProcessing && (
-        <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-blue-50 rounded-lg border border-teal-200">
+        <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-blue-50 rounded-lg border border-[#0072B1]">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center">
               <div className="animate-spin rounded-full h-5 w-5 border-2 border-[#0085D1] border-t-transparent mr-3"></div>
-              <span className="text-sm font-medium text-teal-800">Enhanced AI Processing</span>
+              <span className="text-sm font-medium text-[#005A91]">Enhanced AI Processing</span>
               {processingState.qualityScore && (
                 <span className="ml-2 px-2 py-1 bg-blue-100 text-[#005A91] rounded-full text-xs font-medium">
                   Quality: {processingState.qualityScore}/100
@@ -852,11 +852,11 @@ export default function FileUpload({
 
       {/* Batch Progress and Controls */}
       {enableBatchMode && showBatchProgress && batchProgress.total > 0 && (
-        <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-blue-50 rounded-lg border border-teal-200">
+        <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-blue-50 rounded-lg border border-[#0072B1]">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center">
               <div className="flex items-center space-x-2">
-                <span className="text-sm font-medium text-teal-800">Batch Upload Progress</span>
+                <span className="text-sm font-medium text-[#005A91]">Batch Upload Progress</span>
                 <span className="px-2 py-1 bg-blue-100 text-[#005A91] rounded-full text-xs font-medium">
                   {batchProgress.completed}/{batchProgress.total} files
                 </span>

@@ -88,7 +88,7 @@ export default function AdminContactsPage() {
 
   const getSourceColor = (source: string) => {
     const colors: Record<string, string> = {
-      'contact-page': 'bg-teal-100 text-teal-800',
+      'contact-page': 'bg-blue-100 text-[#0072B1]',
       'business-setup-guide': 'bg-indigo-100 text-indigo-800'
     }
     return colors[source] || 'bg-gray-100 text-gray-800'
@@ -100,7 +100,7 @@ export default function AdminContactsPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-teal-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-8 h-8 border-4 border-[#0072B1] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Loading contact submissions...</p>
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function AdminContactsPage() {
               <h1 className="text-3xl font-bold text-gray-900">Contact Submissions</h1>
               <p className="text-gray-600 mt-1">Manage and review all contact form submissions</p>
             </div>
-            <Button onClick={fetchSubmissions} className="bg-teal-600 hover:bg-teal-700">
+            <Button onClick={fetchSubmissions} className="bg-[#0072B1] hover:bg-[#005A91]">
               Refresh
             </Button>
           </div>
@@ -169,7 +169,7 @@ export default function AdminContactsPage() {
                   <p className="text-sm text-gray-600">Total Submissions</p>
                   <p className="text-3xl font-bold text-gray-900">{submissions.length}</p>
                 </div>
-                <MessageSquare className="h-8 w-8 text-teal-600" />
+                <MessageSquare className="h-8 w-8 text-[#0072B1]" />
               </div>
             </CardContent>
           </Card>
@@ -269,14 +269,14 @@ export default function AdminContactsPage() {
                   <div className="grid gap-4 md:grid-cols-2 mb-4">
                     <div className="flex items-center gap-2">
                       <Mail className="h-4 w-4 text-gray-400" />
-                      <a href={`mailto:${submission.email}`} className="text-teal-600 hover:text-teal-700">
+                      <a href={`mailto:${submission.email}`} className="text-[#0072B1] hover:text-[#005A91]">
                         {submission.email}
                       </a>
                       <ExternalLink className="h-3 w-3" />
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone className="h-4 w-4 text-gray-400" />
-                      <a href={`tel:${submission.phone}`} className="text-teal-600 hover:text-teal-700">
+                      <a href={`tel:${submission.phone}`} className="text-[#0072B1] hover:text-[#005A91]">
                         {submission.phone}
                       </a>
                       <ExternalLink className="h-3 w-3" />
@@ -308,7 +308,7 @@ export default function AdminContactsPage() {
                   <div className="flex gap-3 mt-4">
                     <Button 
                       size="sm" 
-                      className="bg-teal-600 hover:bg-teal-700"
+                      className="bg-[#0072B1] hover:bg-[#005A91]"
                       onClick={() => window.open(`mailto:${submission.email}?subject=Re: Your inquiry about ${submission.subject.replace('-', ' ')}`)}
                     >
                       <Mail className="h-4 w-4 mr-2" />

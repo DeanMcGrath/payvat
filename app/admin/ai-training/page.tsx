@@ -177,7 +177,7 @@ export default function AITrainingDashboard() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="flex items-center space-x-2">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-teal-600 border-t-transparent"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#0072B1] border-t-transparent"></div>
           <span className="text-gray-600">Loading AI Training Dashboard...</span>
         </div>
       </div>
@@ -211,7 +211,7 @@ export default function AITrainingDashboard() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-              <Brain className="h-8 w-8 mr-3 text-teal-600" />
+              <Brain className="h-8 w-8 mr-3 text-[#0072B1]" />
               AI Training Dashboard
             </h1>
             <p className="text-gray-600 mt-1">
@@ -322,7 +322,7 @@ export default function AITrainingDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-teal-600">{feedbackAnalytics.totalFeedback.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-[#0072B1]">{feedbackAnalytics.totalFeedback.toLocaleString()}</div>
               <p className="text-xs text-gray-500 mt-1">User corrections collected</p>
             </CardContent>
           </Card>
@@ -365,7 +365,7 @@ export default function AITrainingDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-teal-600">{pipelineStatus.currentJobs.length}</div>
+              <div className="text-2xl font-bold text-[#0072B1]">{pipelineStatus.currentJobs.length}</div>
               <p className="text-xs text-gray-500 mt-1">Currently running</p>
             </CardContent>
           </Card>

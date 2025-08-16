@@ -281,8 +281,8 @@ export default function PayrollSetupIreland() {
                   </div>
                   
                   <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-teal-900 mb-2">Additional Costs</h4>
-                    <ul className="text-teal-800 text-sm space-y-1">
+                    <h4 className="font-semibold text-blue-900 mb-2">Additional Costs</h4>
+                    <ul className="text-blue-800 text-sm space-y-1">
                       <li>• Employer liability insurance</li>
                       <li>• Workplace pension contributions</li>
                       <li>• Payroll software costs</li>
@@ -470,7 +470,7 @@ export default function PayrollSetupIreland() {
                 Contact for Advice
               </a>
             </div>
-            <p className="text-sm text-teal-200 mt-6">
+            <p className="text-sm text-blue-200 mt-6">
               Get expert guidance on payroll compliance and setup
             </p>
           </div>

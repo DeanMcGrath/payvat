@@ -93,7 +93,7 @@ export default function AdminSetup() {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2 text-teal-800">
+          <CardTitle className="flex items-center space-x-2 text-[#005A91]">
             <Shield className="h-5 w-5" />
             <span>Admin Setup</span>
           </CardTitle>
@@ -208,7 +208,7 @@ export default function AdminSetup() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-teal-500 hover:bg-teal-600 text-white"
+              className="w-full bg-[#0072B1] hover:bg-[#005A91] text-white"
             >
               {loading ? 'Creating Admin...' : 'Create Admin User'}
             </Button>
@@ -217,7 +217,7 @@ export default function AdminSetup() {
           <div className="mt-4 pt-4 border-t text-center">
             <p className="text-sm text-gray-500">
               Already have an account?{' '}
-              <a href="/login" className="text-teal-600 hover:text-teal-700 font-medium">
+              <a href="/login" className="text-[#0072B1] hover:text-[#005A91] font-medium">
                 Login here
               </a>
             </p>

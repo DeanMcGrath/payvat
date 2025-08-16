@@ -87,7 +87,7 @@ export function OptimizedImage({
   return (
     <div 
       className={cn(
-        "relative overflow-hidden rounded-lg bg-gradient-to-br from-teal-50 to-cyan-50",
+        "relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-50 to-blue-50",
         isVisible ? "animate-fade-in" : "opacity-0",
         className
       )}
@@ -123,7 +123,7 @@ export function OptimizedImage({
       {/* Loading Indicator */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#0072B1] border-t-transparent rounded-full animate-spin" />
         </div>
       )}
     </div>

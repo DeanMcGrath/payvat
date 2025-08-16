@@ -310,7 +310,7 @@ export default function LiveChat() {
         <div className="fixed bottom-20 right-4 w-80 h-96 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] bg-white border border-gray-200 rounded-lg shadow-xl z-[9999]">
           {/* Drag and Drop Overlay */}
           {isDragOver && (
-            <div className="absolute inset-0 bg-[#0085D1] bg-opacity-20 border-2 border-dashed border-teal-400 rounded-lg flex items-center justify-center z-10">
+            <div className="absolute inset-0 bg-[#0085D1] bg-opacity-20 border-2 border-dashed border-[#0072B1] rounded-lg flex items-center justify-center z-10">
               <div className="text-center text-blue-600">
                 <Upload className="h-8 w-8 mx-auto mb-2" />
                 <p className="font-semibold">Drop file to upload</p>
@@ -361,7 +361,7 @@ export default function LiveChat() {
                               ? 'bg-[#0085D1] text-white ml-auto'
                               : msg.senderType === 'admin'
                               ? isAI 
-                                ? 'bg-gradient-to-r from-teal-50 to-slate-50 text-gray-800 border border-blue-200'
+                                ? 'bg-gradient-to-r from-blue-50 to-slate-50 text-gray-800 border border-blue-200'
                                 : 'bg-blue-100 text-gray-800'
                               : 'bg-gray-100 text-gray-800'
                           }`}
