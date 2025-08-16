@@ -76,8 +76,8 @@ export default function BusinessStructureComparison() {
                     onClick={() => setSelectedStructure(key)}
                     className={`p-4 text-center rounded-lg transition-all duration-300 ${
                       selectedStructure === key
-                        ? 'bg-teal-600 text-white shadow-lg scale-105'
-                        : 'bg-gray-100 text-gray-700 hover:bg-teal-50'
+                        ? 'bg-[#0072B1] text-white shadow-lg scale-105'
+                        : 'bg-gray-100 text-gray-700 hover:bg-blue-50'
                     }`}
                   >
                     <h3 className="font-bold">{structure.name}</h3>
@@ -244,9 +244,9 @@ export default function BusinessStructureComparison() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-4">Growth / Investment</h4>
-                    <div className="bg-teal-50 p-4 rounded-lg">
-                      <p className="font-semibold text-teal-900 mb-2">Recommended: Limited Company</p>
-                      <ul className="text-teal-800 text-sm space-y-1">
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <p className="font-semibold text-blue-900 mb-2">Recommended: Limited Company</p>
+                      <ul className="text-blue-800 text-sm space-y-1">
                         <li>• Limited liability protection</li>
                         <li>• Tax efficiency</li>
                         <li>• Investment ready</li>
@@ -291,8 +291,8 @@ export default function BusinessStructureComparison() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Financial Considerations</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-teal-600 font-bold text-sm">1</span>
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-blue-600 font-bold text-sm">1</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Annual Turnover Under €50,000</h4>
@@ -300,8 +300,8 @@ export default function BusinessStructureComparison() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-teal-600 font-bold text-sm">2</span>
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-blue-600 font-bold text-sm">2</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Annual Turnover €50,000-€200,000</h4>
@@ -309,8 +309,8 @@ export default function BusinessStructureComparison() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-teal-600 font-bold text-sm">3</span>
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-blue-600 font-bold text-sm">3</span>
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Annual Turnover Above €200,000</h4>
@@ -390,24 +390,24 @@ export default function BusinessStructureComparison() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-teal-600 text-white">
+        <section className="py-20 px-4 bg-[#0072B1] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Get Expert Structure Advice
             </h2>
-            <p className="text-xl mb-8 text-teal-50">
+            <p className="text-xl mb-8 text-blue-50">
               Unsure which business structure is right for you? Get personalized recommendations based on your specific situation and goals.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-teal-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Get Structure Consultation
               </a>
               <a 
                 href="/complete-business-setup-guide-ireland" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-teal-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
               >
                 Complete Setup Guide
               </a>

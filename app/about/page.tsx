@@ -125,7 +125,7 @@ export default function AboutPayVat() {
               
               <div className="grid md:grid-cols-3 gap-8 mt-12">
                 <div className="card-modern p-6 hover-lift group">
-                  <div className="icon-modern bg-teal-500 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                  <div className="icon-modern bg-[#0085D1] mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
                     <Clock className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-1">Time-Saving</h3>
@@ -133,7 +133,7 @@ export default function AboutPayVat() {
                 </div>
                 
                 <div className="card-modern p-6 hover-lift group">
-                  <div className="icon-modern bg-teal-600 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                  <div className="icon-modern bg-[#0072B1] mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
                     <Shield className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-1">Revenue Compliant</h3>
@@ -141,7 +141,7 @@ export default function AboutPayVat() {
                 </div>
                 
                 <div className="card-modern p-6 hover-lift group">
-                  <div className="icon-modern bg-teal-700 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+                  <div className="icon-modern bg-[#005A91] mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
                     <Euro className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="font-semibold text-foreground mb-1">Affordable</h3>
@@ -170,39 +170,39 @@ export default function AboutPayVat() {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
               <div className="card-modern p-6 hover-lift group">
-                <div className="icon-modern bg-teal-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-[#0085D1] mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Building className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Business Setup</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-3">€500 complete package with 6 months free VAT services</p>
-                <div className="text-xs text-teal-600 font-medium">Full Service</div>
+                <div className="text-xs text-blue-600 font-medium">Full Service</div>
               </div>
 
               <div className="card-modern p-6 hover-lift group">
-                <div className="icon-modern bg-teal-600 mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-[#0072B1] mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Calculator className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">VAT Services</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-3">Automated calculations, submissions, and deadline reminders</p>
-                <div className="text-xs text-teal-600 font-medium">€90/month</div>
+                <div className="text-xs text-blue-600 font-medium">€90/month</div>
               </div>
 
               <div className="card-modern p-6 hover-lift group">
-                <div className="icon-modern bg-teal-700 mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-[#005A91] mb-4 group-hover:scale-110 transition-transform duration-300">
                   <Users className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Expert Support</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-3">Irish-based team available to help with VAT questions and issues</p>
-                <div className="text-xs text-teal-600 font-medium">Always Available</div>
+                <div className="text-xs text-blue-600 font-medium">Always Available</div>
               </div>
 
               <div className="card-modern p-6 hover-lift group">
-                <div className="icon-modern bg-teal-800 mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-[#004A75] mb-4 group-hover:scale-110 transition-transform duration-300">
                   <MapPin className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Free Trial</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-3">14-day free trial to test our VAT services with no commitment</p>
-                <div className="text-xs text-teal-600 font-medium">No Setup Fees</div>
+                <div className="text-xs text-blue-600 font-medium">No Setup Fees</div>
               </div>
             </div>
           </div>
@@ -350,7 +350,7 @@ export default function AboutPayVat() {
                 
                 <div className="card-modern p-8 hover-lift group">
                   <div className="flex items-start gap-4">
-                    <div className="icon-modern bg-teal-500 group-hover:scale-110 transition-transform duration-300">
+                    <div className="icon-modern bg-[#0085D1] group-hover:scale-110 transition-transform duration-300">
                       <Clock className="h-6 w-6 text-white" />
                     </div>
                     <div>
@@ -364,7 +364,7 @@ export default function AboutPayVat() {
                 
                 <div className="card-modern p-8 hover-lift group">
                   <div className="flex items-start gap-4">
-                    <div className="icon-modern bg-teal-600 group-hover:scale-110 transition-transform duration-300">
+                    <div className="icon-modern bg-[#0072B1] group-hover:scale-110 transition-transform duration-300">
                       <Users className="h-6 w-6 text-white" />
                     </div>
                     <div>

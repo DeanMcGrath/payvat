@@ -60,7 +60,7 @@ export default function ConstructionVatIreland() {
               </div>
               
               <div className="card-modern p-8 text-center hover:shadow-xl transition-all duration-300 group">
-                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-teal-100 text-teal-600 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-blue-100 text-blue-600 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
@@ -75,7 +75,7 @@ export default function ConstructionVatIreland() {
               </div>
               
               <div className="card-modern p-8 text-center hover:shadow-xl transition-all duration-300 group">
-                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-teal-100 text-teal-600 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-blue-100 text-blue-600 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H7m2 0v-4a2 2 0 012-2h2a2 2 0 012 2v4M7 7h10M7 11h10" />
                   </svg>
@@ -110,19 +110,19 @@ export default function ConstructionVatIreland() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">General Construction Services</span>
-                    <span className="font-bold text-teal-600">13.5%</span>
+                    <span className="font-bold text-blue-600">13.5%</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">House Building Services</span>
-                    <span className="font-bold text-teal-600">13.5%</span>
+                    <span className="font-bold text-blue-600">13.5%</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Repair & Maintenance</span>
-                    <span className="font-bold text-teal-600">13.5%</span>
+                    <span className="font-bold text-blue-600">13.5%</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Cleaning Services</span>
-                    <span className="font-bold text-teal-600">13.5%</span>
+                    <span className="font-bold text-blue-600">13.5%</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium text-gray-900">Security Services</span>
@@ -152,7 +152,7 @@ export default function ConstructionVatIreland() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium text-gray-900">Fuel & Energy</span>
-                    <span className="font-bold text-teal-600">13.5%</span>
+                    <span className="font-bold text-blue-600">13.5%</span>
                   </div>
                 </div>
               </div>
@@ -228,9 +228,9 @@ export default function ConstructionVatIreland() {
                     <div className="text-2xl font-bold text-green-600">0%</div>
                     <p className="text-green-800 text-sm mt-2">C2 certificate holders (tax compliant)</p>
                   </div>
-                  <div className="bg-teal-50 p-4 rounded-lg text-center">
-                    <div className="text-2xl font-bold text-teal-600">20%</div>
-                    <p className="text-teal-800 text-sm mt-2">Standard rate for registered subcontractors</p>
+                  <div className="bg-blue-50 p-4 rounded-lg text-center">
+                    <div className="text-2xl font-bold text-blue-600">20%</div>
+                    <p className="text-blue-800 text-sm mt-2">Standard rate for registered subcontractors</p>
                   </div>
                   <div className="bg-red-50 p-4 rounded-lg text-center">
                     <div className="text-2xl font-bold text-red-600">35%</div>
@@ -242,9 +242,9 @@ export default function ConstructionVatIreland() {
               <div className="card-premium p-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">3. Monthly RCT Returns</h3>
                 <div className="space-y-4">
-                  <div className="bg-teal-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-teal-900 mb-2">Return Requirements</h4>
-                    <ul className="text-teal-800 text-sm space-y-1">
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-blue-900 mb-2">Return Requirements</h4>
+                    <ul className="text-blue-800 text-sm space-y-1">
                       <li>• Due by 14th of following month</li>
                       <li>• Submit even if no payments made (nil return)</li>
                       <li>• Include all subcontractor payments</li>
@@ -278,28 +278,28 @@ export default function ConstructionVatIreland() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">VAT Registration Benefits</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">High Input VAT Recovery</h4>
                       <p className="text-gray-600 text-sm">Reclaim 23% VAT on equipment, vehicles, materials purchases</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Professional Credibility</h4>
                       <p className="text-gray-600 text-sm">VAT number essential for commercial contracts and tenders</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Supplier Relationships</h4>
                       <p className="text-gray-600 text-sm">Access to trade suppliers offering VAT-exclusive pricing</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Cash Flow Management</h4>
                       <p className="text-gray-600 text-sm">Monthly VAT refunds during equipment purchase phases</p>
@@ -313,17 +313,17 @@ export default function ConstructionVatIreland() {
                 <div className="space-y-4">
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h4 className="font-semibold text-gray-900 mb-2">Small Construction Business</h4>
-                    <div className="text-2xl font-bold text-teal-600">€8,000-15,000</div>
+                    <div className="text-2xl font-bold text-blue-600">€8,000-15,000</div>
                     <p className="text-gray-600 text-sm">Annual VAT recovery on equipment and materials</p>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h4 className="font-semibold text-gray-900 mb-2">Medium Construction Company</h4>
-                    <div className="text-2xl font-bold text-teal-600">€25,000-60,000</div>
+                    <div className="text-2xl font-bold text-blue-600">€25,000-60,000</div>
                     <p className="text-gray-600 text-sm">Annual VAT recovery including vehicles and plant</p>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h4 className="font-semibold text-gray-900 mb-2">Large Construction Enterprise</h4>
-                    <div className="text-2xl font-bold text-teal-600">€100,000+</div>
+                    <div className="text-2xl font-bold text-blue-600">€100,000+</div>
                     <p className="text-gray-600 text-sm">Substantial VAT recovery on major equipment purchases</p>
                   </div>
                 </div>
@@ -350,19 +350,19 @@ export default function ConstructionVatIreland() {
                   <h3 className="text-xl font-bold text-gray-900 mb-4">VAT Automation</h3>
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                      <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
                       <span>Automatic 13.5% vs 23% VAT calculation</span>
                     </li>
                     <li className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                      <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
                       <span>Two-third rule application for mixed supplies</span>
                     </li>
                     <li className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                      <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
                       <span>Input VAT tracking for materials and equipment</span>
                     </li>
                     <li className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-teal-500 rounded-full mt-2"></div>
+                      <div className="w-2 h-2 bg-[#0085D1] rounded-full mt-2"></div>
                       <span>Bi-monthly VAT return generation</span>
                     </li>
                   </ul>
@@ -401,7 +401,7 @@ export default function ConstructionVatIreland() {
                   </a>
                   <a 
                     href="/pricing" 
-                    className="px-8 py-4 text-lg font-semibold text-teal-600 border-2 border-teal-200 rounded-xl hover:bg-teal-50 transition-all duration-300"
+                    className="px-8 py-4 text-lg font-semibold text-blue-600 border-2 border-blue-200 rounded-xl hover:bg-blue-50 transition-all duration-300"
                   >
                     View Construction Plans
                   </a>
@@ -412,29 +412,29 @@ export default function ConstructionVatIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-teal-600 text-white">
+        <section className="scroll-section py-20 px-4 bg-[#0072B1] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Ready to Simplify Construction VAT & RCT Compliance?
             </h2>
-            <p className="text-xl mb-8 text-teal-100">
+            <p className="text-xl mb-8 text-blue-100">
               Trusted by Irish construction businesses for automated VAT and RCT compliance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-teal-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Get Started Free
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-teal-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
               >
                 View Pricing
               </a>
             </div>
-            <p className="text-sm text-teal-200 mt-6">
+            <p className="text-sm text-blue-200 mt-6">
               Professional VAT and RCT compliance service
             </p>
           </div>

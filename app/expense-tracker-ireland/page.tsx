@@ -82,8 +82,8 @@ export default function ExpenseTrackerIreland() {
                     onClick={() => setSelectedCategory(key)}
                     className={`p-4 text-center rounded-lg transition-all duration-300 ${
                       selectedCategory === key
-                        ? 'bg-teal-600 text-white shadow-lg scale-105'
-                        : 'bg-gray-100 text-gray-700 hover:bg-teal-50'
+                        ? 'bg-[#0072B1] text-white shadow-lg scale-105'
+                        : 'bg-gray-100 text-gray-700 hover:bg-blue-50'
                     }`}
                   >
                     <h3 className="font-bold text-sm">{category.name}</h3>
@@ -98,8 +98,8 @@ export default function ExpenseTrackerIreland() {
                     onClick={() => setSelectedCategory(key)}
                     className={`p-4 text-center rounded-lg transition-all duration-300 ${
                       selectedCategory === key
-                        ? 'bg-teal-600 text-white shadow-lg scale-105'
-                        : 'bg-gray-100 text-gray-700 hover:bg-teal-50'
+                        ? 'bg-[#0072B1] text-white shadow-lg scale-105'
+                        : 'bg-gray-100 text-gray-700 hover:bg-blue-50'
                     }`}
                   >
                     <h3 className="font-bold text-sm">{category.name}</h3>
@@ -144,7 +144,7 @@ export default function ExpenseTrackerIreland() {
                     <ul className="space-y-1">
                       {expenseCategories[selectedCategory as keyof typeof expenseCategories].examples.map((example, index) => (
                         <li key={index} className="flex items-start space-x-2">
-                          <span className="text-teal-500 mt-1">•</span>
+                          <span className="text-blue-500 mt-1">•</span>
                           <span className="text-gray-700 text-sm">{example}</span>
                         </li>
                       ))}
@@ -289,9 +289,9 @@ export default function ExpenseTrackerIreland() {
                     </ul>
                   </div>
                   
-                  <div className="bg-teal-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-teal-900 mb-2">Accounting Software</h4>
-                    <ul className="text-teal-800 text-sm space-y-1">
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-blue-900 mb-2">Accounting Software</h4>
+                    <ul className="text-blue-800 text-sm space-y-1">
                       <li>• Bank transaction import</li>
                       <li>• Automatic categorization</li>
                       <li>• VAT tracking</li>
@@ -398,23 +398,23 @@ export default function ExpenseTrackerIreland() {
                   <h3 className="text-xl font-bold text-gray-900 mb-4">Monthly Routine</h3>
                   <div className="space-y-3">
                     <div className="flex items-start space-x-3">
-                      <span className="text-teal-500 mt-1">✓</span>
+                      <span className="text-blue-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Categorize all expenses by type</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-teal-500 mt-1">✓</span>
+                      <span className="text-blue-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Reconcile bank statements</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-teal-500 mt-1">✓</span>
+                      <span className="text-blue-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Review mileage logs</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-teal-500 mt-1">✓</span>
+                      <span className="text-blue-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">File receipts digitally</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-teal-500 mt-1">✓</span>
+                      <span className="text-blue-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Calculate VAT recoverable</span>
                     </div>
                   </div>
@@ -424,23 +424,23 @@ export default function ExpenseTrackerIreland() {
                   <h3 className="text-xl font-bold text-gray-900 mb-4">Annual Review</h3>
                   <div className="space-y-3">
                     <div className="flex items-start space-x-3">
-                      <span className="text-teal-500 mt-1">✓</span>
+                      <span className="text-blue-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Analyze expense trends</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-teal-500 mt-1">✓</span>
+                      <span className="text-blue-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Identify tax-saving opportunities</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-teal-500 mt-1">✓</span>
+                      <span className="text-blue-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Update mileage calculations</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-teal-500 mt-1">✓</span>
+                      <span className="text-blue-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Prepare tax return documentation</span>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <span className="text-teal-500 mt-1">✓</span>
+                      <span className="text-blue-500 mt-1">✓</span>
                       <span className="text-gray-700 text-sm">Archive old records securely</span>
                     </div>
                   </div>
@@ -451,29 +451,29 @@ export default function ExpenseTrackerIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-teal-600 text-white">
+        <section className="py-20 px-4 bg-[#0072B1] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Automate Your Expense Tracking
             </h2>
-            <p className="text-xl mb-8 text-teal-50">
+            <p className="text-xl mb-8 text-blue-50">
               Stop losing money on missed deductions. PayVat helps you maintain compliant expense records and VAT documentation for maximum deductions.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-teal-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Start Expense Tracking
               </a>
               <a 
                 href="/vat-calculator-ireland" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-teal-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
               >
                 Calculate VAT Savings
               </a>
             </div>
-            <p className="text-sm text-teal-100 mt-6">
+            <p className="text-sm text-blue-100 mt-6">
               Trusted by Irish businesses maximizing expense deductions
             </p>
           </div>

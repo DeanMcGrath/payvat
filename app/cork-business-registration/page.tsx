@@ -47,26 +47,26 @@ export default function CorkBusinessRegistration() {
               <div className="space-y-6">
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-teal-600 font-bold text-sm">1</span>
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-blue-600 font-bold text-sm">1</span>
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 mb-3">Choose Business Structure</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Sole Trader - Simplest for individuals</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Partnership - For multiple owners</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Limited Company - Most popular for growth</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>DAC/PLC - For larger enterprises</span>
                         </li>
                       </ul>
@@ -76,26 +76,26 @@ export default function CorkBusinessRegistration() {
                 
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-teal-600 font-bold text-sm">2</span>
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-blue-600 font-bold text-sm">2</span>
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 mb-3">Register with CRO</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Companies Registration Office filing</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Form A1 for new companies</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Constitution and compliance</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Director appointments</span>
                         </li>
                       </ul>
@@ -105,26 +105,26 @@ export default function CorkBusinessRegistration() {
                 
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-teal-600 font-bold text-sm">3</span>
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-blue-600 font-bold text-sm">3</span>
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 mb-3">Revenue Registration</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Tax registration (Form TR1/TR2)</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>PAYE/PRSI for employees</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>VAT registration if required</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>ROS online access setup</span>
                         </li>
                       </ul>
@@ -136,26 +136,26 @@ export default function CorkBusinessRegistration() {
               <div className="space-y-6">
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-teal-600 font-bold text-sm">4</span>
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-blue-600 font-bold text-sm">4</span>
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 mb-3">Insurance & Compliance</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Employer's Liability Insurance</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Public Liability Insurance</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Professional Indemnity if applicable</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Data protection compliance (GDPR)</span>
                         </li>
                       </ul>
@@ -165,26 +165,26 @@ export default function CorkBusinessRegistration() {
                 
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-teal-600 font-bold text-sm">5</span>
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-blue-600 font-bold text-sm">5</span>
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 mb-3">Business Licenses</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Trading licenses (sector-specific)</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Planning permissions if required</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Food business registration</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Waste collection permits</span>
                         </li>
                       </ul>
@@ -194,26 +194,26 @@ export default function CorkBusinessRegistration() {
                 
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-teal-600 font-bold text-sm">6</span>
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
+                      <span className="text-blue-600 font-bold text-sm">6</span>
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 mb-3">Cork Local Requirements</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Cork City/County Council registration</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Shop front/signage permits</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Fire safety certificates</span>
                         </li>
                         <li className="flex items-start space-x-2">
-                          <span className="text-teal-500">•</span>
+                          <span className="text-blue-500">•</span>
                           <span>Commercial rates registration</span>
                         </li>
                       </ul>
@@ -250,8 +250,8 @@ export default function CorkBusinessRegistration() {
                       <li>• Feasibility study grants</li>
                     </ul>
                   </div>
-                  <div className="bg-teal-50 p-3 rounded">
-                    <p className="text-teal-800 text-xs font-medium">Contact: Cork City Hall, Anglesea Street</p>
+                  <div className="bg-blue-50 p-3 rounded">
+                    <p className="text-blue-800 text-xs font-medium">Contact: Cork City Hall, Anglesea Street</p>
                   </div>
                 </div>
               </div>
@@ -268,8 +268,8 @@ export default function CorkBusinessRegistration() {
                       <li>• Policy advocacy</li>
                     </ul>
                   </div>
-                  <div className="bg-teal-50 p-3 rounded">
-                    <p className="text-teal-800 text-xs font-medium">Member benefits and events</p>
+                  <div className="bg-blue-50 p-3 rounded">
+                    <p className="text-blue-800 text-xs font-medium">Member benefits and events</p>
                   </div>
                 </div>
               </div>
@@ -286,8 +286,8 @@ export default function CorkBusinessRegistration() {
                       <li>• Innovation funding</li>
                     </ul>
                   </div>
-                  <div className="bg-teal-50 p-3 rounded">
-                    <p className="text-teal-800 text-xs font-medium">University-industry collaboration</p>
+                  <div className="bg-blue-50 p-3 rounded">
+                    <p className="text-blue-800 text-xs font-medium">University-industry collaboration</p>
                   </div>
                 </div>
               </div>
@@ -434,29 +434,29 @@ export default function CorkBusinessRegistration() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white">
+        <section className="scroll-section py-20 px-4 bg-gradient-to-r from-[#0072B1] to-[#005A91] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Start Your Cork Business Journey Today
             </h2>
-            <p className="text-xl mb-8 text-teal-100">
+            <p className="text-xl mb-8 text-blue-100">
               Get complete business registration support for Cork. From company formation to VAT compliance, we handle the complexity so you can focus on growth.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-teal-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Start Cork Business Setup
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-teal-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
               >
                 View Business Plans
               </a>
             </div>
-            <p className="text-sm text-teal-200 mt-6">
+            <p className="text-sm text-blue-200 mt-6">
               Trusted by Cork businesses for VAT compliance
             </p>
           </div>

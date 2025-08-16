@@ -99,9 +99,9 @@ function VATPeriodContent() {
       return {
         type: "current",
         message: "This covers the two-month taxable period as per VAT regulations",
-        color: "text-teal-800",
-        bgColor: "bg-teal-50",
-        borderColor: "border-teal-200"
+        color: "text-blue-800",
+        bgColor: "bg-blue-50",
+        borderColor: "border-blue-200"
       }
     }
   }

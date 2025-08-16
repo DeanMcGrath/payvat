@@ -137,7 +137,7 @@ export default function LandingPage() {
                       </div>
                       
                       {/* Premium Badge */}
-                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-teal-400 to-cyan-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-[#0085D1] to-cyan-400 text-white text-xs font-bold px-2 py-1 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         {box.id === 1 ? 'NEW' : box.id === 2 ? 'POPULAR' : 'SECURE'}
                       </div>
                     </div>

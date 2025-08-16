@@ -194,7 +194,7 @@ export default function VAT3ReturnForm() {
   }
 
   // Helper function to get input class with error styling
-  const getInputClassName = (fieldName: string, baseClasses = "bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base") => {
+  const getInputClassName = (fieldName: string, baseClasses = "bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base") => {
     const hasError = fieldErrors[fieldName]
     if (hasError) {
       return baseClasses.replace('border-gray-300', 'border-red-300').replace('focus:border-teal-500', 'focus:border-red-500').replace('focus:ring-teal-500', 'focus:ring-red-500')
@@ -681,7 +681,7 @@ export default function VAT3ReturnForm() {
                           type="number"
                           value={formData.t1VATOnSales}
                           onChange={(e) => handleInputChange("t1VATOnSales", e.target.value)}
-                          className={getInputClassName("t1VATOnSales", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                          className={getInputClassName("t1VATOnSales", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
                           placeholder="0"
                         />
                       </FieldWrapper>
@@ -699,7 +699,7 @@ export default function VAT3ReturnForm() {
                           type="number"
                           value={formData.t2VATOnPurchases}
                           onChange={(e) => handleInputChange("t2VATOnPurchases", e.target.value)}
-                          className={getInputClassName("t2VATOnPurchases", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                          className={getInputClassName("t2VATOnPurchases", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
                           placeholder="0"
                         />
                       </FieldWrapper>
@@ -752,7 +752,7 @@ export default function VAT3ReturnForm() {
                             type="number"
                             value={formData.unusualAmount}
                             onChange={(e) => handleInputChange("unusualAmount", e.target.value)}
-                            className={getInputClassName("unusualAmount", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                            className={getInputClassName("unusualAmount", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
                             placeholder="0"
                           />
                         </FieldWrapper>
@@ -768,7 +768,7 @@ export default function VAT3ReturnForm() {
                         <Textarea
                           value={formData.unusualDetails}
                           onChange={(e) => handleInputChange("unusualDetails", e.target.value)}
-                          className={getInputClassName("unusualDetails", "min-h-[80px] w-full bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                          className={getInputClassName("unusualDetails", "min-h-[80px] w-full bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
                           placeholder="Enter details here..."
                         />
                       </FieldWrapper>
@@ -839,7 +839,7 @@ export default function VAT3ReturnForm() {
                         type="number"
                         value={formData.e1TotalGoodsTo}
                         onChange={(e) => handleInputChange("e1TotalGoodsTo", e.target.value)}
-                        className={getInputClassName("e1TotalGoodsTo", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                        className={getInputClassName("e1TotalGoodsTo", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
                         placeholder="0"
                       />
                     </FieldWrapper>
@@ -857,7 +857,7 @@ export default function VAT3ReturnForm() {
                         type="number"
                         value={formData.e2TotalGoodsFrom}
                         onChange={(e) => handleInputChange("e2TotalGoodsFrom", e.target.value)}
-                        className={getInputClassName("e2TotalGoodsFrom", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                        className={getInputClassName("e2TotalGoodsFrom", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
                         placeholder="0"
                       />
                     </FieldWrapper>
@@ -875,7 +875,7 @@ export default function VAT3ReturnForm() {
                         type="number"
                         value={formData.es1TotalServicesTo}
                         onChange={(e) => handleInputChange("es1TotalServicesTo", e.target.value)}
-                        className={getInputClassName("es1TotalServicesTo", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                        className={getInputClassName("es1TotalServicesTo", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
                         placeholder="0"
                       />
                     </FieldWrapper>
@@ -893,7 +893,7 @@ export default function VAT3ReturnForm() {
                         type="number"
                         value={formData.es2TotalServicesFrom}
                         onChange={(e) => handleInputChange("es2TotalServicesFrom", e.target.value)}
-                        className={getInputClassName("es2TotalServicesFrom", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                        className={getInputClassName("es2TotalServicesFrom", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
                         placeholder="0"
                       />
                     </FieldWrapper>
@@ -921,7 +921,7 @@ export default function VAT3ReturnForm() {
                       type="number"
                       value={formData.pa1PostponedAccounting}
                       onChange={(e) => handleInputChange("pa1PostponedAccounting", e.target.value)}
-                      className={getInputClassName("pa1PostponedAccounting", "w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base")}
+                      className={getInputClassName("pa1PostponedAccounting", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
                       placeholder="0"
                     />
                   </FieldWrapper>
@@ -969,21 +969,21 @@ export default function VAT3ReturnForm() {
       {/* Live Chat */}
 
       {/* Main Footer */}
-      <footer className="bg-teal-700 text-white">
+      <footer className="bg-[#005A91] text-white">
         {/* Navigation Bar */}
-        <div className="bg-teal-600 py-4">
+        <div className="bg-[#0072B1] py-4">
           <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <Link href="/" className="text-white hover:text-teal-200 underline">
+            <Link href="/" className="text-white hover:text-blue-200 underline">
               Back
             </Link>
-            <a href="#top" className="text-white hover:text-teal-200 underline flex items-center space-x-1">
+            <a href="#top" className="text-white hover:text-blue-200 underline flex items-center space-x-1">
               <ArrowUp className="h-4 w-4" />
               <span>Back to top</span>
             </a>
           </div>
         </div>
         {/* Copyright */}
-        <div className="bg-teal-800 py-4">
+        <div className="bg-[#004A75] py-4">
           <div className="max-w-7xl mx-auto px-6 text-center">
             <p className="text-sm font-thin">© PayVAT</p>
           </div>

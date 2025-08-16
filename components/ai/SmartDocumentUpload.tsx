@@ -304,7 +304,7 @@ export default function SmartDocumentUpload({
     const config = {
       'TEMPLATE_MATCH': { color: 'bg-green-100 text-green-800', icon: '✓', label: 'Template Match' },
       'HYBRID': { color: 'bg-blue-100 text-blue-800', icon: '⇄', label: 'Hybrid AI' },
-      'AI_VISION': { color: 'bg-teal-100 text-teal-800', icon: 'AI', label: 'AI Vision' },
+      'AI_VISION': { color: 'bg-blue-100 text-teal-800', icon: 'AI', label: 'AI Vision' },
       'FALLBACK': { color: 'bg-yellow-100 text-yellow-800', icon: '→', label: 'Fallback' }
     }
     
@@ -321,14 +321,14 @@ export default function SmartDocumentUpload({
   return (
     <div>
       <h4 className="text-md font-semibold text-gray-900 mb-3 flex items-center">
-        <Brain className="h-5 w-5 mr-2 text-teal-600" />
+        <Brain className="h-5 w-5 mr-2 text-blue-600" />
         {title}
       </h4>
       
       {/* Enhanced Upload Area */}
       <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-teal-300 transition-colors bg-gradient-to-br from-teal-50 to-blue-50">
         <div className="flex justify-center mb-3">
-          <Upload className="h-10 w-10 text-teal-600" />
+          <Upload className="h-10 w-10 text-blue-600" />
         </div>
         <p className="text-gray-700 mb-2 font-medium">{description}</p>
         <p className="text-sm text-gray-600 mb-1">Enhanced with AI learning</p>
@@ -336,7 +336,7 @@ export default function SmartDocumentUpload({
         
         <Button 
           variant="outline" 
-          className="border-teal-300 text-teal-700 hover:bg-teal-50 font-medium"
+          className="border-teal-300 text-blue-700 hover:bg-blue-50 font-medium"
           onClick={(event) => {
             event.stopPropagation() // Prevent event bubbling
             handleFileSelect(event)
@@ -379,7 +379,7 @@ export default function SmartDocumentUpload({
                         <div className="relative">
                           <FileText className="h-8 w-8 text-gray-500" />
                           {file.learningApplied && (
-                            <Brain className="h-3 w-3 text-teal-600 absolute -top-1 -right-1" />
+                            <Brain className="h-3 w-3 text-blue-600 absolute -top-1 -right-1" />
                           )}
                         </div>
                       </div>
@@ -421,7 +421,7 @@ export default function SmartDocumentUpload({
                           
                           {/* Matched Features */}
                           {file.matchedFeatures && file.matchedFeatures.length > 0 && (
-                            <div className="flex items-center text-teal-600 text-xs">
+                            <div className="flex items-center text-blue-600 text-xs">
                               <TrendingUp className="h-3 w-3 mr-1" />
                               {file.matchedFeatures.length} patterns matched
                             </div>
@@ -429,7 +429,7 @@ export default function SmartDocumentUpload({
                           
                           {/* Suggested Improvements */}
                           {file.suggestedImprovements && file.suggestedImprovements.length > 0 && (
-                            <div className="flex items-center text-teal-600 text-xs">
+                            <div className="flex items-center text-blue-600 text-xs">
                               <Info className="h-3 w-3 mr-1" />
                               {file.suggestedImprovements.length} suggestions
                             </div>
@@ -516,8 +516,8 @@ export default function SmartDocumentUpload({
               <li>• Expense reports and summaries</li>
             </>
           )}
-          <li className="text-teal-600 font-medium">• AI learns from your feedback to improve accuracy</li>
-          <li className="text-teal-600 font-medium">• Templates auto-created for similar documents</li>
+          <li className="text-blue-600 font-medium">• AI learns from your feedback to improve accuracy</li>
+          <li className="text-blue-600 font-medium">• Templates auto-created for similar documents</li>
         </ul>
       </div>
     </div>

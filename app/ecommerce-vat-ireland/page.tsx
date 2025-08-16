@@ -66,9 +66,9 @@ export default function EcommerceVatIreland() {
               <div className="card-modern p-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Above €10,000 EU Sales</h3>
                 <div className="space-y-4">
-                  <div className="bg-teal-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-teal-900 mb-2">OSS Registration Required</h4>
-                    <ul className="text-teal-800 text-sm space-y-1">
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h4 className="font-semibold text-blue-900 mb-2">OSS Registration Required</h4>
+                    <ul className="text-blue-800 text-sm space-y-1">
                       <li>• Charge customer's country VAT rate</li>
                       <li>• Register for One Stop Shop (OSS)</li>
                       <li>• File quarterly OSS returns</li>
@@ -179,9 +179,9 @@ export default function EcommerceVatIreland() {
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-4">Selling to UK Customers</h3>
                   <div className="space-y-4">
-                    <div className="bg-teal-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-teal-900 mb-2">Under £135</h4>
-                      <ul className="text-teal-800 text-sm space-y-1">
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-blue-900 mb-2">Under £135</h4>
+                      <ul className="text-blue-800 text-sm space-y-1">
                         <li>• UK VAT registration required</li>
                         <li>• Charge 20% UK VAT at checkout</li>
                         <li>• File UK VAT returns</li>
@@ -210,9 +210,9 @@ export default function EcommerceVatIreland() {
                         <li>• Use Irish VAT number</li>
                       </ul>
                     </div>
-                    <div className="bg-teal-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-teal-900 mb-2">Documentation</h4>
-                      <p className="text-teal-800 text-sm">XI prefix for NI businesses. Verify status before applying EU rules.</p>
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <h4 className="font-semibold text-blue-900 mb-2">Documentation</h4>
+                      <p className="text-blue-800 text-sm">XI prefix for NI businesses. Verify status before applying EU rules.</p>
                     </div>
                   </div>
                 </div>
@@ -281,15 +281,15 @@ export default function EcommerceVatIreland() {
                     <h4 className="font-semibold text-gray-900 mb-3">Returns & Reporting</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li className="flex items-start space-x-2">
-                        <span className="text-teal-500">✓</span>
+                        <span className="text-blue-500">✓</span>
                         <span>Bi-monthly Irish VAT returns</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-teal-500">✓</span>
+                        <span className="text-blue-500">✓</span>
                         <span>Quarterly OSS returns if applicable</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-teal-500">✓</span>
+                        <span className="text-blue-500">✓</span>
                         <span>EC Sales Lists for B2B</span>
                       </li>
                     </ul>
@@ -298,15 +298,15 @@ export default function EcommerceVatIreland() {
                     <h4 className="font-semibold text-gray-900 mb-3">Documentation</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li className="flex items-start space-x-2">
-                        <span className="text-teal-500">✓</span>
+                        <span className="text-blue-500">✓</span>
                         <span>Customer location evidence</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-teal-500">✓</span>
+                        <span className="text-blue-500">✓</span>
                         <span>VAT invoices for all sales</span>
                       </li>
                       <li className="flex items-start space-x-2">
-                        <span className="text-teal-500">✓</span>
+                        <span className="text-blue-500">✓</span>
                         <span>10-year record retention</span>
                       </li>
                     </ul>
@@ -318,29 +318,29 @@ export default function EcommerceVatIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-teal-600 text-white">
+        <section className="scroll-section py-20 px-4 bg-[#0072B1] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Automate Your E-commerce VAT Compliance
             </h2>
-            <p className="text-xl mb-8 text-teal-100">
+            <p className="text-xl mb-8 text-blue-100">
               PayVat handles complex e-commerce VAT rules automatically. OSS registration, real-time calculations, and marketplace integration.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-teal-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Start E-commerce VAT Setup
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-teal-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
               >
                 View E-commerce Plans
               </a>
             </div>
-            <p className="text-sm text-teal-200 mt-6">
+            <p className="text-sm text-blue-200 mt-6">
               Trusted by Irish e-commerce businesses
             </p>
           </div>

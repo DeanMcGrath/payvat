@@ -210,7 +210,7 @@ export default function SiteHeader({
           />
           
           {/* Mobile Menu */}
-          <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gradient-to-br from-teal-600 to-teal-700 shadow-2xl z-50 md:hidden animate-slide-in-right">
+          <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gradient-to-br from-[#0072B1] to-[#005A91] shadow-2xl z-50 md:hidden animate-slide-in-right">
             <div className="p-6 space-y-6">
               {/* Mobile Menu Header */}
               <div className="flex items-center justify-between pb-4 border-b border-white/20">

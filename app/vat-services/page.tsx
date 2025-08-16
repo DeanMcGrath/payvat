@@ -33,7 +33,7 @@ export default function VATServicesPage() {
         "Bulk calculations",
         "Export to Excel/PDF"
       ],
-      color: "from-teal-500 to-teal-600"
+      color: "from-[#0085D1] to-[#0072B1]"
     },
     {
       id: "submission",
@@ -47,7 +47,7 @@ export default function VATServicesPage() {
         "Deadline reminders",
         "Amendment support"
       ],
-      color: "from-teal-500 to-green-600"
+      color: "from-[#0085D1] to-green-600"
     },
     {
       id: "payment",
@@ -61,7 +61,7 @@ export default function VATServicesPage() {
         "Payment confirmations",
         "Late payment protection"
       ],
-      color: "from-teal-600 to-teal-700"
+      color: "from-[#0072B1] to-[#005A91]"
     },
     {
       id: "compliance",
@@ -75,7 +75,7 @@ export default function VATServicesPage() {
         "Audit preparation",
         "Expert consultations"
       ],
-      color: "from-teal-500 to-cyan-600"
+      color: "from-[#0085D1] to-cyan-600"
     }
   ]
 
@@ -197,7 +197,7 @@ export default function VATServicesPage() {
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-foreground mb-2 group-hover:text-teal-600 transition-colors">
+                      <h3 className="text-2xl font-bold text-foreground mb-2 group-hover:text-blue-600 transition-colors">
                         {service.title}
                       </h3>
                       <p className="text-muted-foreground mb-4">
@@ -206,7 +206,7 @@ export default function VATServicesPage() {
                       <ul className="space-y-2">
                         {service.features.map((feature, idx) => (
                           <li key={idx} className="flex items-start gap-2 text-sm">
-                            <CheckCircle className="h-4 w-4 text-teal-600 mt-0.5 flex-shrink-0" />
+                            <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
                             <span className="text-gray-700">{feature}</span>
                           </li>
                         ))}
@@ -238,14 +238,14 @@ export default function VATServicesPage() {
                 key={plan.id}
                 className={`relative transition-all duration-300 ${
                   plan.popular 
-                    ? 'shadow-2xl scale-105 border-teal-500' 
+                    ? 'shadow-2xl scale-105 border-blue-500' 
                     : 'hover:shadow-xl hover:-translate-y-1'
-                } ${selectedPlan === plan.id ? 'ring-2 ring-teal-500' : ''}`}
+                } ${selectedPlan === plan.id ? 'ring-2 ring-blue-500' : ''}`}
                 onClick={() => setSelectedPlan(plan.id)}
               >
                 {plan.badge && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-4 py-1">
+                    <Badge className="bg-gradient-to-r from-[#0072B1] to-cyan-600 text-white px-4 py-1">
                       {plan.badge}
                     </Badge>
                   </div>
@@ -269,7 +269,7 @@ export default function VATServicesPage() {
                   <ul className="space-y-3">
                     {plan.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <CheckCircle className="h-5 w-5 text-teal-600 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
                         <span className="text-gray-700">{feature}</span>
                       </li>
                     ))}
@@ -279,8 +279,8 @@ export default function VATServicesPage() {
                     size="lg" 
                     className={`w-full font-semibold ${
                       plan.popular 
-                        ? 'bg-gradient-to-r from-teal-600 to-cyan-600 text-white' 
-                        : 'border border-teal-600 text-teal-600 hover:bg-teal-50'
+                        ? 'bg-gradient-to-r from-[#0072B1] to-cyan-600 text-white' 
+                        : 'border border-blue-600 text-blue-600 hover:bg-blue-50'
                     }`}
                     variant={plan.popular ? "default" : "outline"}
                   >
@@ -333,9 +333,9 @@ export default function VATServicesPage() {
                   <th className="border-b border-gray-200 px-6 py-4 text-left font-semibold">Feature</th>
                   <th className="border-b border-gray-200 px-6 py-4 text-center font-semibold">Manual Process</th>
                   <th className="border-b border-gray-200 px-6 py-4 text-center font-semibold">Traditional Accountant</th>
-                  <th className="border-b border-gray-200 px-6 py-4 text-center font-semibold bg-teal-50">
+                  <th className="border-b border-gray-200 px-6 py-4 text-center font-semibold bg-blue-50">
                     <div className="flex items-center justify-center gap-2">
-                      <BadgeCheck className="h-5 w-5 text-teal-600" />
+                      <BadgeCheck className="h-5 w-5 text-blue-600" />
                       PayVAT
                     </div>
                   </th>
@@ -378,7 +378,7 @@ export default function VATServicesPage() {
                     <td className="border-b border-gray-200 px-6 py-4 font-medium">{row.feature}</td>
                     <td className="border-b border-gray-200 px-6 py-4 text-center text-gray-600">{row.manual}</td>
                     <td className="border-b border-gray-200 px-6 py-4 text-center text-gray-600">{row.accountant}</td>
-                    <td className="border-b border-gray-200 px-6 py-4 text-center font-semibold text-teal-600 bg-teal-50">{row.payvat}</td>
+                    <td className="border-b border-gray-200 px-6 py-4 text-center font-semibold text-blue-600 bg-blue-50">{row.payvat}</td>
                   </tr>
                 ))}
               </tbody>
@@ -405,7 +405,7 @@ export default function VATServicesPage() {
                 <CardContent className="p-8">
                   <div className="flex items-center gap-1 mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <BadgeCheck key={i} className="h-5 w-5 text-teal-400" />
+                      <BadgeCheck key={i} className="h-5 w-5 text-[#0085D1]" />
                     ))}
                   </div>
                   <blockquote className="text-gray-700 mb-6">
@@ -415,7 +415,7 @@ export default function VATServicesPage() {
                     <div>
                       <div className="font-semibold text-foreground">{testimonial.name}</div>
                       <div className="text-sm text-gray-600">{testimonial.role}</div>
-                      <div className="text-sm font-medium text-teal-600">{testimonial.company}</div>
+                      <div className="text-sm font-medium text-blue-600">{testimonial.company}</div>
                     </div>
                     <div className="text-right">
                       <div className="text-sm text-gray-500">Saves</div>
@@ -430,7 +430,7 @@ export default function VATServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-teal-600 to-cyan-600">
+      <section className="py-20 bg-gradient-to-br from-[#0072B1] to-cyan-600">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12">
             <Calculator className="h-16 w-16 text-white mx-auto mb-6" />
@@ -444,7 +444,7 @@ export default function VATServicesPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
               <Button 
                 size="lg" 
-                className="bg-white text-teal-600 hover:bg-gray-100 font-semibold px-8"
+                className="bg-white text-blue-600 hover:bg-gray-100 font-semibold px-8"
               >
                 Start 14-Day Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />

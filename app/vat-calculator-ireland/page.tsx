@@ -79,7 +79,7 @@ export default function VatCalculatorIreland() {
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="Enter amount"
-                      className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-base sm:text-lg min-h-[48px] transition-all duration-200 bg-white"
+                      className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base sm:text-lg min-h-[48px] transition-all duration-200 bg-white"
                       inputMode="decimal"
                     />
                   </div>
@@ -91,7 +91,7 @@ export default function VatCalculatorIreland() {
                     <select
                       value={vatRate}
                       onChange={(e) => setVatRate(e.target.value)}
-                      className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-base sm:text-lg min-h-[48px] bg-white transition-all duration-200"
+                      className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base sm:text-lg min-h-[48px] bg-white transition-all duration-200"
                     >
                       <option value="23">23% - Standard Rate</option>
                       <option value="13.5">13.5% - Reduced Rate</option>
@@ -106,23 +106,23 @@ export default function VatCalculatorIreland() {
                       Calculation Type
                     </label>
                     <div className="space-y-3">
-                      <label className="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-teal-300 transition-colors min-h-[48px]">
+                      <label className="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-blue-300 transition-colors min-h-[48px]">
                         <input
                           type="radio"
                           value="exclusive"
                           checked={calculationType === 'exclusive'}
                           onChange={(e) => setCalculationType(e.target.value)}
-                          className="mr-3 text-teal-600 scale-125"
+                          className="mr-3 text-blue-600 scale-125"
                         />
                         <span className="text-sm sm:text-base">Amount is VAT exclusive (add VAT)</span>
                       </label>
-                      <label className="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-teal-300 transition-colors min-h-[48px]">
+                      <label className="flex items-center p-3 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-blue-300 transition-colors min-h-[48px]">
                         <input
                           type="radio"
                           value="inclusive"
                           checked={calculationType === 'inclusive'}
                           onChange={(e) => setCalculationType(e.target.value)}
-                          className="mr-3 text-teal-600 scale-125"
+                          className="mr-3 text-blue-600 scale-125"
                         />
                         <span className="text-sm sm:text-base">Amount is VAT inclusive (extract VAT)</span>
                       </label>
@@ -130,7 +130,7 @@ export default function VatCalculatorIreland() {
                   </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-teal-50 to-cyan-50 p-4 sm:p-6 rounded-2xl border border-teal-100">
+                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-4 sm:p-6 rounded-2xl border border-blue-100">
                   <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 text-center">VAT Calculation Result</h3>
                   {result ? (
                     <div className="space-y-4">
@@ -138,11 +138,11 @@ export default function VatCalculatorIreland() {
                         <span className="font-semibold text-gray-700 text-sm sm:text-base">Net Amount:</span>
                         <span className="font-bold text-gray-900 text-base sm:text-lg">€{result.net}</span>
                       </div>
-                      <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-teal-200 min-h-[48px]">
+                      <div className="flex justify-between items-center bg-white p-3 rounded-lg border border-blue-200 min-h-[48px]">
                         <span className="font-semibold text-gray-700 text-sm sm:text-base">VAT ({result.rate}%):</span>
-                        <span className="font-bold text-teal-600 text-base sm:text-lg">€{result.vat}</span>
+                        <span className="font-bold text-blue-600 text-base sm:text-lg">€{result.vat}</span>
                       </div>
-                      <div className="flex justify-between items-center bg-teal-600 text-white p-4 rounded-lg shadow-lg min-h-[56px]">
+                      <div className="flex justify-between items-center bg-[#0072B1] text-white p-4 rounded-lg shadow-lg min-h-[56px]">
                         <span className="font-bold text-base sm:text-lg">Total Amount:</span>
                         <span className="font-bold text-xl sm:text-2xl">€{result.total}</span>
                       </div>
@@ -185,9 +185,9 @@ export default function VatCalculatorIreland() {
                     </ul>
                   </div>
                   
-                  <div className="bg-teal-50 p-4 rounded-lg">
-                    <h4 className="font-bold text-teal-600 text-lg mb-2">13.5% - Reduced Rate</h4>
-                    <ul className="text-teal-800 text-sm space-y-1">
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h4 className="font-bold text-blue-600 text-lg mb-2">13.5% - Reduced Rate</h4>
+                    <ul className="text-blue-800 text-sm space-y-1">
                       <li>• Construction services</li>
                       <li>• Restaurant meals and catering</li>
                       <li>• Fuel and heating</li>
@@ -195,9 +195,9 @@ export default function VatCalculatorIreland() {
                     </ul>
                   </div>
                   
-                  <div className="bg-teal-50 p-4 rounded-lg">
-                    <h4 className="font-bold text-teal-600 text-lg mb-2">9% - Second Reduced Rate</h4>
-                    <ul className="text-teal-800 text-sm space-y-1">
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h4 className="font-bold text-blue-600 text-lg mb-2">9% - Second Reduced Rate</h4>
+                    <ul className="text-blue-800 text-sm space-y-1">
                       <li>• Newspapers and magazines</li>
                       <li>• Sporting facilities</li>
                       <li>• Hairdressing services</li>
@@ -222,7 +222,7 @@ export default function VatCalculatorIreland() {
                   </div>
                   
                   <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-bold text-teal-600 text-lg mb-2">4.8% - Livestock Rate</h4>
+                    <h4 className="font-bold text-blue-600 text-lg mb-2">4.8% - Livestock Rate</h4>
                     <ul className="text-blue-800 text-sm space-y-1">
                       <li>• Cattle, sheep, pigs</li>
                       <li>• Horses for food production</li>
@@ -261,21 +261,21 @@ export default function VatCalculatorIreland() {
             <div className="card-premium p-8">
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-teal-600 mb-4">€42,500</div>
+                  <div className="text-5xl font-bold text-blue-600 mb-4">€42,500</div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Services Threshold</h3>
                   <p className="text-gray-600">Annual turnover for service providers including freelancers, consultants, and professionals.</p>
                 </div>
                 
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-teal-600 mb-4">€85,000</div>
+                  <div className="text-5xl font-bold text-blue-600 mb-4">€85,000</div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Goods Threshold</h3>
                   <p className="text-gray-600">Annual turnover for businesses selling physical goods including retailers and manufacturers.</p>
                 </div>
               </div>
               
               <div className="mt-8 text-center">
-                <div className="bg-teal-50 p-4 rounded-lg mb-6">
-                  <p className="text-teal-800 font-medium">
+                <div className="bg-blue-50 p-4 rounded-lg mb-6">
+                  <p className="text-blue-800 font-medium">
                     <strong>Important:</strong> You must register within 30 days of exceeding these thresholds. 
                     Many businesses register voluntarily before reaching thresholds to reclaim input VAT.
                   </p>
@@ -301,7 +301,7 @@ export default function VatCalculatorIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-teal-600 text-white">
+        <section className="py-20 px-4 bg-[#0072B1] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Need More Than Just VAT Calculation?

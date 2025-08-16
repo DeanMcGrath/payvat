@@ -140,7 +140,7 @@ export default function VATRegistrationPage() {
         <Card className="card-modern hover-lift mb-2" id="step-1">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
-              <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
+              <span className="w-8 h-8 bg-[#0072B1] text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
               Determine if You Need to Register for VAT
             </CardTitle>
           </CardHeader>
@@ -216,7 +216,7 @@ export default function VATRegistrationPage() {
         <Card className="card-modern hover-lift mb-2" id="step-2">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
-              <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
+              <span className="w-8 h-8 bg-[#0072B1] text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
               Gather Required Information and Documents
             </CardTitle>
           </CardHeader>
@@ -227,7 +227,7 @@ export default function VATRegistrationPage() {
               {/* Business Information */}
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                  <Building className="h-5 w-5 text-teal-600 mr-2" />
+                  <Building className="h-5 w-5 text-blue-600 mr-2" />
                   Business Information
                 </h4>
                 <ul className="space-y-2 text-gray-700 text-sm">
@@ -243,7 +243,7 @@ export default function VATRegistrationPage() {
               {/* Personal/Director Information */}
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                  <Users className="h-5 w-5 text-teal-600 mr-2" />
+                  <Users className="h-5 w-5 text-blue-600 mr-2" />
                   Personal/Director Information
                 </h4>
                 <ul className="space-y-2 text-gray-700 text-sm">
@@ -256,7 +256,7 @@ export default function VATRegistrationPage() {
               {/* Evidence of Trade */}
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                  <FileText className="h-5 w-5 text-teal-600 mr-2" />
+                  <FileText className="h-5 w-5 text-blue-600 mr-2" />
                   Evidence of Trade
                 </h4>
                 <ul className="space-y-2 text-gray-700 text-sm">
@@ -281,7 +281,7 @@ export default function VATRegistrationPage() {
         <Card className="card-modern hover-lift mb-2" id="step-3">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
-              <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
+              <span className="w-8 h-8 bg-[#0072B1] text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
               Choose the Appropriate Registration Form
             </CardTitle>
           </CardHeader>
@@ -290,36 +290,36 @@ export default function VATRegistrationPage() {
             
             <div className="grid md:grid-cols-2 gap-6">
               {/* Online Forms */}
-              <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
-                <h4 className="font-semibold text-teal-900 mb-3 flex items-center">
-                  <ExternalLink className="h-5 w-5 text-teal-600 mr-2" />
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h4 className="font-semibold text-blue-900 mb-3 flex items-center">
+                  <ExternalLink className="h-5 w-5 text-blue-600 mr-2" />
                   Online Forms (via ROS)
                 </h4>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-white rounded border border-teal-100">
+                  <div className="flex items-center justify-between p-3 bg-white rounded border border-blue-100">
                     <div>
-                      <span className="font-medium text-teal-800">TR1 Form</span>
-                      <p className="text-sm text-teal-700">For sole traders, partnerships, or trusts established in Ireland</p>
+                      <span className="font-medium text-blue-800">TR1 Form</span>
+                      <p className="text-sm text-blue-700">For sole traders, partnerships, or trusts established in Ireland</p>
                     </div>
                     <Button 
                       size="sm" 
                       variant="outline" 
-                      className="border-teal-200 text-teal-700"
+                      className="border-blue-200 text-blue-700"
                       onClick={() => window.open('https://www.revenue.ie/en/companies-and-charities/documents/tr1.pdf', '_blank')}
                     >
                       <Download className="h-4 w-4 mr-1" />
                       TR1
                     </Button>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-white rounded border border-teal-100">
+                  <div className="flex items-center justify-between p-3 bg-white rounded border border-blue-100">
                     <div>
-                      <span className="font-medium text-teal-800">TR2 Form</span>
-                      <p className="text-sm text-teal-700">For limited companies established in Ireland</p>
+                      <span className="font-medium text-blue-800">TR2 Form</span>
+                      <p className="text-sm text-blue-700">For limited companies established in Ireland</p>
                     </div>
                     <Button 
                       size="sm" 
                       variant="outline" 
-                      className="border-teal-200 text-teal-700"
+                      className="border-blue-200 text-blue-700"
                       onClick={() => window.open('https://www.revenue.ie/en/companies-and-charities/documents/tr2.pdf', '_blank')}
                     >
                       <Download className="h-4 w-4 mr-1" />
@@ -385,7 +385,7 @@ export default function VATRegistrationPage() {
         <Card className="card-modern hover-lift mb-2" id="step-4">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
-              <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">4</span>
+              <span className="w-8 h-8 bg-[#0072B1] text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">4</span>
               Register Through the Revenue Online Service (ROS)
             </CardTitle>
           </CardHeader>
@@ -395,14 +395,14 @@ export default function VATRegistrationPage() {
             <div className="space-y-4">
               {/* Create ROS Account */}
               <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <span className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</span>
+                <span className="w-6 h-6 bg-[#0072B1] text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">1</span>
                 <div className="flex-1">
                   <h4 className="font-semibold text-gray-900 mb-2">Create a ROS Account</h4>
-                  <p className="text-gray-700 mb-3">Visit the ROS website at <a href="https://www.ros.ie" target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:text-teal-700 underline">www.ros.ie</a> and register for a ROS account if you don&apos;t have one.</p>
+                  <p className="text-gray-700 mb-3">Visit the ROS website at <a href="https://www.ros.ie" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 underline">www.ros.ie</a> and register for a ROS account if you don&apos;t have one.</p>
                   <p className="text-gray-700">You&apos;ll need your PPS number (for sole traders) or TRN (for companies).</p>
                   <Button 
                     size="sm" 
-                    className="mt-3 bg-teal-600 hover:bg-teal-700"
+                    className="mt-3 bg-[#0072B1] hover:bg-[#005A91]"
                     onClick={() => window.open('https://www.ros.ie/myenquiries-web/registration/registration.html?execution=e1s1', '_blank')}
                   >
                     <ExternalLink className="h-4 w-4 mr-2" />
@@ -413,10 +413,10 @@ export default function VATRegistrationPage() {
 
               {/* Complete Form */}
               <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <span className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</span>
+                <span className="w-6 h-6 bg-[#0072B1] text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">2</span>
                 <div className="flex-1">
                   <h4 className="font-semibold text-gray-900 mb-2">Complete the Appropriate Form</h4>
-                  <p className="text-gray-700 mb-3">Log in to ROS at <a href="https://www.ros.ie" target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:text-teal-700 underline">www.ros.ie</a> and select the TR1 or TR2 form based on your business type.</p>
+                  <p className="text-gray-700 mb-3">Log in to ROS at <a href="https://www.ros.ie" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 underline">www.ros.ie</a> and select the TR1 or TR2 form based on your business type.</p>
                   <ul className="space-y-1 text-gray-700">
                     <li>• Fill in all required fields, including business details, turnover estimates, and VAT registration date</li>
                     <li>• Indicate whether you&apos;re applying for &quot;domestic-only&quot; or &quot;intra-EU&quot; status</li>
@@ -426,7 +426,7 @@ export default function VATRegistrationPage() {
 
               {/* Upload Documents */}
               <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <span className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</span>
+                <span className="w-6 h-6 bg-[#0072B1] text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">3</span>
                 <div className="flex-1">
                   <h4 className="font-semibold text-gray-900 mb-2">Upload Supporting Documents</h4>
                   <p className="text-gray-700 mb-3">Attach evidence of trade (e.g., invoices, contracts) and any required identification documents.</p>
@@ -436,7 +436,7 @@ export default function VATRegistrationPage() {
 
               {/* Submit Application */}
               <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <span className="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</span>
+                <span className="w-6 h-6 bg-[#0072B1] text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">4</span>
                 <div className="flex-1">
                   <h4 className="font-semibold text-gray-900 mb-2">Submit the Application</h4>
                   <p className="text-gray-700 mb-3">Review your application for accuracy to avoid delays.</p>
@@ -455,7 +455,7 @@ export default function VATRegistrationPage() {
         <Card className="card-modern hover-lift mb-2" id="step-5">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
-              <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">5</span>
+              <span className="w-8 h-8 bg-[#0072B1] text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">5</span>
               Await Processing and Respond to Queries
             </CardTitle>
           </CardHeader>
@@ -488,12 +488,12 @@ export default function VATRegistrationPage() {
               </div>
 
               {/* Approval */}
-              <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
-                <h4 className="font-semibold text-teal-900 mb-3 flex items-center">
-                  <CheckCircle className="h-5 w-5 text-teal-600 mr-2" />
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h4 className="font-semibold text-blue-900 mb-3 flex items-center">
+                  <CheckCircle className="h-5 w-5 text-blue-600 mr-2" />
                   Approval
                 </h4>
-                <ul className="space-y-2 text-teal-700 text-sm">
+                <ul className="space-y-2 text-blue-700 text-sm">
                   <li>• Upon approval, you&apos;ll receive a VAT number in the format &quot;IE&quot; followed by 8 or 9 characters (e.g., IE1234567A or IE12345678B)</li>
                   <li>• The VAT number is effective from the start of the next taxable period (two months after application receipt) or the date you were required to register</li>
                 </ul>
@@ -506,7 +506,7 @@ export default function VATRegistrationPage() {
         <Card className="card-modern hover-lift mb-2" id="step-6">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
-              <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">6</span>
+              <span className="w-8 h-8 bg-[#0072B1] text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">6</span>
               Understand Post-Registration Obligations
             </CardTitle>
           </CardHeader>
@@ -517,7 +517,7 @@ export default function VATRegistrationPage() {
               {/* Charge VAT on Sales */}
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
-                  <Euro className="h-5 w-5 text-teal-600 mr-2" />
+                  <Euro className="h-5 w-5 text-blue-600 mr-2" />
                   Charge VAT on Sales
                 </h4>
                 <ul className="space-y-2 text-gray-700 text-sm">
@@ -527,21 +527,21 @@ export default function VATRegistrationPage() {
               </div>
 
               {/* Submit VAT Returns */}
-              <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
-                <h4 className="font-semibold text-teal-900 mb-3 flex items-center">
-                  <FileText className="h-5 w-5 text-teal-600 mr-2" />
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h4 className="font-semibold text-blue-900 mb-3 flex items-center">
+                  <FileText className="h-5 w-5 text-blue-600 mr-2" />
                   Submit VAT Returns
                 </h4>
                 <div className="space-y-3">
-                  <ul className="space-y-2 text-teal-700 text-sm">
+                  <ul className="space-y-2 text-blue-700 text-sm">
                     <li>• Submit VAT returns every two months, detailing sales, purchases, and VAT owed</li>
                     <li>• Choose between invoice basis (VAT due when invoiced) or cash basis (VAT due when paid, if turnover is below €2 million and 90% of customers are non-VAT-registered)</li>
                   </ul>
-                  <div className="bg-white border border-teal-200 rounded-lg p-3">
-                    <p className="text-teal-800 text-sm mb-2"><strong>Note:</strong> You can calculate, submit, and pay VAT using digital platforms.</p>
+                  <div className="bg-white border border-blue-200 rounded-lg p-3">
+                    <p className="text-blue-800 text-sm mb-2"><strong>Note:</strong> You can calculate, submit, and pay VAT using digital platforms.</p>
                     <Button 
                       size="sm" 
-                      className="bg-teal-600 hover:bg-teal-700"
+                      className="bg-[#0072B1] hover:bg-[#005A91]"
                       onClick={() => window.location.href = '/vat-guide'}
                     >
                       <ArrowRight className="h-4 w-4 mr-2" />
@@ -614,7 +614,7 @@ export default function VATRegistrationPage() {
         <Card className="card-modern hover-lift mb-2" id="step-7">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
-              <span className="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">7</span>
+              <span className="w-8 h-8 bg-[#0072B1] text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">7</span>
               Monitor and Maintain Compliance
             </CardTitle>
           </CardHeader>
@@ -652,7 +652,7 @@ export default function VATRegistrationPage() {
         <Card className="card-modern hover-lift mb-4">
           <CardHeader>
             <CardTitle className="text-xl font-semibold text-gray-900 flex items-center">
-              <Users className="h-5 w-5 text-teal-500 mr-2" />
+              <Users className="h-5 w-5 text-blue-500 mr-2" />
               Industry-Specific VAT Registration Considerations
             </CardTitle>
           </CardHeader>
@@ -662,40 +662,40 @@ export default function VATRegistrationPage() {
               <div className="space-y-4">
                 <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex items-center gap-3 mb-2">
-                    <Building className="h-5 w-5 text-teal-600" />
+                    <Building className="h-5 w-5 text-blue-600" />
                     <span className="font-medium text-gray-800">Construction</span>
                   </div>
                   <p className="text-sm text-gray-600 mb-2">Must register for RCT and VAT, special reverse charge provisions apply</p>
-                  <a href="/construction-vat-ireland" className="text-xs text-teal-600 font-medium hover:text-teal-700">Construction VAT guide →</a>
+                  <a href="/construction-vat-ireland" className="text-xs text-blue-600 font-medium hover:text-blue-700">Construction VAT guide →</a>
                 </div>
                 
                 <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex items-center gap-3 mb-2">
-                    <Globe className="h-5 w-5 text-teal-600" />
+                    <Globe className="h-5 w-5 text-blue-600" />
                     <span className="font-medium text-gray-800">E-commerce</span>
                   </div>
                   <p className="text-sm text-gray-600 mb-2">Distance selling rules, OSS registration for EU sales</p>
-                  <a href="/ecommerce-vat-ireland" className="text-xs text-teal-600 font-medium hover:text-teal-700">E-commerce VAT guide →</a>
+                  <a href="/ecommerce-vat-ireland" className="text-xs text-blue-600 font-medium hover:text-blue-700">E-commerce VAT guide →</a>
                 </div>
               </div>
               
               <div className="space-y-4">
                 <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex items-center gap-3 mb-2">
-                    <Users className="h-5 w-5 text-teal-600" />
+                    <Users className="h-5 w-5 text-blue-600" />
                     <span className="font-medium text-gray-800">Freelancers</span>
                   </div>
                   <p className="text-sm text-gray-600 mb-2">Service thresholds, professional service considerations</p>
-                  <a href="/freelancer-vat-ireland" className="text-xs text-teal-600 font-medium hover:text-teal-700">Freelancer VAT guide →</a>
+                  <a href="/freelancer-vat-ireland" className="text-xs text-blue-600 font-medium hover:text-blue-700">Freelancer VAT guide →</a>
                 </div>
                 
                 <div className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors">
                   <div className="flex items-center gap-3 mb-2">
-                    <Home className="h-5 w-5 text-teal-600" />
+                    <Home className="h-5 w-5 text-blue-600" />
                     <span className="font-medium text-gray-800">Property</span>
                   </div>
                   <p className="text-sm text-gray-600 mb-2">Rental property exemptions, development considerations</p>
-                  <a href="/property-rental-vat-ireland" className="text-xs text-teal-600 font-medium hover:text-teal-700">Property VAT guide →</a>
+                  <a href="/property-rental-vat-ireland" className="text-xs text-blue-600 font-medium hover:text-blue-700">Property VAT guide →</a>
                 </div>
               </div>
             </div>
@@ -709,7 +709,7 @@ export default function VATRegistrationPage() {
             <p className="text-gray-600 mb-2 max-w-2xl mx-auto">Once you receive your VAT number, let PayVAT handle your VAT calculations, submissions, and payments. Focus on growing your business while we ensure your VAT compliance.</p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button 
-                className="bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 text-lg"
+                className="bg-[#0072B1] hover:bg-[#005A91] text-white font-semibold py-3 px-8 text-lg"
                 onClick={() => window.location.href = '/about'}
               >
                 <ArrowRight className="h-5 w-5 mr-2" />
@@ -717,7 +717,7 @@ export default function VATRegistrationPage() {
               </Button>
               <Button 
                 variant="outline" 
-                className="border-teal-200 text-teal-700 hover:bg-teal-50 py-3 px-8 text-lg"
+                className="border-blue-200 text-blue-700 hover:bg-blue-50 py-3 px-8 text-lg"
                 onClick={() => window.location.href = '/vat-guide'}
               >
                 <BookOpen className="h-5 w-5 mr-2" />

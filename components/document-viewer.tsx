@@ -699,7 +699,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
       return (
         <div className="flex items-center justify-center min-h-[50vh] sm:min-h-[70vh] bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border">
           <div className="text-center p-8">
-            <RefreshCw className="h-12 w-12 animate-spin mx-auto mb-4 text-teal-600" />
+            <RefreshCw className="h-12 w-12 animate-spin mx-auto mb-4 text-blue-600" />
             <p className="text-gray-600 text-lg">Loading document...</p>
             <p className="text-gray-500 text-sm mt-2">Please wait while we prepare the preview</p>
           </div>
@@ -719,7 +719,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
             <Button 
               onClick={handleDownload} 
               size="lg"
-              className="bg-teal-600 hover:bg-teal-700"
+              className="bg-[#0072B1] hover:bg-[#005A91]"
             >
               <Download className="h-5 w-5 mr-2" />
               Download to View
@@ -790,7 +790,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
           <Button 
             onClick={handleDownload} 
             size="lg"
-            className="bg-teal-600 hover:bg-teal-700"
+            className="bg-[#0072B1] hover:bg-[#005A91]"
           >
             <Download className="h-5 w-5 mr-2" />
             Download to View
@@ -827,7 +827,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                   variant="default" 
                   size="sm" 
                   onClick={handleDownload}
-                  className="bg-teal-600 hover:bg-teal-700 touch-manipulation"
+                  className="bg-[#0072B1] hover:bg-[#005A91] touch-manipulation"
                 >
                   <Download className="h-4 w-4 sm:mr-2" />
                   <span className="hidden sm:inline">Download</span>

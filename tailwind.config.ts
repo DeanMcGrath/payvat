@@ -15,13 +15,13 @@ const config: Config = {
       // Custom fonts with advanced features
       fontFamily: {
         sans: [
+          '"Helvetica Neue"',
           'ui-sans-serif',
           'system-ui',
           '-apple-system',
           'BlinkMacSystemFont',
           '"Segoe UI"',
           'Roboto',
-          '"Helvetica Neue"',
           'Arial',
           '"Noto Sans"',
           'sans-serif',

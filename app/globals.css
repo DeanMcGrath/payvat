@@ -11,8 +11,8 @@
   --shadow-dramatic: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 35px 65px -15px rgba(0, 0, 0, 0.15);
   
   /* Professional Business Gradients */
-  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #3b82f6 100%);
-  --gradient-accent: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #1e40af 100%);
+  --gradient-primary: linear-gradient(135deg, #0072B1 0%, #005A91 50%, #0085D1 100%);
+  --gradient-accent: linear-gradient(135deg, #005A91 0%, #0072B1 50%, #004A73 100%);
   --gradient-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
   --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
 
@@ -23,7 +23,7 @@
   --card-foreground: 222.2 84% 4.9%;
   --popover: 0 0% 100%;
   --popover-foreground: 222.2 84% 4.9%;
-  --primary: 217 91% 60%;
+  --primary: 203 100% 35%;
   --primary-foreground: 0 0% 98%;
   --secondary: 210 40% 98%;
   --secondary-foreground: 222.2 84% 4.9%;
@@ -35,8 +35,8 @@
   --destructive-foreground: 0 0% 98%;
   --border: 214.3 31.8% 91.4%;
   --input: 214.3 31.8% 91.4%;
-  --ring: 217 91% 60%;
-  --chart-1: 217 91% 60%;
+  --ring: 203 100% 35%;
+  --chart-1: 203 100% 35%;
   --chart-2: 221.2 83.2% 53.3%;
   --chart-3: 142.1 76.2% 36.3%;
   --chart-4: 47.9 95.8% 53.1%;
@@ -51,7 +51,7 @@
   --card-foreground: 0 0% 98%;
   --popover: 222.2 84% 4.9%;
   --popover-foreground: 0 0% 98%;
-  --primary: 217 91% 60%;
+  --primary: 203 100% 35%;
   --primary-foreground: 222.2 84% 4.9%;
   --secondary: 217.2 32.6% 17.5%;
   --secondary-foreground: 0 0% 98%;
@@ -63,8 +63,8 @@
   --destructive-foreground: 0 0% 98%;
   --border: 217.2 32.6% 17.5%;
   --input: 217.2 32.6% 17.5%;
-  --ring: 217 91% 60%;
-  --chart-1: 217 91% 60%;
+  --ring: 203 100% 35%;
+  --chart-1: 203 100% 35%;
   --chart-2: 217.2 91.2% 59.8%;
   --chart-3: 142.1 70.6% 45.3%;
   --chart-4: 47.9 95.8% 53.1%;
@@ -102,14 +102,14 @@ body {
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(0, 114, 177, 0.3), transparent);
     opacity: 0;
     transition: opacity 0.4s ease;
   }
   
   .card-modern:hover {
     box-shadow: var(--shadow-premium);
-    border-color: rgba(37, 99, 235, 0.3);
+    border-color: rgba(0, 114, 177, 0.3);
     transform: translateY(-6px) scale(1.02);
   }
   
@@ -120,7 +120,7 @@ body {
   .card-premium {
     background: linear-gradient(145deg, white 0%, #fafafa 100%);
     border-radius: 1.25rem;
-    border: 1px solid rgba(37, 99, 235, 0.1);
+    border: 1px solid rgba(0, 114, 177, 0.1);
     box-shadow: var(--shadow-premium);
     backdrop-filter: blur(8px);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -133,7 +133,7 @@ body {
     position: absolute;
     inset: 0;
     padding: 1px;
-    background: linear-gradient(145deg, rgba(37, 99, 235, 0.2), transparent, rgba(37, 99, 235, 0.1));
+    background: linear-gradient(145deg, rgba(0, 114, 177, 0.2), transparent, rgba(0, 114, 177, 0.1));
     border-radius: inherit;
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: subtract;
@@ -154,7 +154,7 @@ body {
   .icon-modern {
     width: 3rem;
     height: 3rem;
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #3b82f6 100%);
+    background: linear-gradient(135deg, #0072B1 0%, #005A91 50%, #0085D1 100%);
     border-radius: 1rem;
     display: flex;
     align-items: center;
@@ -191,7 +191,7 @@ body {
   .icon-premium {
     width: 4rem;
     height: 4rem;
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 30%, #3b82f6 70%, #1e40af 100%);
+    background: linear-gradient(135deg, #0072B1 0%, #005A91 30%, #0085D1 70%, #004A73 100%);
     border-radius: 1.25rem;
     display: flex;
     align-items: center;
@@ -223,7 +223,7 @@ body {
   
   /* Enhanced Buttons */
   .btn-primary {
-    background: linear-gradient(to right, #2563eb, #1d4ed8);
+    background: linear-gradient(to right, #0072B1, #005A91);
     color: white;
     box-shadow: var(--shadow-soft);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -247,7 +247,7 @@ body {
   
   .btn-primary:hover {
     box-shadow: var(--shadow-premium);
-    background: linear-gradient(to right, #1d4ed8, #1e40af);
+    background: linear-gradient(to right, #005A91, #004A73);
   }
   
   .btn-primary:hover::before {
@@ -269,7 +269,7 @@ body {
   
   .btn-outline:hover {
     background-color: #f9fafb;
-    border-color: #2563eb;
+    border-color: #0072B1;
     box-shadow: var(--shadow-soft);
   }
   
@@ -513,7 +513,7 @@ body {
   }
   
   .text-gradient-primary {
-    background: linear-gradient(to right, #2563eb, #1d4ed8);
+    background: linear-gradient(to right, #0072B1, #005A91);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;

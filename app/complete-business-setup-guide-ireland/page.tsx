@@ -46,36 +46,6 @@ export default function CompleteBusinessSetupGuideIreland() {
       />
 
 
-      {/* Service Announcement Section */}
-      <section className="py-12 bg-[#4A9B8E]">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <div className="text-center text-white">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-              Let Us Handle Everything For You!
-            </h2>
-            <p className="text-xl lg:text-2xl leading-relaxed mb-8 opacity-95">
-              Don't want to navigate the complexities alone? PayVAT offers a complete done-for-you business setup service. We handle every step from company registration to VAT setup, so you can focus on growing your business.
-            </p>
-            <div className="mb-8">
-              <div className="text-4xl font-bold mb-2">€500 Complete Package</div>
-              <div className="text-xl">+ 6 Months FREE VAT Services</div>
-            </div>
-            <Button 
-              size="lg"
-              className="bg-white text-[#4A9B8E] hover:bg-gray-100 px-12 py-4 text-lg font-semibold"
-              onClick={() => {
-                const contactSection = document.getElementById('contact-form');
-                if (contactSection) {
-                  contactSection.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-            >
-              Learn More
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </section>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
 
@@ -558,14 +528,14 @@ export default function CompleteBusinessSetupGuideIreland() {
         </section>
 
         {/* Complete Startup Package Section */}
-        <section id="contact-form" className="py-20 bg-[#4A9B8E]">
+        <section id="contact-form" className="py-20 bg-[#0072B1]">
           <div className="max-w-4xl mx-auto px-6 lg:px-8">
             <div className="text-center text-white mb-12">
               <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-                Complete Startup Package: €500
+                Complete Startup Guide For FREE!
               </h2>
               <p className="text-xl leading-relaxed">
-                We handle your entire business setup from start to finish, plus you get your first 6 months of PayVAT VAT processing and submission services FREE.
+                Learn how to setup your Business from start to finish!
               </p>
             </div>
             
@@ -581,7 +551,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                       id="fullName"
                       name="fullName"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
                       placeholder="Enter your full name"
                     />
                   </div>
@@ -594,7 +564,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                       id="email"
                       name="email"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -610,7 +580,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                       id="phone"
                       name="phone"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
                       placeholder="+353..."
                     />
                   </div>
@@ -622,7 +592,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                       id="businessType"
                       name="businessType"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
                     >
                       <option value="">Select business type</option>
                       <option value="sole-trader">Sole Trader</option>
@@ -640,7 +610,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                     id="currentStage"
                     name="currentStage"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
                   >
                     <option value="">Select current stage</option>
                     <option value="just-starting">Just Starting</option>
@@ -658,7 +628,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                     id="message"
                     name="message"
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4A9B8E] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0072B1] focus:border-transparent"
                     placeholder="Tell us about your business goals or any specific requirements..."
                   ></textarea>
                 </div>
@@ -667,9 +637,9 @@ export default function CompleteBusinessSetupGuideIreland() {
                   <Button
                     type="submit"
                     size="lg"
-                    className="bg-[#4A9B8E] hover:bg-[#3A8B7E] text-white px-12 py-4 text-lg font-semibold"
+                    className="bg-[#0072B1] hover:bg-[#005A91] text-white px-12 py-4 text-lg font-semibold"
                   >
-                    Get Your Startup Package
+                    Get Your FREE Guide
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </div>

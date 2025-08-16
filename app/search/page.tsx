@@ -153,11 +153,11 @@ function SearchPageContent() {
   const getTypeColor = (type: string) => {
     switch (type) {
       case 'guide':
-        return 'bg-teal-100 text-teal-800 border-teal-200'
+        return 'bg-blue-100 text-blue-800 border-blue-200'
       case 'page':
         return 'bg-blue-100 text-blue-800 border-blue-200'
       case 'help':
-        return 'bg-teal-100 text-teal-800 border-teal-200'
+        return 'bg-blue-100 text-blue-800 border-blue-200'
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200'
     }
@@ -166,7 +166,7 @@ function SearchPageContent() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <header className="bg-teal-700 text-white">
+      <header className="bg-[#005A91] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
@@ -192,22 +192,22 @@ function SearchPageContent() {
               {user && (
                 <div className="text-right hidden sm:block max-w-48 lg:max-w-none">
                   <h3 className="text-sm lg:text-base font-bold text-white truncate">{user.businessName}</h3>
-                  <p className="text-teal-100 font-mono text-xs">VAT: {user.vatNumber}</p>
+                  <p className="text-blue-100 font-mono text-xs">VAT: {user.vatNumber}</p>
                 </div>
               )}
               
               <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 lg:hidden p-2 min-w-[44px] min-h-[44px]">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-[#0072B1] lg:hidden p-2 min-w-[44px] min-h-[44px]">
                   <Search className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-[#0072B1] p-2 min-w-[44px] min-h-[44px]">
                   <Bell className="h-4 w-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-[#0072B1] hidden sm:flex p-2 min-w-[44px] min-h-[44px]">
                   <Settings className="h-4 w-4" />
                 </Button>
                 {user && (
-                  <Button variant="ghost" size="sm" className="text-white hover:bg-teal-600 p-2 min-w-[44px] min-h-[44px]" onClick={handleLogout} title="Logout">
+                  <Button variant="ghost" size="sm" className="text-white hover:bg-[#0072B1] p-2 min-w-[44px] min-h-[44px]" onClick={handleLogout} title="Logout">
                     <LogOut className="h-4 w-4" />
                   </Button>
                 )}
@@ -217,19 +217,19 @@ function SearchPageContent() {
         </div>
         
         {/* Navigation */}
-        <div className="bg-teal-600 px-4 sm:px-6 py-3">
+        <div className="bg-[#0072B1] px-4 sm:px-6 py-3">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2 text-sm">
                 <span className="text-white">Search Results</span>
                 {query && (
-                  <span className="text-teal-100">for &quot;{query}&quot;</span>
+                  <span className="text-blue-100">for &quot;{query}&quot;</span>
                 )}
               </div>
               {user && (
                 <div className="sm:hidden text-right max-w-40">
-                  <p className="text-xs text-teal-100 font-mono truncate">{user.businessName}</p>
-                  <p className="text-xs text-teal-200 font-mono">{user.vatNumber}</p>
+                  <p className="text-xs text-blue-100 font-mono truncate">{user.businessName}</p>
+                  <p className="text-xs text-blue-200 font-mono">{user.vatNumber}</p>
                 </div>
               )}
             </div>
@@ -258,7 +258,7 @@ function SearchPageContent() {
                 </div>
                 <Button 
                   onClick={() => handleSearch()}
-                  className="bg-teal-600 hover:bg-teal-700 px-6 py-3"
+                  className="bg-[#0072B1] hover:bg-[#005A91] px-6 py-3"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -275,7 +275,7 @@ function SearchPageContent() {
         {/* Search Results */}
         {isLoading ? (
           <div className="text-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-teal-600 mx-auto mb-4" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#0072B1] mx-auto mb-4" />
             <p className="text-gray-600">Searching...</p>
           </div>
         ) : hasSearched ? (
@@ -310,7 +310,7 @@ function SearchPageContent() {
                         <ArrowRight className="h-4 w-4 text-gray-400" />
                       </div>
                       
-                      <h3 className="text-lg font-semibold text-teal-700 hover:text-teal-800 mb-2">
+                      <h3 className="text-lg font-semibold text-[#005A91] hover:text-[#005A91] mb-2">
                         {result.title}
                       </h3>
                       
@@ -358,14 +358,14 @@ function SearchPageContent() {
         ) : (
           /* Welcome State */
           <div className="text-center py-12">
-            <Search className="h-12 w-12 text-teal-600 mx-auto mb-4" />
+            <Search className="h-12 w-12 text-[#0072B1] mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Search PayVAT</h2>
             <p className="text-gray-600 mb-8">Find guides, documentation, and help for managing your VAT in Ireland</p>
             
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <Card className="hover:shadow-md transition-shadow">
                 <CardContent className="pt-6 text-center">
-                  <BookOpen className="h-8 w-8 text-teal-600 mx-auto mb-3" />
+                  <BookOpen className="h-8 w-8 text-[#0072B1] mx-auto mb-3" />
                   <h3 className="font-semibold text-gray-900 mb-2">VAT Guides</h3>
                   <p className="text-gray-600 text-sm mb-4">Learn about VAT registration, rates, and compliance in Ireland</p>
                   <Button 
@@ -401,7 +401,7 @@ function SearchPageContent() {
 
               <Card className="hover:shadow-md transition-shadow">
                 <CardContent className="pt-6 text-center">
-                  <HelpCircle className="h-8 w-8 text-teal-600 mx-auto mb-3" />
+                  <HelpCircle className="h-8 w-8 text-[#0072B1] mx-auto mb-3" />
                   <h3 className="font-semibold text-gray-900 mb-2">Help & Support</h3>
                   <p className="text-gray-600 text-sm mb-4">Get answers to common questions and troubleshooting help</p>
                   <Button 
@@ -434,7 +434,7 @@ export default function SearchPage() {
     <Suspense fallback={
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0072B1] mx-auto mb-4"></div>
           <p className="text-gray-600">Loading search...</p>
         </div>
       </div>

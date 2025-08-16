@@ -60,7 +60,7 @@ export default function DublinBusinessRegistration() {
               </div>
               
               <div className="card-modern p-8 text-center hover:shadow-xl transition-all duration-300 group">
-                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-gray-100 text-teal-600 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-gray-100 text-blue-600 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                   </svg>
@@ -75,7 +75,7 @@ export default function DublinBusinessRegistration() {
               </div>
               
               <div className="card-modern p-8 text-center hover:shadow-xl transition-all duration-300 group">
-                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-gray-100 text-teal-600 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern w-16 h-16 mx-auto mb-6 bg-gray-100 text-blue-600 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
@@ -258,23 +258,23 @@ export default function DublinBusinessRegistration() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Company Registration</span>
-                    <span className="font-bold text-teal-600">€125-200</span>
+                    <span className="font-bold text-blue-600">€125-200</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Dublin City Council Rates</span>
-                    <span className="font-bold text-teal-600">€500-2,000</span>
+                    <span className="font-bold text-blue-600">€500-2,000</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Business Insurance (Dublin)</span>
-                    <span className="font-bold text-teal-600">€1,200-4,000</span>
+                    <span className="font-bold text-blue-600">€1,200-4,000</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Professional Services</span>
-                    <span className="font-bold text-teal-600">€2,000-8,000</span>
+                    <span className="font-bold text-blue-600">€2,000-8,000</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium text-gray-900">Bank Account & Setup</span>
-                    <span className="font-bold text-teal-600">€200-800</span>
+                    <span className="font-bold text-blue-600">€200-800</span>
                   </div>
                 </div>
               </div>
@@ -284,23 +284,23 @@ export default function DublinBusinessRegistration() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Office Rent (City Centre)</span>
-                    <span className="font-bold text-teal-600">€35-65/m²</span>
+                    <span className="font-bold text-blue-600">€35-65/m²</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Office Rent (Suburbs)</span>
-                    <span className="font-bold text-teal-600">€20-35/m²</span>
+                    <span className="font-bold text-blue-600">€20-35/m²</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Utilities & Services</span>
-                    <span className="font-bold text-teal-600">€300-1,200</span>
+                    <span className="font-bold text-blue-600">€300-1,200</span>
                   </div>
                   <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <span className="font-medium text-gray-900">Parking (if needed)</span>
-                    <span className="font-bold text-teal-600">€150-400</span>
+                    <span className="font-bold text-blue-600">€150-400</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="font-medium text-gray-900">Staff Costs (higher)</span>
-                    <span className="font-bold text-teal-600">+15-25%</span>
+                    <span className="font-bold text-blue-600">+15-25%</span>
                   </div>
                 </div>
               </div>
@@ -354,13 +354,13 @@ export default function DublinBusinessRegistration() {
             </div>
             
             <div className="space-y-6">
-              <div className="card-modern p-8 border-l-4 border-teal-500">
-                <h3 className="text-xl font-bold text-teal-600 mb-3">Dublin 1 & 2 - City Centre</h3>
+              <div className="card-modern p-8 border-l-4 border-blue-500">
+                <h3 className="text-xl font-bold text-blue-600 mb-3">Dublin 1 & 2 - City Centre</h3>
                 <p className="text-gray-700 mb-4">
                   Prime business address, excellent transport links, prestigious location. High costs but maximum visibility and accessibility.
                 </p>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-teal-800 font-semibold">Best for: Professional services, headquarters, client-facing businesses</p>
+                  <p className="text-blue-800 font-semibold">Best for: Professional services, headquarters, client-facing businesses</p>
                 </div>
               </div>
               
@@ -374,13 +374,13 @@ export default function DublinBusinessRegistration() {
                 </div>
               </div>
               
-              <div className="card-modern p-8 border-l-4 border-teal-500">
-                <h3 className="text-xl font-bold text-teal-600 mb-3">Silicon Docks - Dublin 2 & 4</h3>
+              <div className="card-modern p-8 border-l-4 border-blue-500">
+                <h3 className="text-xl font-bold text-blue-600 mb-3">Silicon Docks - Dublin 2 & 4</h3>
                 <p className="text-gray-700 mb-4">
                   Tech cluster around Grand Canal, Google, Facebook, LinkedIn offices. Startup ecosystem and tech talent concentration.
                 </p>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-teal-800 font-semibold">Best for: Tech startups, software companies, digital agencies, fintech</p>
+                  <p className="text-blue-800 font-semibold">Best for: Tech startups, software companies, digital agencies, fintech</p>
                 </div>
               </div>
               
@@ -447,29 +447,29 @@ export default function DublinBusinessRegistration() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-teal-600 text-white">
+        <section className="scroll-section py-20 px-4 bg-[#0072B1] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Ready to Register Your Business in Dublin?
             </h2>
-            <p className="text-xl mb-8 text-teal-100">
+            <p className="text-xl mb-8 text-blue-100">
               Access Ireland's business capital with complete registration support and ongoing VAT compliance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-teal-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Start Dublin Registration
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-teal-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
               >
                 View Dublin Business Plans
               </a>
             </div>
-            <p className="text-sm text-teal-200 mt-6">
+            <p className="text-sm text-blue-200 mt-6">
               Trusted by Dublin businesses for seamless compliance
             </p>
           </div>

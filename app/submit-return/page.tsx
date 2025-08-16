@@ -182,7 +182,7 @@ export default function VAT3ReturnForm() {
                   <Input
                     value={formData.traderName}
                     onChange={(e) => handleInputChange("traderName", e.target.value)}
-                    className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                    className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                   />
                 </div>
                 <div className="space-y-2">
@@ -190,7 +190,7 @@ export default function VAT3ReturnForm() {
                   <Input
                     value={formData.registrationNumber}
                     onChange={(e) => handleInputChange("registrationNumber", e.target.value)}
-                    className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                    className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                   />
                 </div>
               </div>
@@ -255,7 +255,7 @@ export default function VAT3ReturnForm() {
                       type="date"
                       value={formData.periodBeginDate}
                       onChange={(e) => handleInputChange("periodBeginDate", e.target.value)}
-                      className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                      className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                     />
                   </div>
                   <div className="space-y-2">
@@ -265,7 +265,7 @@ export default function VAT3ReturnForm() {
                       type="date"
                       value={formData.periodEndDate}
                       onChange={(e) => handleInputChange("periodEndDate", e.target.value)}
-                      className="bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                      className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                     />
                   </div>
                 </div>
@@ -331,7 +331,7 @@ export default function VAT3ReturnForm() {
                         type="number"
                         value={formData.t1VATOnSales}
                         onChange={(e) => handleInputChange("t1VATOnSales", e.target.value)}
-                        className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                        className="w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                         placeholder="0"
                       />
                     </div>
@@ -347,7 +347,7 @@ export default function VAT3ReturnForm() {
                         type="number"
                         value={formData.t2VATOnPurchases}
                         onChange={(e) => handleInputChange("t2VATOnPurchases", e.target.value)}
-                        className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                        className="w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                         placeholder="0"
                       />
                     </div>
@@ -398,7 +398,7 @@ export default function VAT3ReturnForm() {
                           type="number"
                           value={formData.unusualAmount}
                           onChange={(e) => handleInputChange("unusualAmount", e.target.value)}
-                          className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                          className="w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                           placeholder="0"
                         />
                       </div>
@@ -412,7 +412,7 @@ export default function VAT3ReturnForm() {
                       <Textarea
                         value={formData.unusualDetails}
                         onChange={(e) => handleInputChange("unusualDetails", e.target.value)}
-                        className="min-h-[80px] w-full bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                        className="min-h-[80px] w-full bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                         placeholder="Enter details here..."
                       />
                     </div>
@@ -481,7 +481,7 @@ export default function VAT3ReturnForm() {
                       type="number"
                       value={formData.e1TotalGoodsTo}
                       onChange={(e) => handleInputChange("e1TotalGoodsTo", e.target.value)}
-                      className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                      className="w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                       placeholder="0"
                     />
                   </div>
@@ -497,7 +497,7 @@ export default function VAT3ReturnForm() {
                       type="number"
                       value={formData.e2TotalGoodsFrom}
                       onChange={(e) => handleInputChange("e2TotalGoodsFrom", e.target.value)}
-                      className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                      className="w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                       placeholder="0"
                     />
                   </div>
@@ -513,7 +513,7 @@ export default function VAT3ReturnForm() {
                       type="number"
                       value={formData.es1TotalServicesTo}
                       onChange={(e) => handleInputChange("es1TotalServicesTo", e.target.value)}
-                      className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                      className="w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                       placeholder="0"
                     />
                   </div>
@@ -529,7 +529,7 @@ export default function VAT3ReturnForm() {
                       type="number"
                       value={formData.es2TotalServicesFrom}
                       onChange={(e) => handleInputChange("es2TotalServicesFrom", e.target.value)}
-                      className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                      className="w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                       placeholder="0"
                     />
                   </div>
@@ -555,7 +555,7 @@ export default function VAT3ReturnForm() {
                     type="number"
                     value={formData.pa1PostponedAccounting}
                     onChange={(e) => handleInputChange("pa1PostponedAccounting", e.target.value)}
-                    className="w-32 text-right bg-white border-gray-300 focus:border-teal-500 focus:ring-teal-500 text-gray-900 text-base"
+                    className="w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base"
                     placeholder="0"
                   />
                 </div>
@@ -591,21 +591,21 @@ export default function VAT3ReturnForm() {
       </div>
 
       {/* Main Footer */}
-      <footer className="bg-teal-700 text-white">
+      <footer className="bg-[#005A91] text-white">
         {/* Navigation Bar */}
-        <div className="bg-teal-600 py-4">
+        <div className="bg-[#0072B1] py-4">
           <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <Link href="/dashboard" className="text-white hover:text-teal-200 underline">
+            <Link href="/dashboard" className="text-white hover:text-blue-200 underline">
               Back to Dashboard
             </Link>
-            <a href="#top" className="text-white hover:text-teal-200 underline flex items-center space-x-1">
+            <a href="#top" className="text-white hover:text-blue-200 underline flex items-center space-x-1">
               <ArrowUp className="h-4 w-4" />
               <span>Back to top</span>
             </a>
           </div>
         </div>
         {/* Copyright */}
-        <div className="bg-teal-800 py-4">
+        <div className="bg-[#004A75] py-4">
           <div className="max-w-7xl mx-auto px-6 text-center">
             <p className="text-sm font-thin">© PayVAT</p>
           </div>

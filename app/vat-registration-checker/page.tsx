@@ -140,13 +140,13 @@ export default function VatRegistrationChecker() {
                     <div className="space-y-4">
                       <div className={`p-4 rounded-lg ${
                         result.status === 'required' ? 'bg-red-50 border border-red-200' :
-                        result.status === 'will-be-required' ? 'bg-teal-50 border border-teal-200' :
+                        result.status === 'will-be-required' ? 'bg-blue-50 border border-blue-200' :
                         result.status === 'consider' ? 'bg-blue-50 border border-blue-200' :
                         'bg-green-50 border border-green-200'
                       }`}>
                         <div className={`text-lg font-bold mb-2 ${
                           result.status === 'required' ? 'text-red-900' :
-                          result.status === 'will-be-required' ? 'text-teal-900' :
+                          result.status === 'will-be-required' ? 'text-blue-900' :
                           result.status === 'consider' ? 'text-blue-900' :
                           'text-green-900'
                         }`}>
@@ -157,7 +157,7 @@ export default function VatRegistrationChecker() {
                         </div>
                         <p className={`text-sm mb-3 ${
                           result.status === 'required' ? 'text-red-800' :
-                          result.status === 'will-be-required' ? 'text-teal-800' :
+                          result.status === 'will-be-required' ? 'text-blue-800' :
                           result.status === 'consider' ? 'text-blue-800' :
                           'text-green-800'
                         }`}>
@@ -165,7 +165,7 @@ export default function VatRegistrationChecker() {
                         </p>
                         <p className={`text-sm font-medium ${
                           result.status === 'required' ? 'text-red-900' :
-                          result.status === 'will-be-required' ? 'text-teal-900' :
+                          result.status === 'will-be-required' ? 'text-blue-900' :
                           result.status === 'consider' ? 'text-blue-900' :
                           'text-green-900'
                         }`}>
@@ -230,7 +230,7 @@ export default function VatRegistrationChecker() {
               
               <div className="card-modern p-8">
                 <div className="text-center mb-6">
-                  <div className="text-5xl font-bold text-teal-600 mb-2">€85,000</div>
+                  <div className="text-5xl font-bold text-blue-600 mb-2">€85,000</div>
                   <h3 className="text-2xl font-bold text-gray-900">Goods Threshold</h3>
                   <p className="text-gray-600">Annual turnover for goods suppliers</p>
                 </div>
@@ -276,8 +276,8 @@ export default function VatRegistrationChecker() {
                       <p className="text-blue-800 text-sm">Monthly VAT refunds if input VAT exceeds output VAT in early trading periods</p>
                     </div>
                     <div className="bg-teal-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-teal-900 mb-2">B2B Advantages</h4>
-                      <p className="text-teal-800 text-sm">VAT-registered clients can reclaim VAT, making your services effectively cheaper</p>
+                      <h4 className="font-semibold text-blue-900 mb-2">B2B Advantages</h4>
+                      <p className="text-blue-800 text-sm">VAT-registered clients can reclaim VAT, making your services effectively cheaper</p>
                     </div>
                   </div>
                 </div>
@@ -286,16 +286,16 @@ export default function VatRegistrationChecker() {
                   <h3 className="text-xl font-bold text-gray-900 mb-4">Business Benefits</h3>
                   <div className="space-y-4">
                     <div className="bg-teal-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-teal-900 mb-2">Professional Credibility</h4>
-                      <p className="text-teal-800 text-sm">VAT number signals established business status to clients and suppliers</p>
+                      <h4 className="font-semibold text-blue-900 mb-2">Professional Credibility</h4>
+                      <p className="text-blue-800 text-sm">VAT number signals established business status to clients and suppliers</p>
                     </div>
                     <div className="bg-red-50 p-4 rounded-lg">
                       <h4 className="font-semibold text-red-900 mb-2">Future-Proofing</h4>
                       <p className="text-red-800 text-sm">Avoid mandatory registration disruption when rapidly approaching thresholds</p>
                     </div>
                     <div className="bg-teal-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-teal-900 mb-2">EU Trading</h4>
-                      <p className="text-teal-800 text-sm">Essential for B2B EU trading and accessing certain business opportunities</p>
+                      <h4 className="font-semibold text-blue-900 mb-2">EU Trading</h4>
+                      <p className="text-blue-800 text-sm">Essential for B2B EU trading and accessing certain business opportunities</p>
                     </div>
                   </div>
                 </div>
@@ -372,7 +372,7 @@ export default function VatRegistrationChecker() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white">
+        <section className="py-20 px-4 bg-gradient-to-r from-emerald-600 to-[#0072B1] text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">
               Need Help with VAT Registration?

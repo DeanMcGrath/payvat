@@ -138,7 +138,7 @@ export default function HomePage() {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="flex items-center space-x-2">
-          <Loader2 className="h-6 w-6 animate-spin text-teal-700" />
+          <Loader2 className="h-6 w-6 animate-spin text-[#005A91]" />
           <span className="text-gray-600">Loading dashboard...</span>
         </div>
       </div>

@@ -751,7 +751,7 @@ export default function FileUpload({
       <div 
         className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-200 ${
           isDragOver 
-            ? 'border-teal-500 bg-teal-50' 
+            ? 'border-[#0085D1] bg-blue-50' 
             : 'border-gray-300 hover:border-teal-300'
         } ${
           (isUploading || processingState.isProcessing) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
@@ -769,11 +769,11 @@ export default function FileUpload({
       >
         {isDragOver ? (
           <div>
-            <div className="h-10 w-10 mx-auto mb-3 rounded-full bg-teal-100 flex items-center justify-center">
-              <Upload className="h-6 w-6 text-teal-600" />
+            <div className="h-10 w-10 mx-auto mb-3 rounded-full bg-blue-100 flex items-center justify-center">
+              <Upload className="h-6 w-6 text-[#0072B1]" />
             </div>
-            <p className="text-teal-700 font-semibold mb-2">Drop files here</p>
-            <p className="text-sm text-teal-600">Release to upload your VAT documents</p>
+            <p className="text-[#005A91] font-semibold mb-2">Drop files here</p>
+            <p className="text-sm text-[#0072B1]">Release to upload your VAT documents</p>
           </div>
         ) : (
           <>
@@ -783,7 +783,7 @@ export default function FileUpload({
             <p className="text-gray-600 mb-2">{description}</p>
             <p className="text-sm text-gray-500 mb-3">
               Drag & drop files here, or click to select • PDF, Excel, CSV, Images • Up to 10MB each
-              {enableBatchMode && <span className="block text-teal-600 mt-1">
+              {enableBatchMode && <span className="block text-[#0072B1] mt-1">
                 ⚡ Batch mode: Upload multiple files with smart categorization and concurrent processing
               </span>}
             </p>
@@ -792,7 +792,7 @@ export default function FileUpload({
         
         <Button 
           variant="outline" 
-          className="border-teal-200 text-teal-700 hover:bg-teal-50"
+          className="border-teal-200 text-[#005A91] hover:bg-blue-50"
           onClick={(event) => {
             event.stopPropagation() // Prevent event bubbling to parent div
             handleFileSelect(event)
@@ -820,23 +820,23 @@ export default function FileUpload({
 
       {/* Real-time Processing Indicator */}
       {processingState.isProcessing && (
-        <div className="mt-4 p-4 bg-gradient-to-r from-teal-50 to-blue-50 rounded-lg border border-teal-200">
+        <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-blue-50 rounded-lg border border-teal-200">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center">
-              <div className="animate-spin rounded-full h-5 w-5 border-2 border-teal-500 border-t-transparent mr-3"></div>
+              <div className="animate-spin rounded-full h-5 w-5 border-2 border-[#0085D1] border-t-transparent mr-3"></div>
               <span className="text-sm font-medium text-teal-800">Enhanced AI Processing</span>
               {processingState.qualityScore && (
-                <span className="ml-2 px-2 py-1 bg-teal-100 text-teal-700 rounded-full text-xs font-medium">
+                <span className="ml-2 px-2 py-1 bg-blue-100 text-[#005A91] rounded-full text-xs font-medium">
                   Quality: {processingState.qualityScore}/100
                 </span>
               )}
             </div>
-            <span className="text-sm text-teal-600">{processingState.progress}%</span>
+            <span className="text-sm text-[#0072B1]">{processingState.progress}%</span>
           </div>
           
           <Progress value={processingState.progress} className="mb-3" />
           
-          <div className="flex items-center text-sm text-teal-700">
+          <div className="flex items-center text-sm text-[#005A91]">
             <ArrowRight className="h-4 w-4 mr-2" />
             {processingState.currentStep}
           </div>
@@ -852,12 +852,12 @@ export default function FileUpload({
 
       {/* Batch Progress and Controls */}
       {enableBatchMode && showBatchProgress && batchProgress.total > 0 && (
-        <div className="mt-4 p-4 bg-gradient-to-r from-teal-50 to-blue-50 rounded-lg border border-teal-200">
+        <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-blue-50 rounded-lg border border-teal-200">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center">
               <div className="flex items-center space-x-2">
                 <span className="text-sm font-medium text-teal-800">Batch Upload Progress</span>
-                <span className="px-2 py-1 bg-teal-100 text-teal-700 rounded-full text-xs font-medium">
+                <span className="px-2 py-1 bg-blue-100 text-[#005A91] rounded-full text-xs font-medium">
                   {batchProgress.completed}/{batchProgress.total} files
                 </span>
                 {batchProgress.failed > 0 && (
@@ -867,7 +867,7 @@ export default function FileUpload({
                 )}
               </div>
             </div>
-            <span className="text-sm text-teal-600">
+            <span className="text-sm text-[#0072B1]">
               {Math.round((batchProgress.completed / batchProgress.total) * 100)}%
             </span>
           </div>
@@ -878,7 +878,7 @@ export default function FileUpload({
           />
           
           <div className="flex items-center justify-between">
-            <div className="flex items-center text-sm text-teal-700">
+            <div className="flex items-center text-sm text-[#005A91]">
               <ArrowRight className="h-4 w-4 mr-2" />
               {currentUploads.size > 0 ? `Uploading ${currentUploads.size} files...` : 
                batchProgress.completed === batchProgress.total ? 'Batch complete!' : 'Ready to upload'}
@@ -937,7 +937,7 @@ export default function FileUpload({
           
           {/* Active uploads indicator */}
           {currentUploads.size > 0 && (
-            <div className="mt-3 text-xs text-teal-600">
+            <div className="mt-3 text-xs text-[#0072B1]">
               Currently uploading: {Array.from(currentUploads).map(fileId => 
                 fileId.split('_')[0]).join(', ')}
             </div>

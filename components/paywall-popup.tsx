@@ -76,32 +76,32 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
               {/* Premium Features */}
               <div className="bg-gray-100 rounded-lg p-6">
                 <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <Lock className="h-5 w-5 mr-2 text-teal-600" />
+                  <Lock className="h-5 w-5 mr-2 text-blue-600" />
                   Premium Features Include:
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="flex items-center space-x-2">
-                    <Check className="h-4 w-4 text-teal-500" />
+                    <Check className="h-4 w-4 text-blue-500" />
                     <span className="text-sm text-gray-700">Unlimited VAT submissions</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Check className="h-4 w-4 text-teal-500" />
+                    <Check className="h-4 w-4 text-blue-500" />
                     <span className="text-sm text-gray-700">Secure payment processing</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Check className="h-4 w-4 text-teal-500" />
+                    <Check className="h-4 w-4 text-blue-500" />
                     <span className="text-sm text-gray-700">Advanced reporting & analytics</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Check className="h-4 w-4 text-teal-500" />
+                    <Check className="h-4 w-4 text-blue-500" />
                     <span className="text-sm text-gray-700">Priority customer support</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Check className="h-4 w-4 text-teal-500" />
+                    <Check className="h-4 w-4 text-blue-500" />
                     <span className="text-sm text-gray-700">Document storage & backup</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Check className="h-4 w-4 text-teal-500" />
+                    <Check className="h-4 w-4 text-blue-500" />
                     <span className="text-sm text-gray-700">Automated deadline reminders</span>
                   </div>
                 </div>
@@ -120,7 +120,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
                     <Button 
                       onClick={() => handleSubscribe('monthly')}
                       disabled={isProcessing}
-                      className="w-full bg-teal-500 hover:bg-teal-600 text-white"
+                      className="w-full bg-[#0085D1] hover:bg-[#0072B1] text-white"
                     >
                       {isProcessing ? "Processing..." : "Choose Monthly"}
                     </Button>
@@ -131,25 +131,25 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
                 </Card>
 
                 {/* Annual Plan */}
-                <Card className="border-2 border-teal-300 bg-teal-50 relative">
-                  <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-teal-500 text-white">
+                <Card className="border-2 border-teal-300 bg-blue-50 relative">
+                  <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-[#0085D1] text-white">
                     Save €180
                   </Badge>
                   <CardHeader className="text-center pb-4">
                     <CardTitle className="text-lg font-semibold text-teal-900">Annual Plan</CardTitle>
                     <div className="text-3xl font-bold text-teal-900">€900</div>
-                    <p className="text-sm text-teal-700">per year</p>
-                    <p className="text-xs text-teal-600">€75/month when paid annually</p>
+                    <p className="text-sm text-blue-700">per year</p>
+                    <p className="text-xs text-blue-600">€75/month when paid annually</p>
                   </CardHeader>
                   <CardContent className="pt-0">
                     <Button 
                       onClick={() => handleSubscribe('annual')}
                       disabled={isProcessing}
-                      className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                      className="w-full bg-[#0072B1] hover:bg-[#005A91] text-white"
                     >
                       {isProcessing ? "Processing..." : "Choose Annual"}
                     </Button>
-                    <p className="text-xs text-teal-600 text-center mt-2">
+                    <p className="text-xs text-blue-600 text-center mt-2">
                       Best value - 2 months free!
                     </p>
                   </CardContent>
