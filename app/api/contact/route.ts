@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    console.log('New contact form submission saved:', submission.id)
+    // console.log('New contact form submission saved:', submission.id)
 
     return NextResponse.json(
       { 

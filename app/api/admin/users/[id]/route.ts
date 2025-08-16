@@ -13,7 +13,7 @@ async function getUserDetails(request: NextRequest, user: AuthUser) {
     const pathSegments = url.pathname.split('/')
     const userId = pathSegments[pathSegments.length - 1]
     
-    console.log(`[${requestId}] Admin user detail request for user ${userId} by ${user.email} (${user.role})`)
+    // console.log(`[${requestId}] Admin user detail request for user ${userId} by ${user.email} (${user.role})`)
     
     if (!userId) {
       console.log(`[${requestId}] Missing user ID in request`)
@@ -147,7 +147,7 @@ async function getUserDetails(request: NextRequest, user: AuthUser) {
         }
       }
     })
-    console.log(`[${requestId}] User details query completed`)
+    // console.log(`[${requestId}] User details query completed`)
     } catch (userQueryError) {
       console.error(`[${requestId}] Failed to fetch user details:`, userQueryError)
       return NextResponse.json(
@@ -167,7 +167,7 @@ async function getUserDetails(request: NextRequest, user: AuthUser) {
       )
     }
 
-    console.log(`[${requestId}] Found user ${userDetails.email}, fetching additional stats`)
+    // console.log(`[${requestId}] Found user ${userDetails.email}, fetching additional stats`)
 
     // Get additional statistics with error handling
     let totalVATPaid, pendingPayments
@@ -239,7 +239,7 @@ async function getUserDetails(request: NextRequest, user: AuthUser) {
       console.error(`[${requestId}] Failed to create audit log (non-critical):`, auditError)
     }
 
-    console.log(`[${requestId}] Admin user detail request completed successfully for ${userDetails.email}`)
+    // console.log(`[${requestId}] Admin user detail request completed successfully for ${userDetails.email}`)
     return NextResponse.json({
       success: true,
       user: finalUser

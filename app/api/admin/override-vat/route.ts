@@ -81,9 +81,9 @@ async function postOverrideVAT(request: NextRequest, user: AuthUser) {
       }
     })
     
-    console.log(`🔧 MANUAL VAT OVERRIDE: Document ${documentId} VAT corrected to €${correctVATAmount}`)
-    console.log(`   Original amount: €${originalAmount || 'unknown'}`)
-    console.log(`   Reason: ${reason}`)
+    // console.log(`🔧 MANUAL VAT OVERRIDE: Document ${documentId} VAT corrected to €${correctVATAmount}`)
+    // console.log(`   Original amount: €${originalAmount || 'unknown'}`)
+    // console.log(`   Reason: ${reason}`)
     
     return NextResponse.json({
       success: true,

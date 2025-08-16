@@ -10,7 +10,7 @@ export const runtime = 'nodejs'
  * POST /api/admin/ai/trigger-learning - Trigger immediate learning process
  */
 async function triggerLearning(request: NextRequest, user?: AuthUser) {
-  console.log('⚡ Trigger Learning API called')
+  // console.log('⚡ Trigger Learning API called')
   
   try {
     // Only admin users can trigger learning

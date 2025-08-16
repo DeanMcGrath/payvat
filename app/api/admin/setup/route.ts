@@ -35,12 +35,12 @@ export async function POST(request: NextRequest) {
     const expectedSetupKey = process.env.ADMIN_SETUP_KEY
     
     // Debug logging (remove in production)
-    console.log('Admin setup key validation:')
-    console.log('- Environment key exists:', !!expectedSetupKey)
-    console.log('- Environment key length:', expectedSetupKey?.length || 0)
-    console.log('- Received key length:', setupKey?.length || 0)
-    console.log('- Keys match (exact):', setupKey === expectedSetupKey)
-    console.log('- Keys match (trimmed):', setupKey?.trim() === expectedSetupKey?.trim())
+    // console.log('Admin setup key validation:')
+    // console.log('- Environment key exists:', !!expectedSetupKey)
+    // console.log('- Environment key length:', expectedSetupKey?.length || 0)
+    // console.log('- Received key length:', setupKey?.length || 0)
+    // console.log('- Keys match (exact):', setupKey === expectedSetupKey)
+    // console.log('- Keys match (trimmed):', setupKey?.trim() === expectedSetupKey?.trim())
     
     // Improved validation with better error messages
     if (!expectedSetupKey) {

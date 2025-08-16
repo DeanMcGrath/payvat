@@ -16,7 +16,7 @@ async function handlePipelineAction(
 ) {
   const url = new URL(request.url)
   const action = url.pathname.split('/').pop()
-  console.log(`🎛️ Pipeline ${action} API called`)
+  // console.log(`🎛️ Pipeline ${action} API called`)
   
   try {
     // Only admin users can control the pipeline

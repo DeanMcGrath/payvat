@@ -7,10 +7,10 @@ import { Decimal } from '@prisma/client/runtime/library'
 // GET /api/admin/users - List all users (admin only)
 async function getUsers(request: NextRequest, user: AuthUser) {
   const requestId = Math.random().toString(36).substring(7)
-  console.log(`[${requestId}] Admin users request started by user ${user.email} (${user.role})`)
-  console.log(`[${requestId}] Request URL: ${request.url}`)
-  console.log(`[${requestId}] Environment: ${process.env.NODE_ENV}`)
-  console.log(`[${requestId}] Database URL configured: ${!!process.env.DATABASE_URL}`)
+  // console.log(`[${requestId}] Admin users request started by user ${user.email} (${user.role})`)
+  // console.log(`[${requestId}] Request URL: ${request.url}`)
+  // console.log(`[${requestId}] Environment: ${process.env.NODE_ENV}`)
+  // console.log(`[${requestId}] Database URL configured: ${!!process.env.DATABASE_URL}`)
   
   try {
     // Enhanced database connection with retry logic and detailed logging
@@ -74,7 +74,7 @@ async function getUsers(request: NextRequest, user: AuthUser) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100)
     
-    console.log(`[${requestId}] Query parameters:`, { search, role, status, page, limit })
+    // console.log(`[${requestId}] Query parameters:`, { search, role, status, page, limit })
     
     // Build where clause with proper AND/OR logic
     const where: any = {}
@@ -207,7 +207,7 @@ async function getUsers(request: NextRequest, user: AuthUser) {
     }
     
     // Get additional statistics for each user with enhanced error handling
-    console.log(`[${requestId}] Starting stats aggregation for ${users.length} users`)
+    // console.log(`[${requestId}] Starting stats aggregation for ${users.length} users`)
     const usersWithStats = await Promise.all(
       users.map(async (user, index) => {
         try {
@@ -316,7 +316,7 @@ async function getUsers(request: NextRequest, user: AuthUser) {
       })
     )
     
-    console.log(`[${requestId}] Completed stats aggregation for all ${usersWithStats.length} users`)
+    // console.log(`[${requestId}] Completed stats aggregation for all ${usersWithStats.length} users`)
     
     // Create admin audit log (non-blocking) with enhanced error handling
     try {
@@ -367,7 +367,7 @@ async function getUsers(request: NextRequest, user: AuthUser) {
       }
     }
     
-    console.log(`[${requestId}] Admin users request completed successfully: ${usersWithStats.length} users returned`)
+    // console.log(`[${requestId}] Admin users request completed successfully: ${usersWithStats.length} users returned`)
     return NextResponse.json(response)
     
   } catch (error) {

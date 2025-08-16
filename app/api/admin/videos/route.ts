@@ -90,8 +90,8 @@ async function postVideo(request: NextRequest, user: AuthUser) {
     // Log request headers for debugging
     const contentType = request.headers.get('content-type')
     const contentLength = request.headers.get('content-length')
-    console.log(`📋 [VIDEO UPLOAD] Content-Type: ${contentType}`)
-    console.log(`📏 [VIDEO UPLOAD] Content-Length: ${contentLength || 'unknown'}`)
+    // console.log(`📋 [VIDEO UPLOAD] Content-Type: ${contentType}`)
+    // console.log(`📏 [VIDEO UPLOAD] Content-Length: ${contentLength || 'unknown'}`)
 
     // Early request size validation - Vercel has ~1-2MB hard limit for form data  
     const maxRequestSize = 1 * 1024 * 1024 // 1MB limit due to Vercel serverless constraints
@@ -115,13 +115,13 @@ async function postVideo(request: NextRequest, user: AuthUser) {
       }, { status: 400 })
     }
 
-    console.log(`📦 [VIDEO UPLOAD] Parsing form data...`)
+    // console.log(`📦 [VIDEO UPLOAD] Parsing form data...`)
     const formData = await request.formData()
     const file = formData.get('video') as File
     const title = formData.get('title') as string
     const description = formData.get('description') as string
 
-    console.log(`📝 [VIDEO UPLOAD] Form data parsed - Title: "${title}", Description length: ${description?.length || 0}`)
+    // console.log(`📝 [VIDEO UPLOAD] Form data parsed - Title: "${title}", Description length: ${description?.length || 0}`)
 
     // Pre-upload validation
     if (!file) {
@@ -142,7 +142,7 @@ async function postVideo(request: NextRequest, user: AuthUser) {
       }, { status: 400 })
     }
 
-    console.log(`📄 [VIDEO UPLOAD] File details - Name: "${file.name}", Size: ${file.size} bytes (${Math.round(file.size / 1024 / 1024)}MB), Type: ${file.type}`)
+    // console.log(`📄 [VIDEO UPLOAD] File details - Name: "${file.name}", Size: ${file.size} bytes (${Math.round(file.size / 1024 / 1024)}MB), Type: ${file.type}`)
 
     // Enhanced file type validation
     const allowedTypes = [
@@ -190,25 +190,25 @@ async function postVideo(request: NextRequest, user: AuthUser) {
       }, { status: 400 })
     }
 
-    console.log(`✅ [VIDEO UPLOAD] File validation passed`)
+    // console.log(`✅ [VIDEO UPLOAD] File validation passed`)
 
     // Generate unique filename
     const originalExtension = file.name.split('.').pop()
     const uniqueFilename = `demo-video-${uuidv4()}.${originalExtension}`
-    console.log(`🏷️ [VIDEO UPLOAD] Generated filename: ${uniqueFilename}`)
+    // console.log(`🏷️ [VIDEO UPLOAD] Generated filename: ${uniqueFilename}`)
     
     // Convert file to buffer and calculate hash
-    console.log(`🔄 [VIDEO UPLOAD] Converting file to buffer...`)
+    // console.log(`🔄 [VIDEO UPLOAD] Converting file to buffer...`)
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
-    console.log(`📊 [VIDEO UPLOAD] Buffer created - Size: ${buffer.length} bytes`)
+    // console.log(`📊 [VIDEO UPLOAD] Buffer created - Size: ${buffer.length} bytes`)
     
-    console.log(`🔐 [VIDEO UPLOAD] Calculating file hash...`)
+    // console.log(`🔐 [VIDEO UPLOAD] Calculating file hash...`)
     const fileHash = crypto.SHA256(buffer.toString()).toString()
-    console.log(`✅ [VIDEO UPLOAD] File hash calculated: ${fileHash}`)
+    // console.log(`✅ [VIDEO UPLOAD] File hash calculated: ${fileHash}`)
 
     // Upload to Vercel Blob
-    console.log(`☁️ [VIDEO UPLOAD] Uploading to Vercel Blob...`)
+    // console.log(`☁️ [VIDEO UPLOAD] Uploading to Vercel Blob...`)
     try {
       const videoBlob = await put(uniqueFilename, buffer, {
         access: 'public'

@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const timeRange = searchParams.get('timeRange') as 'day' | 'week' | 'month' || 'week'
     
-    console.log(`📊 Fetching confidence metrics for time range: ${timeRange}`)
+    // console.log(`📊 Fetching confidence metrics for time range: ${timeRange}`)
     
     // Get comprehensive metrics
     const metrics = await ConfidenceMonitor.getConfidenceMetrics(timeRange)
@@ -33,12 +33,12 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString()
     }
     
-    console.log(`✅ Generated confidence dashboard data:`)
-    console.log(`   📈 Average confidence: ${dashboardData.summary.averageConfidence}%`)
-    console.log(`   📄 Documents: ${dashboardData.summary.totalDocuments}`)
-    console.log(`   🇮🇪 Compliance: ${dashboardData.summary.complianceRate}%`)
-    console.log(`   🚨 Alerts: ${dashboardData.summary.alertCount} (${dashboardData.summary.criticalAlerts} critical)`)
-    console.log(`   💪 Health: ${dashboardData.summary.overallHealth}`)
+    // console.log(`✅ Generated confidence dashboard data:`)
+    // console.log(`   📈 Average confidence: ${dashboardData.summary.averageConfidence}%`)
+    // console.log(`   📄 Documents: ${dashboardData.summary.totalDocuments}`)
+    // console.log(`   🇮🇪 Compliance: ${dashboardData.summary.complianceRate}%`)
+    // console.log(`   🚨 Alerts: ${dashboardData.summary.alertCount} (${dashboardData.summary.criticalAlerts} critical)`)
+    // console.log(`   💪 Health: ${dashboardData.summary.overallHealth}`)
     
     return NextResponse.json({
       success: true,
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
     // Log the confidence metric
     await ConfidenceMonitor.logConfidenceMetric(data)
     
-    console.log(`📊 Logged confidence metric for ${data.fileName}: ${Math.round(data.confidence * 100)}%`)
+    // console.log(`📊 Logged confidence metric for ${data.fileName}: ${Math.round(data.confidence * 100)}%`)
     
     return NextResponse.json({
       success: true,

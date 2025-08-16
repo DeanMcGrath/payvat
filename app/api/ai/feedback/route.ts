@@ -36,24 +36,24 @@ interface FeedbackRequest {
  * POST /api/ai/feedback - Collect user feedback on document processing
  */
 async function collectFeedback(request: NextRequest, user?: AuthUser) {
-  console.log('🎓 AI Feedback Collection API called')
-  console.log(`   User: ${user ? `${user.id} (${user.email})` : 'GUEST/ANONYMOUS'}`)
+  // // console.log('🎓 AI Feedback Collection API called')
+  // // console.log(`   User: ${user ? `${user.id} (${user.email})` : 'GUEST/ANONYMOUS'}`)
   
   try {
     const body: FeedbackRequest = await request.json()
     
-    console.log('📝 Feedback details:', {
-      documentId: body.documentId,
-      feedback: body.feedback,
-      correctionsCount: body.specificCorrections?.length || 0,
-      hasNotes: !!body.userNotes,
-      confidenceRating: body.confidenceRating,
-      hasVATCorrection: !!body.vatCorrection
-    })
+    // // console.log('📝 Feedback details:', {
+    //   documentId: body.documentId,
+    //   feedback: body.feedback,
+    //   correctionsCount: body.specificCorrections?.length || 0,
+    //   hasNotes: !!body.userNotes,
+    //   confidenceRating: body.confidenceRating,
+    //   hasVATCorrection: !!body.vatCorrection
+    // })
     
     // Enhanced logging for VAT corrections
     if (body.vatCorrection) {
-      console.log('💰 VAT Correction details:', {
+      // console.log('💰 VAT Correction details:', {
         originalSalesVAT: body.vatCorrection.originalSalesVAT,
         correctedSalesVAT: body.vatCorrection.correctedSalesVAT,
         originalPurchaseVAT: body.vatCorrection.originalPurchaseVAT,
@@ -132,12 +132,12 @@ async function collectFeedback(request: NextRequest, user?: AuthUser) {
       }
     })
     
-    console.log(`✅ Feedback stored with ID: ${feedbackRecord.id}`)
+    // // console.log(`✅ Feedback stored with ID: ${feedbackRecord.id}`)
     
     // Process VAT corrections through user correction system if provided
     if (body.vatCorrection) {
       try {
-        console.log('💰 Processing VAT correction through correction system...')
+        // console.log('💰 Processing VAT correction through correction system...')
         const { userCorrectionSystem } = await import('@/lib/ai/user-correction-system')
         
         await userCorrectionSystem.submitCorrection({
@@ -162,7 +162,7 @@ async function collectFeedback(request: NextRequest, user?: AuthUser) {
           documentText: document.scanResult || undefined
         })
         
-        console.log('✅ VAT correction processed successfully')
+        // console.log('✅ VAT correction processed successfully')
       } catch (correctionError) {
         console.error('Error processing VAT correction:', correctionError)
         // Don't fail the whole request if VAT correction processing fails
@@ -171,7 +171,7 @@ async function collectFeedback(request: NextRequest, user?: AuthUser) {
     
     // Process feedback through learning system
     try {
-      console.log('🧠 Processing feedback through learning system...')
+      // console.log('🧠 Processing feedback through learning system...')
       await EnhancedDocumentAnalysis.collectUserFeedback(
         body.documentId,
         {
@@ -190,7 +190,7 @@ async function collectFeedback(request: NextRequest, user?: AuthUser) {
         user?.id
       )
       
-      console.log('✅ Learning system processed feedback successfully')
+      // console.log('✅ Learning system processed feedback successfully')
       
     } catch (learningError) {
       console.error('Error processing feedback through learning system:', learningError)
@@ -218,7 +218,7 @@ async function collectFeedback(request: NextRequest, user?: AuthUser) {
         }
       })
       
-      console.log('✅ Analytics stored successfully')
+      // console.log('✅ Analytics stored successfully')
       
     } catch (analyticsError) {
       console.error('Error storing analytics:', analyticsError)
@@ -261,7 +261,7 @@ async function collectFeedback(request: NextRequest, user?: AuthUser) {
  * GET /api/ai/feedback - Get feedback analytics for admin
  */
 async function getFeedbackAnalytics(request: NextRequest, user?: AuthUser) {
-  console.log('📊 Feedback Analytics API called')
+  // // console.log('📊 Feedback Analytics API called')
   
   try {
     // Only admin users can access analytics

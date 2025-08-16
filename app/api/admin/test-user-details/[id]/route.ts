@@ -10,7 +10,7 @@ async function testUserDetails(
   const { id: userId } = await context.params
   
   try {
-    console.log(`[${requestId}] Test admin user detail request for user ${userId} (bypassing auth for testing)`)
+    // console.log(`[${requestId}] Test admin user detail request for user ${userId} (bypassing auth for testing)`)
     
     if (!userId) {
       console.log(`[${requestId}] Missing user ID in request`)
@@ -144,7 +144,7 @@ async function testUserDetails(
         }
       }
     })
-    console.log(`[${requestId}] User details query completed`)
+    // console.log(`[${requestId}] User details query completed`)
     } catch (userQueryError) {
       console.error(`[${requestId}] Failed to fetch user details:`, userQueryError)
       return NextResponse.json(
@@ -165,7 +165,7 @@ async function testUserDetails(
       )
     }
 
-    console.log(`[${requestId}] Found user ${userDetails.email}, fetching additional stats`)
+    // console.log(`[${requestId}] Found user ${userDetails.email}, fetching additional stats`)
 
     // Get additional statistics with error handling
     let totalVATPaid, pendingPayments
@@ -216,7 +216,7 @@ async function testUserDetails(
     // Remove the _count field as it's been processed into stats
     const { _count, ...finalUser } = userWithStats
 
-    console.log(`[${requestId}] Test admin user detail request completed successfully for ${userDetails.email}`)
+    // console.log(`[${requestId}] Test admin user detail request completed successfully for ${userDetails.email}`)
     return NextResponse.json({
       success: true,
       user: finalUser,

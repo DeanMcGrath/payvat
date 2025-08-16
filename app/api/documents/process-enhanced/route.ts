@@ -19,18 +19,18 @@ interface EnhancedProcessingRequest {
  * POST /api/documents/process-enhanced - Enhanced AI document processing with learning
  */
 async function processDocumentEnhanced(request: NextRequest, user?: AuthUser) {
-  console.log('🧠 Enhanced Document Processing API called')
-  console.log(`   User: ${user ? `${user.id} (${user.email})` : 'GUEST/ANONYMOUS'}`)
+  // // console.log('🧠 Enhanced Document Processing API called')
+  // // console.log(`   User: ${user ? `${user.id} (${user.email})` : 'GUEST/ANONYMOUS'}`)
   
   try {
     const body: EnhancedProcessingRequest = await request.json()
     
-    console.log('🔍 Processing request:', {
-      documentId: body.documentId,
-      useEnhancedLearning: body.useEnhancedLearning,
-      forceReprocess: body.forceReprocess,
-      debugMode: body.debugMode
-    })
+    // // console.log('🔍 Processing request:', {
+    //   documentId: body.documentId,
+    //   useEnhancedLearning: body.useEnhancedLearning,
+    //   forceReprocess: body.forceReprocess,
+    //   debugMode: body.debugMode
+    // })
     
     // Validate required fields
     if (!body.documentId) {
@@ -84,7 +84,7 @@ async function processDocumentEnhanced(request: NextRequest, user?: AuthUser) {
     const aiAnalytics = (document as any).aiAnalytics
     if (!body.forceReprocess && aiAnalytics && aiAnalytics.length > 0) {
       const lastProcessing = aiAnalytics[0]
-      console.log('📊 Document already processed, returning existing results')
+      // console.log('📊 Document already processed, returning existing results')
       
       return NextResponse.json({
         success: true,
@@ -102,7 +102,7 @@ async function processDocumentEnhanced(request: NextRequest, user?: AuthUser) {
       })
     }
     
-    console.log('🚀 Starting enhanced AI processing...')
+    // // console.log('🚀 Starting enhanced AI processing...')
     const startTime = Date.now()
     
     // Prepare processing context
@@ -150,7 +150,7 @@ async function processDocumentEnhanced(request: NextRequest, user?: AuthUser) {
         processingContext
       )
       
-      console.log('✅ Enhanced processing completed:', {
+      // console.log('✅ Enhanced processing completed:', {
         success: result.success,
         strategy: result.processingStrategy,
         confidence: result.extractedData?.confidence,
@@ -200,7 +200,7 @@ async function processDocumentEnhanced(request: NextRequest, user?: AuthUser) {
         }
       })
       
-      console.log('📊 Processing analytics stored')
+      // console.log('📊 Processing analytics stored')
       
     } catch (analyticsError) {
       console.error('Failed to store analytics:', analyticsError)
@@ -283,7 +283,7 @@ async function processDocumentEnhanced(request: NextRequest, user?: AuthUser) {
  * This is a placeholder - would need actual implementations for different file types
  */
 async function extractTextFromDocument(document: any): Promise<string> {
-  console.log(`📄 Extracting text from ${document.mimeType} document`)
+  // // console.log(`📄 Extracting text from ${document.mimeType} document`)
   
   // This would contain actual text extraction logic for:
   // - PDF files (pdf-parse)

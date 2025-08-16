@@ -30,7 +30,7 @@ const chunkSessions = new Map<string, ChunkUploadSession>()
 // POST - Handle chunked video upload
 async function handleChunkedUpload(request: NextRequest, user: AuthUser) {
   const uploadStartTime = Date.now()
-  console.log(`🎬 [CHUNKED UPLOAD] Starting chunked upload at ${new Date().toISOString()}`)
+  // console.log(`🎬 [CHUNKED UPLOAD] Starting chunked upload at ${new Date().toISOString()}`)
   
   try {
     const formData = await request.formData()
@@ -44,7 +44,7 @@ async function handleChunkedUpload(request: NextRequest, user: AuthUser) {
     const mimeType = formData.get('mimeType') as string
     const chunk = formData.get('chunk') as File
 
-    console.log(`📦 [CHUNKED UPLOAD] Session ${sessionId}, chunk ${chunkIndex + 1}/${totalChunks}`)
+    // console.log(`📦 [CHUNKED UPLOAD] Session ${sessionId}, chunk ${chunkIndex + 1}/${totalChunks}`)
 
     // Validate required fields
     if (!sessionId || chunkIndex === null || !totalChunks || !chunk) {
@@ -124,7 +124,7 @@ async function handleChunkedUpload(request: NextRequest, user: AuthUser) {
       session.chunksReceived.push(chunkIndex)
     }
 
-    console.log(`✅ [CHUNKED UPLOAD] Chunk ${chunkIndex + 1}/${totalChunks} saved (${session.chunksReceived.length} total)`)
+    // console.log(`✅ [CHUNKED UPLOAD] Chunk ${chunkIndex + 1}/${totalChunks} saved (${session.chunksReceived.length} total)`)
 
     // Check if all chunks are received
     if (session.chunksReceived.length === totalChunks) {
@@ -196,7 +196,7 @@ async function handleChunkedUpload(request: NextRequest, user: AuthUser) {
 
 // Assemble the complete video file from chunks
 async function assembleVideoFile(session: ChunkUploadSession, user: AuthUser) {
-  console.log(`🔧 [CHUNKED UPLOAD] Assembling video file for session ${session.sessionId}`)
+  // console.log(`🔧 [CHUNKED UPLOAD] Assembling video file for session ${session.sessionId}`)
   
   try {
     // Create final file path
@@ -230,7 +230,7 @@ async function assembleVideoFile(session: ChunkUploadSession, user: AuthUser) {
       writeStream.on('error', reject)
     })
 
-    console.log(`✅ [CHUNKED UPLOAD] File assembled successfully`)
+    // console.log(`✅ [CHUNKED UPLOAD] File assembled successfully`)
 
     // Verify file size
     const stats = await stat(finalFilePath)
@@ -257,12 +257,12 @@ async function assembleVideoFile(session: ChunkUploadSession, user: AuthUser) {
     const fileHash = crypto.SHA256(finalBuffer.toString()).toString()
     
     // Upload to Vercel Blob
-    console.log(`☁️ [CHUNKED UPLOAD] Uploading assembled file to Vercel Blob...`)
+    // console.log(`☁️ [CHUNKED UPLOAD] Uploading assembled file to Vercel Blob...`)
     const videoBlob = await put(uniqueFilename, finalBuffer, {
       access: 'public'
     })
     
-    console.log(`✅ [CHUNKED UPLOAD] Successfully uploaded to Vercel Blob: ${videoBlob.url}`)
+    // console.log(`✅ [CHUNKED UPLOAD] Successfully uploaded to Vercel Blob: ${videoBlob.url}`)
 
     // Create video record in database
     const video = await prisma.demoVideo.create({
@@ -291,7 +291,7 @@ async function assembleVideoFile(session: ChunkUploadSession, user: AuthUser) {
     
     chunkSessions.delete(session.sessionId)
     
-    console.log(`🎉 [CHUNKED UPLOAD] Chunked upload completed successfully`)
+    // console.log(`🎉 [CHUNKED UPLOAD] Chunked upload completed successfully`)
 
     return NextResponse.json({
       success: true,

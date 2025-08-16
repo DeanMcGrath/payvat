@@ -9,7 +9,7 @@ export const runtime = 'nodejs'
  * GET /api/admin/ai/metrics - Get AI learning system metrics
  */
 async function getAIMetrics(request: NextRequest, user?: AuthUser) {
-  console.log('📊 AI Metrics API called')
+  // console.log('📊 AI Metrics API called')
   
   try {
     // Only admin users can access metrics

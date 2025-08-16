@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 // GET /api/admin/test-users - Test endpoint to bypass auth for testing user management
 async function testUsers(request: NextRequest) {
   const requestId = Math.random().toString(36).substring(7)
-  console.log(`[${requestId}] Test admin users request started (bypassing auth for testing)`)
+  // console.log(`[${requestId}] Test admin users request started (bypassing auth for testing)`)
   
   try {
     // Use hardcoded admin user for testing
@@ -56,7 +56,7 @@ async function testUsers(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100)
     
-    console.log(`[${requestId}] Query parameters:`, { search, role, status, page, limit })
+    // console.log(`[${requestId}] Query parameters:`, { search, role, status, page, limit })
     
     // Build where clause with proper AND/OR logic
     const where: any = {}
@@ -246,7 +246,7 @@ async function testUsers(request: NextRequest) {
       testMode: true // Indicate this is test mode
     }
     
-    console.log(`[${requestId}] Test admin users request completed successfully: ${usersWithStats.length} users returned`)
+    // console.log(`[${requestId}] Test admin users request completed successfully: ${usersWithStats.length} users returned`)
     return NextResponse.json(response)
     
   } catch (error) {

@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
 
 async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
   try {
-    console.log(`Payment succeeded: ${paymentIntent.id}`)
+    // console.log(`Payment succeeded: ${paymentIntent.id}`)
     
     // Find payment by Stripe payment intent ID
     const payment = await prisma.payment.findFirst({
@@ -118,7 +118,7 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
       }
     })
     
-    console.log(`Payment ${payment.id} successfully processed`)
+    // console.log(`Payment ${payment.id} successfully processed`)
     
   } catch (error) {
     console.error('Error handling payment succeeded:', error)
@@ -127,7 +127,7 @@ async function handlePaymentSucceeded(paymentIntent: Stripe.PaymentIntent) {
 
 async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
   try {
-    console.log(`Payment failed: ${paymentIntent.id}`)
+    // console.log(`Payment failed: ${paymentIntent.id}`)
     
     const payment = await prisma.payment.findFirst({
       where: {
@@ -167,7 +167,7 @@ async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
       }
     })
     
-    console.log(`Payment ${payment.id} marked as failed`)
+    // console.log(`Payment ${payment.id} marked as failed`)
     
   } catch (error) {
     console.error('Error handling payment failed:', error)
@@ -176,7 +176,7 @@ async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
 
 async function handlePaymentCanceled(paymentIntent: Stripe.PaymentIntent) {
   try {
-    console.log(`Payment canceled: ${paymentIntent.id}`)
+    // console.log(`Payment canceled: ${paymentIntent.id}`)
     
     const payment = await prisma.payment.findFirst({
       where: {
@@ -215,7 +215,7 @@ async function handlePaymentCanceled(paymentIntent: Stripe.PaymentIntent) {
       }
     })
     
-    console.log(`Payment ${payment.id} marked as canceled`)
+    // console.log(`Payment ${payment.id} marked as canceled`)
     
   } catch (error) {
     console.error('Error handling payment canceled:', error)
@@ -224,7 +224,7 @@ async function handlePaymentCanceled(paymentIntent: Stripe.PaymentIntent) {
 
 async function handlePaymentRequiresAction(paymentIntent: Stripe.PaymentIntent) {
   try {
-    console.log(`Payment requires action: ${paymentIntent.id}`)
+    // console.log(`Payment requires action: ${paymentIntent.id}`)
     
     const payment = await prisma.payment.findFirst({
       where: {
@@ -245,7 +245,7 @@ async function handlePaymentRequiresAction(paymentIntent: Stripe.PaymentIntent) 
       }
     })
     
-    console.log(`Payment ${payment.id} requires action`)
+    // console.log(`Payment ${payment.id} requires action`)
     
   } catch (error) {
     console.error('Error handling payment requires action:', error)

@@ -9,7 +9,7 @@ export const runtime = 'nodejs'
  * GET /api/admin/ai/pipeline-status - Get learning pipeline status
  */
 async function getPipelineStatus(request: NextRequest, user?: AuthUser) {
-  console.log('🔍 Pipeline Status API called')
+  // console.log('🔍 Pipeline Status API called')
   
   try {
     // Only admin users can access pipeline status
