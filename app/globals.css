@@ -882,6 +882,31 @@ svg {
   z-index: 10000 !important;
 }
 
+/* Typing Animation for Brand Name */
+.typing-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  animation: blink-cursor 0.75s step-end infinite;
+  font-weight: 300;
+  color: inherit;
+}
+
+@keyframes blink-cursor {
+  from, to { 
+    opacity: 1; 
+  }
+  50% { 
+    opacity: 0; 
+  }
+}
+
+/* Brand typing container for smooth appearance */
+.brand-typing {
+  display: inline-block;
+  min-height: 1em;
+  position: relative;
+}
+
 /* Responsive Design Helpers */
 @media (max-width: 640px) {
   .card-modern {
