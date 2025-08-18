@@ -8,6 +8,13 @@ import { Bell, FileText, Settings, LogOut, TrendingUp, Calendar, Euro, AlertCirc
 import { Input } from "@/components/ui/input"
 import Footer from "@/components/footer"
 import { useSubscription } from "@/contexts/subscription-context"
+import VATTrendsChart from "@/components/dashboard/VATTrendsChart"
+import VATBreakdownChart from "@/components/dashboard/VATBreakdownChart"
+import EnhancedStatsCard from "@/components/dashboard/EnhancedStatsCard"
+import InsightsPanel from "@/components/dashboard/InsightsPanel"
+import CalendarWidget from "@/components/dashboard/CalendarWidget"
+import DocumentsOverview from "@/components/dashboard/DocumentsOverview"
+import QuickActions from "@/components/dashboard/QuickActions"
 
 interface UserProfile {
   id: string
@@ -278,118 +285,74 @@ export default function HomePage() {
             <p className="text-xl text-muted-foreground">Here's your VAT overview and recent activity</p>
           </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-3" data-animate>
-            <div className="card-modern p-6 hover-lift">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-sm text-muted-foreground font-medium">Net VAT Due</p>
-                  {statsLoading ? (
-                    <div className="flex items-center space-x-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <div className="text-2xl font-bold text-foreground">Loading...</div>
-                    </div>
-                  ) : (
-                    <div className="text-3xl font-bold text-foreground">
-                      €{(stats?.pendingPayments && stats.pendingPayments.length > 0) ? 
-                        stats.pendingPayments[0].amount.toFixed(2) : 
-                        stats?.currentYear?.totalNetVAT?.toFixed(2) || '0.00'
-                      }
-                    </div>
-                  )}
-                </div>
-                <div className="icon-premium">
-                  <Euro className="h-6 w-6 text-white" />
-                </div>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                {(stats?.pendingPayments && stats.pendingPayments.length > 0) ? (
-                  <div className="status-warning">
-                    Due: {stats.pendingPayments[0].dueDate ? new Date(stats.pendingPayments[0].dueDate).toLocaleDateString() : 'Soon'}
-                  </div>
-                ) : (
-                  <div className="status-success">No outstanding VAT</div>
-                )}
-              </div>
-            </div>
-
-            <div className="card-modern p-6 hover-lift">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-sm text-muted-foreground font-medium">This Year</p>
-                  {statsLoading ? (
-                    <div className="flex items-center space-x-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <div className="text-2xl font-bold text-foreground">Loading...</div>
-                    </div>
-                  ) : (
-                    <div className="text-3xl font-bold text-foreground">
-                      €{stats?.currentYear?.totalSalesVAT?.toFixed(2) || '0.00'}
-                    </div>
-                  )}
-                </div>
-                <div className="icon-premium">
-                  <TrendingUp className="h-6 w-6 text-white" />
-                </div>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <div className="status-success">
-                  Sales VAT collected
-                </div>
-              </div>
-            </div>
-
-            <div className="card-modern p-6 hover-lift">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-sm text-muted-foreground font-medium">Returns Filed</p>
-                  {statsLoading ? (
-                    <div className="flex items-center space-x-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <div className="text-2xl font-bold text-foreground">Loading...</div>
-                    </div>
-                  ) : (
-                    <div className="text-3xl font-bold text-foreground">
-                      {stats?.currentYear?.returnsSubmitted || 0}
-                    </div>
-                  )}
-                </div>
-                <div className="icon-premium">
-                  <FileText className="h-6 w-6 text-white" />
-                </div>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <div className="status-success">
-                  {stats?.currentYear?.returnsSubmitted ? 'Filed this year' : 'Ready to file'}
-                </div>
-              </div>
-            </div>
-
-            <div className="card-modern p-6 hover-lift">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-sm text-muted-foreground font-medium">Upcoming Returns</p>
-                  {statsLoading ? (
-                    <div className="flex items-center space-x-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <div className="text-2xl font-bold text-foreground">Loading...</div>
-                    </div>
-                  ) : (
-                    <div className="text-3xl font-bold text-foreground">
-                      {stats?.upcomingReturns?.length ?? 0}
-                    </div>
-                  )}
-                </div>
-                <div className="icon-premium">
-                  <Calendar className="h-6 w-6 text-white" />
-                </div>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <div className="status-success">
-                  {(stats?.upcomingReturns && stats.upcomingReturns.length > 0) ? 'Due soon' : 'All up to date'}
-                </div>
-              </div>
-            </div>
+          {/* Enhanced Stats Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" data-animate>
+            <EnhancedStatsCard
+              title="Net VAT Due"
+              value={(stats?.pendingPayments && stats.pendingPayments.length > 0) ? 
+                stats.pendingPayments[0].amount : 
+                stats?.currentYear?.totalNetVAT || 0
+              }
+              subtitle={(stats?.pendingPayments && stats.pendingPayments.length > 0) ? 
+                `Due: ${stats.pendingPayments[0].dueDate ? new Date(stats.pendingPayments[0].dueDate).toLocaleDateString() : 'Soon'}` : 
+                'No outstanding VAT'
+              }
+              icon={Euro}
+              trend={{
+                value: 5.2,
+                period: 'vs last quarter'
+              }}
+              status={{
+                type: (stats?.pendingPayments && stats.pendingPayments.length > 0) ? 'warning' : 'success',
+                text: (stats?.pendingPayments && stats.pendingPayments.length > 0) ? 'Payment Due' : 'Up to Date'
+              }}
+              loading={statsLoading}
+            />
+            
+            <EnhancedStatsCard
+              title="Sales VAT"
+              value={stats?.currentYear?.totalSalesVAT || 0}
+              subtitle="This year collected"
+              icon={TrendingUp}
+              trend={{
+                value: 12.8,
+                period: 'vs last year'
+              }}
+              status={{
+                type: 'success',
+                text: 'Growing'
+              }}
+              sparklineData={[1200, 1500, 1800, 1650, 1900, 2100]}
+              loading={statsLoading}
+            />
+            
+            <EnhancedStatsCard
+              title="Returns Filed"
+              value={stats?.currentYear?.returnsSubmitted || 0}
+              subtitle={stats?.currentYear?.returnsSubmitted ? 'Filed this year' : 'Ready to file'}
+              icon={FileText}
+              trend={{
+                value: 0,
+                period: 'on schedule'
+              }}
+              status={{
+                type: 'info',
+                text: 'On Track'
+              }}
+              loading={statsLoading}
+            />
+            
+            <EnhancedStatsCard
+              title="Upcoming Returns"
+              value={stats?.upcomingReturns?.length ?? 0}
+              subtitle={(stats?.upcomingReturns && stats.upcomingReturns.length > 0) ? 'Due soon' : 'All up to date'}
+              icon={Calendar}
+              status={{
+                type: (stats?.upcomingReturns && stats.upcomingReturns.length > 0) ? 'warning' : 'success',
+                text: (stats?.upcomingReturns && stats.upcomingReturns.length > 0) ? 'Action Required' : 'Current'
+              }}
+              loading={statsLoading}
+            />
           </div>
 
           {/* Subscription Status */}
@@ -418,114 +381,89 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Quick Actions */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-3">
-            <div className="card-modern p-8">
-              <div className="mb-2">
-                <h3 className="text-2xl font-bold text-foreground mb-2">Quick Actions</h3>
-                <p className="text-muted-foreground">Common VAT tasks and operations</p>
-              </div>
-              
-              <div className="space-y-4">
-                <Button 
-                  size="lg"
-                  className="w-full justify-start hover-lift"
-                  onClick={() => window.location.href = '/vat-period'}
-                >
-                  <FileText className="h-5 w-5 mr-3" />
-                  Submit VAT Return
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  size="lg"
-                  className="w-full justify-start"
-                  onClick={() => window.location.href = '/reports'}
-                >
-                  <TrendingUp className="h-5 w-5 mr-3" />
-                  View Reports
-                </Button>
-              </div>
-            </div>
+          {/* Charts Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <VATTrendsChart className="col-span-1" />
+            <VATBreakdownChart className="col-span-1" />
+          </div>
 
-            {/* Recent Activity */}
-            <div className="card-modern p-8">
-              <div className="mb-2">
-                <h3 className="text-2xl font-bold text-foreground mb-2">Recent Activity</h3>
-                <p className="text-muted-foreground">Latest VAT transactions and updates</p>
-              </div>
+          {/* Main Dashboard Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            {/* Left Column - Quick Actions */}
+            <div className="lg:col-span-1">
+              <QuickActions className="mb-8" />
+            </div>
+            
+            {/* Middle Column - Insights & Calendar */}
+            <div className="lg:col-span-1 space-y-8">
+              <InsightsPanel />
+              <CalendarWidget />
+            </div>
+            
+            {/* Right Column - Documents & Activity */}
+            <div className="lg:col-span-1">
+              <DocumentsOverview className="mb-8" />
               
-              {statsLoading ? (
-                <div className="flex items-center justify-center py-8">
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                  <span className="ml-2 text-muted-foreground">Loading activity...</span>
-                </div>
-              ) : stats?.recentActivity && stats.recentActivity.length > 0 ? (
-                <div className="space-y-6">
-                  {stats.recentActivity.map((activity, index) => {
-                    const getActivityDetails = (action: string) => {
-                      switch (action) {
-                        case 'SUBMIT_VAT_RETURN':
-                          return {
-                            icon: FileText,
-                            bgColor: 'bg-primary/20 border-primary/30',
-                            iconColor: 'text-primary',
-                            title: 'VAT return submitted',
-                            status: 'Filed'
+              {/* Recent Activity - Simplified */}
+              <Card className="card-modern hover-lift">
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-xl font-bold text-foreground">Recent Activity</CardTitle>
+                  <p className="text-sm text-muted-foreground">Latest VAT transactions</p>
+                </CardHeader>
+                <CardContent>
+                  {statsLoading ? (
+                    <div className="flex items-center justify-center py-8">
+                      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                      <span className="ml-2 text-muted-foreground">Loading...</span>
+                    </div>
+                  ) : stats?.recentActivity && stats.recentActivity.length > 0 ? (
+                    <div className="space-y-4">
+                      {stats.recentActivity.slice(0, 3).map((activity, index) => {
+                        const getActivityDetails = (action: string) => {
+                          switch (action) {
+                            case 'SUBMIT_VAT_RETURN':
+                              return { icon: FileText, title: 'VAT return submitted', color: 'text-primary' }
+                            case 'UPLOAD_DOCUMENT':
+                              return { icon: FileText, title: 'Document uploaded', color: 'text-blue-500' }
+                            case 'CALCULATE_VAT':
+                              return { icon: Calculator, title: 'VAT calculated', color: 'text-green-500' }
+                            default:
+                              return { icon: CheckCircle, title: 'Activity logged', color: 'text-gray-500' }
                           }
-                        case 'UPLOAD_DOCUMENT':
-                          return {
-                            icon: FileText,
-                            bgColor: 'bg-blue-500/20 border-blue-500/30',
-                            iconColor: 'text-blue-500',
-                            title: 'Document uploaded',
-                            status: 'Processed'
-                          }
-                        case 'CALCULATE_VAT':
-                          return {
-                            icon: Calculator,
-                            bgColor: 'bg-green-500/20 border-green-500/30',
-                            iconColor: 'text-green-500',
-                            title: 'VAT calculated',
-                            status: 'Completed'
-                          }
-                        default:
-                          return {
-                            icon: CheckCircle,
-                            bgColor: 'bg-success/20 border-success/30',
-                            iconColor: 'text-success',
-                            title: 'Activity logged',
-                            status: 'Completed'
-                          }
-                      }
-                    }
-                    
-                    const details = getActivityDetails(activity.action)
-                    const Icon = details.icon
-                    
-                    return (
-                      <div key={index} className="flex items-center space-x-4">
-                        <div className={`icon-modern ${details.bgColor}`}>
-                          <Icon className={`h-5 w-5 ${details.iconColor}`} />
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-semibold text-foreground">{details.title}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {new Date(activity.createdAt).toLocaleDateString()} - {new Date(activity.createdAt).toLocaleTimeString()}
-                          </p>
-                        </div>
-                        <div className="status-success">{details.status}</div>
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p className="text-lg font-medium">No recent activity</p>
-                  <p className="text-sm">Your VAT activities will appear here</p>
-                </div>
-              )}
+                        }
+                        
+                        const details = getActivityDetails(activity.action)
+                        const Icon = details.icon
+                        
+                        return (
+                          <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                            <Icon className={`h-4 w-4 ${details.color}`} />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium text-foreground">{details.title}</p>
+                              <p className="text-xs text-muted-foreground">
+                                {new Date(activity.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+                        )
+                      })}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full text-xs"
+                        onClick={() => window.location.href = '/reports'}
+                      >
+                        View All Activity
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="text-center py-6 text-muted-foreground">
+                      <CheckCircle className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No recent activity</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
