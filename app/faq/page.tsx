@@ -55,7 +55,7 @@ export default function FAQPage() {
       <SiteHeader />
 
 
-      <div className="max-w-4xl mx-auto px-6 py-8">
+      <div className="max-w-4xl mx-auto px-6 content-after-header pb-8">
 
         {/* FAQ Items */}
         <section className="py-12" data-animate>

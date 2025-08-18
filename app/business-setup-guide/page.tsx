@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/navigation'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -30,6 +31,7 @@ type ContactFormData = {
 export default function BusinessSetupGuidePage() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null)
   const [completedSteps, setCompletedSteps] = useState<string[]>([])
+  const router = useRouter()
   
   const form = useForm<ContactFormData>({
     defaultValues: {
@@ -79,6 +81,25 @@ export default function BusinessSetupGuidePage() {
         ? prev.filter(id => id !== stepId)
         : [...prev, stepId]
     )
+  }
+
+  const handleResourceClick = (resourceTitle: string) => {
+    switch (resourceTitle) {
+      case "Business Plan Template":
+        router.push('/business-plan-template')
+        break
+      case "VAT Calculator":
+        router.push('/vat-calculator-ireland')
+        break
+      case "Tax Calendar":
+        router.push('/tax-calendar-ireland')
+        break
+      case "Expert Consultation":
+        router.push('/contact')
+        break
+      default:
+        break
+    }
   }
 
   const setupSteps = [
@@ -258,7 +279,7 @@ export default function BusinessSetupGuidePage() {
 
 
       {/* Progress Tracker */}
-      <section className="py-8 -mt-12 relative z-10">
+      <section className="section-after-header relative z-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card className="shadow-xl border-2 border-blue-100 overflow-hidden">
             <CardHeader className="pb-4">
@@ -603,7 +624,11 @@ export default function BusinessSetupGuidePage() {
                   </div>
                   <h3 className="font-semibold text-lg mb-2">{resource.title}</h3>
                   <p className="text-sm text-gray-600 mb-4">{resource.description}</p>
-                  <Button variant="outline" className="w-full text-[#73C2FB] border-[#73C2FB] hover:bg-blue-50">
+                  <Button 
+                    variant="outline" 
+                    className="w-full text-[#73C2FB] border-[#73C2FB] hover:bg-blue-50"
+                    onClick={() => handleResourceClick(resource.title)}
+                  >
                     {resource.action}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>

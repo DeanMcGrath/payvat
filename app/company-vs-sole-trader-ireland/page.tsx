@@ -46,7 +46,7 @@ export default function CompanyVsSoleTraderIreland() {
       />
 
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 content-after-header pb-8">
 
         {/* Quick Decision Matrix */}
         <section className="py-20" data-animate>

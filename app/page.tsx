@@ -119,7 +119,7 @@ export default function LandingPage() {
         aria-label="Don't Be Like Me! Ireland - VAT services"
         className={`relative z-10 transition-opacity duration-1000 ${brandAnimationComplete ? "opacity-100" : "opacity-0"}`}
       >
-        <section className="relative py-16">
+        <section className="relative section-after-header">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <div className="grid gap-8 md:grid-cols-3" data-animate>
               {navigationBoxes.map((box, index) => (

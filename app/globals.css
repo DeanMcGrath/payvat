@@ -495,6 +495,16 @@ body {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
   }
+
+  /* Header Spacing - Professional spacing after SiteHeader */
+  .content-after-header {
+    padding-top: 5rem; /* 80px - consistent breathing room after header */
+  }
+
+  .section-after-header {
+    padding-top: 6rem; /* 96px - for first sections after header */
+    padding-bottom: 4rem; /* 64px - standard bottom padding */
+  }
   
   /* Glass Effects */
   .glass-white\/10 {

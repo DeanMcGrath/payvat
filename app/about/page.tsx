@@ -44,7 +44,7 @@ export default function AboutPayVat() {
       <SiteHeader />
 
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 content-after-header pb-8">
 
         {/* Who We Are */}
         <section className="py-20" data-animate>

@@ -49,7 +49,7 @@ export default function VATGuidePage() {
       />
 
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 content-after-header pb-8">
 
         {/* What Is VAT */}
         <Card className="mb-4">

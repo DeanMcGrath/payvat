@@ -448,7 +448,7 @@ export default function VAT3ReturnForm() {
       />
 
 
-      <div className="max-w-4xl mx-auto px-6 py-8">
+      <div className="max-w-4xl mx-auto px-6 content-after-header pb-8">
         {/* Validation Errors */}
         {validationErrors.length > 0 && (
           <Card className="border-red-200 bg-red-50 mb-2">

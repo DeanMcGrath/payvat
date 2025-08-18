@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Bell, Settings, LogOut, Search, Shield, CheckCircle, Lock, Mail, UserPlus, Building, AlertTriangle } from 'lucide-react'
+import { Bell, Settings, LogOut, Search, Shield, CheckCircle, Lock, Mail, UserPlus, Building, AlertTriangle, User } from 'lucide-react'
 import Footer from "@/components/footer"
 import { z } from "zod"
 import { toast } from "sonner"
@@ -218,12 +218,13 @@ export default function SignupPage() {
                     <Settings className="h-5 w-5" />
                   </Button>
                   <Button 
-                    variant="outline" 
+                    variant="ghost" 
                     size="sm" 
-                    className="text-white border-white/20 hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm"
+                    className="text-white hover:bg-white/10 border border-white/20 backdrop-blur-sm min-h-[44px] min-w-[44px]"
                     onClick={() => router.push('/login')}
+                    aria-label="Sign In"
                   >
-                    Sign In
+                    <User className="h-5 w-5" />
                   </Button>
                 </div>
               </div>
@@ -241,9 +242,6 @@ export default function SignupPage() {
                   </span>
                   <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
                     <button className="hover:text-white transition-colors" onClick={() => router.push('/about')}>About</button>
-                    <button className="hover:text-white transition-colors" onClick={() => router.push('/pricing')}>Pricing</button>
-                    <button className="hover:text-white transition-colors" onClick={() => router.push('/vat-guide')}>VAT Guide</button>
-                    <button className="hover:text-white transition-colors" onClick={() => router.push('/vat-registration')}>Get VAT Number</button>
                     <button className="hover:text-white transition-colors" onClick={() => router.push('/login')}>Login</button>
                   </div>
                 </div>
@@ -257,7 +255,7 @@ export default function SignupPage() {
       </header>
 
 
-      <div className="max-w-lg mx-auto px-6 py-8 -mt-16 relative z-10">
+      <div className="max-w-lg mx-auto px-6 content-after-header pb-8 relative z-10">
         <div className="card-premium p-8">
           <div className="text-center mb-4">
             <div className="icon-premium mb-4 mx-auto">

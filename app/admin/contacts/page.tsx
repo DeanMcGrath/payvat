@@ -124,7 +124,7 @@ export default function AdminContactsPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 content-after-header pb-8">
         {/* Filters */}
         <Card className="mb-8">
           <CardHeader>

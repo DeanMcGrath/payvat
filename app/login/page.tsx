@@ -185,9 +185,6 @@ export default function LoginPage() {
                   </span>
                   <div className="hidden md:flex items-center space-x-6 text-white/70 text-sm">
                     <button className="hover:text-white transition-colors" onClick={() => router.push('/about')}>About</button>
-                    <button className="hover:text-white transition-colors" onClick={() => router.push('/pricing')}>Pricing</button>
-                    <button className="hover:text-white transition-colors" onClick={() => router.push('/vat-guide')}>VAT Guide</button>
-                    <button className="hover:text-white transition-colors" onClick={() => router.push('/vat-registration')}>Get VAT Number</button>
                   </div>
                 </div>
                 <div className="text-white/60 text-xs hidden sm:block">
@@ -200,7 +197,7 @@ export default function LoginPage() {
       </header>
 
 
-      <div className="max-w-lg mx-auto px-6 py-8 -mt-16 relative z-10">
+      <div className="max-w-lg mx-auto px-6 content-after-header pb-8 relative z-10">
         <div className="card-premium p-8">
           <div className="text-center mb-4">
             <div className="icon-premium mb-4 mx-auto">

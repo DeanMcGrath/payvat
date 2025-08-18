@@ -554,7 +554,7 @@ export default function VATSubmissionPage() {
       />
 
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="max-w-6xl mx-auto px-6 content-after-header pb-8">
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Form */}

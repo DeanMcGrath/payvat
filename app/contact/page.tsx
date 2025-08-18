@@ -73,7 +73,7 @@ export default function ContactPage() {
 
 
       {/* Contact Form Section */}
-      <section className="py-16 relative z-10">
+      <section className="section-after-header relative z-10">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <Card className="card-premium">
             <CardHeader className="text-center pb-8">
