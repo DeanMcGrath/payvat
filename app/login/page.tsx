@@ -127,8 +127,8 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center">
-                <Link href="/" className="text-2xl font-thin text-white tracking-tight hover:text-white/90 transition-colors">
-                  PayVAT
+                <Link href="/" className="text-2xl font-bold font-mono text-white tracking-tight hover:text-white/90 transition-colors">
+                  Don't Be Like Me!
                 </Link>
               </div>
               

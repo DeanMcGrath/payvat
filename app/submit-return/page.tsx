@@ -607,7 +607,7 @@ export default function VAT3ReturnForm() {
         {/* Copyright */}
         <div className="bg-[#004A75] py-4">
           <div className="max-w-7xl mx-auto px-6 text-center">
-            <p className="text-sm font-thin">© PayVAT</p>
+            <p className="text-sm font-thin">© Don't Be Like Me!</p>
           </div>
         </div>
       </footer>

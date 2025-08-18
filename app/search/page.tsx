@@ -169,7 +169,7 @@ function SearchPageContent() {
       <header className="bg-[#5BADEA] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl sm:text-2xl font-thin">PayVAT</h1>
+            <h1 className="text-xl sm:text-2xl font-bold font-mono">Don't Be Like Me!</h1>
             
             <div className="flex items-center space-x-2 sm:space-x-6">
               <div className="hidden lg:flex items-center space-x-2">
