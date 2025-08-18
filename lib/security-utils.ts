@@ -113,7 +113,7 @@ export const getCSPHeaders = () => {
     isProduction
       ? "connect-src 'self' https://api.stripe.com https://api.openai.com https://*.payvat.ie"
       : "connect-src 'self' https: wss: https://api.stripe.com https://api.openai.com",
-    "frame-src 'none'", // No iframes for security
+    "frame-src 'self' blob: data:", // FIXED: Allow blob and data URLs for PDF preview
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

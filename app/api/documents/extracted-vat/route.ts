@@ -45,6 +45,34 @@ interface ExtractedVATSummary {
 const vatDataCache = new Map<string, { data: ExtractedVATSummary; timestamp: number }>()
 const CACHE_DURATION = 30000 // 30 seconds
 
+// ENHANCED: Cache invalidation utilities
+export function invalidateUserCache(userId?: string) {
+  if (!userId) {
+    // Guest user - clear all guest caches
+    for (const [key] of vatDataCache.entries()) {
+      if (key.startsWith('guest-')) {
+        vatDataCache.delete(key)
+      }
+    }
+  } else {
+    // Authenticated user - clear specific user cache
+    for (const [key] of vatDataCache.entries()) {
+      if (key.includes(userId)) {
+        vatDataCache.delete(key)
+      }
+    }
+  }
+}
+
+function clearExpiredCache() {
+  const now = Date.now()
+  for (const [key, value] of vatDataCache.entries()) {
+    if (now - value.timestamp > CACHE_DURATION) {
+      vatDataCache.delete(key)
+    }
+  }
+}
+
 // Utility function to parse processing status from scanResult
 function parseProcessingStatus(scanResult: string | null) {
   if (!scanResult) return null
@@ -442,10 +470,10 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     
     // Getting VAT data for authenticated user
     
-    // Build query filters for user's own documents
+    // FIXED: Build query filters for user's own documents - include ALL documents
     const whereClause: any = {
       userId: user.id,
-      isScanned: true, // Only include processed documents
+      // REMOVED isScanned filter - include all documents regardless of processing status
     }
     
     if (vatReturnId) {
@@ -519,8 +547,15 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     const salesDocuments: ExtractedVATSummary['salesDocuments'] = []
     const purchaseDocuments: ExtractedVATSummary['purchaseDocuments'] = []
     
-    // Count processed documents (all scanned documents are considered processed)
-    const processedDocuments = documents.filter(doc => doc.isScanned).length
+    // FIXED: Count processed documents more accurately - include all documents that have been touched by the system
+    let processedDocuments = 0
+    for (const doc of documents) {
+      const hasAuditLog = auditLogs.some(log => log.entityId === doc.id)
+      const hasBeenProcessed = doc.isScanned || hasAuditLog || doc.scanResult
+      if (hasBeenProcessed) {
+        processedDocuments++
+      }
+    }
     // Processed documents counted
     
     // Process each document
@@ -699,7 +734,51 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           weightedConfidenceSum += confidence * vatTotal
           totalVATAmount += vatTotal
         } else {
-          // No VAT found in scan result
+          // No VAT found in scan result - include document anyway with pending status
+          const isSales = document.category?.includes('SALES')
+          const docForList = {
+            id: document.id,
+            fileName: document.originalName,
+            category: document.category,
+            extractedAmounts: [] as number[],
+            confidence: 0,
+            scanResult: document.scanResult || 'No VAT amounts found in scan',
+            processingStatus: parseProcessingStatus(document.scanResult)
+          }
+          
+          if (isSales) {
+            salesDocuments.push(docForList)
+          } else {
+            purchaseDocuments.push(docForList)
+          }
+        }
+      } else {
+        // CRITICAL FIX: Handle documents WITHOUT audit logs (newly uploaded, processing failed, etc.)
+        const isSales = document.category?.includes('SALES')
+        const isPending = !document.isScanned
+        const hasFailed = document.scanResult?.includes('failed') || document.scanResult?.includes('error')
+        
+        const status = isPending ? 'Pending processing...' : 
+                       hasFailed ? 'Processing failed - please retry' :
+                       'Processed without VAT extraction'
+        
+        const docForList = {
+          id: document.id,
+          fileName: document.originalName,
+          category: document.category,
+          extractedAmounts: [] as number[],
+          confidence: 0,
+          scanResult: document.scanResult || status,
+          processingStatus: parseProcessingStatus(document.scanResult) || { 
+            status: isPending ? 'pending' : 'failed',
+            timestamp: new Date().toISOString()
+          }
+        }
+        
+        if (isSales) {
+          salesDocuments.push(docForList)
+        } else {
+          purchaseDocuments.push(docForList)
         }
       }
     }

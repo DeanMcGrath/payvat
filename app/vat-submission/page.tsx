@@ -51,7 +51,7 @@ export default function VATSubmissionPage() {
   // Rate limiting and debouncing state
   const [lastFetchTime, setLastFetchTime] = useState(0)
   const [fetchTimeout, setFetchTimeout] = useState<NodeJS.Timeout | null>(null)
-  const [cachedVATData, setCachedVATData] = useState<{data: any, timestamp: number} | null>(null)
+  // REMOVED: Frontend caching - now handled by backend with proper invalidation
   const [isRefreshDisabled, setIsRefreshDisabled] = useState(false)
   const [autoPopulateTimeout, setAutoPopulateTimeout] = useState<NodeJS.Timeout | null>(null)
   
@@ -255,18 +255,10 @@ export default function VATSubmissionPage() {
 
   const loadExtractedVATData = async (forceRefresh = false): Promise<any> => {
     try {
-      // Check if we have cached data and it's still fresh (within 30 seconds)
-      const CACHE_DURATION = 30000; // 30 seconds
-      const now = Date.now()
-      
-      if (!forceRefresh && cachedVATData && (now - cachedVATData.timestamp) < CACHE_DURATION) {
-        console.log('📋 FRONTEND: Using cached VAT data')
-        setExtractedVATData(cachedVATData.data)
-        return cachedVATData.data
-      }
-      
+      // FIXED: Removed frontend caching - backend handles caching with proper invalidation
       // Prevent rapid successive calls
       const MIN_INTERVAL = 2000; // 2 seconds minimum between calls
+      const now = Date.now()
       if (!forceRefresh && (now - lastFetchTime) < MIN_INTERVAL) {
         console.log('⏳ FRONTEND: Skipping request due to rate limiting')
         return extractedVATData
@@ -301,8 +293,7 @@ export default function VATSubmissionPage() {
           })
           
           setExtractedVATData(result.extractedVAT)
-          // Cache the fresh data
-          setCachedVATData({ data: result.extractedVAT, timestamp: Date.now() })
+          // REMOVED: Frontend caching - now handled by backend with proper invalidation
           logger.info('Loaded extracted VAT data', { totalSalesVAT: result.extractedVAT.totalSalesVAT, totalPurchaseVAT: result.extractedVAT.totalPurchaseVAT }, 'VAT_SUBMISSION')
           return result.extractedVAT // Return fresh data
         } else {

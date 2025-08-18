@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { processDocument } from '@/lib/documentProcessor'
 import { AuthUser } from '@/lib/auth'
 import { extractionMonitor, createExtractionAttempt } from '@/lib/extraction-monitor'
+import { invalidateUserCache } from '@/app/api/documents/extracted-vat/route'
 
 // Force Node.js runtime for XLSX library compatibility
 export const runtime = 'nodejs'
@@ -837,6 +838,15 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         'VAT extraction accuracy may be reduced',
         'To enable full AI processing, configure OPENAI_API_KEY in environment variables'
       )
+    }
+    
+    // CRITICAL FIX: Invalidate VAT data cache after successful processing
+    try {
+      invalidateUserCache(user?.id)
+      console.log('Cache invalidated after document processing', { userId: user?.id })
+    } catch (cacheError) {
+      console.error('Cache invalidation failed', cacheError)
+      // Don't fail the processing if cache invalidation fails
     }
     
     return NextResponse.json(responseData)

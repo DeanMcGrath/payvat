@@ -7,6 +7,7 @@ import { processDocument } from '@/lib/documentProcessor'
 import { AuthUser } from '@/lib/auth'
 import { logger } from '@/lib/logger'
 import { logError, logWarn, logInfo, logAudit, logPerformance } from '@/lib/secure-logger'
+import { invalidateUserCache } from '@/app/api/documents/extracted-vat/route'
 
 async function uploadFile(request: NextRequest, user?: AuthUser) {
   const startTime = Date.now()
@@ -298,6 +299,15 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       userId,
       operation: 'file-upload'
     })
+
+    // CRITICAL FIX: Invalidate VAT data cache after successful upload
+    try {
+      invalidateUserCache(user?.id)
+      logInfo('Cache invalidated after document upload', { userId: user?.id })
+    } catch (cacheError) {
+      logError('Cache invalidation failed', cacheError, { userId: user?.id })
+      // Don't fail the upload if cache invalidation fails
+    }
 
     return NextResponse.json({
       success: true,
