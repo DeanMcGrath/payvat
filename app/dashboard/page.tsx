@@ -8,8 +8,6 @@ import { Bell, FileText, Settings, LogOut, TrendingUp, Calendar, Euro, AlertCirc
 import { Input } from "@/components/ui/input"
 import Footer from "@/components/footer"
 import { useSubscription } from "@/contexts/subscription-context"
-import VATTrendsChart from "@/components/dashboard/VATTrendsChart"
-import VATBreakdownChart from "@/components/dashboard/VATBreakdownChart"
 import EnhancedStatsCard from "@/components/dashboard/EnhancedStatsCard"
 import InsightsPanel from "@/components/dashboard/InsightsPanel"
 import CalendarWidget from "@/components/dashboard/CalendarWidget"
@@ -286,7 +284,7 @@ export default function HomePage() {
           </div>
 
           {/* Enhanced Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" data-animate>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6" data-animate>
             <EnhancedStatsCard
               title="Net VAT Due"
               value={(stats?.pendingPayments && stats.pendingPayments.length > 0) ? 
@@ -381,28 +379,24 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* Charts Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <VATTrendsChart className="col-span-1" />
-            <VATBreakdownChart className="col-span-1" />
-          </div>
-
-          {/* Main Dashboard Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-            {/* Left Column - Quick Actions */}
-            <div className="lg:col-span-1">
-              <QuickActions className="mb-8" />
-            </div>
-            
-            {/* Middle Column - Insights & Calendar */}
-            <div className="lg:col-span-1 space-y-8">
+          {/* Main Dashboard Grid - Improved 2-Column Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-6">
+            {/* Left Column - Primary Actions & Insights (60% width) */}
+            <div className="lg:col-span-3 space-y-6">
+              {/* Quick Actions - More Prominent */}
+              <QuickActions />
+              
+              {/* Insights Panel - Primary Focus */}
               <InsightsPanel />
-              <CalendarWidget />
             </div>
             
-            {/* Right Column - Documents & Activity */}
-            <div className="lg:col-span-1">
-              <DocumentsOverview className="mb-8" />
+            {/* Right Column - Supporting Info (40% width) */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Calendar Widget - Top for Deadline Visibility */}
+              <CalendarWidget />
+              
+              {/* Documents Overview */}
+              <DocumentsOverview />
               
               {/* Recent Activity - Simplified */}
               <Card className="card-modern hover-lift">
@@ -412,13 +406,13 @@ export default function HomePage() {
                 </CardHeader>
                 <CardContent>
                   {statsLoading ? (
-                    <div className="flex items-center justify-center py-8">
-                      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                    <div className="flex items-center justify-center py-6">
+                      <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
                       <span className="ml-2 text-muted-foreground">Loading...</span>
                     </div>
                   ) : stats?.recentActivity && stats.recentActivity.length > 0 ? (
-                    <div className="space-y-4">
-                      {stats.recentActivity.slice(0, 3).map((activity, index) => {
+                    <div className="space-y-3">
+                      {stats.recentActivity.slice(0, 4).map((activity, index) => {
                         const getActivityDetails = (action: string) => {
                           switch (action) {
                             case 'SUBMIT_VAT_RETURN':
@@ -436,7 +430,7 @@ export default function HomePage() {
                         const Icon = details.icon
                         
                         return (
-                          <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                          <div key={index} className="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg">
                             <Icon className={`h-4 w-4 ${details.color}`} />
                             <div className="flex-1">
                               <p className="text-sm font-medium text-foreground">{details.title}</p>
@@ -450,15 +444,15 @@ export default function HomePage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="w-full text-xs"
+                        className="w-full text-xs mt-3"
                         onClick={() => window.location.href = '/reports'}
                       >
                         View All Activity
                       </Button>
                     </div>
                   ) : (
-                    <div className="text-center py-6 text-muted-foreground">
-                      <CheckCircle className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                    <div className="text-center py-4 text-muted-foreground">
+                      <CheckCircle className="h-6 w-6 mx-auto mb-2 opacity-50" />
                       <p className="text-sm">No recent activity</p>
                     </div>
                   )}
