@@ -524,6 +524,27 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       extractionMonitor.logAttempt(failedAttempt)
       // console.log('📊 MONITORING: Failed extraction attempt logged')
       
+      // ENHANCED: Mark document as failed with detailed status
+      try {
+        const failureStatus = {
+          status: 'failed',
+          timestamp: new Date().toISOString(),
+          processingTime: processingTimeMs,
+          error: processingError instanceof Error ? processingError.message : 'Unknown error',
+          retryable: true
+        }
+        
+        await prisma.document.update({
+          where: { id: documentId },
+          data: {
+            isScanned: false, // Keep as false to indicate processing incomplete
+            scanResult: `Processing failed: ${failureStatus.error}\n\n[PROCESSING_STATUS: ${JSON.stringify(failureStatus)}]`,
+          }
+        })
+      } catch (updateError) {
+        console.error('Failed to update document status:', updateError)
+      }
+      
       // Return a structured error response
       return NextResponse.json(
         {
@@ -640,12 +661,22 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       )
     }
     
-    // Update document with processing results
+    // ENHANCED: Update document with detailed processing status
+    const processingStatus = {
+      status: 'completed',
+      timestamp: new Date().toISOString(),
+      processingTime: Date.now() - processingStartTime,
+      engine: result.processingSteps ? 'enhanced' : 'legacy',
+      vatExtracted: result.extractedData ? [...result.extractedData.salesVAT, ...result.extractedData.purchaseVAT].length > 0 : false,
+      confidence: result.extractedData?.confidence || 0,
+      originalScanResult: result.scanResult
+    }
+    
     const updatedDocument = await prisma.document.update({
       where: { id: documentId },
       data: {
         isScanned: true,
-        scanResult: result.scanResult,
+        scanResult: `${result.scanResult}\n\n[PROCESSING_STATUS: ${JSON.stringify(processingStatus)}]`,
       }
     })
     

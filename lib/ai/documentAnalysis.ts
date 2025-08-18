@@ -1295,10 +1295,12 @@ async function convertToEnhancedVATData(aiData: any, category: string): Promise<
           continue
         }
         
-        // Use smart categorization or AI classification or fallback to original category
-        const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
-          ? docAnalysis.suggestedCategory 
-          : (aiData.classification?.category || (category.includes('SALES') ? 'SALES' : 'PURCHASES'))
+        // FIXED: Prioritize original document category over AI suggestions
+        const targetCategory = category.includes('SALES') ? 'SALES' : 
+                               category.includes('PURCHASE') ? 'PURCHASES' :
+                               (docAnalysis.suggestedCategory !== 'UNKNOWN' 
+                                 ? docAnalysis.suggestedCategory 
+                                 : (aiData.classification?.category || 'PURCHASES'))
         
         // 🚨 CRITICAL DEBUG: VAT Amount Categorization
         console.log(`   🔍 VAT CATEGORIZATION DEBUG for €${item.vatAmount}:`)
@@ -1337,9 +1339,12 @@ async function convertToEnhancedVATData(aiData: any, category: string): Promise<
     
     // Skip if this total amount should be excluded
     if (!shouldExcludeAmount(totalVatAmount, extractedText)) {
-      const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
-        ? docAnalysis.suggestedCategory 
-        : (aiData.classification?.category || (category.includes('SALES') ? 'SALES' : 'PURCHASES'))
+      // FIXED: Prioritize original document category over AI suggestions
+      const targetCategory = category.includes('SALES') ? 'SALES' : 
+                             category.includes('PURCHASE') ? 'PURCHASES' :
+                             (docAnalysis.suggestedCategory !== 'UNKNOWN' 
+                               ? docAnalysis.suggestedCategory 
+                               : (aiData.classification?.category || 'PURCHASES'))
       
       // 🚨 CRITICAL DEBUG: Total VAT Amount Categorization
       console.log(`   🔍 TOTAL VAT CATEGORIZATION DEBUG for €${totalVatAmount}:`)
@@ -1397,9 +1402,12 @@ async function convertToEnhancedVATData(aiData: any, category: string): Promise<
           salesVAT.length = 0
           purchaseVAT.length = 0
           
-          const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
-            ? docAnalysis.suggestedCategory 
-            : (aiData.classification?.category || (category.includes('SALES') ? 'SALES' : 'PURCHASES'))
+          // FIXED: Prioritize original document category over AI suggestions  
+          const targetCategory = category.includes('SALES') ? 'SALES' : 
+                                 category.includes('PURCHASE') ? 'PURCHASES' :
+                                 (docAnalysis.suggestedCategory !== 'UNKNOWN' 
+                                   ? docAnalysis.suggestedCategory 
+                                   : (aiData.classification?.category || 'PURCHASES'))
           
           if (targetCategory === 'SALES') {
             salesVAT.push(aiData.vatData.totalVatAmount)

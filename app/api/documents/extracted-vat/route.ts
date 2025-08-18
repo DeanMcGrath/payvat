@@ -12,6 +12,13 @@ interface ExtractedVATSummary {
   documentCount: number
   processedDocuments: number
   averageConfidence: number
+  // ENHANCED: Add processing status tracking
+  failedDocuments: number
+  processingStats: {
+    completed: number
+    failed: number
+    pending: number
+  }
   salesDocuments: Array<{
     id: string
     fileName: string
@@ -19,6 +26,8 @@ interface ExtractedVATSummary {
     extractedAmounts: number[]
     confidence: number
     scanResult: string
+    // ENHANCED: Add status info
+    processingStatus?: any
   }>
   purchaseDocuments: Array<{
     id: string
@@ -27,12 +36,29 @@ interface ExtractedVATSummary {
     extractedAmounts: number[]
     confidence: number
     scanResult: string
+    // ENHANCED: Add status info  
+    processingStatus?: any
   }>
 }
 
 // Simple in-memory cache for extracted VAT data to prevent zeros during processing
 const vatDataCache = new Map<string, { data: ExtractedVATSummary; timestamp: number }>()
 const CACHE_DURATION = 30000 // 30 seconds
+
+// Utility function to parse processing status from scanResult
+function parseProcessingStatus(scanResult: string | null) {
+  if (!scanResult) return null
+  
+  const statusMatch = scanResult.match(/\[PROCESSING_STATUS: (.*?)\]/)
+  if (statusMatch) {
+    try {
+      return JSON.parse(statusMatch[1])
+    } catch (e) {
+      return null
+    }
+  }
+  return null
+}
 
 /**
  * GET /api/documents/extracted-vat - Get aggregated VAT data from user's documents
@@ -88,12 +114,17 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       // Guest user document processing check
       
       try {
-        // FIRST: Try the most aggressive approach - find ANY recent processed documents regardless of user
-        // Searching for recent processed documents
+        // SIMPLIFIED: Single comprehensive query for guest documents
+        logInfo('Searching for recent guest documents', {
+          operation: 'guest-document-search',
+          timeWindow: '24 hours'
+        })
         
-        const anyRecentDocs = await prisma.document.findMany({
+        const recentGuestDocuments = await prisma.document.findMany({
           where: {
-            isScanned: true,
+            user: {
+              role: 'GUEST'
+            },
             uploadedAt: {
               gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
             }
@@ -104,46 +135,16 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           orderBy: {
             uploadedAt: 'desc'
           },
-          take: 20 // Broader search
+          take: 50 // Increase limit to catch more documents
         })
         
-        // Found processed documents
-        
-        // SECOND: Filter for guest documents from the broader search
-        const allGuestDocs = anyRecentDocs.filter(doc => doc.user?.role === 'GUEST')
-        // Filtered guest documents
-        
-        // Check for recent guest documents by finding documents owned by guest users
-        const recentGuestDocuments = await prisma.document.findMany({
-          where: {
-            user: {
-              role: 'GUEST' // Find documents owned by users with GUEST role
-            },
-            isScanned: true,
-            uploadedAt: {
-              gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours (increased from 30 minutes)
-            }
-          },
-          include: {
-            user: true // Include user data to verify guest status
-          },
-          orderBy: {
-            uploadedAt: 'desc'
-          },
-          take: 10 // Limit to recent documents
+        logInfo('Found guest documents', {
+          operation: 'guest-document-search',
+          totalFound: recentGuestDocuments.length,
+          processedCount: recentGuestDocuments.filter(doc => doc.isScanned).length
         })
         
-        // Query results processed
-        
-        // CRITICAL DEBUG: Compare the two approaches
-        if (allGuestDocs.length !== recentGuestDocuments.length) {
-          logWarn('Document count mismatch between search methods', {
-            operation: 'guest-document-search'
-          })
-        }
-        
-        // Use the more comprehensive results if available
-        const finalGuestDocs = recentGuestDocuments.length > 0 ? recentGuestDocuments : allGuestDocs
+        const finalGuestDocs = recentGuestDocuments
         
         // Using guest documents for calculation
         
@@ -318,6 +319,24 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           ? guestWeightedConfidenceSum / guestTotalVATAmount
           : (docsWithVAT > 0 ? guestTotalConfidence / docsWithVAT : 0)
 
+        // ENHANCED: Calculate guest processing statistics
+        let guestCompletedDocs = 0
+        let guestFailedDocs = 0
+        let guestPendingDocs = 0
+        
+        for (const doc of finalGuestDocs) {
+          const status = parseProcessingStatus(doc.scanResult)
+          if (status) {
+            if (status.status === 'completed') guestCompletedDocs++
+            else if (status.status === 'failed') guestFailedDocs++
+            else guestPendingDocs++
+          } else if (doc.isScanned) {
+            guestCompletedDocs++
+          } else {
+            guestPendingDocs++
+          }
+        }
+        
         const guestSummary: ExtractedVATSummary = {
           totalSalesVAT: Math.round(guestTotalSalesVAT * 100) / 100,
           totalPurchaseVAT: Math.round(guestTotalPurchaseVAT * 100) / 100,
@@ -325,8 +344,21 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           documentCount: finalGuestDocs.length,
           processedDocuments: guestProcessedDocuments,
           averageConfidence: weightedAverageConfidence,
-          salesDocuments: guestSalesDocuments,
-          purchaseDocuments: guestPurchaseDocuments
+          // ENHANCED: Add processing stats for guests too
+          failedDocuments: guestFailedDocs,
+          processingStats: {
+            completed: guestCompletedDocs,
+            failed: guestFailedDocs,
+            pending: guestPendingDocs
+          },
+          salesDocuments: guestSalesDocuments.map(doc => ({
+            ...doc,
+            processingStatus: parseProcessingStatus(doc.scanResult)
+          })),
+          purchaseDocuments: guestPurchaseDocuments.map(doc => ({
+            ...doc,
+            processingStatus: parseProcessingStatus(doc.scanResult)
+          }))
         }
         
         // Guest summary calculated
@@ -379,83 +411,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           userId: 'GUEST'
         })
         
-        // Try a simpler fallback query without joins
-        // Attempting fallback query
-        try {
-          const simpleDocs = await prisma.document.findMany({
-            where: {
-              isScanned: true,
-              uploadedAt: {
-                gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
-              }
-            },
-            orderBy: {
-              uploadedAt: 'desc'
-            },
-            take: 20
-          })
-          
-          // Fallback query results
-          
-          if (simpleDocs.length > 0) {
-            // Process these documents
-            let fallbackTotalPurchaseVAT = 0
-            let fallbackProcessedDocs = 0
-            const fallbackPurchaseDocs: ExtractedVATSummary['purchaseDocuments'] = []
-            
-            for (const doc of simpleDocs) {
-              const vatMatches = doc.scanResult?.match(/€([0-9,]+\.?[0-9]*)/g) || []
-              const vatAmounts = vatMatches.map(match => parseFloat(match.replace('€', '').replace(',', '')))
-              
-              if (vatAmounts.length > 0) {
-                const vatTotal = vatAmounts.reduce((sum, amount) => sum + amount, 0)
-                fallbackTotalPurchaseVAT += vatTotal
-                fallbackProcessedDocs++
-                
-                fallbackPurchaseDocs.push({
-                  id: doc.id,
-                  fileName: doc.originalName,
-                  category: doc.category,
-                  extractedAmounts: vatAmounts,
-                  confidence: 0.85,
-                  scanResult: doc.scanResult || 'Processed'
-                })
-              }
-            }
-            
-            const fallbackSummary: ExtractedVATSummary = {
-              totalSalesVAT: 0,
-              totalPurchaseVAT: Math.round(fallbackTotalPurchaseVAT * 100) / 100,
-              totalNetVAT: Math.round(-fallbackTotalPurchaseVAT * 100) / 100,
-              documentCount: simpleDocs.length,
-              processedDocuments: fallbackProcessedDocs,
-              averageConfidence: 0.85,
-              salesDocuments: [],
-              purchaseDocuments: fallbackPurchaseDocs
-            }
-            
-            // Fallback extraction successful
-            
-            return NextResponse.json({
-              success: true,
-              extractedVAT: fallbackSummary,
-              isGuestUser: true,
-              debugInfo: {
-                totalDocumentsFound: simpleDocs.length,
-                documentsProcessed: fallbackProcessedDocs,
-                queryTime: new Date().toISOString(),
-                version: 'fallback-v1'
-              },
-              note: `✅ SYSTEM WORKING (Fallback): Found VAT data from ${fallbackProcessedDocs} documents. Total: €${fallbackSummary.totalPurchaseVAT}`,
-              userMessage: 'Your documents have been processed successfully.'
-            })
-          }
-        } catch (fallbackError) {
-          logError('Fallback query failed', fallbackError, {
-            operation: 'fallback-extraction',
-            userId: 'GUEST'
-          })
-        }
+        // FIXED: Simplified error handling - no more complex fallback logic
         
         // If all else fails, return empty summary
         const emptySummary: ExtractedVATSummary = {
@@ -465,6 +421,12 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           documentCount: 0,
           processedDocuments: 0,
           averageConfidence: 0,
+          failedDocuments: 0,
+          processingStats: {
+            completed: 0,
+            failed: 0,
+            pending: 0
+          },
           salesDocuments: [],
           purchaseDocuments: []
         }
@@ -582,8 +544,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           const purchaseTotal = purchaseVAT.reduce((sum: number, amount: number) => sum + amount, 0)
           // VAT data extracted from audit log
           
-          totalSalesVAT += salesTotal
-          totalPurchaseVAT += purchaseTotal
+          // FIXED: Don't add to totals yet - do it during categorization to avoid double counting
           totalConfidence += confidence
           confidenceCount++
           
@@ -592,59 +553,86 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           weightedConfidenceSum += confidence * vatTotal
           totalVATAmount += vatTotal
           
-          // Categorize documents - prioritize by VAT amounts first, then by category
+          // Categorize documents - FIXED: Prioritize document category over VAT amounts
           const isSalesDocument = document.category.includes('SALES')
           const isPurchaseDocument = document.category.includes('PURCHASE')
           
-          if (salesTotal > 0 && (isSalesDocument || !isPurchaseDocument)) {
-            // Has sales VAT and is sales category, OR has sales VAT but no clear purchase category
-            // Added to sales section
+          if (isSalesDocument) {
+            // FIXED: Sales document - add all VAT to sales total regardless of where it was stored
+            const extractedAmounts = salesVAT.length > 0 ? salesVAT : purchaseVAT
+            totalSalesVAT += salesTotal + purchaseTotal
+            
             salesDocuments.push({
               id: document.id,
               fileName: document.originalName,
               category: document.category,
-              extractedAmounts: salesVAT,
+              extractedAmounts: extractedAmounts,
               confidence: confidence,
               scanResult: document.scanResult || 'Processed'
             })
-          } else if (purchaseTotal > 0 && (isPurchaseDocument || !isSalesDocument)) {
-            // Has purchase VAT and is purchase category, OR has purchase VAT but no clear sales category
-            // Added to purchase section
+          } else if (isPurchaseDocument) {
+            // FIXED: Purchase document - add all VAT to purchase total regardless of where it was stored
+            const extractedAmounts = purchaseVAT.length > 0 ? purchaseVAT : salesVAT
+            totalPurchaseVAT += salesTotal + purchaseTotal
+            
             purchaseDocuments.push({
               id: document.id,
               fileName: document.originalName,
               category: document.category,
-              extractedAmounts: purchaseVAT,
-              confidence: confidence,
-              scanResult: document.scanResult || 'Processed'
-            })
-          } else if (isSalesDocument && !isPurchaseDocument) {
-            // No VAT amounts but clearly a sales document
-            // Added to sales (category-based)
-            salesDocuments.push({
-              id: document.id,
-              fileName: document.originalName,
-              category: document.category,
-              extractedAmounts: salesVAT,
-              confidence: confidence,
-              scanResult: document.scanResult || 'Processed'
-            })
-          } else if (isPurchaseDocument && !isSalesDocument) {
-            // No VAT amounts but clearly a purchase document
-            // Added to purchase (category-based)
-            purchaseDocuments.push({
-              id: document.id,
-              fileName: document.originalName,
-              category: document.category,
-              extractedAmounts: purchaseVAT,
+              extractedAmounts: extractedAmounts,
               confidence: confidence,
               scanResult: document.scanResult || 'Processed'
             })
           } else {
-            logWarn('Document could not be categorized', {
-              operation: 'document-categorization',
-              documentId: document.id
-            })
+            // Fallback for documents without clear category - use VAT type
+            if (salesTotal > 0) {
+              totalSalesVAT += salesTotal
+              salesDocuments.push({
+                id: document.id,
+                fileName: document.originalName,
+                category: document.category,
+                extractedAmounts: salesVAT,
+                confidence: confidence,
+                scanResult: document.scanResult || 'Processed'
+              })
+            } else if (purchaseTotal > 0) {
+              totalPurchaseVAT += purchaseTotal
+              purchaseDocuments.push({
+                id: document.id,
+                fileName: document.originalName,
+                category: document.category,
+                extractedAmounts: purchaseVAT,
+                confidence: confidence,
+                scanResult: document.scanResult || 'Processed'
+              })
+            } else {
+              // No VAT found - still categorize by document type
+              if (document.category) {
+                const docForList = {
+                  id: document.id,
+                  fileName: document.originalName,
+                  category: document.category,
+                  extractedAmounts: [] as number[],
+                  confidence: confidence,
+                  scanResult: document.scanResult || 'Processed without VAT amounts'
+                }
+                
+                // Make a best guess based on category text
+                if (document.category.toLowerCase().includes('sales') || 
+                    document.category.toLowerCase().includes('invoice') ||
+                    document.category.toLowerCase().includes('receipt')) {
+                  salesDocuments.push(docForList)
+                } else {
+                  purchaseDocuments.push(docForList)
+                }
+              } else {
+                logWarn('Document has no VAT amounts and no clear category', {
+                  operation: 'document-categorization',
+                  documentId: document.id,
+                  category: document.category
+                })
+              }
+            }
           }
         }
       } else if (document.scanResult) {
@@ -723,6 +711,24 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       ? weightedConfidenceSum / totalVATAmount
       : (confidenceCount > 0 ? totalConfidence / confidenceCount : 0)
     
+    // ENHANCED: Calculate processing statistics
+    let completedDocs = 0
+    let failedDocs = 0
+    let pendingDocs = 0
+    
+    for (const document of documents) {
+      const status = parseProcessingStatus(document.scanResult)
+      if (status) {
+        if (status.status === 'completed') completedDocs++
+        else if (status.status === 'failed') failedDocs++
+        else pendingDocs++
+      } else if (document.isScanned) {
+        completedDocs++ // Legacy processed documents
+      } else {
+        pendingDocs++
+      }
+    }
+    
     const summary: ExtractedVATSummary = {
       totalSalesVAT: Math.round(totalSalesVAT * 100) / 100,
       totalPurchaseVAT: Math.round(totalPurchaseVAT * 100) / 100,
@@ -730,8 +736,21 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       documentCount: documents.length,
       processedDocuments,
       averageConfidence: averageConfidence,
-      salesDocuments,
-      purchaseDocuments
+      // ENHANCED: Add processing stats
+      failedDocuments: failedDocs,
+      processingStats: {
+        completed: completedDocs,
+        failed: failedDocs,
+        pending: pendingDocs
+      },
+      salesDocuments: salesDocuments.map(doc => ({
+        ...doc,
+        processingStatus: parseProcessingStatus(doc.scanResult)
+      })),
+      purchaseDocuments: purchaseDocuments.map(doc => ({
+        ...doc,
+        processingStatus: parseProcessingStatus(doc.scanResult)
+      }))
     }
     
     // VAT summary calculated

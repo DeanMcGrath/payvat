@@ -53,6 +53,7 @@ export default function VATSubmissionPage() {
   const [fetchTimeout, setFetchTimeout] = useState<NodeJS.Timeout | null>(null)
   const [cachedVATData, setCachedVATData] = useState<{data: any, timestamp: number} | null>(null)
   const [isRefreshDisabled, setIsRefreshDisabled] = useState(false)
+  const [autoPopulateTimeout, setAutoPopulateTimeout] = useState<NodeJS.Timeout | null>(null)
   
   // Batch upload state
   const [enableBatchMode, setEnableBatchMode] = useState(true)
@@ -101,10 +102,13 @@ export default function VATSubmissionPage() {
     loadExtractedVATData()
     loadUploadedDocuments()
     
-    // Cleanup timeout on unmount
+    // Cleanup timeouts on unmount
     return () => {
       if (fetchTimeout) {
         clearTimeout(fetchTimeout)
+      }
+      if (autoPopulateTimeout) {
+        clearTimeout(autoPopulateTimeout)
       }
     }
   }, [])
@@ -168,14 +172,29 @@ export default function VATSubmissionPage() {
   }
   
   // Debounced refresh function to prevent rapid successive calls
-  const debouncedRefreshVATData = (delay = 3000) => {
+  const debouncedRefreshVATData = (delay = 3000, enableAutoPopulate = false) => {
+    // Clear any existing timeouts to prevent conflicts
     if (fetchTimeout) {
       clearTimeout(fetchTimeout)
+    }
+    if (autoPopulateTimeout) {
+      clearTimeout(autoPopulateTimeout)
     }
     
     const timeout = setTimeout(() => {
       console.log('🔄 FRONTEND: Executing debounced VAT data refresh')
-      loadExtractedVATData(true)
+      loadExtractedVATData(true).then(() => {
+        // Auto-populate only if specifically requested and data is available
+        if (enableAutoPopulate) {
+          const populateTimeout = setTimeout(() => {
+            if (extractedVATData && extractedVATData.processedDocuments > 0) {
+              console.log('✅ FRONTEND: Auto-populating calculator with extracted VAT data')
+              useExtractedVATData()
+            }
+          }, 1000) // Short delay after data refresh
+          setAutoPopulateTimeout(populateTimeout)
+        }
+      })
     }, delay)
     
     setFetchTimeout(timeout)
@@ -758,19 +777,8 @@ export default function VATSubmissionPage() {
                       setUploadedDocuments(prev => [...prev, doc])
                       
                       console.log('⏳ FRONTEND: Document uploaded, scheduling debounced VAT data refresh...')
-                      // Use debounced refresh to avoid rate limiting
-                      debouncedRefreshVATData(5000) // 5 second delay for AI processing
-                      
-                      // Auto-populate when data is available (this will happen via the next refresh)
-                      setTimeout(() => {
-                        if (extractedVATData && extractedVATData.processedDocuments > 0) {
-                          console.log('✅ FRONTEND: Auto-populating calculator with available VAT data')
-                          setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
-                          setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
-                          setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
-                          setUseExtractedData(true)
-                        }
-                      }, 6000) // Check after the refresh completes
+                      // FIXED: Use single debounced refresh with auto-populate
+                      debouncedRefreshVATData(5000, true) // 5 second delay for AI processing, with auto-populate
                     }}
                   />
                 </div>
@@ -954,19 +962,8 @@ export default function VATSubmissionPage() {
                       setUploadedDocuments(prev => [...prev, doc])
                       
                       console.log('⏳ FRONTEND: Document uploaded, scheduling debounced VAT data refresh...')
-                      // Use debounced refresh to avoid rate limiting
-                      debouncedRefreshVATData(5000) // 5 second delay for AI processing
-                      
-                      // Auto-populate when data is available (this will happen via the next refresh)
-                      setTimeout(() => {
-                        if (extractedVATData && extractedVATData.processedDocuments > 0) {
-                          console.log('✅ FRONTEND: Auto-populating calculator with available VAT data')
-                          setSalesVAT(extractedVATData.totalSalesVAT.toFixed(2))
-                          setPurchaseVAT(extractedVATData.totalPurchaseVAT.toFixed(2))
-                          setNetVAT(extractedVATData.totalNetVAT.toFixed(2))
-                          setUseExtractedData(true)
-                        }
-                      }, 6000) // Check after the refresh completes
+                      // FIXED: Use single debounced refresh with auto-populate
+                      debouncedRefreshVATData(5000, true) // 5 second delay for AI processing, with auto-populate
                     }}
                   />
                 </div>
