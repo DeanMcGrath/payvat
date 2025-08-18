@@ -174,15 +174,18 @@ export default function QuickActions({ className }: QuickActionsProps) {
   }
 
   return (
-    <Card className={`${className} card-modern hover-lift`}>
-      <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold text-foreground flex items-center space-x-2">
-          <Zap className="h-6 w-6 text-primary" />
+    <Card className={`${className} gradient-primary relative overflow-hidden hover-lift`}>
+      {/* Background Pattern */}
+      <div className="absolute inset-0 gradient-mesh opacity-10"></div>
+      
+      <CardHeader className="pb-4 relative z-10">
+        <CardTitle className="text-xl font-bold text-white flex items-center space-x-2">
+          <Zap className="h-6 w-6 text-white" />
           <span>Quick Actions</span>
         </CardTitle>
-        <p className="text-sm text-muted-foreground">Common tasks and frequent operations</p>
+        <p className="text-sm text-white/80">Common tasks and frequent operations</p>
       </CardHeader>
-      <CardContent>
+      <CardContent className="relative z-10">
         <div className="space-y-6">
           {categoryOrder.map(category => {
             const categoryActions = groupedActions[category]
@@ -191,10 +194,12 @@ export default function QuickActions({ className }: QuickActionsProps) {
             return (
               <div key={category} className="space-y-3">
                 <div className="flex items-center space-x-2">
-                  <div className={`p-1.5 rounded-lg ${getCategoryColor(category)}`}>
-                    {getCategoryIcon(category)}
+                  <div className={`p-1.5 rounded-lg bg-white/20 backdrop-blur-sm`}>
+                    <div className="text-white">
+                      {getCategoryIcon(category)}
+                    </div>
                   </div>
-                  <h4 className="text-sm font-semibold text-foreground">
+                  <h4 className="text-sm font-semibold text-white">
                     {categoryNames[category as keyof typeof categoryNames]}
                   </h4>
                 </div>
@@ -205,18 +210,17 @@ export default function QuickActions({ className }: QuickActionsProps) {
                     return (
                       <Button
                         key={action.id}
-                        variant="ghost"
-                        className="h-auto p-4 justify-start text-left hover:bg-gray-50 hover:border-primary/20 border border-transparent group"
+                        className="h-auto p-4 justify-start text-left bg-white hover:bg-white/95 text-gray-800 border-0 shadow-sm hover:shadow-md transition-all group rounded-lg"
                         onClick={() => handleActionClick(action)}
                       >
                         <div className="flex items-start space-x-3 w-full">
-                          <div className="flex-shrink-0 p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                            <Icon className="h-5 w-5 text-primary" />
+                          <div className="flex-shrink-0 p-2 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
+                            <Icon className="h-5 w-5 text-blue-600" />
                           </div>
                           
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-1">
-                              <h5 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                              <h5 className="text-sm font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
                                 {action.title}
                               </h5>
                               <div className="flex items-center space-x-1">
@@ -225,15 +229,15 @@ export default function QuickActions({ className }: QuickActionsProps) {
                                     {action.badge}
                                   </Badge>
                                 )}
-                                <ChevronRight className="h-3 w-3 text-muted-foreground group-hover:text-primary transition-colors" />
+                                <ChevronRight className="h-3 w-3 text-gray-400 group-hover:text-blue-600 transition-colors" />
                               </div>
                             </div>
                             
-                            <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
+                            <p className="text-xs text-gray-600 mb-2 line-clamp-2">
                               {action.description}
                             </p>
                             
-                            <div className="flex items-center justify-between text-xs text-muted-foreground">
+                            <div className="flex items-center justify-between text-xs text-gray-500">
                               {action.estimatedTime && (
                                 <div className="flex items-center space-x-1">
                                   <Clock className="h-3 w-3" />
@@ -243,7 +247,7 @@ export default function QuickActions({ className }: QuickActionsProps) {
                               
                               {action.shortcut && (
                                 <div className="hidden sm:flex items-center space-x-1">
-                                  <kbd className="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded text-xs font-mono">
+                                  <kbd className="px-1.5 py-0.5 bg-gray-200 text-gray-700 rounded text-xs font-mono">
                                     {action.shortcut}
                                   </kbd>
                                 </div>
@@ -261,19 +265,19 @@ export default function QuickActions({ className }: QuickActionsProps) {
         </div>
         
         {/* Quick Stats */}
-        <div className="mt-6 pt-6 border-t border-gray-200">
+        <div className="mt-6 pt-6 border-t border-white/20 relative z-10">
           <div className="grid grid-cols-3 gap-4 text-center">
             <div className="space-y-1">
-              <p className="text-lg font-bold text-foreground">12</p>
-              <p className="text-xs text-muted-foreground">Tasks This Week</p>
+              <p className="text-lg font-bold text-white">12</p>
+              <p className="text-xs text-white/70">Tasks This Week</p>
             </div>
             <div className="space-y-1">
-              <p className="text-lg font-bold text-foreground">3</p>
-              <p className="text-xs text-muted-foreground">Pending Actions</p>
+              <p className="text-lg font-bold text-white">3</p>
+              <p className="text-xs text-white/70">Pending Actions</p>
             </div>
             <div className="space-y-1">
-              <p className="text-lg font-bold text-foreground">98%</p>
-              <p className="text-xs text-muted-foreground">On-Time Rate</p>
+              <p className="text-lg font-bold text-white">98%</p>
+              <p className="text-xs text-white/70">On-Time Rate</p>
             </div>
           </div>
         </div>
