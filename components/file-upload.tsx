@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Upload, FileText, X, CheckCircle, AlertCircle, Loader2, ArrowRight, Pause, Play, RotateCcw, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Progress } from '@/components/ui/progress'
+import { generateDocumentFingerprint, checkForDuplicates } from '@/lib/duplicateDetection'
 
 interface UploadedDocument {
   id: string

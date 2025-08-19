@@ -207,14 +207,37 @@ async function processDocumentEnhanced(request: NextRequest, user?: AuthUser) {
       // Don't fail the whole request
     }
     
-    // Update document scan status
+    // Extract enhanced data for document organization
+    const enhancedData = await extractDocumentMetadata(result, document)
+    
+    // Update document with scan status and new fields
     try {
       await prisma.document.update({
         where: { id: document.id },
         data: {
           isScanned: result.isScanned,
-          scanResult: result.scanResult
+          scanResult: result.scanResult,
+          // New enhanced fields
+          extractedDate: enhancedData.extractedDate,
+          extractedYear: enhancedData.extractedYear,
+          extractedMonth: enhancedData.extractedMonth,
+          invoiceTotal: enhancedData.invoiceTotal,
+          vatAccuracy: enhancedData.vatAccuracy,
+          processingQuality: enhancedData.processingQuality,
+          extractionConfidence: enhancedData.extractionConfidence,
+          dateExtractionConfidence: enhancedData.dateExtractionConfidence,
+          totalExtractionConfidence: enhancedData.totalExtractionConfidence,
+          validationStatus: enhancedData.validationStatus,
+          complianceIssues: enhancedData.complianceIssues,
+          // Duplicate detection will be added later
+          isDuplicate: false
         }
+      })
+      
+      console.log('✅ Document updated with enhanced metadata:', {
+        extractedDate: enhancedData.extractedDate,
+        invoiceTotal: enhancedData.invoiceTotal,
+        vatAccuracy: enhancedData.vatAccuracy
       })
       
     } catch (updateError) {
@@ -276,6 +299,183 @@ async function processDocumentEnhanced(request: NextRequest, user?: AuthUser) {
       { status: 500 }
     )
   }
+}
+
+/**
+ * Extract enhanced metadata from document processing results
+ */
+async function extractDocumentMetadata(result: AdvancedProcessingResult, document: any) {
+  const metadata = {
+    extractedDate: null as Date | null,
+    extractedYear: null as number | null,
+    extractedMonth: null as number | null,
+    invoiceTotal: null as number | null,
+    vatAccuracy: 0.0,
+    processingQuality: 85, // Default quality score
+    extractionConfidence: result.extractedData?.confidence || 0.0,
+    dateExtractionConfidence: 0.0,
+    totalExtractionConfidence: 0.0,
+    validationStatus: 'PENDING' as string,
+    complianceIssues: [] as string[]
+  }
+
+  try {
+    // Extract date information
+    if (result.extractedData?.metadata) {
+      const extractedData = result.extractedData.metadata
+
+      // Look for date fields in extracted data
+      const dateFields = ['documentDate', 'invoiceDate', 'date', 'issueDate']
+      let extractedDate = null
+      let dateConfidence = 0.0
+
+      for (const field of dateFields) {
+        if (extractedData[field]) {
+          const dateValue = extractedData[field]
+          if (dateValue.value) {
+            try {
+              extractedDate = new Date(dateValue.value)
+              dateConfidence = dateValue.confidence || 0.7
+              break
+            } catch (e) {
+              console.warn('Failed to parse date:', dateValue.value)
+            }
+          }
+        }
+      }
+
+      // Fallback: try to extract date from document name
+      if (!extractedDate) {
+        const dateFromName = extractDateFromFileName(document.originalName)
+        if (dateFromName) {
+          extractedDate = dateFromName
+          dateConfidence = 0.5 // Lower confidence for filename extraction
+        }
+      }
+
+      // Use upload date as final fallback
+      if (!extractedDate) {
+        extractedDate = new Date(document.uploadedAt)
+        dateConfidence = 0.3 // Low confidence for fallback
+      }
+
+      if (extractedDate) {
+        metadata.extractedDate = extractedDate
+        metadata.extractedYear = extractedDate.getFullYear()
+        metadata.extractedMonth = extractedDate.getMonth() + 1 // 1-based month
+        metadata.dateExtractionConfidence = dateConfidence
+      }
+
+      // Extract total amount
+      const totalFields = ['total', 'totalAmount', 'grandTotal', 'amountDue']
+      for (const field of totalFields) {
+        if (extractedData[field]) {
+          const totalValue = extractedData[field]
+          if (totalValue.value && typeof totalValue.value === 'number') {
+            metadata.invoiceTotal = totalValue.value
+            metadata.totalExtractionConfidence = totalValue.confidence || 0.7
+            break
+          }
+        }
+      }
+
+      // Calculate VAT accuracy based on confidence scores
+      const vatFields = extractedData.vatAmounts || []
+      if (vatFields.length > 0) {
+        const avgConfidence = vatFields.reduce((sum: number, vat: any) => sum + (vat.confidence || 0), 0) / vatFields.length
+        metadata.vatAccuracy = avgConfidence
+      }
+
+      // Set processing quality based on various factors
+      let qualityScore = 70 // Base score
+      
+      if (result.processingStrategy === 'TEMPLATE_MATCH') {
+        qualityScore += 20 // Template match is higher quality
+      }
+      if (metadata.dateExtractionConfidence > 0.8) {
+        qualityScore += 5
+      }
+      if (metadata.totalExtractionConfidence > 0.8) {
+        qualityScore += 5
+      }
+      
+      metadata.processingQuality = Math.min(100, qualityScore)
+
+      // Validate compliance (Irish VAT requirements)
+      const issues: string[] = []
+      
+      if (!metadata.invoiceTotal || metadata.invoiceTotal <= 0) {
+        issues.push('Missing or invalid invoice total')
+      }
+      
+      if (!metadata.extractedDate) {
+        issues.push('Missing document date')
+      }
+      
+      if (vatFields.length === 0) {
+        issues.push('No VAT amounts detected')
+      }
+
+      metadata.complianceIssues = issues
+      
+      if (issues.length === 0) {
+        metadata.validationStatus = 'COMPLIANT'
+      } else if (issues.length <= 2) {
+        metadata.validationStatus = 'NEEDS_REVIEW'
+      } else {
+        metadata.validationStatus = 'NON_COMPLIANT'
+      }
+    }
+
+  } catch (error) {
+    console.error('Error extracting document metadata:', error)
+  }
+
+  return metadata
+}
+
+/**
+ * Extract date from filename patterns
+ */
+function extractDateFromFileName(filename: string): Date | null {
+  // Common date patterns in filenames
+  const patterns = [
+    /(\d{4})[-_](\d{1,2})[-_](\d{1,2})/, // YYYY-MM-DD or YYYY_MM_DD
+    /(\d{1,2})[-_](\d{1,2})[-_](\d{4})/, // MM-DD-YYYY or MM_DD_YYYY
+    /(\d{1,2})[-_](\d{1,2})[-_](\d{2})/, // MM-DD-YY or MM_DD_YY
+  ]
+
+  for (const pattern of patterns) {
+    const match = filename.match(pattern)
+    if (match) {
+      try {
+        let year, month, day
+        if (pattern.source.startsWith('(\\d{4})')) {
+          // YYYY-MM-DD format
+          year = parseInt(match[1])
+          month = parseInt(match[2]) - 1 // 0-based for Date constructor
+          day = parseInt(match[3])
+        } else {
+          // MM-DD-YYYY format
+          month = parseInt(match[1]) - 1
+          day = parseInt(match[2])
+          year = parseInt(match[3])
+          if (year < 100) {
+            year += 2000 // Convert 2-digit year
+          }
+        }
+
+        const date = new Date(year, month, day)
+        if (!isNaN(date.getTime())) {
+          return date
+        }
+      } catch (e) {
+        continue
+      }
+    }
+  }
+
+  return null
 }
 
 /**

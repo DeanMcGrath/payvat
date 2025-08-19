@@ -9,11 +9,12 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Calculator, FileText, CheckCircle, BadgeCheck, RefreshCw, X, AlertCircle, Loader2, Eye, Edit3 } from 'lucide-react'
+import { ArrowLeft, Calculator, FileText, CheckCircle, BadgeCheck, RefreshCw, X, AlertCircle, Loader2, Eye, Edit3, Play, Video } from 'lucide-react'
 import FileUpload from "@/components/file-upload"
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 import DocumentViewer from "@/components/document-viewer"
+import { VideoModal } from "@/components/video-modal"
 import { toast } from "sonner"
 import { logger } from "@/lib/logger"
 import { useVATData } from "@/contexts/vat-data-context"
@@ -58,6 +59,9 @@ export default function VATSubmissionPage() {
   // Batch upload state
   const [enableBatchMode, setEnableBatchMode] = useState(true)
   const [maxConcurrentUploads, setMaxConcurrentUploads] = useState(3)
+  
+  // Video modal state
+  const [showVideoModal, setShowVideoModal] = useState(false)
   
 
   // Use period data from context or fallback
@@ -565,172 +569,34 @@ export default function VATSubmissionPage() {
 
 
       <div className="max-w-6xl mx-auto px-6 content-after-header pb-8">
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Form */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Extracted VAT Data Card */}
-            {extractedVATData && extractedVATData.processedDocuments > 0 && (
-              <Card className="card-premium ">
-                <CardHeader>
-                  <CardTitle className="text-lg font-semibold text-blue-900 flex items-center">
-                    <BadgeCheck className="h-5 w-5 mr-2 text-[#73C2FB]" />
-                    VAT Data Extracted from Documents
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-white p-3 rounded-lg border border-[#99D3FF]">
-                      <div className="text-sm text-gray-600">Sales VAT</div>
-                      <div className="text-lg font-semibold text-[#73C2FB]">
-{formatCurrency(extractedVATData.totalSalesVAT)}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {extractedVATData.salesDocuments.length} document(s)
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white p-3 rounded-lg border border-[#99D3FF]">
-                      <div className="text-sm text-gray-600">Purchase VAT</div>
-                      <div className="text-lg font-semibold text-[#73C2FB]">
-{formatCurrency(extractedVATData.totalPurchaseVAT)}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {extractedVATData.purchaseDocuments.length} document(s)
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white p-3 rounded-lg border border-[#99D3FF]">
-                      <div className="text-sm text-gray-600">Confidence</div>
-                      <div className="text-lg font-semibold text-[#73C2FB]">
-                        {(extractedVATData.averageConfidence * 100).toFixed(0)}%
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {extractedVATData.processedDocuments} processed
-                      </div>
-                    </div>
+        {/* Watch Demo Video Section - Top of Page */}
+        <div className="mb-8">
+          <Card className="bg-gradient-to-r from-[#E6F4FF] to-[#CCE7FF] border-[#99D3FF]">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-center">
+                <div className="text-center">
+                  <div className="flex items-center justify-center mb-3">
+                    <Video className="h-8 w-8 text-[#73C2FB] mr-3" />
+                    <h2 className="text-2xl font-bold text-blue-900">Learn How It Works</h2>
                   </div>
-                  
-                  <div className="flex space-x-2">
-                    <Button 
-                      onClick={useExtractedVATData}
-                      className="bg-[#73C2FB] hover:bg-[#73C2FB] text-white"
-                      disabled={useExtractedData}
-                    >
-                      <Calculator className="h-4 w-4 mr-2" />
-                      {useExtractedData ? 'Using Extracted Data' : 'Use Extracted Amounts'}
-                    </Button>
-                    
-                    <Button 
-                      onClick={() => {
-                        console.log('🔄 FRONTEND: Manual refresh button clicked')
-                        setIsRefreshDisabled(true)
-                        loadExtractedVATData(true).finally(() => {
-                          // Re-enable refresh button after 3 seconds
-                          setTimeout(() => setIsRefreshDisabled(false), 3000)
-                        })
-                      }}
-                      variant="outline" 
-                      className="border-[#99D3FF] text-[#5BADEA]"
-                      disabled={loadingExtractedData || isRefreshDisabled}
-                    >
-                      <RefreshCw className={`h-4 w-4 mr-2 ${loadingExtractedData ? 'animate-spin' : ''}`} />
-                      {isRefreshDisabled ? 'Wait...' : 'Refresh'}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-
-
-
-
-
-            <Card className="card-modern ">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                  <Calculator className="h-5 w-5 mr-2 text-[#73C2FB]" />
-                  VAT Calculation
-                  {useExtractedData && (
-                    <Badge className="ml-2 bg-[#CCE7FF] text-[#004A75]">
-                      From Documents
-                    </Badge>
-                  )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="sales-vat" className="text-gray-700 font-medium">
-                      VAT on Sales (Output VAT)
-                    </Label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">€</span>
-                      <Input
-                        id="sales-vat"
-                        type="text"
-                        value={salesVAT}
-                        onChange={(e) => {
-                          setSalesVAT(e.target.value)
-                          // Update context with new value
-                          const salesValue = parseFloat(e.target.value) || 0
-                          const purchaseValue = parseFloat(purchaseVAT) || 0
-                          setVATAmounts(salesValue, purchaseValue)
-                        }}
-                        className="pl-8 bg-white border-gray-300 focus:border-[#73C2FB] focus:ring-[#73C2FB]"
-                      />
-                    </div>
-                    <p className="text-xs text-gray-500">Total VAT collected on sales</p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="purchase-vat" className="text-gray-700 font-medium">
-                      VAT on Purchases (Input VAT)
-                    </Label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">€</span>
-                      <Input
-                        id="purchase-vat"
-                        type="text"
-                        value={purchaseVAT}
-                        onChange={(e) => {
-                          setPurchaseVAT(e.target.value)
-                          // Update context with new value
-                          const salesValue = parseFloat(salesVAT) || 0
-                          const purchaseValue = parseFloat(e.target.value) || 0
-                          setVATAmounts(salesValue, purchaseValue)
-                        }}
-                        className="pl-8 bg-white border-gray-300 focus:border-[#73C2FB] focus:ring-[#73C2FB]"
-                      />
-                    </div>
-                    <p className="text-xs text-gray-500">Total VAT paid on purchases</p>
-                  </div>
+                  <p className="text-[#5BADEA] mb-4 text-lg">
+                    Watch our demo to see how easy VAT submission can be
+                  </p>
+                  <Button 
+                    onClick={() => setShowVideoModal(true)}
+                    size="lg"
+                    className="bg-[#73C2FB] hover:bg-[#5BADEA] text-white px-8 py-3 text-lg font-semibold"
+                  >
+                    <Play className="h-5 w-5 mr-2" />
+                    Watch Demo Video
+                  </Button>
                 </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-                <div className="border-t pt-6">
-                  <div className="bg-[#E6F4FF] border border-[#99D3FF] rounded-lg p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <Label className="text-lg font-semibold text-blue-900">Net VAT Due</Label>
-                        <p className="text-sm text-[#5BADEA]">Amount to pay to Revenue</p>
-                      </div>
-                      <div className="text-3xl font-bold text-[#73C2FB]">€{netVAT}</div>
-                    </div>
-                  </div>
-                </div>
-
-                <Button 
-                  onClick={calculateNetVAT}
-                  className="w-full bg-[#73C2FB] hover:bg-[#73C2FB] text-white"
-                >
-                  <Calculator className="h-4 w-4 mr-2" />
-                  Recalculate VAT
-                </Button>
-              </CardContent>
-            </Card>
-
-
+        <div className="space-y-6">
             {/* Sales Documents Section - Always visible */}
             <Card className="card-modern border-[#99D3FF]">
               <CardHeader className="bg-[#E6F4FF]">
@@ -774,8 +640,78 @@ export default function VATSubmissionPage() {
                   />
                 </div>
 
-                {/* Uploaded Sales Documents List */}
-                {uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length > 0 && (
+              </CardContent>
+            </Card>
+
+            {/* Purchase Documents Section - Always visible */}
+            <Card className="card-modern border-green-200">
+              <CardHeader className="bg-green-50">
+                <CardTitle className="text-lg font-semibold text-green-900 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FileText className="h-5 w-5 mr-2 text-green-600" />
+                    Section 2: Purchase Documents {uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length > 0 && (
+                      <>({uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length})</>
+                    )}
+                  </div>
+                  {extractedVATData?.totalPurchaseVAT && extractedVATData.totalPurchaseVAT > 0 && (
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-green-600">
+                        Purchase VAT Total: {formatCurrency(extractedVATData.totalPurchaseVAT)}
+                      </div>
+                    </div>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-4">
+                {/* Purchase Upload Area */}
+                <div className="mb-6">
+                  <FileUpload
+                    category="PURCHASES"
+                    title="Upload Purchase Documents"
+                    description="Upload purchase-related documents including invoices, receipts, and expense records"
+                    acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
+                    enableBatchMode={true}
+                    maxConcurrentUploads={maxConcurrentUploads}
+                    showBatchProgress={true}
+                    onUploadSuccess={(doc) => {
+                      console.log('📤 FRONTEND: Purchase document uploaded:', doc.fileName)
+                      logger.info('Purchase document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
+                      // Add to uploaded documents list
+                      setUploadedDocuments(prev => [...prev, doc])
+                      
+                      console.log('⏳ FRONTEND: Document uploaded, scheduling debounced VAT data refresh...')
+                      // FIXED: Use single debounced refresh with auto-populate
+                      debouncedRefreshVATData(5000, true) // 5 second delay for AI processing, with auto-populate
+                    }}
+                  />
+                </div>
+
+              </CardContent>
+            </Card>
+
+            {/* Document List Section - Moved from upload areas */}
+            {(uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length > 0 || 
+              uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length > 0) && (
+              <Card className="card-modern border-gray-300">
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold text-gray-900 flex items-center">
+                    <FileText className="h-5 w-5 mr-2 text-gray-600" />
+                    Uploaded Documents ({uploadedDocuments.filter(doc => doc.category?.includes('SALES') || doc.category?.includes('PURCHASE')).length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Sales Documents List */}
+                  {uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length > 0 && (
+                    <div>
+                      <h4 className="text-md font-medium text-blue-900 mb-3 flex items-center">
+                        <div className="w-3 h-3 bg-[#73C2FB] rounded-full mr-2"></div>
+                        Sales Documents ({uploadedDocuments.filter(doc => doc.category?.includes('SALES')).length})
+                        {extractedVATData?.totalSalesVAT && extractedVATData.totalSalesVAT > 0 && (
+                          <span className="ml-2 text-sm font-medium text-[#73C2FB]">
+                            Total VAT: {formatCurrency(extractedVATData.totalSalesVAT)}
+                          </span>
+                        )}
+                      </h4>
                       <div className="space-y-3">
                         {uploadedDocuments
                           .filter(doc => doc.category?.includes('SALES'))
@@ -912,55 +848,21 @@ export default function VATSubmissionPage() {
                             );
                           })}
                       </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Purchase Documents Section - Always visible */}
-            <Card className="card-modern border-green-200">
-              <CardHeader className="bg-green-50">
-                <CardTitle className="text-lg font-semibold text-green-900 flex items-center justify-between">
-                  <div className="flex items-center">
-                    <FileText className="h-5 w-5 mr-2 text-green-600" />
-                    Section 2: Purchase Documents {uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length > 0 && (
-                      <>({uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length})</>
-                    )}
-                  </div>
-                  {extractedVATData?.totalPurchaseVAT && extractedVATData.totalPurchaseVAT > 0 && (
-                    <div className="text-right">
-                      <div className="text-sm font-medium text-green-600">
-                        Purchase VAT Total: {formatCurrency(extractedVATData.totalPurchaseVAT)}
-                      </div>
                     </div>
                   )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4">
-                {/* Purchase Upload Area */}
-                <div className="mb-6">
-                  <FileUpload
-                    category="PURCHASES"
-                    title="Upload Purchase Documents"
-                    description="Upload purchase-related documents including invoices, receipts, and expense records"
-                    acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
-                    enableBatchMode={true}
-                    maxConcurrentUploads={maxConcurrentUploads}
-                    showBatchProgress={true}
-                    onUploadSuccess={(doc) => {
-                      console.log('📤 FRONTEND: Purchase document uploaded:', doc.fileName)
-                      logger.info('Purchase document uploaded', { fileName: doc.fileName }, 'VAT_SUBMISSION')
-                      // Add to uploaded documents list
-                      setUploadedDocuments(prev => [...prev, doc])
-                      
-                      console.log('⏳ FRONTEND: Document uploaded, scheduling debounced VAT data refresh...')
-                      // FIXED: Use single debounced refresh with auto-populate
-                      debouncedRefreshVATData(5000, true) // 5 second delay for AI processing, with auto-populate
-                    }}
-                  />
-                </div>
 
-                {/* Uploaded Purchase Documents List */}
-                {uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length > 0 && (
+                  {/* Purchase Documents List */}
+                  {uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length > 0 && (
+                    <div>
+                      <h4 className="text-md font-medium text-green-900 mb-3 flex items-center">
+                        <div className="w-3 h-3 bg-green-600 rounded-full mr-2"></div>
+                        Purchase Documents ({uploadedDocuments.filter(doc => doc.category?.includes('PURCHASE')).length})
+                        {extractedVATData?.totalPurchaseVAT && extractedVATData.totalPurchaseVAT > 0 && (
+                          <span className="ml-2 text-sm font-medium text-green-600">
+                            Total VAT: {formatCurrency(extractedVATData.totalPurchaseVAT)}
+                          </span>
+                        )}
+                      </h4>
                       <div className="space-y-3">
                         {uploadedDocuments
                           .filter(doc => doc.category?.includes('PURCHASE'))
@@ -1045,10 +947,12 @@ export default function VATSubmissionPage() {
                             );
                           })}
                       </div>
-                )}
-              </CardContent>
-            </Card>
-
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+            
             {/* Other Documents Section (if any exist that aren't SALES or PURCHASE) */}
             {uploadedDocuments.filter(doc => !doc.category?.includes('SALES') && !doc.category?.includes('PURCHASE')).length > 0 && (
               <Card className="card-modern border-gray-200">
@@ -1113,11 +1017,166 @@ export default function VATSubmissionPage() {
                 </CardContent>
               </Card>
             )}
-          </div>
-
-          {/* Summary Sidebar */}
-          <div className="space-y-6">
+            
+            {/* VAT Data Extracted from Documents - Moved from top */}
+            {extractedVATData && extractedVATData.processedDocuments > 0 && (
+              <Card className="card-premium ">
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold text-blue-900 flex items-center">
+                    <BadgeCheck className="h-5 w-5 mr-2 text-[#73C2FB]" />
+                    VAT Data Extracted from Documents
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-white p-3 rounded-lg border border-[#99D3FF]">
+                      <div className="text-sm text-gray-600">Sales VAT</div>
+                      <div className="text-lg font-semibold text-[#73C2FB]">
+{formatCurrency(extractedVATData.totalSalesVAT)}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {extractedVATData.salesDocuments.length} document(s)
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white p-3 rounded-lg border border-[#99D3FF]">
+                      <div className="text-sm text-gray-600">Purchase VAT</div>
+                      <div className="text-lg font-semibold text-[#73C2FB]">
+{formatCurrency(extractedVATData.totalPurchaseVAT)}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {extractedVATData.purchaseDocuments.length} document(s)
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white p-3 rounded-lg border border-[#99D3FF]">
+                      <div className="text-sm text-gray-600">Confidence</div>
+                      <div className="text-lg font-semibold text-[#73C2FB]">
+                        {(extractedVATData.averageConfidence * 100).toFixed(0)}%
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {extractedVATData.processedDocuments} processed
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex space-x-2">
+                    <Button 
+                      onClick={useExtractedVATData}
+                      className="bg-[#73C2FB] hover:bg-[#73C2FB] text-white"
+                      disabled={useExtractedData}
+                    >
+                      <Calculator className="h-4 w-4 mr-2" />
+                      {useExtractedData ? 'Using Extracted Data' : 'Use Extracted Amounts'}
+                    </Button>
+                    
+                    <Button 
+                      onClick={() => {
+                        console.log('🔄 FRONTEND: Manual refresh button clicked')
+                        setIsRefreshDisabled(true)
+                        loadExtractedVATData(true).finally(() => {
+                          // Re-enable refresh button after 3 seconds
+                          setTimeout(() => setIsRefreshDisabled(false), 3000)
+                        })
+                      }}
+                      variant="outline" 
+                      className="border-[#99D3FF] text-[#5BADEA]"
+                      disabled={loadingExtractedData || isRefreshDisabled}
+                    >
+                      <RefreshCw className={`h-4 w-4 mr-2 ${loadingExtractedData ? 'animate-spin' : ''}`} />
+                      {isRefreshDisabled ? 'Wait...' : 'Refresh'}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            
+            {/* VAT Calculation - Moved from top */}
             <Card className="card-modern ">
+              <CardHeader>
+                <CardTitle className="text-lg font-semibold text-foreground flex items-center">
+                  <Calculator className="h-5 w-5 mr-2 text-[#73C2FB]" />
+                  VAT Calculation
+                  {useExtractedData && (
+                    <Badge className="ml-2 bg-[#CCE7FF] text-[#004A75]">
+                      From Documents
+                    </Badge>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="sales-vat" className="text-gray-700 font-medium">
+                      VAT on Sales (Output VAT)
+                    </Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">€</span>
+                      <Input
+                        id="sales-vat"
+                        type="text"
+                        value={salesVAT}
+                        onChange={(e) => {
+                          setSalesVAT(e.target.value)
+                          // Update context with new value
+                          const salesValue = parseFloat(e.target.value) || 0
+                          const purchaseValue = parseFloat(purchaseVAT) || 0
+                          setVATAmounts(salesValue, purchaseValue)
+                        }}
+                        className="pl-8 bg-white border-gray-300 focus:border-[#73C2FB] focus:ring-[#73C2FB]"
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500">Total VAT collected on sales</p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="purchase-vat" className="text-gray-700 font-medium">
+                      VAT on Purchases (Input VAT)
+                    </Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">€</span>
+                      <Input
+                        id="purchase-vat"
+                        type="text"
+                        value={purchaseVAT}
+                        onChange={(e) => {
+                          setPurchaseVAT(e.target.value)
+                          // Update context with new value
+                          const salesValue = parseFloat(salesVAT) || 0
+                          const purchaseValue = parseFloat(e.target.value) || 0
+                          setVATAmounts(salesValue, purchaseValue)
+                        }}
+                        className="pl-8 bg-white border-gray-300 focus:border-[#73C2FB] focus:ring-[#73C2FB]"
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500">Total VAT paid on purchases</p>
+                  </div>
+                </div>
+
+                <div className="border-t pt-6">
+                  <div className="bg-[#E6F4FF] border border-[#99D3FF] rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <Label className="text-lg font-semibold text-blue-900">Net VAT Due</Label>
+                        <p className="text-sm text-[#5BADEA]">Amount to pay to Revenue</p>
+                      </div>
+                      <div className="text-3xl font-bold text-[#73C2FB]">€{netVAT}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <Button 
+                  onClick={calculateNetVAT}
+                  className="w-full bg-[#73C2FB] hover:bg-[#73C2FB] text-white"
+                >
+                  <Calculator className="h-4 w-4 mr-2" />
+                  Recalculate VAT
+                </Button>
+              </CardContent>
+            </Card>
+            
+            {/* Return Summary Panel - Moved from Sidebar */}
+            <Card className="card-modern">
               <CardHeader>
                 <CardTitle className="text-lg font-semibold text-foreground">Return Summary</CardTitle>
               </CardHeader>
@@ -1144,59 +1203,61 @@ export default function VATSubmissionPage() {
                 </div>
               </CardContent>
             </Card>
-
-            <Card className="card-modern ">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold text-foreground">Checklist</CardTitle>
+            
+            {/* Ready to Submit Section - Moved from Sidebar */}
+            <Card className="bg-gradient-to-r from-[#E6F4FF] to-[#CCE7FF] border-[#99D3FF]">
+              <CardHeader className="text-center">
+                <CardTitle className="text-xl font-bold text-blue-900">Ready to Submit?</CardTitle>
+                <p className="text-[#5BADEA] text-sm">Review your VAT return and submit to Revenue Ireland</p>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-[#73C2FB]" />
-                  <span className="text-sm text-gray-700">Period selected</span>
+              <CardContent className="space-y-4">
+                {/* Summary info */}
+                <div className="bg-white/70 rounded-lg p-4 border border-[#B8DDF6]">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <div className="text-gray-600">Period</div>
+                      <div className="font-medium">{displayPeriod}</div>
+                    </div>
+                    <div>
+                      <div className="text-gray-600">Net VAT Due</div>
+                      <div className="font-bold text-[#73C2FB] text-lg">€{netVAT}</div>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-[#73C2FB]" />
-                  <span className="text-sm text-gray-700">VAT amounts entered</span>
+                
+                {/* Action buttons */}
+                <div className="space-y-3">
+                  <Button 
+                    variant="outline" 
+                    className="w-full bg-white/50 border-[#99D3FF] text-[#5BADEA] hover:bg-white/80 justify-start text-base py-6"
+                  >
+                    <FileText className="h-5 w-5 mr-3" />
+                    Save as Draft
+                  </Button>
+                  <Button 
+                    className="w-full bg-[#73C2FB] hover:bg-[#5BADEA] text-white justify-start text-base py-6 shadow-lg"
+                    onClick={() => {
+                      // Save current VAT amounts to context before navigating
+                      const salesValue = parseFloat(salesVAT) || 0
+                      const purchaseValue = parseFloat(purchaseVAT) || 0
+                      setVATAmounts(salesValue, purchaseValue)
+                      
+                      // Navigate to VAT3 return page
+                      setTimeout(() => {
+                        router.push('/vat3-return')
+                      }, 100) // Small delay to ensure context updates
+                    }}
+                  >
+                    <CheckCircle className="h-5 w-5 mr-3" />
+                    Submit VAT Return
+                  </Button>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <div className="h-4 w-4 border-2 border-gray-300 rounded-full"></div>
-                  <span className="text-sm text-gray-500">Documents uploaded</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="h-4 w-4 border-2 border-gray-300 rounded-full"></div>
-                  <span className="text-sm text-gray-500">Return submitted</span>
+                
+                <div className="text-xs text-[#5BADEA] text-center mt-4">
+                  ✓ Secure submission via ROS  ✓ Automatic filing confirmation
                 </div>
               </CardContent>
             </Card>
-
-            <Card className="card-premium ">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold text-foreground">Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Button variant="outline" className="w-full justify-start">
-                  <FileText className="h-4 w-4 mr-2" />
-                  Save as Draft
-                </Button>
-                <Button 
-                  className="w-full bg-[#73C2FB] hover:bg-[#73C2FB] text-white justify-start"
-                  onClick={() => {
-                    // Save current VAT amounts to context before navigating
-                    const salesValue = parseFloat(salesVAT) || 0
-                    const purchaseValue = parseFloat(purchaseVAT) || 0
-                    setVATAmounts(salesValue, purchaseValue)
-                    
-                    // Navigate to VAT3 return page
-                    setTimeout(() => {
-                      router.push('/vat3-return')
-                    }, 100) // Small delay to ensure context updates
-                  }}
-                >
-                  Submit Return
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
         </div>
       </div>
 
@@ -1208,6 +1269,9 @@ export default function VATSubmissionPage() {
         extractedVAT={selectedDocument ? getDocumentVATExtraction(selectedDocument.id) : null}
         onVATCorrection={handleVATCorrection}
       />
+      
+      {/* Video Modal */}
+      <VideoModal isOpen={showVideoModal} onClose={() => setShowVideoModal(false)} />
 
       {/* Footer */}
       <Footer />

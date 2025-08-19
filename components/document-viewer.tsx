@@ -497,8 +497,8 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
   // Initialize correction state when document or extractedVAT changes
   useEffect(() => {
     if (extractedVAT) {
-      setCorrectedSalesVAT(extractedVAT.salesVAT.map(v => v.toString()))
-      setCorrectedPurchaseVAT(extractedVAT.purchaseVAT.map(v => v.toString()))
+      setCorrectedSalesVAT((extractedVAT.salesVAT || []).map(v => v.toString()))
+      setCorrectedPurchaseVAT((extractedVAT.purchaseVAT || []).map(v => v.toString()))
     } else {
       setCorrectedSalesVAT([''])
       setCorrectedPurchaseVAT([''])
@@ -906,9 +906,9 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                 <CardContent className="space-y-4">
                   <div>
                     <Label className="text-sm font-medium">Sales VAT</Label>
-                    {extractedVAT.salesVAT.length > 0 ? (
+                    {extractedVAT.salesVAT && extractedVAT.salesVAT.length > 0 ? (
                       <div className="space-y-1">
-                        {extractedVAT.salesVAT.map((amount, index) => (
+                        {(extractedVAT.salesVAT || []).map((amount, index) => (
                           <div key={index} className="flex items-center gap-2">
                             <Euro className="h-3 w-3 text-gray-400" />
                             <span className="text-sm">{formatCurrency(amount).replace('€', '')}</span>
@@ -927,9 +927,9 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
 
                   <div>
                     <Label className="text-sm font-medium">Purchase VAT</Label>
-                    {extractedVAT.purchaseVAT.length > 0 ? (
+                    {extractedVAT.purchaseVAT && extractedVAT.purchaseVAT.length > 0 ? (
                       <div className="space-y-1">
-                        {extractedVAT.purchaseVAT.map((amount, index) => (
+                        {(extractedVAT.purchaseVAT || []).map((amount, index) => (
                           <div key={index} className="flex items-center gap-2">
                             <Euro className="h-3 w-3 text-gray-400" />
                             <span className="text-sm">{formatCurrency(amount).replace('€', '')}</span>

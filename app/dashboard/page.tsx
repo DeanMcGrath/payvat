@@ -1,469 +1,503 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
+import { useState, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Bell, FileText, Settings, LogOut, TrendingUp, Calendar, Euro, AlertCircle, Loader2, Search, CheckCircle, Calculator } from 'lucide-react'
 import { Input } from "@/components/ui/input"
-import Footer from "@/components/footer"
-import { useSubscription } from "@/contexts/subscription-context"
-import EnhancedStatsCard from "@/components/dashboard/EnhancedStatsCard"
-import InsightsPanel from "@/components/dashboard/InsightsPanel"
-import CalendarWidget from "@/components/dashboard/CalendarWidget"
-import DocumentsOverview from "@/components/dashboard/DocumentsOverview"
-import QuickActions from "@/components/dashboard/QuickActions"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { FileText, Calendar, TrendingUp, TrendingDown, Search, Filter, X, ArrowUpDown, Home } from "lucide-react"
+import FileUpload from "@/components/file-upload"
+import DocumentList, { type Document } from "@/components/document-list"
+import DocumentPreviewModal from "@/components/document-preview-modal"
 
-interface UserProfile {
-  id: string
-  email: string
-  businessName: string
-  vatNumber: string
-  firstName?: string
-  lastName?: string
+// Component wrapper to match the expected interface
+function FileUploadComponent({ onFilesUploaded, defaultDocumentType, title, description }: {
+  onFilesUploaded: (files: any[]) => void
+  defaultDocumentType: string
+  title: string
+  description: string
+}) {
+  return (
+    <FileUpload
+      category={defaultDocumentType === "sales" ? "SALES" : "PURCHASES"}
+      title={title}
+      description={description}
+      acceptedFiles={[".pdf", ".csv", ".xlsx", ".xls", ".jpg", ".jpeg", ".png"]}
+      onUploadSuccess={(document) => {
+        onFilesUploaded([document])
+      }}
+    />
+  )
 }
 
-interface DashboardStats {
-  currentYear: {
-    totalSalesVAT: number
-    totalPurchaseVAT: number
-    totalNetVAT: number
-    returnsSubmitted: number
-  }
-  pendingPayments: Array<{
-    id: string
-    amount: number
-    status: string
-    dueDate?: Date
-    period?: string
-  }>
-  upcomingReturns: Array<{
-    id: string
-    period: string
-    netVAT: number
-    dueDate: Date
-    daysUntilDue: number
-  }>
-  recentActivity: Array<{
-    action: string
-    entityType: string
-    createdAt: Date
-    metadata: any
-  }>
-}
+export default function Dashboard() {
+  const [selectedYear, setSelectedYear] = useState<string>("2024")
+  const [selectedMonth, setSelectedMonth] = useState<string>("all")
+  const [selectedType, setSelectedType] = useState<string>("all")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [sortBy, setSortBy] = useState<"date" | "name" | "size">("date")
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
+  const [previewDocument, setPreviewDocument] = useState<Document | null>(null)
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
 
-export default function HomePage() {
-  const { hasAccess, subscriptionType, trialEndsAt } = useSubscription()
-  const [user, setUser] = useState<UserProfile | null>(null)
-  const [stats, setStats] = useState<DashboardStats | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [statsLoading, setStatsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [documents, setDocuments] = useState<Document[]>([
+    {
+      id: "1",
+      name: "Invoice_2024_001.pdf",
+      type: "sales",
+      date: "2024-01-15",
+      size: 245760,
+      uploadDate: "2024-01-15T10:30:00Z",
+      fileType: "pdf",
+    },
+    {
+      id: "2",
+      name: "Receipt_Office_Supplies.pdf",
+      type: "purchases",
+      date: "2024-01-20",
+      size: 156432,
+      uploadDate: "2024-01-20T14:15:00Z",
+      fileType: "pdf",
+    },
+    {
+      id: "3",
+      name: "Sales_Report_Q1.xlsx",
+      type: "sales",
+      date: "2024-03-31",
+      size: 512000,
+      uploadDate: "2024-03-31T16:45:00Z",
+      fileType: "xlsx",
+    },
+    {
+      id: "4",
+      name: "Equipment_Purchase.pdf",
+      type: "purchases",
+      date: "2024-02-10",
+      size: 324567,
+      uploadDate: "2024-02-10T09:20:00Z",
+      fileType: "pdf",
+    },
+  ])
 
-  useEffect(() => {
-    fetchUserProfile()
-    fetchDashboardStats()
-  }, [])
+  const currentYear = new Date().getFullYear()
+  const years = Array.from({ length: 5 }, (_, i) => currentYear - i)
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
 
-  const fetchUserProfile = async () => {
-    try {
-      const response = await fetch('/api/auth/profile', {
-        method: 'GET',
-        credentials: 'include'
-      })
+  const filteredAndSortedDocuments = useMemo(() => {
+    const filtered = documents.filter((doc) => {
+      const docDate = new Date(doc.date)
+      const docYear = docDate.getFullYear().toString()
+      const docMonth = (docDate.getMonth() + 1).toString()
 
-      if (response.ok) {
-        const data = await response.json()
-        if (data.success && data.user) {
-          setUser(data.user)
-        } else {
-          setError('Failed to load user profile')
-        }
-      } else if (response.status === 401) {
-        // User not authenticated, redirect to login
-        window.location.href = '/login'
-      } else {
-        setError('Failed to fetch user profile')
+      // Filter by year
+      if (selectedYear !== "all" && docYear !== selectedYear) return false
+
+      // Filter by month
+      if (selectedMonth !== "all" && docMonth !== selectedMonth) return false
+
+      // Filter by type
+      if (selectedType !== "all" && doc.type !== selectedType) return false
+
+      // Filter by search query
+      if (searchQuery && !doc.name.toLowerCase().includes(searchQuery.toLowerCase())) return false
+
+      return true
+    })
+
+    // Sort documents
+    filtered.sort((a, b) => {
+      let comparison = 0
+
+      switch (sortBy) {
+        case "date":
+          comparison = new Date(a.date).getTime() - new Date(b.date).getTime()
+          break
+        case "name":
+          comparison = a.name.localeCompare(b.name)
+          break
+        case "size":
+          comparison = a.size - b.size
+          break
       }
-    } catch (err) {
-      setError('Network error occurred')
-    } finally {
-      setLoading(false)
-    }
+
+      return sortOrder === "asc" ? comparison : -comparison
+    })
+
+    return filtered
+  }, [documents, selectedYear, selectedMonth, selectedType, searchQuery, sortBy, sortOrder])
+
+  const stats = useMemo(() => {
+    const total = documents.length
+    const sales = documents.filter((doc) => doc.type === "sales").length
+    const purchases = documents.filter((doc) => doc.type === "purchases").length
+
+    return { total, sales, purchases }
+  }, [documents])
+
+  const clearFilters = () => {
+    setSelectedYear("2024")
+    setSelectedMonth("all")
+    setSelectedType("all")
+    setSearchQuery("")
+    setSortBy("date")
+    setSortOrder("desc")
   }
 
-  const fetchDashboardStats = async () => {
-    try {
-      const response = await fetch('/api/reports?type=dashboard-stats', {
-        method: 'GET',
-        credentials: 'include'
-      })
+  const activeFiltersCount = useMemo(() => {
+    let count = 0
+    if (selectedYear !== "2024") count++
+    if (selectedMonth !== "all") count++
+    if (selectedType !== "all") count++
+    if (searchQuery) count++
+    return count
+  }, [selectedYear, selectedMonth, selectedType, searchQuery])
 
-      if (response.ok) {
-        const data = await response.json()
-        if (data.success && data.report) {
-          setStats(data.report.stats)
-        }
-      }
-    } catch (err) {
-      console.error('Failed to fetch dashboard stats:', err)
-    } finally {
-      setStatsLoading(false)
-    }
+  const handleDocumentView = (document: Document) => {
+    setPreviewDocument(document)
+    setIsPreviewOpen(true)
   }
 
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/logout', {
-        method: 'POST',
-        credentials: 'include'
-      })
-      // Always redirect to login after logout attempt
-      window.location.href = '/login'
-    } catch (err) {
-      // Even if logout fails, redirect to login
-      window.location.href = '/login'
-    }
+  const handleDocumentUpdate = (updatedDocument: Document) => {
+    setDocuments((prev) => prev.map((doc) => (doc.id === updatedDocument.id ? updatedDocument : doc)))
   }
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`
-    }
+  const handleDocumentDownload = (document: Document) => {
+    console.log("[v0] Downloading document:", document.name)
+    // Create a mock download
+    const link = document.createElement("a")
+    link.href = "#"
+    link.download = document.name
+    link.click()
   }
 
-  const handleSearchKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch()
-    }
+  const handleDocumentDelete = (document: Document) => {
+    setDocuments((prev) => prev.filter((doc) => doc.id !== document.id))
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="flex items-center space-x-2">
-          <Loader2 className="h-6 w-6 animate-spin text-[#5BADEA]" />
-          <span className="text-gray-600">Loading dashboard...</span>
-        </div>
-      </div>
+  const handleBulkDelete = (documentIds: string[]) => {
+    setDocuments((prev) => prev.filter((doc) => !documentIds.includes(doc.id)))
+  }
+
+  const handleExport = (documents: Document[]) => {
+    console.log(
+      "[v0] Exporting documents:",
+      documents.map((d) => d.name),
     )
+    // Mock CSV export
+    const csvContent = [
+      "Name,Type,Date,Size,Upload Date",
+      ...documents.map((doc) => `"${doc.name}","${doc.type}","${doc.date}","${doc.size}","${doc.uploadDate}"`),
+    ].join("\n")
+
+    const blob = new Blob([csvContent], { type: "text/csv" })
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "documents-export.csv"
+    link.click()
+    window.URL.revokeObjectURL(url)
   }
 
-  if (error || !user) {
-    return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <Card className="w-full max-w-md border-red-200">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              <AlertCircle className="h-8 w-8 text-red-500" />
-              <span className="text-lg font-medium text-red-800">Error Loading Dashboard</span>
-            </div>
-            <p className="text-red-600 text-center mb-4">{error}</p>
-            <div className="flex space-x-2">
-              <Button onClick={fetchUserProfile} className="flex-1">
-                Try Again
-              </Button>
-              <Button onClick={() => window.location.href = '/login'} variant="outline" className="flex-1">
-                Login
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    )
+  const handleFilesUploaded = (uploadedFiles: any[]) => {
+    console.log("[v0] Files uploaded:", uploadedFiles)
+    // TODO: Convert uploaded files to Document format and add to documents state
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Modern Header */}
-      <header className="gradient-primary relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 gradient-mesh opacity-30"></div>
-        
-        <div className="relative z-10">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
-            <div className="flex items-center justify-between">
-              {/* Logo */}
-              <div className="flex items-center">
-                <Link href="/" className="text-2xl font-bold font-mono text-white tracking-tight hover:text-white/90 transition-colors">
-                  Don't Be Like Me!
-                </Link>
-              </div>
-              
-              {/* Header Content */}
-              <div className="flex items-center space-x-6">
-                {/* Search - Desktop */}
-                <div className="hidden lg:flex items-center space-x-3">
-                  <div className="relative">
-                    <Input
-                      placeholder="Search ..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onKeyPress={handleSearchKeyPress}
-                      className="w-64 xl:w-80 bg-white/10 text-white placeholder-white/70 border-white/20 backdrop-blur-sm focus:bg-white/15 focus:border-white/40"
-                    />
-                    <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70 cursor-pointer" onClick={handleSearch} />
-                  </div>
-                </div>
-                
-                {/* Business Info */}
-                <div className="text-right hidden sm:block">
-                  <h3 className="text-sm lg:text-base font-bold text-white truncate max-w-48 lg:max-w-none">{user.businessName}</h3>
-                  <p className="text-white/70 font-mono text-xs">VAT: {user.vatNumber}</p>
-                </div>
-                
-                {/* Action Buttons */}
-                <div className="flex items-center space-x-2">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 lg:hidden glass-white/10 backdrop-blur-sm border-white/20"
-                    onClick={() => window.location.href = '/search'}
-                    title="Search"
-                  >
-                    <Search className="h-5 w-5" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20 relative"
-                  >
-                    <Bell className="h-5 w-5" />
-                    <span className="absolute -top-1 -right-1 h-3 w-3 bg-warning rounded-full animate-pulse-gentle"></span>
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 hidden sm:flex glass-white/10 backdrop-blur-sm border-white/20"
-                  >
-                    <Settings className="h-5 w-5" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-white hover:bg-white/10 glass-white/10 backdrop-blur-sm border-white/20"
-                    onClick={handleLogout} 
-                    title="Logout"
-                  >
-                    <LogOut className="h-5 w-5" />
-                  </Button>
-                </div>
-              </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-[#0072B1] text-white shadow-lg">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold font-mono">Don't Be Like Me!</h1>
+              <p className="text-blue-100 text-sm">Document Management Dashboard</p>
             </div>
+            <Button variant="secondary" className="bg-white text-[#0072B1] hover:bg-gray-100">
+              <Home className="h-4 w-4 mr-2" />
+              Back to Home
+            </Button>
           </div>
-          
-          {/* Modern Navigation */}
-          <nav className="border-t border-white/10 bg-white/5 backdrop-blur-sm">
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-8">
-                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                    <span>Dashboard</span>
-                  </span>
-                </div>
-                <div className="text-white/60 text-xs hidden sm:block">
-                  Welcome back, {user.firstName || user.businessName}
-                </div>
-              </div>
-            </div>
-          </nav>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="py-8 lg:py-12">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          {/* Welcome Section */}
-          <div className="mb-3 animate-fade-in">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
-              Welcome back, <span className="text-gradient-primary">{user.firstName || user.businessName.split(' ')[0] || 'User'}</span>
-            </h2>
-            <p className="text-xl text-muted-foreground">Here's your VAT overview and recent activity</p>
-          </div>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="mb-6">
+          <nav className="flex items-center space-x-2 text-sm text-slate-600">
+            <span>Dashboard</span>
+            <span>/</span>
+            <span>Documents</span>
+            {selectedYear !== "2024" && (
+              <>
+                <span>/</span>
+                <span>{selectedYear}</span>
+              </>
+            )}
+            {selectedMonth !== "all" && (
+              <>
+                <span>/</span>
+                <span>{months[Number.parseInt(selectedMonth) - 1]}</span>
+              </>
+            )}
+            {selectedType !== "all" && (
+              <>
+                <span>/</span>
+                <span className="capitalize">{selectedType}</span>
+              </>
+            )}
+          </nav>
+        </div>
 
-          {/* Enhanced Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6" data-animate>
-            <EnhancedStatsCard
-              title="Net VAT Due"
-              value={(stats?.pendingPayments && stats.pendingPayments.length > 0) ? 
-                stats.pendingPayments[0].amount : 
-                stats?.currentYear?.totalNetVAT || 0
-              }
-              subtitle={(stats?.pendingPayments && stats.pendingPayments.length > 0) ? 
-                `Due: ${stats.pendingPayments[0].dueDate ? new Date(stats.pendingPayments[0].dueDate).toLocaleDateString() : 'Soon'}` : 
-                'No outstanding VAT'
-              }
-              icon={Euro}
-              trend={{
-                value: 5.2,
-                period: 'vs last quarter'
-              }}
-              status={{
-                type: (stats?.pendingPayments && stats.pendingPayments.length > 0) ? 'warning' : 'success',
-                text: (stats?.pendingPayments && stats.pendingPayments.length > 0) ? 'Payment Due' : 'Up to Date'
-              }}
-              loading={statsLoading}
-            />
-            
-            <EnhancedStatsCard
-              title="Sales VAT"
-              value={stats?.currentYear?.totalSalesVAT || 0}
-              subtitle="This year collected"
-              icon={TrendingUp}
-              trend={{
-                value: 12.8,
-                period: 'vs last year'
-              }}
-              status={{
-                type: 'success',
-                text: 'Growing'
-              }}
-              sparklineData={[1200, 1500, 1800, 1650, 1900, 2100]}
-              loading={statsLoading}
-            />
-            
-            <EnhancedStatsCard
-              title="Returns Filed"
-              value={stats?.currentYear?.returnsSubmitted || 0}
-              subtitle={stats?.currentYear?.returnsSubmitted ? 'Filed this year' : 'Ready to file'}
-              icon={FileText}
-              trend={{
-                value: 0,
-                period: 'on schedule'
-              }}
-              status={{
-                type: 'info',
-                text: 'On Track'
-              }}
-              loading={statsLoading}
-            />
-            
-            <EnhancedStatsCard
-              title="Upcoming Returns"
-              value={stats?.upcomingReturns?.length ?? 0}
-              subtitle={(stats?.upcomingReturns && stats.upcomingReturns.length > 0) ? 'Due soon' : 'All up to date'}
-              icon={Calendar}
-              status={{
-                type: (stats?.upcomingReturns && stats.upcomingReturns.length > 0) ? 'warning' : 'success',
-                text: (stats?.upcomingReturns && stats.upcomingReturns.length > 0) ? 'Action Required' : 'Current'
-              }}
-              loading={statsLoading}
-            />
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar Filters */}
+          <div className="lg:col-span-1">
+            <Card className="sticky top-8">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2 text-[#0072B1]">
+                    <Filter className="h-5 w-5" />
+                    Filters
+                    {activeFiltersCount > 0 && (
+                      <span className="bg-[#0072B1] text-white text-xs rounded-full px-2 py-1">
+                        {activeFiltersCount}
+                      </span>
+                    )}
+                  </CardTitle>
+                  {activeFiltersCount > 0 && (
+                    <Button variant="ghost" size="sm" onClick={clearFilters}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-700">Year</label>
+                  <Select value={selectedYear} onValueChange={setSelectedYear}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {years.map((year) => (
+                        <SelectItem key={year} value={year.toString()}>
+                          {year}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-          {/* Subscription Status */}
-          {subscriptionType === 'trial' && trialEndsAt && (
-            <div className="mb-3">
-              <div className="card-premium p-8 border border-warning/20 bg-warning/5 relative overflow-hidden">
-                <div className="absolute inset-0 gradient-mesh opacity-10"></div>
-                <div className="relative z-10 flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className="icon-modern bg-warning/20 border-warning/30">
-                      <Bell className="h-6 w-6 text-warning" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-foreground mb-1">Free Trial Active</h3>
-                      <p className="text-muted-foreground">
-                        Your trial expires on {trialEndsAt.toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                  <Button variant="default" size="lg" className="hover-lift">
-                    Upgrade Now
-                    <CheckCircle className="ml-2 h-5 w-5" />
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-700">Month</label>
+                  <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Months</SelectItem>
+                      {months.map((month, index) => (
+                        <SelectItem key={month} value={(index + 1).toString()}>
+                          {month}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-700">Document Type</label>
+                  <Select value={selectedType} onValueChange={setSelectedType}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Documents</SelectItem>
+                      <SelectItem value="sales">Sales</SelectItem>
+                      <SelectItem value="purchases">Purchases</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-700">Sort By</label>
+                  <Select value={sortBy} onValueChange={(value: "date" | "name" | "size") => setSortBy(value)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="date">Date</SelectItem>
+                      <SelectItem value="name">Name</SelectItem>
+                      <SelectItem value="size">Size</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-700">Sort Order</label>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                    className="w-full justify-start"
+                  >
+                    <ArrowUpDown className="h-4 w-4 mr-2" />
+                    {sortOrder === "asc" ? "Ascending" : "Descending"}
                   </Button>
                 </div>
-              </div>
-            </div>
-          )}
 
-          {/* Main Dashboard Grid - Improved 2-Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-6">
-            {/* Left Column - Primary Actions & Insights (60% width) */}
-            <div className="lg:col-span-3 space-y-6">
-              {/* Quick Actions - More Prominent */}
-              <QuickActions />
-              
-              {/* Insights Panel - Primary Focus */}
-              <InsightsPanel />
-            </div>
-            
-            {/* Right Column - Supporting Info (40% width) */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Calendar Widget - Top for Deadline Visibility */}
-              <CalendarWidget />
-              
-              {/* Documents Overview */}
-              <DocumentsOverview />
-              
-              {/* Recent Activity - Simplified */}
-              <Card className="card-modern hover-lift">
-                <CardHeader className="pb-4">
-                  <CardTitle className="text-xl font-bold text-foreground">Recent Activity</CardTitle>
-                  <p className="text-sm text-muted-foreground">Latest VAT transactions</p>
-                </CardHeader>
-                <CardContent>
-                  {statsLoading ? (
-                    <div className="flex items-center justify-center py-6">
-                      <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-                      <span className="ml-2 text-muted-foreground">Loading...</span>
-                    </div>
-                  ) : stats?.recentActivity && stats.recentActivity.length > 0 ? (
-                    <div className="space-y-3">
-                      {stats.recentActivity.slice(0, 4).map((activity, index) => {
-                        const getActivityDetails = (action: string) => {
-                          switch (action) {
-                            case 'SUBMIT_VAT_RETURN':
-                              return { icon: FileText, title: 'VAT return submitted', color: 'text-primary' }
-                            case 'UPLOAD_DOCUMENT':
-                              return { icon: FileText, title: 'Document uploaded', color: 'text-blue-500' }
-                            case 'CALCULATE_VAT':
-                              return { icon: Calculator, title: 'VAT calculated', color: 'text-green-500' }
-                            default:
-                              return { icon: CheckCircle, title: 'Activity logged', color: 'text-gray-500' }
-                          }
-                        }
-                        
-                        const details = getActivityDetails(activity.action)
-                        const Icon = details.icon
-                        
-                        return (
-                          <div key={index} className="flex items-center space-x-3 p-2 bg-gray-50 rounded-lg">
-                            <Icon className={`h-4 w-4 ${details.color}`} />
-                            <div className="flex-1">
-                              <p className="text-sm font-medium text-foreground">{details.title}</p>
-                              <p className="text-xs text-muted-foreground">
-                                {new Date(activity.createdAt).toLocaleDateString()}
-                              </p>
-                            </div>
-                          </div>
-                        )
-                      })}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-slate-700">Search</label>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      placeholder="Search documents..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                    {searchQuery && (
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="w-full text-xs mt-3"
-                        onClick={() => window.location.href = '/reports'}
+                        onClick={() => setSearchQuery("")}
+                        className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
                       >
-                        View All Activity
+                        <X className="h-3 w-3" />
                       </Button>
-                    </div>
-                  ) : (
-                    <div className="text-center py-4 text-muted-foreground">
-                      <CheckCircle className="h-6 w-6 mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">No recent activity</p>
-                    </div>
-                  )}
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Main Content */}
+          <div className="lg:col-span-3 space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Sales Upload Section */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-green-600">
+                    <TrendingUp className="h-5 w-5" />
+                    Upload Sales Documents
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <FileUploadComponent
+                    onFilesUploaded={handleFilesUploaded}
+                    defaultDocumentType="sales"
+                    title="Sales Documents"
+                    description="Upload invoices, receipts, and sales reports"
+                  />
+                </CardContent>
+              </Card>
+
+              {/* Purchases Upload Section */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-red-600">
+                    <TrendingDown className="h-5 w-5" />
+                    Upload Purchase Documents
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <FileUploadComponent
+                    onFilesUploaded={handleFilesUploaded}
+                    defaultDocumentType="purchases"
+                    title="Purchase Documents"
+                    description="Upload receipts, invoices, and purchase orders"
+                  />
                 </CardContent>
               </Card>
             </div>
+
+            {/* Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-slate-600">Total Documents</p>
+                      <p className="text-2xl font-bold text-slate-800">{stats.total}</p>
+                    </div>
+                    <FileText className="h-8 w-8 text-[#0072B1]" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-slate-600">Sales Documents</p>
+                      <p className="text-2xl font-bold text-green-600">{stats.sales}</p>
+                    </div>
+                    <TrendingUp className="h-8 w-8 text-green-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-slate-600">Purchase Documents</p>
+                      <p className="text-2xl font-bold text-red-600">{stats.purchases}</p>
+                    </div>
+                    <TrendingDown className="h-8 w-8 text-red-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Documents List */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-[#0072B1]">
+                  <Calendar className="h-5 w-5" />
+                  Documents for {selectedYear}{" "}
+                  {selectedMonth !== "all" ? `- ${months[Number.parseInt(selectedMonth) - 1]}` : ""}
+                  {selectedType !== "all" && (
+                    <span className="text-sm font-normal text-slate-600">({selectedType} only)</span>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <DocumentList
+                  documents={filteredAndSortedDocuments}
+                  onView={handleDocumentView}
+                  onDownload={handleDocumentDownload}
+                  onDelete={handleDocumentDelete}
+                  onBulkDelete={handleBulkDelete}
+                  onExport={handleExport}
+                />
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </main>
+      </div>
 
-      <Footer />
+      {/* Document Preview Modal */}
+      <DocumentPreviewModal
+        document={previewDocument}
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        onUpdate={handleDocumentUpdate}
+        onDownload={handleDocumentDownload}
+      />
     </div>
   )
 }

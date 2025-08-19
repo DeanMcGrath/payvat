@@ -85,11 +85,22 @@ export function createGuestFriendlyRoute(
 ) {
   return async (request: NextRequest) => {
     try {
+      // Try to get user without aggressive timeout
       const user = await getUserFromRequest(request)
+      
       return await handler(request, user || undefined)
     } catch (error) {
+      console.warn('Guest-friendly route auth error, continuing as guest:', error)
       // Allow guest access - continue without user
-      return await handler(request, undefined)
+      try {
+        return await handler(request, undefined)
+      } catch (handlerError) {
+        console.error('Handler error in guest-friendly route:', handlerError)
+        return NextResponse.json({
+          success: false,
+          error: 'Service temporarily unavailable'
+        }, { status: 500 })
+      }
     }
   }
 }

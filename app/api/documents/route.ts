@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { createGuestFriendlyRoute } from '@/lib/middleware'
-import { prisma } from '@/lib/prisma'
+import { prisma, withDatabaseRetry } from '@/lib/prisma'
 import { AuthUser } from '@/lib/auth'
 import { logError, logAudit, logPerformance } from '@/lib/secure-logger'
 
@@ -12,8 +12,30 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
     const { searchParams } = new URL(request.url)
     const vatReturnId = searchParams.get('vatReturnId')
     const category = searchParams.get('category')
+    const dashboard = searchParams.get('dashboard') === 'true'
     const page = parseInt(searchParams.get('page') || '1')
-    const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50) // Max 50 per page
+    const limit = Math.min(parseInt(searchParams.get('limit') || (dashboard ? '50' : '10')), 50) // Max 50 per page
+    
+    // Test basic database connectivity
+    try {
+      await prisma.$queryRaw`SELECT 1`
+    } catch (dbError) {
+      logError('Database connection failed', dbError, {
+        userId: user?.id,
+        operation: 'documents-list-db-test'
+      })
+      return NextResponse.json({
+        success: true,
+        documents: [],
+        pagination: {
+          page: 1,
+          limit: 10,
+          totalCount: 0,
+          totalPages: 0
+        },
+        message: 'Service temporarily unavailable'
+      })
+    }
     
     logAudit('DOCUMENTS_LIST_REQUEST', {
       userId: user?.id,
@@ -28,66 +50,52 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       // Authenticated user - get their documents
       where.userId = user.id
     } else {
-      // Guest user - find recent guest documents (same logic as extracted-vat endpoint)
-      const recentGuestDocuments = await prisma.document.findMany({
-        where: {
-          user: {
-            role: 'GUEST' // Find documents owned by users with GUEST role
+      // Guest user - simplified approach to avoid complex joins
+      try {
+        const guestUsers = await prisma.user.findMany({
+          where: {
+            role: 'GUEST',
+            createdAt: {
+              gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
+            }
           },
-          uploadedAt: {
-            gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
-          }
-        },
-        include: {
-          user: true
-        },
-        orderBy: {
-          uploadedAt: 'desc'
-        },
-        take: 50 // Reasonable limit for guests
-      })
-      
-      // Return guest documents directly instead of using where clause
-      const totalCount = recentGuestDocuments.length
-      const paginatedDocs = recentGuestDocuments.slice(
-        (page - 1) * limit,
-        page * limit
-      )
-      
-      const documents = paginatedDocs.map(doc => ({
-        id: doc.id,
-        fileName: doc.fileName,
-        originalName: doc.originalName,
-        fileSize: doc.fileSize,
-        mimeType: doc.mimeType,
-        documentType: doc.documentType,
-        category: doc.category,
-        isScanned: doc.isScanned,
-        scanResult: doc.scanResult,
-        uploadedAt: doc.uploadedAt,
-        vatReturnId: doc.vatReturnId,
-      }))
-      
-      logPerformance('documents-list-guest', Date.now() - startTime, {
-        operation: 'documents-list-guest'
-      })
-      
-      return NextResponse.json({
-        success: true,
-        documents,
-        pagination: {
-          page,
-          limit,
-          totalCount,
-          totalPages: Math.ceil(totalCount / limit)
-        },
-        isGuestUser: true,
-        debugInfo: {
-          foundDocuments: totalCount,
-          timeWindow: '24 hours',
-          queryTime: new Date().toISOString()
+          select: { id: true },
+          take: 50
+        })
+        
+        if (guestUsers.length === 0) {
+          return NextResponse.json({
+            success: true,
+            documents: [],
+            pagination: {
+              page: 1,
+              limit: 10,
+              totalCount: 0,
+              totalPages: 0
+            },
+            message: 'No recent guest documents found'
+          })
         }
-      })
+        
+        where.userId = {
+          in: guestUsers.map(u => u.id)
+        }
+      } catch (guestError) {
+        logError('Guest user lookup failed', guestError, {
+          operation: 'documents-list-guest-lookup'
+        })
+        return NextResponse.json({
+          success: true,
+          documents: [],
+          pagination: {
+            page: 1,
+            limit: 10,
+            totalCount: 0,
+            totalPages: 0
+          },
+          message: 'Unable to retrieve guest documents'
+        })
+      }
     }
     
     if (vatReturnId) {
@@ -116,6 +124,22 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
         scanResult: true,
         uploadedAt: true,
         vatReturnId: true,
+        // New dashboard fields - conditionally selected
+        ...(dashboard && {
+          extractedDate: true,
+          extractedYear: true,
+          extractedMonth: true,
+          invoiceTotal: true,
+          vatAccuracy: true,
+          processingQuality: true,
+          isDuplicate: true,
+          duplicateOfId: true,
+          validationStatus: true,
+          complianceIssues: true,
+          extractionConfidence: true,
+          dateExtractionConfidence: true,
+          totalExtractionConfidence: true
+        })
       },
       orderBy: {
         uploadedAt: 'desc'
@@ -124,14 +148,24 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       take: limit,
     })
     
+    // Process documents for dashboard format
+    const processedDocuments = documents.map(doc => ({
+      ...doc,
+      // Format new fields for dashboard
+      ...(dashboard && {
+        invoiceTotal: doc.invoiceTotal ? parseFloat(doc.invoiceTotal.toString()) : null,
+        extractedDate: doc.extractedDate ? doc.extractedDate : null
+      })
+    }))
+    
     logPerformance('documents-list-authenticated', Date.now() - startTime, {
-      userId: user.id,
+      userId: user?.id,
       operation: 'documents-list-authenticated'
     })
 
     return NextResponse.json({
       success: true,
-      documents,
+      documents: processedDocuments,
       pagination: {
         page,
         limit,
@@ -146,7 +180,17 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       operation: 'documents-list'
     })
     return NextResponse.json(
-      { error: 'Failed to fetch documents' },
+      { 
+        success: false,
+        error: 'Failed to fetch documents',
+        documents: [],
+        pagination: {
+          page: 1,
+          limit: 10,
+          totalCount: 0,
+          totalPages: 0
+        }
+      },
       { status: 500 }
     )
   }

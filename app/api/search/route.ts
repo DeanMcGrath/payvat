@@ -111,7 +111,7 @@ const SEARCHABLE_CONTENT = [
   {
     id: 'pricing',
     title: 'Pricing Plans',
-    content: 'PayVAT pricing plans subscription costs VAT management service fees business plans enterprise solutions monthly annual billing payment processing €30 monthly €300 yearly',
+    content: 'PayVAT pricing plans subscription costs VAT management service fees business plans enterprise solutions monthly annual billing payment processing €35 monthly €350 yearly',
     url: '/pricing',
     type: 'page' as const,
     category: 'Pricing'

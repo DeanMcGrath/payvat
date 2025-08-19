@@ -194,7 +194,7 @@ export default function SiteHeader({
           />
           
           {/* Mobile Menu */}
-          <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gradient-to-br from-[#73C2FB] to-[#5BADEA] shadow-2xl z-50 md:hidden animate-slide-in-right">
+          <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] shadow-2xl z-50 md:hidden animate-slide-in-right" style={{background: 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'}}>
             <div className="p-6 space-y-6">
               {/* Mobile Menu Header */}
               <div className="flex items-center justify-between pb-4 border-b border-white/20">
@@ -251,7 +251,7 @@ export default function SiteHeader({
                   <>
                     {/* Sign Up */}
                     <Button 
-                      className="w-full bg-white text-[#73C2FB] hover:bg-white/90 font-semibold min-h-[44px]"
+                      className="w-full bg-white text-[#005A8B] hover:bg-white/90 font-semibold min-h-[44px]"
                       onClick={() => {
                         window.location.href = '/signup'
                         setIsMobileMenuOpen(false)

@@ -11,12 +11,12 @@ export default function Footer() {
   return (
     <>
       {/* Utility Section */}
-      <div className="bg-gradient-to-r from-gray-50 to-[#E6F2F8] py-6 mt-12 sm:mt-16">
+      <div className="py-6 mt-12 sm:mt-16" style={{background: 'linear-gradient(to right, #f9fafb, rgba(115, 194, 251, 0.1))'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex justify-center">
             <button 
               onClick={scrollToTop}
-              className="group text-gray-600 hover:text-[#5BADEA] font-medium transition-all duration-300 flex items-center gap-2 py-2 px-4 rounded-full hover:bg-white hover:shadow-md"
+              className="group text-gray-600 hover:text-[#005A8B] font-medium transition-all duration-300 flex items-center gap-2 py-2 px-4 rounded-full hover:bg-white hover:shadow-md"
             >
               Back to Top <ArrowUp className="h-4 w-4 group-hover:-translate-y-0.5 transition-transform" />
             </button>
@@ -27,8 +27,8 @@ export default function Footer() {
       {/* Main Footer */}
       <footer className="gradient-primary text-white py-12 sm:py-16 relative overflow-hidden">
         {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#5BADEA]/20 to-transparent pointer-events-none"></div>
-        <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#73C2FB]/10 rounded-full blur-3xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#73C2FB]/20 to-transparent pointer-events-none"></div>
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#005A8B]/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#73C2FB]/10 rounded-full blur-3xl"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">

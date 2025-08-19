@@ -94,7 +94,7 @@ export default function AccountantFeesVsPayVatSavingsLayout({
                 "name": "How much do accountants charge for VAT services in Ireland?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "Traditional accountants in Ireland charge an average of €4,560 annually for VAT compliance services, including €300 per return for preparation and filing, plus additional fees for advice, corrections, and annual summaries."
+                  "text": "Traditional accountants in Ireland charge an average of €4,560 annually for VAT compliance services, including €350 per return for preparation and filing, plus additional fees for advice, corrections, and annual summaries."
                 }
               },
               {
@@ -152,7 +152,7 @@ export default function AccountantFeesVsPayVatSavingsLayout({
               {
                 "@type": "Offer", 
                 "name": "PayVat Software Platform",
-                "price": "360",
+                "price": "420",
                 "priceCurrency": "EUR",
                 "description": "Annual subscription for automated VAT compliance with unlimited calculations, filing, and support"
               }

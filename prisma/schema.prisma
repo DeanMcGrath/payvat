@@ -19,10 +19,10 @@ model tenants {
 }
 
 model User {
-  id                   String      @id @default(cuid())
-  email                String      @unique
+  id                   String                    @id @default(cuid())
+  email                String                    @unique
   password             String
-  role                 String      @default("USER")
+  role                 String                    @default("USER")
   businessName         String
   vatNumber            String?
   firstName            String?
@@ -33,20 +33,19 @@ model User {
   lastLoginAt          DateTime?
   passwordResetToken   String?
   passwordResetExpires DateTime?
-  createdAt            DateTime    @default(now())
-  updatedAt            DateTime    @updatedAt
+  createdAt            DateTime                  @default(now())
+  updatedAt            DateTime                  @updatedAt
+  aiAnalytics          AIProcessingAnalytics[]
+  businessPatterns     BusinessLearningPattern[]
+  documentFolders      DocumentFolder[]
+  learningFeedbacks    LearningFeedback[]
+  templateUsages       TemplateUsage[]
   auditLogs            AuditLog[]
+  chatSessions         ChatSession[]
   documents            Document[]
   payments             Payment[]
   vatReturns           VATReturn[]
-  chatSessions         ChatSession[]
   videoAnalytics       VideoAnalytics[]
-  
-  // AI Learning System Relations
-  templateUsages       TemplateUsage[]
-  learningFeedbacks    LearningFeedback[]
-  aiAnalytics          AIProcessingAnalytics[]
-  businessPatterns     BusinessLearningPattern[]
 
   @@map("vat_users")
 }
@@ -75,31 +74,72 @@ model VATReturn {
 }
 
 model Document {
-  id           String     @id @default(cuid())
-  userId       String
-  vatReturnId  String?
-  fileName     String
-  originalName String
-  filePath     String?
-  fileSize     Int
-  mimeType     String
-  fileHash     String
-  documentType String
-  category     String
-  isScanned    Boolean    @default(false)
-  scanResult   String?
-  uploadedAt   DateTime   @default(now())
-  fileData     String?
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  vatReturn    VATReturn? @relation(fields: [vatReturnId], references: [id])
-  
-  // AI Learning System Relations  
-  fingerprint      DocumentFingerprint?
-  templateUsages   TemplateUsage[]
-  learningFeedbacks LearningFeedback[]
-  aiAnalytics      AIProcessingAnalytics[]
+  id                        String                  @id @default(cuid())
+  userId                    String
+  vatReturnId               String?
+  fileName                  String
+  originalName              String
+  filePath                  String?
+  fileSize                  Int
+  mimeType                  String
+  fileHash                  String
+  documentType              String
+  category                  String
+  isScanned                 Boolean                 @default(false)
+  scanResult                String?
+  uploadedAt                DateTime                @default(now())
+  fileData                  String?
+  complianceIssues          String[]
+  dateExtractionConfidence  Float?
+  documentHash              String?
+  duplicateOfId             String?
+  extractedDate             DateTime?
+  extractedMonth            Int?
+  extractedYear             Int?
+  extractionConfidence      Float?
+  invoiceTotal              Decimal?
+  isDuplicate               Boolean                 @default(false)
+  processingQuality         Int?
+  totalExtractionConfidence Float?
+  validationStatus          String                  @default("PENDING")
+  vatAccuracy               Float?
+  aiAnalytics               AIProcessingAnalytics[]
+  fingerprint               DocumentFingerprint?
+  learningFeedbacks         LearningFeedback[]
+  templateUsages            TemplateUsage[]
+  folder                    DocumentFolder?         @relation(fields: [userId, extractedYear, extractedMonth], references: [userId, year, month])
+  user                      User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vatReturn                 VATReturn?              @relation(fields: [vatReturnId], references: [id])
 
   @@map("vat_documents")
+}
+
+model DocumentFolder {
+  id                       String     @id @default(cuid())
+  userId                   String
+  year                     Int
+  month                    Int
+  totalSalesAmount         Decimal    @default(0)
+  totalPurchaseAmount      Decimal    @default(0)
+  totalSalesVAT            Decimal    @default(0)
+  totalPurchaseVAT         Decimal    @default(0)
+  totalNetVAT              Decimal    @default(0)
+  documentCount            Int        @default(0)
+  salesDocumentCount       Int        @default(0)
+  purchaseDocumentCount    Int        @default(0)
+  averageProcessingQuality Int?
+  averageVATAccuracy       Float?
+  isComplete               Boolean    @default(false)
+  needsReview              Boolean    @default(false)
+  complianceStatus         String     @default("PENDING")
+  createdAt                DateTime   @default(now())
+  updatedAt                DateTime   @updatedAt
+  lastDocumentAt           DateTime?
+  user                     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documents                Document[]
+
+  @@unique([userId, year, month])
+  @@map("document_folders")
 }
 
 model Payment {
@@ -143,386 +183,258 @@ model AuditLog {
 }
 
 model ChatSession {
-  id              String        @id @default(cuid())
-  userId          String?       // Optional - for anonymous users
-  sessionId       String        @unique // Anonymous session identifier
-  
-  // Session Information
-  isActive        Boolean       @default(true)
-  isResolved      Boolean       @default(false)
-  resolvedAt      DateTime?
-  resolvedBy      String?       // Admin user ID who resolved
-  
-  // User Information (for anonymous users)
-  userEmail       String?
-  userName        String?
-  userCompany     String?
-  
-  // Session Context
-  ipAddress       String?
-  userAgent       String?
-  referrerUrl     String?
-  
-  // Timestamps
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  lastMessageAt   DateTime      @default(now())
-  
-  // Relations
-  user            User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
-  messages        ChatMessage[]
-  
+  id            String        @id @default(cuid())
+  userId        String?
+  sessionId     String        @unique
+  isActive      Boolean       @default(true)
+  isResolved    Boolean       @default(false)
+  resolvedAt    DateTime?
+  resolvedBy    String?
+  userEmail     String?
+  userName      String?
+  userCompany   String?
+  ipAddress     String?
+  userAgent     String?
+  referrerUrl   String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  lastMessageAt DateTime      @default(now())
+  messages      ChatMessage[]
+  user          User?         @relation(fields: [userId], references: [id])
+
   @@map("vat_chat_sessions")
 }
 
 model ChatMessage {
-  id            String      @id @default(cuid())
-  sessionId     String
-  
-  // Message Content
-  message       String
-  messageType   String      @default("text") // text, file, system
-  
-  // Sender Information
-  senderType    String      // user, admin, system
-  senderId      String?     // User ID or Admin ID
-  senderName    String?     // Display name
-  
-  // Message Status
-  isRead        Boolean     @default(false)
-  readAt        DateTime?
-  
-  // File Attachment (enhanced)
-  fileName      String?
-  originalName  String?     // Original file name from user
-  fileUrl       String?     // Secure file path
-  fileSize      Int?        // File size in bytes
-  mimeType      String?     // MIME type for validation
-  fileHash      String?     // SHA256 hash for integrity
-  filePreviewUrl String?    // Thumbnail/preview URL
-  
-  // File Security
-  isScanned     Boolean     @default(false)
-  scanResult    String?     // CLEAN, INFECTED, SUSPICIOUS, ERROR
-  scanDetails   String?     // Additional scan information
-  
-  // File Management
-  downloadCount Int         @default(0)
-  expiresAt     DateTime?   // File expiration date
-  isActive      Boolean     @default(true)
-  
-  // Timestamps
-  createdAt     DateTime    @default(now())
-  
-  // Relations
-  session       ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  
+  id             String      @id @default(cuid())
+  sessionId      String
+  message        String
+  messageType    String      @default("text")
+  senderType     String
+  senderId       String?
+  senderName     String?
+  isRead         Boolean     @default(false)
+  readAt         DateTime?
+  fileName       String?
+  fileUrl        String?
+  fileSize       Int?
+  createdAt      DateTime    @default(now())
+  downloadCount  Int         @default(0)
+  expiresAt      DateTime?
+  fileHash       String?
+  filePreviewUrl String?
+  isActive       Boolean     @default(true)
+  isScanned      Boolean     @default(false)
+  mimeType       String?
+  originalName   String?
+  scanDetails    String?
+  scanResult     String?
+  session        ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
   @@map("vat_chat_messages")
 }
 
 model DemoVideo {
-  id              String    @id @default(cuid())
-  
-  // Video Information
+  id              String           @id @default(cuid())
   title           String
   description     String?
   fileName        String
   originalName    String
-  fileSize        Int       // Size in bytes
+  fileSize        Int
   mimeType        String
-  duration        Int?      // Duration in seconds
-  
-  // File Storage
-  videoUrl        String    // Main video file URL
-  thumbnailUrl    String?   // Video thumbnail/preview image
-  fileHash        String    // SHA256 hash for integrity
-  
-  // Video Quality Versions
-  videoUrlHD      String?   // 1080p version
-  videoUrlMD      String?   // 720p version  
-  videoUrlSD      String?   // 480p version
-  
-  // Video Status
-  status          String    @default("PROCESSING") // PROCESSING, READY, FAILED
-  isActive        Boolean   @default(true)
-  processingError String?   // Error message if processing failed
-  
-  // Video Metadata
-  width           Int?      // Video width in pixels
-  height          Int?      // Video height in pixels
-  aspectRatio     String?   // e.g. "16:9", "4:3"
-  bitrate         Int?      // Bitrate in kbps
-  codec           String?   // Video codec information
-  
-  // Upload Information
-  uploadedBy      String    // Admin user ID who uploaded
-  uploadedAt      DateTime  @default(now())
-  lastModified    DateTime  @updatedAt
-  
-  // Relations
+  duration        Int?
+  videoUrl        String
+  thumbnailUrl    String?
+  fileHash        String
+  videoUrlHD      String?
+  videoUrlMD      String?
+  videoUrlSD      String?
+  status          String           @default("PROCESSING")
+  isActive        Boolean          @default(true)
+  processingError String?
+  width           Int?
+  height          Int?
+  aspectRatio     String?
+  bitrate         Int?
+  codec           String?
+  uploadedBy      String
+  uploadedAt      DateTime         @default(now())
+  lastModified    DateTime         @updatedAt
   analytics       VideoAnalytics[]
-  
+
   @@map("demo_videos")
 }
 
 model VideoAnalytics {
-  id            String    @id @default(cuid())
-  videoId       String
-  
-  // View Information
-  sessionId     String?   // Anonymous session ID
-  userId        String?   // Logged in user ID (optional)
-  ipAddress     String?   // Hashed IP for privacy
-  userAgent     String?   // Browser/device information
-  
-  // Geographic Data
-  country       String?
-  city          String?
-  timezone      String?
-  
-  // Device Information  
-  deviceType    String?   // mobile, desktop, tablet
-  browserName   String?   // chrome, firefox, safari, etc.
-  osName        String?   // windows, macos, ios, android
-  screenSize    String?   // viewport dimensions
-  
-  // View Engagement
-  playCount     Int       @default(1)
-  watchDuration Int       @default(0) // Seconds watched
-  completionRate Float    @default(0) // Percentage watched (0-100)
-  
-  // View Context
-  referrerUrl   String?   // Where they came from
-  pageUrl       String?   // Page where video was watched
-  isFirstView   Boolean   @default(true)
-  
-  // Quality & Performance
-  selectedQuality String? // HD, MD, SD
-  bufferEvents   Int      @default(0) // Number of buffering events
-  loadTime       Int?     // Time to start playing (ms)
-  
-  // Timestamps
-  firstViewAt   DateTime  @default(now())
-  lastViewAt    DateTime  @updatedAt
-  
-  // Relations
-  video         DemoVideo @relation(fields: [videoId], references: [id], onDelete: Cascade)
-  user          User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
-  
+  id              String    @id @default(cuid())
+  videoId         String
+  sessionId       String?
+  userId          String?
+  ipAddress       String?
+  userAgent       String?
+  country         String?
+  city            String?
+  timezone        String?
+  deviceType      String?
+  browserName     String?
+  osName          String?
+  screenSize      String?
+  playCount       Int       @default(1)
+  watchDuration   Int       @default(0)
+  completionRate  Float     @default(0)
+  referrerUrl     String?
+  pageUrl         String?
+  isFirstView     Boolean   @default(true)
+  selectedQuality String?
+  bufferEvents    Int       @default(0)
+  loadTime        Int?
+  firstViewAt     DateTime  @default(now())
+  lastViewAt      DateTime  @updatedAt
+  user            User?     @relation(fields: [userId], references: [id])
+  video           DemoVideo @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
   @@map("video_analytics")
 }
 
-// AI Learning System Models for PayVAT.ie Document Intelligence
-
-// Document Fingerprints for pattern recognition
 model DocumentFingerprint {
-  id                  String      @id @default(cuid())
-  documentId          String      @unique
-  
-  // Structural Analysis
-  structuralHash      String      // Hash of document structure
-  textPatterns        String[]    // Key text patterns
-  vatPatterns         Json        // VAT-specific patterns with positions
-  businessSignatures  String[]    // Business name/address patterns
-  layoutFeatures      Json        // Layout analysis results
-  
-  // Learning Metrics
-  confidence          Float       @default(0.8)
-  successRate         Float       @default(0.0)
-  usageCount          Int         @default(0)
-  
-  // Timestamps
-  createdAt           DateTime    @default(now())
-  lastUsed            DateTime    @default(now())
-  updatedAt           DateTime    @updatedAt
-  
-  // Relations
-  document            Document    @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  templates           DocumentTemplate[]
-  feedbacks           LearningFeedback[]
-  
+  id                 String             @id @default(cuid())
+  documentId         String             @unique
+  structuralHash     String
+  textPatterns       String[]
+  vatPatterns        Json
+  businessSignatures String[]
+  layoutFeatures     Json
+  confidence         Float              @default(0.8)
+  successRate        Float              @default(0.0)
+  usageCount         Int                @default(0)
+  createdAt          DateTime           @default(now())
+  lastUsed           DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  document           Document           @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  templates          DocumentTemplate[]
+  feedbacks          LearningFeedback[]
+
   @@map("document_fingerprints")
 }
 
-// Document Templates for intelligent processing
 model DocumentTemplate {
-  id                    String      @id @default(cuid())
+  id                    String              @id @default(cuid())
   name                  String
   businessName          String?
-  templateType          String      // INVOICE, RECEIPT, STATEMENT, etc.
-  category              String      // SALES, PURCHASES, MIXED
-  
-  // Template Structure
+  templateType          String
+  category              String
   fingerprintId         String
-  extractionRules       Json        // Rules for extracting data
-  validationRules       Json        // Rules for validating extraction
-  
-  // Performance Metrics
-  confidence            Float       @default(0.8)
-  usageCount            Int         @default(0)
-  successRate           Float       @default(1.0)
-  averageProcessingTime Int         @default(5000) // milliseconds
-  averageConfidence     Float       @default(0.8)
-  
-  // Learning Data
-  createdFromDocuments  String[]    // Document IDs used to create template
-  errorPatterns         Json        // Common error patterns
-  
-  // Status
-  isActive              Boolean     @default(true)
-  
-  // Timestamps
-  createdAt             DateTime    @default(now())
-  lastUsed              DateTime    @default(now())
-  lastUpdated           DateTime    @updatedAt
-  
-  // Relations
+  extractionRules       Json
+  validationRules       Json
+  confidence            Float               @default(0.8)
+  usageCount            Int                 @default(0)
+  successRate           Float               @default(1.0)
+  averageProcessingTime Int                 @default(5000)
+  averageConfidence     Float               @default(0.8)
+  createdFromDocuments  String[]
+  errorPatterns         Json
+  isActive              Boolean             @default(true)
+  createdAt             DateTime            @default(now())
+  lastUsed              DateTime            @default(now())
+  lastUpdated           DateTime            @updatedAt
   fingerprint           DocumentFingerprint @relation(fields: [fingerprintId], references: [id])
-  usageHistory          TemplateUsage[]
   feedbacks             LearningFeedback[]
-  
+  usageHistory          TemplateUsage[]
+
   @@map("document_templates")
 }
 
-// Template usage tracking
 model TemplateUsage {
-  id                    String      @id @default(cuid())
-  templateId            String
-  documentId            String
-  userId                String?
-  
-  // Usage Metrics
-  processingTime        Int         // milliseconds
-  confidence            Float
-  wasAccurate           Boolean?    // Set after user feedback
-  
-  // Template Match Info
-  similarity            Float       // Similarity score when matched
-  matchedFeatures       String[]    // Features that matched
-  
-  // Processing Details
-  extractedData         Json        // What was extracted
-  correctedData         Json?       // User corrections if any
-  
-  // Timestamps
-  createdAt             DateTime    @default(now())
-  feedbackAt            DateTime?   // When feedback was provided
-  
-  // Relations
-  template              DocumentTemplate @relation(fields: [templateId], references: [id])
-  document              Document    @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  user                  User?       @relation(fields: [userId], references: [id])
-  
+  id              String           @id @default(cuid())
+  templateId      String
+  documentId      String
+  userId          String?
+  processingTime  Int
+  confidence      Float
+  wasAccurate     Boolean?
+  similarity      Float
+  matchedFeatures String[]
+  extractedData   Json
+  correctedData   Json?
+  createdAt       DateTime         @default(now())
+  feedbackAt      DateTime?
+  document        Document         @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  template        DocumentTemplate @relation(fields: [templateId], references: [id])
+  user            User?            @relation(fields: [userId], references: [id])
+
   @@map("template_usage")
 }
 
-// User feedback for learning improvement
 model LearningFeedback {
-  id                    String      @id @default(cuid())
-  documentId            String
-  fingerprintId         String?
-  templateId            String?
-  userId                String
-  
-  // Feedback Content
-  originalExtraction    Json        // Original AI extraction
-  correctedExtraction   Json        // User-corrected data
-  feedback              String      // CORRECT, INCORRECT, PARTIALLY_CORRECT
-  corrections           Json        // Specific field corrections
-  
-  // Context
-  confidenceScore       Float?      // Original confidence
-  processingTime        Int?        // Original processing time
-  notes                 String?     // User notes
-  
-  // Learning Impact
-  wasProcessed          Boolean     @default(false) // Has learning system processed this?
-  processedAt           DateTime?
-  improvementMade       Boolean     @default(false) // Did this lead to improvements?
-  
-  // Timestamps
-  createdAt             DateTime    @default(now())
-  updatedAt             DateTime    @updatedAt
-  
-  // Relations
-  document              Document    @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  fingerprint           DocumentFingerprint? @relation(fields: [fingerprintId], references: [id])
-  template              DocumentTemplate? @relation(fields: [templateId], references: [id])
-  user                  User        @relation(fields: [userId], references: [id])
-  
+  id                  String               @id @default(cuid())
+  documentId          String
+  fingerprintId       String?
+  templateId          String?
+  userId              String
+  originalExtraction  Json
+  correctedExtraction Json
+  feedback            String
+  corrections         Json
+  confidenceScore     Float?
+  processingTime      Int?
+  notes               String?
+  wasProcessed        Boolean              @default(false)
+  processedAt         DateTime?
+  improvementMade     Boolean              @default(false)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  document            Document             @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  fingerprint         DocumentFingerprint? @relation(fields: [fingerprintId], references: [id])
+  template            DocumentTemplate?    @relation(fields: [templateId], references: [id])
+  user                User                 @relation(fields: [userId], references: [id])
+
   @@map("learning_feedback")
 }
 
-// AI Processing Analytics
 model AIProcessingAnalytics {
-  id                    String      @id @default(cuid())
+  id                    String    @id @default(cuid())
   documentId            String
   userId                String?
-  
-  // Processing Strategy
-  processingStrategy    String      // TEMPLATE_MATCH, AI_VISION, HYBRID, FALLBACK
-  templateUsed          String?     // Template ID if used
-  
-  // Performance Metrics
-  processingTime        Int         // milliseconds
+  processingStrategy    String
+  templateUsed          String?
+  processingTime        Int
   confidenceScore       Float
-  tokensUsed            Int?        // OpenAI tokens consumed
-  cost                  Float?      // Processing cost in cents
-  
-  // Quality Metrics
-  extractionAccuracy    Float?      // Measured after feedback
-  userSatisfaction      Int?        // 1-5 scale from user feedback
-  
-  // Learning Impact
-  learningApplied       Boolean     @default(false)
-  confidenceBoost       Float       @default(0.0)
+  tokensUsed            Int?
+  cost                  Float?
+  extractionAccuracy    Float?
+  userSatisfaction      Int?
+  learningApplied       Boolean   @default(false)
+  confidenceBoost       Float     @default(0.0)
   matchedFeatures       String[]
   suggestedImprovements String[]
-  
-  // Error Tracking
-  hadErrors             Boolean     @default(false)
-  errorType             String?     // Classification of error
+  hadErrors             Boolean   @default(false)
+  errorType             String?
   errorMessage          String?
-  
-  // Timestamps
-  processedAt           DateTime    @default(now())
-  feedbackAt            DateTime?   // When user provided feedback
-  
-  // Relations
-  document              Document    @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  user                  User?       @relation(fields: [userId], references: [id])
-  
+  processedAt           DateTime  @default(now())
+  feedbackAt            DateTime?
+  document              Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user                  User?     @relation(fields: [userId], references: [id])
+
   @@map("ai_processing_analytics")
 }
 
-// Business Learning Patterns
 model BusinessLearningPattern {
-  id                    String      @id @default(cuid())
-  userId                String?     // User/business this pattern belongs to
-  businessName          String?
-  
-  // Pattern Information
-  patternType           String      // VAT_RATE, SUPPLIER_FORMAT, INVOICE_STYLE, etc.
-  patternData           Json        // Specific pattern details
-  frequency             Int         @default(1) // How often this pattern appears
-  confidence            Float       @default(0.5) // Confidence in this pattern
-  
-  // Learning Context
-  documentTypes         String[]    // Document types this applies to
-  categories            String[]    // SALES, PURCHASES, etc.
-  
-  // Performance
-  successRate           Float       @default(0.0)
-  lastValidated         DateTime?
-  
-  // Timestamps
-  firstSeen             DateTime    @default(now())
-  lastSeen              DateTime    @default(now())
-  updatedAt             DateTime    @updatedAt
-  
-  // Relations
-  user                  User?       @relation(fields: [userId], references: [id])
-  
+  id            String    @id @default(cuid())
+  userId        String?
+  businessName  String?
+  patternType   String
+  patternData   Json
+  frequency     Int       @default(1)
+  confidence    Float     @default(0.5)
+  documentTypes String[]
+  categories    String[]
+  successRate   Float     @default(0.0)
+  lastValidated DateTime?
+  firstSeen     DateTime  @default(now())
+  lastSeen      DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User?     @relation(fields: [userId], references: [id])
+
   @@map("business_learning_patterns")
 }
 
@@ -536,10 +448,9 @@ model ContactSubmission {
   message      String
   businessType String?
   currentStage String?
-  source       String   // Which page/form the submission came from
+  source       String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   @@map("contact_submissions")
 }
-

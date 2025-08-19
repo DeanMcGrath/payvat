@@ -1,13 +1,14 @@
 import { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { createGuestFriendlyRoute } from '@/lib/middleware'
-import { prisma } from '@/lib/prisma'
+import { prisma, withDatabaseRetry } from '@/lib/prisma'
 import { validateFile, processFileForServerless, getDocumentType } from '@/lib/serverlessFileUtils'
 import { processDocument } from '@/lib/documentProcessor'
 import { AuthUser } from '@/lib/auth'
 import { logger } from '@/lib/logger'
 import { logError, logWarn, logInfo, logAudit, logPerformance } from '@/lib/secure-logger'
 import { invalidateUserCache } from '@/app/api/documents/extracted-vat/route'
+import { generateDocumentFingerprint, checkForDuplicates, storeDocumentHash, markAsDuplicate } from '@/lib/duplicateDetection'
 
 async function uploadFile(request: NextRequest, user?: AuthUser) {
   const startTime = Date.now()
@@ -82,66 +83,172 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       )
     }
     
+    // Test basic database connectivity
+    try {
+      await prisma.$queryRaw`SELECT 1`
+    } catch (dbError) {
+      logError('Database connection failed in upload', dbError, {
+        userId: user?.id,
+        operation: 'upload-db-test'
+      })
+      return NextResponse.json({
+        success: false,
+        error: 'Service temporarily unavailable. Please try again later.'
+      }, { status: 503 })
+    }
+
     // Generate session-based user ID for guests - but we need a valid User record for DB constraint
     let userId: string;
     if (user) {
       userId = user.id;
     } else {
       // For guest uploads, create a minimal guest user record to satisfy foreign key constraint
-      const guestEmail = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}@guest.payvat.ie`;
-      const guestUser = await prisma.user.create({
-        data: {
-          email: guestEmail,
-          password: 'guest-no-password',
-          businessName: 'Guest Upload',
-          vatNumber: `GUEST${Date.now()}`,
-          role: 'GUEST'
-        }
-      });
-      userId = guestUser.id;
-      logInfo('Created guest user for upload', { operation: 'guest-user-creation' });
+      try {
+        const guestEmail = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}@guest.payvat.ie`;
+        const guestUser = await prisma.user.create({
+          data: {
+            email: guestEmail,
+            password: 'guest-no-password',
+            businessName: 'Guest Upload',
+            vatNumber: `GUEST${Date.now()}`,
+            role: 'GUEST'
+          }
+        });
+        userId = guestUser.id;
+        logInfo('Created guest user for upload', { 
+          operation: 'guest-user-creation',
+          userId: userId 
+        });
+      } catch (guestUserError) {
+        logError('Failed to create guest user', guestUserError, {
+          operation: 'guest-user-creation'
+        })
+        return NextResponse.json({
+          success: false,
+          error: 'Unable to process guest upload. Please try again.'
+        }, { status: 500 })
+      }
     }
     
     // Validate VAT return ownership if provided and user is authenticated
     if (vatReturnId && user) {
-      const vatReturn = await prisma.vATReturn.findFirst({
-        where: {
-          id: vatReturnId,
-          userId: user.id
+      try {
+        const vatReturn = await prisma.vATReturn.findFirst({
+          where: {
+            id: vatReturnId,
+            userId: user.id
+          }
+        })
+        
+        if (!vatReturn) {
+          return NextResponse.json(
+            { error: 'VAT return not found or not authorized' },
+            { status: 404 }
+          )
         }
-      })
-      
-      if (!vatReturn) {
-        return NextResponse.json(
-          { error: 'VAT return not found or not authorized' },
-          { status: 404 }
-        )
+      } catch (vatReturnError) {
+        logError('VAT return validation failed', vatReturnError, {
+          userId: user.id,
+          vatReturnId,
+          operation: 'upload-vat-return-validation'
+        })
+        return NextResponse.json({
+          success: false,
+          error: 'Unable to validate VAT return. Please try again.'
+        }, { status: 500 })
       }
     }
     
     // Process file for serverless environment
-    const processedFile = await processFileForServerless(file, userId)
+    let processedFile
+    try {
+      processedFile = await processFileForServerless(file, userId)
+    } catch (processingError) {
+      logError('File processing failed', processingError, {
+        userId,
+        fileName: file.name,
+        operation: 'upload-file-processing'
+      })
+      return NextResponse.json({
+        success: false,
+        error: 'File processing failed. Please ensure the file is not corrupted and try again.'
+      }, { status: 500 })
+    }
     
     // Save document metadata to database
-    // Creating document record
-    const document = await prisma.document.create({
-      data: {
-        userId: userId,
-        vatReturnId: vatReturnId || null,
+    let document
+    try {
+      document = await prisma.document.create({
+        data: {
+          userId: userId,
+          vatReturnId: vatReturnId || null,
+          fileName: processedFile.fileName,
+          originalName: processedFile.originalName,
+          filePath: null, // Not used in serverless
+          fileData: processedFile.fileData,
+          fileSize: processedFile.fileSize,
+          mimeType: processedFile.mimeType,
+          fileHash: processedFile.fileHash,
+          documentType: getDocumentType(processedFile.extension) as any,
+          category: category as any,
+          isScanned: false, // Will be updated by document processing
+        }
+      })
+    } catch (dbCreateError) {
+      logError('Document creation failed', dbCreateError, {
+        userId,
         fileName: processedFile.fileName,
-        originalName: processedFile.originalName,
-        filePath: null, // Not used in serverless
-        fileData: processedFile.fileData,
-        fileSize: processedFile.fileSize,
-        mimeType: processedFile.mimeType,
-        fileHash: processedFile.fileHash,
-        documentType: getDocumentType(processedFile.extension) as any,
-        category: category as any,
-        isScanned: false, // Will be updated by document processing
-      }
-    })
+        operation: 'upload-document-creation'
+      })
+      return NextResponse.json({
+        success: false,
+        error: 'Failed to save document. Please try again.'
+      }, { status: 500 })
+    }
     
     // Document record created successfully
+    
+    // DUPLICATE DETECTION - Check if this document is a duplicate
+    let duplicateResult = null
+    try {
+      logger.info('Starting duplicate detection', { fileName: processedFile.originalName }, 'UPLOAD_API')
+      
+      // Generate document fingerprint
+      const fingerprint = generateDocumentFingerprint(
+        processedFile.fileData,
+        processedFile.originalName,
+        processedFile.fileSize,
+        processedFile.mimeType
+      )
+      
+      // Check for duplicates
+      duplicateResult = await checkForDuplicates(fingerprint, userId, document.id)
+      
+      if (duplicateResult.isDuplicate && duplicateResult.duplicateOfId) {
+        logger.info('Duplicate document detected', { 
+          documentId: document.id, 
+          duplicateOfId: duplicateResult.duplicateOfId,
+          confidence: duplicateResult.confidence 
+        }, 'DUPLICATE_DETECTION')
+        
+        // Mark as duplicate in database
+        await markAsDuplicate(document.id, duplicateResult.duplicateOfId, duplicateResult.confidence)
+        
+        logWarn('Document marked as duplicate', {
+          documentId: document.id,
+          duplicateOfId: duplicateResult.duplicateOfId,
+          reasons: duplicateResult.reasons,
+          confidence: duplicateResult.confidence
+        })
+      } else {
+        // Store document hash for future duplicate detection
+        await storeDocumentHash(document.id, fingerprint)
+      }
+      
+    } catch (duplicateError) {
+      logError('Duplicate detection failed', duplicateError, 'DUPLICATE_DETECTION')
+      // Continue with processing even if duplicate detection fails
+    }
     
     // Process document immediately after upload for VAT extraction
     logger.info('Starting document processing', { fileName: processedFile.originalName }, 'UPLOAD_API')
@@ -342,7 +449,15 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         category: document.category,
         uploadedAt: document.uploadedAt,
         isScanned: updatedDocument?.isScanned || false,
-        scanResult: updatedDocument?.scanResult
+        scanResult: updatedDocument?.scanResult,
+        // Include duplicate detection results
+        isDuplicate: updatedDocument?.isDuplicate || false,
+        duplicateOfId: updatedDocument?.duplicateOfId || null,
+        duplicateInfo: duplicateResult ? {
+          confidence: duplicateResult.confidence,
+          reasons: duplicateResult.reasons,
+          similarityScore: duplicateResult.similarityScore
+        } : null
       }
     })
     

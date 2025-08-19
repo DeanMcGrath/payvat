@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { NextRequest } from 'next/server'
 import { User } from './generated/prisma'
+import { prisma } from './prisma'
 
 // Types for authentication
 export interface AuthUser {
@@ -74,29 +75,34 @@ export async function getUserFromRequest(request: NextRequest): Promise<AuthUser
       return null
     }
     
-    // Load full user data from database
-    const { prisma } = await import('./prisma')
-    const user = await prisma.user.findUnique({
-      where: { id: payload.userId },
-      select: {
-        id: true,
-        email: true,
-        role: true,
-        businessName: true,
-        vatNumber: true
+    // Load full user data from database with error handling
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: payload.userId },
+        select: {
+          id: true,
+          email: true,
+          role: true,
+          businessName: true,
+          vatNumber: true
+        }
+      })
+      
+      if (!user) {
+        return null
       }
-    })
-    
-    if (!user) {
+      
+      return {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        businessName: user.businessName,
+        vatNumber: user.vatNumber
+      }
+    } catch (dbError) {
+      console.error('Database error in getUserFromRequest:', dbError)
+      // Return null to allow guest access instead of crashing
       return null
-    }
-    
-    return {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      businessName: user.businessName,
-      vatNumber: user.vatNumber
     }
   } catch (error) {
     console.error('Error extracting user from request:', error)

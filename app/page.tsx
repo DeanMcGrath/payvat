@@ -98,9 +98,9 @@ export default function LandingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#73C2FB] relative">
+    <div className="min-h-screen relative" style={{background: 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'}}>
       {showFullScreenBrand && (
-        <div className="fixed inset-0 z-[10000] opening-animation flex items-center justify-center bg-[#73C2FB]">
+        <div className="fixed inset-0 z-[10000] opening-animation flex items-center justify-center" style={{background: 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'}}>
           <div className="text-center">
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold font-mono text-white drop-shadow-2xl">
               {typewriterText}
@@ -154,7 +154,14 @@ export default function LandingPage() {
 
                       <Button
                         size="lg"
-                        className="w-full font-semibold font-sans text-white bg-[#73C2FB] hover:bg-[#005a8b] shadow-md hover:shadow-lg transition-all duration-300 min-h-[52px] text-base rounded-lg"
+                        className="w-full font-semibold font-sans text-white shadow-md hover:shadow-lg transition-all duration-300 min-h-[52px] text-base rounded-lg"
+                        style={{background: 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'}}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = 'linear-gradient(135deg, #5BADEA 0%, #003F63 100%)'
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'
+                        }}
                         onClick={() => router.push(box.link)}
                       >
                         <span className="font-bold">{box.buttonText}</span>

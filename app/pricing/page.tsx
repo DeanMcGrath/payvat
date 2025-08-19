@@ -121,7 +121,7 @@ export default function PricingPage() {
                   <div className="card-modern p-8 text-center">
                     <div className="flex items-center justify-center space-x-2 mb-4">
                       <Euro className="h-8 w-8 text-primary" />
-                      <span className="text-5xl font-bold text-foreground">90</span>
+                      <span className="text-5xl font-bold text-foreground">30</span>
                       <span className="text-muted-foreground text-lg">/month</span>
                     </div>
                     <p className="text-muted-foreground mb-6">Perfect for getting started</p>
@@ -144,7 +144,7 @@ export default function PricingPage() {
                     </div>
                     <div className="flex items-center justify-center space-x-2 mb-4">
                       <Euro className="h-8 w-8 text-primary" />
-                      <span className="text-5xl font-bold text-foreground">900</span>
+                      <span className="text-5xl font-bold text-foreground">300</span>
                       <span className="text-muted-foreground text-lg">/year</span>
                     </div>
                     <p className="text-primary font-semibold mb-2">Two months free!</p>

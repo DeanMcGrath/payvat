@@ -83,7 +83,7 @@ export default function VATServicesPage() {
     {
       id: "monthly",
       name: "Monthly Plan",
-      price: "€90",
+      price: "€30",
       period: "/month",
       description: "Perfect for getting started",
       features: [
@@ -104,7 +104,7 @@ export default function VATServicesPage() {
     {
       id: "annual",
       name: "Annual Plan",
-      price: "€900",
+      price: "€300",
       period: "/year",
       description: "Best value for growing businesses",
       features: [
@@ -353,7 +353,7 @@ export default function VATServicesPage() {
                     feature: "Cost per Month",
                     manual: "Your time (€25-50/hour)",
                     accountant: "€200-500",
-                    payvat: "€90/month or €900/year"
+                    payvat: "€35/month or €350/year"
                   },
                   {
                     feature: "Error Rate",

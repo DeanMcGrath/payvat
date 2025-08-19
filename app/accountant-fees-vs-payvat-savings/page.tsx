@@ -93,7 +93,7 @@ export default function AccountantFeesVsPayVatSavings() {
                     </div>
                     <div className="flex justify-between items-center p-3 bg-red-50 rounded">
                       <span className="text-sm font-medium">Penalty insurance/corrections</span>
-                      <span className="text-sm font-semibold text-red-600">€300</span>
+                      <span className="text-sm font-semibold text-red-600">€350</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-red-50 rounded">
                       <span className="text-sm font-medium">Record review/organization</span>
@@ -377,7 +377,7 @@ export default function AccountantFeesVsPayVatSavings() {
                 <blockquote className="text-sm text-red-700 italic text-center">
                   "My accountant charged €450 per VAT return but took 2 weeks to file. When I had urgent VAT questions, 
                   I had to wait for callbacks. The lack of control was frustrating and expensive. PayVat gives me everything 
-                  instantly for €30/month."
+                  instantly for €35/month."
                 </blockquote>
                 <cite className="text-xs text-red-600 block text-center mt-2">— Sarah M., Design Agency Owner</cite>
               </div>

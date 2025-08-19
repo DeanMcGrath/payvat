@@ -673,11 +673,104 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
       originalScanResult: result.scanResult
     }
     
+    // Extract date information for automatic folder allocation
+    let extractedDate: Date | null = null
+    let extractedYear: number | null = null
+    let extractedMonth: number | null = null
+    
+    if (result.extractedData?.invoiceDate) {
+      try {
+        // Parse various date formats commonly found in Irish documents
+        const dateStr = result.extractedData.invoiceDate
+        let parsedDate: Date | null = null
+        
+        // Try multiple date formats
+        const dateFormats = [
+          // DD/MM/YYYY (Irish standard)
+          /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/,
+          // MM/DD/YYYY (American format)
+          /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/,
+          // YYYY-MM-DD (ISO format)
+          /(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/,
+          // DD MMM YYYY (e.g., 15 Jan 2025)
+          /(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})/i
+        ]
+        
+        console.log(`📅 EXTRACTING DATE: Attempting to parse "${dateStr}"`)
+        
+        // Try direct parsing first
+        parsedDate = new Date(dateStr)
+        if (isNaN(parsedDate.getTime())) {
+          // Try regex patterns
+          for (const pattern of dateFormats) {
+            const match = dateStr.match(pattern)
+            if (match) {
+              if (pattern.source.includes('(\\d{4}).*?(\\d{1,2}).*?(\\d{1,2})')) {
+                // YYYY-MM-DD format
+                parsedDate = new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]))
+              } else if (match[2] && isNaN(parseInt(match[2]))) {
+                // Month name format
+                const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 
+                                  'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+                const monthIndex = monthNames.indexOf(match[2].toLowerCase())
+                if (monthIndex !== -1) {
+                  parsedDate = new Date(parseInt(match[3]), monthIndex, parseInt(match[1]))
+                }
+              } else {
+                // DD/MM/YYYY format (assume Irish format)
+                parsedDate = new Date(parseInt(match[3]), parseInt(match[2]) - 1, parseInt(match[1]))
+              }
+              
+              if (!isNaN(parsedDate.getTime())) {
+                break
+              }
+            }
+          }
+        }
+        
+        // Validate the parsed date is reasonable
+        if (parsedDate && !isNaN(parsedDate.getTime())) {
+          const currentYear = new Date().getFullYear()
+          const year = parsedDate.getFullYear()
+          
+          // Accept dates from 1990 to 2030 (reasonable range for business documents)
+          if (year >= 1990 && year <= 2030) {
+            extractedDate = parsedDate
+            extractedYear = year
+            extractedMonth = parsedDate.getMonth() + 1 // Convert to 1-12 range
+            console.log(`✅ DATE EXTRACTION SUCCESS: ${extractedDate.toISOString()} → Year: ${extractedYear}, Month: ${extractedMonth}`)
+          } else {
+            console.log(`⚠️ DATE OUT OF RANGE: ${year} is outside acceptable range (1990-2030)`)
+          }
+        } else {
+          console.log(`❌ DATE PARSING FAILED: Could not parse "${dateStr}"`)
+        }
+      } catch (dateError) {
+        console.error(`🚨 DATE EXTRACTION ERROR:`, dateError)
+      }
+    }
+    
+    // Fallback: use current date if no date could be extracted
+    if (!extractedDate) {
+      console.log(`📅 FALLBACK: Using current date for document organization`)
+      extractedDate = new Date()
+      extractedYear = extractedDate.getFullYear()
+      extractedMonth = extractedDate.getMonth() + 1
+    }
+    
+    console.log(`📁 FOLDER ALLOCATION: Document will be placed in ${extractedYear}/${String(extractedMonth).padStart(2, '0')}/${document.category.includes('SALES') ? 'Sales' : 'Purchases'}`)
+
     const updatedDocument = await prisma.document.update({
       where: { id: documentId },
       data: {
         isScanned: true,
         scanResult: `${result.scanResult}\n\n[PROCESSING_STATUS: ${JSON.stringify(processingStatus)}]`,
+        // Add extracted date information for automatic folder allocation
+        extractedDate: extractedDate,
+        extractedYear: extractedYear,
+        extractedMonth: extractedMonth,
+        extractionConfidence: result.extractedData?.confidence || 0.8,
+        dateExtractionConfidence: result.extractedData?.invoiceDate ? 0.9 : 0.5, // High confidence if date was found
       }
     })
     
