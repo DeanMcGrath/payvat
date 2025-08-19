@@ -9,6 +9,7 @@ import { FileText, Calendar, TrendingUp, TrendingDown, Search, Filter, X, ArrowU
 import FileUpload from "@/components/file-upload"
 import DocumentList, { type Document } from "@/components/document-list"
 import DocumentPreviewModal from "@/components/document-preview-modal"
+import DocumentViewer from "@/components/document-viewer"
 
 // Component wrapper to match the expected interface
 function FileUploadComponent({ onFilesUploaded, defaultDocumentType, title, description }: {
@@ -39,6 +40,11 @@ export default function Dashboard() {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
   const [previewDocument, setPreviewDocument] = useState<Document | null>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  
+  // Document viewer state for advanced analytics
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null)
+  const [documentViewerOpen, setDocumentViewerOpen] = useState(false)
+  const [extractedVATData, setExtractedVATData] = useState<any>(null)
 
   const [documents, setDocuments] = useState<Document[]>([
     {
@@ -49,6 +55,22 @@ export default function Dashboard() {
       size: 245760,
       uploadDate: "2024-01-15T10:30:00Z",
       fileType: "pdf",
+      isScanned: true,
+      vatAmount: 460.50,
+      invoiceTotal: 2302.50,
+      aiConfidence: 0.94,
+      processingQuality: 88,
+      irishVATCompliant: true,
+      processingEngine: 'enhanced',
+      validationStatus: 'COMPLIANT',
+      extractedDate: new Date("2024-01-15"),
+      processingInfo: {
+        engine: 'enhanced',
+        qualityScore: 88,
+        processingSteps: [],
+        irishVATCompliant: true,
+        totalProcessingTime: 2340
+      }
     },
     {
       id: "2",
@@ -58,6 +80,15 @@ export default function Dashboard() {
       size: 156432,
       uploadDate: "2024-01-20T14:15:00Z",
       fileType: "pdf",
+      isScanned: true,
+      vatAmount: 34.20,
+      invoiceTotal: 171.00,
+      aiConfidence: 0.87,
+      processingQuality: 75,
+      irishVATCompliant: true,
+      processingEngine: 'enhanced',
+      validationStatus: 'COMPLIANT',
+      extractedDate: new Date("2024-01-20")
     },
     {
       id: "3",
@@ -67,6 +98,15 @@ export default function Dashboard() {
       size: 512000,
       uploadDate: "2024-03-31T16:45:00Z",
       fileType: "xlsx",
+      isScanned: true,
+      vatAmount: 1580.75,
+      invoiceTotal: 7903.75,
+      aiConfidence: 0.96,
+      processingQuality: 92,
+      irishVATCompliant: true,
+      processingEngine: 'enhanced',
+      validationStatus: 'COMPLIANT',
+      extractedDate: new Date("2024-03-31")
     },
     {
       id: "4",
@@ -76,7 +116,28 @@ export default function Dashboard() {
       size: 324567,
       uploadDate: "2024-02-10T09:20:00Z",
       fileType: "pdf",
+      isScanned: true,
+      vatAmount: 127.50,
+      invoiceTotal: 637.50,
+      aiConfidence: 0.72,
+      processingQuality: 65,
+      irishVATCompliant: false,
+      processingEngine: 'legacy',
+      validationStatus: 'NEEDS_REVIEW',
+      extractedDate: new Date("2024-02-10")
     },
+    {
+      id: "5",
+      name: "Monthly_Expenses_Feb.csv",
+      type: "purchases",
+      date: "2024-02-28",
+      size: 89456,
+      uploadDate: "2024-02-28T09:15:00Z",
+      fileType: "csv",
+      isScanned: false,
+      processingEngine: 'enhanced',
+      validationStatus: 'PENDING'
+    }
   ])
 
   const currentYear = new Date().getFullYear()
@@ -143,8 +204,39 @@ export default function Dashboard() {
     const total = documents.length
     const sales = documents.filter((doc) => doc.type === "sales").length
     const purchases = documents.filter((doc) => doc.type === "purchases").length
+    
+    // Calculate VAT totals from enhanced document data
+    const totalSalesVAT = documents
+      .filter((doc) => doc.type === "sales" && doc.vatAmount)
+      .reduce((sum, doc) => sum + (doc.vatAmount || 0), 0)
+    
+    const totalPurchaseVAT = documents
+      .filter((doc) => doc.type === "purchases" && doc.vatAmount)
+      .reduce((sum, doc) => sum + (doc.vatAmount || 0), 0)
+    
+    const totalInvoiceAmount = documents
+      .filter((doc) => doc.invoiceTotal)
+      .reduce((sum, doc) => sum + (doc.invoiceTotal || 0), 0)
+    
+    const averageConfidence = documents
+      .filter((doc) => doc.aiConfidence)
+      .reduce((sum, doc) => sum + (doc.aiConfidence || 0), 0) / 
+      Math.max(documents.filter((doc) => doc.aiConfidence).length, 1)
+    
+    const compliantDocuments = documents.filter((doc) => doc.validationStatus === 'COMPLIANT').length
+    const complianceRate = total > 0 ? (compliantDocuments / total) * 100 : 0
 
-    return { total, sales, purchases }
+    return { 
+      total, 
+      sales, 
+      purchases, 
+      totalSalesVAT, 
+      totalPurchaseVAT, 
+      totalInvoiceAmount, 
+      averageConfidence,
+      complianceRate,
+      compliantDocuments
+    }
   }, [documents])
 
   const clearFilters = () => {
@@ -166,8 +258,32 @@ export default function Dashboard() {
   }, [selectedYear, selectedMonth, selectedType, searchQuery])
 
   const handleDocumentView = (document: Document) => {
-    setPreviewDocument(document)
-    setIsPreviewOpen(true)
+    // Use the advanced DocumentViewer for enhanced analytics
+    setSelectedDocument(document)
+    setDocumentViewerOpen(true)
+    
+    // Mock extracted VAT data based on document properties
+    if (document.isScanned && document.vatAmount) {
+      setExtractedVATData({
+        salesVAT: document.type === 'sales' ? [document.vatAmount] : [],
+        purchaseVAT: document.type === 'purchases' ? [document.vatAmount] : [],
+        confidence: document.aiConfidence || 0.8,
+        totalSalesVAT: document.type === 'sales' ? document.vatAmount : 0,
+        totalPurchaseVAT: document.type === 'purchases' ? document.vatAmount : 0
+      })
+    }
+  }
+
+  const handleCloseDocumentViewer = () => {
+    setDocumentViewerOpen(false)
+    setSelectedDocument(null)
+    setExtractedVATData(null)
+  }
+
+  const handleVATCorrection = (correctionData: any) => {
+    // Handle VAT corrections for AI training
+    console.log('VAT correction submitted:', correctionData)
+    // In a real app, this would send the correction to the API
   }
 
   const handleDocumentUpdate = (updatedDocument: Document) => {
@@ -212,8 +328,44 @@ export default function Dashboard() {
   }
 
   const handleFilesUploaded = (uploadedFiles: any[]) => {
-    console.log("[v0] Files uploaded:", uploadedFiles)
-    // TODO: Convert uploaded files to Document format and add to documents state
+    console.log("[Dashboard] Files uploaded:", uploadedFiles)
+    
+    // Convert uploaded files to Document format with processing indicators
+    const newDocuments = uploadedFiles.map(file => ({
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+      name: file.name || 'Uploaded Document',
+      type: file.category?.includes('SALES') ? 'sales' as const : 'purchases' as const,
+      date: new Date().toISOString().split('T')[0],
+      size: file.size || 0,
+      uploadDate: new Date().toISOString(),
+      fileType: file.name?.split('.').pop()?.toLowerCase() || 'pdf',
+      isScanned: false, // Will be set to true when processing completes
+      processingEngine: 'enhanced' as const,
+      validationStatus: 'PENDING' as const
+    }))
+    
+    setDocuments(prev => [...prev, ...newDocuments])
+    
+    // Simulate AI processing with real-time updates
+    newDocuments.forEach((doc, index) => {
+      setTimeout(() => {
+        setDocuments(prev => prev.map(d => 
+          d.id === doc.id 
+            ? {
+                ...d,
+                isScanned: true,
+                vatAmount: Math.random() * 500 + 50, // Mock VAT amount
+                invoiceTotal: Math.random() * 2500 + 250, // Mock invoice total
+                aiConfidence: 0.7 + Math.random() * 0.3, // Mock confidence 70-100%
+                processingQuality: 60 + Math.random() * 40, // Mock quality 60-100
+                irishVATCompliant: Math.random() > 0.2, // 80% compliance rate
+                validationStatus: Math.random() > 0.15 ? 'COMPLIANT' as const : 'NEEDS_REVIEW' as const,
+                extractedDate: new Date()
+              }
+            : d
+        ))
+      }, (index + 1) * 3000 + Math.random() * 2000) // Stagger processing times
+    })
   }
 
   return (
@@ -424,8 +576,36 @@ export default function Dashboard() {
               </Card>
             </div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Processing Status Indicator */}
+            {documents.some(doc => !doc.isScanned) && (
+              <Card className="border-yellow-200 bg-yellow-50">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="animate-spin rounded-full h-6 w-6 border-2 border-yellow-500 border-t-transparent" />
+                    <div className="flex-1">
+                      <h3 className="font-medium text-yellow-800">AI Processing in Progress</h3>
+                      <p className="text-sm text-yellow-600">
+                        {documents.filter(doc => !doc.isScanned).length} documents being analyzed for VAT extraction and compliance
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-yellow-700">
+                        {Math.round((documents.filter(doc => doc.isScanned).length / documents.length) * 100)}% Complete
+                      </div>
+                      <div className="w-24 bg-yellow-200 rounded-full h-2 mt-1">
+                        <div 
+                          className="bg-yellow-500 h-2 rounded-full transition-all duration-500"
+                          style={{ width: `${(documents.filter(doc => doc.isScanned).length / documents.length) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Enhanced Analytics Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
@@ -442,8 +622,9 @@ export default function Dashboard() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-slate-600">Sales Documents</p>
-                      <p className="text-2xl font-bold text-green-600">{stats.sales}</p>
+                      <p className="text-sm text-slate-600">Sales VAT Total</p>
+                      <p className="text-2xl font-bold text-green-600">€{stats.totalSalesVAT.toFixed(2)}</p>
+                      <p className="text-xs text-slate-500">{stats.sales} documents</p>
                     </div>
                     <TrendingUp className="h-8 w-8 text-green-600" />
                   </div>
@@ -454,10 +635,76 @@ export default function Dashboard() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-slate-600">Purchase Documents</p>
-                      <p className="text-2xl font-bold text-red-600">{stats.purchases}</p>
+                      <p className="text-sm text-slate-600">Purchase VAT Total</p>
+                      <p className="text-2xl font-bold text-red-600">€{stats.totalPurchaseVAT.toFixed(2)}</p>
+                      <p className="text-xs text-slate-500">{stats.purchases} documents</p>
                     </div>
                     <TrendingDown className="h-8 w-8 text-red-600" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-slate-600">AI Confidence</p>
+                      <p className="text-2xl font-bold text-[#0072B1]">{Math.round(stats.averageConfidence * 100)}%</p>
+                      <p className="text-xs text-slate-500">Average across all docs</p>
+                    </div>
+                    <div className={`h-8 w-8 rounded-full flex items-center justify-center ${
+                      stats.averageConfidence >= 0.8 ? 'bg-green-100' :
+                      stats.averageConfidence >= 0.6 ? 'bg-yellow-100' : 'bg-red-100'
+                    }`}>
+                      <div className={`h-4 w-4 rounded-full ${
+                        stats.averageConfidence >= 0.8 ? 'bg-green-500' :
+                        stats.averageConfidence >= 0.6 ? 'bg-yellow-500' : 'bg-red-500'
+                      }`} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Additional Analytics Row */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-slate-600">Total Invoice Value</p>
+                      <p className="text-2xl font-bold text-[#0072B1]">€{stats.totalInvoiceAmount.toFixed(2)}</p>
+                      <p className="text-xs text-slate-500">Across all documents</p>
+                    </div>
+                    <Calendar className="h-8 w-8 text-[#0072B1]" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-slate-600">VAT Compliance</p>
+                      <p className="text-2xl font-bold text-green-600">{Math.round(stats.complianceRate)}%</p>
+                      <p className="text-xs text-slate-500">{stats.compliantDocuments} of {stats.total} compliant</p>
+                    </div>
+                    <div className="h-8 w-8 flex items-center justify-center text-lg">🇮🇪</div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-slate-600">Net VAT Due</p>
+                      <p className="text-2xl font-bold text-[#0072B1]">€{(stats.totalSalesVAT - stats.totalPurchaseVAT).toFixed(2)}</p>
+                      <p className="text-xs text-slate-500">Sales VAT - Purchase VAT</p>
+                    </div>
+                    <div className="h-8 w-8 bg-[#0072B1] rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">€</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -497,6 +744,15 @@ export default function Dashboard() {
         onClose={() => setIsPreviewOpen(false)}
         onUpdate={handleDocumentUpdate}
         onDownload={handleDocumentDownload}
+      />
+
+      {/* Advanced Document Viewer with VAT Analytics */}
+      <DocumentViewer
+        isOpen={documentViewerOpen}
+        onClose={handleCloseDocumentViewer}
+        document={selectedDocument}
+        extractedVAT={extractedVATData}
+        onVATCorrection={handleVATCorrection}
       />
     </div>
   )

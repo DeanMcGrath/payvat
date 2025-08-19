@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
-import { FileText, Download, Trash2, Eye, MoreHorizontal, Calendar, FolderOpen, Archive } from "lucide-react"
+import { FileText, Download, Trash2, Eye, MoreHorizontal, Calendar, FolderOpen, Archive, CheckCircle, AlertCircle, Euro, TrendingUp, Star, Zap } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,6 +29,25 @@ export interface Document {
   size: number
   uploadDate: string
   fileType: string
+  // Enhanced VAT analytics fields
+  vatAmount?: number
+  invoiceTotal?: number
+  aiConfidence?: number
+  processingQuality?: number
+  irishVATCompliant?: boolean
+  processingEngine?: 'enhanced' | 'legacy'
+  extractedDate?: Date
+  validationStatus?: 'COMPLIANT' | 'NEEDS_REVIEW' | 'NON_COMPLIANT' | 'PENDING'
+  isScanned?: boolean
+  scanResult?: string
+  // Processing info from enhanced engine
+  processingInfo?: {
+    engine: 'enhanced' | 'legacy'
+    qualityScore: number
+    processingSteps: any[]
+    irishVATCompliant: boolean
+    totalProcessingTime: number
+  }
 }
 
 interface DocumentListProps {
@@ -80,6 +99,68 @@ export default function DocumentList({
         Purchases
       </Badge>
     )
+  }
+
+  const getConfidenceBadge = (confidence?: number) => {
+    if (!confidence) return null
+    
+    const percentage = Math.round(confidence * 100)
+    if (percentage >= 80) {
+      return (
+        <Badge variant="secondary" className="bg-green-100 text-green-700">
+          <CheckCircle className="h-3 w-3 mr-1" />
+          {percentage}% confident
+        </Badge>
+      )
+    } else if (percentage >= 60) {
+      return (
+        <Badge variant="secondary" className="bg-yellow-100 text-yellow-700">
+          <AlertCircle className="h-3 w-3 mr-1" />
+          {percentage}% confident
+        </Badge>
+      )
+    } else {
+      return (
+        <Badge variant="secondary" className="bg-red-100 text-red-700">
+          <AlertCircle className="h-3 w-3 mr-1" />
+          {percentage}% confident
+        </Badge>
+      )
+    }
+  }
+
+  const getQualityBadge = (qualityScore?: number) => {
+    if (!qualityScore) return null
+    
+    if (qualityScore >= 80) {
+      return (
+        <Badge variant="secondary" className="bg-blue-100 text-blue-700">
+          <Star className="h-3 w-3 mr-1" />
+          Quality: {qualityScore}/100
+        </Badge>
+      )
+    } else if (qualityScore >= 60) {
+      return (
+        <Badge variant="secondary" className="bg-yellow-100 text-yellow-700">
+          <Star className="h-3 w-3 mr-1" />
+          Quality: {qualityScore}/100
+        </Badge>
+      )
+    } else {
+      return (
+        <Badge variant="secondary" className="bg-red-100 text-red-700">
+          <Star className="h-3 w-3 mr-1" />
+          Quality: {qualityScore}/100
+        </Badge>
+      )
+    }
+  }
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-IE', {
+      style: 'currency',
+      currency: 'EUR'
+    }).format(amount)
   }
 
   const handleSelectAll = (checked: boolean) => {
@@ -180,9 +261,10 @@ export default function DocumentList({
               </TableHead>
               <TableHead>Document</TableHead>
               <TableHead>Type</TableHead>
+              <TableHead>VAT Analytics</TableHead>
+              <TableHead>Quality</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Size</TableHead>
-              <TableHead>Uploaded</TableHead>
               <TableHead className="w-12"></TableHead>
             </TableRow>
           </TableHeader>
@@ -200,24 +282,86 @@ export default function DocumentList({
                     {getFileTypeIcon(document.fileType)}
                     <div>
                       <div className="font-medium text-gray-900">{document.name}</div>
-                      <div className="text-sm text-gray-500 uppercase">{document.fileType}</div>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <div className="text-sm text-gray-500 uppercase">{document.fileType}</div>
+                        {document.isScanned && (
+                          <Badge variant="secondary" className="bg-green-100 text-green-700 text-xs">
+                            <CheckCircle className="h-3 w-3 mr-1" />
+                            AI Processed
+                          </Badge>
+                        )}
+                        {!document.isScanned && (
+                          <Badge variant="secondary" className="bg-yellow-100 text-yellow-700 text-xs">
+                            <AlertCircle className="h-3 w-3 mr-1" />
+                            Processing...
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>
-                  {getTypeBadge(document.type)}
+                  <div className="flex flex-col space-y-1">
+                    {getTypeBadge(document.type)}
+                    {document.processingEngine === 'enhanced' && (
+                      <Badge variant="secondary" className="bg-blue-100 text-blue-700 text-xs">
+                        <Zap className="h-3 w-3 mr-1" />
+                        Enhanced AI
+                      </Badge>
+                    )}
+                    {document.irishVATCompliant && (
+                      <Badge variant="secondary" className="bg-green-100 text-green-700 text-xs">
+                        🇮🇪 VAT Compliant
+                      </Badge>
+                    )}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col space-y-2">
+                    {document.vatAmount && (
+                      <div className="flex items-center text-sm">
+                        <Euro className="h-3 w-3 mr-1 text-green-600" />
+                        <span className="font-medium text-green-600">
+                          {formatCurrency(document.vatAmount)}
+                        </span>
+                      </div>
+                    )}
+                    {document.invoiceTotal && (
+                      <div className="flex items-center text-sm text-gray-600">
+                        <TrendingUp className="h-3 w-3 mr-1" />
+                        <span>Total: {formatCurrency(document.invoiceTotal)}</span>
+                      </div>
+                    )}
+                    {getConfidenceBadge(document.aiConfidence)}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex flex-col space-y-1">
+                    {getQualityBadge(document.processingQuality || document.processingInfo?.qualityScore)}
+                    {document.validationStatus && (
+                      <Badge 
+                        variant="secondary" 
+                        className={`text-xs ${
+                          document.validationStatus === 'COMPLIANT' ? 'bg-green-100 text-green-700' :
+                          document.validationStatus === 'NEEDS_REVIEW' ? 'bg-yellow-100 text-yellow-700' :
+                          'bg-red-100 text-red-700'
+                        }`}
+                      >
+                        {document.validationStatus === 'COMPLIANT' ? 'Compliant' :
+                         document.validationStatus === 'NEEDS_REVIEW' ? 'Needs Review' :
+                         document.validationStatus === 'NON_COMPLIANT' ? 'Non-Compliant' : 'Pending'}
+                      </Badge>
+                    )}
+                  </div>
                 </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-1 text-gray-600">
                     <Calendar className="h-3 w-3" />
-                    <span className="text-sm">{formatDate(document.date)}</span>
+                    <span className="text-sm">{formatDate(document.extractedDate || document.date)}</span>
                   </div>
                 </TableCell>
                 <TableCell className="text-sm text-gray-600">
                   {formatFileSize(document.size)}
-                </TableCell>
-                <TableCell className="text-sm text-gray-500">
-                  {formatDate(document.uploadDate)}
                 </TableCell>
                 <TableCell>
                   <DropdownMenu>
@@ -229,7 +373,7 @@ export default function DocumentList({
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onClick={() => onView(document)}>
                         <Eye className="h-4 w-4 mr-2" />
-                        View
+                        View & Analyze
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => onDownload(document)}>
                         <Download className="h-4 w-4 mr-2" />
