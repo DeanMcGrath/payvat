@@ -102,6 +102,26 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
         { status: 400 }
       )
     }
+
+    // Test database connectivity first
+    try {
+      await Promise.race([
+        prisma.$queryRaw`SELECT 1`,
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Database connection timeout')), 10000)
+        )
+      ])
+    } catch (dbError) {
+      logError('Database connection failed during document deletion', dbError, {
+        userId: user?.id,
+        documentId: id,
+        operation: 'delete-document-db-test'
+      })
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable. Please try again later.' },
+        { status: 503 }
+      )
+    }
     
     const whereClause: any = { id }
     
@@ -170,14 +190,14 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
       try {
         await deleteFile(document.filePath)
         logInfo('Successfully deleted file', {
-          userId: user.id,
+          userId: user?.id,
           documentId: id,
           filePath: document.filePath,
           operation: 'file-deletion'
         })
       } catch (fileError) {
         logWarn('File deletion warning', {
-          userId: user.id,
+          userId: user?.id,
           documentId: id,
           filePath: document.filePath,
           operation: 'file-deletion'
@@ -188,13 +208,13 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
     } else if (document.fileData) {
       // For base64 stored files, no physical file to delete
       logInfo('Document uses base64 storage, no physical file to delete', {
-        userId: user.id,
+        userId: user?.id,
         documentId: id,
         operation: 'file-deletion'
       })
     } else {
       logWarn('Document has no filePath or fileData - unusual but proceeding', {
-        userId: user.id,
+        userId: user?.id,
         documentId: id,
         operation: 'file-deletion'
       })
@@ -211,7 +231,7 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
       })
       if (deletedFingerprint.count > 0) {
         logInfo('Deleted related document fingerprint', {
-          userId: user.id,
+          userId: user?.id,
           documentId: id,
           count: deletedFingerprint.count,
           operation: 'fingerprint-deletion'
@@ -219,7 +239,7 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
       }
     } catch (fingerprintError) {
       logWarn('Failed to delete document fingerprint', {
-        userId: user.id,
+        userId: user?.id,
         documentId: id,
         operation: 'fingerprint-deletion'
       })
@@ -235,7 +255,7 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
       })
       if (deletedUsages.count > 0) {
         logInfo('Deleted related template usages', {
-          userId: user.id,
+          userId: user?.id,
           documentId: id,
           count: deletedUsages.count,
           operation: 'template-usage-deletion'
@@ -243,7 +263,7 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
       }
     } catch (usageError) {
       logWarn('Failed to delete template usages for document', {
-        userId: user.id,
+        userId: user?.id,
         documentId: id,
         operation: 'template-usage-deletion'
       })
@@ -259,7 +279,7 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
       })
       if (deletedAnalytics.count > 0) {
         logInfo('Deleted related AI processing analytics', {
-          userId: user.id,
+          userId: user?.id,
           documentId: id,
           count: deletedAnalytics.count,
           operation: 'ai-analytics-deletion'
@@ -267,7 +287,7 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
       }
     } catch (analyticsError) {
       logWarn('Failed to delete AI processing analytics for document', {
-        userId: user.id,
+        userId: user?.id,
         documentId: id,
         operation: 'ai-analytics-deletion'
       })
@@ -284,7 +304,7 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
       })
       if (deletedAuditLogs.count > 0) {
         logInfo('Deleted related audit logs', {
-          userId: user.id,
+          userId: user?.id,
           documentId: id,
           count: deletedAuditLogs.count,
           operation: 'audit-logs-deletion'
@@ -292,7 +312,7 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
       }
     } catch (auditError) {
       logWarn('Failed to delete audit logs for document', {
-        userId: user.id,
+        userId: user?.id,
         documentId: id,
         operation: 'audit-logs-deletion'
       })
@@ -307,14 +327,14 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
         }
       })
       logInfo('Deleted related learning feedback records', {
-        userId: user.id,
+        userId: user?.id,
         documentId: id,
         count: deletedFeedback.count,
         operation: 'learning-feedback-deletion'
       })
     } catch (feedbackError) {
       logWarn('Failed to delete learning feedback for document', {
-        userId: user.id,
+        userId: user?.id,
         documentId: id,
         operation: 'learning-feedback-deletion'
       })
@@ -326,13 +346,15 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
       where: { id }
     })
     
-    // Create audit log
-    await logAudit('DELETE_DOCUMENT', {
-      userId: user.id,
-      documentId: id,
-      operation: 'document-deletion',
-      result: 'SUCCESS'
-    })
+    // Create audit log (only for authenticated users)
+    if (user) {
+      await logAudit('DELETE_DOCUMENT', {
+        userId: user.id,
+        documentId: id,
+        operation: 'document-deletion',
+        result: 'SUCCESS'
+      })
+    }
     
     return NextResponse.json({
       success: true,
@@ -342,7 +364,7 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
     
   } catch (error) {
     logError('Document deletion error', error, {
-      userId: user.id,
+      userId: user?.id,
       documentId: id,
       operation: 'document-deletion'
     })
