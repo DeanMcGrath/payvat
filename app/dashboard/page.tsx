@@ -1,146 +1,63 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { FileText, Calendar, TrendingUp, TrendingDown, Search, Filter, X, ArrowUpDown, Home } from "lucide-react"
+import { FileText, Calendar, TrendingUp, TrendingDown, Search, Filter, X, ArrowUpDown, Home, Calculator } from "lucide-react"
 import FileUpload from "@/components/file-upload"
 import DocumentList, { type Document } from "@/components/document-list"
 import DocumentPreviewModal from "@/components/document-preview-modal"
 import DocumentViewer from "@/components/document-viewer"
+import { toast } from "sonner"
 
-// Component wrapper to match the expected interface
-function FileUploadComponent({ onFilesUploaded, defaultDocumentType, title, description }: {
-  onFilesUploaded: (files: any[]) => void
-  defaultDocumentType: string
-  title: string
-  description: string
-}) {
-  return (
-    <FileUpload
-      category={defaultDocumentType === "sales" ? "SALES" : "PURCHASES"}
-      title={title}
-      description={description}
-      acceptedFiles={[".pdf", ".csv", ".xlsx", ".xls", ".jpg", ".jpeg", ".png"]}
-      onUploadSuccess={(document) => {
-        onFilesUploaded([document])
-      }}
-    />
-  )
-}
+// Helper function to map uploaded documents to dashboard format
+const mapUploadedDocument = (doc: any): Document => ({
+  id: doc.id,
+  name: doc.originalName || doc.fileName || 'Uploaded Document',
+  type: doc.category?.includes('SALES') ? 'sales' as const : 'purchases' as const,
+  date: doc.uploadedAt ? new Date(doc.uploadedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+  size: doc.fileSize || 0,
+  uploadDate: doc.uploadedAt || new Date().toISOString(),
+  fileType: doc.mimeType?.includes('pdf') ? 'pdf' : 
+           doc.mimeType?.includes('spreadsheet') || doc.mimeType?.includes('excel') ? 'xlsx' :
+           doc.mimeType?.includes('csv') ? 'csv' : 'pdf',
+  isScanned: doc.isScanned || false,
+  vatAmount: doc.vatAmount,
+  invoiceTotal: doc.invoiceTotal,
+  aiConfidence: doc.extractionConfidence || doc.confidence,
+  processingQuality: doc.processingQuality,
+  validationStatus: doc.validationStatus || 'PENDING' as const,
+  irishVATCompliant: doc.irishVATCompliant,
+  processingEngine: 'enhanced' as const,
+  extractedDate: doc.extractedDate ? new Date(doc.extractedDate) : undefined
+})
 
 export default function Dashboard() {
-  const [selectedYear, setSelectedYear] = useState<string>("2024")
+  const currentYear = new Date().getFullYear()
+  const [selectedYear, setSelectedYear] = useState<string>(currentYear.toString())
   const [selectedMonth, setSelectedMonth] = useState<string>("all")
-  const [selectedType, setSelectedType] = useState<string>("all")
   const [searchQuery, setSearchQuery] = useState("")
-  const [sortBy, setSortBy] = useState<"date" | "name" | "size">("date")
+  const [sortBy, setSortBy] = useState<"date" | "name">("date")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
   const [previewDocument, setPreviewDocument] = useState<Document | null>(null)
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   
   // Document viewer state for advanced analytics
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null)
+  const [selectedDocument, setSelectedDocument] = useState<any>(null)
   const [documentViewerOpen, setDocumentViewerOpen] = useState(false)
   const [extractedVATData, setExtractedVATData] = useState<any>(null)
+  const [documents, setDocuments] = useState<Document[]>([])
+  const [loadingDocuments, setLoadingDocuments] = useState(true)
+  
+  // VAT extraction and batch upload state
+  const [loadingExtractedData, setLoadingExtractedData] = useState(false)
+  const [lastFetchTime, setLastFetchTime] = useState(0)
+  const [fetchTimeout, setFetchTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [enableBatchMode] = useState(true)
+  const [maxConcurrentUploads] = useState(3)
 
-  const [documents, setDocuments] = useState<Document[]>([
-    {
-      id: "1",
-      name: "Invoice_2024_001.pdf",
-      type: "sales",
-      date: "2024-01-15",
-      size: 245760,
-      uploadDate: "2024-01-15T10:30:00Z",
-      fileType: "pdf",
-      isScanned: true,
-      vatAmount: 460.50,
-      invoiceTotal: 2302.50,
-      aiConfidence: 0.94,
-      processingQuality: 88,
-      irishVATCompliant: true,
-      processingEngine: 'enhanced',
-      validationStatus: 'COMPLIANT',
-      extractedDate: new Date("2024-01-15"),
-      processingInfo: {
-        engine: 'enhanced',
-        qualityScore: 88,
-        processingSteps: [],
-        irishVATCompliant: true,
-        totalProcessingTime: 2340
-      }
-    },
-    {
-      id: "2",
-      name: "Receipt_Office_Supplies.pdf",
-      type: "purchases",
-      date: "2024-01-20",
-      size: 156432,
-      uploadDate: "2024-01-20T14:15:00Z",
-      fileType: "pdf",
-      isScanned: true,
-      vatAmount: 34.20,
-      invoiceTotal: 171.00,
-      aiConfidence: 0.87,
-      processingQuality: 75,
-      irishVATCompliant: true,
-      processingEngine: 'enhanced',
-      validationStatus: 'COMPLIANT',
-      extractedDate: new Date("2024-01-20")
-    },
-    {
-      id: "3",
-      name: "Sales_Report_Q1.xlsx",
-      type: "sales",
-      date: "2024-03-31",
-      size: 512000,
-      uploadDate: "2024-03-31T16:45:00Z",
-      fileType: "xlsx",
-      isScanned: true,
-      vatAmount: 1580.75,
-      invoiceTotal: 7903.75,
-      aiConfidence: 0.96,
-      processingQuality: 92,
-      irishVATCompliant: true,
-      processingEngine: 'enhanced',
-      validationStatus: 'COMPLIANT',
-      extractedDate: new Date("2024-03-31")
-    },
-    {
-      id: "4",
-      name: "Equipment_Purchase.pdf",
-      type: "purchases",
-      date: "2024-02-10",
-      size: 324567,
-      uploadDate: "2024-02-10T09:20:00Z",
-      fileType: "pdf",
-      isScanned: true,
-      vatAmount: 127.50,
-      invoiceTotal: 637.50,
-      aiConfidence: 0.72,
-      processingQuality: 65,
-      irishVATCompliant: false,
-      processingEngine: 'legacy',
-      validationStatus: 'NEEDS_REVIEW',
-      extractedDate: new Date("2024-02-10")
-    },
-    {
-      id: "5",
-      name: "Monthly_Expenses_Feb.csv",
-      type: "purchases",
-      date: "2024-02-28",
-      size: 89456,
-      uploadDate: "2024-02-28T09:15:00Z",
-      fileType: "csv",
-      isScanned: false,
-      processingEngine: 'enhanced',
-      validationStatus: 'PENDING'
-    }
-  ])
-
-  const currentYear = new Date().getFullYear()
   const years = Array.from({ length: 5 }, (_, i) => currentYear - i)
   const months = [
     "January",
@@ -169,9 +86,6 @@ export default function Dashboard() {
       // Filter by month
       if (selectedMonth !== "all" && docMonth !== selectedMonth) return false
 
-      // Filter by type
-      if (selectedType !== "all" && doc.type !== selectedType) return false
-
       // Filter by search query
       if (searchQuery && !doc.name.toLowerCase().includes(searchQuery.toLowerCase())) return false
 
@@ -189,16 +103,13 @@ export default function Dashboard() {
         case "name":
           comparison = a.name.localeCompare(b.name)
           break
-        case "size":
-          comparison = a.size - b.size
-          break
       }
 
       return sortOrder === "asc" ? comparison : -comparison
     })
 
     return filtered
-  }, [documents, selectedYear, selectedMonth, selectedType, searchQuery, sortBy, sortOrder])
+  }, [documents, selectedYear, selectedMonth, searchQuery, sortBy, sortOrder])
 
   const stats = useMemo(() => {
     const total = documents.length
@@ -240,9 +151,8 @@ export default function Dashboard() {
   }, [documents])
 
   const clearFilters = () => {
-    setSelectedYear("2024")
+    setSelectedYear(currentYear.toString())
     setSelectedMonth("all")
-    setSelectedType("all")
     setSearchQuery("")
     setSortBy("date")
     setSortOrder("desc")
@@ -250,16 +160,29 @@ export default function Dashboard() {
 
   const activeFiltersCount = useMemo(() => {
     let count = 0
-    if (selectedYear !== "2024") count++
+    if (selectedYear !== currentYear.toString()) count++
     if (selectedMonth !== "all") count++
-    if (selectedType !== "all") count++
     if (searchQuery) count++
     return count
-  }, [selectedYear, selectedMonth, selectedType, searchQuery])
+  }, [selectedYear, selectedMonth, searchQuery, currentYear])
 
   const handleDocumentView = (document: Document) => {
-    // Use the advanced DocumentViewer for enhanced analytics
-    setSelectedDocument(document)
+    // Convert Document to DocumentData format expected by DocumentViewer
+    const documentData = {
+      id: document.id,
+      originalName: document.name,
+      fileName: document.name,
+      mimeType: document.fileType === 'pdf' ? 'application/pdf' : 
+                document.fileType === 'xlsx' ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' :
+                document.fileType === 'xls' ? 'application/vnd.ms-excel' :
+                document.fileType === 'csv' ? 'text/csv' : 'application/octet-stream',
+      fileSize: document.size,
+      category: document.type.toUpperCase(),
+      isScanned: document.isScanned || false,
+      uploadedAt: document.uploadDate
+    }
+    
+    setSelectedDocument(documentData)
     setDocumentViewerOpen(true)
     
     // Mock extracted VAT data based on document properties
@@ -293,18 +216,56 @@ export default function Dashboard() {
   const handleDocumentDownload = (document: Document) => {
     console.log("[v0] Downloading document:", document.name)
     // Create a mock download
-    const link = document.createElement("a")
+    const link = globalThis.document.createElement("a")
     link.href = "#"
     link.download = document.name
+    globalThis.document.body.appendChild(link)
     link.click()
+    globalThis.document.body.removeChild(link)
   }
 
-  const handleDocumentDelete = (document: Document) => {
-    setDocuments((prev) => prev.filter((doc) => doc.id !== document.id))
+  const handleDocumentDelete = async (document: Document) => {
+    try {
+      // Call API to delete from database
+      const response = await fetch(`/api/documents/${document.id}`, {
+        method: 'DELETE',
+      })
+      
+      if (response.ok) {
+        // Remove from local state only after successful deletion
+        setDocuments((prev) => prev.filter((doc) => doc.id !== document.id))
+        toast.success('Document deleted successfully')
+      } else {
+        toast.error('Failed to delete document')
+      }
+    } catch (error) {
+      console.error('Error deleting document:', error)
+      toast.error('Error deleting document')
+    }
   }
 
-  const handleBulkDelete = (documentIds: string[]) => {
-    setDocuments((prev) => prev.filter((doc) => !documentIds.includes(doc.id)))
+  const handleBulkDelete = async (documentIds: string[]) => {
+    try {
+      // Delete all documents via API
+      const deletePromises = documentIds.map(id =>
+        fetch(`/api/documents/${id}`, { method: 'DELETE' })
+      )
+      
+      const results = await Promise.all(deletePromises)
+      const successfulDeletes = documentIds.filter((id, index) => results[index].ok)
+      
+      // Remove only successfully deleted documents from state
+      setDocuments((prev) => prev.filter((doc) => !successfulDeletes.includes(doc.id)))
+      
+      if (successfulDeletes.length === documentIds.length) {
+        toast.success(`${successfulDeletes.length} documents deleted`)
+      } else {
+        toast.warning(`Deleted ${successfulDeletes.length} of ${documentIds.length} documents`)
+      }
+    } catch (error) {
+      console.error('Error deleting documents:', error)
+      toast.error('Error deleting documents')
+    }
   }
 
   const handleExport = (documents: Document[]) => {
@@ -319,53 +280,139 @@ export default function Dashboard() {
     ].join("\n")
 
     const blob = new Blob([csvContent], { type: "text/csv" })
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement("a")
+    const url = globalThis.URL.createObjectURL(blob)
+    const link = globalThis.document.createElement("a")
     link.href = url
     link.download = "documents-export.csv"
+    globalThis.document.body.appendChild(link)
     link.click()
-    window.URL.revokeObjectURL(url)
+    globalThis.document.body.removeChild(link)
+    globalThis.URL.revokeObjectURL(url)
   }
 
-  const handleFilesUploaded = (uploadedFiles: any[]) => {
-    console.log("[Dashboard] Files uploaded:", uploadedFiles)
+  const loadDocuments = async () => {
+    try {
+      setLoadingDocuments(true)
+      const response = await fetch('/api/documents?dashboard=true')
+      
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success && result.documents) {
+          // Map API documents to Dashboard Document interface
+          const mappedDocuments: Document[] = result.documents.map((doc: any) => ({
+            id: doc.id,
+            name: doc.originalName || doc.fileName || 'Unknown Document',
+            type: doc.category?.includes('SALES') ? 'sales' as const : 'purchases' as const,
+            date: doc.extractedDate ? new Date(doc.extractedDate).toISOString().split('T')[0] : 
+                  doc.uploadedAt ? new Date(doc.uploadedAt).toISOString().split('T')[0] : 
+                  new Date().toISOString().split('T')[0],
+            size: doc.fileSize || 0,
+            uploadDate: doc.uploadedAt || new Date().toISOString(),
+            fileType: doc.mimeType?.includes('pdf') ? 'pdf' :
+                     doc.mimeType?.includes('spreadsheet') || doc.mimeType?.includes('excel') ? 'xlsx' :
+                     doc.mimeType?.includes('csv') ? 'csv' : 'pdf',
+            isScanned: doc.isScanned || true,
+            vatAmount: doc.vatAccuracy || doc.vatAmount || doc.extractedAmounts?.[0] || undefined,
+            invoiceTotal: doc.invoiceTotal || doc.totalAmount || undefined,
+            aiConfidence: doc.extractionConfidence || doc.confidence || doc.aiConfidence || undefined,
+            processingQuality: doc.processingQuality || undefined,
+            irishVATCompliant: doc.irishVATCompliant,
+            processingEngine: doc.processingEngine || 'enhanced' as const,
+            validationStatus: doc.validationStatus || 'COMPLIANT' as const,
+            extractedDate: doc.extractedDate ? new Date(doc.extractedDate) : undefined
+          }))
+          
+          setDocuments(mappedDocuments)
+          console.log('Loaded documents from API:', mappedDocuments)
+        } else {
+          setDocuments([])
+        }
+      } else {
+        console.warn('Failed to load documents:', response.statusText)
+        setDocuments([])
+      }
+    } catch (error) {
+      console.error('Error loading documents:', error)
+      setDocuments([])
+    } finally {
+      setLoadingDocuments(false)
+    }
+  }
+
+  useEffect(() => {
+    loadDocuments()
+  }, [])
+
+  // Debounced refresh function to prevent rapid successive calls
+  const debouncedRefreshVATData = (delay = 3000, enableAutoPopulate = false) => {
+    // Clear any existing timeouts to prevent conflicts
+    if (fetchTimeout) {
+      clearTimeout(fetchTimeout)
+    }
     
-    // Convert uploaded files to Document format with processing indicators
-    const newDocuments = uploadedFiles.map(file => ({
-      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-      name: file.name || 'Uploaded Document',
-      type: file.category?.includes('SALES') ? 'sales' as const : 'purchases' as const,
-      date: new Date().toISOString().split('T')[0],
-      size: file.size || 0,
-      uploadDate: new Date().toISOString(),
-      fileType: file.name?.split('.').pop()?.toLowerCase() || 'pdf',
-      isScanned: false, // Will be set to true when processing completes
-      processingEngine: 'enhanced' as const,
-      validationStatus: 'PENDING' as const
-    }))
+    const timeout = setTimeout(() => {
+      console.log('🔄 DASHBOARD: Executing debounced VAT data refresh')
+      loadExtractedVATData(true).then(() => {
+        // Reload documents to get updated VAT data
+        loadDocuments()
+      })
+    }, delay)
     
-    setDocuments(prev => [...prev, ...newDocuments])
+    setFetchTimeout(timeout)
+  }
+
+  const loadExtractedVATData = async (forceRefresh = false): Promise<any> => {
+    try {
+      // Prevent rapid successive calls
+      const MIN_INTERVAL = 2000; // 2 seconds minimum between calls
+      const now = Date.now()
+      if (!forceRefresh && (now - lastFetchTime) < MIN_INTERVAL) {
+        console.log('⏳ DASHBOARD: Skipping request due to rate limiting')
+        return extractedVATData
+      }
+      
+      // Check if we're already loading
+      if (loadingExtractedData) {
+        console.log('⏳ DASHBOARD: Request already in progress, skipping')
+        return extractedVATData
+      }
+      
+      setLoadingExtractedData(true)
+      setLastFetchTime(now)
+      console.log('🔍 DASHBOARD: Loading extracted VAT data...')
+      
+      const response = await fetch('/api/documents/extracted-vat')
+      
+      if (response.ok) {
+        const data = await response.json()
+        setExtractedVATData(data)
+        console.log('✅ DASHBOARD: VAT data loaded successfully:', data)
+        return data
+      } else {
+        console.error('❌ DASHBOARD: Failed to load VAT data')
+        return null
+      }
+    } catch (error) {
+      console.error('❌ DASHBOARD: Error loading VAT data:', error)
+      return null
+    } finally {
+      setLoadingExtractedData(false)
+    }
+  }
+
+  const handleDocumentUploadSuccess = (doc: any) => {
+    console.log('📤 DASHBOARD: Document uploaded:', doc.fileName || doc.originalName)
     
-    // Simulate AI processing with real-time updates
-    newDocuments.forEach((doc, index) => {
-      setTimeout(() => {
-        setDocuments(prev => prev.map(d => 
-          d.id === doc.id 
-            ? {
-                ...d,
-                isScanned: true,
-                vatAmount: Math.random() * 500 + 50, // Mock VAT amount
-                invoiceTotal: Math.random() * 2500 + 250, // Mock invoice total
-                aiConfidence: 0.7 + Math.random() * 0.3, // Mock confidence 70-100%
-                processingQuality: 60 + Math.random() * 40, // Mock quality 60-100
-                irishVATCompliant: Math.random() > 0.2, // 80% compliance rate
-                validationStatus: Math.random() > 0.15 ? 'COMPLIANT' as const : 'NEEDS_REVIEW' as const,
-                extractedDate: new Date()
-              }
-            : d
-        ))
-      }, (index + 1) * 3000 + Math.random() * 2000) // Stagger processing times
-    })
+    // Add to documents list immediately with mapped format
+    const mappedDoc = mapUploadedDocument(doc)
+    setDocuments(prev => [...prev, mappedDoc])
+    
+    // Show success message
+    toast.success('Document uploaded successfully')
+    
+    console.log('⏳ DASHBOARD: Document uploaded, scheduling debounced VAT data refresh...')
+    // Use debounced refresh with auto-populate
+    debouncedRefreshVATData(5000, true) // 5 second delay for AI processing
   }
 
   return (
@@ -404,180 +451,88 @@ export default function Dashboard() {
                 <span>{months[Number.parseInt(selectedMonth) - 1]}</span>
               </>
             )}
-            {selectedType !== "all" && (
-              <>
-                <span>/</span>
-                <span className="capitalize">{selectedType}</span>
-              </>
-            )}
           </nav>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar Filters */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-8">
+        <div className="space-y-8">
+          {/* Main Content */}
+          <div className="space-y-8">
+            {/* Upload Section */}
+            <Card>
               <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2 text-[#0072B1]">
-                    <Filter className="h-5 w-5" />
-                    Filters
-                    {activeFiltersCount > 0 && (
-                      <span className="bg-[#0072B1] text-white text-xs rounded-full px-2 py-1">
-                        {activeFiltersCount}
-                      </span>
-                    )}
-                  </CardTitle>
-                  {activeFiltersCount > 0 && (
-                    <Button variant="ghost" size="sm" onClick={clearFilters}>
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
+                <CardTitle className="flex items-center gap-2 text-[#0072B1]">
+                  <FileText className="h-5 w-5" />
+                  Upload Documents
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Year</label>
-                  <Select value={selectedYear} onValueChange={setSelectedYear}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {years.map((year) => (
-                        <SelectItem key={year} value={year.toString()}>
-                          {year}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Month</label>
-                  <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Months</SelectItem>
-                      {months.map((month, index) => (
-                        <SelectItem key={month} value={(index + 1).toString()}>
-                          {month}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Document Type</label>
-                  <Select value={selectedType} onValueChange={setSelectedType}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Documents</SelectItem>
-                      <SelectItem value="sales">Sales</SelectItem>
-                      <SelectItem value="purchases">Purchases</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Sort By</label>
-                  <Select value={sortBy} onValueChange={(value: "date" | "name" | "size") => setSortBy(value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="date">Date</SelectItem>
-                      <SelectItem value="name">Name</SelectItem>
-                      <SelectItem value="size">Size</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Sort Order</label>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-                    className="w-full justify-start"
-                  >
-                    <ArrowUpDown className="h-4 w-4 mr-2" />
-                    {sortOrder === "asc" ? "Ascending" : "Descending"}
-                  </Button>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-700">Search</label>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                      placeholder="Search documents..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
+              <CardContent>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="text-lg font-medium text-green-600 mb-4 flex items-center gap-2">
+                      <TrendingUp className="h-5 w-5" />
+                      Sales Documents
+                    </h3>
+                    <FileUpload
+                      category="SALES"
+                      title="Upload Sales Documents"
+                      description="Upload sales-related documents including invoices, receipts, and payment records"
+                      acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
+                      enableBatchMode={enableBatchMode}
+                      maxConcurrentUploads={maxConcurrentUploads}
+                      showBatchProgress={true}
+                      onUploadSuccess={handleDocumentUploadSuccess}
+                      onUploadStart={() => console.log('Sales upload started')}
+                      onUploadError={(error) => {
+                        console.error('Sales upload error:', error)
+                        toast.error('Failed to upload sales document')
+                      }}
                     />
-                    {searchQuery && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setSearchQuery("")}
-                        className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    )}
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-lg font-medium text-red-600 mb-4 flex items-center gap-2">
+                      <TrendingDown className="h-5 w-5" />
+                      Purchase Documents
+                    </h3>
+                    <FileUpload
+                      category="PURCHASES"
+                      title="Upload Purchase Documents"
+                      description="Upload purchase-related documents including invoices, receipts, and expense records"
+                      acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
+                      enableBatchMode={enableBatchMode}
+                      maxConcurrentUploads={maxConcurrentUploads}
+                      showBatchProgress={true}
+                      onUploadSuccess={handleDocumentUploadSuccess}
+                      onUploadStart={() => console.log('Purchase upload started')}
+                      onUploadError={(error) => {
+                        console.error('Purchase upload error:', error)
+                        toast.error('Failed to upload purchase document')
+                      }}
+                    />
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
 
-          {/* Main Content */}
-          <div className="lg:col-span-3 space-y-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Sales Upload Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-green-600">
-                    <TrendingUp className="h-5 w-5" />
-                    Upload Sales Documents
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <FileUploadComponent
-                    onFilesUploaded={handleFilesUploaded}
-                    defaultDocumentType="sales"
-                    title="Sales Documents"
-                    description="Upload invoices, receipts, and sales reports"
-                  />
+            {/* Loading Indicator */}
+            {loadingDocuments && (
+              <Card className="border-blue-200 bg-blue-50">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-500 border-t-transparent" />
+                    <div className="flex-1">
+                      <h3 className="font-medium text-blue-800">Loading Documents</h3>
+                      <p className="text-sm text-blue-600">
+                        Fetching your documents from the database...
+                      </p>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
-
-              {/* Purchases Upload Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-red-600">
-                    <TrendingDown className="h-5 w-5" />
-                    Upload Purchase Documents
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <FileUploadComponent
-                    onFilesUploaded={handleFilesUploaded}
-                    defaultDocumentType="purchases"
-                    title="Purchase Documents"
-                    description="Upload receipts, invoices, and purchase orders"
-                  />
-                </CardContent>
-              </Card>
-            </div>
+            )}
 
             {/* Processing Status Indicator */}
-            {documents.some(doc => !doc.isScanned) && (
+            {!loadingDocuments && documents.some(doc => !doc.isScanned) && (
               <Card className="border-yellow-200 bg-yellow-50">
                 <CardContent className="p-4">
                   <div className="flex items-center space-x-3">
@@ -599,6 +554,107 @@ export default function Dashboard() {
                         />
                       </div>
                     </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* VAT Extraction Status and Results */}
+            {!loadingDocuments && documents.length > 0 && (
+              <Card className="border-[#0072B1] bg-blue-50">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-[#0072B1]">
+                    <Calculator className="h-5 w-5" />
+                    VAT Data Extraction Status
+                    {loadingExtractedData && (
+                      <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#0072B1] border-t-transparent ml-2" />
+                    )}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {/* Processing Summary */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                        <div>
+                          <p className="text-sm text-gray-600">Documents Processed</p>
+                          <p className="text-lg font-semibold text-[#0072B1]">
+                            {documents.filter(doc => doc.isScanned).length} / {documents.length}
+                          </p>
+                        </div>
+                        <div className="text-2xl">📄</div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                        <div>
+                          <p className="text-sm text-gray-600">VAT Amounts Found</p>
+                          <p className="text-lg font-semibold text-green-600">
+                            {documents.filter(doc => doc.vatAmount && doc.vatAmount > 0).length}
+                          </p>
+                        </div>
+                        <div className="text-2xl">💰</div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
+                        <div>
+                          <p className="text-sm text-gray-600">Average Confidence</p>
+                          <p className="text-lg font-semibold text-[#0072B1]">
+                            {Math.round(stats.averageConfidence * 100)}%
+                          </p>
+                        </div>
+                        <div className="text-2xl">🎯</div>
+                      </div>
+                    </div>
+
+                    {/* Processing Progress Bar */}
+                    {documents.some(doc => !doc.isScanned) && (
+                      <div className="bg-white p-4 rounded-lg border">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-gray-700">Processing Progress</span>
+                          <span className="text-sm text-gray-500">
+                            {documents.filter(doc => doc.isScanned).length} / {documents.length} complete
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-3">
+                          <div 
+                            className="bg-gradient-to-r from-[#0072B1] to-[#5BADEA] h-3 rounded-full transition-all duration-500"
+                            style={{ width: `${(documents.filter(doc => doc.isScanned).length / documents.length) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Recent Processing Activity */}
+                    {documents.filter(doc => doc.isScanned).length > 0 && (
+                      <div className="bg-white p-4 rounded-lg border">
+                        <h4 className="text-sm font-medium text-gray-700 mb-3">Recent AI Processing Results</h4>
+                        <div className="space-y-2 max-h-40 overflow-y-auto">
+                          {documents
+                            .filter(doc => doc.isScanned)
+                            .slice(0, 5)
+                            .map((doc) => (
+                              <div key={doc.id} className="flex items-center justify-between text-sm">
+                                <div className="flex items-center space-x-2">
+                                  <div className={`w-2 h-2 rounded-full ${doc.vatAmount && doc.vatAmount > 0 ? 'bg-green-500' : 'bg-gray-300'}`} />
+                                  <span className="truncate max-w-40">{doc.name}</span>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                  {doc.vatAmount && doc.vatAmount > 0 ? (
+                                    <span className="text-green-600 font-medium">€{doc.vatAmount.toFixed(2)}</span>
+                                  ) : (
+                                    <span className="text-gray-500">No VAT</span>
+                                  )}
+                                  {doc.aiConfidence && (
+                                    <span className={`text-xs ${doc.aiConfidence > 0.8 ? 'text-green-600' : doc.aiConfidence > 0.6 ? 'text-yellow-600' : 'text-red-600'}`}>
+                                      {Math.round(doc.aiConfidence * 100)}%
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -710,29 +766,175 @@ export default function Dashboard() {
               </Card>
             </div>
 
-            {/* Documents List */}
+            {/* Filters Section */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-[#0072B1]">
-                  <Calendar className="h-5 w-5" />
-                  Documents for {selectedYear}{" "}
-                  {selectedMonth !== "all" ? `- ${months[Number.parseInt(selectedMonth) - 1]}` : ""}
-                  {selectedType !== "all" && (
-                    <span className="text-sm font-normal text-slate-600">({selectedType} only)</span>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2 text-[#0072B1]">
+                    <Filter className="h-5 w-5" />
+                    Filters
+                    {activeFiltersCount > 0 && (
+                      <span className="bg-[#0072B1] text-white text-xs rounded-full px-2 py-1">
+                        {activeFiltersCount}
+                      </span>
+                    )}
+                  </CardTitle>
+                  {activeFiltersCount > 0 && (
+                    <Button variant="ghost" size="sm" onClick={clearFilters}>
+                      <X className="h-4 w-4" />
+                    </Button>
                   )}
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Year</label>
+                    <Select value={selectedYear} onValueChange={setSelectedYear}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {years.map((year) => (
+                          <SelectItem key={year} value={year.toString()}>
+                            {year}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Month</label>
+                    <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Months</SelectItem>
+                        {months.map((month, index) => (
+                          <SelectItem key={month} value={(index + 1).toString()}>
+                            {month}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Sort By</label>
+                    <Select value={sortBy} onValueChange={(value: "date" | "name") => setSortBy(value)}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="date">Date</SelectItem>
+                        <SelectItem value="name">Name</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700">Search</label>
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        placeholder="Search documents..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-10"
+                      />
+                      {searchQuery && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSearchQuery("")}
+                          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-slate-600">Sort Order:</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                      className="h-8"
+                    >
+                      <ArrowUpDown className="h-4 w-4 mr-2" />
+                      {sortOrder === "asc" ? "Ascending" : "Descending"}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Empty State */}
+            {!loadingDocuments && documents.length === 0 && (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <div className="flex flex-col items-center space-y-4">
+                    <FileText className="h-16 w-16 text-gray-400" />
+                    <div>
+                      <h3 className="text-lg font-medium text-gray-900 mb-2">No Documents Found</h3>
+                      <p className="text-gray-500 mb-4">
+                        Upload your first document to get started with VAT processing
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Sales Documents Section */}
+            {!loadingDocuments && documents.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-green-600">
+                  <TrendingUp className="h-5 w-5" />
+                  Sales Documents for {selectedYear}{" "}
+                  {selectedMonth !== "all" ? `- ${months[Number.parseInt(selectedMonth) - 1]}` : ""}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <DocumentList
-                  documents={filteredAndSortedDocuments}
+                  documents={filteredAndSortedDocuments.filter(doc => doc.type === 'sales')}
                   onView={handleDocumentView}
-                  onDownload={handleDocumentDownload}
                   onDelete={handleDocumentDelete}
                   onBulkDelete={handleBulkDelete}
                   onExport={handleExport}
                 />
               </CardContent>
             </Card>
+            )}
+
+            {/* Purchase Documents Section */}
+            {!loadingDocuments && documents.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-red-600">
+                  <TrendingDown className="h-5 w-5" />
+                  Purchase Documents for {selectedYear}{" "}
+                  {selectedMonth !== "all" ? `- ${months[Number.parseInt(selectedMonth) - 1]}` : ""}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <DocumentList
+                  documents={filteredAndSortedDocuments.filter(doc => doc.type === 'purchases')}
+                  onView={handleDocumentView}
+                  onDelete={handleDocumentDelete}
+                  onBulkDelete={handleBulkDelete}
+                  onExport={handleExport}
+                />
+              </CardContent>
+            </Card>
+            )}
           </div>
         </div>
       </div>
@@ -743,7 +945,6 @@ export default function Dashboard() {
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
         onUpdate={handleDocumentUpdate}
-        onDownload={handleDocumentDownload}
       />
 
       {/* Advanced Document Viewer with VAT Analytics */}

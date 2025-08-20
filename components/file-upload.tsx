@@ -302,6 +302,7 @@ export default function FileUpload({
     formData.append('file', file)
     const categoryValue = getCategoryValue(fileCategory, file.name)
     formData.append('category', categoryValue)
+    formData.append('enhancedAI', 'true') // Enable enhanced processing
     
     if (vatReturnId) {
       formData.append('vatReturnId', vatReturnId)
@@ -375,6 +376,7 @@ export default function FileUpload({
       formData.append('file', file)
       const categoryValue = getCategoryValue(category, file.name)
       formData.append('category', categoryValue)
+      formData.append('enhancedAI', 'true') // Enable enhanced processing
       console.log('Category determined:', categoryValue)
       
       if (vatReturnId) {

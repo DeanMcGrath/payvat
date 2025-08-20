@@ -4,6 +4,7 @@ import { createGuestFriendlyRoute } from '@/lib/middleware'
 import { prisma, withDatabaseRetry } from '@/lib/prisma'
 import { validateFile, processFileForServerless, getDocumentType } from '@/lib/serverlessFileUtils'
 import { processDocument } from '@/lib/documentProcessor'
+import { EnhancedDocumentAnalysis } from '@/lib/ai/enhancedDocumentAnalysis'
 import { AuthUser } from '@/lib/auth'
 import { logger } from '@/lib/logger'
 import { logError, logWarn, logInfo, logAudit, logPerformance } from '@/lib/secure-logger'
@@ -356,6 +357,142 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       })
     }
     
+    // Enhanced AI Processing - trigger after basic processing (ASYNC TO PREVENT TIMEOUT)
+    // Don't await this to prevent timeout - let it run in background
+    const triggerAsyncAIProcessing = async () => {
+      try {
+        const enhancedAI = formData.get('enhancedAI') === 'true'
+        
+        if (enhancedAI || processingResult?.success) {
+          logger.info('Starting enhanced AI processing (async)', { documentId: document.id }, 'ENHANCED_AI')
+        
+        // Prepare processing context
+        const processingContext = {
+          userId: userId,
+          businessContext: {
+            businessName: user?.businessName || 'Guest Upload',
+            vatNumber: user?.vatNumber
+          },
+          forceRelearn: false,
+          debugMode: false
+        }
+        
+        // Extract text from document (use basic processing result as primary source)
+        let extractedText = ''
+        try {
+          if (processingResult?.extractedData?.extractedText) {
+            extractedText = Array.isArray(processingResult.extractedData.extractedText) 
+              ? processingResult.extractedData.extractedText.join(' ')
+              : processingResult.extractedData.extractedText.toString()
+          }
+          
+          // If no extracted text from basic processing, try to extract some basic info
+          if (!extractedText || extractedText.length < 10) {
+            // For PDFs, try to extract basic information from the document name and category
+            if (document.mimeType === 'application/pdf' || document.mimeType === 'application/octet-stream') {
+              extractedText = `Document: ${document.originalName}, Category: ${document.category}, Type: Invoice/Receipt document for VAT processing`
+            }
+          }
+          
+          logger.info('Text extracted for enhanced processing', { 
+            textLength: extractedText.length,
+            hasBasicResult: !!processingResult?.extractedData?.extractedText,
+            documentId: document.id 
+          }, 'ENHANCED_AI')
+          
+        } catch (textError) {
+          logger.warn('Text extraction failed for enhanced processing', textError, 'ENHANCED_AI')
+          // Fallback: use document metadata
+          extractedText = `Document: ${document.originalName}, Category: ${document.category}`
+        }
+        
+        // Process with enhanced AI system
+        const enhancedResult = await EnhancedDocumentAnalysis.processDocumentWithLearning(
+          document.id,
+          processedFile.fileData,
+          processedFile.mimeType,
+          processedFile.originalName,
+          extractedText,
+          processingContext
+        )
+        
+        if (enhancedResult.success && enhancedResult.extractedData) {
+          logger.info('Enhanced AI processing completed successfully', { 
+            documentId: document.id,
+            strategy: enhancedResult.processingStrategy,
+            confidence: enhancedResult.extractedData.confidence
+          }, 'ENHANCED_AI')
+          
+          // Extract enhanced metadata (simplified version)
+          const enhancedData = await extractDocumentMetadataSimple(enhancedResult, document)
+          
+          // Update document with enhanced metadata
+          await prisma.document.update({
+            where: { id: document.id },
+            data: {
+              // Enhanced fields
+              extractedDate: enhancedData.extractedDate,
+              extractedYear: enhancedData.extractedYear,
+              extractedMonth: enhancedData.extractedMonth,
+              invoiceTotal: enhancedData.invoiceTotal,
+              vatAmount: enhancedData.vatAmount,
+              vatAccuracy: enhancedData.vatAccuracy,
+              processingQuality: enhancedData.processingQuality,
+              extractionConfidence: enhancedData.extractionConfidence,
+              dateExtractionConfidence: enhancedData.dateExtractionConfidence,
+              totalExtractionConfidence: enhancedData.totalExtractionConfidence,
+              validationStatus: enhancedData.validationStatus,
+              complianceIssues: enhancedData.complianceIssues,
+              isDuplicate: false
+            }
+          })
+          
+          // Store processing analytics
+          await prisma.aIProcessingAnalytics.create({
+            data: {
+              documentId: document.id,
+              userId: userId,
+              processingStrategy: enhancedResult.processingStrategy,
+              templateUsed: enhancedResult.templateUsed,
+              processingTime: enhancedResult.processingTime || 0,
+              confidenceScore: enhancedResult.extractedData?.confidence || 0,
+              tokensUsed: null,
+              cost: null,
+              learningApplied: enhancedResult.learningApplied,
+              confidenceBoost: enhancedResult.confidenceBoost,
+              matchedFeatures: enhancedResult.matchedFeatures,
+              suggestedImprovements: enhancedResult.suggestedImprovements,
+              hadErrors: !enhancedResult.success,
+              errorType: enhancedResult.error ? 'PROCESSING_ERROR' : null,
+              errorMessage: enhancedResult.error,
+              extractionAccuracy: null,
+              userSatisfaction: null
+            }
+          })
+          
+          logger.info('Enhanced AI metadata saved successfully', { 
+            documentId: document.id,
+            extractedDate: enhancedData.extractedDate,
+            invoiceTotal: enhancedData.invoiceTotal
+          }, 'ENHANCED_AI')
+        } else {
+          logger.warn('Enhanced AI processing failed', { 
+            documentId: document.id,
+            error: enhancedResult.error 
+          }, 'ENHANCED_AI')
+        }
+        }
+      } catch (enhancedProcessingError) {
+        logger.error('Enhanced AI processing failed with exception (async)', enhancedProcessingError, 'ENHANCED_AI')
+        // Don't fail the upload if enhanced processing fails
+      }
+    }
+    
+    // Trigger async AI processing without blocking the response
+    triggerAsyncAIProcessing().catch(error => {
+      logger.error('Async AI processing trigger failed', error, 'ENHANCED_AI')
+    })
+    
     // Create audit log for document upload (now including guests for consistency)
     // Creating upload audit log
     
@@ -472,6 +609,124 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       { status: 500 }
     )
   }
+}
+
+/**
+ * Extract enhanced metadata from document processing results
+ * Simplified version for upload API
+ */
+async function extractDocumentMetadataSimple(result: any, document: any) {
+  const metadata = {
+    extractedDate: null as Date | null,
+    extractedYear: null as number | null,
+    extractedMonth: null as number | null,
+    invoiceTotal: null as number | null,
+    vatAmount: 0.0,
+    vatAccuracy: 0.0,
+    processingQuality: 85, // Default quality score
+    extractionConfidence: result.extractedData?.confidence || 0.0,
+    dateExtractionConfidence: 0.0,
+    totalExtractionConfidence: 0.0,
+    validationStatus: 'PENDING' as string,
+    complianceIssues: [] as string[]
+  }
+
+  try {
+    // Extract date information
+    if (result.extractedData?.metadata) {
+      const extractedData = result.extractedData.metadata
+
+      // Look for date fields in extracted data
+      const dateFields = ['documentDate', 'invoiceDate', 'date', 'issueDate']
+      let extractedDate = null
+      let dateConfidence = 0.0
+
+      for (const field of dateFields) {
+        if (extractedData[field]) {
+          const dateValue = extractedData[field]
+          if (dateValue.value) {
+            try {
+              extractedDate = new Date(dateValue.value)
+              dateConfidence = dateValue.confidence || 0.7
+              break
+            } catch (e) {
+              console.warn('Failed to parse date:', dateValue.value)
+            }
+          }
+        }
+      }
+
+      // Use upload date as fallback
+      if (!extractedDate) {
+        extractedDate = new Date(document.uploadedAt)
+        dateConfidence = 0.3 // Low confidence for fallback
+      }
+
+      if (extractedDate) {
+        metadata.extractedDate = extractedDate
+        metadata.extractedYear = extractedDate.getFullYear()
+        metadata.extractedMonth = extractedDate.getMonth() + 1 // 1-based month
+        metadata.dateExtractionConfidence = dateConfidence
+      }
+
+      // Extract total amount
+      const totalFields = ['total', 'totalAmount', 'grandTotal', 'amountDue']
+      for (const field of totalFields) {
+        if (extractedData[field]) {
+          const totalValue = extractedData[field]
+          if (totalValue.value && typeof totalValue.value === 'number') {
+            metadata.invoiceTotal = totalValue.value
+            metadata.totalExtractionConfidence = totalValue.confidence || 0.7
+            break
+          }
+        }
+      }
+
+      // Extract VAT amount
+      let vatAmount = 0
+      if (result.extractedData?.vatData?.totalVatAmount) {
+        vatAmount = result.extractedData.vatData.totalVatAmount
+      } else if (result.extractedData?.salesVAT?.length > 0) {
+        vatAmount = result.extractedData.salesVAT.reduce((sum: number, vat: number) => sum + vat, 0)
+      } else if (result.extractedData?.purchaseVAT?.length > 0) {
+        vatAmount = result.extractedData.purchaseVAT.reduce((sum: number, vat: number) => sum + vat, 0)
+      } else if (extractedData['vatAmount']) {
+        const vatValue = extractedData['vatAmount']
+        vatAmount = vatValue.value || vatValue
+      }
+      
+      metadata.vatAmount = vatAmount
+
+      // Set processing quality based on confidence
+      let qualityScore = 70 // Base score
+      if (result.processingStrategy === 'TEMPLATE_MATCH') {
+        qualityScore += 20
+      }
+      if (metadata.dateExtractionConfidence > 0.8) {
+        qualityScore += 5
+      }
+      if (metadata.totalExtractionConfidence > 0.8) {
+        qualityScore += 5
+      }
+      metadata.processingQuality = Math.min(100, qualityScore)
+
+      // Basic validation
+      const issues: string[] = []
+      if (!metadata.invoiceTotal || metadata.invoiceTotal <= 0) {
+        issues.push('Missing or invalid invoice total')
+      }
+      if (!metadata.extractedDate) {
+        issues.push('Missing document date')
+      }
+      
+      metadata.complianceIssues = issues
+      metadata.validationStatus = issues.length === 0 ? 'COMPLIANT' : 'NEEDS_REVIEW'
+    }
+  } catch (error) {
+    console.error('Error extracting document metadata:', error)
+  }
+
+  return metadata
 }
 
 export const POST = createGuestFriendlyRoute(uploadFile)

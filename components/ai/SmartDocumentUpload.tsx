@@ -194,7 +194,12 @@ export default function SmartDocumentUpload({
 
         // Auto-process with AI if not already done
         if (!result.aiProcessed) {
-          await triggerAIProcessing(enhancedDocument.id)
+          try {
+            await triggerAIProcessing(enhancedDocument.id)
+          } catch (processingError) {
+            console.error('AI processing failed:', processingError)
+            toast.error('Document uploaded but AI processing failed. You can retry processing later.')
+          }
         }
         
         onUploadSuccess?.(enhancedDocument)
@@ -255,6 +260,23 @@ export default function SmartDocumentUpload({
           const vatAmount = result.extractedData.vatData.totalVatAmount
           toast.success(`AI extracted €${vatAmount.toFixed(2)} VAT`)
         }
+      } else {
+        // Handle processing errors
+        const errorMessage = result.error || 'AI processing failed'
+        console.error('Enhanced AI processing failed:', errorMessage)
+        
+        // Update document to show processing failed
+        setUploadedFiles(prev => prev.map(doc => 
+          doc.id === documentId ? {
+            ...doc,
+            isScanned: false,
+            scanResult: `Processing failed: ${errorMessage}`,
+            aiProcessed: false
+          } : doc
+        ))
+        
+        toast.error(`AI processing failed: ${errorMessage}`)
+        throw new Error(errorMessage)
       }
     } catch (error) {
       console.error('Enhanced AI processing error:', error)

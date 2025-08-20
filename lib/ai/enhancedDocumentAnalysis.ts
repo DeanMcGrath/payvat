@@ -306,8 +306,27 @@ export class EnhancedDocumentAnalysis {
   }
   
   private static async callAIVision(fileData: string, mimeType: string, extractedText: string): Promise<EnhancedVATData> {
-    console.log('🔍 Calling AI Vision API')
+    console.log(`🔍 Processing document with MIME type: ${mimeType}`)
     
+    // Check if the document is an image that can use vision API
+    const isImage = mimeType.startsWith('image/') && (
+      mimeType.includes('jpeg') || 
+      mimeType.includes('jpg') || 
+      mimeType.includes('png') || 
+      mimeType.includes('webp') || 
+      mimeType.includes('gif')
+    )
+    
+    if (isImage) {
+      console.log('📷 Using AI Vision API for image document')
+      return this.processImageWithVision(fileData, mimeType, extractedText)
+    } else {
+      console.log('📄 Using AI Text API for non-image document')
+      return this.processDocumentWithText(extractedText, mimeType)
+    }
+  }
+  
+  private static async processImageWithVision(fileData: string, mimeType: string, extractedText: string): Promise<EnhancedVATData> {
     try {
       const response = await openai.chat.completions.create({
         model: AI_CONFIG.models.vision,
@@ -338,6 +357,37 @@ export class EnhancedDocumentAnalysis {
       
     } catch (error) {
       console.error('AI Vision call failed:', error)
+      throw error
+    }
+  }
+  
+  private static async processDocumentWithText(extractedText: string, mimeType: string): Promise<EnhancedVATData> {
+    try {
+      // For PDFs and other non-image documents, use text-based processing
+      const prompt = `${this.buildEnhancedPrompt(extractedText)}
+
+DOCUMENT TEXT TO ANALYZE:
+${extractedText}
+
+Please extract VAT information from the above text content. The document type is: ${mimeType}`
+
+      const response = await openai.chat.completions.create({
+        model: AI_CONFIG.models.text,
+        max_tokens: AI_CONFIG.limits.maxTokens,
+        temperature: AI_CONFIG.limits.temperature,
+        messages: [
+          {
+            role: "user",
+            content: prompt
+          }
+        ]
+      })
+      
+      const content = response.choices[0]?.message?.content || '{}'
+      return this.parseAIResponse(content)
+      
+    } catch (error) {
+      console.error('AI Text processing failed:', error)
       throw error
     }
   }
@@ -566,14 +616,42 @@ ADDITIONAL CONTEXT:
   
   private static parseAIResponse(content: string): EnhancedVATData {
     try {
-      const parsed = JSON.parse(content)
+      // Try to extract JSON from markdown code blocks or clean up the response
+      let jsonContent = content.trim()
+      
+      // Check if response contains ```json blocks
+      const jsonMatch = content.match(/```json\s*([\s\S]*?)\s*```/) || content.match(/```\s*([\s\S]*?)\s*```/)
+      if (jsonMatch) {
+        jsonContent = jsonMatch[1].trim()
+        // Remove any "json" language identifier
+        if (jsonContent.startsWith('json')) {
+          jsonContent = jsonContent.slice(4).trim()
+        }
+      }
+      
+      // If it starts with ``` and ends with ```, extract the middle
+      if (jsonContent.startsWith('```') && jsonContent.endsWith('```')) {
+        jsonContent = jsonContent.slice(3, -3).trim()
+        if (jsonContent.startsWith('json')) {
+          jsonContent = jsonContent.slice(4).trim()
+        }
+      }
+      
+      // Remove any leading/trailing non-JSON text
+      const jsonStart = jsonContent.indexOf('{')
+      const jsonEnd = jsonContent.lastIndexOf('}')
+      if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+        jsonContent = jsonContent.substring(jsonStart, jsonEnd + 1)
+      }
+      
+      const parsed = JSON.parse(jsonContent)
       
       // Ensure all required fields exist
       return {
         documentType: parsed.documentType || 'OTHER',
         businessDetails: parsed.businessDetails || {},
         transactionData: parsed.transactionData || {},
-        vatData: parsed.vatData || {},
+        vatData: parsed.vatData || { totalVatAmount: 0 },
         classification: parsed.classification || { category: 'MIXED', confidence: 0.5, reasoning: 'Auto-classified' },
         validationFlags: parsed.validationFlags || [],
         extractedText: parsed.extractedText || '',
@@ -584,7 +662,21 @@ ADDITIONAL CONTEXT:
       
     } catch (error) {
       console.error('Error parsing AI response:', error)
-      throw new Error('Failed to parse AI response as JSON')
+      console.log('Raw AI response:', content)
+      
+      // Return a default structure instead of throwing to prevent upload failures
+      return {
+        documentType: 'OTHER',
+        businessDetails: {},
+        transactionData: {},
+        vatData: { totalVatAmount: 0 },
+        classification: { category: 'MIXED', confidence: 0.1, reasoning: 'Parse error - AI returned non-JSON' },
+        validationFlags: ['AI_PARSE_ERROR'],
+        extractedText: '',
+        salesVAT: [],
+        purchaseVAT: [],
+        confidence: 0.1
+      }
     }
   }
   

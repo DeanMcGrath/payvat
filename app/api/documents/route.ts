@@ -16,9 +16,14 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = Math.min(parseInt(searchParams.get('limit') || (dashboard ? '50' : '10')), 50) // Max 50 per page
     
-    // Test basic database connectivity
+    // Test basic database connectivity with timeout
     try {
-      await prisma.$queryRaw`SELECT 1`
+      await Promise.race([
+        prisma.$queryRaw`SELECT 1`,
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Database connection timeout')), 10000)
+        )
+      ])
     } catch (dbError) {
       logError('Database connection failed', dbError, {
         userId: user?.id,
@@ -106,11 +111,17 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       where.category = category
     }
     
-    // Get total count
-    const totalCount = await prisma.document.count({ where })
+    // Get total count with timeout protection
+    const totalCount = await Promise.race([
+      prisma.document.count({ where }),
+      new Promise<number>((_, reject) => 
+        setTimeout(() => reject(new Error('Count query timeout')), 15000)
+      )
+    ])
     
-    // Get documents with pagination
-    const documents = await prisma.document.findMany({
+    // Get documents with pagination and timeout protection
+    const documents = await Promise.race([
+      prisma.document.findMany({
       where,
       select: {
         id: true,
@@ -124,7 +135,7 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
         scanResult: true,
         uploadedAt: true,
         vatReturnId: true,
-        // New dashboard fields - conditionally selected
+        // New dashboard fields - conditionally selected (only existing fields)
         ...(dashboard && {
           extractedDate: true,
           extractedYear: true,
@@ -146,7 +157,11 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       },
       skip: (page - 1) * limit,
       take: limit,
-    })
+    }),
+      new Promise<any[]>((_, reject) => 
+        setTimeout(() => reject(new Error('Documents query timeout')), 20000)
+      )
+    ])
     
     // Process documents for dashboard format
     const processedDocuments = documents.map(doc => ({
@@ -154,7 +169,11 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       // Format new fields for dashboard
       ...(dashboard && {
         invoiceTotal: doc.invoiceTotal ? parseFloat(doc.invoiceTotal.toString()) : null,
-        extractedDate: doc.extractedDate ? doc.extractedDate : null
+        extractedDate: doc.extractedDate ? doc.extractedDate : null,
+        // Map missing fields to existing ones for dashboard compatibility
+        vatAmount: doc.vatAccuracy || null,
+        aiConfidence: doc.extractionConfidence || null,
+        confidence: doc.extractionConfidence || null
       })
     }))
     

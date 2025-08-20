@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { createProtectedRoute } from '@/lib/middleware'
+import { createProtectedRoute, createGuestFriendlyRoute } from '@/lib/middleware'
 import { prisma } from '@/lib/prisma'
 import { deleteFile } from '@/lib/fileUtils'
 import { base64ToBuffer } from '@/lib/serverlessFileUtils'
@@ -10,7 +10,7 @@ import fs from 'fs/promises'
 import path from 'path'
 
 // GET /api/documents/[id] - Get specific document
-async function getDocument(request: NextRequest, user: AuthUser) {
+async function getDocument(request: NextRequest, user?: AuthUser) {
   try {
     const url = new URL(request.url)
     const id = url.pathname.split('/').pop()
@@ -22,11 +22,38 @@ async function getDocument(request: NextRequest, user: AuthUser) {
       )
     }
     
+    const whereClause: any = { id }
+    
+    if (user) {
+      // Authenticated user - ensure they can only access their own documents
+      whereClause.userId = user.id
+    } else {
+      // Guest user - find documents from recent guest users (last 24 hours)
+      const guestUsers = await prisma.user.findMany({
+        where: {
+          role: 'GUEST',
+          createdAt: {
+            gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
+          }
+        },
+        select: { id: true },
+        take: 50
+      })
+      
+      if (guestUsers.length === 0) {
+        return NextResponse.json(
+          { error: 'Document not found' },
+          { status: 404 }
+        )
+      }
+      
+      whereClause.userId = {
+        in: guestUsers.map(u => u.id)
+      }
+    }
+    
     const document = await prisma.document.findFirst({
-      where: {
-        id,
-        userId: user.id // Ensure user can only access their own documents
-      },
+      where: whereClause,
       include: {
         vatReturn: {
           select: {
@@ -53,7 +80,7 @@ async function getDocument(request: NextRequest, user: AuthUser) {
     
   } catch (error) {
     logError('Document fetch error', error, {
-      userId: user.id,
+      userId: user?.id,
       operation: 'document-fetch'
     })
     return NextResponse.json(
@@ -64,7 +91,7 @@ async function getDocument(request: NextRequest, user: AuthUser) {
 }
 
 // DELETE /api/documents/[id] - Delete document
-async function deleteDocument(request: NextRequest, user: AuthUser) {
+async function deleteDocument(request: NextRequest, user?: AuthUser) {
   const url = new URL(request.url)
   const id = url.pathname.split('/').pop()
   
@@ -76,11 +103,38 @@ async function deleteDocument(request: NextRequest, user: AuthUser) {
       )
     }
     
-    const document = await prisma.document.findFirst({
-      where: {
-        id,
-        userId: user.id // Ensure user can only delete their own documents
+    const whereClause: any = { id }
+    
+    if (user) {
+      // Authenticated user - ensure they can only delete their own documents
+      whereClause.userId = user.id
+    } else {
+      // Guest user - find documents from recent guest users (last 24 hours)
+      const guestUsers = await prisma.user.findMany({
+        where: {
+          role: 'GUEST',
+          createdAt: {
+            gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
+          }
+        },
+        select: { id: true },
+        take: 50
+      })
+      
+      if (guestUsers.length === 0) {
+        return NextResponse.json(
+          { error: 'Document not found' },
+          { status: 404 }
+        )
       }
+      
+      whereClause.userId = {
+        in: guestUsers.map(u => u.id)
+      }
+    }
+    
+    const document = await prisma.document.findFirst({
+      where: whereClause
     })
     
     if (!document) {
@@ -316,7 +370,7 @@ async function deleteDocument(request: NextRequest, user: AuthUser) {
 }
 
 // Download document file
-async function downloadDocument(request: NextRequest, user: AuthUser) {
+async function downloadDocument(request: NextRequest, user?: AuthUser) {
   try {
     const url = new URL(request.url)
     const id = url.pathname.split('/').pop()
@@ -333,11 +387,38 @@ async function downloadDocument(request: NextRequest, user: AuthUser) {
       )
     }
     
-    const document = await prisma.document.findFirst({
-      where: {
-        id,
-        userId: user.id // Ensure user can only download their own documents
+    const whereClause: any = { id }
+    
+    if (user) {
+      // Authenticated user - ensure they can only download their own documents
+      whereClause.userId = user.id
+    } else {
+      // Guest user - find documents from recent guest users (last 24 hours)
+      const guestUsers = await prisma.user.findMany({
+        where: {
+          role: 'GUEST',
+          createdAt: {
+            gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
+          }
+        },
+        select: { id: true },
+        take: 50
+      })
+      
+      if (guestUsers.length === 0) {
+        return NextResponse.json(
+          { error: 'Document not found' },
+          { status: 404 }
+        )
       }
+      
+      whereClause.userId = {
+        in: guestUsers.map(u => u.id)
+      }
+    }
+    
+    const document = await prisma.document.findFirst({
+      where: whereClause
     })
     
     if (!document) {
@@ -365,21 +446,23 @@ async function downloadDocument(request: NextRequest, user: AuthUser) {
         )
       }
       
-      // Create audit log for download
-      await prisma.auditLog.create({
-        data: {
-          userId: user.id,
-          action: 'DOWNLOAD_DOCUMENT',
-          entityType: 'DOCUMENT',
-          entityId: id,
-          ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
-          userAgent: request.headers.get('user-agent') || 'unknown',
-          metadata: {
-            fileName: document.originalName,
-            timestamp: new Date().toISOString()
+      // Create audit log for download (only if user is authenticated)
+      if (user) {
+        await prisma.auditLog.create({
+          data: {
+            userId: user.id,
+            action: 'DOWNLOAD_DOCUMENT',
+            entityType: 'DOCUMENT',
+            entityId: id,
+            ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+            userAgent: request.headers.get('user-agent') || 'unknown',
+            metadata: {
+              fileName: document.originalName,
+              timestamp: new Date().toISOString()
+            }
           }
-        }
-      })
+        })
+      }
       
       // Determine content disposition based on action
       const isPreview = action === 'preview'
@@ -409,7 +492,7 @@ async function downloadDocument(request: NextRequest, user: AuthUser) {
     
   } catch (error) {
     logError('Document download error', error, {
-      userId: user.id,
+      userId: user?.id,
       operation: 'document-download'
     })
     return NextResponse.json(
@@ -419,5 +502,5 @@ async function downloadDocument(request: NextRequest, user: AuthUser) {
   }
 }
 
-export const GET = createProtectedRoute(downloadDocument)
-export const DELETE = createProtectedRoute(deleteDocument)
+export const GET = createGuestFriendlyRoute(downloadDocument)
+export const DELETE = createGuestFriendlyRoute(deleteDocument)

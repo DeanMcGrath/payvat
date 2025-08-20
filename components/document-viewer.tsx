@@ -535,12 +535,24 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
   const loadDocument = useCallback(async () => {
     if (!document) return
     
+    // Skip API call for mock documents (simple numeric IDs like "1", "2", "3")
+    if (/^\d+$/.test(document.id)) {
+      // Mock documents don't have actual files to load
+      setLoading(false)
+      setDocumentUrl(null)
+      return
+    }
+    
     setLoading(true)
     try {
       // Use preview action for viewing, not download
       const response = await fetch(`/api/documents/${document.id}?action=preview`, {
         method: 'GET',
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': '*/*'
+        }
       })
       
       if (response.ok) {
@@ -548,7 +560,20 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
         const url = URL.createObjectURL(blob)
         setDocumentUrl(url)
       } else {
-        toast.error('Failed to load document')
+        const errorText = await response.text()
+        console.error('Document preview failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText
+        })
+        
+        if (response.status === 401) {
+          toast.error('Authentication required. Please log in again.')
+        } else if (response.status === 403) {
+          toast.error('Access denied. You may not have permission to view this document.')
+        } else {
+          toast.error(`Failed to load document: ${response.statusText}`)
+        }
       }
     } catch (error) {
       console.error('Error loading document:', error)
@@ -561,10 +586,20 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
   const handleDownload = async () => {
     if (!document) return
     
+    // Skip download for mock documents (simple numeric IDs like "1", "2", "3")
+    if (/^\d+$/.test(document.id)) {
+      toast.error('Mock documents cannot be downloaded')
+      return
+    }
+    
     try {
       const response = await fetch(`/api/documents/${document.id}?action=download`, {
         method: 'GET',
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': '*/*'
+        }
       })
       
       if (response.ok) {

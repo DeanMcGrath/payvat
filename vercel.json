@@ -9,6 +9,10 @@
     "app/api/**/*.ts": {
       "maxDuration": 60
     },
+    "app/api/upload/route.ts": {
+      "maxDuration": 300,
+      "memory": 1024
+    },
     "app/api/admin/videos/route.ts": {
       "maxDuration": 300,
       "memory": 1024

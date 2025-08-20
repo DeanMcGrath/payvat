@@ -17,6 +17,7 @@ export const AI_CONFIG = {
     vision: 'gpt-4o', // gpt-4o includes vision capabilities 
     chat: 'gpt-4o-mini', // gpt-4o-mini for cost-effective chat
     analysis: 'gpt-4o', // gpt-4o for detailed analysis
+    text: 'gpt-4o', // gpt-4o for text-based document processing
   },
   limits: {
     maxTokens: 2000,

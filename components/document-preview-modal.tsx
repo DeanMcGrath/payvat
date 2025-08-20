@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { FileText, Download, Calendar, FileType, Folder, Save, X } from "lucide-react"
+import { FileText, Calendar, FileType, Folder, Save, X } from "lucide-react"
 import { type Document } from "@/components/document-list"
 
 interface DocumentPreviewModalProps {
@@ -26,15 +26,13 @@ interface DocumentPreviewModalProps {
   isOpen: boolean
   onClose: () => void
   onUpdate: (document: Document) => void
-  onDownload: (document: Document) => void
 }
 
 export default function DocumentPreviewModal({
   document,
   isOpen,
   onClose,
-  onUpdate,
-  onDownload
+  onUpdate
 }: DocumentPreviewModalProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editedDocument, setEditedDocument] = useState<Document | null>(null)
@@ -123,16 +121,9 @@ export default function DocumentPreviewModal({
             {getFileTypeIcon(currentDocument.fileType)}
             <div className="mt-4">
               <h3 className="text-lg font-medium text-gray-900 mb-2">Document Preview</h3>
-              <p className="text-gray-500 mb-4">
+              <p className="text-gray-500">
                 Preview for {currentDocument.fileType.toUpperCase()} files is not available in this demo
               </p>
-              <Button
-                onClick={() => onDownload(currentDocument)}
-                className="bg-[#0072B1] hover:bg-[#005a8a] text-white"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Download to View
-              </Button>
             </div>
           </div>
 
@@ -229,18 +220,7 @@ export default function DocumentPreviewModal({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-between pt-4 border-t">
-            <div className="flex space-x-2">
-              <Button
-                onClick={() => onDownload(currentDocument)}
-                variant="outline"
-                className="text-[#0072B1] border-[#0072B1] hover:bg-[#0072B1] hover:text-white"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Download
-              </Button>
-            </div>
-            
+          <div className="flex justify-end pt-4 border-t">
             <div className="flex space-x-2">
               {isEditing ? (
                 <>
