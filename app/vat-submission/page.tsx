@@ -9,12 +9,11 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Calculator, FileText, CheckCircle, BadgeCheck, RefreshCw, X, AlertCircle, Loader2, Eye, Edit3, Play, Video } from 'lucide-react'
+import { ArrowLeft, Calculator, FileText, CheckCircle, BadgeCheck, RefreshCw, X, AlertCircle, Loader2, Eye, Edit3 } from 'lucide-react'
 import FileUpload from "@/components/file-upload"
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 import DocumentViewer from "@/components/document-viewer"
-import { VideoModal } from "@/components/video-modal"
 import { toast } from "sonner"
 import { logger } from "@/lib/logger"
 import { useVATData } from "@/contexts/vat-data-context"
@@ -60,10 +59,6 @@ export default function VATSubmissionPage() {
   const [enableBatchMode, setEnableBatchMode] = useState(true)
   const [maxConcurrentUploads, setMaxConcurrentUploads] = useState(3)
   
-  // Video modal state
-  const [showVideoModal, setShowVideoModal] = useState(false)
-  
-
   // Use period data from context or fallback
   // Calculate current period if none selected
   const currentDate = new Date()
@@ -116,6 +111,62 @@ export default function VATSubmissionPage() {
       }
     }
   }, [])
+  
+  // Reload documents when VAT period dates change
+  useEffect(() => {
+    if (periodBeginDate && periodEndDate) {
+      logger.info('VAT period dates changed, reloading documents', { 
+        periodBeginDate, 
+        periodEndDate 
+      }, 'VAT_SUBMISSION')
+      loadUploadedDocuments()
+    }
+  }, [periodBeginDate, periodEndDate])
+  
+  // Handle URL parameters for continuing existing VAT returns
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const returnId = urlParams.get('returnId')
+    
+    if (returnId) {
+      // Load existing VAT return data
+      loadExistingVATReturn(returnId)
+    }
+  }, [])
+  
+  const loadExistingVATReturn = async (returnId: string) => {
+    try {
+      logger.info('Loading existing VAT return', { returnId }, 'VAT_SUBMISSION')
+      const response = await fetch(`/api/vat/${returnId}`)
+      
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success && result.vatReturn) {
+          const vatReturn = result.vatReturn
+          
+          // Update VAT amounts
+          setSalesVAT(vatReturn.salesVAT.toString())
+          setPurchaseVAT(vatReturn.purchaseVAT.toString())
+          setNetVAT(vatReturn.netVAT.toString())
+          
+          // Update context with period data if needed
+          const periodStart = new Date(vatReturn.periodStart)
+          const periodEnd = new Date(vatReturn.periodEnd)
+          
+          logger.info('Loaded existing VAT return successfully', { 
+            returnId,
+            periodStart: periodStart.toISOString(),
+            periodEnd: periodEnd.toISOString(),
+            salesVAT: vatReturn.salesVAT,
+            purchaseVAT: vatReturn.purchaseVAT
+          }, 'VAT_SUBMISSION')
+        }
+      }
+    } catch (error) {
+      logger.error('Failed to load existing VAT return', error, 'VAT_SUBMISSION')
+      toast.error('Failed to load VAT return data')
+    }
+  }
   
   // Monitor changes to extracted VAT data
   useEffect(() => {
@@ -207,13 +258,31 @@ export default function VATSubmissionPage() {
   const loadUploadedDocuments = async () => {
     try {
       setLoadingDocuments(true)
-      const response = await fetch('/api/documents')
+      
+      // Build API URL with date filtering if period dates are available
+      let apiUrl = '/api/documents'
+      if (periodBeginDate && periodEndDate) {
+        const params = new URLSearchParams({
+          startDate: periodBeginDate,
+          endDate: periodEndDate
+        })
+        apiUrl = `/api/documents?${params.toString()}`
+        logger.info('Loading documents filtered by VAT period', { 
+          startDate: periodBeginDate, 
+          endDate: periodEndDate 
+        }, 'VAT_SUBMISSION')
+      }
+      
+      const response = await fetch(apiUrl)
       
       if (response.ok) {
         const result = await response.json()
         if (result.success && result.documents) {
           setUploadedDocuments(result.documents)
-          logger.info('Loaded uploaded documents', { count: result.documents.length }, 'VAT_SUBMISSION')
+          logger.info('Loaded uploaded documents', { 
+            count: result.documents.length,
+            filtered: !!(periodBeginDate && periodEndDate)
+          }, 'VAT_SUBMISSION')
         }
       }
     } catch (error) {
@@ -569,33 +638,6 @@ export default function VATSubmissionPage() {
 
 
       <div className="max-w-6xl mx-auto px-6 content-after-header pb-8">
-        {/* Watch Demo Video Section - Top of Page */}
-        <div className="mb-8">
-          <Card className="bg-gradient-to-r from-[#E6F4FF] to-[#CCE7FF] border-[#99D3FF]">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-center">
-                <div className="text-center">
-                  <div className="flex items-center justify-center mb-3">
-                    <Video className="h-8 w-8 text-[#73C2FB] mr-3" />
-                    <h2 className="text-2xl font-bold text-blue-900">Learn How It Works</h2>
-                  </div>
-                  <p className="text-[#5BADEA] mb-4 text-lg">
-                    Watch our demo to see how easy VAT submission can be
-                  </p>
-                  <Button 
-                    onClick={() => setShowVideoModal(true)}
-                    size="lg"
-                    className="bg-[#73C2FB] hover:bg-[#5BADEA] text-white px-8 py-3 text-lg font-semibold"
-                  >
-                    <Play className="h-5 w-5 mr-2" />
-                    Watch Demo Video
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
         <div className="space-y-6">
             {/* Sales Documents Section - Always visible */}
             <Card className="card-modern border-[#99D3FF]">
@@ -1269,9 +1311,6 @@ export default function VATSubmissionPage() {
         extractedVAT={selectedDocument ? getDocumentVATExtraction(selectedDocument.id) : null}
         onVATCorrection={handleVATCorrection}
       />
-      
-      {/* Video Modal */}
-      <VideoModal isOpen={showVideoModal} onClose={() => setShowVideoModal(false)} />
 
       {/* Footer */}
       <Footer />

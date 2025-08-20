@@ -13,6 +13,8 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
     const vatReturnId = searchParams.get('vatReturnId')
     const category = searchParams.get('category')
     const dashboard = searchParams.get('dashboard') === 'true'
+    const startDate = searchParams.get('startDate')
+    const endDate = searchParams.get('endDate')
     const page = parseInt(searchParams.get('page') || '1')
     const limit = Math.min(parseInt(searchParams.get('limit') || (dashboard ? '50' : '10')), 50) // Max 50 per page
     
@@ -109,6 +111,28 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
     
     if (category) {
       where.category = category
+    }
+    
+    // Add date filtering if provided
+    if (startDate && endDate) {
+      const startDateTime = new Date(startDate)
+      const endDateTime = new Date(endDate)
+      
+      // Filter documents by upload date or extracted date within the specified range
+      where.OR = [
+        {
+          uploadedAt: {
+            gte: startDateTime,
+            lte: endDateTime
+          }
+        },
+        {
+          extractedDate: {
+            gte: startDateTime,
+            lte: endDateTime
+          }
+        }
+      ]
     }
     
     // Get total count with timeout protection

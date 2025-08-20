@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { FileText, TrendingUp, TrendingDown, Search, Filter, X, ArrowUpDown, Home, Calculator, CheckCircle, RefreshCw, Eye, AlertCircle, Loader2 } from 'lucide-react'
+import { FileText, TrendingUp, TrendingDown, Search, Filter, X, ArrowUpDown, Home, Calculator, CheckCircle, RefreshCw, Eye, AlertCircle, Loader2, Video, Play, Calendar, Clock, ArrowRight } from 'lucide-react'
 import FileUpload from "@/components/file-upload"
 import DocumentViewer from "@/components/document-viewer"
+import { VideoModal } from "@/components/video-modal"
 import { toast } from "sonner"
 import { logger } from "@/lib/logger"
 import { useVATData } from "@/contexts/vat-data-context"
@@ -48,6 +49,13 @@ export default function Dashboard() {
   const [selectedDocument, setSelectedDocument] = useState<any | null>(null)
   const [documentViewerOpen, setDocumentViewerOpen] = useState(false)
   
+  // Video modal state
+  const [showVideoModal, setShowVideoModal] = useState(false)
+  
+  // Past VAT submissions state
+  const [pastSubmissions, setPastSubmissions] = useState<any[]>([])
+  const [loadingSubmissions, setLoadingSubmissions] = useState(false)
+  
   // Rate limiting and debouncing state
   const [lastFetchTime, setLastFetchTime] = useState(0)
   const [fetchTimeout, setFetchTimeout] = useState<NodeJS.Timeout | null>(null)
@@ -69,6 +77,7 @@ export default function Dashboard() {
     fetchUserProfile()
     loadExtractedVATData()
     loadUploadedDocuments()
+    loadPastSubmissions()
     
     // Cleanup timeouts on unmount
     return () => {
@@ -202,6 +211,25 @@ export default function Dashboard() {
     } catch (error) {
       toast.error('Network error occurred while removing document')
       logger.error('Delete error', error, 'DASHBOARD')
+    }
+  }
+
+  const loadPastSubmissions = async () => {
+    try {
+      setLoadingSubmissions(true)
+      const response = await fetch('/api/vat')
+      
+      if (response.ok) {
+        const result = await response.json()
+        if (result.success && result.vatReturns) {
+          setPastSubmissions(result.vatReturns)
+          logger.info('Loaded past VAT submissions', { count: result.vatReturns.length }, 'DASHBOARD')
+        }
+      }
+    } catch (error) {
+      logger.error('Failed to load past submissions', error, 'DASHBOARD')
+    } finally {
+      setLoadingSubmissions(false)
     }
   }
 
@@ -410,6 +438,117 @@ export default function Dashboard() {
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="space-y-6">
+          {/* Watch Demo Video Section */}
+          <Card className="bg-gradient-to-r from-[#E6F4FF] to-[#CCE7FF] border-[#99D3FF]">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-center">
+                <div className="text-center">
+                  <div className="flex items-center justify-center mb-3">
+                    <Video className="h-8 w-8 text-[#73C2FB] mr-3" />
+                    <h2 className="text-2xl font-bold text-blue-900">Learn How It Works</h2>
+                  </div>
+                  <p className="text-[#5BADEA] mb-4 text-lg">
+                    Watch our demo to see how easy VAT submission can be
+                  </p>
+                  <Button 
+                    onClick={() => setShowVideoModal(true)}
+                    size="lg"
+                    className="bg-[#73C2FB] hover:bg-[#5BADEA] text-white px-8 py-3 text-lg font-semibold"
+                  >
+                    <Play className="h-5 w-5 mr-2" />
+                    Watch Demo Video
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Past VAT Submissions Section */}
+          {!userLoading && user && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-[#0072B1]">
+                  <Calendar className="h-5 w-5" />
+                  Past VAT Submissions
+                  {pastSubmissions.length > 0 && (
+                    <span className="bg-[#0072B1] text-white text-xs rounded-full px-2 py-1">
+                      {pastSubmissions.length}
+                    </span>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {loadingSubmissions ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader2 className="h-6 w-6 animate-spin text-[#5BADEA]" />
+                    <span className="ml-2 text-gray-600">Loading submissions...</span>
+                  </div>
+                ) : pastSubmissions.length > 0 ? (
+                  <div className="space-y-3">
+                    {pastSubmissions.slice(0, 5).map((submission) => (
+                      <div key={submission.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
+                        <div className="flex items-center space-x-4">
+                          <div className="flex-shrink-0">
+                            <Calendar className="h-8 w-8 text-[#0072B1]" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">
+                              {new Date(submission.periodStart).toLocaleDateString()} - {new Date(submission.periodEnd).toLocaleDateString()}
+                            </p>
+                            <div className="flex items-center space-x-4 mt-1">
+                              <span className={`text-xs px-2 py-1 rounded-full ${
+                                submission.status === 'SUBMITTED' ? 'bg-green-100 text-green-800' :
+                                submission.status === 'PAID' ? 'bg-blue-100 text-blue-800' :
+                                'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {submission.status}
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                Sales: {formatCurrency(submission.salesVAT)} • Purchase: {formatCurrency(submission.purchaseVAT)} • Net: {formatCurrency(submission.netVAT)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => router.push(`/vat-submission?returnId=${submission.id}`)}
+                            className="text-[#0072B1] border-[#0072B1] hover:bg-[#E6F4FF]"
+                          >
+                            {submission.status === 'DRAFT' ? 'Continue' : 'View'}
+                            <ArrowRight className="h-4 w-4 ml-1" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                    {pastSubmissions.length > 5 && (
+                      <div className="text-center pt-4">
+                        <Button variant="outline" onClick={() => router.push('/submit-return')}>
+                          View All Submissions ({pastSubmissions.length})
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No VAT Submissions Yet</h3>
+                    <p className="text-gray-500 mb-4">
+                      Start by uploading your documents and creating your first VAT submission
+                    </p>
+                    <Button 
+                      onClick={() => router.push('/vat-submission')}
+                      className="bg-[#0072B1] hover:bg-[#005A8D] text-white"
+                    >
+                      Create New VAT Submission
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
           {/* Sales Documents Section */}
           <Card className="card-modern border-[#99D3FF]">
             <CardHeader className="bg-[#E6F4FF]">
@@ -874,6 +1013,12 @@ export default function Dashboard() {
           console.log('VAT correction submitted:', correctionData)
           // Handle VAT corrections for AI training
         }}
+      />
+
+      {/* Video Modal */}
+      <VideoModal
+        isOpen={showVideoModal}
+        onClose={() => setShowVideoModal(false)}
       />
     </div>
   )
