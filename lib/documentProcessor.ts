@@ -1903,14 +1903,29 @@ export async function processDocument(
 function convertToLegacyFormat(enhancedData: any): ExtractedVATData | undefined {
   if (!enhancedData) return undefined
   
+  // Map AI response format to legacy format
+  let invoiceDate = undefined
+  let totalAmount = enhancedData.totalAmount
+
+  // Extract date from AI response format (transactionData.date)
+  if (enhancedData.transactionData?.date) {
+    invoiceDate = enhancedData.transactionData.date
+  }
+
+  // Extract total from AI response format (vatData.grandTotal) 
+  if (enhancedData.vatData?.grandTotal) {
+    totalAmount = enhancedData.vatData.grandTotal
+  }
+  
   return {
     salesVAT: enhancedData.salesVAT || [],
     purchaseVAT: enhancedData.purchaseVAT || [],
-    totalAmount: enhancedData.totalAmount,
+    totalAmount: totalAmount,
     vatRate: enhancedData.vatRate,
     confidence: enhancedData.confidence || 0,
     extractedText: [enhancedData.extractedText || ''],
     documentType: mapDocumentType(enhancedData.documentType),
+    invoiceDate: invoiceDate,
     processingMethod: 'AI_VISION',
     processingTimeMs: 2000,
     validationFlags: ['LEGACY_FORMAT_CONVERSION'],

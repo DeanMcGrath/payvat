@@ -273,11 +273,12 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       // Processing complete
       
       if (processingResult.success) {
-        // Extract date information from basic processing
+        // Extract date information from basic processing (support both formats)
         let extractedDate = null
         let extractedYear = null
         let extractedMonth = null
         
+        // Try basic processing format first
         if (processingResult.extractedData?.invoiceDate) {
           try {
             extractedDate = new Date(processingResult.extractedData.invoiceDate)
@@ -291,9 +292,32 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
             console.warn('Failed to parse extracted date:', processingResult.extractedData.invoiceDate)
             extractedDate = null
           }
+        } 
+        // Try AI response format
+        else if (processingResult.extractedData?.transactionData?.date) {
+          try {
+            extractedDate = new Date(processingResult.extractedData.transactionData.date)
+            if (!isNaN(extractedDate.getTime())) {
+              extractedYear = extractedDate.getFullYear()
+              extractedMonth = extractedDate.getMonth() + 1 // 1-based month
+            } else {
+              extractedDate = null
+            }
+          } catch (dateError) {
+            console.warn('Failed to parse AI extracted date:', processingResult.extractedData.transactionData.date)
+            extractedDate = null
+          }
         }
         
-        // Update document with processing results including extracted date
+        // Extract total amount from basic or AI processing
+        let invoiceTotal = null
+        if (processingResult.extractedData?.totalAmount) {
+          invoiceTotal = processingResult.extractedData.totalAmount
+        } else if (processingResult.extractedData?.vatData?.grandTotal) {
+          invoiceTotal = processingResult.extractedData.vatData.grandTotal
+        }
+        
+        // Update document with processing results including extracted date and total
         await prisma.document.update({
           where: { id: document.id },
           data: {
@@ -303,6 +327,9 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
               extractedDate,
               extractedYear,
               extractedMonth
+            }),
+            ...(invoiceTotal && {
+              invoiceTotal
             })
           }
         })
