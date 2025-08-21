@@ -83,23 +83,7 @@ export default function FileUpload({
   const [batchProgress, setBatchProgress] = useState({ completed: 0, total: 0, failed: 0 })
   const [isPaused, setIsPaused] = useState(false)
 
-  // Smart file categorization based on file name patterns
-  const getSmartCategory = (fileName: string): 'SALES' | 'PURCHASES' => {
-    const lower = fileName.toLowerCase()
-    
-    // Sales indicators
-    const salesKeywords = ['sales', 'invoice', 'receipt', 'customer', 'payment_received', 'income', 'revenue']
-    const purchaseKeywords = ['purchase', 'expense', 'supplier', 'vendor', 'bill', 'paid', 'cost', 'woocommerce']
-    
-    const salesScore = salesKeywords.reduce((score, keyword) => score + (lower.includes(keyword) ? 1 : 0), 0)
-    const purchaseScore = purchaseKeywords.reduce((score, keyword) => score + (lower.includes(keyword) ? 1 : 0), 0)
-    
-    // Default to category prop, but use smart detection if confidence is high
-    if (purchaseScore > salesScore && purchaseScore > 0) return 'PURCHASES'
-    if (salesScore > purchaseScore && salesScore > 0) return 'SALES'
-    
-    return category // Fallback to prop
-  }
+  // Removed smart categorization - always respect user's category choice
 
   // Map category to backend enum values
   const getCategoryValue = (fileCategory: 'SALES' | 'PURCHASES', fileName: string) => {
@@ -259,14 +243,13 @@ export default function FileUpload({
       setUploadResults(new Map(results))
 
       try {
-        // Use smart categorization
-        const smartCategory = getSmartCategory(file.name)
-        const uploadedDocument = await uploadFileBatch(file, smartCategory)
+        // Use user's original category choice - no smart override
+        const uploadedDocument = await uploadFileBatch(file, category)
         
         results.set(fileId, { status: 'success', document: uploadedDocument })
         completedCount++
         
-        toast.success(`✅ ${file.name} uploaded successfully${smartCategory !== category ? ` (auto-categorized as ${smartCategory})` : ''}`)
+        toast.success(`✅ ${file.name} uploaded successfully`)
       } catch (error) {
         results.set(fileId, { status: 'error', error: error instanceof Error ? error.message : 'Upload failed' })
         failedCount++
@@ -663,8 +646,7 @@ export default function FileUpload({
     if (validFiles.length === 0) return
     
     // Show success message for drag and drop
-    const smartCategorized = validFiles.filter(f => getSmartCategory(f.name) !== category).length
-    toast.success(`${validFiles.length} file(s) dropped successfully${smartCategorized > 0 ? ` (${smartCategorized} auto-categorized)` : ''}`)
+    toast.success(`${validFiles.length} file(s) dropped successfully`)
     
     setIsUploading(true)
     

@@ -1517,12 +1517,8 @@ export function extractVATDataFromText(
         if (!foundVATAmounts.has(roundedAmount)) {
           foundVATAmounts.add(roundedAmount)
           
-          // Use smart categorization or fallback to original category
-          const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
-            ? docAnalysis.suggestedCategory 
-            : (category.includes('SALES') ? 'SALES' : 'PURCHASES')
-          
-          if (targetCategory === 'SALES') {
+          // Use user's original category choice - AI should not override
+          if (category.includes('SALES')) {
             salesVAT.push(amount)
           } else {
             purchaseVAT.push(amount)
@@ -1549,11 +1545,8 @@ export function extractVATDataFromText(
           if (!foundVATAmounts.has(roundedAmount)) {
             foundVATAmounts.add(roundedAmount)
             
-            const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
-              ? docAnalysis.suggestedCategory 
-              : (category.includes('SALES') ? 'SALES' : 'PURCHASES')
-            
-            if (targetCategory === 'SALES') {
+            // Use user's original category choice - AI should not override
+            if (category.includes('SALES')) {
               salesVAT.push(amount)
             } else {
               purchaseVAT.push(amount)
@@ -1579,11 +1572,8 @@ export function extractVATDataFromText(
           if (!foundVATAmounts.has(roundedAmount)) {
             foundVATAmounts.add(roundedAmount)
             
-            const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
-              ? docAnalysis.suggestedCategory 
-              : (category.includes('SALES') ? 'SALES' : 'PURCHASES')
-            
-            if (targetCategory === 'SALES') {
+            // Use user's original category choice - AI should not override
+            if (category.includes('SALES')) {
               salesVAT.push(amount)
             } else {
               purchaseVAT.push(amount)
@@ -1623,11 +1613,8 @@ export function extractVATDataFromText(
       // Skip excluded amounts
       if (excludedAmounts.has(Math.round(amount * 100) / 100)) continue
       
-      const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
-        ? docAnalysis.suggestedCategory 
-        : (category.includes('SALES') ? 'SALES' : 'PURCHASES')
-      
-      if (targetCategory === 'SALES') {
+      // Use user's original category choice - AI should not override
+      if (category.includes('SALES')) {
         salesVAT.push(amount)
       } else {
         purchaseVAT.push(amount)
@@ -1640,11 +1627,8 @@ export function extractVATDataFromText(
   if (salesVAT.length === 0 && purchaseVAT.length === 0 && totalAmount && vatRate) {
     const calculatedVAT = (totalAmount * vatRate) / (100 + vatRate)
     
-    const targetCategory = docAnalysis.suggestedCategory !== 'UNKNOWN' 
-      ? docAnalysis.suggestedCategory 
-      : (category.includes('SALES') ? 'SALES' : 'PURCHASES')
-    
-    if (targetCategory === 'SALES') {
+    // Use user's original category choice - AI should not override
+    if (category.includes('SALES')) {
       salesVAT.push(Math.round(calculatedVAT * 100) / 100)
     } else {
       purchaseVAT.push(Math.round(calculatedVAT * 100) / 100)
@@ -2130,12 +2114,12 @@ async function processWithLegacyMethod(
         confidence = parseInt(confidenceMatch[1]) / 100
       }
 
-      // Extract report type information
+      // Determine document type based on user's category choice (not WooCommerce report type)
       let documentType: ExtractedVATData['documentType'] = 'OTHER'
-      if (textResult.text.includes('country_summary')) {
-        documentType = 'PURCHASE_INVOICE' // Country summaries are typically purchase-related
-      } else if (textResult.text.includes('order_detail')) {
-        documentType = 'SALES_RECEIPT' // Order details are typically sales-related
+      if (category.includes('SALES')) {
+        documentType = 'SALES_INVOICE' // User uploaded to sales section
+      } else if (category.includes('PURCHASE')) {
+        documentType = 'PURCHASE_INVOICE' // User uploaded to purchase section
       }
       
       // Create proper ExtractedVATData with the WooCommerce-extracted amount

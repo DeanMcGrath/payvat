@@ -273,12 +273,37 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       // Processing complete
       
       if (processingResult.success) {
-        // Update document with processing results
+        // Extract date information from basic processing
+        let extractedDate = null
+        let extractedYear = null
+        let extractedMonth = null
+        
+        if (processingResult.extractedData?.invoiceDate) {
+          try {
+            extractedDate = new Date(processingResult.extractedData.invoiceDate)
+            if (!isNaN(extractedDate.getTime())) {
+              extractedYear = extractedDate.getFullYear()
+              extractedMonth = extractedDate.getMonth() + 1 // 1-based month
+            } else {
+              extractedDate = null
+            }
+          } catch (dateError) {
+            console.warn('Failed to parse extracted date:', processingResult.extractedData.invoiceDate)
+            extractedDate = null
+          }
+        }
+        
+        // Update document with processing results including extracted date
         await prisma.document.update({
           where: { id: document.id },
           data: {
             isScanned: true,
             scanResult: processingResult.scanResult,
+            ...(extractedDate && {
+              extractedDate,
+              extractedYear,
+              extractedMonth
+            })
           }
         })
         
