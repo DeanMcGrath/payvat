@@ -176,7 +176,7 @@ export default function Dashboard() {
   const loadUploadedDocuments = async () => {
     try {
       setLoadingDocuments(true)
-      const response = await fetch('/api/documents')
+      const response = await fetch('/api/documents?dashboard=true')
       
       if (response.ok) {
         const result = await response.json()
