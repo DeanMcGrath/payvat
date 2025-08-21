@@ -765,6 +765,18 @@ export default function Dashboard() {
                         </span>
                       )}
                     </h4>
+                    
+                    {/* Column Headers */}
+                    <div className="grid grid-cols-12 gap-4 items-center px-4 py-2 bg-gray-50 rounded-lg border-b text-xs font-medium text-gray-600 uppercase tracking-wide mb-3">
+                      <div className="col-span-1 text-center">Type</div>
+                      <div className="col-span-3">Document Name</div>
+                      <div className="col-span-2">Date</div>
+                      <div className="col-span-2">Total</div>
+                      <div className="col-span-2">VAT Amount</div>
+                      <div className="col-span-1">Confidence</div>
+                      <div className="col-span-1 text-right">Actions</div>
+                    </div>
+                    
                     <div className="space-y-3">
                       {filteredAndSortedDocuments
                         .filter(doc => doc.category?.includes('SALES'))
@@ -777,53 +789,85 @@ export default function Dashboard() {
                           const totalVAT = vatAmounts.reduce((sum: number, amount: number) => sum + amount, 0);
                           
                           return (
-                            <div key={document.id} className="flex items-center justify-between p-4 bg-[#E6F4FF] rounded-lg border border-[#99D3FF]">
-                              <div className="flex items-center space-x-4">
-                                <div className="flex-shrink-0">
-                                  <FileText className="h-8 w-8 text-red-500" />
-                                </div>
-                                
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-gray-900 truncate">
-                                    {document.originalName || document.fileName}
-                                  </p>
-                                  <div className="flex items-center space-x-4 mt-1">
-                                    <p className="text-xs text-gray-500">
-                                      {Math.round(document.fileSize / 1024)}KB
-                                    </p>
-                                    
-                                    {document.isScanned && docVATData && vatAmounts.length > 0 && (
-                                      <div className="flex items-center text-xs">
-                                        <span className="inline-flex items-center text-[#5BADEA] font-medium">
-                                          <CheckCircle className="h-3 w-3 mr-1" />
-                                          VAT: {formatCurrency(totalVAT)} • {Math.round(confidence * 100)}% confidence
-                                        </span>
-                                      </div>
-                                    )}
-                                    
-                                    {document.isScanned && (!docVATData || vatAmounts.length === 0) && (
-                                      <span className="inline-flex items-center text-green-600 text-xs">
-                                        <CheckCircle className="h-3 w-3 mr-1" />
-                                        AI Processed
-                                      </span>
-                                    )}
-                                    
-                                    {!document.isScanned && (
-                                      <span className="inline-flex items-center text-yellow-600 text-xs">
-                                        <div className="animate-spin rounded-full h-3 w-3 border border-yellow-600 border-t-transparent mr-2"></div>
-                                        AI Processing...
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
+                            <div key={document.id} className="grid grid-cols-12 gap-4 items-center p-4 bg-[#E6F4FF] rounded-lg border border-[#99D3FF] hover:bg-[#DDF0FF] transition-colors">
+                              {/* Icon */}
+                              <div className="col-span-1 flex justify-center">
+                                <FileText className="h-6 w-6 text-[#5BADEA]" />
                               </div>
                               
-                              <div className="flex gap-1">
+                              {/* Filename */}
+                              <div className="col-span-3">
+                                <p className="text-sm font-medium text-gray-900 truncate" title={document.originalName || document.fileName}>
+                                  {document.originalName || document.fileName}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-0.5">
+                                  {Math.round(document.fileSize / 1024)}KB
+                                </p>
+                              </div>
+                              
+                              {/* Date */}
+                              <div className="col-span-2">
+                                <p className="text-sm text-gray-700">
+                                  {document.extractedDate 
+                                    ? new Date(document.extractedDate).toLocaleDateString('en-IE', {
+                                        day: '2-digit',
+                                        month: '2-digit', 
+                                        year: 'numeric'
+                                      })
+                                    : '—'
+                                  }
+                                </p>
+                              </div>
+                              
+                              {/* Total Amount */}
+                              <div className="col-span-2">
+                                <p className="text-sm font-medium text-gray-800">
+                                  {document.invoiceTotal 
+                                    ? formatCurrency(parseFloat(document.invoiceTotal.toString()))
+                                    : '—'
+                                  }
+                                </p>
+                              </div>
+                              
+                              {/* VAT Amount */}
+                              <div className="col-span-2">
+                                <p className="text-sm font-medium text-[#5BADEA]">
+                                  {document.isScanned && docVATData && vatAmounts.length > 0
+                                    ? formatCurrency(totalVAT)
+                                    : '—'
+                                  }
+                                </p>
+                              </div>
+                              
+                              {/* Confidence & Status */}
+                              <div className="col-span-1">
+                                {document.isScanned && docVATData && vatAmounts.length > 0 && (
+                                  <span className="inline-flex items-center text-xs font-medium text-[#5BADEA]">
+                                    <CheckCircle className="h-3 w-3 mr-1" />
+                                    {Math.round(confidence * 100)}%
+                                  </span>
+                                )}
+                                {document.isScanned && (!docVATData || vatAmounts.length === 0) && (
+                                  <span className="inline-flex items-center text-xs font-medium text-green-600">
+                                    <CheckCircle className="h-3 w-3 mr-1" />
+                                    Done
+                                  </span>
+                                )}
+                                {!document.isScanned && (
+                                  <span className="inline-flex items-center text-xs text-yellow-600">
+                                    <div className="animate-spin rounded-full h-3 w-3 border border-yellow-600 border-t-transparent mr-1"></div>
+                                    Processing
+                                  </span>
+                                )}
+                              </div>
+                              
+                              {/* Actions */}
+                              <div className="col-span-1 flex justify-end gap-1">
                                 <Button
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => handleViewDocument(document)}
-                                  className="text-[#8FD0FC] hover:text-[#5BADEA] hover:bg-[#E6F4FF]"
+                                  className="h-8 w-8 p-0 text-[#8FD0FC] hover:text-[#5BADEA] hover:bg-[#CCE7FF]"
                                   title="Review Document"
                                 >
                                   <Eye className="h-4 w-4" />
@@ -832,7 +876,7 @@ export default function Dashboard() {
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => removeDocument(document.id)}
-                                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                  className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
                                   title="Remove Document"
                                 >
                                   <X className="h-4 w-4" />
@@ -857,6 +901,18 @@ export default function Dashboard() {
                         </span>
                       )}
                     </h4>
+                    
+                    {/* Column Headers */}
+                    <div className="grid grid-cols-12 gap-4 items-center px-4 py-2 bg-gray-50 rounded-lg border-b text-xs font-medium text-gray-600 uppercase tracking-wide mb-3">
+                      <div className="col-span-1 text-center">Type</div>
+                      <div className="col-span-3">Document Name</div>
+                      <div className="col-span-2">Date</div>
+                      <div className="col-span-2">Total</div>
+                      <div className="col-span-2">VAT Amount</div>
+                      <div className="col-span-1">Confidence</div>
+                      <div className="col-span-1 text-right">Actions</div>
+                    </div>
+                    
                     <div className="space-y-3">
                       {filteredAndSortedDocuments
                         .filter(doc => doc.category?.includes('PURCHASE'))
@@ -869,53 +925,85 @@ export default function Dashboard() {
                           const totalVAT = vatAmounts.reduce((sum: number, amount: number) => sum + amount, 0);
                           
                           return (
-                            <div key={document.id} className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
-                              <div className="flex items-center space-x-4">
-                                <div className="flex-shrink-0">
-                                  <FileText className="h-8 w-8 text-red-500" />
-                                </div>
-                                
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-gray-900 truncate">
-                                    {document.originalName || document.fileName}
-                                  </p>
-                                  <div className="flex items-center space-x-4 mt-1">
-                                    <p className="text-xs text-gray-500">
-                                      {Math.round(document.fileSize / 1024)}KB
-                                    </p>
-                                    
-                                    {document.isScanned && docVATData && vatAmounts.length > 0 && (
-                                      <div className="flex items-center text-xs">
-                                        <span className="inline-flex items-center text-green-700 font-medium">
-                                          <CheckCircle className="h-3 w-3 mr-1" />
-                                          VAT: {formatCurrency(totalVAT)} detected ({Math.round(confidence * 100)}% confidence)
-                                        </span>
-                                      </div>
-                                    )}
-                                    
-                                    {document.isScanned && (!docVATData || vatAmounts.length === 0) && (
-                                      <span className="inline-flex items-center text-green-600 text-xs">
-                                        <CheckCircle className="h-3 w-3 mr-1" />
-                                        AI Processed
-                                      </span>
-                                    )}
-                                    
-                                    {!document.isScanned && (
-                                      <span className="inline-flex items-center text-yellow-600 text-xs">
-                                        <AlertCircle className="h-3 w-3 mr-1" />
-                                        Processing...
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
+                            <div key={document.id} className="grid grid-cols-12 gap-4 items-center p-4 bg-green-50 rounded-lg border border-green-200 hover:bg-green-100 transition-colors">
+                              {/* Icon */}
+                              <div className="col-span-1 flex justify-center">
+                                <FileText className="h-6 w-6 text-green-600" />
                               </div>
                               
-                              <div className="flex gap-1">
+                              {/* Filename */}
+                              <div className="col-span-3">
+                                <p className="text-sm font-medium text-gray-900 truncate" title={document.originalName || document.fileName}>
+                                  {document.originalName || document.fileName}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-0.5">
+                                  {Math.round(document.fileSize / 1024)}KB
+                                </p>
+                              </div>
+                              
+                              {/* Date */}
+                              <div className="col-span-2">
+                                <p className="text-sm text-gray-700">
+                                  {document.extractedDate 
+                                    ? new Date(document.extractedDate).toLocaleDateString('en-IE', {
+                                        day: '2-digit',
+                                        month: '2-digit', 
+                                        year: 'numeric'
+                                      })
+                                    : '—'
+                                  }
+                                </p>
+                              </div>
+                              
+                              {/* Total Amount */}
+                              <div className="col-span-2">
+                                <p className="text-sm font-medium text-gray-800">
+                                  {document.invoiceTotal 
+                                    ? formatCurrency(parseFloat(document.invoiceTotal.toString()))
+                                    : '—'
+                                  }
+                                </p>
+                              </div>
+                              
+                              {/* VAT Amount */}
+                              <div className="col-span-2">
+                                <p className="text-sm font-medium text-green-600">
+                                  {document.isScanned && docVATData && vatAmounts.length > 0
+                                    ? formatCurrency(totalVAT)
+                                    : '—'
+                                  }
+                                </p>
+                              </div>
+                              
+                              {/* Confidence & Status */}
+                              <div className="col-span-1">
+                                {document.isScanned && docVATData && vatAmounts.length > 0 && (
+                                  <span className="inline-flex items-center text-xs font-medium text-green-600">
+                                    <CheckCircle className="h-3 w-3 mr-1" />
+                                    {Math.round(confidence * 100)}%
+                                  </span>
+                                )}
+                                {document.isScanned && (!docVATData || vatAmounts.length === 0) && (
+                                  <span className="inline-flex items-center text-xs font-medium text-green-600">
+                                    <CheckCircle className="h-3 w-3 mr-1" />
+                                    Done
+                                  </span>
+                                )}
+                                {!document.isScanned && (
+                                  <span className="inline-flex items-center text-xs text-yellow-600">
+                                    <div className="animate-spin rounded-full h-3 w-3 border border-yellow-600 border-t-transparent mr-1"></div>
+                                    Processing
+                                  </span>
+                                )}
+                              </div>
+                              
+                              {/* Actions */}
+                              <div className="col-span-1 flex justify-end gap-1">
                                 <Button
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => handleViewDocument(document)}
-                                  className="text-[#8FD0FC] hover:text-[#5BADEA] hover:bg-[#E6F4FF]"
+                                  className="h-8 w-8 p-0 text-[#8FD0FC] hover:text-[#5BADEA] hover:bg-[#CCE7FF]"
                                   title="Review Document"
                                 >
                                   <Eye className="h-4 w-4" />
@@ -924,7 +1012,7 @@ export default function Dashboard() {
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => removeDocument(document.id)}
-                                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                  className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
                                   title="Remove Document"
                                 >
                                   <X className="h-4 w-4" />
