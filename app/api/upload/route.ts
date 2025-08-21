@@ -657,12 +657,35 @@ async function extractDocumentMetadataSimple(result: any, document: any) {
   }
 
   try {
-    // Extract date information
+    // First, convert AI response format to metadata format
+    let extractedData: any = {}
+    
     if (result.extractedData?.metadata) {
-      const extractedData = result.extractedData.metadata
+      extractedData = result.extractedData.metadata
+    } else if (result.extractedData) {
+      // Convert AI JSON response to metadata format
+      const aiData = result.extractedData
+      
+      // Map date from transactionData.date to various date field formats
+      if (aiData.transactionData?.date) {
+        extractedData.dueDate = { value: aiData.transactionData.date, confidence: 0.8 }
+        extractedData.invoiceDate = { value: aiData.transactionData.date, confidence: 0.8 }
+        extractedData.documentDate = { value: aiData.transactionData.date, confidence: 0.8 }
+      }
+      
+      // Map total from vatData.grandTotal to various total field formats
+      if (aiData.vatData?.grandTotal) {
+        extractedData.total = { value: aiData.vatData.grandTotal, confidence: 0.8 }
+        extractedData.totalAmount = { value: aiData.vatData.grandTotal, confidence: 0.8 }
+        extractedData.grandTotal = { value: aiData.vatData.grandTotal, confidence: 0.8 }
+      }
+    }
+
+    // Extract date information
+    if (extractedData && Object.keys(extractedData).length > 0) {
 
       // Look for date fields in extracted data
-      const dateFields = ['documentDate', 'invoiceDate', 'date', 'issueDate']
+      const dateFields = ['dueDate', 'paymentDueDate', 'due', 'paymentDue', 'documentDate', 'invoiceDate', 'date', 'issueDate', 'billDate']
       let extractedDate = null
       let dateConfidence = 0.0
 
@@ -695,7 +718,7 @@ async function extractDocumentMetadataSimple(result: any, document: any) {
       }
 
       // Extract total amount
-      const totalFields = ['total', 'totalAmount', 'grandTotal', 'amountDue']
+      const totalFields = ['total', 'totalAmount', 'grandTotal', 'amountDue', 'totalDue', 'balanceDue', 'totalIncludingVat', 'totalIncVat', 'totalInclVat']
       for (const field of totalFields) {
         if (extractedData[field]) {
           const totalValue = extractedData[field]

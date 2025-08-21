@@ -67,6 +67,26 @@ Analyze this document and extract tax-related information with high accuracy. Lo
 
 Pay special attention to TOTAL tax amounts and country-wise aggregation.
 
+CRITICAL: MANDATORY DATE EXTRACTION:
+- Look for ANY date on the document and extract it as transactionData.date
+- Prioritize these date fields (in order):
+  * "Due Date", "Payment Due Date", "Due", "Payment Due"
+  * "Invoice Date", "Date of Invoice", "Bill Date"
+  * "Date", "Issue Date", "Document Date"
+  * Any clearly visible date in DD/MM/YYYY, MM/DD/YYYY, or YYYY-MM-DD format
+- If multiple dates exist, prefer DUE DATE over invoice date
+- Convert to YYYY-MM-DD format in the JSON response
+
+CRITICAL: MANDATORY TOTAL EXTRACTION:
+- Look for the TOTAL AMOUNT (including VAT, delivery, and all charges) and extract it as vatData.grandTotal
+- Prioritize these total fields (in order):
+  * "Total", "Total Amount", "Total Due"
+  * "Grand Total", "Amount Due", "Balance Due"
+  * "Total Including VAT", "Total Inc. VAT", "Total Incl. VAT"
+  * The largest monetary amount on the document (usually the final total)
+- This should be the complete amount the customer needs to pay
+- Extract as a number (remove currency symbols and commas)
+
 Return your analysis in the following JSON format:
 {
   "documentType": "INVOICE" | "RECEIPT" | "CREDIT_NOTE" | "STATEMENT" | "OTHER",
