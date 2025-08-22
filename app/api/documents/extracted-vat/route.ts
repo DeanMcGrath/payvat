@@ -498,33 +498,36 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       }
     }
     
-    // Getting VAT data for authenticated user
+    // Getting VAT data for authenticated user - using withDatabaseFallback
+    const fallbackKey = `vat-data-${cacheKey}`
     
-    // FIXED: Build query filters for user's own documents - include ALL documents
-    const whereClause: any = {
-      userId: user.id,
-      // REMOVED isScanned filter - include all documents regardless of processing status
-    }
-    
-    if (vatReturnId) {
-      whereClause.vatReturnId = vatReturnId
-    }
-    
-    if (category) {
-      if (category === 'SALES') {
-        whereClause.category = {
-          in: ['SALES_INVOICE', 'SALES_RECEIPT', 'SALES_REPORT']
+    const result = await withDatabaseFallback(
+      async () => {
+        // FIXED: Build query filters for user's own documents - include ALL documents
+        const whereClause: any = {
+          userId: user.id,
+          // REMOVED isScanned filter - include all documents regardless of processing status
         }
-      } else if (category === 'PURCHASES') {
-        whereClause.category = {
-          in: ['PURCHASE_INVOICE', 'PURCHASE_RECEIPT', 'PURCHASE_REPORT']
+        
+        if (vatReturnId) {
+          whereClause.vatReturnId = vatReturnId
         }
-      }
-    }
-    
-    // Get user's processed documents only - secure production behavior
-    const documents = await Promise.race([
-      prisma.document.findMany({
+        
+        if (category) {
+          if (category === 'SALES') {
+            whereClause.category = {
+              in: ['SALES_INVOICE', 'SALES_RECEIPT', 'SALES_REPORT']
+            }
+          } else if (category === 'PURCHASES') {
+            whereClause.category = {
+              in: ['PURCHASE_INVOICE', 'PURCHASE_RECEIPT', 'PURCHASE_REPORT']
+            }
+          }
+        }
+        
+        // Get user's processed documents only - secure production behavior
+        const documents = await Promise.race([
+          prisma.document.findMany({
         where: whereClause,
         orderBy: {
           uploadedAt: 'desc'
@@ -892,13 +895,28 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       }
     }
     
+        // Return summary data for withDatabaseFallback
+        return summary
+      },
+      fallbackKey,
+      fallbackVATData
+    )
+    
+    // Log performance for monitoring
+    logPerformance('vat-extraction', Date.now() - startTime, {
+      userId: user?.id,
+      operation: 'extracted-vat'
+    })
+    
     // 🚨 NEW: Add monitoring statistics to response
     const monitoringStats = extractionMonitor.getStats()
     
     const response = NextResponse.json({
       success: true,
-      extractedVAT: summary,
+      extractedVAT: result.data,
       fromCache: false,
+      fromFallback: result.fromFallback,
+      message: result.fromFallback ? 'Service temporarily unavailable - showing cached data' : undefined,
       monitoringStats: {
         totalExtractions: monitoringStats.totalAttempts,
         successRate: monitoringStats.successRate,
@@ -906,12 +924,6 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         wooCommerceExtractions: monitoringStats.wooCommerceStats.attempts,
         lastProcessingPerformance: monitoringStats.averageProcessingTime
       }
-    })
-    
-    // Log performance for monitoring
-    logPerformance('vat-extraction', Date.now() - startTime, {
-      userId: user?.id,
-      operation: 'extracted-vat'
     })
 
     // Prevent browser caching to ensure fresh data
@@ -922,32 +934,20 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     return response
     
   } catch (error) {
-    logError('Error getting extracted VAT data', error, {
+    // Only catch non-database errors here (URL parsing, cache operations, etc.)
+    logError('Extracted VAT route error (non-database)', error, {
       userId: user?.id,
-      operation: 'extracted-vat'
+      operation: 'extracted-vat-route-error'
     })
     
-    // Determine error type and provide appropriate response
-    const isTimeoutError = error instanceof Error && error.message.includes('timeout')
-    const isConnectionError = error instanceof Error && error.message.includes('connection')
-    
-    const response = NextResponse.json(
+    return NextResponse.json(
       { 
         success: false,
-        error: isTimeoutError ? 'Database query timeout - please try again later' :
-               isConnectionError ? 'Database connection failed - please try again' :
-               'Failed to retrieve VAT data',
-        retryAfter: isTimeoutError || isConnectionError ? 60 : 30 // seconds
+        error: 'Invalid request parameters',
+        extractedVAT: fallbackVATData
       },
-      { status: isTimeoutError ? 503 : isConnectionError ? 503 : 500 }
+      { status: 400 }
     )
-    
-    // Add retry hints for client
-    if (isTimeoutError || isConnectionError) {
-      response.headers.set('Retry-After', isTimeoutError ? '60' : '30')
-    }
-    
-    return response
   }
 }
 

@@ -5,9 +5,41 @@ declare global {
   var prisma: PrismaClient | undefined
 }
 
+// Validate database URL format
+function validateDatabaseUrl(url?: string): boolean {
+  if (!url) {
+    console.error('DATABASE_URL is not defined')
+    return false
+  }
+  
+  // Check if URL starts with postgresql:// or postgres://
+  if (!url.startsWith('postgresql://') && !url.startsWith('postgres://')) {
+    console.error('DATABASE_URL must start with postgresql:// or postgres://')
+    return false
+  }
+  
+  // Basic validation for required components
+  try {
+    const parsed = new URL(url)
+    if (!parsed.hostname || !parsed.pathname || parsed.pathname === '/') {
+      console.error('DATABASE_URL missing required components (hostname or database name)')
+      return false
+    }
+    return true
+  } catch (error) {
+    console.error('DATABASE_URL is not a valid URL:', error)
+    return false
+  }
+}
+
 // Configure Prisma for serverless environment with optimized connection pooling
 const createPrismaClient = () => {
   try {
+    // Validate DATABASE_URL before attempting connection
+    if (!validateDatabaseUrl(process.env.DATABASE_URL)) {
+      throw new Error('Invalid DATABASE_URL configuration')
+    }
+    
     const client = new PrismaClient({
       log: process.env.NODE_ENV === 'development' ? ['query'] : ['error'],
       errorFormat: 'pretty',
@@ -104,6 +136,12 @@ export async function withDatabaseRetry<T>(
         lastError = error as Error
         console.error(`Database operation failed (attempt ${attempt}/${maxRetries}):`, error)
         
+        // Check if this is a circuit breaker error to avoid retry loops
+        if (error instanceof Error && error.message.includes('Circuit breaker is OPEN')) {
+          console.log('Circuit breaker is open, skipping retries')
+          throw error
+        }
+        
         if (attempt < maxRetries) {
           // Wait before retry with jittered exponential backoff
           const baseDelay = Math.pow(2, attempt) * 2000 // Start at 4s instead of 2s
@@ -144,9 +182,11 @@ export async function withDatabaseFallback<T>(
   defaultFallback: T
 ): Promise<{ data: T; fromFallback: boolean }> {
   try {
+    console.log(`Attempting database operation for key: ${fallbackKey}`)
     const result = await withDatabaseRetry(operation)
     // Cache successful result for future fallback
     setFallbackData(fallbackKey, result)
+    console.log(`Database operation successful for key: ${fallbackKey}`)
     return { data: result, fromFallback: false }
   } catch (error) {
     console.warn(`Database operation failed, trying fallback for key: ${fallbackKey}`, error)

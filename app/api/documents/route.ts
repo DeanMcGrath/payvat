@@ -7,8 +7,9 @@ import { logError, logAudit, logPerformance } from '@/lib/secure-logger'
 
 // GET /api/documents - List user's documents
 async function getDocuments(request: NextRequest, user?: AuthUser) {
+  const startTime = Date.now()
+  
   try {
-    const startTime = Date.now()
     const { searchParams } = new URL(request.url)
     const vatReturnId = searchParams.get('vatReturnId')
     const category = searchParams.get('category')
@@ -31,7 +32,7 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
     
     const fallbackKey = `documents-${user?.id || 'guest'}-${vatReturnId || 'all'}-${category || 'all'}`
     
-    // Use withDatabaseFallback for graceful degradation
+    // Use withDatabaseFallback for graceful degradation - OUTSIDE try-catch
     const result = await withDatabaseFallback(
       async () => {
         logAudit('DOCUMENTS_LIST_REQUEST', {
@@ -181,39 +182,26 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
     })
     
   } catch (error) {
-    logError('Documents fetch error', error, {
+    // Only catch non-database errors here (URL parsing, etc.)
+    logError('Documents route error (non-database)', error, {
       userId: user?.id,
-      operation: 'documents-list'
+      operation: 'documents-list-route-error'
     })
     
-    // Determine appropriate error status and response
-    const isTimeoutError = error instanceof Error && error.message.includes('timeout')
-    const isConnectionError = error instanceof Error && error.message.includes('connection')
-    
-    const response = NextResponse.json(
+    return NextResponse.json(
       { 
         success: false,
-        error: isTimeoutError ? 'Database query timeout - please try again' :
-               isConnectionError ? 'Database connection failed - please try again' :
-               'Failed to fetch documents',
+        error: 'Invalid request parameters',
         documents: [],
         pagination: {
           page: 1,
           limit: 10,
           totalCount: 0,
           totalPages: 0
-        },
-        retryAfter: isTimeoutError || isConnectionError ? 30 : 5 // seconds
+        }
       },
-      { status: isTimeoutError ? 503 : isConnectionError ? 503 : 500 }
+      { status: 400 }
     )
-    
-    // Add retry hints for client
-    if (isTimeoutError || isConnectionError) {
-      response.headers.set('Retry-After', '30')
-    }
-    
-    return response
   }
 }
 
