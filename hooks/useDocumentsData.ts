@@ -19,6 +19,8 @@ interface UseDocumentsDataState {
   loadingDocuments: boolean
   loadingVAT: boolean
   error: string | null
+  inFallbackMode: boolean
+  fallbackMessage: string | null
 }
 
 interface UseDocumentsDataActions {
@@ -54,6 +56,8 @@ export function useDocumentsData(): UseDocumentsDataReturn {
   const [loadingDocuments, setLoadingDocuments] = useState(false)
   const [loadingVAT, setLoadingVAT] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [inFallbackMode, setInFallbackMode] = useState(false)
+  const [fallbackMessage, setFallbackMessage] = useState<string | null>(null)
 
   // Rate limiting and retry logic
   const lastFetchTime = useRef(0)
@@ -73,6 +77,15 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       if (response.success && response.data?.documents) {
         setDocuments(response.data.documents)
         retryCountRef.current = 0 // Reset retry count on success
+        
+        // Check if in fallback mode
+        if (response.fromFallback) {
+          setInFallbackMode(true)
+          setFallbackMessage(response.message || 'Service temporarily unavailable - showing cached data')
+        } else {
+          setInFallbackMode(false)
+          setFallbackMessage(null)
+        }
       } else {
         const errorMsg = response.error || response.message || 'Failed to load documents'
         throw new Error(errorMsg)
@@ -264,6 +277,8 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       loadingDocuments,
       loadingVAT,
       error,
+      inFallbackMode,
+      fallbackMessage,
     },
     actions: {
       loadDocuments,

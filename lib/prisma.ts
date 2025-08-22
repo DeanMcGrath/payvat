@@ -5,16 +5,36 @@ declare global {
   var prisma: PrismaClient | undefined
 }
 
+// Get the best available database URL
+function getDatabaseUrl(): string | undefined {
+  // Try multiple environment variables in order of preference
+  const dbUrl = process.env.DATABASE_URL || 
+                process.env.NILEDB_POSTGRES_URL || 
+                process.env.POSTGRES_URL ||
+                process.env.NILEDB_URL
+  
+  if (dbUrl) {
+    console.log('Using database URL from:', 
+      process.env.DATABASE_URL ? 'DATABASE_URL' :
+      process.env.NILEDB_POSTGRES_URL ? 'NILEDB_POSTGRES_URL' :
+      process.env.POSTGRES_URL ? 'POSTGRES_URL' : 'NILEDB_URL'
+    )
+  }
+  
+  return dbUrl
+}
+
 // Validate database URL format
 function validateDatabaseUrl(url?: string): boolean {
   if (!url) {
-    console.error('DATABASE_URL is not defined')
+    console.error('No database URL found in environment variables')
+    console.error('Checked: DATABASE_URL, NILEDB_POSTGRES_URL, POSTGRES_URL, NILEDB_URL')
     return false
   }
   
   // Check if URL starts with postgresql:// or postgres://
   if (!url.startsWith('postgresql://') && !url.startsWith('postgres://')) {
-    console.error('DATABASE_URL must start with postgresql:// or postgres://')
+    console.error('Database URL must start with postgresql:// or postgres://', { urlPrefix: url.substring(0, 20) })
     return false
   }
   
@@ -22,12 +42,15 @@ function validateDatabaseUrl(url?: string): boolean {
   try {
     const parsed = new URL(url)
     if (!parsed.hostname || !parsed.pathname || parsed.pathname === '/') {
-      console.error('DATABASE_URL missing required components (hostname or database name)')
+      console.error('Database URL missing required components (hostname or database name)', {
+        hostname: parsed.hostname,
+        pathname: parsed.pathname
+      })
       return false
     }
     return true
   } catch (error) {
-    console.error('DATABASE_URL is not a valid URL:', error)
+    console.error('Database URL is not a valid URL:', error)
     return false
   }
 }
@@ -35,17 +58,29 @@ function validateDatabaseUrl(url?: string): boolean {
 // Configure Prisma for serverless environment with optimized connection pooling
 const createPrismaClient = () => {
   try {
-    // Validate DATABASE_URL before attempting connection
-    if (!validateDatabaseUrl(process.env.DATABASE_URL)) {
-      throw new Error('Invalid DATABASE_URL configuration')
+    // Get the best available database URL
+    const databaseUrl = getDatabaseUrl()
+    
+    // Validate database URL before attempting connection
+    if (!validateDatabaseUrl(databaseUrl)) {
+      throw new Error('Invalid database URL configuration')
     }
+    
+    // Add connection parameters for better reliability
+    const connectionParams = '?connection_limit=20&pool_timeout=20&connect_timeout=10&sslmode=require'
+    const fullDatabaseUrl = databaseUrl + connectionParams
+    
+    console.log('Creating Prisma client with connection params:', {
+      hasUrl: !!databaseUrl,
+      hostname: databaseUrl ? new URL(databaseUrl).hostname : 'unknown'
+    })
     
     const client = new PrismaClient({
       log: process.env.NODE_ENV === 'development' ? ['query'] : ['error'],
       errorFormat: 'pretty',
       datasources: {
         db: {
-          url: process.env.DATABASE_URL + '?connection_limit=20&pool_timeout=20&connect_timeout=10'
+          url: fullDatabaseUrl
         }
       }
     })

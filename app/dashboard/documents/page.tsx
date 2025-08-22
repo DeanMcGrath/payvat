@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Filter, X, ArrowUpDown, Home, RefreshCw, Video, Play, Calendar, Clock, ArrowRight, Search, FileText, Loader2 } from 'lucide-react'
+import { Filter, X, ArrowUpDown, Home, RefreshCw, Video, Play, Calendar, Clock, ArrowRight, Search, FileText, Loader2, AlertCircle } from 'lucide-react'
 import { VideoModal } from "@/components/video-modal"
 import { toast } from "sonner"
 import { useVATData } from "@/contexts/vat-data-context"
@@ -56,7 +56,7 @@ export default function DashboardDocuments() {
   
   // Use the new documents data hook
   const {
-    state: { documents, vatData, loadingDocuments, loadingVAT, error },
+    state: { documents, vatData, loadingDocuments, loadingVAT, error, inFallbackMode, fallbackMessage },
     actions: { refreshData, debouncedRefreshVAT, removeDocument, setDocuments },
     computed: { salesDocuments, purchaseDocuments, totalDocuments, processedDocuments }
   } = useDocumentsData()
@@ -294,6 +294,31 @@ export default function DashboardDocuments() {
       }
     >
       <div className="space-y-8">
+        {/* Fallback Mode Warning */}
+        {inFallbackMode && (
+          <Card className="bg-yellow-50 border-yellow-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-yellow-800">Service Temporarily Unavailable</h3>
+                  <p className="text-yellow-700 text-sm mt-1">
+                    {fallbackMessage || 'Database maintenance in progress. Showing demo data.'} 
+                    <Button 
+                      variant="link" 
+                      size="sm" 
+                      onClick={refreshData}
+                      className="text-yellow-700 underline p-0 h-auto font-normal ml-2"
+                    >
+                      Try again
+                    </Button>
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Statistics Overview */}
         <StatCardGrid columns={4}>
           <DocumentsStatCard 
