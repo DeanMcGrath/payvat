@@ -4,9 +4,14 @@
  */
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
-import { documentsApi, Document, VATData, VATExtraction, ApiError } from '@/lib/apiClient'
+import { documentsApi, Document, VATData, ApiError } from '@/lib/apiClient'
 import { useDebouncedCallback } from './useDebouncedCallback'
-import { logger } from '@/lib/logger'
+
+interface VATExtraction {
+  id: string
+  extractedAmounts: number[]
+  confidence: number
+}
 
 interface UseDocumentsDataState {
   documents: Document[]
@@ -61,24 +66,18 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       setLoadingDocuments(true)
       setError(null)
       
-      logger.info('Loading documents from API', {}, 'DOCUMENTS_HOOK')
-      
       const response = await documentsApi.getAll({ dashboard: true })
       
       if (response.success && response.data?.documents) {
         setDocuments(response.data.documents)
-        logger.info('Documents loaded successfully', { 
-          count: response.data.documents.length 
-        }, 'DOCUMENTS_HOOK')
       } else {
         const errorMsg = response.error || response.message || 'Failed to load documents'
-        logger.error('Documents API returned error', { response }, 'DOCUMENTS_HOOK')
         throw new Error(errorMsg)
       }
     } catch (err) {
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to load documents'
       setError(errorMessage)
-      logger.error('Failed to load documents', err, 'DOCUMENTS_HOOK')
+      console.error('Failed to load documents:', err)
     } finally {
       setLoadingDocuments(false)
     }
@@ -90,12 +89,10 @@ export function useDocumentsData(): UseDocumentsDataReturn {
     
     // Rate limiting check
     if (!force && (now - lastFetchTime.current) < MIN_INTERVAL) {
-      logger.debug('VAT data fetch skipped due to rate limiting', {}, 'DOCUMENTS_HOOK')
       return
     }
 
     if (loadingVAT && !force) {
-      logger.debug('VAT data fetch already in progress', {}, 'DOCUMENTS_HOOK')
       return
     }
 
@@ -104,26 +101,18 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       setError(null)
       lastFetchTime.current = now
 
-      logger.info('Loading VAT data from API', {}, 'DOCUMENTS_HOOK')
-
       const response = await documentsApi.getExtractedVAT()
 
       if (response.success && response.data?.extractedVAT) {
         setVATData(response.data.extractedVAT)
-        logger.info('VAT data loaded successfully', {
-          totalSalesVAT: response.data.extractedVAT.totalSalesVAT,
-          totalPurchaseVAT: response.data.extractedVAT.totalPurchaseVAT,
-          processedDocuments: response.data.extractedVAT.processedDocuments
-        }, 'DOCUMENTS_HOOK')
       } else {
-        const errorMsg = response.error || response.message || 'Failed to load VAT data'
-        logger.warn('VAT data response failed', { response, error: errorMsg }, 'DOCUMENTS_HOOK')
+        console.warn('VAT data response failed:', response)
         // Don't throw for VAT data failures - just warn and continue
       }
     } catch (err) {
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to load VAT data'
       setError(errorMessage)
-      logger.error('Failed to load VAT data', err, 'DOCUMENTS_HOOK')
+      console.error('Failed to load VAT data:', err)
     } finally {
       setLoadingVAT(false)
     }
@@ -162,11 +151,11 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       // Refresh VAT data after removal
       debouncedRefreshVAT(1000)
       
-      logger.info('Document removed successfully', { documentId: id }, 'DOCUMENTS_HOOK')
+      console.log('Document removed successfully:', id)
     } catch (err) {
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to remove document'
       setError(errorMessage)
-      logger.error('Failed to remove document', err, 'DOCUMENTS_HOOK')
+      console.error('Failed to remove document:', err)
       throw err // Re-throw so the caller can handle it
     }
   }, [debouncedRefreshVAT])
