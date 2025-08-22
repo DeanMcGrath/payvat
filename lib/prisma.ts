@@ -1,15 +1,21 @@
 import { PrismaClient } from './generated/prisma'
+import { databaseCircuitBreaker } from './circuit-breaker'
 
 declare global {
   var prisma: PrismaClient | undefined
 }
 
-// Configure Prisma for serverless environment
+// Configure Prisma for serverless environment with optimized connection pooling
 const createPrismaClient = () => {
   try {
     const client = new PrismaClient({
       log: process.env.NODE_ENV === 'development' ? ['query'] : ['error'],
-      errorFormat: 'pretty'
+      errorFormat: 'pretty',
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL + '?connection_limit=20&pool_timeout=20&connect_timeout=10'
+        }
+      }
     })
 
     return client
@@ -77,32 +83,83 @@ export async function disconnectDatabase() {
   }
 }
 
-// Create a function to handle database errors gracefully
+// Create a function to handle database errors gracefully with circuit breaker
 export async function withDatabaseRetry<T>(
   operation: () => Promise<T>,
-  maxRetries = 3
+  maxRetries = 2 // Reduced from 3 to prevent retry storms
 ): Promise<T> {
-  let lastError: Error
-  
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      // Test connection before operation
-      const isConnected = await testDatabaseConnection()
-      if (!isConnected) {
-        throw new Error('Database connection test failed')
-      }
-      
-      return await operation()
-    } catch (error) {
-      lastError = error as Error
-      console.error(`Database operation failed (attempt ${attempt}/${maxRetries}):`, error)
-      
-      if (attempt < maxRetries) {
-        // Wait before retry with exponential backoff
-        await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000))
+  return databaseCircuitBreaker.execute(async () => {
+    let lastError: Error
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        // Test connection before operation with shorter timeout
+        const isConnected = await testDatabaseConnection()
+        if (!isConnected) {
+          throw new Error('Database connection test failed')
+        }
+        
+        return await operation()
+      } catch (error) {
+        lastError = error as Error
+        console.error(`Database operation failed (attempt ${attempt}/${maxRetries}):`, error)
+        
+        if (attempt < maxRetries) {
+          // Wait before retry with jittered exponential backoff
+          const baseDelay = Math.pow(2, attempt) * 2000 // Start at 4s instead of 2s
+          const jitter = Math.random() * 1000 // Add up to 1s jitter
+          await new Promise(resolve => setTimeout(resolve, baseDelay + jitter))
+        }
       }
     }
+    
+    throw lastError!
+  })
+}
+
+// Graceful fallback cache for critical data
+const fallbackCache = new Map<string, { data: any; timestamp: number }>()
+const FALLBACK_CACHE_TTL = 300000 // 5 minutes
+
+export function setFallbackData(key: string, data: any): void {
+  fallbackCache.set(key, { data, timestamp: Date.now() })
+}
+
+export function getFallbackData(key: string): any | null {
+  const cached = fallbackCache.get(key)
+  if (!cached) return null
+  
+  if (Date.now() - cached.timestamp > FALLBACK_CACHE_TTL) {
+    fallbackCache.delete(key)
+    return null
   }
   
-  throw lastError!
+  return cached.data
+}
+
+// Safe database operation with fallback
+export async function withDatabaseFallback<T>(
+  operation: () => Promise<T>,
+  fallbackKey: string,
+  defaultFallback: T
+): Promise<{ data: T; fromFallback: boolean }> {
+  try {
+    const result = await withDatabaseRetry(operation)
+    // Cache successful result for future fallback
+    setFallbackData(fallbackKey, result)
+    return { data: result, fromFallback: false }
+  } catch (error) {
+    console.warn(`Database operation failed, trying fallback for key: ${fallbackKey}`, error)
+    
+    // Try fallback cache first
+    const fallbackData = getFallbackData(fallbackKey)
+    if (fallbackData) {
+      console.log(`Using cached fallback data for key: ${fallbackKey}`)
+      return { data: fallbackData, fromFallback: true }
+    }
+    
+    // Use default fallback
+    console.log(`Using default fallback data for key: ${fallbackKey}`)
+    return { data: defaultFallback, fromFallback: true }
+  }
 }

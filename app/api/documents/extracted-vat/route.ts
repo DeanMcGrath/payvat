@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createGuestFriendlyRoute } from '@/lib/middleware'
-import { prisma } from '@/lib/prisma'
+import { prisma, withDatabaseFallback } from '@/lib/prisma'
 import { AuthUser } from '@/lib/auth'
 import { extractionMonitor } from '@/lib/extraction-monitor'
 import { logError, logWarn, logInfo, logAudit, logPerformance } from '@/lib/secure-logger'
@@ -107,6 +107,24 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     
     // Create cache key based on user and parameters
     const cacheKey = `${user?.id || 'guest'}-${vatReturnId || 'all'}-${category || 'all'}`
+    
+    // Define fallback VAT data structure
+    const fallbackVATData: ExtractedVATSummary = {
+      totalSalesVAT: 0,
+      totalPurchaseVAT: 0,
+      totalNetVAT: 0,
+      documentCount: 0,
+      processedDocuments: 0,
+      averageConfidence: 0,
+      failedDocuments: 0,
+      processingStats: {
+        completed: 0,
+        failed: 0,
+        pending: 0
+      },
+      salesDocuments: [],
+      purchaseDocuments: []
+    }
     
     // Check cache first (unless skipCache is requested)
     if (!skipCache) {

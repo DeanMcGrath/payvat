@@ -2,6 +2,15 @@
  * Simple API client for PayVAT application - compatible with stable backend
  */
 
+// Request deduplication - prevent multiple identical requests
+const inflightRequests = new Map<string, Promise<any>>()
+
+function createRequestKey(url: string, options: RequestInit): string {
+  const method = options.method || 'GET'
+  const body = options.body || ''
+  return `${method}:${url}:${body}`
+}
+
 export class ApiError extends Error {
   status?: number
   retryAfter?: number
@@ -77,8 +86,31 @@ export interface VATReturn {
   status: 'DRAFT' | 'SUBMITTED' | 'PAID'
 }
 
-// Enhanced fetch wrapper with rate limiting support
+// Enhanced fetch wrapper with rate limiting support and deduplication
 async function apiRequest<T>(url: string, options: RequestInit = {}): Promise<T> {
+  const requestKey = createRequestKey(url, options)
+  
+  // Check if identical request is already in flight
+  if (inflightRequests.has(requestKey)) {
+    console.log(`[API] Deduplicating request: ${requestKey}`)
+    return inflightRequests.get(requestKey)!
+  }
+  
+  // Create new request promise
+  const requestPromise = executeRequest<T>(url, options)
+  
+  // Store in-flight request
+  inflightRequests.set(requestKey, requestPromise)
+  
+  // Clean up after completion (success or failure)
+  requestPromise.finally(() => {
+    inflightRequests.delete(requestKey)
+  })
+  
+  return requestPromise
+}
+
+async function executeRequest<T>(url: string, options: RequestInit): Promise<T> {
   try {
     const response = await fetch(url, {
       credentials: 'include',
