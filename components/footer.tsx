@@ -11,12 +11,12 @@ export default function Footer() {
   return (
     <>
       {/* Utility Section */}
-      <div className="py-6 mt-12 sm:mt-16" style={{background: 'linear-gradient(to right, #f9fafb, rgba(115, 194, 251, 0.1))'}}>
+      <div className="py-6 mt-12 sm:mt-16" style={{background: 'linear-gradient(to right, #f9fafb, rgba(129, 230, 217, 0.1))'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex justify-center">
             <button 
               onClick={scrollToTop}
-              className="group text-gray-600 hover:text-[#005A8B] font-medium transition-all duration-300 flex items-center gap-2 py-2 px-4 rounded-full hover:bg-white hover:shadow-md"
+              className="group text-gray-600 hover:text-[#065666] font-medium transition-all duration-300 flex items-center gap-2 py-2 px-4 rounded-full hover:bg-white hover:shadow-md"
             >
               Back to Top <ArrowUp className="h-4 w-4 group-hover:-translate-y-0.5 transition-transform" />
             </button>
@@ -27,9 +27,9 @@ export default function Footer() {
       {/* Main Footer */}
       <footer className="gradient-primary text-white py-12 sm:py-16 relative overflow-hidden">
         {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#73C2FB]/20 to-transparent pointer-events-none"></div>
-        <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#005A8B]/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#73C2FB]/10 rounded-full blur-3xl"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#81E6D9]/20 to-transparent pointer-events-none"></div>
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#065666]/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#81E6D9]/10 rounded-full blur-3xl"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
@@ -43,7 +43,7 @@ export default function Footer() {
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    About Don't Be Like Me
+                    <span className="payvat-brand">About PayVAT</span>
                   </Link>
                 </li>
                 <li>
@@ -190,7 +190,7 @@ export default function Footer() {
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    PayVat vs Accountant Fees
+                    <span className="payvat-brand">PayVAT</span> vs Accountant Fees
                   </Link>
                 </li>
                 <li>
@@ -208,10 +208,10 @@ export default function Footer() {
           </div>
           
           {/* Bottom Section */}
-          <div className="mt-12 pt-8 border-t border-[#73C2FB]/30">
+          <div className="mt-12 pt-8 border-t border-[#81E6D9]/30">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
               <p className="text-blue-100 text-center sm:text-left">
-                © 2025 Don't Be Like Me. All rights reserved.
+                © 2025 <span className="payvat-brand">PayVAT</span>. All rights reserved.
               </p>
               <div className="flex items-center space-x-4">
                 <span className="text-blue-100 text-center sm:text-right font-medium">Ireland's complete business guidance platform</span>

@@ -115,31 +115,20 @@ export default function DashboardLayout({
 
       if (response.ok) {
         const data = await response.json()
-        if (data.success) {
-          if (data.user) {
-            setUser(data.user)
-          } else if (data.isGuest) {
-            // Guest state - show login prompt instead of erroring
-            setUser(null)
-            setUserError('Please log in to access your dashboard')
-          } else {
-            setUserError('Failed to load user profile')
-          }
+        if (data.success && data.user) {
+          setUser(data.user)
         } else {
           setUserError('Failed to load user profile')
         }
       } else if (response.status === 401) {
-        // Authentication failed, show login prompt
-        setUser(null)
-        setUserError('Authentication expired. Please log in again.')
+        router.push('/login')
+        return
       } else {
         setUserError('Failed to fetch user profile')
       }
     } catch (err) {
       console.log('Authentication check failed:', err)
-      // Don't redirect immediately, show guest state with login option
-      setUser(null)
-      setUserError('Please log in to access your dashboard')
+      router.push('/login')
     } finally {
       setUserLoading(false)
     }
@@ -168,45 +157,23 @@ export default function DashboardLayout({
     )
   }
 
-  if (userError || !user) {
-    const isAuthError = userError?.includes('log in') || userError?.includes('Authentication')
+  if (userError) {
     return (
       <div className="min-h-screen bg-neutral-100 flex items-center justify-center">
-        <Card className="w-full max-w-md border-amber-200">
+        <Card className="w-full max-w-md border-red-200">
           <CardContent className="pt-6">
             <div className="flex items-center justify-center space-x-2 mb-4">
-              {isAuthError ? (
-                <User className="h-8 w-8 text-amber-500" />
-              ) : (
-                <AlertCircle className="h-8 w-8 text-red-500" />
-              )}
-              <span className="h6 text-neutral-800">
-                {isAuthError ? 'Authentication Required' : 'Error Loading Dashboard'}
-              </span>
+              <AlertCircle className="h-8 w-8 text-red-500" />
+              <span className="h6 text-red-800">Error Loading Dashboard</span>
             </div>
-            <p className="body-md text-neutral-600 text-center mb-4">
-              {userError || 'Please log in to access your dashboard'}
-            </p>
+            <p className="body-md text-red-600 text-center mb-4">{userError}</p>
             <div className="flex space-x-2">
-              {isAuthError ? (
-                <>
-                  <Button onClick={() => router.push('/login')} className="flex-1">
-                    Log In
-                  </Button>
-                  <Button onClick={() => router.push('/')} variant="outline" className="flex-1">
-                    Go Home
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button onClick={fetchUserProfile} className="flex-1">
-                    Try Again
-                  </Button>
-                  <Button onClick={() => router.push('/')} variant="outline" className="flex-1">
-                    Go Home
-                  </Button>
-                </>
-              )}
+              <Button onClick={fetchUserProfile} className="flex-1">
+                Try Again
+              </Button>
+              <Button onClick={() => router.push('/')} variant="outline" className="flex-1">
+                Go Home
+              </Button>
             </div>
           </CardContent>
         </Card>

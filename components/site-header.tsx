@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Bell, User, LogOut, Menu, X, UserPlus } from 'lucide-react'
@@ -26,28 +26,6 @@ export default function SiteHeader({
   hideNavLinks
 }: SiteHeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  
-  // Typing animation state
-  const [displayedText, setDisplayedText] = useState("")
-  const [showCursor, setShowCursor] = useState(true)
-  const brandText = "Don't Be Like Me!"
-  
-  // Typing animation effect
-  useEffect(() => {
-    let index = 0
-    const typingInterval = setInterval(() => {
-      if (index <= brandText.length) {
-        setDisplayedText(brandText.slice(0, index))
-        index++
-      } else {
-        clearInterval(typingInterval)
-        // Hide cursor 2 seconds after typing completes
-        setTimeout(() => setShowCursor(false), 2000)
-      }
-    }, 150) // 150ms between each character for natural typing speed
-    
-    return () => clearInterval(typingInterval)
-  }, [])
 
   return (
     <>
@@ -76,10 +54,9 @@ export default function SiteHeader({
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
-              <Link href="/" className="text-2xl font-bold font-mono text-white tracking-tight hover:text-white/90 transition-colors">
-                <span className="brand-typing">
-                  {displayedText}
-                  {showCursor && <span className="typing-cursor">|</span>}
+              <Link href="/" className="text-2xl font-bold text-white tracking-tight hover:text-white/90 transition-colors">
+                <span className="payvat-brand">
+                  PayVAT
                 </span>
               </Link>
             </div>
