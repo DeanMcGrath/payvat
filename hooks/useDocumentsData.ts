@@ -55,36 +55,54 @@ export function useDocumentsData(): UseDocumentsDataReturn {
   const [loadingVAT, setLoadingVAT] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Rate limiting
+  // Rate limiting and retry logic
   const lastFetchTime = useRef(0)
   const fetchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const retryCountRef = useRef(0)
   const MIN_INTERVAL = 2000 // 2 seconds between VAT data fetches
+  const MAX_RETRIES = 3
 
-  // Load documents from API
-  const loadDocuments = useCallback(async () => {
+  // Load documents from API with retry logic
+  const loadDocuments = useCallback(async (retryCount = 0) => {
     try {
       setLoadingDocuments(true)
-      setError(null)
+      if (retryCount === 0) setError(null) // Only clear error on first attempt
       
       const response = await documentsApi.getAll({ dashboard: true })
       
       if (response.success && response.data?.documents) {
         setDocuments(response.data.documents)
+        retryCountRef.current = 0 // Reset retry count on success
       } else {
         const errorMsg = response.error || response.message || 'Failed to load documents'
         throw new Error(errorMsg)
       }
     } catch (err) {
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to load documents'
+      const isRateLimited = err instanceof ApiError && err.status === 429
+      const isServerError = err instanceof ApiError && (err.status === 500 || err.status === 503)
+      
+      // Implement exponential backoff for retries
+      if (retryCount < MAX_RETRIES && (isRateLimited || isServerError)) {
+        const delay = Math.min(1000 * Math.pow(2, retryCount), 30000) // Max 30 second delay
+        console.log(`Retrying documents load in ${delay}ms (attempt ${retryCount + 1}/${MAX_RETRIES})`)
+        
+        setTimeout(() => {
+          loadDocuments(retryCount + 1)
+        }, delay)
+        return
+      }
+      
+      retryCountRef.current = retryCount
       setError(errorMessage)
       console.error('Failed to load documents:', err)
     } finally {
-      setLoadingDocuments(false)
+      if (retryCount === 0) setLoadingDocuments(false) // Only update loading on first attempt
     }
   }, [])
 
-  // Load VAT data from API
-  const loadVATData = useCallback(async (force = false): Promise<void> => {
+  // Load VAT data from API with retry logic
+  const loadVATData = useCallback(async (force = false, retryCount = 0): Promise<void> => {
     const now = Date.now()
     
     // Rate limiting check
@@ -92,29 +110,47 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       return
     }
 
-    if (loadingVAT && !force) {
+    if (loadingVAT && !force && retryCount === 0) {
       return
     }
 
     try {
-      setLoadingVAT(true)
-      setError(null)
+      if (retryCount === 0) {
+        setLoadingVAT(true)
+        setError(null)
+      }
       lastFetchTime.current = now
 
       const response = await documentsApi.getExtractedVAT()
 
       if (response.success && response.data?.extractedVAT) {
         setVATData(response.data.extractedVAT)
+        retryCountRef.current = 0 // Reset retry count on success
       } else {
         console.warn('VAT data response failed:', response)
         // Don't throw for VAT data failures - just warn and continue
       }
     } catch (err) {
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to load VAT data'
+      const isRateLimited = err instanceof ApiError && err.status === 429
+      const isServerError = err instanceof ApiError && (err.status === 500 || err.status === 503)
+      
+      // Implement exponential backoff for retries
+      if (retryCount < MAX_RETRIES && (isRateLimited || isServerError)) {
+        const delay = Math.min(2000 * Math.pow(2, retryCount), 60000) // Max 60 second delay for VAT data
+        console.log(`Retrying VAT data load in ${delay}ms (attempt ${retryCount + 1}/${MAX_RETRIES})`)
+        
+        setTimeout(() => {
+          loadVATData(true, retryCount + 1)
+        }, delay)
+        return
+      }
+      
+      retryCountRef.current = retryCount
       setError(errorMessage)
       console.error('Failed to load VAT data:', err)
     } finally {
-      setLoadingVAT(false)
+      if (retryCount === 0) setLoadingVAT(false) // Only update loading on first attempt
     }
   }, [loadingVAT])
 
@@ -191,10 +227,13 @@ export function useDocumentsData(): UseDocumentsDataReturn {
     }
   }, [documents])
 
-  // Load initial data
+  // Load initial data with staggered timing
   useEffect(() => {
     loadDocuments()
-    loadVATData(true)
+    // Slight delay to prevent simultaneous API calls
+    setTimeout(() => {
+      loadVATData(true)
+    }, 500)
   }, [loadDocuments, loadVATData])
 
   // Cleanup timeouts on unmount

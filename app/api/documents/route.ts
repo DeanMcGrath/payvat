@@ -23,7 +23,7 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       await Promise.race([
         prisma.$queryRaw`SELECT 1`,
         new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Database connection timeout')), 10000)
+          setTimeout(() => reject(new Error('Database connection timeout')), 3000)
         )
       ])
     } catch (dbError) {
@@ -139,7 +139,7 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
     const totalCount = await Promise.race([
       prisma.document.count({ where }),
       new Promise<number>((_, reject) => 
-        setTimeout(() => reject(new Error('Count query timeout')), 15000)
+        setTimeout(() => reject(new Error('Count query timeout')), 5000)
       )
     ])
     
@@ -183,7 +183,7 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       take: limit,
     }),
       new Promise<any[]>((_, reject) => 
-        setTimeout(() => reject(new Error('Documents query timeout')), 20000)
+        setTimeout(() => reject(new Error('Documents query timeout')), 8000)
       )
     ])
     
@@ -222,20 +222,35 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       userId: user?.id,
       operation: 'documents-list'
     })
-    return NextResponse.json(
+    
+    // Determine appropriate error status and response
+    const isTimeoutError = error instanceof Error && error.message.includes('timeout')
+    const isConnectionError = error instanceof Error && error.message.includes('connection')
+    
+    const response = NextResponse.json(
       { 
         success: false,
-        error: 'Failed to fetch documents',
+        error: isTimeoutError ? 'Database query timeout - please try again' :
+               isConnectionError ? 'Database connection failed - please try again' :
+               'Failed to fetch documents',
         documents: [],
         pagination: {
           page: 1,
           limit: 10,
           totalCount: 0,
           totalPages: 0
-        }
+        },
+        retryAfter: isTimeoutError || isConnectionError ? 30 : 5 // seconds
       },
-      { status: 500 }
+      { status: isTimeoutError ? 503 : isConnectionError ? 503 : 500 }
     )
+    
+    // Add retry hints for client
+    if (isTimeoutError || isConnectionError) {
+      response.headers.set('Retry-After', '30')
+    }
+    
+    return response
   }
 }
 

@@ -142,29 +142,34 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       // Guest user document processing check
       
       try {
-        // SIMPLIFIED: Single comprehensive query for guest documents
+        // SIMPLIFIED: Single comprehensive query for guest documents with timeout
         logInfo('Searching for recent guest documents', {
           operation: 'guest-document-search',
           timeWindow: '24 hours'
         })
         
-        const recentGuestDocuments = await prisma.document.findMany({
-          where: {
-            user: {
-              role: 'GUEST'
+        const recentGuestDocuments = await Promise.race([
+          prisma.document.findMany({
+            where: {
+              user: {
+                role: 'GUEST'
+              },
+              uploadedAt: {
+                gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
+              }
             },
-            uploadedAt: {
-              gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
-            }
-          },
-          include: {
-            user: true
-          },
-          orderBy: {
-            uploadedAt: 'desc'
-          },
-          take: 50 // Increase limit to catch more documents
-        })
+            include: {
+              user: true
+            },
+            orderBy: {
+              uploadedAt: 'desc'
+            },
+            take: 20 // Reduce limit for faster queries
+          }),
+          new Promise<any[]>((_, reject) => 
+            setTimeout(() => reject(new Error('Guest documents query timeout')), 5000)
+          )
+        ])
         
         logInfo('Found guest documents', {
           operation: 'guest-document-search',
@@ -182,25 +187,32 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         // Guest documents processed
         
         // Additional debugging: Check for any unprocessed guest documents
-        // Checking unprocessed documents
-        const unprocessedGuestDocs = await prisma.document.findMany({
-          where: {
-            user: {
-              role: 'GUEST'
+        // Quick check for unprocessed documents with timeout
+        const unprocessedGuestDocs = await Promise.race([
+          prisma.document.findMany({
+            where: {
+              user: {
+                role: 'GUEST'
+              },
+              isScanned: false, // Check unprocessed documents too
+              uploadedAt: {
+                gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
+              }
             },
-            isScanned: false, // Check unprocessed documents too
-            uploadedAt: {
-              gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
-            }
-          },
-          include: {
-            user: true
-          },
-          orderBy: {
-            uploadedAt: 'desc'
-          },
-          take: 5
-        })
+            select: {
+              id: true,
+              uploadedAt: true,
+              isScanned: true
+            }, // Select only needed fields
+            orderBy: {
+              uploadedAt: 'desc'
+            },
+            take: 5
+          }),
+          new Promise<any[]>((_, reject) => 
+            setTimeout(() => reject(new Error('Unprocessed documents query timeout')), 3000)
+          )
+        ])
         
         // Unprocessed documents logged
         
@@ -493,12 +505,18 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     }
     
     // Get user's processed documents only - secure production behavior
-    const documents = await prisma.document.findMany({
-      where: whereClause,
-      orderBy: {
-        uploadedAt: 'desc'
-      }
-    })
+    const documents = await Promise.race([
+      prisma.document.findMany({
+        where: whereClause,
+        orderBy: {
+          uploadedAt: 'desc'
+        },
+        take: 100 // Limit for performance
+      }),
+      new Promise<any[]>((_, reject) => 
+        setTimeout(() => reject(new Error('User documents query timeout')), 5000)
+      )
+    ])
     
     // Documents found for user
     
@@ -510,19 +528,25 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     // Create a map to store the most recent audit log per document
     const auditLogMap = new Map<string, any>()
     
-    // Fetch audit logs for all documents and filter to most recent per document
-    const allAuditLogs = await prisma.auditLog.findMany({
-      where: {
-        action: 'VAT_DATA_EXTRACTED',
-        entityType: 'DOCUMENT',
-        entityId: {
-          in: documents.map(doc => doc.id)
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    })
+    // Fetch audit logs for all documents with timeout
+    const allAuditLogs = await Promise.race([
+      prisma.auditLog.findMany({
+        where: {
+          action: 'VAT_DATA_EXTRACTED',
+          entityType: 'DOCUMENT',
+          entityId: {
+            in: documents.map(doc => doc.id)
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        },
+        take: 200 // Limit for performance
+      }),
+      new Promise<any[]>((_, reject) => 
+        setTimeout(() => reject(new Error('Audit logs query timeout')), 5000)
+      )
+    ])
     
     // Keep only the most recent audit log per document
     allAuditLogs.forEach(log => {
@@ -884,10 +908,28 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       userId: user?.id,
       operation: 'extracted-vat'
     })
-    return NextResponse.json(
-      { error: 'Failed to retrieve VAT data' },
-      { status: 500 }
+    
+    // Determine error type and provide appropriate response
+    const isTimeoutError = error instanceof Error && error.message.includes('timeout')
+    const isConnectionError = error instanceof Error && error.message.includes('connection')
+    
+    const response = NextResponse.json(
+      { 
+        success: false,
+        error: isTimeoutError ? 'Database query timeout - please try again later' :
+               isConnectionError ? 'Database connection failed - please try again' :
+               'Failed to retrieve VAT data',
+        retryAfter: isTimeoutError || isConnectionError ? 60 : 30 // seconds
+      },
+      { status: isTimeoutError ? 503 : isConnectionError ? 503 : 500 }
     )
+    
+    // Add retry hints for client
+    if (isTimeoutError || isConnectionError) {
+      response.headers.set('Retry-After', isTimeoutError ? '60' : '30')
+    }
+    
+    return response
   }
 }
 

@@ -4,6 +4,8 @@
 
 export class ApiError extends Error {
   status?: number
+  retryAfter?: number
+  resetTime?: number
   
   constructor(message: string, status?: number) {
     super(message)
@@ -18,6 +20,7 @@ export interface ApiResponse<T> {
   data?: T
   error?: string
   message?: string
+  retryAfter?: number
 }
 
 // Document types
@@ -74,7 +77,7 @@ export interface VATReturn {
   status: 'DRAFT' | 'SUBMITTED' | 'PAID'
 }
 
-// Simple fetch wrapper
+// Enhanced fetch wrapper with rate limiting support
 async function apiRequest<T>(url: string, options: RequestInit = {}): Promise<T> {
   try {
     const response = await fetch(url, {
@@ -87,7 +90,38 @@ async function apiRequest<T>(url: string, options: RequestInit = {}): Promise<T>
     })
 
     if (!response.ok) {
-      throw new ApiError(`Request failed: ${response.statusText}`, response.status)
+      // Extract error details from response
+      let errorMessage = `Request failed: ${response.statusText}`
+      let errorData: any = {}
+      
+      try {
+        errorData = await response.json()
+        if (errorData.error) {
+          errorMessage = errorData.error
+        }
+      } catch {
+        // Ignore JSON parsing errors
+      }
+      
+      const apiError = new ApiError(errorMessage, response.status)
+      
+      // Add rate limiting information for 429 errors
+      if (response.status === 429) {
+        const retryAfter = response.headers.get('Retry-After')
+        const rateLimitReset = response.headers.get('X-RateLimit-Reset')
+        
+        if (retryAfter) {
+          (apiError as any).retryAfter = parseInt(retryAfter, 10)
+        }
+        if (rateLimitReset) {
+          (apiError as any).resetTime = parseInt(rateLimitReset, 10)
+        }
+        if (errorData.retryAfter) {
+          (apiError as any).retryAfter = errorData.retryAfter
+        }
+      }
+      
+      throw apiError
     }
 
     return await response.json()

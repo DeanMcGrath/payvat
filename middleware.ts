@@ -4,10 +4,12 @@ import { blockDebugEndpoints, validateDebugSecurity } from '@/lib/security/debug
 import { logWarn, logError } from '@/lib/secure-logger'
 
 // Security: Rate limiting configuration
-const RATE_LIMIT_MAX_REQUESTS = 100 // requests per window
+const RATE_LIMIT_MAX_REQUESTS = 200 // requests per window
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000 // 15 minutes
 const LOGIN_RATE_LIMIT = process.env.NODE_ENV === 'development' ? 1000 : 20 // higher limit in development
 const PAYMENT_RATE_LIMIT = 10 // payment attempts per window
+const DASHBOARD_RATE_LIMIT = 300 // higher limit for dashboard endpoints
+const API_DOCUMENTS_RATE_LIMIT = 150 // higher limit for document API endpoints
 
 // In-memory store for rate limiting (in production, use Redis or similar)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
@@ -101,6 +103,10 @@ export function middleware(request: NextRequest) {
     rateLimit = LOGIN_RATE_LIMIT
   } else if (pathname.startsWith('/api/payments/')) {
     rateLimit = PAYMENT_RATE_LIMIT
+  } else if (pathname.startsWith('/dashboard')) {
+    rateLimit = DASHBOARD_RATE_LIMIT
+  } else if (pathname.startsWith('/api/documents')) {
+    rateLimit = API_DOCUMENTS_RATE_LIMIT
   }
   
   // Check rate limit
@@ -109,12 +115,19 @@ export function middleware(request: NextRequest) {
   if (!rateLimitResult.allowed) {
     logWarn('Rate limit exceeded', {
       operation: 'rate-limit-exceeded',
-      sessionId: request.headers.get('x-session-id') || 'unknown'
+      sessionId: request.headers.get('x-session-id') || 'unknown',
+      path: pathname,
+      clientIP: clientIP
     })
+    
+    const retryAfterSeconds = Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)
+    
     return new Response(
       JSON.stringify({ 
-        error: 'Rate limit exceeded', 
-        resetTime: new Date(rateLimitResult.resetTime).toISOString() 
+        success: false,
+        error: 'Rate limit exceeded - please try again later', 
+        resetTime: new Date(rateLimitResult.resetTime).toISOString(),
+        retryAfter: retryAfterSeconds
       }), 
       { 
         status: 429,
@@ -123,7 +136,7 @@ export function middleware(request: NextRequest) {
           'X-RateLimit-Limit': rateLimit.toString(),
           'X-RateLimit-Remaining': '0',
           'X-RateLimit-Reset': rateLimitResult.resetTime.toString(),
-          'Retry-After': Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString()
+          'Retry-After': retryAfterSeconds.toString()
         }
       }
     )
