@@ -3,16 +3,22 @@ import { addSecurityHeaders } from '@/lib/security-utils'
 import { blockDebugEndpoints, validateDebugSecurity } from '@/lib/security/debug-blocker'
 import { logWarn, logError } from '@/lib/secure-logger'
 
-// Security: Rate limiting configuration
-const RATE_LIMIT_MAX_REQUESTS = 200 // requests per window
+// Security: Rate limiting configuration - HOTFIX: Dramatically increased limits
+const RATE_LIMIT_MAX_REQUESTS = 2000 // requests per window (increased 10x)
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000 // 15 minutes
-const LOGIN_RATE_LIMIT = process.env.NODE_ENV === 'development' ? 1000 : 20 // higher limit in development
-const PAYMENT_RATE_LIMIT = 10 // payment attempts per window
-const DASHBOARD_RATE_LIMIT = 300 // higher limit for dashboard endpoints
-const API_DOCUMENTS_RATE_LIMIT = 150 // higher limit for document API endpoints
+const LOGIN_RATE_LIMIT = process.env.NODE_ENV === 'development' ? 1000 : 100 // higher limit in development
+const PAYMENT_RATE_LIMIT = 50 // payment attempts per window (increased 5x)
+const DASHBOARD_RATE_LIMIT = 1500 // higher limit for dashboard endpoints (increased 5x)
+const API_DOCUMENTS_RATE_LIMIT = 1000 // higher limit for document API endpoints (increased 6x)
+const AUTH_RATE_LIMIT = 1000 // high limit for auth endpoints
 
 // In-memory store for rate limiting (in production, use Redis or similar)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
+
+// Serverless-friendly rate limiting with graceful degradation
+const isServerlessEnvironment = () => {
+  return process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.FUNCTIONS_RUNTIME
+}
 
 // Security: Get client IP address
 function getClientIP(request: NextRequest): string {
@@ -28,10 +34,10 @@ function getClientIP(request: NextRequest): string {
   return 'unknown'
 }
 
-// Security: Rate limiting implementation
-function checkRateLimit(clientIP: string, limit: number, windowMs: number): { allowed: boolean; remaining: number; resetTime: number } {
+// Security: Rate limiting implementation with endpoint-specific keys
+function checkRateLimit(clientIP: string, endpoint: string, limit: number, windowMs: number): { allowed: boolean; remaining: number; resetTime: number } {
   const now = Date.now()
-  const key = `${clientIP}_${Math.floor(now / windowMs)}`
+  const key = `${clientIP}_${endpoint}_${Math.floor(now / windowMs)}`
   
   const current = rateLimitStore.get(key)
   if (!current) {
@@ -94,25 +100,42 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
   
-  // Apply different rate limits based on endpoint
+  // Check for authentication bypasses
+  const authCookie = request.cookies.get('auth-token') || request.cookies.get('session')
+  const authHeader = request.headers.get('authorization')
+  const hasAuth = authCookie || authHeader
+  
+  // Apply different rate limits based on endpoint with separate buckets
   let rateLimit = RATE_LIMIT_MAX_REQUESTS
   let windowMs = RATE_LIMIT_WINDOW_MS
+  let endpointType = 'general'
   
   // Stricter limits for sensitive endpoints
   if (pathname.startsWith('/api/auth/login')) {
     rateLimit = LOGIN_RATE_LIMIT
+    endpointType = 'login'
+  } else if (pathname.startsWith('/api/auth/')) {
+    rateLimit = AUTH_RATE_LIMIT
+    endpointType = 'auth'
   } else if (pathname.startsWith('/api/payments/')) {
     rateLimit = PAYMENT_RATE_LIMIT
+    endpointType = 'payments'
   } else if (pathname.startsWith('/dashboard')) {
-    rateLimit = DASHBOARD_RATE_LIMIT
+    rateLimit = hasAuth ? DASHBOARD_RATE_LIMIT * 2 : DASHBOARD_RATE_LIMIT // Double limit for authenticated users
+    endpointType = 'dashboard'
   } else if (pathname.startsWith('/api/documents')) {
-    rateLimit = API_DOCUMENTS_RATE_LIMIT
+    rateLimit = hasAuth ? API_DOCUMENTS_RATE_LIMIT * 2 : API_DOCUMENTS_RATE_LIMIT // Double limit for authenticated users
+    endpointType = 'documents'
   }
   
-  // Check rate limit
-  const rateLimitResult = checkRateLimit(clientIP, rateLimit, windowMs)
+  // Check rate limit with endpoint-specific bucket
+  // HOTFIX: In serverless environments, be more permissive to avoid false positives
+  const rateLimitResult = checkRateLimit(clientIP, endpointType, rateLimit, windowMs)
   
-  if (!rateLimitResult.allowed) {
+  // Serverless safety: If rate limiting seems broken, allow the request
+  const shouldBypass = isServerlessEnvironment() && rateLimitStore.size > 10000 // Too many entries suggests memory issues
+  
+  if (!rateLimitResult.allowed && !shouldBypass) {
     logWarn('Rate limit exceeded', {
       operation: 'rate-limit-exceeded',
       sessionId: request.headers.get('x-session-id') || 'unknown',

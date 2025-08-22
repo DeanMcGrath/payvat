@@ -233,12 +233,19 @@ export function useDocumentsData(): UseDocumentsDataReturn {
 
   // Load initial data with staggered timing to prevent thundering herd
   useEffect(() => {
-    loadDocuments()
-    // Longer delay to prevent simultaneous API calls
-    const jitter = Math.random() * 2000 + 1000 // Random delay between 1-3 seconds
-    setTimeout(() => {
-      loadVATData(true)
-    }, jitter)
+    // Sequential loading to prevent rate limit exhaustion
+    const loadSequentially = async () => {
+      try {
+        await loadDocuments()
+        // Wait longer between requests to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 3000)) // 2-5 seconds delay
+        await loadVATData(true)
+      } catch (error) {
+        console.error('Sequential loading failed:', error)
+      }
+    }
+    
+    loadSequentially()
   }, [loadDocuments, loadVATData])
 
   // Cleanup timeouts on unmount
