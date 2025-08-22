@@ -1,0 +1,151 @@
+/**
+ * DocumentSection - Reusable component for displaying document collections
+ * Used for both sales and purchase document sections
+ */
+
+import React from 'react'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { DocumentTable } from './DocumentTable'
+import { Skeleton } from '@/components/ui/skeleton'
+import { FileText } from 'lucide-react'
+import { Document, VATData } from '@/types/dashboard'
+import { formatCurrency } from '@/lib/vatUtils'
+
+interface DocumentSectionProps {
+  title: string
+  documents: Document[]
+  vatData?: VATData
+  variant: 'sales' | 'purchase'
+  onView: (document: Document) => void
+  onRemove: (id: string) => void
+  loading?: boolean
+  emptyMessage?: string
+  children?: React.ReactNode
+}
+
+export function DocumentSection({
+  title,
+  documents,
+  vatData,
+  variant,
+  onView,
+  onRemove,
+  loading = false,
+  emptyMessage,
+  children,
+}: DocumentSectionProps) {
+  // Determine styling based on variant
+  const variantStyles = {
+    sales: {
+      card: 'border-brand-200 bg-brand-50',
+      header: 'bg-brand-100',
+      title: 'text-brand-900',
+      accent: 'text-brand-700',
+      icon: 'text-brand-600',
+    },
+    purchase: {
+      card: 'border-green-200 bg-green-50',
+      header: 'bg-green-100',
+      title: 'text-green-900',
+      accent: 'text-green-700',
+      icon: 'text-green-600',
+    },
+  }
+
+  const styles = variantStyles[variant]
+
+  // Calculate total VAT for this section
+  const totalVAT = variant === 'sales' 
+    ? vatData?.totalSalesVAT || 0
+    : vatData?.totalPurchaseVAT || 0
+
+  const defaultEmptyMessage = variant === 'sales' 
+    ? 'No sales documents uploaded yet'
+    : 'No purchase documents uploaded yet'
+
+  return (
+    <Card className={`${styles.card} rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
+      <CardHeader className={`${styles.header} rounded-t-xl`}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <FileText className={`h-5 w-5 ${styles.icon}`} />
+            <div>
+              <h3 className={`h5 ${styles.title}`}>
+                {title}
+                {documents.length > 0 && (
+                  <span className="ml-2 text-sm font-normal">
+                    ({documents.length})
+                  </span>
+                )}
+              </h3>
+            </div>
+          </div>
+          
+          {totalVAT > 0 && (
+            <div className="text-right">
+              <div className={`body-sm font-medium ${styles.accent}`}>
+                Total VAT: {formatCurrency(totalVAT)}
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {children}
+      </CardHeader>
+      
+      <CardContent className="p-0">
+        {loading ? (
+          <div className="p-6 space-y-4">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+          </div>
+        ) : documents.length > 0 ? (
+          <DocumentTable
+            documents={documents}
+            vatData={vatData}
+            variant={variant}
+            onView={onView}
+            onRemove={onRemove}
+          />
+        ) : (
+          <div className="p-8 text-center">
+            <FileText className={`h-16 w-16 mx-auto mb-4 ${styles.icon} opacity-50`} />
+            <h4 className="h6 text-neutral-900 mb-2">No Documents Found</h4>
+            <p className="body-sm text-neutral-600">
+              {emptyMessage || defaultEmptyMessage}
+            </p>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
+/**
+ * Skeleton loader for DocumentSection
+ */
+export function DocumentSectionSkeleton({ variant }: { variant: 'sales' | 'purchase' }) {
+  const styles = variant === 'sales' 
+    ? 'border-brand-200 bg-brand-50'
+    : 'border-green-200 bg-green-50'
+
+  return (
+    <Card className={`${styles} rounded-xl`}>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Skeleton className="h-5 w-5" />
+            <Skeleton className="h-6 w-48" />
+          </div>
+          <Skeleton className="h-5 w-32" />
+        </div>
+      </CardHeader>
+      <CardContent className="p-6 space-y-4">
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-12 w-full" />
+      </CardContent>
+    </Card>
+  )
+}
