@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { testDatabaseConnection, databaseCircuitBreaker } from '@/lib/prisma'
+import { testDatabaseConnection } from '@/lib/prisma'
+import { databaseCircuitBreaker } from '@/lib/circuit-breaker'
 
 export async function GET() {
   const startTime = Date.now()
