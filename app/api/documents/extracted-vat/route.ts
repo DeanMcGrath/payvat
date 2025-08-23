@@ -216,7 +216,9 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       )
       
       const recentGuestDocuments = guestResult.data
-        
+      
+      // Process the guest documents (continuing existing logic)
+      try {
         logInfo('Found guest documents', {
           operation: 'guest-document-search',
           totalFound: recentGuestDocuments.length,
