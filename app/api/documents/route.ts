@@ -19,53 +19,14 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = Math.min(parseInt(searchParams.get('limit') || (dashboard ? '50' : '10')), 50) // Max 50 per page
     
-    // Define fallback data structure with demo data
+    // No fallback data - database must work
     const fallbackDocuments = {
-      documents: [
-        {
-          id: "demo-1",
-          fileName: "sample_invoice_001.pdf",
-          originalName: "Sample Sales Invoice - January 2024.pdf",
-          fileSize: 245760,
-          mimeType: "application/pdf",
-          documentType: "INVOICE",
-          category: "SALES",
-          isScanned: true,
-          scanResult: "Successfully processed - Demo data",
-          uploadedAt: new Date().toISOString(),
-          extractedDate: "2024-01-15T00:00:00.000Z",
-          invoiceTotal: 1250.00,
-          vatAccuracy: 95.5,
-          processingQuality: "HIGH",
-          isDuplicate: false,
-          validationStatus: "VALID",
-          extractionConfidence: 95.5
-        },
-        {
-          id: "demo-2", 
-          fileName: "purchase_receipt_002.pdf",
-          originalName: "Office Supplies Receipt - January 2024.pdf",
-          fileSize: 128450,
-          mimeType: "application/pdf",
-          documentType: "RECEIPT",
-          category: "PURCHASE",
-          isScanned: true,
-          scanResult: "Successfully processed - Demo data",
-          uploadedAt: new Date(Date.now() - 86400000).toISOString(), // Yesterday
-          extractedDate: "2024-01-10T00:00:00.000Z",
-          invoiceTotal: 287.50,
-          vatAccuracy: 98.2,
-          processingQuality: "HIGH", 
-          isDuplicate: false,
-          validationStatus: "VALID",
-          extractionConfidence: 98.2
-        }
-      ],
+      documents: [],
       pagination: {
         page: 1,
         limit: 10,
-        totalCount: 2,
-        totalPages: 1
+        totalCount: 0,
+        totalPages: 0
       }
     }
     
@@ -138,59 +99,76 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
           ]
         }
         
-        // Get total count
-        const totalCount = await prisma.document.count({ where })
+        // Get total count with timeout protection
+        const totalCount = await Promise.race([
+          prisma.document.count({ where }),
+          new Promise<number>((_, reject) => 
+            setTimeout(() => reject(new Error('Count query timeout')), 10000)
+          )
+        ])
         
-        // Get documents with pagination
-        const documents = await prisma.document.findMany({
-          where,
-          select: {
-            id: true,
-            fileName: true,
-            originalName: true,
-            fileSize: true,
-            mimeType: true,
-            documentType: true,
-            category: true,
-            isScanned: true,
-            scanResult: true,
-            uploadedAt: true,
-            vatReturnId: true,
-            // New dashboard fields - conditionally selected (only existing fields)
-            ...(dashboard && {
-              extractedDate: true,
-              extractedYear: true,
-              extractedMonth: true,
-              invoiceTotal: true,
-              vatAccuracy: true,
-              processingQuality: true,
-              isDuplicate: true,
-              duplicateOfId: true,
-              validationStatus: true,
-              complianceIssues: true,
-              extractionConfidence: true,
-              dateExtractionConfidence: true,
-              totalExtractionConfidence: true
-            })
-          },
-          orderBy: {
-            uploadedAt: 'desc'
-          },
-          skip: (page - 1) * limit,
-          take: limit,
-        })
+        // Get documents with pagination and timeout protection
+        const documents = await Promise.race([
+          prisma.document.findMany({
+            where,
+            select: {
+              id: true,
+              fileName: true,
+              originalName: true,
+              fileSize: true,
+              mimeType: true,
+              documentType: true,
+              category: true,
+              isScanned: true,
+              scanResult: true,
+              uploadedAt: true,
+              vatReturnId: true,
+              // New dashboard fields - conditionally selected (only existing fields)
+              ...(dashboard && {
+                extractedDate: true,
+                extractedYear: true,
+                extractedMonth: true,
+                invoiceTotal: true,
+                vatAccuracy: true,
+                processingQuality: true,
+                isDuplicate: true,
+                duplicateOfId: true,
+                validationStatus: true,
+                complianceIssues: true,
+                extractionConfidence: true,
+                dateExtractionConfidence: true,
+                totalExtractionConfidence: true
+              })
+            },
+            orderBy: {
+              uploadedAt: 'desc'
+            },
+            skip: (page - 1) * limit,
+            take: limit,
+          }),
+          new Promise<any[]>((_, reject) => 
+            setTimeout(() => reject(new Error('Documents query timeout')), 15000)
+          )
+        ])
         
         // Process documents for dashboard format
         const processedDocuments = documents.map(doc => ({
           ...doc,
+          // Ensure consistent field formatting for dashboard
+          originalName: doc.originalName || doc.fileName,
           // Format new fields for dashboard
           ...(dashboard && {
-            invoiceTotal: doc.invoiceTotal ? parseFloat(doc.invoiceTotal.toString()) : null,
-            extractedDate: doc.extractedDate ? doc.extractedDate : null,
+            invoiceTotal: doc.invoiceTotal ? (typeof doc.invoiceTotal === 'string' ? parseFloat(doc.invoiceTotal) : doc.invoiceTotal) : null,
+            extractedDate: doc.extractedDate ? doc.extractedDate.toISOString() : null,
             // Map missing fields to existing ones for dashboard compatibility
             vatAmount: doc.vatAccuracy || null,
             aiConfidence: doc.extractionConfidence || null,
-            confidence: doc.extractionConfidence || null
+            confidence: doc.extractionConfidence || null,
+            // Ensure boolean values are properly set
+            isScanned: Boolean(doc.isScanned),
+            // Handle potential null values
+            scanResult: doc.scanResult || null,
+            category: doc.category || 'PURCHASE'
           })
         }))
         

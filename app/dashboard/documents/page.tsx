@@ -12,6 +12,7 @@ import { VideoModal } from "@/components/video-modal"
 import { toast } from "sonner"
 import { useVATData } from "@/contexts/vat-data-context"
 import { formatCurrency } from "@/lib/vatUtils"
+import { ErrorBoundary, useErrorHandler } from "@/components/ErrorBoundary"
 
 // New imports for refactored components
 import { useDocumentsData } from "@/hooks/useDocumentsData"
@@ -27,10 +28,11 @@ const DocumentViewer = dynamic(() => import("@/components/document-viewer"), {
   loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div></div>
 })
 
-export default function DashboardDocuments() {
+function DashboardDocumentsContent() {
   const { selectedYear, selectedPeriod, setVATAmounts } = useVATData()
   const router = useRouter()
   const currentYear = new Date().getFullYear()
+  const errorHandler = useErrorHandler()
   
   // State for filtering and search
   const [selectedFilterYear, setSelectedFilterYear] = useState<string>(currentYear.toString())
@@ -179,6 +181,8 @@ export default function DashboardDocuments() {
       await removeDocument(id)
       toast.success('Document removed successfully')
     } catch (err) {
+      console.error('Error removing document:', err)
+      errorHandler(err instanceof Error ? err : new Error('Failed to remove document'))
       toast.error('Failed to remove document')
     }
   }
@@ -630,5 +634,19 @@ export default function DashboardDocuments() {
         onClose={() => setShowVideoModal(false)}
       />
     </PageLayout>
+  )
+}
+
+// Export the component wrapped with error boundary
+export default function DashboardDocuments() {
+  return (
+    <ErrorBoundary 
+      onError={(error, errorInfo) => {
+        console.error('Dashboard Documents Error:', error, errorInfo)
+        // In production, you might want to send this to an error reporting service
+      }}
+    >
+      <DashboardDocumentsContent />
+    </ErrorBoundary>
   )
 }

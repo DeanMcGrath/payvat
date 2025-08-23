@@ -115,11 +115,11 @@ export class CircuitBreaker {
   }
 }
 
-// Create circuit breakers for different services
+// Create circuit breakers for different services - Aggressive reconnection
 export const databaseCircuitBreaker = new CircuitBreaker({
-  failureThreshold: 3,
-  successThreshold: 2,
-  timeout: 60000, // 1 minute
+  failureThreshold: 5, // Allow more failures before opening
+  successThreshold: 1, // Close immediately on first success
+  timeout: 5000, // Only wait 5 seconds before trying again
   monitor: (event, data) => {
     console.log(`[DB Circuit Breaker] ${event}:`, data)
   }

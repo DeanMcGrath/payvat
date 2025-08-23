@@ -63,16 +63,29 @@ export function useDocumentsData(): UseDocumentsDataReturn {
   const lastFetchTime = useRef(0)
   const fetchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const retryCountRef = useRef(0)
-  const MIN_INTERVAL = 5000 // 5 seconds between VAT data fetches (increased)
-  const MAX_RETRIES = 2 // Reduced from 3 to prevent retry storms
+  const MIN_INTERVAL = 3000 // 3 seconds between VAT data fetches (reduced for better UX)
+  const MAX_RETRIES = 1 // Reduced to 1 to prevent retry storms
 
   // Load documents from API with retry logic
   const loadDocuments = useCallback(async (retryCount = 0) => {
+    const startTime = Date.now()
     try {
       setLoadingDocuments(true)
       if (retryCount === 0) setError(null) // Only clear error on first attempt
       
+      console.log(`Loading documents (attempt ${retryCount + 1}/${MAX_RETRIES + 1})`, {
+        timestamp: new Date().toISOString()
+      })
+      
       const response = await documentsApi.getAll({ dashboard: true })
+      
+      const loadTime = Date.now() - startTime
+      console.log('Documents loaded successfully', {
+        loadTime: `${loadTime}ms`,
+        documentCount: response.data?.documents?.length || 0,
+        fromFallback: response.fromFallback,
+        timestamp: new Date().toISOString()
+      })
       
       if (response.success && response.data?.documents) {
         setDocuments(response.data.documents)
@@ -95,11 +108,9 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       const isRateLimited = err instanceof ApiError && err.status === 429
       const isServerError = err instanceof ApiError && (err.status === 500 || err.status === 503)
       
-      // Implement exponential backoff for retries with jitter
+      // Implement simple retry with fixed delay to prevent retry storms
       if (retryCount < MAX_RETRIES && (isRateLimited || isServerError)) {
-        const baseDelay = Math.min(3000 * Math.pow(2, retryCount), 60000) // Start at 6s, max 60s
-        const jitter = Math.random() * 2000 // Add up to 2s jitter
-        const delay = baseDelay + jitter
+        const delay = 5000 // Fixed 5s delay instead of exponential backoff
         console.log(`Retrying documents load in ${delay}ms (attempt ${retryCount + 1}/${MAX_RETRIES})`)
         
         setTimeout(() => {
@@ -110,7 +121,14 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       
       retryCountRef.current = retryCount
       setError(errorMessage)
-      console.error('Failed to load documents:', err)
+      console.error('Failed to load documents:', {
+        error: err,
+        attempt: retryCount + 1,
+        totalTime: Date.now() - startTime,
+        errorType: err instanceof ApiError ? 'ApiError' : 'Unknown',
+        status: err instanceof ApiError ? err.status : undefined,
+        timestamp: new Date().toISOString()
+      })
     } finally {
       if (retryCount === 0) setLoadingDocuments(false) // Only update loading on first attempt
     }
@@ -118,14 +136,20 @@ export function useDocumentsData(): UseDocumentsDataReturn {
 
   // Load VAT data from API with retry logic
   const loadVATData = useCallback(async (force = false, retryCount = 0): Promise<void> => {
+    const startTime = Date.now()
     const now = Date.now()
     
     // Rate limiting check
     if (!force && (now - lastFetchTime.current) < MIN_INTERVAL) {
+      console.log('VAT data load skipped due to rate limiting', {
+        timeSinceLastFetch: now - lastFetchTime.current,
+        minInterval: MIN_INTERVAL
+      })
       return
     }
 
     if (loadingVAT && !force && retryCount === 0) {
+      console.log('VAT data load skipped - already loading')
       return
     }
 
@@ -136,7 +160,22 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       }
       lastFetchTime.current = now
 
+      console.log(`Loading VAT data (attempt ${retryCount + 1}/${MAX_RETRIES + 1})`, {
+        force,
+        timestamp: new Date().toISOString()
+      })
+
       const response = await documentsApi.getExtractedVAT()
+      
+      const loadTime = Date.now() - startTime
+      console.log('VAT data loaded successfully', {
+        loadTime: `${loadTime}ms`,
+        totalSalesVAT: response.data?.extractedVAT?.totalSalesVAT || 0,
+        totalPurchaseVAT: response.data?.extractedVAT?.totalPurchaseVAT || 0,
+        processedDocuments: response.data?.extractedVAT?.processedDocuments || 0,
+        fromFallback: response.fromFallback,
+        timestamp: new Date().toISOString()
+      })
 
       if (response.success && response.data?.extractedVAT) {
         setVATData(response.data.extractedVAT)
@@ -150,11 +189,9 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       const isRateLimited = err instanceof ApiError && err.status === 429
       const isServerError = err instanceof ApiError && (err.status === 500 || err.status === 503)
       
-      // Implement exponential backoff for retries with jitter
+      // Implement simple retry with fixed delay to prevent retry storms
       if (retryCount < MAX_RETRIES && (isRateLimited || isServerError)) {
-        const baseDelay = Math.min(5000 * Math.pow(2, retryCount), 120000) // Start at 10s, max 120s
-        const jitter = Math.random() * 3000 // Add up to 3s jitter
-        const delay = baseDelay + jitter
+        const delay = 8000 // Fixed 8s delay for VAT data (longer than documents)
         console.log(`Retrying VAT data load in ${delay}ms (attempt ${retryCount + 1}/${MAX_RETRIES})`)
         
         setTimeout(() => {
@@ -165,7 +202,14 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       
       retryCountRef.current = retryCount
       setError(errorMessage)
-      console.error('Failed to load VAT data:', err)
+      console.error('Failed to load VAT data:', {
+        error: err,
+        attempt: retryCount + 1,
+        totalTime: Date.now() - startTime,
+        errorType: err instanceof ApiError ? 'ApiError' : 'Unknown',
+        status: err instanceof ApiError ? err.status : undefined,
+        timestamp: new Date().toISOString()
+      })
     } finally {
       if (retryCount === 0) setLoadingVAT(false) // Only update loading on first attempt
     }
@@ -250,8 +294,8 @@ export function useDocumentsData(): UseDocumentsDataReturn {
     const loadSequentially = async () => {
       try {
         await loadDocuments()
-        // Wait longer between requests to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 3000)) // 2-5 seconds delay
+        // Fixed 2 second delay between requests
+        await new Promise(resolve => setTimeout(resolve, 2000))
         await loadVATData(true)
       } catch (error) {
         console.error('Sequential loading failed:', error)

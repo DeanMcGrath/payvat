@@ -136,6 +136,12 @@ export async function testDatabaseConnection() {
         setTimeout(() => reject(new Error('Query timeout')), 5000)
       )
     ])
+    // Reset circuit breaker on successful connection
+    const { databaseCircuitBreaker } = await import('./circuit-breaker')
+    if (databaseCircuitBreaker.getState() !== 'closed') {
+      console.log('Resetting circuit breaker after successful database test')
+      databaseCircuitBreaker.reset()
+    }
     return true
   } catch (error) {
     console.error('Database test query failed:', error)

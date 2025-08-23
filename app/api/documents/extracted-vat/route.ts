@@ -44,6 +44,7 @@ interface ExtractedVATSummary {
 // Simple in-memory cache for extracted VAT data to prevent zeros during processing
 const vatDataCache = new Map<string, { data: ExtractedVATSummary; timestamp: number }>()
 const CACHE_DURATION = 30000 // 30 seconds
+const MAX_CACHE_SIZE = 50 // Limit cache size to prevent memory issues
 
 // ENHANCED: Cache invalidation utilities
 export function invalidateUserCache(userId?: string) {
@@ -68,6 +69,17 @@ function clearExpiredCache() {
   const now = Date.now()
   for (const [key, value] of vatDataCache.entries()) {
     if (now - value.timestamp > CACHE_DURATION) {
+      vatDataCache.delete(key)
+    }
+  }
+  
+  // Also enforce max cache size to prevent memory leaks
+  if (vatDataCache.size > MAX_CACHE_SIZE) {
+    // Remove oldest entries
+    const entries = Array.from(vatDataCache.entries())
+    entries.sort(([,a], [,b]) => a.timestamp - b.timestamp)
+    const toRemove = entries.slice(0, vatDataCache.size - MAX_CACHE_SIZE)
+    for (const [key] of toRemove) {
       vatDataCache.delete(key)
     }
   }
@@ -108,40 +120,25 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     // Create cache key based on user and parameters
     const cacheKey = `${user?.id || 'guest'}-${vatReturnId || 'all'}-${category || 'all'}`
     
-    // Define fallback VAT data structure with demo data
+    // Proactive cache cleanup at request start
+    clearExpiredCache()
+    
+    // No demo data - database must work
     const fallbackVATData: ExtractedVATSummary = {
-      totalSalesVAT: 270.00,
-      totalPurchaseVAT: 58.75,
-      totalNetVAT: 211.25,
-      documentCount: 2,
-      processedDocuments: 2,
-      averageConfidence: 96.85,
+      totalSalesVAT: 0,
+      totalPurchaseVAT: 0,
+      totalNetVAT: 0,
+      documentCount: 0,
+      processedDocuments: 0,
+      averageConfidence: 0,
       failedDocuments: 0,
       processingStats: {
-        completed: 2,
+        completed: 0,
         failed: 0,
         pending: 0
       },
-      salesDocuments: [
-        {
-          id: "demo-1",
-          fileName: "Sample Sales Invoice - January 2024.pdf",
-          category: "SALES",
-          extractedAmounts: [1250.00, 270.00],
-          confidence: 95.5,
-          scanResult: "Successfully extracted VAT: €270.00 - Demo data"
-        }
-      ],
-      purchaseDocuments: [
-        {
-          id: "demo-2",
-          fileName: "Office Supplies Receipt - January 2024.pdf", 
-          category: "PURCHASE",
-          extractedAmounts: [287.50, 58.75],
-          confidence: 98.2,
-          scanResult: "Successfully extracted VAT: €58.75 - Demo data"
-        }
-      ]
+      salesDocuments: [],
+      purchaseDocuments: []
     }
     
     // Check cache first (unless skipCache is requested)
@@ -456,6 +453,9 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           data: guestSummary,
           timestamp: Date.now()
         })
+        
+        // Clean up cache for guest requests too
+        clearExpiredCache()
         
         const docsWithSuccessfulVAT = guestSalesDocuments.filter(d => d.extractedAmounts.length > 0).length + 
                                       guestPurchaseDocuments.filter(d => d.extractedAmounts.length > 0).length
@@ -899,15 +899,8 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       timestamp: Date.now()
     })
     
-    // Clean up old cache entries (simple cleanup)
-    if (vatDataCache.size > 100) {
-      const now = Date.now()
-      for (const [key, value] of vatDataCache.entries()) {
-        if (now - value.timestamp > CACHE_DURATION * 2) {
-          vatDataCache.delete(key)
-        }
-      }
-    }
+    // Clean up cache proactively
+    clearExpiredCache()
     
         // Return summary data for withDatabaseFallback
         return summary
