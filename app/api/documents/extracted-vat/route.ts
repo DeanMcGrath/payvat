@@ -173,39 +173,49 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     
     // Query params logged for audit
     
-    // For guest users, check for recent document processing results
+    // For guest users, check for recent document processing results using fallback
     if (!user) {
-      // Guest user document processing check
+      // Use withDatabaseFallback for guest user processing too
+      const guestFallbackKey = `guest-vat-data-${cacheKey}`
       
-      try {
-        // SIMPLIFIED: Single comprehensive query for guest documents with timeout
-        logInfo('Searching for recent guest documents', {
-          operation: 'guest-document-search',
-          timeWindow: '24 hours'
-        })
-        
-        const recentGuestDocuments = await Promise.race([
-          prisma.document.findMany({
-            where: {
-              user: {
-                role: 'GUEST'
+      const guestResult = await withDatabaseFallback(
+        async () => {
+          // SIMPLIFIED: Single comprehensive query for guest documents with timeout
+          logInfo('Searching for recent guest documents', {
+            operation: 'guest-document-search',
+            timeWindow: '24 hours'
+          })
+          
+          const recentGuestDocuments = await Promise.race([
+            prisma.document.findMany({
+              where: {
+                user: {
+                  role: 'GUEST'
+                },
+                uploadedAt: {
+                  gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
+                }
               },
-              uploadedAt: {
-                gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
-              }
-            },
-            include: {
-              user: true
-            },
-            orderBy: {
-              uploadedAt: 'desc'
-            },
-            take: 20 // Reduce limit for faster queries
-          }),
-          new Promise<any[]>((_, reject) => 
-            setTimeout(() => reject(new Error('Guest documents query timeout')), 5000)
-          )
-        ])
+              include: {
+                user: true
+              },
+              orderBy: {
+                uploadedAt: 'desc'
+              },
+              take: 20 // Reduce limit for faster queries
+            }),
+            new Promise<any[]>((_, reject) => 
+              setTimeout(() => reject(new Error('Guest documents query timeout')), 5000)
+            )
+          ])
+          
+          return recentGuestDocuments
+        },
+        guestFallbackKey,
+        [] // Empty array as fallback for guest documents
+      )
+      
+      const recentGuestDocuments = guestResult.data
         
         logInfo('Found guest documents', {
           operation: 'guest-document-search',
@@ -489,29 +499,13 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         
         // FIXED: Simplified error handling - no more complex fallback logic
         
-        // If all else fails, return empty summary
-        const emptySummary: ExtractedVATSummary = {
-          totalSalesVAT: 0,
-          totalPurchaseVAT: 0,
-          totalNetVAT: 0,
-          documentCount: 0,
-          processedDocuments: 0,
-          averageConfidence: 0,
-          failedDocuments: 0,
-          processingStats: {
-            completed: 0,
-            failed: 0,
-            pending: 0
-          },
-          salesDocuments: [],
-          purchaseDocuments: []
-        }
-        
+        // If all else fails, return fallback demo data instead of empty summary
         return NextResponse.json({
           success: true,
-          extractedVAT: emptySummary,
+          extractedVAT: fallbackVATData,
           isGuestUser: true,
-          note: 'Unable to retrieve recent processing results. This may be due to system limitations for guest users.'
+          fromFallback: guestResult.fromFallback,
+          message: guestResult.fromFallback ? 'Service temporarily unavailable - showing demo data' : 'Demo VAT data for guest users'
         })
       }
     }

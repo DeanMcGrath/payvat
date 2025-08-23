@@ -13,15 +13,23 @@ function getDatabaseUrl(): string | undefined {
                 process.env.POSTGRES_URL ||
                 process.env.NILEDB_URL
   
-  if (dbUrl) {
+  // Clean up the URL by removing any trailing newlines or whitespace
+  const cleanedUrl = dbUrl?.trim().replace(/\n/g, '')
+  
+  if (cleanedUrl) {
     console.log('Using database URL from:', 
       process.env.DATABASE_URL ? 'DATABASE_URL' :
       process.env.NILEDB_POSTGRES_URL ? 'NILEDB_POSTGRES_URL' :
       process.env.POSTGRES_URL ? 'POSTGRES_URL' : 'NILEDB_URL'
     )
+    console.log('Database URL cleaned:', {
+      originalLength: dbUrl?.length,
+      cleanedLength: cleanedUrl.length,
+      hadNewlines: dbUrl !== cleanedUrl
+    })
   }
   
-  return dbUrl
+  return cleanedUrl
 }
 
 // Validate database URL format
