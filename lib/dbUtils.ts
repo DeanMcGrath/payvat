@@ -74,28 +74,28 @@ export async function safeDbOperation<T>(
 export class SafeDatabase {
   static async findUser(email: string) {
     return safeDbOperation(
-      () => prisma.user.findUnique({ where: { email: email.toLowerCase() } }),
+      () => prisma.User.findUnique({ where: { email: email.toLowerCase() } }),
       'Find user by email'
     )
   }
   
   static async createUser(userData: any) {
     return safeDbOperation(
-      () => prisma.user.create({ data: userData }),
+      () => prisma.User.create({ data: userData }),
       'Create user'
     )
   }
   
   static async updateUser(id: string, userData: any) {
     return safeDbOperation(
-      () => prisma.user.update({ where: { id }, data: userData }),
+      () => prisma.User.update({ where: { id }, data: userData }),
       'Update user'
     )
   }
   
   static async findVATReturn(id: string, userId: string) {
     return safeDbOperation(
-      () => prisma.vATReturn.findFirst({ 
+      () => prisma.VATReturn.findFirst({ 
         where: { id, userId },
         include: {
           documents: true,
@@ -108,28 +108,28 @@ export class SafeDatabase {
   
   static async createVATReturn(vatData: any) {
     return safeDbOperation(
-      () => prisma.vATReturn.create({ data: vatData }),
+      () => prisma.VATReturn.create({ data: vatData }),
       'Create VAT return'
     )
   }
   
   static async createDocument(docData: any) {
     return safeDbOperation(
-      () => prisma.document.create({ data: docData }),
+      () => prisma.Document.create({ data: docData }),
       'Create document'
     )
   }
   
   static async createAuditLog(logData: any) {
     return safeDbOperation(
-      () => prisma.auditLog.create({ data: logData }),
+      () => prisma.AuditLog.create({ data: logData }),
       'Create audit log'
     )
   }
   
   static async createPayment(paymentData: any) {
     return safeDbOperation(
-      () => prisma.payment.create({ data: paymentData }),
+      () => prisma.Payment.create({ data: paymentData }),
       'Create payment'
     )
   }

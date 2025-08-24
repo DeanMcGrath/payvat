@@ -77,7 +77,7 @@ export async function getUserFromRequest(request: NextRequest): Promise<AuthUser
     
     // Load full user data from database with error handling
     try {
-      const user = await prisma.user.findUnique({
+      const user = await prisma.User.findUnique({
         where: { id: payload.userId },
         select: {
           id: true,

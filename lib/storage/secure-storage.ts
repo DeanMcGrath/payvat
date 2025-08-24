@@ -369,7 +369,7 @@ export async function migrateFilesToStorage(batchSize: number = 10): Promise<{
 
   try {
     // Get documents with fileData still in database
-    const documentsWithFileData = await prisma.document.findMany({
+    const documentsWithFileData = await prisma.Document.findMany({
       where: {
         fileData: { not: null },
         filePath: null // Not yet migrated
@@ -401,7 +401,7 @@ export async function migrateFilesToStorage(batchSize: number = 10): Promise<{
 
         if (uploadResult.success && uploadResult.file) {
           // Update document with new file path and remove fileData
-          await prisma.document.update({
+          await prisma.Document.update({
             where: { id: doc.id },
             data: {
               filePath: uploadResult.file.url,

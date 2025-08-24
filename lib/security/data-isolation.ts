@@ -23,7 +23,7 @@ export async function validateDocumentOwnership(
   user: AuthUser
 ): Promise<boolean> {
   try {
-    const document = await prisma.document.findUnique({
+    const document = await prisma.Document.findUnique({
       where: { id: documentId },
       select: { userId: true, user: { select: { role: true } } }
     })
@@ -80,7 +80,7 @@ export async function validateVATReturnOwnership(
   user: AuthUser
 ): Promise<boolean> {
   try {
-    const vatReturn = await prisma.vATReturn.findUnique({
+    const vatReturn = await prisma.VATReturn.findUnique({
       where: { id: vatReturnId },
       select: { userId: true }
     })
@@ -118,7 +118,7 @@ export async function validatePaymentOwnership(
   user: AuthUser
 ): Promise<boolean> {
   try {
-    const payment = await prisma.payment.findUnique({
+    const payment = await prisma.Payment.findUnique({
       where: { id: paymentId },
       select: { userId: true }
     })
@@ -236,7 +236,7 @@ export class SecureDBClient {
       ...additionalWhere
     }
 
-    const documents = await prisma.document.findMany({
+    const documents = await prisma.Document.findMany({
       where,
       select: {
         id: true,
@@ -269,7 +269,7 @@ export class SecureDBClient {
       ...additionalWhere
     }
 
-    const returns = await prisma.vATReturn.findMany({
+    const returns = await prisma.VATReturn.findMany({
       where,
       select: {
         id: true,
@@ -303,7 +303,7 @@ export class SecureDBClient {
       ...additionalWhere
     }
 
-    const payments = await prisma.payment.findMany({
+    const payments = await prisma.Payment.findMany({
       where,
       select: {
         id: true,
@@ -339,7 +339,7 @@ export async function validateAPIAccess(
   if (!user) {
     // Guest users can only access recent guest resources
     if (resourceType === 'document') {
-      const document = await prisma.document.findUnique({
+      const document = await prisma.Document.findUnique({
         where: { id: resourceId },
         include: { user: true }
       })

@@ -73,7 +73,7 @@ export async function checkForDuplicates(
 ): Promise<DuplicateResult> {
   try {
     // Get all user documents with fingerprints for comparison
-    const existingDocuments = await prisma.document.findMany({
+    const existingDocuments = await prisma.Document.findMany({
       where: {
         userId,
         id: currentDocumentId ? { not: currentDocumentId } : undefined,
@@ -245,7 +245,7 @@ export async function storeDocumentHash(
   fingerprint: DocumentFingerprint
 ): Promise<void> {
   try {
-    await prisma.document.update({
+    await prisma.Document.update({
       where: { id: documentId },
       data: {
         documentHash: fingerprint.contentHash
@@ -265,7 +265,7 @@ export async function markAsDuplicate(
   confidence: number
 ): Promise<void> {
   try {
-    await prisma.document.update({
+    await prisma.Document.update({
       where: { id: documentId },
       data: {
         isDuplicate: true,
@@ -284,7 +284,7 @@ export async function markAsDuplicate(
  */
 export async function getDuplicateDocuments(userId: string): Promise<any[]> {
   try {
-    return await prisma.document.findMany({
+    return await prisma.Document.findMany({
       where: {
         userId,
         isDuplicate: true
