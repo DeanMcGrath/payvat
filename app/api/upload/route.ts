@@ -345,7 +345,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           // Creating VAT audit log
           
           try {
-            await prisma.auditLog.create({
+            await prisma.AuditLog.create({
               data: {
                 userId: userId, // Use the userId (works for both authenticated and guest users)
                 action: 'VAT_DATA_EXTRACTED',
@@ -400,7 +400,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       })
       logger.error('Document processing error', docProcessingError, 'UPLOAD_API')
       // Update with error status
-      await prisma.document.update({
+      await prisma.Document.update({
         where: { id: document.id },
         data: {
           isScanned: false,
@@ -500,7 +500,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           })
           
           // Store processing analytics
-          await prisma.aIProcessingAnalytics.create({
+          await prisma.AIProcessingAnalytics.create({
             data: {
               documentId: document.id,
               userId: userId,
@@ -549,7 +549,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     // Creating upload audit log
     
     try {
-      await prisma.auditLog.create({
+      await prisma.AuditLog.create({
         data: {
           userId: userId, // Use userId for both authenticated and guest users
           action: 'UPLOAD_DOCUMENT',

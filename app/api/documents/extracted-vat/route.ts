@@ -149,7 +149,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         })
         
         // FIXED: Simplify guest query - no time filtering, no joins
-        const recentGuestUsers = await prisma.user.findMany({
+        const recentGuestUsers = await prisma.User.findMany({
           where: {
             role: 'GUEST'
           },
@@ -160,7 +160,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
 
         const guestUserIds = recentGuestUsers.map(u => u.id)
         
-        const recentGuestDocuments = await prisma.document.findMany({
+        const recentGuestDocuments = await prisma.Document.findMany({
           where: {
             userId: {
               in: guestUserIds
@@ -196,7 +196,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         
         // Additional debugging: Check for any unprocessed guest documents
         // Checking unprocessed documents
-        const unprocessedGuestDocs = await prisma.document.findMany({
+        const unprocessedGuestDocs = await prisma.Document.findMany({
           where: {
             userId: {
               in: guestUserIds
@@ -507,7 +507,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     }
     
     // Get user's processed documents only - secure production behavior
-    const documents = await prisma.document.findMany({
+    const documents = await prisma.Document.findMany({
       where: whereClause,
       orderBy: {
         uploadedAt: 'desc'
@@ -525,7 +525,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     const auditLogMap = new Map<string, any>()
     
     // Fetch audit logs for all documents and filter to most recent per document
-    const allAuditLogs = await prisma.auditLog.findMany({
+    const allAuditLogs = await prisma.AuditLog.findMany({
       where: {
         action: 'VAT_DATA_EXTRACTED',
         entityType: 'DOCUMENT',

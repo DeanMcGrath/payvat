@@ -56,7 +56,7 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       // Guest user - simplified approach to avoid complex joins
       try {
         // FIXED: Simplify guest user query - no complex time filtering
-        const guestUsers = await prisma.user.findMany({
+        const guestUsers = await prisma.User.findMany({
           where: {
             role: 'GUEST'
           },
@@ -131,10 +131,10 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
     }
     
     // FIXED: Remove Promise.race wrapper - let Prisma handle timeouts
-    const totalCount = await prisma.document.count({ where })
+    const totalCount = await prisma.Document.count({ where })
     
     // FIXED: Remove Promise.race wrapper - let Prisma handle timeouts
-    const documents = await prisma.document.findMany({
+    const documents = await prisma.Document.findMany({
       where,
       select: {
         id: true,
