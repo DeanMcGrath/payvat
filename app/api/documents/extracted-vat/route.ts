@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createGuestFriendlyRoute } from '@/lib/middleware'
-import { prisma, withDatabaseFallback } from '@/lib/prisma'
+import { prisma } from '@/lib/prisma'
 import { AuthUser } from '@/lib/auth'
 import { extractionMonitor } from '@/lib/extraction-monitor'
 import { logError, logWarn, logInfo, logAudit, logPerformance } from '@/lib/secure-logger'
@@ -44,7 +44,6 @@ interface ExtractedVATSummary {
 // Simple in-memory cache for extracted VAT data to prevent zeros during processing
 const vatDataCache = new Map<string, { data: ExtractedVATSummary; timestamp: number }>()
 const CACHE_DURATION = 30000 // 30 seconds
-const MAX_CACHE_SIZE = 50 // Limit cache size to prevent memory issues
 
 // ENHANCED: Cache invalidation utilities
 export function invalidateUserCache(userId?: string) {
@@ -69,17 +68,6 @@ function clearExpiredCache() {
   const now = Date.now()
   for (const [key, value] of vatDataCache.entries()) {
     if (now - value.timestamp > CACHE_DURATION) {
-      vatDataCache.delete(key)
-    }
-  }
-  
-  // Also enforce max cache size to prevent memory leaks
-  if (vatDataCache.size > MAX_CACHE_SIZE) {
-    // Remove oldest entries
-    const entries = Array.from(vatDataCache.entries())
-    entries.sort(([,a], [,b]) => a.timestamp - b.timestamp)
-    const toRemove = entries.slice(0, vatDataCache.size - MAX_CACHE_SIZE)
-    for (const [key] of toRemove) {
       vatDataCache.delete(key)
     }
   }
@@ -120,27 +108,6 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     // Create cache key based on user and parameters
     const cacheKey = `${user?.id || 'guest'}-${vatReturnId || 'all'}-${category || 'all'}`
     
-    // Proactive cache cleanup at request start
-    clearExpiredCache()
-    
-    // No demo data - database must work
-    const fallbackVATData: ExtractedVATSummary = {
-      totalSalesVAT: 0,
-      totalPurchaseVAT: 0,
-      totalNetVAT: 0,
-      documentCount: 0,
-      processedDocuments: 0,
-      averageConfidence: 0,
-      failedDocuments: 0,
-      processingStats: {
-        completed: 0,
-        failed: 0,
-        pending: 0
-      },
-      salesDocuments: [],
-      purchaseDocuments: []
-    }
-    
     // Check cache first (unless skipCache is requested)
     if (!skipCache) {
       const cached = vatDataCache.get(cacheKey)
@@ -170,52 +137,48 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     
     // Query params logged for audit
     
-    // For guest users, check for recent document processing results using fallback
+    // For guest users, check for recent document processing results
     if (!user) {
-      // Use withDatabaseFallback for guest user processing too
-      const guestFallbackKey = `guest-vat-data-${cacheKey}`
+      // Guest user document processing check
       
-      const guestResult = await withDatabaseFallback(
-        async () => {
-          // SIMPLIFIED: Single comprehensive query for guest documents with timeout
-          logInfo('Searching for recent guest documents', {
-            operation: 'guest-document-search',
-            timeWindow: '24 hours'
-          })
-          
-          const recentGuestDocuments = await Promise.race([
-            prisma.document.findMany({
-              where: {
-                user: {
-                  role: 'GUEST'
-                },
-                uploadedAt: {
-                  gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
-                }
-              },
-              include: {
-                user: true
-              },
-              orderBy: {
-                uploadedAt: 'desc'
-              },
-              take: 20 // Reduce limit for faster queries
-            }),
-            new Promise<any[]>((_, reject) => 
-              setTimeout(() => reject(new Error('Guest documents query timeout')), 5000)
-            )
-          ])
-          
-          return recentGuestDocuments
-        },
-        guestFallbackKey,
-        [] // Empty array as fallback for guest documents
-      )
-      
-      const recentGuestDocuments = guestResult.data
-      
-      // Process the guest documents (continuing existing logic)
       try {
+        // SIMPLIFIED: Single comprehensive query for guest documents
+        logInfo('Searching for recent guest documents', {
+          operation: 'guest-document-search',
+          timeWindow: '24 hours'
+        })
+        
+        // FIXED: Simplify guest query - no time filtering, no joins
+        const recentGuestUsers = await prisma.user.findMany({
+          where: {
+            role: 'GUEST'
+          },
+          select: { id: true },
+          take: 50,
+          orderBy: { createdAt: 'desc' }
+        })
+
+        const guestUserIds = recentGuestUsers.map(u => u.id)
+        
+        const recentGuestDocuments = await prisma.document.findMany({
+          where: {
+            userId: {
+              in: guestUserIds
+            }
+          },
+          select: {
+            id: true,
+            userId: true,
+            category: true,
+            isScanned: true,
+            uploadedAt: true
+          },
+          orderBy: {
+            uploadedAt: 'desc'
+          },
+          take: 100
+        })
+        
         logInfo('Found guest documents', {
           operation: 'guest-document-search',
           totalFound: recentGuestDocuments.length,
@@ -232,32 +195,26 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         // Guest documents processed
         
         // Additional debugging: Check for any unprocessed guest documents
-        // Quick check for unprocessed documents with timeout
-        const unprocessedGuestDocs = await Promise.race([
-          prisma.document.findMany({
-            where: {
-              user: {
-                role: 'GUEST'
-              },
-              isScanned: false, // Check unprocessed documents too
-              uploadedAt: {
-                gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
-              }
+        // Checking unprocessed documents
+        const unprocessedGuestDocs = await prisma.document.findMany({
+          where: {
+            userId: {
+              in: guestUserIds
             },
-            select: {
-              id: true,
-              uploadedAt: true,
-              isScanned: true
-            }, // Select only needed fields
-            orderBy: {
-              uploadedAt: 'desc'
-            },
-            take: 5
-          }),
-          new Promise<any[]>((_, reject) => 
-            setTimeout(() => reject(new Error('Unprocessed documents query timeout')), 3000)
-          )
-        ])
+            isScanned: false // Check unprocessed documents too
+          },
+          select: {
+            id: true,
+            userId: true,
+            category: true,
+            isScanned: true,
+            uploadedAt: true
+          },
+          orderBy: {
+            uploadedAt: 'desc'
+          },
+          take: 5
+        })
         
         // Unprocessed documents logged
         
@@ -454,9 +411,6 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           timestamp: Date.now()
         })
         
-        // Clean up cache for guest requests too
-        clearExpiredCache()
-        
         const docsWithSuccessfulVAT = guestSalesDocuments.filter(d => d.extractedAmounts.length > 0).length + 
                                       guestPurchaseDocuments.filter(d => d.extractedAmounts.length > 0).length
         
@@ -501,57 +455,64 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         
         // FIXED: Simplified error handling - no more complex fallback logic
         
-        // If all else fails, return fallback demo data instead of empty summary
+        // If all else fails, return empty summary
+        const emptySummary: ExtractedVATSummary = {
+          totalSalesVAT: 0,
+          totalPurchaseVAT: 0,
+          totalNetVAT: 0,
+          documentCount: 0,
+          processedDocuments: 0,
+          averageConfidence: 0,
+          failedDocuments: 0,
+          processingStats: {
+            completed: 0,
+            failed: 0,
+            pending: 0
+          },
+          salesDocuments: [],
+          purchaseDocuments: []
+        }
+        
         return NextResponse.json({
           success: true,
-          extractedVAT: fallbackVATData,
+          extractedVAT: emptySummary,
           isGuestUser: true,
-          fromFallback: guestResult.fromFallback,
-          message: guestResult.fromFallback ? 'Service temporarily unavailable - showing demo data' : 'Demo VAT data for guest users'
+          note: 'Unable to retrieve recent processing results. This may be due to system limitations for guest users.'
         })
       }
     }
     
-    // Getting VAT data for authenticated user - using withDatabaseFallback
-    const fallbackKey = `vat-data-${cacheKey}`
+    // Getting VAT data for authenticated user
     
-    const result = await withDatabaseFallback(
-      async () => {
-        // FIXED: Build query filters for user's own documents - include ALL documents
-        const whereClause: any = {
-          userId: user.id,
-          // REMOVED isScanned filter - include all documents regardless of processing status
+    // FIXED: Build query filters for user's own documents - include ALL documents
+    const whereClause: any = {
+      userId: user.id,
+      // REMOVED isScanned filter - include all documents regardless of processing status
+    }
+    
+    if (vatReturnId) {
+      whereClause.vatReturnId = vatReturnId
+    }
+    
+    if (category) {
+      if (category === 'SALES') {
+        whereClause.category = {
+          in: ['SALES_INVOICE', 'SALES_RECEIPT', 'SALES_REPORT']
         }
-        
-        if (vatReturnId) {
-          whereClause.vatReturnId = vatReturnId
+      } else if (category === 'PURCHASES') {
+        whereClause.category = {
+          in: ['PURCHASE_INVOICE', 'PURCHASE_RECEIPT', 'PURCHASE_REPORT']
         }
-        
-        if (category) {
-          if (category === 'SALES') {
-            whereClause.category = {
-              in: ['SALES_INVOICE', 'SALES_RECEIPT', 'SALES_REPORT']
-            }
-          } else if (category === 'PURCHASES') {
-            whereClause.category = {
-              in: ['PURCHASE_INVOICE', 'PURCHASE_RECEIPT', 'PURCHASE_REPORT']
-            }
-          }
-        }
-        
-        // Get user's processed documents only - secure production behavior
-        const documents = await Promise.race([
-          prisma.document.findMany({
-        where: whereClause,
-        orderBy: {
-          uploadedAt: 'desc'
-        },
-        take: 100 // Limit for performance
-      }),
-      new Promise<any[]>((_, reject) => 
-        setTimeout(() => reject(new Error('User documents query timeout')), 5000)
-      )
-    ])
+      }
+    }
+    
+    // Get user's processed documents only - secure production behavior
+    const documents = await prisma.document.findMany({
+      where: whereClause,
+      orderBy: {
+        uploadedAt: 'desc'
+      }
+    })
     
     // Documents found for user
     
@@ -563,25 +524,19 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     // Create a map to store the most recent audit log per document
     const auditLogMap = new Map<string, any>()
     
-    // Fetch audit logs for all documents with timeout
-    const allAuditLogs = await Promise.race([
-      prisma.auditLog.findMany({
-        where: {
-          action: 'VAT_DATA_EXTRACTED',
-          entityType: 'DOCUMENT',
-          entityId: {
-            in: documents.map(doc => doc.id)
-          }
-        },
-        orderBy: {
-          createdAt: 'desc'
-        },
-        take: 200 // Limit for performance
-      }),
-      new Promise<any[]>((_, reject) => 
-        setTimeout(() => reject(new Error('Audit logs query timeout')), 5000)
-      )
-    ])
+    // Fetch audit logs for all documents and filter to most recent per document
+    const allAuditLogs = await prisma.auditLog.findMany({
+      where: {
+        action: 'VAT_DATA_EXTRACTED',
+        entityType: 'DOCUMENT',
+        entityId: {
+          in: documents.map(doc => doc.id)
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
     
     // Keep only the most recent audit log per document
     allAuditLogs.forEach(log => {
@@ -899,31 +854,23 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       timestamp: Date.now()
     })
     
-    // Clean up cache proactively
-    clearExpiredCache()
-    
-        // Return summary data for withDatabaseFallback
-        return summary
-      },
-      fallbackKey,
-      fallbackVATData
-    )
-    
-    // Log performance for monitoring
-    logPerformance('vat-extraction', Date.now() - startTime, {
-      userId: user?.id,
-      operation: 'extracted-vat'
-    })
+    // Clean up old cache entries (simple cleanup)
+    if (vatDataCache.size > 100) {
+      const now = Date.now()
+      for (const [key, value] of vatDataCache.entries()) {
+        if (now - value.timestamp > CACHE_DURATION * 2) {
+          vatDataCache.delete(key)
+        }
+      }
+    }
     
     // 🚨 NEW: Add monitoring statistics to response
     const monitoringStats = extractionMonitor.getStats()
     
     const response = NextResponse.json({
       success: true,
-      extractedVAT: result.data,
+      extractedVAT: summary,
       fromCache: false,
-      fromFallback: result.fromFallback,
-      message: result.fromFallback ? 'Service temporarily unavailable - showing cached data' : undefined,
       monitoringStats: {
         totalExtractions: monitoringStats.totalAttempts,
         successRate: monitoringStats.successRate,
@@ -931,6 +878,12 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         wooCommerceExtractions: monitoringStats.wooCommerceStats.attempts,
         lastProcessingPerformance: monitoringStats.averageProcessingTime
       }
+    })
+    
+    // Log performance for monitoring
+    logPerformance('vat-extraction', Date.now() - startTime, {
+      userId: user?.id,
+      operation: 'extracted-vat'
     })
 
     // Prevent browser caching to ensure fresh data
@@ -941,19 +894,13 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
     return response
     
   } catch (error) {
-    // Only catch non-database errors here (URL parsing, cache operations, etc.)
-    logError('Extracted VAT route error (non-database)', error, {
+    logError('Error getting extracted VAT data', error, {
       userId: user?.id,
-      operation: 'extracted-vat-route-error'
+      operation: 'extracted-vat'
     })
-    
     return NextResponse.json(
-      { 
-        success: false,
-        error: 'Invalid request parameters',
-        extractedVAT: fallbackVATData
-      },
-      { status: 400 }
+      { error: 'Failed to retrieve VAT data' },
+      { status: 500 }
     )
   }
 }

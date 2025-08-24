@@ -165,11 +165,18 @@ async function executeRequest<T>(url: string, options: RequestInit): Promise<T> 
   }
 }
 
-// Document API
+// Document API - Updated to match actual API response format
 export const documentsApi = {
   getAll: (params?: { dashboard?: boolean }) => {
     const query = params?.dashboard ? '?dashboard=true' : ''
-    return apiRequest<ApiResponse<{ documents: Document[] }>>(`/api/documents${query}`)
+    return apiRequest<{ 
+      success: boolean
+      documents: Document[]
+      pagination?: { page: number, limit: number, totalCount: number, totalPages: number }
+      error?: string
+      message?: string
+      fromFallback?: boolean
+    }>(`/api/documents${query}`)
   },
 
   getById: (id: string) =>
@@ -179,7 +186,13 @@ export const documentsApi = {
     apiRequest<ApiResponse<void>>(`/api/documents/${id}`, { method: 'DELETE' }),
 
   getExtractedVAT: () =>
-    apiRequest<ApiResponse<{ extractedVAT: VATData }>>('/api/documents/extracted-vat'),
+    apiRequest<{ 
+      success: boolean
+      extractedVAT?: VATData
+      error?: string
+      message?: string
+      fromFallback?: boolean
+    }>('/api/documents/extracted-vat'),
 }
 
 // User API

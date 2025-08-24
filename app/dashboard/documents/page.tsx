@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useRef } from "react"
 import { useRouter } from "next/navigation"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
@@ -40,6 +40,10 @@ function DashboardDocumentsContent() {
   const [searchQuery, setSearchQuery] = useState("")
   const [sortBy, setSortBy] = useState<"date" | "name">("date")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
+  
+  // CRITICAL FIX: Add loading timeout protection
+  const [loadingTimeout, setLoadingTimeout] = useState(false)
+  const loadingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   
   // User state  
   const [user, setUser] = useState<UserProfile | null>(null)
@@ -124,6 +128,22 @@ function DashboardDocumentsContent() {
       stats
     }
   }, [documents, selectedFilterYear, selectedMonth, searchQuery, sortBy, sortOrder, vatData])
+
+  // CRITICAL FIX: Add 3-second timeout protection
+  React.useEffect(() => {
+    loadingTimeoutRef.current = setTimeout(() => {
+      if (loadingDocuments || loadingVAT) {
+        console.warn('Loading timeout reached - showing dashboard')
+        setLoadingTimeout(true)
+      }
+    }, 3000) // 3 seconds
+
+    return () => {
+      if (loadingTimeoutRef.current) {
+        clearTimeout(loadingTimeoutRef.current)
+      }
+    }
+  }, [loadingDocuments, loadingVAT])
 
   // Load user profile and past submissions on mount
   React.useEffect(() => {
@@ -238,20 +258,35 @@ function DashboardDocumentsContent() {
     (selectedMonth !== "all" ? 1 : 0) +
     (searchQuery ? 1 : 0)
 
-  if (loadingDocuments && documents.length === 0) {
+  // CRITICAL FIX: Only show loading spinner for first 5 seconds, then show dashboard
+  const showLoadingSpinner = loadingDocuments && !loadingTimeout && documents.length === 0
+  
+  if (showLoadingSpinner) {
     return (
       <PageLayout>
         <div className="flex items-center justify-center py-20">
-          <div className="flex items-center space-x-3">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600" />
-            <span className="body-lg text-neutral-600">Loading dashboard...</span>
+          <div className="flex flex-col items-center space-y-4">
+            <div className="flex items-center space-x-3">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600" />
+              <span className="body-lg text-neutral-600">Loading dashboard...</span>
+            </div>
+            <Button 
+              onClick={() => setLoadingTimeout(true)} 
+              variant="outline" 
+              className="mt-4"
+            >
+              Skip Loading - Show Dashboard Now
+            </Button>
           </div>
         </div>
       </PageLayout>
     )
   }
 
-  if (error) {
+  // CRITICAL FIX: Show dashboard even with errors, just with warnings
+  const showDashboard = loadingTimeout || !loadingDocuments || documents.length > 0
+
+  if (error && !showDashboard) {
     return (
       <PageLayout>
         <div className="flex items-center justify-center py-20">
@@ -265,6 +300,9 @@ function DashboardDocumentsContent() {
               <div className="flex space-x-2">
                 <Button onClick={refreshData} className="flex-1">
                   Try Again
+                </Button>
+                <Button onClick={() => setLoadingTimeout(true)} className="flex-1">
+                  Show Dashboard Anyway
                 </Button>
                 <Button onClick={() => router.push('/')} variant="outline" className="flex-1">
                   Go Home
@@ -298,6 +336,31 @@ function DashboardDocumentsContent() {
       }
     >
       <div className="space-y-8">
+        {/* CRITICAL FIX: Error Warning Banner */}
+        {error && showDashboard && (
+          <Card className="bg-red-50 border-red-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-red-800">Loading Issues Detected</h3>
+                  <p className="text-red-700 text-sm mt-1">
+                    {error} - Dashboard may show incomplete data.
+                    <Button 
+                      variant="link" 
+                      size="sm" 
+                      onClick={refreshData}
+                      className="text-red-700 underline p-0 h-auto font-normal ml-2"
+                    >
+                      Retry loading
+                    </Button>
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Fallback Mode Warning */}
         {inFallbackMode && (
           <Card className="bg-yellow-50 border-yellow-200">
@@ -316,6 +379,23 @@ function DashboardDocumentsContent() {
                     >
                       Try again
                     </Button>
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Loading Timeout Success Banner */}
+        {loadingTimeout && (
+          <Card className="bg-green-50 border-green-200">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-green-800">Dashboard Loaded</h3>
+                  <p className="text-green-700 text-sm mt-1">
+                    Dashboard is now available. Data loading may still be in progress.
                   </p>
                 </div>
               </div>

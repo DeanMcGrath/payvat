@@ -63,17 +63,16 @@ export function useDocumentsData(): UseDocumentsDataReturn {
   const lastFetchTime = useRef(0)
   const fetchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const retryCountRef = useRef(0)
-  const MIN_INTERVAL = 3000 // 3 seconds between VAT data fetches (reduced for better UX)
-  const MAX_RETRIES = 1 // Reduced to 1 to prevent retry storms
+  const MIN_INTERVAL = 2000 // 2 seconds between VAT data fetches
 
-  // Load documents from API with retry logic
-  const loadDocuments = useCallback(async (retryCount = 0) => {
+  // Load documents from API without automatic retries
+  const loadDocuments = useCallback(async () => {
     const startTime = Date.now()
     try {
       setLoadingDocuments(true)
-      if (retryCount === 0) setError(null) // Only clear error on first attempt
+      setError(null) // Clear any previous errors
       
-      console.log(`Loading documents (attempt ${retryCount + 1}/${MAX_RETRIES + 1})`, {
+      console.log('Loading documents', {
         timestamp: new Date().toISOString()
       })
       
@@ -82,14 +81,13 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       const loadTime = Date.now() - startTime
       console.log('Documents loaded successfully', {
         loadTime: `${loadTime}ms`,
-        documentCount: response.data?.documents?.length || 0,
+        documentCount: response.documents?.length || 0,
         fromFallback: response.fromFallback,
         timestamp: new Date().toISOString()
       })
       
-      if (response.success && response.data?.documents) {
-        setDocuments(response.data.documents)
-        retryCountRef.current = 0 // Reset retry count on success
+      if (response.success && response.documents) {
+        setDocuments(response.documents)
         
         // Check if in fallback mode
         if (response.fromFallback) {
@@ -105,37 +103,22 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       }
     } catch (err) {
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to load documents'
-      const isRateLimited = err instanceof ApiError && err.status === 429
-      const isServerError = err instanceof ApiError && (err.status === 500 || err.status === 503)
       
-      // Implement simple retry with fixed delay to prevent retry storms
-      if (retryCount < MAX_RETRIES && (isRateLimited || isServerError)) {
-        const delay = 5000 // Fixed 5s delay instead of exponential backoff
-        console.log(`Retrying documents load in ${delay}ms (attempt ${retryCount + 1}/${MAX_RETRIES})`)
-        
-        setTimeout(() => {
-          loadDocuments(retryCount + 1)
-        }, delay)
-        return
-      }
-      
-      retryCountRef.current = retryCount
       setError(errorMessage)
       console.error('Failed to load documents:', {
         error: err,
-        attempt: retryCount + 1,
         totalTime: Date.now() - startTime,
         errorType: err instanceof ApiError ? 'ApiError' : 'Unknown',
         status: err instanceof ApiError ? err.status : undefined,
         timestamp: new Date().toISOString()
       })
     } finally {
-      if (retryCount === 0) setLoadingDocuments(false) // Only update loading on first attempt
+      setLoadingDocuments(false)
     }
   }, [])
 
-  // Load VAT data from API with retry logic
-  const loadVATData = useCallback(async (force = false, retryCount = 0): Promise<void> => {
+  // Load VAT data from API without automatic retries
+  const loadVATData = useCallback(async (force = false): Promise<void> => {
     const startTime = Date.now()
     const now = Date.now()
     
@@ -148,19 +131,17 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       return
     }
 
-    if (loadingVAT && !force && retryCount === 0) {
+    if (loadingVAT && !force) {
       console.log('VAT data load skipped - already loading')
       return
     }
 
     try {
-      if (retryCount === 0) {
-        setLoadingVAT(true)
-        setError(null)
-      }
+      setLoadingVAT(true)
+      setError(null)
       lastFetchTime.current = now
 
-      console.log(`Loading VAT data (attempt ${retryCount + 1}/${MAX_RETRIES + 1})`, {
+      console.log('Loading VAT data', {
         force,
         timestamp: new Date().toISOString()
       })
@@ -170,50 +151,34 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       const loadTime = Date.now() - startTime
       console.log('VAT data loaded successfully', {
         loadTime: `${loadTime}ms`,
-        totalSalesVAT: response.data?.extractedVAT?.totalSalesVAT || 0,
-        totalPurchaseVAT: response.data?.extractedVAT?.totalPurchaseVAT || 0,
-        processedDocuments: response.data?.extractedVAT?.processedDocuments || 0,
+        totalSalesVAT: response.extractedVAT?.totalSalesVAT || 0,
+        totalPurchaseVAT: response.extractedVAT?.totalPurchaseVAT || 0,
+        processedDocuments: response.extractedVAT?.processedDocuments || 0,
         fromFallback: response.fromFallback,
         timestamp: new Date().toISOString()
       })
 
-      if (response.success && response.data?.extractedVAT) {
-        setVATData(response.data.extractedVAT)
-        retryCountRef.current = 0 // Reset retry count on success
+      if (response.success && response.extractedVAT) {
+        setVATData(response.extractedVAT)
       } else {
         console.warn('VAT data response failed:', response)
         // Don't throw for VAT data failures - just warn and continue
       }
     } catch (err) {
       const errorMessage = err instanceof ApiError ? err.message : 'Failed to load VAT data'
-      const isRateLimited = err instanceof ApiError && err.status === 429
-      const isServerError = err instanceof ApiError && (err.status === 500 || err.status === 503)
       
-      // Implement simple retry with fixed delay to prevent retry storms
-      if (retryCount < MAX_RETRIES && (isRateLimited || isServerError)) {
-        const delay = 8000 // Fixed 8s delay for VAT data (longer than documents)
-        console.log(`Retrying VAT data load in ${delay}ms (attempt ${retryCount + 1}/${MAX_RETRIES})`)
-        
-        setTimeout(() => {
-          loadVATData(true, retryCount + 1)
-        }, delay)
-        return
-      }
-      
-      retryCountRef.current = retryCount
       setError(errorMessage)
       console.error('Failed to load VAT data:', {
         error: err,
-        attempt: retryCount + 1,
         totalTime: Date.now() - startTime,
         errorType: err instanceof ApiError ? 'ApiError' : 'Unknown',
         status: err instanceof ApiError ? err.status : undefined,
         timestamp: new Date().toISOString()
       })
     } finally {
-      if (retryCount === 0) setLoadingVAT(false) // Only update loading on first attempt
+      setLoadingVAT(false)
     }
-  }, [loadingVAT])
+  }, [])
 
   // Refresh all data
   const refreshData = useCallback(async () => {
@@ -276,8 +241,19 @@ export function useDocumentsData(): UseDocumentsDataReturn {
 
   // Computed values
   const computed = useMemo(() => {
-    const salesDocuments = documents.filter(doc => doc.category === 'SALES')
-    const purchaseDocuments = documents.filter(doc => doc.category === 'PURCHASE')
+    // Fix category mapping - API returns specific categories, dashboard expects generic
+    const salesDocuments = documents.filter(doc => 
+      doc.category === 'SALES' || 
+      doc.category === 'SALES_INVOICE' || 
+      doc.category?.startsWith('SALES')
+    )
+    const purchaseDocuments = documents.filter(doc => 
+      doc.category === 'PURCHASE' || 
+      doc.category === 'PURCHASE_INVOICE' || 
+      doc.category === 'PURCHASE_REPORT' || 
+      doc.category === 'PURCHASE_RECEIPT' ||
+      doc.category?.startsWith('PURCHASE')
+    )
     const processedDocuments = documents.filter(doc => doc.isScanned).length
 
     return {
@@ -288,22 +264,35 @@ export function useDocumentsData(): UseDocumentsDataReturn {
     }
   }, [documents])
 
-  // Load initial data with staggered timing to prevent thundering herd
+  // CRITICAL FIX: Load data in parallel, not sequential
   useEffect(() => {
-    // Sequential loading to prevent rate limit exhaustion
-    const loadSequentially = async () => {
+    const loadParallel = async () => {
+      console.log('Starting parallel data loading...', {
+        timestamp: new Date().toISOString()
+      })
+      
       try {
-        await loadDocuments()
-        // Fixed 2 second delay between requests
-        await new Promise(resolve => setTimeout(resolve, 2000))
-        await loadVATData(true)
+        // Load both simultaneously - don't wait for one to finish
+        await Promise.allSettled([
+          loadDocuments(),
+          loadVATData(true)
+        ])
+        console.log('Parallel loading completed')
       } catch (error) {
-        console.error('Sequential loading failed:', error)
+        console.error('Parallel loading failed:', error)
+        // Individual API calls handle their own errors
       }
+      
+      // Force clear loading states after 30 seconds maximum
+      setTimeout(() => {
+        setLoadingDocuments(false)
+        setLoadingVAT(false)
+      }, 30000)
     }
     
-    loadSequentially()
-  }, [loadDocuments, loadVATData])
+    loadParallel()
+  }, [])
+
 
   // Cleanup timeouts on unmount
   useEffect(() => {
