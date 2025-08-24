@@ -804,16 +804,20 @@ async function extractDocumentMetadataSimple(result: any, document: any) {
   return metadata
 }
 
-// Temporary: expose real error for debugging
+// Debug: test basic functionality
 export const POST = async (request: NextRequest) => {
   try {
-    return await uploadFile(request, undefined)
-  } catch (error) {
-    console.error('REAL UPLOAD ERROR:', error)
+    console.log('Upload POST called')
     return NextResponse.json({
-      error: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined,
-      details: error
+      debug: 'Upload endpoint reached',
+      method: request.method,
+      url: request.url,
+      headers: Object.fromEntries(request.headers.entries())
+    })
+  } catch (error) {
+    console.error('BASIC ERROR:', error)
+    return NextResponse.json({
+      error: 'Basic endpoint error: ' + (error instanceof Error ? error.message : String(error))
     }, { status: 500 })
   }
 }
