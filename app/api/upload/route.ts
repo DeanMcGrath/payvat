@@ -106,7 +106,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       // For guest uploads, create a minimal guest user record to satisfy foreign key constraint
       try {
         const guestEmail = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}@guest.payvat.ie`;
-        const guestUser = await prisma.user.create({
+        const guestUser = await prisma.User.create({
           data: {
             email: guestEmail,
             password: 'guest-no-password',
@@ -134,7 +134,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     // Validate VAT return ownership if provided and user is authenticated
     if (vatReturnId && user) {
       try {
-        const vatReturn = await prisma.vATReturn.findFirst({
+        const vatReturn = await prisma.VATReturn.findFirst({
           where: {
             id: vatReturnId,
             userId: user.id
@@ -179,7 +179,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     // Save document metadata to database
     let document
     try {
-      document = await prisma.document.create({
+      document = await prisma.Document.create({
         data: {
           userId: userId,
           vatReturnId: vatReturnId || null,
@@ -318,7 +318,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         }
         
         // Update document with processing results including extracted date and total
-        await prisma.document.update({
+        await prisma.Document.update({
           where: { id: document.id },
           data: {
             isScanned: true,
@@ -384,7 +384,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         })
         logger.warn('Document processing failed', { error: processingResult.error }, 'UPLOAD_API')
         // Update with failed status
-        await prisma.document.update({
+        await prisma.Document.update({
           where: { id: document.id },
           data: {
             isScanned: false,
@@ -479,7 +479,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           const enhancedData = await extractDocumentMetadataSimple(enhancedResult, document)
           
           // Update document with enhanced metadata
-          await prisma.document.update({
+          await prisma.Document.update({
             where: { id: document.id },
             data: {
               // Enhanced fields
@@ -578,7 +578,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     }
     
     // Fetch updated document status
-    const updatedDocument = await prisma.document.findUnique({
+    const updatedDocument = await prisma.Document.findUnique({
       where: { id: document.id }
     })
 
