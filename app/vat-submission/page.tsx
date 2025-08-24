@@ -29,7 +29,7 @@ interface UserProfile {
 }
 
 export default function VATSubmissionPage() {
-  const { selectedYear, selectedPeriod, setVATAmounts, totalSalesVAT: contextSalesVAT, totalPurchaseVAT: contextPurchaseVAT } = useVATData()
+  const { selectedYear, selectedPeriod, periodBeginDate, periodEndDate, setVATAmounts, totalSalesVAT: contextSalesVAT, totalPurchaseVAT: contextPurchaseVAT } = useVATData()
   const router = useRouter()
   const [salesVAT, setSalesVAT] = useState("0.00")
   const [purchaseVAT, setPurchaseVAT] = useState("0.00")
