@@ -898,10 +898,33 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       userId: user?.id,
       operation: 'extracted-vat'
     })
-    return NextResponse.json(
-      { error: 'Failed to retrieve VAT data' },
-      { status: 500 }
-    )
+    
+    // CRITICAL FIX: Return success with empty data instead of 500 error
+    // This prevents dashboard from breaking when VAT API has issues
+    const emptySummary: ExtractedVATSummary = {
+      totalSalesVAT: 0,
+      totalPurchaseVAT: 0,
+      totalNetVAT: 0,
+      documentCount: 0,
+      processedDocuments: 0,
+      averageConfidence: 0,
+      failedDocuments: 0,
+      processingStats: {
+        completed: 0,
+        failed: 0,
+        pending: 0
+      },
+      salesDocuments: [],
+      purchaseDocuments: []
+    }
+    
+    return NextResponse.json({
+      success: true,
+      extractedVAT: emptySummary,
+      hasError: true,
+      errorMessage: 'VAT data temporarily unavailable',
+      isGuestUser: !user
+    })
   }
 }
 

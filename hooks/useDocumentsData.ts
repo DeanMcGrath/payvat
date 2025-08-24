@@ -165,16 +165,17 @@ export function useDocumentsData(): UseDocumentsDataReturn {
         // Don't throw for VAT data failures - just warn and continue
       }
     } catch (err) {
-      const errorMessage = err instanceof ApiError ? err.message : 'Failed to load VAT data'
-      
-      setError(errorMessage)
-      console.error('Failed to load VAT data:', {
+      console.warn('VAT data failed to load, continuing with documents only:', {
         error: err,
         totalTime: Date.now() - startTime,
         errorType: err instanceof ApiError ? 'ApiError' : 'Unknown',
         status: err instanceof ApiError ? err.status : undefined,
         timestamp: new Date().toISOString()
       })
+      
+      // CRITICAL FIX: Don't set error state for VAT failures
+      // Dashboard should still work with documents even if VAT fails
+      // setError() is removed - VAT failures are non-blocking
     } finally {
       setLoadingVAT(false)
     }
