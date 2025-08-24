@@ -2,34 +2,10 @@
 
 import { useState, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { 
-  Sidebar, 
-  SidebarContent, 
-  SidebarHeader, 
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger
-} from "@/components/ui/sidebar"
-import { 
-  User, 
-  FileCheck, 
-  FileText, 
-  Calculator, 
-  CreditCard, 
-  Calendar, 
-  XCircle, 
-  DollarSign,
-  Home,
-  LogOut,
-  Loader2,
-  AlertCircle
-} from "lucide-react"
+import { TopNavigation } from "@/components/ui/top-navigation"
 import { Card, CardContent } from "@/components/ui/card"
+import { Loader2, AlertCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface UserProfile {
   id: string
@@ -40,56 +16,6 @@ interface UserProfile {
   lastName?: string
 }
 
-const navigationItems = [
-  {
-    title: "Account",
-    href: "/dashboard/account",
-    icon: User,
-    description: "Profile, billing, and messages"
-  },
-  {
-    title: "Registration",
-    href: "/dashboard/registration", 
-    icon: FileCheck,
-    description: "Company & VAT registration status"
-  },
-  {
-    title: "Documents",
-    href: "/dashboard/documents",
-    icon: FileText,
-    description: "Sales and purchase documents"
-  },
-  {
-    title: "VAT Returns",
-    href: "/dashboard/vat-returns",
-    icon: Calculator,
-    description: "Past returns and upcoming submissions"
-  },
-  {
-    title: "Financial Payments",
-    href: "/dashboard/payments",
-    icon: CreditCard,
-    description: "Bank statements and transactions"
-  },
-  {
-    title: "Annual Returns",
-    href: "/dashboard/annual-returns",
-    icon: Calendar,
-    description: "End of year filings"
-  },
-  {
-    title: "Terminate Business",
-    href: "/dashboard/terminate",
-    icon: XCircle,
-    description: "Request closure assistance"
-  },
-  {
-    title: "Sell Business",
-    href: "/dashboard/sell",
-    icon: DollarSign,
-    description: "Request sale guidance"
-  }
-]
 
 export default function DashboardLayout({
   children,
@@ -182,118 +108,20 @@ export default function DashboardLayout({
   }
 
   return (
-    <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen w-full bg-neutral-50">
-        <Sidebar 
-          collapsible="offcanvas"
-          className="border-r border-neutral-200 bg-white"
-        >
-          <SidebarHeader>
-            <div className="flex items-center gap-2 px-4 py-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-700">
-                <span className="body-sm font-bold text-white">PV</span>
-              </div>
-              <div className="grid flex-1 text-left body-sm leading-tight">
-                <span className="truncate font-semibold text-brand-700 text-brand-heading">
-                  PayVat
-                </span>
-                <span className="truncate body-xs text-neutral-500">
-                  Business Dashboard
-                </span>
-              </div>
-            </div>
-          </SidebarHeader>
-          
-          <SidebarContent>
-            <SidebarMenu>
-              {navigationItems.map((item) => {
-                const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
-                return (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton 
-                      asChild 
-                      isActive={isActive}
-                      tooltip={item.description}
-                    >
-                      <Link href={item.href} className="flex items-center gap-3">
-                        <item.icon className="h-4 w-4" />
-                        <div className="flex-1">
-                          <div className="font-medium">{item.title}</div>
-                          <div className="body-xs text-neutral-500 group-data-[collapsible=icon]:hidden">
-                            {item.description}
-                          </div>
-                        </div>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
-            </SidebarMenu>
-          </SidebarContent>
-
-          <div className="mt-auto p-4 border-t border-neutral-200">
-            {user && (
-              <div className="space-y-3">
-                <div className="body-sm group-data-[collapsible=icon]:hidden">
-                  <div className="font-medium text-neutral-900">
-                    {user.firstName && user.lastName 
-                      ? `${user.firstName} ${user.lastName}` 
-                      : user.businessName}
-                  </div>
-                  <div className="body-xs text-neutral-500">{user.email}</div>
-                </div>
-                
-                <div className="flex gap-2 group-data-[collapsible=icon]:flex-col">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => router.push('/')}
-                    className="flex-1 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:p-0"
-                    tooltip="Home"
-                  >
-                    <Home className="h-4 w-4 group-data-[collapsible=icon]:mr-0 mr-2" />
-                    <span className="group-data-[collapsible=icon]:hidden">Home</span>
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleLogout}
-                    className="flex-1 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:p-0"
-                    tooltip="Logout"
-                  >
-                    <LogOut className="h-4 w-4 group-data-[collapsible=icon]:mr-0 mr-2" />
-                    <span className="group-data-[collapsible=icon]:hidden">Logout</span>
-                  </Button>
-                </div>
-              </div>
-            )}
+    <div className="min-h-screen w-full bg-neutral-50">
+      <TopNavigation 
+        user={user}
+        onLogout={handleLogout}
+        onHome={() => router.push('/')}
+      />
+      
+      <main className="pt-16 min-h-screen">
+        <div className="p-6 bg-neutral-50 min-h-[calc(100vh-4rem)]">
+          <div className="max-w-7xl mx-auto w-full">
+            {children}
           </div>
-        </Sidebar>
-
-        <SidebarInset className="w-full">
-          <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b border-neutral-200 px-6 bg-white shadow-sm">
-            <SidebarTrigger className="-ml-2" />
-            <div className="flex-1">
-              <div className="h6 text-neutral-900">
-                {navigationItems.find(item => 
-                  pathname === item.href || pathname.startsWith(item.href + '/')
-                )?.title || 'Dashboard'}
-              </div>
-            </div>
-            {user && (
-              <div className="body-sm text-neutral-600">
-                Welcome, {user.firstName || user.businessName}
-              </div>
-            )}
-          </header>
-          
-          <main className="flex-1 p-6 bg-neutral-50 min-h-[calc(100vh-4rem)]">
-            <div className="max-w-7xl mx-auto w-full">
-              {children}
-            </div>
-          </main>
-        </SidebarInset>
-      </div>
-    </SidebarProvider>
+        </div>
+      </main>
+    </div>
   )
 }
