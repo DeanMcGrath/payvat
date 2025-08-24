@@ -804,4 +804,16 @@ async function extractDocumentMetadataSimple(result: any, document: any) {
   return metadata
 }
 
-export const POST = createGuestFriendlyRoute(uploadFile)
+// Temporary: expose real error for debugging
+export const POST = async (request: NextRequest) => {
+  try {
+    return await uploadFile(request, undefined)
+  } catch (error) {
+    console.error('REAL UPLOAD ERROR:', error)
+    return NextResponse.json({
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      details: error
+    }, { status: 500 })
+  }
+}
