@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { FileText } from 'lucide-react'
 import { Document, VATData } from '@/types/dashboard'
 import { formatCurrency } from '@/lib/vatUtils'
+import FileUpload from '@/components/file-upload'
 
 interface DocumentSectionProps {
   title: string
@@ -21,6 +22,11 @@ interface DocumentSectionProps {
   loading?: boolean
   emptyMessage?: string
   children?: React.ReactNode
+  // Upload functionality props
+  onUploadSuccess?: (document: Document) => void
+  enableBatchMode?: boolean
+  maxConcurrentUploads?: number
+  vatReturnId?: string
 }
 
 export function DocumentSection({
@@ -33,6 +39,10 @@ export function DocumentSection({
   loading = false,
   emptyMessage,
   children,
+  onUploadSuccess,
+  enableBatchMode = true,
+  maxConcurrentUploads = 3,
+  vatReturnId,
 }: DocumentSectionProps) {
   // Determine styling based on variant
   const variantStyles = {
@@ -60,13 +70,20 @@ export function DocumentSection({
     : vatData?.totalPurchaseVAT || 0
 
   const defaultEmptyMessage = variant === 'sales' 
-    ? 'No sales documents uploaded yet'
-    : 'No purchase documents uploaded yet'
+    ? 'Upload sales-related documents including invoices, receipts, and payment records'
+    : 'Upload purchase-related documents including invoices, receipts, and expense records'
+
+  // Map variant to FileUpload category
+  const uploadCategory = variant === 'sales' ? 'SALES' : 'PURCHASES'
+  const uploadTitle = variant === 'sales' ? 'Upload Sales Documents' : 'Upload Purchase Documents'
+  const uploadDescription = variant === 'sales' 
+    ? 'Upload sales-related documents including invoices, receipts, and payment records'
+    : 'Upload purchase-related documents including invoices, receipts, and expense records'
 
   return (
     <Card className={`${styles.card} rounded-xl shadow-sm hover:shadow-md transition-all duration-300`}>
       <CardHeader className={`${styles.header} rounded-t-xl`}>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <FileText className={`h-5 w-5 ${styles.icon}`} />
             <div>
@@ -88,6 +105,21 @@ export function DocumentSection({
               </div>
             </div>
           )}
+        </div>
+
+        {/* Integrated Upload Area */}
+        <div className="mt-4">
+          <FileUpload
+            category={uploadCategory}
+            title={uploadTitle}
+            description={uploadDescription}
+            acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
+            enableBatchMode={enableBatchMode}
+            maxConcurrentUploads={maxConcurrentUploads}
+            showBatchProgress={true}
+            onUploadSuccess={onUploadSuccess}
+            vatReturnId={vatReturnId}
+          />
         </div>
         
         {children}

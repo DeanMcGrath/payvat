@@ -453,7 +453,37 @@ function DashboardDocumentsContent() {
           </Card>
         )}
 
-        {/* Search & Filter Documents - Positioned for optimal user workflow */}
+        {/* VAT on Sales Documents - Unified Section with Upload + Display */}
+        <DocumentSection
+          variant="sales"
+          title="VAT on Sales Documents"
+          documents={filteredSalesDocuments}
+          vatData={vatData}
+          onView={handleViewDocument}
+          onRemove={handleDocumentRemove}
+          loading={loadingDocuments}
+          emptyMessage="Upload sales-related documents including invoices, receipts, and payment records"
+          onUploadSuccess={handleDocumentUpload}
+          enableBatchMode={enableBatchMode}
+          maxConcurrentUploads={maxConcurrentUploads}
+        />
+
+        {/* VAT on Purchases Documents - Unified Section with Upload + Display */}
+        <DocumentSection
+          variant="purchase"
+          title="VAT on Purchases Documents"
+          documents={filteredPurchaseDocuments}
+          vatData={vatData}
+          onView={handleViewDocument}
+          onRemove={handleDocumentRemove}
+          loading={loadingDocuments}
+          emptyMessage="Upload purchase-related documents including invoices, receipts, and expense records"
+          onUploadSuccess={handleDocumentUpload}
+          enableBatchMode={enableBatchMode}
+          maxConcurrentUploads={maxConcurrentUploads}
+        />
+
+        {/* Search & Filter Documents - Positioned at bottom for result filtering */}
         <Card className="border-neutral-200">
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -573,30 +603,6 @@ function DashboardDocumentsContent() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Sales Documents Section */}
-        <DocumentSection
-          variant="sales"
-          title="Sales Documents"
-          documents={filteredSalesDocuments}
-          vatData={vatData}
-          onView={handleViewDocument}
-          onRemove={handleDocumentRemove}
-          loading={loadingDocuments}
-          emptyMessage="Upload sales-related documents including invoices, receipts, and payment records"
-        />
-
-        {/* Purchase Documents Section */}
-        <DocumentSection
-          variant="purchase"
-          title="Purchase Documents"
-          documents={filteredPurchaseDocuments}
-          vatData={vatData}
-          onView={handleViewDocument}
-          onRemove={handleDocumentRemove}
-          loading={loadingDocuments}
-          emptyMessage="Upload purchase-related documents including invoices, receipts, and expense records"
-        />
 
         {/* Empty State */}
         {!loadingDocuments && documents.length === 0 && (

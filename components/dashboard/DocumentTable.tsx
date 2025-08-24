@@ -33,10 +33,11 @@ export function DocumentTable({
       {showHeaders && (
         <div className="grid grid-cols-12 gap-4 items-center px-6 py-3 bg-neutral-50 border-b text-xs font-medium text-neutral-600 uppercase tracking-wide">
           <div className="col-span-1 text-center">Type</div>
-          <div className="col-span-3">Document Name</div>
-          <div className="col-span-2">Date</div>
-          <div className="col-span-2">Total Amount</div>
+          <div className="col-span-2">Document Name</div>
+          <div className="col-span-2">Date on Doc</div>
+          <div className="col-span-2">Total on Doc</div>
           <div className="col-span-2">VAT Amount</div>
+          <div className="col-span-1">Confidence %</div>
           <div className="col-span-1">Status</div>
           <div className="col-span-1 text-right">Actions</div>
         </div>

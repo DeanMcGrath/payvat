@@ -99,10 +99,10 @@ export function DocumentRow({
 
     if (vatExtraction && vatAmounts.length > 0) {
       return {
-        label: `${Math.round(confidence * 100)}%`,
+        label: 'Processed',
         icon: CheckCircle,
         variant: 'success' as const,
-        className: styles.accent,
+        className: 'text-green-600',
       }
     }
 
@@ -185,7 +185,7 @@ export function DocumentRow({
       </div>
       
       {/* Document Name and Size */}
-      <div className="col-span-3 min-w-0">
+      <div className="col-span-2 min-w-0">
         <p className="body-sm font-medium truncate" title={document.originalName || document.fileName}>
           {document.originalName || document.fileName}
         </p>
@@ -215,6 +215,13 @@ export function DocumentRow({
       <div className="col-span-2">
         <p className={`body-sm font-medium ${styles.accent}`}>
           {totalVAT > 0 ? formatCurrency(totalVAT) : '—'}
+        </p>
+      </div>
+      
+      {/* Confidence % */}
+      <div className="col-span-1">
+        <p className="body-sm font-medium text-neutral-700">
+          {confidence > 0 ? `${Math.round(confidence * 100)}%` : '—'}
         </p>
       </div>
       
