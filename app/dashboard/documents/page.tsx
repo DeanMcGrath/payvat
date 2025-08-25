@@ -7,8 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Filter, X, ArrowUpDown, Home, RefreshCw, Video, Play, Calendar, Clock, ArrowRight, Search, FileText, Loader2, AlertCircle, CheckCircle, Eye, ChevronDown, ChevronUp, Trash2, TrendingUp, ShoppingCart } from 'lucide-react'
+import { Filter, X, ArrowUpDown, Home, RefreshCw, Video, Play, Calendar, Clock, ArrowRight, Search, FileText, Loader2, AlertCircle, CheckCircle, Eye, ChevronDown, ChevronUp, TrendingUp, ShoppingCart } from 'lucide-react'
 import { VideoModal } from "@/components/video-modal"
 import { toast } from "sonner"
 import { useVATData } from "@/contexts/vat-data-context"
@@ -63,9 +62,6 @@ function DashboardDocumentsContent() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 25
   
-  // Bulk operations state
-  const [selectedDocumentIds, setSelectedDocumentIds] = useState<Set<string>>(new Set())
-  const [isDeleting, setIsDeleting] = useState(false)
   
   // Use the new documents data hook
   const {
@@ -222,50 +218,6 @@ function DashboardDocumentsContent() {
     setSelectedDocument(null)
   }, [])
 
-  // Bulk operations handlers
-  const handleSelectDocument = useCallback((documentId: string, selected: boolean) => {
-    setSelectedDocumentIds(prev => {
-      const newSet = new Set(prev)
-      if (selected) {
-        newSet.add(documentId)
-      } else {
-        newSet.delete(documentId)
-      }
-      return newSet
-    })
-  }, [])
-
-  const handleSelectAll = useCallback((selected: boolean) => {
-    if (selected) {
-      setSelectedDocumentIds(new Set(paginatedDocuments.map(doc => doc.id)))
-    } else {
-      setSelectedDocumentIds(new Set())
-    }
-  }, [paginatedDocuments])
-
-  const handleBulkDelete = useCallback(async () => {
-    if (selectedDocumentIds.size === 0) return
-
-    try {
-      setIsDeleting(true)
-      const documentIds = Array.from(selectedDocumentIds)
-      
-      // Delete documents one by one (respecting user categorization)
-      for (const docId of documentIds) {
-        await removeDocument(docId)
-      }
-      
-      setSelectedDocumentIds(new Set())
-      toast.success(`Successfully deleted ${documentIds.length} documents`)
-      
-    } catch (err) {
-      console.error('Error deleting documents:', err)
-      errorHandler(err instanceof Error ? err : new Error('Failed to delete documents'))
-      toast.error('Failed to delete some documents')
-    } finally {
-      setIsDeleting(false)
-    }
-  }, [selectedDocumentIds, removeDocument, errorHandler])
 
   // Helper function to get VAT extraction data for a document
   const getDocumentVATExtraction = (documentId: string) => {
@@ -309,10 +261,6 @@ function DashboardDocumentsContent() {
     setCurrentPage(1)
   }, [selectedFilterYear, selectedMonth, selectedCategory, searchQuery, sortBy, sortOrder])
 
-  // Clear selections when pagination changes
-  React.useEffect(() => {
-    setSelectedDocumentIds(new Set())
-  }, [currentPage])
 
   const activeFiltersCount = 
     (selectedFilterYear !== currentYear.toString() ? 1 : 0) +
@@ -810,69 +758,35 @@ function DashboardDocumentsContent() {
                 )}
               </CardTitle>
               
-              {/* Bulk Delete Controls */}
-              {selectedDocumentIds.size > 0 && (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-neutral-600">
-                    {selectedDocumentIds.size} selected
-                  </span>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={handleBulkDelete}
-                    disabled={isDeleting}
-                    className="h-8"
-                  >
-                    {isDeleting ? (
-                      <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                    ) : (
-                      <Trash2 className="h-4 w-4 mr-1" />
-                    )}
-                    Delete {selectedDocumentIds.size}
-                  </Button>
-                </div>
-              )}
             </div>
           </CardHeader>
           <CardContent className="p-0">
             {loadingDocuments ? (
               <div className="p-6 space-y-3">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="grid grid-cols-13 gap-4 items-center p-4 animate-pulse">
-                    {/* Checkbox placeholder */}
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="grid grid-cols-12 gap-4 items-center p-4 animate-pulse">
                     <div className="col-span-1 flex justify-center">
-                      <div className="h-4 w-4 bg-neutral-200 rounded border" />
+                      <div className="h-6 w-6 bg-neutral-200 rounded" />
                     </div>
-                    {/* Type badge placeholder */}
-                    <div className="col-span-1 flex justify-center">
-                      <div className="h-6 w-16 bg-neutral-200 rounded-full" />
-                    </div>
-                    {/* Document name placeholder */}
                     <div className="col-span-2">
                       <div className="h-4 bg-neutral-200 rounded mb-2" />
                       <div className="h-3 bg-neutral-100 rounded w-16" />
                     </div>
-                    {/* Date placeholder */}
                     <div className="col-span-2">
                       <div className="h-4 bg-neutral-200 rounded w-20" />
                     </div>
-                    {/* Total amount placeholder */}
                     <div className="col-span-2">
                       <div className="h-4 bg-neutral-200 rounded w-16" />
                     </div>
-                    {/* VAT amount placeholder */}
                     <div className="col-span-2">
                       <div className="h-4 bg-neutral-200 rounded w-14" />
                     </div>
-                    {/* Confidence placeholder */}
                     <div className="col-span-1">
                       <div className="h-4 bg-neutral-200 rounded w-10" />
                     </div>
-                    {/* Status placeholder */}
                     <div className="col-span-1">
                       <div className="h-6 w-16 bg-neutral-200 rounded-full" />
                     </div>
-                    {/* Actions placeholder */}
                     <div className="col-span-1 flex justify-end space-x-1">
                       <div className="h-8 w-8 bg-neutral-200 rounded" />
                       <div className="h-8 w-8 bg-neutral-200 rounded" />
@@ -883,13 +797,7 @@ function DashboardDocumentsContent() {
             ) : allFilteredDocuments.length > 0 ? (
               <div className="w-full">
                 {/* Table Headers */}
-                <div className="grid grid-cols-13 gap-4 items-center px-6 py-3 bg-neutral-50 border-b text-xs font-normal text-neutral-600 uppercase tracking-wide">
-                  <div className="col-span-1 text-center">
-                    <Checkbox
-                      checked={selectedDocumentIds.size === paginatedDocuments.length && paginatedDocuments.length > 0}
-                      onCheckedChange={handleSelectAll}
-                    />
-                  </div>
+                <div className="grid grid-cols-12 gap-4 items-center px-6 py-3 bg-neutral-50 border-b text-xs font-normal text-neutral-600 uppercase tracking-wide">
                   <div className="col-span-1 text-center">Type</div>
                   <div className="col-span-2">Document Name</div>
                   <div className="col-span-2">Date on Doc</div>
@@ -908,33 +816,15 @@ function DashboardDocumentsContent() {
                     const variant = isVATSalesDoc ? 'sales' : 'purchase'
                     
                     return (
-                      <div key={document.id} className={`grid grid-cols-13 gap-4 items-center p-4 hover:bg-neutral-50 transition-colors group`}>
-                        {/* Checkbox */}
+                      <div key={document.id} className={`grid grid-cols-12 gap-4 items-center p-4 hover:bg-neutral-50 transition-colors group`}>
+                        {/* Type Badge */}
                         <div className="col-span-1 flex justify-center">
-                          <Checkbox
-                            checked={selectedDocumentIds.has(document.id)}
-                            onCheckedChange={(checked) => handleSelectDocument(document.id, !!checked)}
-                          />
-                        </div>
-                        
-                        {/* Enhanced Type Badge */}
-                        <div className="col-span-1 flex justify-center">
-                          <div className={`flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-full border ${
+                          <div className={`px-2 py-1 text-xs font-normal rounded-full ${
                             isVATSalesDoc 
-                              ? 'bg-brand-50 text-brand-900 border-brand-200' 
-                              : 'bg-green-50 text-green-900 border-green-200'
+                              ? 'bg-brand-100 text-brand-900' 
+                              : 'bg-green-100 text-green-900'
                           }`}>
-                            {isVATSalesDoc ? (
-                              <>
-                                <TrendingUp className="h-3 w-3" />
-                                Sales
-                              </>
-                            ) : (
-                              <>
-                                <ShoppingCart className="h-3 w-3" />
-                                Purchase
-                              </>
-                            )}
+                            {isVATSalesDoc ? 'Sales' : 'Purchase'}
                           </div>
                         </div>
                         
