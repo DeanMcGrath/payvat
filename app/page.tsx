@@ -121,6 +121,9 @@ export default function LandingPage() {
       >
         <section className="relative section-after-header">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            {/* SEO-optimized H1 - Hidden visually but accessible to search engines */}
+            <h1 className="sr-only">PayVAT Ireland - AI-Powered VAT Submission Software for Irish Businesses</h1>
+            
             <div className="grid gap-8 md:grid-cols-3" data-animate>
               {navigationBoxes.map((box, index) => (
                 <div

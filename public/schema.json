@@ -1,24 +1,25 @@
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "Don't Be Like Me Ireland",
-  "description": "Professional VAT services for Irish businesses including VAT returns, compliance, and advisory services.",
-  "url": "https://dontbelikeme.ie",
-  "logo": "https://dontbelikeme.ie/logo.png",
+  "name": "PayVAT.ie",
+  "description": "AI-powered VAT submission service for Irish businesses. Automated document processing, VAT returns, and Revenue compliance.",
+  "url": "https://payvat.ie",
+  "logo": "https://payvat.ie/logo.png",
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+353-1-XXX-XXXX",
     "contactType": "customer service",
     "areaServed": "IE",
-    "availableLanguage": "en"
+    "availableLanguage": "en",
+    "email": "support@payvat.ie"
   },
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "IE",
-    "addressLocality": "Dublin"
+    "addressLocality": "Dublin",
+    "addressRegion": "Dublin"
   },
   "sameAs": [
-    "https://dontbelikeme.ie"
+    "https://payvat.ie"
   ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
@@ -27,17 +28,25 @@
       {
         "@type": "Offer",
         "itemOffered": {
-          "@type": "Service",
-          "name": "VAT Return Submission",
-          "description": "Professional VAT return preparation and submission to Irish Revenue",
+          "@type": "SoftwareApplication",
+          "name": "AI-Powered VAT Return Submission",
+          "description": "Automated VAT return preparation and submission to Irish Revenue using AI document processing",
           "provider": {
             "@type": "Organization",
-            "name": "Don't Be Like Me Ireland"
+            "name": "PayVAT.ie"
           },
           "areaServed": "IE",
+          "applicationCategory": "FinanceApplication",
+          "operatingSystem": "Web Browser",
+          "offers": {
+            "@type": "Offer",
+            "price": "30",
+            "priceCurrency": "EUR",
+            "priceValidUntil": "2025-12-31"
+          },
           "availableChannel": {
             "@type": "ServiceChannel",
-            "serviceUrl": "https://dontbelikeme.ie"
+            "serviceUrl": "https://payvat.ie"
           }
         }
       },
@@ -45,11 +54,11 @@
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service", 
-          "name": "VAT Compliance Services",
-          "description": "Ongoing VAT compliance support for Irish businesses",
+          "name": "Document Processing & VAT Extraction",
+          "description": "AI-powered document processing and VAT amount extraction for Irish businesses",
           "provider": {
             "@type": "Organization",
-            "name": "Don't Be Like Me Ireland"
+            "name": "PayVAT.ie"
           },
           "areaServed": "IE"
         }
@@ -58,11 +67,11 @@
         "@type": "Offer",
         "itemOffered": {
           "@type": "Service",
-          "name": "VAT Registration",
-          "description": "VAT registration assistance for new Irish businesses",
+          "name": "Revenue Ireland Integration",
+          "description": "Direct integration with Irish Revenue systems for seamless VAT submission",
           "provider": {
             "@type": "Organization",
-            "name": "Don't Be Like Me Ireland"
+            "name": "PayVAT.ie"
           },
           "areaServed": "IE"
         }

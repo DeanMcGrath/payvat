@@ -29,13 +29,39 @@ const sendToAnalytics = (metric: WebVitalsMetric) => {
     })
   }
 
-  // Log to console in development
+  // Send to internal analytics API for monitoring
+  sendToInternalAnalytics(metric)
+
+  // Log to console in development with color coding
   if (process.env.NODE_ENV === 'development') {
-    console.log(`[Web Vitals] ${metric.name}:`, {
-      value: metric.value,
-      rating: metric.rating,
-      delta: metric.delta,
+    const color = metric.rating === 'good' ? 'green' : metric.rating === 'needs-improvement' ? 'orange' : 'red'
+    console.log(`%c[Web Vitals] ${metric.name}: ${metric.value.toFixed(2)}ms (${metric.rating})`, 
+      `color: ${color}; font-weight: bold`
+    )
+  }
+}
+
+const sendToInternalAnalytics = async (metric: WebVitalsMetric) => {
+  try {
+    await fetch('/api/analytics/web-vitals', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        metric: metric.name,
+        value: metric.value,
+        rating: metric.rating,
+        id: metric.id,
+        delta: metric.delta,
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: Date.now(),
+      }),
     })
+  } catch (error) {
+    // Silently fail - don't impact user experience
+    console.debug('Analytics tracking failed:', error)
   }
 }
 

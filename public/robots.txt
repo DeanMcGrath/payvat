@@ -1,0 +1,25 @@
+# PayVAT.ie Robots.txt
+User-agent: *
+Allow: /
+
+# Allow access to CSS and JS files
+Allow: /_next/static/
+Allow: /images/
+Allow: /icons/
+Allow: /favicon.ico
+
+# Block admin and API endpoints from crawlers
+Disallow: /admin/
+Disallow: /api/
+Disallow: /dashboard/
+
+# Block test and development pages
+Disallow: /test*
+Disallow: /debug*
+
+# Sitemap location
+Sitemap: https://payvat.ie/sitemap.xml
+Sitemap: https://payvat.ie/api/sitemap
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
