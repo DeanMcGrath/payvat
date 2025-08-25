@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Filter, X, ArrowUpDown, Home, RefreshCw, Video, Play, Calendar, Clock, ArrowRight, Search, FileText, Loader2, AlertCircle, CheckCircle, Eye } from 'lucide-react'
+import { Checkbox } from "@/components/ui/checkbox"
+import { Filter, X, ArrowUpDown, Home, RefreshCw, Video, Play, Calendar, Clock, ArrowRight, Search, FileText, Loader2, AlertCircle, CheckCircle, Eye, ChevronDown, ChevronUp, Trash2, TrendingUp, ShoppingCart } from 'lucide-react'
 import { VideoModal } from "@/components/video-modal"
 import { toast } from "sonner"
 import { useVATData } from "@/contexts/vat-data-context"
@@ -37,6 +38,7 @@ function DashboardDocumentsContent() {
   // State for filtering and search
   const [selectedFilterYear, setSelectedFilterYear] = useState<string>(currentYear.toString())
   const [selectedMonth, setSelectedMonth] = useState<string>("all")
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [sortBy, setSortBy] = useState<"date" | "name">("date")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
@@ -51,10 +53,19 @@ function DashboardDocumentsContent() {
   
   // Video modal state
   const [showVideoModal, setShowVideoModal] = useState(false)
+  const [isVideoCollapsed, setIsVideoCollapsed] = useState(false)
   
   // Past VAT submissions state
   const [pastSubmissions, setPastSubmissions] = useState<VATReturn[]>([])
   const [loadingSubmissions, setLoadingSubmissions] = useState(false)
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 25
+  
+  // Bulk operations state
+  const [selectedDocumentIds, setSelectedDocumentIds] = useState<Set<string>>(new Set())
+  const [isDeleting, setIsDeleting] = useState(false)
   
   // Use the new documents data hook
   const {
@@ -73,10 +84,11 @@ function DashboardDocumentsContent() {
     "July", "August", "September", "October", "November", "December"
   ]
 
-  // Memoized filtered and sorted documents - single computation replaces multiple filter calls
-  const { filteredSalesDocuments, filteredPurchaseDocuments, allFilteredDocuments, stats } = useMemo(() => {
+  // Memoized filtered and sorted documents with pagination - single computation replaces multiple filter calls
+  const { filteredSalesDocuments, filteredPurchaseDocuments, allFilteredDocuments, paginatedDocuments, stats, totalPages } = useMemo(() => {
     const yearFilter = selectedFilterYear
     const monthFilter = selectedMonth
+    const categoryFilter = selectedCategory
     const query = searchQuery.toLowerCase()
 
     // Filter all documents once
@@ -88,6 +100,10 @@ function DashboardDocumentsContent() {
 
       if (yearFilter !== "all" && docYear !== yearFilter) return false
       if (monthFilter !== "all" && docMonth !== monthFilter) return false
+      if (categoryFilter !== "all") {
+        if (categoryFilter === "sales" && !doc.category?.startsWith("SALES")) return false
+        if (categoryFilter === "purchases" && !doc.category?.startsWith("PURCHASE")) return false
+      }
       if (query && !name.includes(query)) return false
       return true
     }).sort((a, b) => {
@@ -118,13 +134,21 @@ function DashboardDocumentsContent() {
       averageConfidence: vatData?.averageConfidence || 0,
     }
 
+    // Calculate pagination
+    const totalPages = Math.ceil(filtered.length / itemsPerPage)
+    const startIndex = (currentPage - 1) * itemsPerPage
+    const endIndex = startIndex + itemsPerPage
+    const paginatedDocuments = filtered.slice(startIndex, endIndex)
+
     return {
       filteredSalesDocuments: sales,
       filteredPurchaseDocuments: purchase,
       allFilteredDocuments: filtered,
-      stats
+      paginatedDocuments,
+      stats,
+      totalPages
     }
-  }, [documents, selectedFilterYear, selectedMonth, searchQuery, sortBy, sortOrder, vatData])
+  }, [documents, selectedFilterYear, selectedMonth, selectedCategory, searchQuery, sortBy, sortOrder, vatData, currentPage, itemsPerPage])
 
   // Load user profile and past submissions on mount
   React.useEffect(() => {
@@ -198,6 +222,51 @@ function DashboardDocumentsContent() {
     setSelectedDocument(null)
   }, [])
 
+  // Bulk operations handlers
+  const handleSelectDocument = useCallback((documentId: string, selected: boolean) => {
+    setSelectedDocumentIds(prev => {
+      const newSet = new Set(prev)
+      if (selected) {
+        newSet.add(documentId)
+      } else {
+        newSet.delete(documentId)
+      }
+      return newSet
+    })
+  }, [])
+
+  const handleSelectAll = useCallback((selected: boolean) => {
+    if (selected) {
+      setSelectedDocumentIds(new Set(paginatedDocuments.map(doc => doc.id)))
+    } else {
+      setSelectedDocumentIds(new Set())
+    }
+  }, [paginatedDocuments])
+
+  const handleBulkDelete = useCallback(async () => {
+    if (selectedDocumentIds.size === 0) return
+
+    try {
+      setIsDeleting(true)
+      const documentIds = Array.from(selectedDocumentIds)
+      
+      // Delete documents one by one (respecting user categorization)
+      for (const docId of documentIds) {
+        await removeDocument(docId)
+      }
+      
+      setSelectedDocumentIds(new Set())
+      toast.success(`Successfully deleted ${documentIds.length} documents`)
+      
+    } catch (err) {
+      console.error('Error deleting documents:', err)
+      errorHandler(err instanceof Error ? err : new Error('Failed to delete documents'))
+      toast.error('Failed to delete some documents')
+    } finally {
+      setIsDeleting(false)
+    }
+  }, [selectedDocumentIds, removeDocument, errorHandler])
+
   // Helper function to get VAT extraction data for a document
   const getDocumentVATExtraction = (documentId: string) => {
     const salesDoc = vatData?.salesDocuments?.find((doc) => doc.id === documentId)
@@ -228,23 +297,70 @@ function DashboardDocumentsContent() {
   const clearFilters = () => {
     setSelectedFilterYear(currentYear.toString())
     setSelectedMonth("all")
+    setSelectedCategory("all")
     setSearchQuery("")
     setSortBy("date")
     setSortOrder("desc")
+    setCurrentPage(1)
   }
+
+  // Reset pagination when filters change
+  React.useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedFilterYear, selectedMonth, selectedCategory, searchQuery, sortBy, sortOrder])
+
+  // Clear selections when pagination changes
+  React.useEffect(() => {
+    setSelectedDocumentIds(new Set())
+  }, [currentPage])
 
   const activeFiltersCount = 
     (selectedFilterYear !== currentYear.toString() ? 1 : 0) +
     (selectedMonth !== "all" ? 1 : 0) +
+    (selectedCategory !== "all" ? 1 : 0) +
     (searchQuery ? 1 : 0)
 
   if (loadingDocuments && documents.length === 0) {
     return (
       <PageLayout>
-        <div className="flex items-center justify-center py-20">
-          <div className="flex items-center space-x-3">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-petrol-600" />
-            <span className="body-lg text-neutral-600">Loading dashboard...</span>
+        <div className="space-y-8 animate-pulse">
+          {/* Header skeleton */}
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="h-8 bg-neutral-200 rounded w-48 mb-2" />
+              <div className="h-5 bg-neutral-100 rounded w-96" />
+            </div>
+            <div className="h-10 bg-neutral-200 rounded w-32" />
+          </div>
+
+          {/* Stats cards skeleton */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {[...Array(4)].map((_, i) => (
+              <Card key={i} className="border-neutral-200">
+                <CardContent className="p-6">
+                  <div className="space-y-3">
+                    <div className="h-4 bg-neutral-200 rounded w-24" />
+                    <div className="h-8 bg-neutral-200 rounded w-16" />
+                    <div className="h-3 bg-neutral-100 rounded w-20" />
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Upload sections skeleton */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {[...Array(2)].map((_, i) => (
+              <Card key={i} className="border-neutral-200">
+                <CardHeader>
+                  <div className="h-6 bg-neutral-200 rounded w-48" />
+                  <div className="h-4 bg-neutral-100 rounded w-64" />
+                </CardHeader>
+                <CardContent>
+                  <div className="h-32 bg-neutral-100 rounded border-2 border-dashed" />
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </PageLayout>
@@ -347,29 +463,43 @@ function DashboardDocumentsContent() {
           <NetVATStatCard amount={stats.netVAT} />
         </StatCardGrid>
 
-        {/* Watch Demo Video Section */}
+        {/* Watch Demo Video Section - Collapsible */}
         <Card className="bg-gradient-brand-subtle border-petrol-200">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-center">
-              <div className="text-center">
-                <div className="flex items-center justify-center mb-3">
-                  <Video className="h-8 w-8 text-petrol-base mr-3" />
-                  <h2 className="h4 text-brand-900">Learn How It Works</h2>
-                </div>
-                <p className="body-lg text-petrol-dark mb-4">
-                  Watch our demo to see how easy VAT submission can be
-                </p>
-                <Button 
-                  onClick={() => setShowVideoModal(true)}
-                  size="lg"
-                  className="bg-gradient-brand text-white px-8 py-3"
-                >
-                  <Play className="h-5 w-5 mr-2" />
-                  Watch Demo Video
-                </Button>
+          <CardHeader className="pb-0">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Video className="h-5 w-5 text-petrol-base" />
+                <h2 className="h5 text-brand-900">Learn How It Works</h2>
               </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsVideoCollapsed(!isVideoCollapsed)}
+                className="h-8 w-8 p-0 text-petrol-base hover:bg-petrol-50"
+              >
+                {isVideoCollapsed ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+              </Button>
             </div>
-          </CardContent>
+          </CardHeader>
+          {!isVideoCollapsed && (
+            <CardContent className="pt-0 pb-6">
+              <div className="flex items-center justify-center">
+                <div className="text-center">
+                  <p className="body-lg text-petrol-dark mb-4">
+                    Watch our demo to see how easy VAT submission can be
+                  </p>
+                  <Button 
+                    onClick={() => setShowVideoModal(true)}
+                    size="lg"
+                    className="bg-gradient-brand text-white px-8 py-3"
+                  >
+                    <Play className="h-5 w-5 mr-2" />
+                    Watch Demo Video
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          )}
         </Card>
 
         {/* Past VAT Submissions Section */}
@@ -554,7 +684,7 @@ function DashboardDocumentsContent() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               <div className="space-y-2">
                 <label className="body-sm font-normal text-neutral-700">Year</label>
                 <Select value={selectedFilterYear} onValueChange={setSelectedFilterYear}>
@@ -584,6 +714,30 @@ function DashboardDocumentsContent() {
                         {month}
                       </SelectItem>
                     ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="body-sm font-normal text-neutral-700">Category</label>
+                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    <SelectItem value="sales">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="h-3 w-3" />
+                        Sales
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="purchases">
+                      <div className="flex items-center gap-2">
+                        <ShoppingCart className="h-3 w-3" />
+                        Purchases
+                      </div>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -655,35 +809,70 @@ function DashboardDocumentsContent() {
                   </span>
                 )}
               </CardTitle>
+              
+              {/* Bulk Delete Controls */}
+              {selectedDocumentIds.size > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-neutral-600">
+                    {selectedDocumentIds.size} selected
+                  </span>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={handleBulkDelete}
+                    disabled={isDeleting}
+                    className="h-8"
+                  >
+                    {isDeleting ? (
+                      <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                    ) : (
+                      <Trash2 className="h-4 w-4 mr-1" />
+                    )}
+                    Delete {selectedDocumentIds.size}
+                  </Button>
+                </div>
+              )}
             </div>
           </CardHeader>
           <CardContent className="p-0">
             {loadingDocuments ? (
               <div className="p-6 space-y-3">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="grid grid-cols-12 gap-4 items-center p-4 animate-pulse">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="grid grid-cols-13 gap-4 items-center p-4 animate-pulse">
+                    {/* Checkbox placeholder */}
                     <div className="col-span-1 flex justify-center">
-                      <div className="h-6 w-6 bg-neutral-200 rounded" />
+                      <div className="h-4 w-4 bg-neutral-200 rounded border" />
                     </div>
+                    {/* Type badge placeholder */}
+                    <div className="col-span-1 flex justify-center">
+                      <div className="h-6 w-16 bg-neutral-200 rounded-full" />
+                    </div>
+                    {/* Document name placeholder */}
                     <div className="col-span-2">
                       <div className="h-4 bg-neutral-200 rounded mb-2" />
                       <div className="h-3 bg-neutral-100 rounded w-16" />
                     </div>
+                    {/* Date placeholder */}
                     <div className="col-span-2">
                       <div className="h-4 bg-neutral-200 rounded w-20" />
                     </div>
+                    {/* Total amount placeholder */}
                     <div className="col-span-2">
                       <div className="h-4 bg-neutral-200 rounded w-16" />
                     </div>
+                    {/* VAT amount placeholder */}
                     <div className="col-span-2">
                       <div className="h-4 bg-neutral-200 rounded w-14" />
                     </div>
+                    {/* Confidence placeholder */}
                     <div className="col-span-1">
                       <div className="h-4 bg-neutral-200 rounded w-10" />
                     </div>
+                    {/* Status placeholder */}
                     <div className="col-span-1">
                       <div className="h-6 w-16 bg-neutral-200 rounded-full" />
                     </div>
+                    {/* Actions placeholder */}
                     <div className="col-span-1 flex justify-end space-x-1">
                       <div className="h-8 w-8 bg-neutral-200 rounded" />
                       <div className="h-8 w-8 bg-neutral-200 rounded" />
@@ -694,7 +883,13 @@ function DashboardDocumentsContent() {
             ) : allFilteredDocuments.length > 0 ? (
               <div className="w-full">
                 {/* Table Headers */}
-                <div className="grid grid-cols-12 gap-4 items-center px-6 py-3 bg-neutral-50 border-b text-xs font-normal text-neutral-600 uppercase tracking-wide">
+                <div className="grid grid-cols-13 gap-4 items-center px-6 py-3 bg-neutral-50 border-b text-xs font-normal text-neutral-600 uppercase tracking-wide">
+                  <div className="col-span-1 text-center">
+                    <Checkbox
+                      checked={selectedDocumentIds.size === paginatedDocuments.length && paginatedDocuments.length > 0}
+                      onCheckedChange={handleSelectAll}
+                    />
+                  </div>
                   <div className="col-span-1 text-center">Type</div>
                   <div className="col-span-2">Document Name</div>
                   <div className="col-span-2">Date on Doc</div>
@@ -707,21 +902,39 @@ function DashboardDocumentsContent() {
                 
                 {/* Document Rows */}
                 <div className="divide-y divide-neutral-100">
-                  {allFilteredDocuments.map((document) => {
+                  {paginatedDocuments.map((document) => {
                     const isVATSalesDoc = document.category?.startsWith("SALES")
                     const isVATPurchaseDoc = document.category?.startsWith("PURCHASE")
                     const variant = isVATSalesDoc ? 'sales' : 'purchase'
                     
                     return (
-                      <div key={document.id} className={`grid grid-cols-12 gap-4 items-center p-4 hover:bg-neutral-50 transition-colors group`}>
-                        {/* Type Badge */}
+                      <div key={document.id} className={`grid grid-cols-13 gap-4 items-center p-4 hover:bg-neutral-50 transition-colors group`}>
+                        {/* Checkbox */}
                         <div className="col-span-1 flex justify-center">
-                          <div className={`px-2 py-1 text-xs font-normal rounded-full ${
+                          <Checkbox
+                            checked={selectedDocumentIds.has(document.id)}
+                            onCheckedChange={(checked) => handleSelectDocument(document.id, !!checked)}
+                          />
+                        </div>
+                        
+                        {/* Enhanced Type Badge */}
+                        <div className="col-span-1 flex justify-center">
+                          <div className={`flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-full border ${
                             isVATSalesDoc 
-                              ? 'bg-brand-100 text-brand-900' 
-                              : 'bg-green-100 text-green-900'
+                              ? 'bg-brand-50 text-brand-900 border-brand-200' 
+                              : 'bg-green-50 text-green-900 border-green-200'
                           }`}>
-                            {isVATSalesDoc ? 'Sales' : 'Purchase'}
+                            {isVATSalesDoc ? (
+                              <>
+                                <TrendingUp className="h-3 w-3" />
+                                Sales
+                              </>
+                            ) : (
+                              <>
+                                <ShoppingCart className="h-3 w-3" />
+                                Purchase
+                              </>
+                            )}
                           </div>
                         </div>
                         
@@ -836,6 +1049,77 @@ function DashboardDocumentsContent() {
                 <p className="body-sm text-neutral-600">
                   Upload your documents using the sections above or adjust your filters
                 </p>
+              </div>
+            )}
+            
+            {/* Pagination Controls */}
+            {allFilteredDocuments.length > itemsPerPage && (
+              <div className="flex items-center justify-between px-6 py-4 border-t border-neutral-100">
+                <div className="text-sm text-neutral-600">
+                  Showing {Math.min((currentPage - 1) * itemsPerPage + 1, allFilteredDocuments.length)} to{' '}
+                  {Math.min(currentPage * itemsPerPage, allFilteredDocuments.length)} of{' '}
+                  {allFilteredDocuments.length} documents
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </Button>
+                  
+                  {/* Page numbers */}
+                  <div className="flex items-center space-x-1">
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      let pageNum
+                      if (totalPages <= 5) {
+                        pageNum = i + 1
+                      } else if (currentPage <= 3) {
+                        pageNum = i + 1
+                      } else if (currentPage >= totalPages - 2) {
+                        pageNum = totalPages - 4 + i
+                      } else {
+                        pageNum = currentPage - 2 + i
+                      }
+                      
+                      return (
+                        <Button
+                          key={pageNum}
+                          variant={currentPage === pageNum ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setCurrentPage(pageNum)}
+                          className="w-8 h-8 p-0"
+                        >
+                          {pageNum}
+                        </Button>
+                      )
+                    })}
+                    {totalPages > 5 && currentPage < totalPages - 2 && (
+                      <>
+                        <span className="text-neutral-400">...</span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setCurrentPage(totalPages)}
+                          className="w-8 h-8 p-0"
+                        >
+                          {totalPages}
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </Button>
+                </div>
               </div>
             )}
           </CardContent>
