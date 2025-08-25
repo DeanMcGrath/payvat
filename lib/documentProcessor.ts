@@ -30,6 +30,7 @@ export interface ExtractedVATData {
   // Enhanced fields for Irish VAT compliance
   vatNumber?: string
   invoiceDate?: string
+  invoiceTotal?: number
   supplierName?: string
   processingMethod: 'AI_VISION' | 'OCR_TEXT' | 'EXCEL_PARSER' | 'FALLBACK'
   processingTimeMs: number

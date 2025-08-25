@@ -541,6 +541,8 @@ body {
   .section-after-header {
     padding-top: 6rem; /* 96px - for first sections after header */
     padding-bottom: 4rem; /* 64px - standard bottom padding */
+    position: relative;
+    z-index: 1;
   }
   
   /* Glass Effects */

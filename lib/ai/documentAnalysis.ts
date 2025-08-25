@@ -758,7 +758,7 @@ CRITICAL: Sum ALL tax-related columns for accurate WooCommerce compatibility. Lo
       console.log(`🤖 PROCESSING IMAGE: ${fileName} with OpenAI Vision API`)
     
     // Use a simple, reliable prompt with international tax terminology
-    const prompt = `Extract tax information from this business document/invoice. Look for tax amounts using ANY of these terms:
+    const prompt = `Extract tax information, invoice date, and total amount from this business document/invoice. Look for tax amounts using ANY of these terms:
 - VAT, Value Added Tax (Europe, Ireland)
 - Tax, Sales Tax, Tax Amount, Total Tax (USA)
 - GST, GST Amount (Australia, UK)
@@ -766,16 +766,24 @@ CRITICAL: Sum ALL tax-related columns for accurate WooCommerce compatibility. Lo
 - BTW (Netherlands)
 - MWST, MwSt (Germany, Austria)
 
+CRITICAL: Also extract the invoice date and total amount from the document.
+
 Return the information in this JSON format:
 {
-  "totalVatAmount": number or null,
+  "invoiceDate": "YYYY-MM-DD or null (look for any date - due date, invoice date, document date)",
+  "invoiceTotal": number or null (the complete total amount customer pays, including VAT),
+  "totalVatAmount": number or null (the VAT portion only),
   "lineItems": [{"description": "string", "vatAmount": number}],
   "extractedText": "all visible text",
   "documentType": "INVOICE" | "RECEIPT" | "OTHER",
   "classification": {"category": "SALES" | "PURCHASES", "confidence": number}
 }
 
-Find the total tax amount clearly labeled on the document using any of the above terminology. Be accurate - this is for tax compliance.`
+REQUIREMENTS:
+- For invoiceDate: Look for "Due Date", "Invoice Date", "Date", or ANY visible date
+- For invoiceTotal: Look for "Total", "Total Amount", "Amount Due", "Grand Total", or the largest monetary amount
+- Find the total tax amount clearly labeled on the document using any of the above terminology.
+- Be accurate - this data is used for tax filing and dashboard display.`
 
     console.log('📝 SENDING SIMPLIFIED PROMPT TO OPENAI VISION API')
     
@@ -941,6 +949,8 @@ Find the total tax amount clearly labeled on the document using any of the above
       
       parsedData = JSON.parse(jsonString)
       console.log('✅ Successfully parsed AI response as JSON')
+      console.log(`   invoiceDate: ${parsedData.invoiceDate}`)
+      console.log(`   invoiceTotal: ${parsedData.invoiceTotal}`)
       console.log(`   totalVatAmount: ${parsedData.totalVatAmount}`)
       console.log(`   lineItems count: ${parsedData.lineItems?.length || 0}`)
       
@@ -954,6 +964,8 @@ Find the total tax amount clearly labeled on the document using any of the above
       console.log(`🔧 FALLBACK: Found potential VAT amounts: ${foundNumbers.join(', ')}`)
       
       parsedData = {
+        invoiceDate: null,
+        invoiceTotal: foundNumbers.length > 0 ? Math.max(...foundNumbers) : null,
         totalVatAmount: foundNumbers.length > 0 ? Math.max(...foundNumbers) : null,
         lineItems: foundNumbers.map((amount, index) => ({
           description: `VAT Item ${index + 1}`,
@@ -1442,8 +1454,17 @@ async function convertToEnhancedVATData(aiData: any, category: string): Promise<
     // New enhanced fields
     documentType: aiData.documentType || 'OTHER',
     businessDetails: aiData.businessDetails || { businessName: null, vatNumber: null, address: null },
-    transactionData: aiData.transactionData || { date: null, invoiceNumber: null, currency: 'EUR' },
-    vatData: aiData.vatData || { lineItems: [], subtotal: null, totalVatAmount: null, grandTotal: null },
+    transactionData: {
+      date: aiData.invoiceDate || aiData.transactionData?.date || null,
+      invoiceNumber: aiData.transactionData?.invoiceNumber || null,
+      currency: aiData.transactionData?.currency || 'EUR'
+    },
+    vatData: {
+      lineItems: aiData.lineItems || aiData.vatData?.lineItems || [],
+      subtotal: aiData.vatData?.subtotal || null,
+      totalVatAmount: aiData.totalVatAmount || aiData.vatData?.totalVatAmount || null,
+      grandTotal: aiData.invoiceTotal || aiData.vatData?.grandTotal || null
+    },
     classification: aiData.classification || { category: category.includes('SALES') ? 'SALES' : 'PURCHASES', confidence: 0.5, reasoning: 'Fallback classification' },
     validationFlags: aiData.validationFlags || [],
     extractedText: aiData.extractedText || '',
@@ -1451,9 +1472,13 @@ async function convertToEnhancedVATData(aiData: any, category: string): Promise<
     // Legacy compatibility fields
     salesVAT,
     purchaseVAT,
-    totalAmount: aiData.vatData?.grandTotal,
+    totalAmount: aiData.invoiceTotal || aiData.vatData?.grandTotal,
     vatRate: aiData.vatData?.lineItems?.[0]?.vatRate,
-    confidence: await calculateConfidence(aiData, salesVAT, purchaseVAT, docAnalysis)
+    confidence: await calculateConfidence(aiData, salesVAT, purchaseVAT, docAnalysis),
+    
+    // Additional extracted fields for database saving
+    invoiceDate: aiData.invoiceDate || aiData.transactionData?.date || null,
+    invoiceTotal: aiData.invoiceTotal || aiData.vatData?.grandTotal || null
   }
 }
 
@@ -2438,9 +2463,12 @@ async function processTextWithGPT4(
     console.log(`   Document: ${fileName}`)
     
     // Use GPT-4 with a focused VAT extraction prompt
-    const prompt = `Extract VAT information from this business document text. This is for Irish tax compliance.
+    const prompt = `Extract VAT information, invoice date, and total amount from this business document text. This is for Irish tax compliance.
 
-IMPORTANT: Look for the exact field "Total Amount VAT" which should contain the main VAT amount to extract.
+CRITICAL EXTRACTION REQUIREMENTS:
+1. INVOICE DATE: Find ANY date on the document and extract as "invoiceDate" in YYYY-MM-DD format
+2. INVOICE TOTAL: Find the COMPLETE TOTAL AMOUNT (including VAT) and extract as "invoiceTotal"  
+3. VAT AMOUNT: Look for "Total Amount VAT" or similar VAT fields
 
 Document Text:
 """
@@ -2449,14 +2477,19 @@ ${extractedText}
 
 Return ONLY a JSON object with this structure:
 {
-  "totalVatAmount": number (the main Total Amount VAT, not individual line items),
+  "invoiceDate": "YYYY-MM-DD or null (REQUIRED: look for any date - due date, invoice date, document date)",
+  "invoiceTotal": number or null (REQUIRED: the complete total amount customer pays, including VAT),
+  "totalVatAmount": number or null (the VAT portion only),
   "lineItems": [{"description": "string", "vatAmount": number}],
-  "extractedText": "key portions of document text containing VAT info",
-  "documentType": "INVOICE",
-  "classification": {"category": "PURCHASES", "confidence": 0.9}
+  "extractedText": "key portions of document text containing dates, totals, and VAT info",
+  "documentType": "INVOICE" | "RECEIPT" | "OTHER",
+  "classification": {"category": "SALES" | "PURCHASES", "confidence": number}
 }
 
-Focus on finding the "Total Amount VAT" field specifically. Be accurate - this is for tax filing.`
+CRITICAL: 
+- For invoiceDate: Look for "Due Date", "Invoice Date", "Date", or ANY visible date
+- For invoiceTotal: Look for "Total", "Total Amount", "Amount Due", "Grand Total", or the largest monetary amount
+- Be accurate - this data is used for tax filing and dashboard display.`
 
     const response = await openai.chat.completions.create({
       model: model, // Use specified model with fallback support
@@ -2487,6 +2520,8 @@ Focus on finding the "Total Amount VAT" field specifically. Be accurate - this i
       if (jsonMatch) {
         parsedData = JSON.parse(jsonMatch[0])
         console.log('✅ Successfully parsed GPT-4 JSON response')
+        console.log(`   invoiceDate: ${parsedData.invoiceDate}`)
+        console.log(`   invoiceTotal: ${parsedData.invoiceTotal}`)
         console.log(`   totalVatAmount: ${parsedData.totalVatAmount}`)
         console.log(`   lineItems count: ${parsedData.lineItems?.length || 0}`)
       } else {

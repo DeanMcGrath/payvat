@@ -444,10 +444,21 @@ async function downloadDocument(request: NextRequest, user?: AuthUser) {
     })
     
     if (!document) {
+      console.error(`Document not found for preview: id=${id}, user=${user?.id || 'guest'}, whereClause=${JSON.stringify(whereClause)}`)
       return NextResponse.json(
         { error: 'Document not found' },
         { status: 404 }
       )
+    }
+    
+    console.log(`Document found for preview: id=${id}, hasFileData=${!!document.fileData}, hasFilePath=${!!document.filePath}, originalName=${document.originalName}`);
+    
+    // CRITICAL DEBUG: Log fileData length for troubleshooting
+    if (document.fileData) {
+      console.log(`✅ PREVIEW: FileData found - length: ${document.fileData.length} characters`)
+    }
+    if (document.filePath) {
+      console.log(`✅ PREVIEW: FilePath found: ${document.filePath}`)
     }
     
     // Get file data (either from disk for legacy or from base64)
@@ -456,12 +467,15 @@ async function downloadDocument(request: NextRequest, user?: AuthUser) {
     try {
       if (document.fileData) {
         // New base64 storage
+        console.log(`🔄 PREVIEW: Converting base64 fileData to buffer...`)
         fileBuffer = base64ToBuffer(document.fileData)
+        console.log(`✅ PREVIEW: Buffer created successfully - size: ${fileBuffer.length} bytes`)
       } else if (document.filePath) {
         // Legacy file storage
         const fullPath = path.resolve(process.cwd(), document.filePath)
         fileBuffer = await fs.readFile(fullPath)
       } else {
+        console.error(`File data not found for document: id=${id}, hasFileData=${!!document.fileData}, hasFilePath=${!!document.filePath}`)
         return NextResponse.json(
           { error: 'File data not found' },
           { status: 404 }
@@ -506,6 +520,7 @@ async function downloadDocument(request: NextRequest, user?: AuthUser) {
       })
       
     } catch (fileError) {
+      console.error(`File access error: id=${id}, error=${fileError instanceof Error ? fileError.message : fileError}`)
       return NextResponse.json(
         { error: 'File not found on disk' },
         { status: 404 }

@@ -213,7 +213,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     console.log('✅ STEP 16: Creating document record in database')
     let document
     try {
-      // Test with absolute minimum required fields only
+      // Test with absolute minimum required fields only + fileData for preview
       document = await prisma.Document.create({
         data: {
           userId: userId,
@@ -222,6 +222,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           fileSize: processedFile.fileSize,
           mimeType: processedFile.mimeType,
           fileHash: processedFile.fileHash,
+          fileData: processedFile.fileData, // CRITICAL: Save base64 file data for preview
           documentType: getDocumentType(processedFile.extension) as any,
           category: category as any,
           isScanned: false
@@ -325,6 +326,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
             if (!isNaN(extractedDate.getTime())) {
               extractedYear = extractedDate.getFullYear()
               extractedMonth = extractedDate.getMonth() + 1 // 1-based month
+              console.log(`✅ EXTRACTION SUCCESS: Date extracted from invoiceDate - ${extractedDate.toISOString()}`)
             } else {
               extractedDate = null
             }
@@ -353,8 +355,12 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         let invoiceTotal = null
         if (processingResult.extractedData?.totalAmount) {
           invoiceTotal = processingResult.extractedData.totalAmount
+          console.log(`✅ EXTRACTION SUCCESS: Total extracted from totalAmount - €${invoiceTotal}`)
         } else if (processingResult.extractedData?.vatData?.grandTotal) {
           invoiceTotal = processingResult.extractedData.vatData.grandTotal
+          console.log(`✅ EXTRACTION SUCCESS: Total extracted from vatData.grandTotal - €${invoiceTotal}`)
+        } else {
+          console.log(`⚠️  EXTRACTION WARNING: No total amount found in processing result`)
         }
         
         // Update document with processing results (basic fields only)
@@ -363,11 +369,21 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           data: {
             isScanned: true,
             scanResult: processingResult.scanResult,
-            // Skip advanced fields that may not exist in database yet
-            // ...(extractedDate && { extractedDate, extractedYear, extractedMonth }),
-            // ...(invoiceTotal && { invoiceTotal })
+            // Save extracted fields to database for proper display
+            ...(extractedDate && { extractedDate, extractedYear, extractedMonth }),
+            ...(invoiceTotal && { invoiceTotal })
           }
         })
+        
+        // LOG CRITICAL FIX: Confirm what was saved to database
+        console.log(`🎯 DATABASE UPDATE COMPLETE:`)
+        console.log(`   Document ID: ${document.id}`)
+        console.log(`   isScanned: true`)
+        console.log(`   extractedDate: ${extractedDate ? extractedDate.toISOString() : 'null'}`)
+        console.log(`   extractedYear: ${extractedYear || 'null'}`)
+        console.log(`   extractedMonth: ${extractedMonth || 'null'}`) 
+        console.log(`   invoiceTotal: €${invoiceTotal || 'null'}`)
+        console.log(`   fileData saved: ${document.fileData ? 'YES' : 'NO'} (${document.fileData ? `${Math.round(document.fileData.length/1024)}KB` : '0KB'})`)
         
         // 🔧 CRITICAL FIX: Log extracted VAT data for audit trail (NOW INCLUDING GUESTS!)
         // This was the root cause of "processedDocuments": 0 - guest users weren't getting audit logs
@@ -513,26 +529,24 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           // Extract enhanced metadata (simplified version)
           const enhancedData = await extractDocumentMetadataSimple(enhancedResult, document)
           
-          // Update document with enhanced metadata (skip fields that may not exist)
+          // Update document with enhanced metadata (save available fields)
           await prisma.Document.update({
             where: { id: document.id },
             data: {
-              // Only update basic fields that exist in all database versions
+              // Save all available enhanced fields from AI processing
               isScanned: true,
-              // Enhanced fields disabled until database migration
-              // extractedDate: enhancedData.extractedDate,
-              // extractedYear: enhancedData.extractedYear, 
-              // extractedMonth: enhancedData.extractedMonth,
-              // invoiceTotal: enhancedData.invoiceTotal,
-              // vatAmount: enhancedData.vatAmount,
-              // vatAccuracy: enhancedData.vatAccuracy,
-              // processingQuality: enhancedData.processingQuality,
-              // extractionConfidence: enhancedData.extractionConfidence,
-              // dateExtractionConfidence: enhancedData.dateExtractionConfidence,
-              // totalExtractionConfidence: enhancedData.totalExtractionConfidence,
-              // validationStatus: enhancedData.validationStatus,
-              // complianceIssues: enhancedData.complianceIssues,
-              // isDuplicate: false
+              extractedDate: enhancedData.extractedDate,
+              extractedYear: enhancedData.extractedYear, 
+              extractedMonth: enhancedData.extractedMonth,
+              invoiceTotal: enhancedData.invoiceTotal,
+              vatAccuracy: enhancedData.vatAccuracy,
+              processingQuality: enhancedData.processingQuality,
+              extractionConfidence: enhancedData.extractionConfidence,
+              dateExtractionConfidence: enhancedData.dateExtractionConfidence,
+              totalExtractionConfidence: enhancedData.totalExtractionConfidence,
+              validationStatus: enhancedData.validationStatus,
+              complianceIssues: enhancedData.complianceIssues,
+              isDuplicate: false
             }
           })
           

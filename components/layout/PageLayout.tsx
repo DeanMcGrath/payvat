@@ -71,7 +71,7 @@ export function PageLayout({
       {/* Main Content Area */}
       <main 
         id="main-content"
-        className={`${showHeader ? 'section-after-header' : 'py-8'} flex-1`}
+        className={`${showHeader ? 'section-after-header' : 'py-8'} flex-1 relative z-10`}
         role="main"
       >
         <div className={`${maxWidthClasses[maxWidth]} mx-auto px-6 lg:px-8`}>

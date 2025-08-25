@@ -70,25 +70,31 @@ Analyze this document and extract tax-related information with high accuracy. Lo
 
 Pay special attention to TOTAL tax amounts and country-wise aggregation.
 
-CRITICAL: MANDATORY DATE EXTRACTION:
-- Look for ANY date on the document and extract it as transactionData.date
+CRITICAL: MANDATORY DATE EXTRACTION (HIGHEST PRIORITY):
+- ALWAYS look for ANY date on the document and extract it as transactionData.date
+- Search the ENTIRE document systematically for dates
 - Prioritize these date fields (in order):
   * "Due Date", "Payment Due Date", "Due", "Payment Due"
-  * "Invoice Date", "Date of Invoice", "Bill Date"
-  * "Date", "Issue Date", "Document Date"
-  * Any clearly visible date in DD/MM/YYYY, MM/DD/YYYY, or YYYY-MM-DD format
+  * "Invoice Date", "Date of Invoice", "Bill Date", "Dated"
+  * "Date", "Issue Date", "Document Date", "Created"
+  * "Delivery Date", "Service Date"
+  * ANY date in DD/MM/YYYY, MM/DD/YYYY, YYYY-MM-DD, DD-MM-YYYY, or "15 Jan 2025" format
 - If multiple dates exist, prefer DUE DATE over invoice date
 - Convert to YYYY-MM-DD format in the JSON response
+- NEVER return null for date - if no clear date found, use TODAY's date as fallback
 
-CRITICAL: MANDATORY TOTAL EXTRACTION:
-- Look for the TOTAL AMOUNT (including VAT, delivery, and all charges) and extract it as vatData.grandTotal
+CRITICAL: MANDATORY TOTAL EXTRACTION (HIGHEST PRIORITY):
+- ALWAYS look for the COMPLETE TOTAL AMOUNT and extract it as vatData.grandTotal
+- Search the ENTIRE document for the final payable amount
 - Prioritize these total fields (in order):
-  * "Total", "Total Amount", "Total Due"
-  * "Grand Total", "Amount Due", "Balance Due"
+  * "Total", "Total Amount", "Total Due", "Amount Due"
+  * "Grand Total", "Final Total", "Balance Due"
   * "Total Including VAT", "Total Inc. VAT", "Total Incl. VAT"
-  * The largest monetary amount on the document (usually the final total)
-- This should be the complete amount the customer needs to pay
+  * "Net Amount", "Invoice Total", "Amount Payable"
+  * The LARGEST monetary amount on the document (usually at bottom right)
+- This should be the complete amount the customer needs to pay (including VAT and all charges)
 - Extract as a number (remove currency symbols and commas)
+- NEVER return null for total - estimate from VAT if no clear total found
 
 Return your analysis in the following JSON format:
 {
@@ -99,7 +105,7 @@ Return your analysis in the following JSON format:
     "address": "string or null"
   },
   "transactionData": {
-    "date": "YYYY-MM-DD or null",
+    "date": "YYYY-MM-DD REQUIRED - NEVER null (use today's date if no date found)",
     "invoiceNumber": "string or null",
     "currency": "EUR" | "USD" | "GBP" | "OTHER"
   },
@@ -117,7 +123,7 @@ Return your analysis in the following JSON format:
     ],
     "subtotal": number or null,
     "totalVatAmount": number or null,
-    "grandTotal": number or null,
+    "grandTotal": "number REQUIRED - NEVER null (estimate from VAT if no clear total)",
     "countryBreakdown": {
       "Ireland": number,
       "UK": number,
@@ -273,7 +279,7 @@ Return your analysis in this JSON format:
     "address": "string or null"
   },
   "transactionData": {
-    "date": "YYYY-MM-DD or null",
+    "date": "YYYY-MM-DD REQUIRED - NEVER null (use today's date if no date found)",
     "invoiceNumber": "string or null",
     "currency": "EUR" | "USD" | "GBP" | "OTHER"
   },
