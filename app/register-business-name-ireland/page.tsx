@@ -55,7 +55,7 @@ export default function RegisterBusinessNameIreland() {
               <div className="icon-premium mb-3 mx-auto">
                 <Target className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Business Name Registration <span className="text-gradient-primary">Process</span>
               </h2>
               <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
@@ -63,39 +63,39 @@ export default function RegisterBusinessNameIreland() {
             
             <div className="grid lg:grid-cols-4 gap-6">
               <div className="card-modern p-6 hover-lift text-center">
-                <div className="icon-modern bg-blue-500 mb-4 mx-auto">
+                <div className="icon-modern bg-petrol-light mb-4 mx-auto">
                   <Search className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">1. Check Availability</h3>
+                <h3 className="font-normal text-foreground mb-2">1. Check Availability</h3>
                 <p className="text-sm text-muted-foreground">Search CRO database for existing names and trademarks</p>
-                <div className="mt-3 text-xs text-blue-600 font-medium">FREE - 2 minutes</div>
+                <div className="mt-3 text-xs text-petrol-base font-normal">FREE - 2 minutes</div>
               </div>
 
               <div className="card-modern p-6 hover-lift text-center">
                 <div className="icon-modern bg-green-500 mb-4 mx-auto">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">2. Reserve Name</h3>
+                <h3 className="font-normal text-foreground mb-2">2. Reserve Name</h3>
                 <p className="text-sm text-muted-foreground">Secure your chosen name for 28 days while preparing documents</p>
-                <div className="mt-3 text-xs text-green-600 font-medium">€25 - Same day</div>
+                <div className="mt-3 text-xs text-green-600 font-normal">€25 - Same day</div>
               </div>
 
               <div className="card-modern p-6 hover-lift text-center">
                 <div className="icon-modern bg-purple-500 mb-4 mx-auto">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">3. Prepare Documents</h3>
+                <h3 className="font-normal text-foreground mb-2">3. Prepare Documents</h3>
                 <p className="text-sm text-muted-foreground">Complete Form A1 and gather required incorporation documents</p>
-                <div className="mt-3 text-xs text-purple-600 font-medium">1-3 days prep</div>
+                <div className="mt-3 text-xs text-purple-600 font-normal">1-3 days prep</div>
               </div>
 
               <div className="card-modern p-6 hover-lift text-center">
                 <div className="icon-modern bg-warning mb-4 mx-auto">
                   <CheckCircle className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">4. Submit & Launch</h3>
+                <h3 className="font-normal text-foreground mb-2">4. Submit & Launch</h3>
                 <p className="text-sm text-muted-foreground">File incorporation application and receive company number</p>
-                <div className="mt-3 text-xs text-yellow-600 font-medium">€100 - 5-7 days</div>
+                <div className="mt-3 text-xs text-yellow-600 font-normal">€100 - 5-7 days</div>
               </div>
             </div>
 
@@ -103,7 +103,7 @@ export default function RegisterBusinessNameIreland() {
               <div className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-green-800 mb-1">Total Cost: €125 | Total Time: 7-10 days</h4>
+                  <h4 className="font-normal text-green-800 mb-1">Total Cost: €125 | Total Time: 7-10 days</h4>
                   <p className="text-sm text-green-700">
                     This covers your complete business registration. Add VAT registration (free) and business banking to be fully operational.
                   </p>
@@ -117,10 +117,10 @@ export default function RegisterBusinessNameIreland() {
         <section className="py-20" data-animate>
           <div className="card-modern p-12 mb-2 hover-lift">
             <div className="text-center mb-2">
-              <div className="icon-modern bg-blue-500 mb-3 mx-auto">
+              <div className="icon-modern bg-petrol-light mb-3 mx-auto">
                 <Search className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Step 1: Check Name <span className="text-gradient-primary">Availability</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -133,33 +133,33 @@ export default function RegisterBusinessNameIreland() {
               
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Where to Search</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">Where to Search</h3>
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                       <div>
-                        <p className="font-medium text-foreground">CRO Database</p>
+                        <p className="font-normal text-foreground">CRO Database</p>
                         <p className="text-sm text-muted-foreground">Search all existing Irish company names</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                       <div>
-                        <p className="font-medium text-foreground">Trademark Registry</p>
+                        <p className="font-normal text-foreground">Trademark Registry</p>
                         <p className="text-sm text-muted-foreground">Check for existing trademarks in your sector</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                       <div>
-                        <p className="font-medium text-foreground">Domain Names</p>
+                        <p className="font-normal text-foreground">Domain Names</p>
                         <p className="text-sm text-muted-foreground">Secure matching .ie and .com domains</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                       <div>
-                        <p className="font-medium text-foreground">Social Media</p>
+                        <p className="font-normal text-foreground">Social Media</p>
                         <p className="text-sm text-muted-foreground">Check handle availability across platforms</p>
                       </div>
                     </div>
@@ -167,7 +167,7 @@ export default function RegisterBusinessNameIreland() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Name Requirements</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">Name Requirements</h3>
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-success" />
@@ -210,7 +210,7 @@ export default function RegisterBusinessNameIreland() {
               <div className="icon-premium mb-3 mx-auto">
                 <Shield className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Step 2: Reserve Your <span className="text-gradient-primary">Name</span>
               </h2>
               <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
@@ -223,33 +223,33 @@ export default function RegisterBusinessNameIreland() {
               
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Reservation Process</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">Reservation Process</h3>
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">1</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal">1</div>
                       <div>
-                        <p className="font-medium text-foreground">Submit online application</p>
+                        <p className="font-normal text-foreground">Submit online application</p>
                         <p className="text-sm text-muted-foreground">Through CRO website with proposed name</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">2</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal">2</div>
                       <div>
-                        <p className="font-medium text-foreground">Pay €25 reservation fee</p>
+                        <p className="font-normal text-foreground">Pay €25 reservation fee</p>
                         <p className="text-sm text-muted-foreground">Credit card payment processed immediately</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">3</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal">3</div>
                       <div>
-                        <p className="font-medium text-foreground">Receive confirmation</p>
+                        <p className="font-normal text-foreground">Receive confirmation</p>
                         <p className="text-sm text-muted-foreground">Usually within same business day</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">4</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal">4</div>
                       <div>
-                        <p className="font-medium text-foreground">Begin document preparation</p>
+                        <p className="font-normal text-foreground">Begin document preparation</p>
                         <p className="text-sm text-muted-foreground">28-day countdown starts from approval</p>
                       </div>
                     </div>
@@ -257,10 +257,10 @@ export default function RegisterBusinessNameIreland() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">What Happens Next</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">What Happens Next</h3>
                   <div className="space-y-3">
                     <div className="p-4 bg-green-50 rounded-lg">
-                      <h4 className="font-semibold text-green-800 mb-2">If Approved</h4>
+                      <h4 className="font-normal text-green-800 mb-2">If Approved</h4>
                       <ul className="text-sm text-green-700 space-y-1">
                         <li>• Name reserved for 28 days</li>
                         <li>• Proceed with incorporation documents</li>
@@ -269,7 +269,7 @@ export default function RegisterBusinessNameIreland() {
                     </div>
                     
                     <div className="p-4 bg-red-50 rounded-lg">
-                      <h4 className="font-semibold text-red-800 mb-2">If Rejected</h4>
+                      <h4 className="font-normal text-red-800 mb-2">If Rejected</h4>
                       <ul className="text-sm text-red-700 space-y-1">
                         <li>• Full refund processed automatically</li>
                         <li>• Feedback provided on rejection reason</li>
@@ -278,8 +278,8 @@ export default function RegisterBusinessNameIreland() {
                     </div>
                   </div>
                   
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                    <p className="text-sm text-blue-800">
+                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-petrol-500">
+                    <p className="text-sm text-petrol-dark">
                       <strong>Extension possible:</strong> If you need more time, you can extend the reservation for another €25, up to maximum 12 months total.
                     </p>
                   </div>
@@ -296,7 +296,7 @@ export default function RegisterBusinessNameIreland() {
               <div className="icon-modern bg-purple-500 mb-3 mx-auto">
                 <FileText className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Step 3: Document <span className="text-gradient-primary">Preparation</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -309,33 +309,33 @@ export default function RegisterBusinessNameIreland() {
               
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Required Documents</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">Required Documents</h3>
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                       <div>
-                        <p className="font-medium text-foreground">Form A1 (Incorporation Application)</p>
+                        <p className="font-normal text-foreground">Form A1 (Incorporation Application)</p>
                         <p className="text-sm text-muted-foreground">Complete company details and officers</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                       <div>
-                        <p className="font-medium text-foreground">Memorandum of Association</p>
+                        <p className="font-normal text-foreground">Memorandum of Association</p>
                         <p className="text-sm text-muted-foreground">Company objects and share capital</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                       <div>
-                        <p className="font-medium text-foreground">Articles of Association</p>
+                        <p className="font-normal text-foreground">Articles of Association</p>
                         <p className="text-sm text-muted-foreground">Internal rules and procedures</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-5 w-5 text-success mt-0.5" />
                       <div>
-                        <p className="font-medium text-foreground">Statement of Compliance</p>
+                        <p className="font-normal text-foreground">Statement of Compliance</p>
                         <p className="text-sm text-muted-foreground">Declaration by qualified person</p>
                       </div>
                     </div>
@@ -343,10 +343,10 @@ export default function RegisterBusinessNameIreland() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Officer Requirements</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">Officer Requirements</h3>
                   <div className="space-y-3">
                     <div className="p-4 bg-gray-50 rounded-lg">
-                      <h4 className="font-semibold text-foreground mb-2">Directors</h4>
+                      <h4 className="font-normal text-foreground mb-2">Directors</h4>
                       <ul className="text-sm text-muted-foreground space-y-1">
                         <li>• Minimum one director (EU resident)</li>
                         <li>• Must be over 18 years old</li>
@@ -356,7 +356,7 @@ export default function RegisterBusinessNameIreland() {
                     </div>
                     
                     <div className="p-4 bg-gray-50 rounded-lg">
-                      <h4 className="font-semibold text-foreground mb-2">Company Secretary</h4>
+                      <h4 className="font-normal text-foreground mb-2">Company Secretary</h4>
                       <ul className="text-sm text-muted-foreground space-y-1">
                         <li>• Can be individual or corporate body</li>
                         <li>• Cannot be sole director</li>
@@ -389,7 +389,7 @@ export default function RegisterBusinessNameIreland() {
               <div className="icon-premium mb-3 mx-auto">
                 <CheckCircle className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Step 4: Submit & <span className="text-gradient-primary">Launch</span>
               </h2>
               <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
@@ -402,33 +402,33 @@ export default function RegisterBusinessNameIreland() {
               
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Submission Process</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">Submission Process</h3>
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">1</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal">1</div>
                       <div>
-                        <p className="font-medium text-foreground">Submit complete application</p>
+                        <p className="font-normal text-foreground">Submit complete application</p>
                         <p className="text-sm text-muted-foreground">Online via CRO portal with €100 fee</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">2</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal">2</div>
                       <div>
-                        <p className="font-medium text-foreground">CRO review (5-7 days)</p>
+                        <p className="font-normal text-foreground">CRO review (5-7 days)</p>
                         <p className="text-sm text-muted-foreground">Automated checks and manual review</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">3</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal">3</div>
                       <div>
-                        <p className="font-medium text-foreground">Receive company number</p>
+                        <p className="font-normal text-foreground">Receive company number</p>
                         <p className="text-sm text-muted-foreground">Certificate of incorporation issued</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">4</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal">4</div>
                       <div>
-                        <p className="font-medium text-foreground">Begin trading</p>
+                        <p className="font-normal text-foreground">Begin trading</p>
                         <p className="text-sm text-muted-foreground">Company legally exists and can operate</p>
                       </div>
                     </div>
@@ -436,7 +436,7 @@ export default function RegisterBusinessNameIreland() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Immediate Next Steps</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">Immediate Next Steps</h3>
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-success" />
@@ -464,9 +464,9 @@ export default function RegisterBusinessNameIreland() {
                     </div>
                   </div>
                   
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                    <h4 className="font-semibold text-blue-800 mb-2">Annual Obligations</h4>
-                    <ul className="text-sm text-blue-700 space-y-1">
+                  <div className="mt-6 p-4 bg-blue-50 rounded-lg border-l-4 border-petrol-500">
+                    <h4 className="font-normal text-petrol-dark mb-2">Annual Obligations</h4>
+                    <ul className="text-sm text-petrol-dark space-y-1">
                       <li>• Annual Return (Form B1) - due by anniversary</li>
                       <li>• Audited accounts filing - 28 days after AGM</li>
                       <li>• Corporation tax returns - 9 months after year-end</li>
@@ -485,7 +485,7 @@ export default function RegisterBusinessNameIreland() {
               <div className="icon-modern bg-destructive mb-3 mx-auto">
                 <AlertCircle className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Common Mistakes <span className="text-gradient-primary">to Avoid</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -495,46 +495,46 @@ export default function RegisterBusinessNameIreland() {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">1</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">1</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Not checking similar names</h4>
+                      <h4 className="font-normal text-foreground mb-1">Not checking similar names</h4>
                       <p className="text-sm text-muted-foreground">CRO may reject names too similar to existing companies, even if not identical</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">2</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">2</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Incomplete or incorrect Form A1</h4>
+                      <h4 className="font-normal text-foreground mb-1">Incomplete or incorrect Form A1</h4>
                       <p className="text-sm text-muted-foreground">Errors cause delays and may require resubmission with new fees</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">3</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">3</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Missing EU resident director</h4>
+                      <h4 className="font-normal text-foreground mb-1">Missing EU resident director</h4>
                       <p className="text-sm text-muted-foreground">At least one director must be resident in EU/EEA for all Irish companies</p>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">4</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">4</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Forgetting about domain names</h4>
+                      <h4 className="font-normal text-foreground mb-1">Forgetting about domain names</h4>
                       <p className="text-sm text-muted-foreground">Secure .ie and .com domains before finalising company name</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">5</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">5</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Delaying tax registration</h4>
+                      <h4 className="font-normal text-foreground mb-1">Delaying tax registration</h4>
                       <p className="text-sm text-muted-foreground">Get TRN and VAT setup immediately to avoid compliance issues</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">6</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">6</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Poor registered office address</h4>
+                      <h4 className="font-normal text-foreground mb-1">Poor registered office address</h4>
                       <p className="text-sm text-muted-foreground">Use a permanent Irish address where official mail can be received</p>
                     </div>
                   </div>
@@ -556,7 +556,7 @@ export default function RegisterBusinessNameIreland() {
                     <Target className="h-12 w-12 text-white" />
                   </div>
                   
-                  <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
+                  <h3 className="text-3xl lg:text-4xl font-normal text-foreground mb-3">
                     Ready to <span className="text-gradient-primary">Register Your Business?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -567,7 +567,7 @@ export default function RegisterBusinessNameIreland() {
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-2">
                   <Button 
                     size="lg"
-                    className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"
+                    className="btn-primary px-12 py-4 text-lg font-normal hover-lift min-w-[220px]"
                     onClick={() => window.location.href = '/signup'}
                   >
                     Start Registration

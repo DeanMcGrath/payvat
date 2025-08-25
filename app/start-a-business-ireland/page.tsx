@@ -55,7 +55,7 @@ export default function StartABusinessIreland() {
               <div className="icon-premium mb-3 mx-auto">
                 <Target className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Your Business Launch <span className="text-gradient-primary">Roadmap</span>
               </h2>
               <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
@@ -68,39 +68,39 @@ export default function StartABusinessIreland() {
               
               <div className="grid lg:grid-cols-4 gap-6">
                 <div className="card-modern p-6 hover-lift text-center">
-                  <div className="icon-modern bg-blue-500 mb-4 mx-auto">
+                  <div className="icon-modern bg-petrol-light mb-4 mx-auto">
                     <Settings className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">1. Planning</h3>
+                  <h3 className="font-normal text-foreground mb-2">1. Planning</h3>
                   <p className="text-sm text-muted-foreground mb-3">Business idea validation, market research, business plan</p>
-                  <div className="text-xs text-blue-600 font-medium">Weeks 1-2</div>
+                  <div className="text-xs text-petrol-base font-normal">Weeks 1-2</div>
                 </div>
 
                 <div className="card-modern p-6 hover-lift text-center">
                   <div className="icon-modern bg-green-500 mb-4 mx-auto">
                     <Building className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">2. Structure</h3>
+                  <h3 className="font-normal text-foreground mb-2">2. Structure</h3>
                   <p className="text-sm text-muted-foreground mb-3">Choose structure, register business, open accounts</p>
-                  <div className="text-xs text-green-600 font-medium">Weeks 3-4</div>
+                  <div className="text-xs text-green-600 font-normal">Weeks 3-4</div>
                 </div>
 
                 <div className="card-modern p-6 hover-lift text-center">
                   <div className="icon-modern bg-purple-500 mb-4 mx-auto">
                     <FileText className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">3. Compliance</h3>
+                  <h3 className="font-normal text-foreground mb-2">3. Compliance</h3>
                   <p className="text-sm text-muted-foreground mb-3">Tax registration, VAT setup, insurance, licences</p>
-                  <div className="text-xs text-purple-600 font-medium">Weeks 5-6</div>
+                  <div className="text-xs text-purple-600 font-normal">Weeks 5-6</div>
                 </div>
 
                 <div className="card-modern p-6 hover-lift text-center">
                   <div className="icon-modern bg-warning mb-4 mx-auto">
                     <ChevronRight className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">4. Launch</h3>
+                  <h3 className="font-normal text-foreground mb-2">4. Launch</h3>
                   <p className="text-sm text-muted-foreground mb-3">Marketing, first customers, operations, growth</p>
-                  <div className="text-xs text-yellow-600 font-medium">Weeks 7-8</div>
+                  <div className="text-xs text-yellow-600 font-normal">Weeks 7-8</div>
                 </div>
               </div>
 
@@ -108,7 +108,7 @@ export default function StartABusinessIreland() {
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
                   <div>
-                    <h4 className="font-semibold text-green-800 mb-1">Fast Track with PayVat</h4>
+                    <h4 className="font-normal text-green-800 mb-1">Fast Track with PayVat</h4>
                     <p className="text-sm text-green-700">
                       PayVat customers complete setup 50% faster by automating compliance steps. 
                       Focus on business building while we handle the bureaucracy.
@@ -127,7 +127,7 @@ export default function StartABusinessIreland() {
               <div className="icon-modern bg-primary mb-3 mx-auto">
                 <Building className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Choose Your <span className="text-gradient-primary">Business Structure</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -144,7 +144,7 @@ export default function StartABusinessIreland() {
                     <div className="icon-modern bg-orange-500">
                       <UserCheck className="h-6 w-6 text-white" />
                     </div>
-                    <h3 className="text-xl font-semibold text-foreground">Sole Trader</h3>
+                    <h3 className="text-xl font-normal text-foreground">Sole Trader</h3>
                   </div>
                   
                   <div className="space-y-3 mb-6">
@@ -184,12 +184,12 @@ export default function StartABusinessIreland() {
                   </div>
                 </div>
 
-                <div className="card-modern p-8 hover-lift border-l-4 border-blue-500">
+                <div className="card-modern p-8 hover-lift border-l-4 border-petrol-500">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="icon-modern bg-blue-500">
+                    <div className="icon-modern bg-petrol-light">
                       <Building className="h-6 w-6 text-white" />
                     </div>
-                    <h3 className="text-xl font-semibold text-foreground">Limited Company</h3>
+                    <h3 className="text-xl font-normal text-foreground">Limited Company</h3>
                   </div>
                   
                   <div className="space-y-3 mb-6">
@@ -223,7 +223,7 @@ export default function StartABusinessIreland() {
                   </div>
                   
                   <div className="p-4 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-800">
+                    <p className="text-sm text-petrol-dark">
                       <strong>Best for:</strong> Growth businesses, multiple shareholders, higher risk activities, investment plans
                     </p>
                   </div>
@@ -233,7 +233,7 @@ export default function StartABusinessIreland() {
               <div className="mt-8 text-center">
                 <Button 
                   size="lg"
-                  className="btn-primary px-8 py-3 text-lg font-semibold hover-lift"
+                  className="btn-primary px-8 py-3 text-lg font-normal hover-lift"
                   onClick={() => window.location.href = '/company-vs-sole-trader-ireland'}
                 >
                   Compare Structures in Detail
@@ -251,7 +251,7 @@ export default function StartABusinessIreland() {
               <div className="icon-premium mb-3 mx-auto">
                 <FileText className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Registration & <span className="text-gradient-primary">Setup Process</span>
               </h2>
               <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
@@ -264,12 +264,12 @@ export default function StartABusinessIreland() {
               
               <div className="space-y-8">
                 <div className="flex items-start gap-6">
-                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-semibold flex-shrink-0">1</div>
+                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-normal flex-shrink-0">1</div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Business Name & Structure</h3>
+                    <h3 className="text-xl font-normal text-foreground mb-3">Business Name & Structure</h3>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <h4 className="font-medium text-foreground mb-2">For Sole Traders:</h4>
+                        <h4 className="font-normal text-foreground mb-2">For Sole Traders:</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
                           <li>• Choose trading name (optional)</li>
                           <li>• Check domain availability</li>
@@ -278,7 +278,7 @@ export default function StartABusinessIreland() {
                         </ul>
                       </div>
                       <div>
-                        <h4 className="font-medium text-foreground mb-2">For Companies:</h4>
+                        <h4 className="font-normal text-foreground mb-2">For Companies:</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
                           <li>• Reserve company name (€25)</li>
                           <li>• Prepare incorporation documents</li>
@@ -291,12 +291,12 @@ export default function StartABusinessIreland() {
                 </div>
 
                 <div className="flex items-start gap-6">
-                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-semibold flex-shrink-0">2</div>
+                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-normal flex-shrink-0">2</div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Tax Registration</h3>
+                    <h3 className="text-xl font-normal text-foreground mb-3">Tax Registration</h3>
                     <div className="space-y-4">
                       <div className="p-4 card-modern">
-                        <h4 className="font-medium text-foreground mb-2">Essential Registrations:</h4>
+                        <h4 className="font-normal text-foreground mb-2">Essential Registrations:</h4>
                         <div className="grid md:grid-cols-2 gap-4 text-sm text-muted-foreground">
                           <ul className="space-y-1">
                             <li>• Tax Reference Number (TRN)</li>
@@ -312,7 +312,7 @@ export default function StartABusinessIreland() {
                       </div>
                       
                       <div className="p-4 bg-yellow-50 rounded-lg border-l-4 border-yellow-500">
-                        <h4 className="font-semibold text-yellow-800 mb-2">VAT Registration Trigger Points</h4>
+                        <h4 className="font-normal text-yellow-800 mb-2">VAT Registration Trigger Points</h4>
                         <p className="text-sm text-yellow-700">
                           Must register when turnover exceeds <strong>€42,500 (services)</strong> or <strong>€85,000 (goods)</strong> 
                           in any 12-month period. Many register early for credibility and to reclaim startup VAT.
@@ -323,13 +323,13 @@ export default function StartABusinessIreland() {
                 </div>
 
                 <div className="flex items-start gap-6">
-                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-semibold flex-shrink-0">3</div>
+                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-normal flex-shrink-0">3</div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Banking & Finance</h3>
+                    <h3 className="text-xl font-normal text-foreground mb-3">Banking & Finance</h3>
                     <div className="space-y-4">
                       <div className="grid md:grid-cols-2 gap-4">
                         <div className="p-4 card-modern">
-                          <h4 className="font-medium text-foreground mb-2">Business Bank Account</h4>
+                          <h4 className="font-normal text-foreground mb-2">Business Bank Account</h4>
                           <ul className="text-sm text-muted-foreground space-y-1">
                             <li>• Separate business finances</li>
                             <li>• Professional appearance</li>
@@ -338,7 +338,7 @@ export default function StartABusinessIreland() {
                           </ul>
                         </div>
                         <div className="p-4 card-modern">
-                          <h4 className="font-medium text-foreground mb-2">Required Documents</h4>
+                          <h4 className="font-normal text-foreground mb-2">Required Documents</h4>
                           <ul className="text-sm text-muted-foreground space-y-1">
                             <li>• ID and address proof</li>
                             <li>• Tax Reference Number</li>
@@ -352,12 +352,12 @@ export default function StartABusinessIreland() {
                 </div>
 
                 <div className="flex items-start gap-6">
-                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-semibold flex-shrink-0">4</div>
+                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-normal flex-shrink-0">4</div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Insurance & Protection</h3>
+                    <h3 className="text-xl font-normal text-foreground mb-3">Insurance & Protection</h3>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="p-4 card-modern">
-                        <h4 className="font-medium text-foreground mb-2">Essential Insurance</h4>
+                        <h4 className="font-normal text-foreground mb-2">Essential Insurance</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
                           <li>• Public liability (€2M minimum)</li>
                           <li>• Professional indemnity</li>
@@ -366,7 +366,7 @@ export default function StartABusinessIreland() {
                         </ul>
                       </div>
                       <div className="p-4 card-modern">
-                        <h4 className="font-medium text-foreground mb-2">Optional but Recommended</h4>
+                        <h4 className="font-normal text-foreground mb-2">Optional but Recommended</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
                           <li>• Equipment insurance</li>
                           <li>• Cyber liability insurance</li>
@@ -389,7 +389,7 @@ export default function StartABusinessIreland() {
               <div className="icon-modern bg-success mb-3 mx-auto">
                 <Calendar className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 First 90 Days <span className="text-gradient-primary">Success Plan</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -402,8 +402,8 @@ export default function StartABusinessIreland() {
               
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="card-modern p-6 hover-lift">
-                  <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-blue-500 text-white text-xs flex items-center justify-center font-semibold">30</div>
+                  <h3 className="font-normal text-foreground mb-3 flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-petrol-light text-white text-xs flex items-center justify-center font-normal">30</div>
                     Days 1-30: Foundation
                   </h3>
                   <div className="space-y-2">
@@ -431,8 +431,8 @@ export default function StartABusinessIreland() {
                 </div>
 
                 <div className="card-modern p-6 hover-lift">
-                  <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-green-500 text-white text-xs flex items-center justify-center font-semibold">60</div>
+                  <h3 className="font-normal text-foreground mb-3 flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-green-500 text-white text-xs flex items-center justify-center font-normal">60</div>
                     Days 31-60: Launch
                   </h3>
                   <div className="space-y-2">
@@ -460,8 +460,8 @@ export default function StartABusinessIreland() {
                 </div>
 
                 <div className="card-modern p-6 hover-lift">
-                  <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-full bg-purple-500 text-white text-xs flex items-center justify-center font-semibold">90</div>
+                  <h3 className="font-normal text-foreground mb-3 flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-purple-500 text-white text-xs flex items-center justify-center font-normal">90</div>
                     Days 61-90: Scale
                   </h3>
                   <div className="space-y-2">
@@ -499,7 +499,7 @@ export default function StartABusinessIreland() {
               <div className="icon-premium mb-3 mx-auto" style={{background: 'linear-gradient(to bottom right, #dc2626, #991b1b)'}}>
                 <AlertTriangle className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Common Startup <span className="text-gradient-primary">Mistakes</span>
               </h2>
               <div className="w-24 h-1 bg-red-500 mx-auto mb-4 rounded-full"></div>
@@ -513,33 +513,33 @@ export default function StartABusinessIreland() {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">1</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">1</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Choosing wrong business structure</h4>
+                      <h4 className="font-normal text-foreground mb-1">Choosing wrong business structure</h4>
                       <p className="text-sm text-muted-foreground">Switching later is expensive and complex. Consider liability, growth plans, and tax implications carefully.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">2</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">2</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Mixing personal and business finances</h4>
+                      <h4 className="font-normal text-foreground mb-1">Mixing personal and business finances</h4>
                       <p className="text-sm text-muted-foreground">Makes accounting nightmare, VAT compliance impossible, and reduces credibility with banks.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">3</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">3</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Delaying VAT registration</h4>
+                      <h4 className="font-normal text-foreground mb-1">Delaying VAT registration</h4>
                       <p className="text-sm text-muted-foreground">Late registration triggers penalties up to €12,695 plus back-dated VAT liability.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">4</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">4</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Poor record keeping from start</h4>
+                      <h4 className="font-normal text-foreground mb-1">Poor record keeping from start</h4>
                       <p className="text-sm text-muted-foreground">Missing receipts, no invoice system, poor filing makes compliance expensive and stressful.</p>
                     </div>
                   </div>
@@ -547,33 +547,33 @@ export default function StartABusinessIreland() {
                 
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">5</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">5</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Inadequate insurance coverage</h4>
+                      <h4 className="font-normal text-foreground mb-1">Inadequate insurance coverage</h4>
                       <p className="text-sm text-muted-foreground">One lawsuit or accident can destroy an uninsured business. Get proper coverage from day one.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">6</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">6</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Ignoring legal compliance</h4>
+                      <h4 className="font-normal text-foreground mb-1">Ignoring legal compliance</h4>
                       <p className="text-sm text-muted-foreground">Missing deadlines, wrong tax rates, no data protection compliance can trigger investigations.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">7</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">7</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Underpricing services/products</h4>
+                      <h4 className="font-normal text-foreground mb-1">Underpricing services/products</h4>
                       <p className="text-sm text-muted-foreground">Not accounting for all costs (including VAT, insurance, taxes) leads to unprofitable businesses.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">8</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">8</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">No business plan or projections</h4>
+                      <h4 className="font-normal text-foreground mb-1">No business plan or projections</h4>
                       <p className="text-sm text-muted-foreground">Banks won't lend, investors won't invest, and you can't plan growth without proper financials.</p>
                     </div>
                   </div>
@@ -595,7 +595,7 @@ export default function StartABusinessIreland() {
                     <Target className="h-12 w-12 text-white" />
                   </div>
                   
-                  <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
+                  <h3 className="text-3xl lg:text-4xl font-normal text-foreground mb-3">
                     Ready to <span className="text-gradient-primary">Start Your Business?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -606,7 +606,7 @@ export default function StartABusinessIreland() {
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-2">
                   <Button 
                     size="lg"
-                    className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"
+                    className="btn-primary px-12 py-4 text-lg font-normal hover-lift min-w-[220px]"
                     onClick={() => window.location.href = '/signup'}
                   >
                     Start Your Business

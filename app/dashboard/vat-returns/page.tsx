@@ -145,7 +145,7 @@ export default function VATReturnsPage() {
       case 'PAID':
         return <CheckCircle className="h-5 w-5 text-green-600" />
       case 'SUBMITTED':
-        return <Clock className="h-5 w-5 text-blue-600" />
+        return <Clock className="h-5 w-5 text-petrol-base" />
       case 'OVERDUE':
         return <AlertCircle className="h-5 w-5 text-red-600" />
       default:
@@ -158,7 +158,7 @@ export default function VATReturnsPage() {
       case 'PAID':
         return <Badge className="bg-green-100 text-green-800">Paid</Badge>
       case 'SUBMITTED':
-        return <Badge className="bg-blue-100 text-blue-800">Submitted</Badge>
+        return <Badge className="bg-blue-100 text-petrol-dark">Submitted</Badge>
       case 'OVERDUE':
         return <Badge className="bg-red-100 text-red-800">Overdue</Badge>
       case 'DRAFT':
@@ -198,9 +198,9 @@ export default function VATReturnsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Submitted</p>
-                <p className="h3 text-brand-700">{stats.totalSubmitted}</p>
+                <p className="h3 text-petrol-dark">{stats.totalSubmitted}</p>
               </div>
-              <CheckCircle className="h-8 w-8 text-brand-700" />
+              <CheckCircle className="h-8 w-8 text-petrol-dark" />
             </div>
           </CardContent>
         </Card>
@@ -210,7 +210,7 @@ export default function VATReturnsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Payments Made</p>
-                <p className="text-2xl font-bold text-green-600">{stats.totalPaid}</p>
+                <p className="text-2xl font-normal text-green-600">{stats.totalPaid}</p>
               </div>
               <Euro className="h-8 w-8 text-green-600" />
             </div>
@@ -222,7 +222,7 @@ export default function VATReturnsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Avg Net VAT</p>
-                <p className="text-2xl font-bold text-purple-600">
+                <p className="text-2xl font-normal text-purple-600">
                   {formatCurrency(stats.averageNetVAT)}
                 </p>
               </div>
@@ -236,9 +236,9 @@ export default function VATReturnsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">On Time Rate</p>
-                <p className="text-2xl font-bold text-blue-600">{stats.onTimeSubmissions}%</p>
+                <p className="text-2xl font-normal text-petrol-base">{stats.onTimeSubmissions}%</p>
               </div>
-              <Clock className="h-8 w-8 text-blue-600" />
+              <Clock className="h-8 w-8 text-petrol-base" />
             </div>
           </CardContent>
         </Card>
@@ -248,7 +248,7 @@ export default function VATReturnsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-brand-700">
+            <CardTitle className="flex items-center gap-2 text-petrol-dark">
               <Calendar className="h-5 w-5" />
               Upcoming VAT Returns
             </CardTitle>
@@ -274,7 +274,7 @@ export default function VATReturnsPage() {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h4 className="font-medium">
+                      <h4 className="font-normal">
                         {new Date(upcomingReturn.periodStart).toLocaleDateString()} - {new Date(upcomingReturn.periodEnd).toLocaleDateString()}
                       </h4>
                       <p className="text-sm text-gray-600">
@@ -293,25 +293,25 @@ export default function VATReturnsPage() {
                   
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                     <div className="text-center">
-                      <div className="text-lg font-semibold text-blue-600">
+                      <div className="text-lg font-normal text-petrol-base">
                         {formatCurrency(upcomingReturn.estimatedSalesVAT)}
                       </div>
                       <div className="text-xs text-gray-500">Sales VAT</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-lg font-semibold text-green-600">
+                      <div className="text-lg font-normal text-green-600">
                         {formatCurrency(upcomingReturn.estimatedPurchaseVAT)}
                       </div>
                       <div className="text-xs text-gray-500">Purchase VAT</div>
                     </div>
                     <div className="text-center">
-                      <div className="h6 text-brand-700">
+                      <div className="h6 text-petrol-dark">
                         {formatCurrency(upcomingReturn.estimatedNetVAT)}
                       </div>
                       <div className="text-xs text-gray-500">Net VAT</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-lg font-semibold text-gray-600">
+                      <div className="text-lg font-normal text-gray-600">
                         {upcomingReturn.documentCount}
                       </div>
                       <div className="text-xs text-gray-500">Documents</div>
@@ -352,7 +352,7 @@ export default function VATReturnsPage() {
       {/* Past Returns */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-brand-700">
+          <CardTitle className="flex items-center gap-2 text-petrol-dark">
             <Calculator className="h-5 w-5" />
             Past VAT Returns
             {pastReturns.length > 0 && (
@@ -370,7 +370,7 @@ export default function VATReturnsPage() {
                       {getStatusIcon(vatReturn.status)}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-normal text-gray-900">
                         {new Date(vatReturn.periodStart).toLocaleDateString()} - {new Date(vatReturn.periodEnd).toLocaleDateString()}
                       </p>
                       <div className="flex items-center space-x-4 mt-1">
@@ -393,7 +393,7 @@ export default function VATReturnsPage() {
                       variant="outline"
                       size="sm"
                       onClick={() => router.push(`/vat-submission?returnId=${vatReturn.id}`)}
-                      className="text-brand-700 border-brand-700 hover:bg-brand-50"
+                      className="text-petrol-dark border-petrol-700 hover:bg-petrol-50"
                     >
                       {vatReturn.status === 'DRAFT' ? 'Continue' : 'View Details'}
                       <ArrowRight className="h-4 w-4 ml-1" />
@@ -425,13 +425,13 @@ export default function VATReturnsPage() {
           ) : (
             <div className="text-center py-8 text-gray-500">
               <Calculator className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No VAT Returns Yet</h3>
+              <h3 className="text-lg font-normal text-gray-900 mb-2">No VAT Returns Yet</h3>
               <p className="text-gray-500 mb-4">
                 Start by uploading your documents and creating your first VAT return
               </p>
               <Button 
                 onClick={() => router.push('/vat-submission')}
-                className="bg-brand-700 hover:bg-brand-800 text-white"
+                className="bg-petrol-dark hover:bg-petrol-dark text-white"
               >
                 Create First VAT Return
               </Button>

@@ -99,7 +99,7 @@ interface AnalyticsData {
   }
 }
 
-const COLORS = ['#73C2FB', '#5BADEA', '#99D3FF', '#CCE7FF', '#E6F4FF']
+const COLORS = ['#2A7A8F', '#216477', '#99D3FF', '#CCE7FF', '#E6F4FF']
 
 export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsProps) {
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null)
@@ -253,7 +253,7 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
     switch (severity) {
       case 'high': return 'bg-red-100 text-red-800'
       case 'medium': return 'bg-yellow-100 text-yellow-800'
-      case 'low': return 'bg-blue-100 text-blue-800'
+      case 'low': return 'bg-blue-100 text-petrol-dark'
     }
   }
 
@@ -268,7 +268,7 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
   const getImpactColor = (impact: 'high' | 'medium' | 'low') => {
     switch (impact) {
       case 'high': return 'bg-green-100 text-green-800'
-      case 'medium': return 'bg-blue-100 text-blue-800'
+      case 'medium': return 'bg-blue-100 text-petrol-dark'
       case 'low': return 'bg-gray-100 text-gray-800'
     }
   }
@@ -306,7 +306,7 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
         <CardContent>
           <div className="text-center py-8 text-muted-foreground">
             <Brain className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p className="text-lg font-medium">No analytics data available</p>
+            <p className="text-lg font-normal">No analytics data available</p>
             <p className="text-sm">Upload more documents to see insights</p>
           </div>
         </CardContent>
@@ -366,15 +366,15 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
           <div className="space-y-6">
             {/* Monthly Trends Chart */}
             <div className="bg-card p-4 rounded-lg border">
-              <h3 className="text-sm font-medium mb-4">Monthly Spending Trends</h3>
+              <h3 className="text-sm font-normal mb-4">Monthly Spending Trends</h3>
               <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={analyticsData.spendingTrends.monthly}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="month" />
                   <YAxis />
                   <Tooltip formatter={(value) => formatCurrency(Number(value))} />
-                  <Line type="monotone" dataKey="sales" stroke="#73C2FB" strokeWidth={2} name="Sales" />
-                  <Line type="monotone" dataKey="purchases" stroke="#5BADEA" strokeWidth={2} name="Purchases" />
+                  <Line type="monotone" dataKey="sales" stroke="#2A7A8F" strokeWidth={2} name="Sales" />
+                  <Line type="monotone" dataKey="purchases" stroke="#216477" strokeWidth={2} name="Purchases" />
                   <Line type="monotone" dataKey="netVAT" stroke="#99D3FF" strokeWidth={2} name="Net VAT" />
                 </LineChart>
               </ResponsiveContainer>
@@ -382,7 +382,7 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
 
             {/* Category Breakdown */}
             <div className="bg-card p-4 rounded-lg border">
-              <h3 className="text-sm font-medium mb-4">Spending by Category</h3>
+              <h3 className="text-sm font-normal mb-4">Spending by Category</h3>
               <div className="space-y-3">
                 {analyticsData.spendingTrends.categories.map((category, index) => (
                   <div key={index} className="flex items-center justify-between">
@@ -391,7 +391,7 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
                         className="w-3 h-3 rounded-full" 
                         style={{ backgroundColor: COLORS[index % COLORS.length] }}
                       />
-                      <span className="text-sm font-medium">{category.category}</span>
+                      <span className="text-sm font-normal">{category.category}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <span className="text-sm">{formatCurrency(category.amount)}</span>
@@ -419,10 +419,10 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-card p-4 rounded-lg border">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-medium">Compliance Score</h3>
+                  <h3 className="text-sm font-normal">Compliance Score</h3>
                   <CheckCircle className="h-4 w-4 text-green-500" />
                 </div>
-                <div className="text-2xl font-bold text-green-600">
+                <div className="text-2xl font-normal text-green-600">
                   {analyticsData.vatInsights.complianceScore.toFixed(1)}%
                 </div>
                 <Progress value={analyticsData.vatInsights.complianceScore} className="mt-2" />
@@ -430,10 +430,10 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
 
               <div className="bg-card p-4 rounded-lg border">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-medium">Avg VAT Rate</h3>
+                  <h3 className="text-sm font-normal">Avg VAT Rate</h3>
                   <Euro className="h-4 w-4 text-blue-500" />
                 </div>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-normal text-petrol-base">
                   {analyticsData.vatInsights.averageVATRate.toFixed(1)}%
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">Expected: 23%</p>
@@ -442,7 +442,7 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
 
             {/* Anomalies */}
             <div className="bg-card p-4 rounded-lg border">
-              <h3 className="text-sm font-medium mb-4">Anomalies & Issues</h3>
+              <h3 className="text-sm font-normal mb-4">Anomalies & Issues</h3>
               <div className="space-y-3">
                 {analyticsData.vatInsights.anomalies.map((anomaly, index) => (
                   <div key={index} className="flex items-start space-x-3 p-3 bg-muted rounded-lg">
@@ -456,7 +456,7 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
                           {anomaly.type.replace('_', ' ')}
                         </span>
                       </div>
-                      <p className="text-sm font-medium">{anomaly.description}</p>
+                      <p className="text-sm font-normal">{anomaly.description}</p>
                       <p className="text-xs text-muted-foreground mt-1">{anomaly.suggestion}</p>
                     </div>
                     <Button variant="ghost" size="sm">
@@ -469,7 +469,7 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
 
             {/* Patterns */}
             <div className="bg-card p-4 rounded-lg border">
-              <h3 className="text-sm font-medium mb-4">Detected Patterns</h3>
+              <h3 className="text-sm font-normal mb-4">Detected Patterns</h3>
               <div className="space-y-2">
                 {analyticsData.vatInsights.patterns.map((pattern, index) => (
                   <div key={index} className="flex items-center justify-between p-2 bg-muted rounded">
@@ -490,7 +490,7 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
           <div className="space-y-6">
             {/* Top Suppliers */}
             <div className="bg-card p-4 rounded-lg border">
-              <h3 className="text-sm font-medium mb-4">Top Suppliers</h3>
+              <h3 className="text-sm font-normal mb-4">Top Suppliers</h3>
               <div className="space-y-3">
                 {analyticsData.supplierAnalysis.topSuppliers.map((supplier, index) => (
                   <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
@@ -499,14 +499,14 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
                         <Building className="h-4 w-4 text-primary" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium">{supplier.name}</p>
+                        <p className="text-sm font-normal">{supplier.name}</p>
                         <p className="text-xs text-muted-foreground">
                           {supplier.documentCount} invoices • Last: {supplier.lastSeen.toLocaleDateString()}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium">{formatCurrency(supplier.totalAmount)}</p>
+                      <p className="text-sm font-normal">{formatCurrency(supplier.totalAmount)}</p>
                       <p className="text-xs text-muted-foreground">
                         VAT: {formatCurrency(supplier.vatAmount)}
                       </p>
@@ -518,7 +518,7 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
 
             {/* Customer Segments */}
             <div className="bg-card p-4 rounded-lg border">
-              <h3 className="text-sm font-medium mb-4">Customer Segments</h3>
+              <h3 className="text-sm font-normal mb-4">Customer Segments</h3>
               <div className="space-y-3">
                 {analyticsData.supplierAnalysis.customerInsights.map((segment, index) => (
                   <div key={index} className="flex items-center justify-between p-3 bg-muted rounded-lg">
@@ -527,14 +527,14 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
                         <Users className="h-4 w-4 text-green-600" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium">{segment.segment}</p>
+                        <p className="text-sm font-normal">{segment.segment}</p>
                         <p className="text-xs text-muted-foreground">
                           Growth: {segment.growth > 0 ? '+' : ''}{segment.growth.toFixed(1)}%
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium">{formatCurrency(segment.revenue)}</p>
+                      <p className="text-sm font-normal">{formatCurrency(segment.revenue)}</p>
                       <p className="text-xs text-muted-foreground">
                         VAT: {formatCurrency(segment.vatContribution)}
                       </p>
@@ -549,32 +549,32 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
         {activeTab === 'predictions' && (
           <div className="space-y-6">
             {/* Next Month Prediction */}
-            <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-petrol-200">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-medium text-blue-900">Next Month VAT Prediction</h3>
-                <Badge className="bg-blue-100 text-blue-800">
+                <h3 className="text-sm font-normal text-blue-900">Next Month VAT Prediction</h3>
+                <Badge className="bg-blue-100 text-petrol-dark">
                   {(analyticsData.predictions.nextMonthConfidence * 100).toFixed(0)}% confidence
                 </Badge>
               </div>
-              <div className="text-3xl font-bold text-blue-900 mb-2">
+              <div className="text-3xl font-normal text-blue-900 mb-2">
                 {formatCurrency(analyticsData.predictions.nextMonthVAT)}
               </div>
               <Progress value={analyticsData.predictions.nextMonthConfidence * 100} className="mb-2" />
-              <p className="text-xs text-blue-700">Based on current trends and seasonal patterns</p>
+              <p className="text-xs text-petrol-dark">Based on current trends and seasonal patterns</p>
             </div>
 
             {/* Quarterly Forecast */}
             <div className="bg-card p-4 rounded-lg border">
-              <h3 className="text-sm font-medium mb-4">Quarterly Forecast</h3>
+              <h3 className="text-sm font-normal mb-4">Quarterly Forecast</h3>
               <div className="space-y-3">
                 {analyticsData.predictions.quarterlyForecast.map((forecast, index) => (
                   <div key={index} className="flex items-center justify-between p-2 bg-muted rounded">
                     <div className="flex items-center space-x-3">
                       <Calendar className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm font-medium">{forecast.period}</span>
+                      <span className="text-sm font-normal">{forecast.period}</span>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-medium">{formatCurrency(forecast.estimatedVAT)}</p>
+                      <p className="text-sm font-normal">{formatCurrency(forecast.estimatedVAT)}</p>
                       <p className="text-xs text-muted-foreground">
                         {(forecast.confidence * 100).toFixed(0)}% confidence
                       </p>
@@ -586,14 +586,14 @@ export default function SmartAnalytics({ dateRange, className }: SmartAnalyticsP
 
             {/* Recommendations */}
             <div className="bg-card p-4 rounded-lg border">
-              <h3 className="text-sm font-medium mb-4">AI Recommendations</h3>
+              <h3 className="text-sm font-normal mb-4">AI Recommendations</h3>
               <div className="space-y-3">
                 {analyticsData.predictions.recommendations.map((rec, index) => (
                   <div key={index} className="flex items-start space-x-3 p-3 bg-muted rounded-lg">
                     <Zap className="h-4 w-4 text-yellow-500 mt-0.5" />
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
-                        <span className="text-sm font-medium">{rec.title}</span>
+                        <span className="text-sm font-normal">{rec.title}</span>
                         <Badge className={getImpactColor(rec.impact)}>
                           {rec.impact} impact
                         </Badge>

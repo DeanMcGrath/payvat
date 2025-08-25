@@ -53,7 +53,7 @@ const MONTHS = [
   'July', 'August', 'September', 'October', 'November', 'December'
 ]
 
-const COLORS = ['#73C2FB', '#5BADEA', '#99D3FF', '#CCE7FF']
+const COLORS = ['#2A7A8F', '#216477', '#99D3FF', '#CCE7FF']
 
 export default function MonthlyDocumentSummary({ 
   selectedYear, 
@@ -127,8 +127,8 @@ export default function MonthlyDocumentSummary({
 
   // Prepare pie chart data for current month
   const pieData = currentSummary ? [
-    { name: 'Sales VAT', value: currentSummary.totalSalesVAT, color: '#73C2FB' },
-    { name: 'Purchase VAT', value: currentSummary.totalPurchaseVAT, color: '#5BADEA' }
+    { name: 'Sales VAT', value: currentSummary.totalSalesVAT, color: '#2A7A8F' },
+    { name: 'Purchase VAT', value: currentSummary.totalPurchaseVAT, color: '#216477' }
   ].filter(item => item.value > 0) : []
 
   if (loading) {
@@ -164,7 +164,7 @@ export default function MonthlyDocumentSummary({
         <CardContent>
           <div className="text-center py-8 text-muted-foreground">
             <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p className="text-lg font-medium">No data for {MONTHS[displayMonth - 1]} {displayYear}</p>
+            <p className="text-lg font-normal">No data for {MONTHS[displayMonth - 1]} {displayYear}</p>
             <p className="text-sm">Upload documents to see monthly summaries</p>
           </div>
         </CardContent>
@@ -208,12 +208,12 @@ export default function MonthlyDocumentSummary({
             <div className="space-y-6">
               {/* Key Metrics */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg border border-petrol-200">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-sm font-medium text-blue-900">Sales VAT</div>
+                    <div className="text-sm font-normal text-blue-900">Sales VAT</div>
                     {getTrendIcon(currentSummary.trends.salesVATChange)}
                   </div>
-                  <div className="text-2xl font-bold text-blue-900">
+                  <div className="text-2xl font-normal text-blue-900">
                     {formatCurrency(currentSummary.totalSalesVAT)}
                   </div>
                   <div className={`text-xs ${getTrendColor(currentSummary.trends.salesVATChange)}`}>
@@ -223,10 +223,10 @@ export default function MonthlyDocumentSummary({
 
                 <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-sm font-medium text-green-900">Purchase VAT</div>
+                    <div className="text-sm font-normal text-green-900">Purchase VAT</div>
                     {getTrendIcon(currentSummary.trends.purchaseVATChange)}
                   </div>
-                  <div className="text-2xl font-bold text-green-900">
+                  <div className="text-2xl font-normal text-green-900">
                     {formatCurrency(currentSummary.totalPurchaseVAT)}
                   </div>
                   <div className={`text-xs ${getTrendColor(currentSummary.trends.purchaseVATChange)}`}>
@@ -236,10 +236,10 @@ export default function MonthlyDocumentSummary({
 
                 <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-sm font-medium text-purple-900">Net VAT</div>
+                    <div className="text-sm font-normal text-purple-900">Net VAT</div>
                     <Euro className="h-4 w-4 text-purple-500" />
                   </div>
-                  <div className="text-2xl font-bold text-purple-900">
+                  <div className="text-2xl font-normal text-purple-900">
                     {formatCurrency(currentSummary.totalNetVAT)}
                   </div>
                   <div className="text-xs text-purple-700">
@@ -249,10 +249,10 @@ export default function MonthlyDocumentSummary({
 
                 <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200">
                   <div className="flex items-center justify-between mb-2">
-                    <div className="text-sm font-medium text-gray-900">Documents</div>
+                    <div className="text-sm font-normal text-gray-900">Documents</div>
                     <FileText className="h-4 w-4 text-gray-500" />
                   </div>
-                  <div className="text-2xl font-bold text-gray-900">
+                  <div className="text-2xl font-normal text-gray-900">
                     {currentSummary.documentCount}
                   </div>
                   <div className="text-xs text-gray-700">
@@ -265,7 +265,7 @@ export default function MonthlyDocumentSummary({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-card p-4 rounded-lg border">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-medium">Processing Quality</h3>
+                    <h3 className="text-sm font-normal">Processing Quality</h3>
                     <Badge variant="outline">
                       {currentSummary.averageProcessingQuality.toFixed(0)}/100
                     </Badge>
@@ -281,7 +281,7 @@ export default function MonthlyDocumentSummary({
 
                 <div className="bg-card p-4 rounded-lg border">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-medium">VAT Accuracy</h3>
+                    <h3 className="text-sm font-normal">VAT Accuracy</h3>
                     <Badge variant="outline">
                       {(currentSummary.averageVATAccuracy * 100).toFixed(0)}%
                     </Badge>
@@ -299,7 +299,7 @@ export default function MonthlyDocumentSummary({
               {/* Compliance Status */}
               <div className="bg-card p-4 rounded-lg border">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-medium flex items-center">
+                  <h3 className="text-sm font-normal flex items-center">
                     <CheckCircle className="h-4 w-4 mr-2 text-green-500" />
                     Compliance Status
                   </h3>
@@ -321,7 +321,7 @@ export default function MonthlyDocumentSummary({
               {/* VAT Trends Chart */}
               {chartData.length > 1 && (
                 <div className="bg-card p-4 rounded-lg border">
-                  <h3 className="text-sm font-medium mb-4">VAT Trends (6 Months)</h3>
+                  <h3 className="text-sm font-normal mb-4">VAT Trends (6 Months)</h3>
                   <ResponsiveContainer width="100%" height={300}>
                     <LineChart data={chartData.slice(-6)}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -331,14 +331,14 @@ export default function MonthlyDocumentSummary({
                       <Line 
                         type="monotone" 
                         dataKey="salesVAT" 
-                        stroke="#73C2FB" 
+                        stroke="#2A7A8F" 
                         strokeWidth={2}
                         name="Sales VAT"
                       />
                       <Line 
                         type="monotone" 
                         dataKey="purchaseVAT" 
-                        stroke="#5BADEA" 
+                        stroke="#216477" 
                         strokeWidth={2}
                         name="Purchase VAT"
                       />
@@ -358,7 +358,7 @@ export default function MonthlyDocumentSummary({
                 {/* VAT Breakdown Pie Chart */}
                 {pieData.length > 0 && (
                   <div className="bg-card p-4 rounded-lg border">
-                    <h3 className="text-sm font-medium mb-4">VAT Breakdown</h3>
+                    <h3 className="text-sm font-normal mb-4">VAT Breakdown</h3>
                     <ResponsiveContainer width="100%" height={200}>
                       <RechartsPieChart>
                         <Pie
@@ -382,14 +382,14 @@ export default function MonthlyDocumentSummary({
                 {/* Document Count Chart */}
                 {chartData.length > 1 && (
                   <div className="bg-card p-4 rounded-lg border">
-                    <h3 className="text-sm font-medium mb-4">Document Volume</h3>
+                    <h3 className="text-sm font-normal mb-4">Document Volume</h3>
                     <ResponsiveContainer width="100%" height={200}>
                       <BarChart data={chartData.slice(-6)}>
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="month" />
                         <YAxis />
                         <Tooltip />
-                        <Bar dataKey="documents" fill="#73C2FB" />
+                        <Bar dataKey="documents" fill="#2A7A8F" />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>

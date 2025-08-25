@@ -86,7 +86,7 @@ export default function EnhancedStatsCard({
       case 'success': return "bg-green-50 text-green-700"
       case 'warning': return "bg-yellow-50 text-yellow-700"
       case 'error': return "bg-red-50 text-red-700"
-      case 'info': return "bg-blue-50 text-blue-700"
+      case 'info': return "bg-blue-50 text-petrol-dark"
       default: return "bg-gray-50 text-gray-700"
     }
   }
@@ -141,15 +141,15 @@ export default function EnhancedStatsCard({
       <CardContent className="p-0">
         <div className="flex items-center justify-between mb-4">
           <div className="flex-1">
-            <p className="text-sm text-muted-foreground font-medium mb-1">{title}</p>
+            <p className="text-sm text-muted-foreground font-normal mb-1">{title}</p>
             <div className="flex items-baseline space-x-2">
-              <div className="text-3xl font-bold text-foreground">
+              <div className="text-3xl font-normal text-foreground">
                 {formatValue(value)}
               </div>
               {trend && (
                 <div className={`flex items-center space-x-1 ${getTrendColor()}`}>
                   {getTrendIcon()}
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-normal">
                     {Math.abs(trend.value).toFixed(1)}%
                   </span>
                 </div>
@@ -174,7 +174,7 @@ export default function EnhancedStatsCard({
         
         <div className="flex items-center justify-between">
           {status && (
-            <div className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBgColor()}`}>
+            <div className={`px-3 py-1 rounded-full text-xs font-normal ${getStatusBgColor()}`}>
               {status.text}
             </div>
           )}

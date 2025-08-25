@@ -141,7 +141,7 @@ export default function CalendarWidget({ className }: CalendarWidgetProps) {
 
   const getEventColor = (status: string) => {
     switch (status) {
-      case 'upcoming': return "bg-blue-100 text-blue-800"
+      case 'upcoming': return "bg-blue-100 text-petrol-dark"
       case 'due': return "bg-yellow-100 text-yellow-800"
       case 'overdue': return "bg-red-100 text-red-800"
       case 'completed': return "bg-green-100 text-green-800"
@@ -183,7 +183,7 @@ export default function CalendarWidget({ className }: CalendarWidgetProps) {
         <div
           key={day}
           className={`h-8 text-xs flex flex-col items-center justify-center cursor-pointer rounded transition-colors relative
-            ${isToday ? 'bg-primary text-white font-bold' : ''}
+            ${isToday ? 'bg-primary text-white font-normal' : ''}
             ${isSelected ? 'ring-2 ring-primary' : ''}
             ${!isToday && !isSelected ? 'hover:bg-gray-100' : ''}
           `}
@@ -198,7 +198,7 @@ export default function CalendarWidget({ className }: CalendarWidgetProps) {
                   className={`w-1 h-1 rounded-full ${
                     event.status === 'completed' ? 'bg-green-500' :
                     event.status === 'overdue' ? 'bg-red-500' :
-                    event.status === 'due' ? 'bg-yellow-500' : 'bg-blue-500'
+                    event.status === 'due' ? 'bg-yellow-500' : 'bg-petrol-light'
                   }`}
                 />
               ))}
@@ -232,7 +232,7 @@ export default function CalendarWidget({ className }: CalendarWidgetProps) {
     return (
       <Card className={`${className} card-modern`}>
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-bold text-foreground flex items-center justify-between">
+          <CardTitle className="text-xl font-normal text-foreground flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <CalendarIcon className="h-6 w-6 text-primary" />
               <span>VAT Calendar</span>
@@ -257,7 +257,7 @@ export default function CalendarWidget({ className }: CalendarWidgetProps) {
   return (
     <Card className={`${className} card-modern hover-lift`}>
       <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold text-foreground flex items-center space-x-2">
+        <CardTitle className="text-xl font-normal text-foreground flex items-center space-x-2">
           <CalendarIcon className="h-6 w-6 text-primary" />
           <span>VAT Calendar</span>
         </CardTitle>
@@ -274,7 +274,7 @@ export default function CalendarWidget({ className }: CalendarWidgetProps) {
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <h3 className="text-lg font-semibold text-foreground">
+          <h3 className="text-lg font-normal text-foreground">
             {getMonthName(currentDate)}
           </h3>
           <Button
@@ -292,7 +292,7 @@ export default function CalendarWidget({ className }: CalendarWidgetProps) {
           {/* Day headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
             {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
-              <div key={day} className="h-6 text-xs font-medium text-muted-foreground text-center">
+              <div key={day} className="h-6 text-xs font-normal text-muted-foreground text-center">
                 {day}
               </div>
             ))}
@@ -306,7 +306,7 @@ export default function CalendarWidget({ className }: CalendarWidgetProps) {
 
         {/* Upcoming Events */}
         <div className="space-y-3">
-          <h4 className="text-sm font-semibold text-foreground">Upcoming Events</h4>
+          <h4 className="text-sm font-normal text-foreground">Upcoming Events</h4>
           
           {getUpcomingEvents().length > 0 ? (
             <div className="space-y-2">
@@ -325,7 +325,7 @@ export default function CalendarWidget({ className }: CalendarWidgetProps) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <h5 className="text-sm font-medium text-foreground truncate">
+                      <h5 className="text-sm font-normal text-foreground truncate">
                         {event.title}
                       </h5>
                       <span className="text-xs text-muted-foreground">
@@ -339,7 +339,7 @@ export default function CalendarWidget({ className }: CalendarWidgetProps) {
                       {event.description}
                     </p>
                     {event.amount && (
-                      <p className="text-xs font-medium text-primary">
+                      <p className="text-xs font-normal text-primary">
                         {formatCurrency(event.amount)}
                       </p>
                     )}

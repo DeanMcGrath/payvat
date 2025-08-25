@@ -172,7 +172,7 @@ export default function DocumentFeedback({
   const renderStarRating = () => {
     return (
       <div className="flex items-center space-x-1">
-        <Label className="text-sm font-medium">Confidence in our extraction:</Label>
+        <Label className="text-sm font-normal">Confidence in our extraction:</Label>
         <div className="flex space-x-1">
           {[1, 2, 3, 4, 5].map(star => (
             <button
@@ -213,13 +213,13 @@ export default function DocumentFeedback({
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <h4 className="font-medium text-green-800 mb-2">Impact</h4>
+            <h4 className="font-normal text-green-800 mb-2">Impact</h4>
             <p className="text-green-700 text-sm">{insights.accuracyImprovement}</p>
           </div>
 
           {insights.commonIssues?.length > 0 && (
             <div>
-              <h4 className="font-medium text-green-800 mb-2">Issues Identified</h4>
+              <h4 className="font-normal text-green-800 mb-2">Issues Identified</h4>
               <ul className="text-green-700 text-sm space-y-1">
                 {insights.commonIssues.map((issue: string, index: number) => (
                   <li key={index} className="flex items-start">
@@ -233,7 +233,7 @@ export default function DocumentFeedback({
 
           {insights.suggestions?.length > 0 && (
             <div>
-              <h4 className="font-medium text-green-800 mb-2 flex items-center">
+              <h4 className="font-normal text-green-800 mb-2 flex items-center">
                 <Info className="h-4 w-4 mr-1" />
                 Suggestions
               </h4>
@@ -252,13 +252,13 @@ export default function DocumentFeedback({
   }
 
   return (
-    <Card className={`border-blue-200 bg-blue-50 ${className}`}>
+    <Card className={`border-petrol-200 bg-blue-50 ${className}`}>
       <CardHeader>
-        <CardTitle className="text-blue-800 flex items-center">
+        <CardTitle className="text-petrol-dark flex items-center">
           <CheckCircle className="h-5 w-5 mr-2" />
           How accurate was our extraction?
         </CardTitle>
-        <p className="text-sm text-blue-600">
+        <p className="text-sm text-petrol-base">
           Your feedback helps improve our AI for future documents
         </p>
       </CardHeader>
@@ -266,7 +266,7 @@ export default function DocumentFeedback({
         
         {/* Feedback Type Selection */}
         <div className="space-y-3">
-          <Label className="text-sm font-medium">Overall accuracy:</Label>
+          <Label className="text-sm font-normal">Overall accuracy:</Label>
           <div className="flex flex-wrap gap-3">
             <Button
               variant={feedbackType === 'CORRECT' ? 'default' : 'outline'}
@@ -312,7 +312,7 @@ export default function DocumentFeedback({
         {/* Correction Form */}
         {showCorrectionForm && correctableFields.length > 0 && (
           <div className="space-y-4 p-4 bg-white rounded-lg border">
-            <h4 className="font-medium text-gray-900">Correct the extracted values:</h4>
+            <h4 className="font-normal text-gray-900">Correct the extracted values:</h4>
             
             {corrections.map((correction, index) => {
               const field = correctableFields.find(f => f.key === correction.field)
@@ -320,7 +320,7 @@ export default function DocumentFeedback({
 
               return (
                 <div key={correction.field} className="space-y-2">
-                  <Label className="text-sm font-medium">{correction.fieldLabel}</Label>
+                  <Label className="text-sm font-normal">{correction.fieldLabel}</Label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                       <Label className="text-xs text-gray-500">Original (AI extracted)</Label>
@@ -355,7 +355,7 @@ export default function DocumentFeedback({
         {/* Additional Notes */}
         {feedbackType && (
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Additional notes (optional)</Label>
+            <Label className="text-sm font-normal">Additional notes (optional)</Label>
             <Textarea
               value={userNotes}
               onChange={(e) => setUserNotes(e.target.value)}
@@ -371,7 +371,7 @@ export default function DocumentFeedback({
           <Button
             onClick={handleSubmitFeedback}
             disabled={isSubmitting}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            className="w-full bg-petrol-base hover:bg-petrol-dark text-white"
           >
             {isSubmitting ? (
               <>

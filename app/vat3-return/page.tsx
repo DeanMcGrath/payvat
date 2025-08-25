@@ -194,7 +194,7 @@ export default function VAT3ReturnForm() {
   }
 
   // Helper function to get input class with error styling
-  const getInputClassName = (fieldName: string, baseClasses = "bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base") => {
+  const getInputClassName = (fieldName: string, baseClasses = "bg-white border-gray-300 focus:border-petrol-500 focus:ring-petrol-base text-gray-900 text-base") => {
     const hasError = fieldErrors[fieldName]
     if (hasError) {
       return baseClasses.replace('border-gray-300', 'border-red-300').replace('focus:border-teal-500', 'focus:border-red-500').replace('focus:ring-teal-500', 'focus:ring-red-500')
@@ -456,7 +456,7 @@ export default function VAT3ReturnForm() {
               <div className="flex items-start space-x-3">
                 <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
                 <div>
-                  <h3 className="text-red-800 font-semibold mb-1">Please correct the following errors:</h3>
+                  <h3 className="text-red-800 font-normal mb-1">Please correct the following errors:</h3>
                   <ul className="text-red-700 text-sm space-y-1">
                     {validationErrors.map((error, index) => (
                       <li key={index} className="flex items-start space-x-1">
@@ -465,7 +465,7 @@ export default function VAT3ReturnForm() {
                         {error.includes('click here to continue') && (
                           <Link 
                             href="/confirmation-payment" 
-                            className="ml-2 underline font-semibold text-red-800 hover:text-red-900"
+                            className="ml-2 underline font-normal text-red-800 hover:text-red-900"
                           >
                             → Go to Confirmation Page
                           </Link>
@@ -493,7 +493,7 @@ export default function VAT3ReturnForm() {
                   <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
                 )}
                 <div className="flex-1">
-                  <p className={`font-semibold ${notification.type === 'success' ? 'text-green-800' : 'text-red-800'}`}>
+                  <p className={`font-normal ${notification.type === 'success' ? 'text-green-800' : 'text-red-800'}`}>
                     {notification.message}
                   </p>
                 </div>
@@ -514,12 +514,12 @@ export default function VAT3ReturnForm() {
           {/* Registration Details */}
           <Card className="card-modern ">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-foreground">Registration Details</CardTitle>
+              <CardTitle className="text-xl font-normal text-foreground">Registration Details</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label className="text-base font-medium text-foreground">Trader Name *</Label>
+                  <Label className="text-base font-normal text-foreground">Trader Name *</Label>
                   <FieldWrapper fieldName="traderName">
                     <Input
                       value={formData.traderName}
@@ -529,7 +529,7 @@ export default function VAT3ReturnForm() {
                   </FieldWrapper>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-base font-medium text-foreground">Registration Number *</Label>
+                  <Label className="text-base font-normal text-foreground">Registration Number *</Label>
                   <FieldWrapper fieldName="registrationNumber">
                     <Input
                       value={formData.registrationNumber}
@@ -545,11 +545,11 @@ export default function VAT3ReturnForm() {
           {/* Filing Frequency */}
           <Card className="card-modern ">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-foreground">Filing Frequency</CardTitle>
+              <CardTitle className="text-xl font-normal text-foreground">Filing Frequency</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <Label className="text-base font-medium text-foreground">Please indicate Filing Frequency *</Label>
+                <Label className="text-base font-normal text-foreground">Please indicate Filing Frequency *</Label>
                 <RadioGroup
                   value={formData.filingFrequency}
                   onValueChange={(value) => handleInputChange("filingFrequency", value)}
@@ -557,25 +557,25 @@ export default function VAT3ReturnForm() {
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="bi-monthly" id="bi-monthly" />
-                    <Label htmlFor="bi-monthly" className="text-base text-gray-700 font-medium">
+                    <Label htmlFor="bi-monthly" className="text-base text-gray-700 font-normal">
                       Bi-Monthly / Repayment Only
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="four-monthly" id="four-monthly" />
-                    <Label htmlFor="four-monthly" className="text-base text-gray-700 font-medium">
+                    <Label htmlFor="four-monthly" className="text-base text-gray-700 font-normal">
                       Four Monthly
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="bi-annual" id="bi-annual" />
-                    <Label htmlFor="bi-annual" className="text-base text-gray-700 font-medium">
+                    <Label htmlFor="bi-annual" className="text-base text-gray-700 font-normal">
                       Bi-Annual
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="other" id="other" />
-                    <Label htmlFor="other" className="text-base text-gray-700 font-medium">
+                    <Label htmlFor="other" className="text-base text-gray-700 font-normal">
                       Other
                     </Label>
                   </div>
@@ -587,14 +587,14 @@ export default function VAT3ReturnForm() {
           {/* Period Details */}
           <Card className="card-modern ">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-foreground">Period Details</CardTitle>
+              <CardTitle className="text-xl font-normal text-foreground">Period Details</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div className="text-base font-semibold text-foreground">Please enter period dates</div>
+                <div className="text-base font-normal text-foreground">Please enter period dates</div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label className="text-base font-medium text-foreground">Period Begin Date *</Label>
+                    <Label className="text-base font-normal text-foreground">Period Begin Date *</Label>
                     <div className="text-sm text-gray-600 mb-1">(dd/mm/yyyy)</div>
                     <FieldWrapper fieldName="periodBeginDate">
                       <Input
@@ -606,7 +606,7 @@ export default function VAT3ReturnForm() {
                     </FieldWrapper>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-base font-medium text-foreground">Period End Date *</Label>
+                    <Label className="text-base font-normal text-foreground">Period End Date *</Label>
                     <div className="text-sm text-gray-600 mb-1">(dd/mm/yyyy)</div>
                     <FieldWrapper fieldName="periodEndDate">
                       <Input
@@ -625,11 +625,11 @@ export default function VAT3ReturnForm() {
           {/* Return Details */}
           <Card className="card-modern ">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-foreground">Return Details</CardTitle>
+              <CardTitle className="text-xl font-normal text-foreground">Return Details</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <Label className="text-base font-medium text-foreground">
+                <Label className="text-base font-normal text-foreground">
                   Please indicate the type of return you wish to file *
                 </Label>
                 <RadioGroup
@@ -639,19 +639,19 @@ export default function VAT3ReturnForm() {
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="original" id="original" />
-                    <Label htmlFor="original" className="text-base text-gray-700 font-medium">
+                    <Label htmlFor="original" className="text-base text-gray-700 font-normal">
                       Original VAT3
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="supplementary" id="supplementary" />
-                    <Label htmlFor="supplementary" className="text-base text-gray-700 font-medium">
+                    <Label htmlFor="supplementary" className="text-base text-gray-700 font-normal">
                       Supplementary VAT3
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="amended" id="amended" />
-                    <Label htmlFor="amended" className="text-base text-gray-700 font-medium">
+                    <Label htmlFor="amended" className="text-base text-gray-700 font-normal">
                       Amended VAT3
                     </Label>
                   </div>
@@ -663,16 +663,16 @@ export default function VAT3ReturnForm() {
           {/* VAT3 Details */}
           <Card className="card-modern ">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-foreground">VAT3 Details</CardTitle>
+              <CardTitle className="text-xl font-normal text-foreground">VAT3 Details</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div className="text-base font-semibold text-foreground">Whole Euro only. Please do not enter cent.</div>
+                <div className="text-base font-normal text-foreground">Whole Euro only. Please do not enter cent.</div>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <Label className="text-base font-medium text-foreground">VAT on Sales *</Label>
-                      <Label className="font-bold text-base text-gray-800">T1</Label>
+                      <Label className="text-base font-normal text-foreground">VAT on Sales *</Label>
+                      <Label className="font-normal text-base text-gray-800">T1</Label>
                     </div>
                     <div className="flex items-start gap-2">
                       <Euro className="h-4 w-4 text-gray-600 mt-3" />
@@ -681,7 +681,7 @@ export default function VAT3ReturnForm() {
                           type="number"
                           value={formData.t1VATOnSales}
                           onChange={(e) => handleInputChange("t1VATOnSales", e.target.value)}
-                          className={getInputClassName("t1VATOnSales", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
+                          className={getInputClassName("t1VATOnSales", "w-32 text-right bg-white border-gray-300 focus:border-petrol-500 focus:ring-petrol-base text-gray-900 text-base")}
                           placeholder="0"
                         />
                       </FieldWrapper>
@@ -689,8 +689,8 @@ export default function VAT3ReturnForm() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <Label className="text-base font-medium text-foreground">VAT on Purchases *</Label>
-                      <Label className="font-bold text-base text-gray-800">T2</Label>
+                      <Label className="text-base font-normal text-foreground">VAT on Purchases *</Label>
+                      <Label className="font-normal text-base text-gray-800">T2</Label>
                     </div>
                     <div className="flex items-start gap-2">
                       <Euro className="h-4 w-4 text-gray-600 mt-3" />
@@ -699,7 +699,7 @@ export default function VAT3ReturnForm() {
                           type="number"
                           value={formData.t2VATOnPurchases}
                           onChange={(e) => handleInputChange("t2VATOnPurchases", e.target.value)}
-                          className={getInputClassName("t2VATOnPurchases", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
+                          className={getInputClassName("t2VATOnPurchases", "w-32 text-right bg-white border-gray-300 focus:border-petrol-500 focus:ring-petrol-base text-gray-900 text-base")}
                           placeholder="0"
                         />
                       </FieldWrapper>
@@ -713,7 +713,7 @@ export default function VAT3ReturnForm() {
           {/* Unusual Expenditure */}
           <Card className="card-modern ">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-foreground">Unusual Expenditure</CardTitle>
+              <CardTitle className="text-xl font-normal text-foreground">Unusual Expenditure</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
@@ -729,13 +729,13 @@ export default function VAT3ReturnForm() {
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="yes" id="yes" />
-                    <Label htmlFor="yes" className="text-base text-gray-700 font-medium">
+                    <Label htmlFor="yes" className="text-base text-gray-700 font-normal">
                       Yes
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem value="no" id="no" />
-                    <Label htmlFor="no" className="text-base text-gray-700 font-medium">
+                    <Label htmlFor="no" className="text-base text-gray-700 font-normal">
                       No
                     </Label>
                   </div>
@@ -744,7 +744,7 @@ export default function VAT3ReturnForm() {
                 {formData.unusualExpenditure === "yes" && (
                   <div className="space-y-6 border-t pt-6">
                     <div className="flex items-center justify-between">
-                      <Label className="text-base font-medium text-foreground">Amount (excl. VAT) *</Label>
+                      <Label className="text-base font-normal text-foreground">Amount (excl. VAT) *</Label>
                       <div className="flex items-start gap-2">
                         <Euro className="h-4 w-4 text-gray-600 mt-3" />
                         <FieldWrapper fieldName="unusualAmount">
@@ -752,14 +752,14 @@ export default function VAT3ReturnForm() {
                             type="number"
                             value={formData.unusualAmount}
                             onChange={(e) => handleInputChange("unusualAmount", e.target.value)}
-                            className={getInputClassName("unusualAmount", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
+                            className={getInputClassName("unusualAmount", "w-32 text-right bg-white border-gray-300 focus:border-petrol-500 focus:ring-petrol-base text-gray-900 text-base")}
                             placeholder="0"
                           />
                         </FieldWrapper>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-base font-medium text-foreground">
+                      <Label className="text-base font-normal text-foreground">
                         Please provide details of the exceptional expenditure. Details should include type of asset
                         acquired, name and VAT number of supplier, total invoice cost excluding VAT, and VAT amount
                         payable in respect of each item of exceptional expenditure. *
@@ -768,7 +768,7 @@ export default function VAT3ReturnForm() {
                         <Textarea
                           value={formData.unusualDetails}
                           onChange={(e) => handleInputChange("unusualDetails", e.target.value)}
-                          className={getInputClassName("unusualDetails", "min-h-[80px] w-full bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
+                          className={getInputClassName("unusualDetails", "min-h-[80px] w-full bg-white border-gray-300 focus:border-petrol-500 focus:ring-petrol-base text-gray-900 text-base")}
                           placeholder="Enter details here..."
                         />
                       </FieldWrapper>
@@ -782,14 +782,14 @@ export default function VAT3ReturnForm() {
           {/* Net Amounts */}
           <Card className="card-modern ">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-foreground">Net Amounts</CardTitle>
+              <CardTitle className="text-xl font-normal text-foreground">Net Amounts</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Label className="text-base font-medium text-gray-700">Net Payable</Label>
-                    <Label className="font-bold text-base text-gray-800">T3</Label>
+                    <Label className="text-base font-normal text-gray-700">Net Payable</Label>
+                    <Label className="font-normal text-base text-gray-800">T3</Label>
                   </div>
                   <div className="flex items-center gap-2">
                     <Euro className="h-4 w-4 text-gray-600" />
@@ -803,8 +803,8 @@ export default function VAT3ReturnForm() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Label className="text-base font-medium text-gray-700">Net Repayable</Label>
-                    <Label className="font-bold text-base text-gray-800">T4</Label>
+                    <Label className="text-base font-normal text-gray-700">Net Repayable</Label>
+                    <Label className="font-normal text-base text-gray-800">T4</Label>
                   </div>
                   <div className="flex items-center gap-2">
                     <Euro className="h-4 w-4 text-gray-600" />
@@ -823,14 +823,14 @@ export default function VAT3ReturnForm() {
           {/* Intra-EU Trade */}
           <Card className="card-modern ">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-foreground">Intra-EU Trade (INTRASTAT)</CardTitle>
+              <CardTitle className="text-xl font-normal text-foreground">Intra-EU Trade (INTRASTAT)</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Label className="text-base font-medium text-foreground">Total goods to other EU countries *</Label>
-                    <Label className="font-bold text-base text-gray-800">E1</Label>
+                    <Label className="text-base font-normal text-foreground">Total goods to other EU countries *</Label>
+                    <Label className="font-normal text-base text-gray-800">E1</Label>
                   </div>
                   <div className="flex items-start gap-2">
                     <Euro className="h-4 w-4 text-gray-600 mt-3" />
@@ -839,7 +839,7 @@ export default function VAT3ReturnForm() {
                         type="number"
                         value={formData.e1TotalGoodsTo}
                         onChange={(e) => handleInputChange("e1TotalGoodsTo", e.target.value)}
-                        className={getInputClassName("e1TotalGoodsTo", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
+                        className={getInputClassName("e1TotalGoodsTo", "w-32 text-right bg-white border-gray-300 focus:border-petrol-500 focus:ring-petrol-base text-gray-900 text-base")}
                         placeholder="0"
                       />
                     </FieldWrapper>
@@ -847,8 +847,8 @@ export default function VAT3ReturnForm() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Label className="text-base font-medium text-foreground">Total goods from other EU countries *</Label>
-                    <Label className="font-bold text-base text-gray-800">E2</Label>
+                    <Label className="text-base font-normal text-foreground">Total goods from other EU countries *</Label>
+                    <Label className="font-normal text-base text-gray-800">E2</Label>
                   </div>
                   <div className="flex items-start gap-2">
                     <Euro className="h-4 w-4 text-gray-600 mt-3" />
@@ -857,7 +857,7 @@ export default function VAT3ReturnForm() {
                         type="number"
                         value={formData.e2TotalGoodsFrom}
                         onChange={(e) => handleInputChange("e2TotalGoodsFrom", e.target.value)}
-                        className={getInputClassName("e2TotalGoodsFrom", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
+                        className={getInputClassName("e2TotalGoodsFrom", "w-32 text-right bg-white border-gray-300 focus:border-petrol-500 focus:ring-petrol-base text-gray-900 text-base")}
                         placeholder="0"
                       />
                     </FieldWrapper>
@@ -865,8 +865,8 @@ export default function VAT3ReturnForm() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Label className="text-base font-medium text-foreground">Total services to other EU countries *</Label>
-                    <Label className="font-bold text-base text-gray-800">ES1</Label>
+                    <Label className="text-base font-normal text-foreground">Total services to other EU countries *</Label>
+                    <Label className="font-normal text-base text-gray-800">ES1</Label>
                   </div>
                   <div className="flex items-start gap-2">
                     <Euro className="h-4 w-4 text-gray-600 mt-3" />
@@ -875,7 +875,7 @@ export default function VAT3ReturnForm() {
                         type="number"
                         value={formData.es1TotalServicesTo}
                         onChange={(e) => handleInputChange("es1TotalServicesTo", e.target.value)}
-                        className={getInputClassName("es1TotalServicesTo", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
+                        className={getInputClassName("es1TotalServicesTo", "w-32 text-right bg-white border-gray-300 focus:border-petrol-500 focus:ring-petrol-base text-gray-900 text-base")}
                         placeholder="0"
                       />
                     </FieldWrapper>
@@ -883,8 +883,8 @@ export default function VAT3ReturnForm() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Label className="text-base font-medium text-foreground">Total services from other EU countries *</Label>
-                    <Label className="font-bold text-base text-gray-800">ES2</Label>
+                    <Label className="text-base font-normal text-foreground">Total services from other EU countries *</Label>
+                    <Label className="font-normal text-base text-gray-800">ES2</Label>
                   </div>
                   <div className="flex items-start gap-2">
                     <Euro className="h-4 w-4 text-gray-600 mt-3" />
@@ -893,7 +893,7 @@ export default function VAT3ReturnForm() {
                         type="number"
                         value={formData.es2TotalServicesFrom}
                         onChange={(e) => handleInputChange("es2TotalServicesFrom", e.target.value)}
-                        className={getInputClassName("es2TotalServicesFrom", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
+                        className={getInputClassName("es2TotalServicesFrom", "w-32 text-right bg-white border-gray-300 focus:border-petrol-500 focus:ring-petrol-base text-gray-900 text-base")}
                         placeholder="0"
                       />
                     </FieldWrapper>
@@ -906,13 +906,13 @@ export default function VAT3ReturnForm() {
           {/* Non EU Trade */}
           <Card className="card-modern ">
             <CardHeader>
-              <CardTitle className="text-xl font-semibold text-foreground">Non EU Trade</CardTitle>
+              <CardTitle className="text-xl font-normal text-foreground">Non EU Trade</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <Label className="text-base font-medium text-foreground">Postponed Accounting *</Label>
-                  <Label className="font-bold text-base text-gray-800">PA1</Label>
+                  <Label className="text-base font-normal text-foreground">Postponed Accounting *</Label>
+                  <Label className="font-normal text-base text-gray-800">PA1</Label>
                 </div>
                 <div className="flex items-start gap-2">
                   <Euro className="h-4 w-4 text-gray-600 mt-3" />
@@ -921,7 +921,7 @@ export default function VAT3ReturnForm() {
                       type="number"
                       value={formData.pa1PostponedAccounting}
                       onChange={(e) => handleInputChange("pa1PostponedAccounting", e.target.value)}
-                      className={getInputClassName("pa1PostponedAccounting", "w-32 text-right bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 text-gray-900 text-base")}
+                      className={getInputClassName("pa1PostponedAccounting", "w-32 text-right bg-white border-gray-300 focus:border-petrol-500 focus:ring-petrol-base text-gray-900 text-base")}
                       placeholder="0"
                     />
                   </FieldWrapper>
@@ -938,7 +938,7 @@ export default function VAT3ReturnForm() {
                   variant="outline"
                   onClick={handleSaveDraft}
                   disabled={isSaving}
-                  className="px-8 py-3 font-semibold hover-scale glass-white/10 backdrop-blur-sm"
+                  className="px-8 py-3 font-normal hover-scale glass-white/10 backdrop-blur-sm"
                 >
                   <Save className="h-4 w-4 mr-2" />
                   {isSaving ? "Saving..." : "Save as Draft"}
@@ -946,7 +946,7 @@ export default function VAT3ReturnForm() {
                 <Button
                   onClick={handleSubmitReturn}
                   disabled={isSubmitting}
-                  className="gradient-primary px-8 py-3 font-semibold text-white hover-scale shadow-lg disabled:opacity-75 disabled:cursor-not-allowed"
+                  className="gradient-primary px-8 py-3 font-normal text-white hover-scale shadow-lg disabled:opacity-75 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>
@@ -969,14 +969,14 @@ export default function VAT3ReturnForm() {
       {/* Live Chat */}
 
       {/* Main Footer */}
-      <footer className="bg-[#5BADEA] text-white">
+      <footer className="bg-[#216477] text-white">
         {/* Navigation Bar */}
-        <div className="bg-[#73C2FB] py-4">
+        <div className="bg-[#2A7A8F] py-4">
           <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <Link href="/" className="text-white hover:text-blue-200 underline">
+            <Link href="/" className="text-white hover:text-petrol-200 underline">
               Back
             </Link>
-            <a href="#top" className="text-white hover:text-blue-200 underline flex items-center space-x-1">
+            <a href="#top" className="text-white hover:text-petrol-200 underline flex items-center space-x-1">
               <ArrowUp className="h-4 w-4" />
               <span>Back to top</span>
             </a>
@@ -985,7 +985,7 @@ export default function VAT3ReturnForm() {
         {/* Copyright */}
         <div className="bg-[#004A75] py-4">
           <div className="max-w-7xl mx-auto px-6 text-center">
-            <p className="text-sm font-thin">© Don't Be Like Me!</p>
+            <p className="text-sm font-thin">© PayVAT</p>
           </div>
         </div>
       </footer>

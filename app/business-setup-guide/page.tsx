@@ -281,10 +281,10 @@ export default function BusinessSetupGuidePage() {
       {/* Progress Tracker */}
       <section className="section-after-header relative z-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="shadow-xl border-2 border-blue-100 overflow-hidden">
+          <Card className="shadow-xl border-2 border-petrol-100 overflow-hidden">
             <CardHeader className="pb-4">
               <CardTitle className="text-xl sm:text-2xl flex items-center gap-2">
-                <Target className="h-5 w-5 sm:h-6 sm:w-6 text-[#73C2FB]" />
+                <Target className="h-5 w-5 sm:h-6 sm:w-6 text-[#2A7A8F]" />
                 Your Setup Progress
               </CardTitle>
               <CardDescription className="text-sm sm:text-base">
@@ -345,7 +345,7 @@ export default function BusinessSetupGuidePage() {
                 key={step.id}
                 className={`overflow-hidden transition-all duration-300 ${
                   expandedSection === step.id ? 'shadow-2xl scale-[1.02]' : 'shadow-lg hover:shadow-xl'
-                } ${completedSteps.includes(step.id) ? 'border-blue-200' : ''}`}
+                } ${completedSteps.includes(step.id) ? 'border-petrol-200' : ''}`}
               >
                 <CardHeader 
                   className="cursor-pointer"
@@ -353,16 +353,16 @@ export default function BusinessSetupGuidePage() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-[#8FD0FC] to-[#5BADEA] p-0.5`}>
+                      <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-[#8FD0FC] to-[#216477] p-0.5`}>
                         <div className="w-full h-full rounded-xl bg-white flex items-center justify-center">
-                          <step.icon className="h-8 w-8 text-[#73C2FB]" />
+                          <step.icon className="h-8 w-8 text-[#2A7A8F]" />
                         </div>
                       </div>
                       <div>
                         <CardTitle className="text-2xl flex items-center gap-2">
                           Step {index + 1}: {step.title}
                           {completedSteps.includes(step.id) && (
-                            <CheckCircle className="h-5 w-5 text-[#73C2FB]" />
+                            <CheckCircle className="h-5 w-5 text-[#2A7A8F]" />
                           )}
                         </CardTitle>
                         <CardDescription className="text-base mt-1">
@@ -381,24 +381,24 @@ export default function BusinessSetupGuidePage() {
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                       {step.content.map((item, idx) => (
                         <div key={idx} className="bg-gray-50 rounded-lg p-6">
-                          <h4 className="font-semibold text-lg mb-3 text-gray-900">{item.name}</h4>
+                          <h4 className="font-normal text-lg mb-3 text-gray-900">{item.name}</h4>
                           
                           {/* Different content layouts based on step type */}
                           {step.id === 'structure' && 'pros' in item && (
                             <div className="space-y-3">
                               <div>
-                                <p className="text-sm font-medium text-gray-700 mb-1">Pros:</p>
+                                <p className="text-sm font-normal text-gray-700 mb-1">Pros:</p>
                                 <ul className="text-sm text-gray-600 space-y-1">
                                   {item.pros?.map((pro, i) => (
                                     <li key={i} className="flex items-start gap-1">
-                                      <CheckCircle className="h-3 w-3 text-[#73C2FB] mt-0.5 flex-shrink-0" />
+                                      <CheckCircle className="h-3 w-3 text-[#2A7A8F] mt-0.5 flex-shrink-0" />
                                       {pro}
                                     </li>
                                   ))}
                                 </ul>
                               </div>
                               <div>
-                                <p className="text-sm font-medium text-gray-700 mb-1">Cons:</p>
+                                <p className="text-sm font-normal text-gray-700 mb-1">Cons:</p>
                                 <ul className="text-sm text-gray-600 space-y-1">
                                   {item.cons?.map((con, i) => (
                                     <li key={i} className="flex items-start gap-1">
@@ -410,7 +410,7 @@ export default function BusinessSetupGuidePage() {
                               </div>
                               <div className="pt-2 border-t">
                                 <p className="text-sm text-gray-700">
-                                  <span className="font-medium">Best for:</span> {item.bestFor}
+                                  <span className="font-normal">Best for:</span> {item.bestFor}
                                 </p>
                               </div>
                             </div>
@@ -421,7 +421,7 @@ export default function BusinessSetupGuidePage() {
                               <ol className="text-sm text-gray-600 space-y-2">
                                 {item.steps?.map((s, i) => (
                                   <li key={i} className="flex items-start gap-2">
-                                    <span className="font-medium text-[#73C2FB]">{i + 1}.</span>
+                                    <span className="font-normal text-[#2A7A8F]">{i + 1}.</span>
                                     {s}
                                   </li>
                                 ))}
@@ -434,7 +434,7 @@ export default function BusinessSetupGuidePage() {
                               )}
                               {'link' in item && item.link && (
                                 <a href={`https://${item.link}`} target="_blank" rel="noopener noreferrer" 
-                                   className="text-sm text-[#73C2FB] hover:text-[#5BADEA] font-medium flex items-center gap-1">
+                                   className="text-sm text-[#2A7A8F] hover:text-[#216477] font-normal flex items-center gap-1">
                                   Visit {item.link}
                                   <ArrowRight className="h-3 w-3" />
                                 </a>
@@ -446,8 +446,8 @@ export default function BusinessSetupGuidePage() {
                             <div className="space-y-3">
                               {'services' in item && item.services && (
                                 <div className="text-sm">
-                                  <p className="text-gray-700"><span className="font-medium">Services:</span> {item.services}</p>
-                                  {'goods' in item && item.goods && <p className="text-gray-700"><span className="font-medium">Goods:</span> {item.goods}</p>}
+                                  <p className="text-gray-700"><span className="font-normal">Services:</span> {item.services}</p>
+                                  {'goods' in item && item.goods && <p className="text-gray-700"><span className="font-normal">Goods:</span> {item.goods}</p>}
                                   {'note' in item && item.note && <p className="text-gray-600 italic mt-2">{item.note}</p>}
                                 </div>
                               )}
@@ -455,7 +455,7 @@ export default function BusinessSetupGuidePage() {
                                 <ol className="text-sm text-gray-600 space-y-1">
                                   {item.steps.map((s, i) => (
                                     <li key={i} className="flex items-start gap-2">
-                                      <span className="font-medium text-[#73C2FB]">{i + 1}.</span>
+                                      <span className="font-normal text-[#2A7A8F]">{i + 1}.</span>
                                       {s}
                                     </li>
                                   ))}
@@ -465,24 +465,24 @@ export default function BusinessSetupGuidePage() {
                                 <div className="space-y-2 text-sm">
                                   <div className="flex justify-between">
                                     <span className="text-gray-600">Standard:</span>
-                                    <span className="font-medium">{item.standard}</span>
+                                    <span className="font-normal">{item.standard}</span>
                                   </div>
                                   {'reduced' in item && item.reduced && (
                                     <div className="flex justify-between">
                                       <span className="text-gray-600">Reduced:</span>
-                                      <span className="font-medium">{item.reduced}</span>
+                                      <span className="font-normal">{item.reduced}</span>
                                     </div>
                                   )}
                                   {'special' in item && item.special && (
                                     <div className="flex justify-between">
                                       <span className="text-gray-600">Special:</span>
-                                      <span className="font-medium">{item.special}</span>
+                                      <span className="font-normal">{item.special}</span>
                                     </div>
                                   )}
                                   {'zero' in item && item.zero && (
                                     <div className="flex justify-between">
                                       <span className="text-gray-600">Zero:</span>
-                                      <span className="font-medium">{item.zero}</span>
+                                      <span className="font-normal">{item.zero}</span>
                                     </div>
                                   )}
                                 </div>
@@ -494,11 +494,11 @@ export default function BusinessSetupGuidePage() {
                             <div className="space-y-3 text-sm">
                               {'requirements' in item && item.requirements && (
                                 <div>
-                                  <p className="font-medium text-gray-700 mb-2">Requirements:</p>
+                                  <p className="font-normal text-gray-700 mb-2">Requirements:</p>
                                   <ul className="text-gray-600 space-y-1">
                                     {item.requirements.map((req, i) => (
                                       <li key={i} className="flex items-start gap-1">
-                                        <CheckCircle className="h-3 w-3 text-[#73C2FB] mt-0.5 flex-shrink-0" />
+                                        <CheckCircle className="h-3 w-3 text-[#2A7A8F] mt-0.5 flex-shrink-0" />
                                         {req}
                                       </li>
                                     ))}
@@ -507,19 +507,19 @@ export default function BusinessSetupGuidePage() {
                               )}
                               {'banks' in item && item.banks && (
                                 <div>
-                                  <p className="font-medium text-gray-700 mb-1">Major Banks:</p>
+                                  <p className="font-normal text-gray-700 mb-1">Major Banks:</p>
                                   <p className="text-gray-600">{item.banks.join(', ')}</p>
                                 </div>
                               )}
                               {'options' in item && item.options && (
                                 <div>
-                                  <p className="font-medium text-gray-700 mb-1">Options:</p>
+                                  <p className="font-normal text-gray-700 mb-1">Options:</p>
                                   <p className="text-gray-600">{item.options.join(', ')}</p>
                                 </div>
                               )}
                               {('recommended' in item && item.recommended && Array.isArray(item.recommended)) ? (
                                 <div>
-                                  <p className="font-medium text-gray-700 mb-1">Recommended:</p>
+                                  <p className="font-normal text-gray-700 mb-1">Recommended:</p>
                                   <p className="text-gray-600">{item.recommended.join(', ')}</p>
                                 </div>
                               ) : null}
@@ -538,7 +538,7 @@ export default function BusinessSetupGuidePage() {
                                 <ul className="text-gray-600 space-y-1">
                                   {item.items.map((itm, i) => (
                                     <li key={i} className="flex items-start gap-2">
-                                      <CheckCircle className="h-3 w-3 text-[#73C2FB] mt-0.5 flex-shrink-0" />
+                                      <CheckCircle className="h-3 w-3 text-[#2A7A8F] mt-0.5 flex-shrink-0" />
                                       {itm}
                                     </li>
                                   ))}
@@ -546,7 +546,7 @@ export default function BusinessSetupGuidePage() {
                               )}
                               {'requirement' in item && item.requirement && (
                                 <div className="pt-3 border-t">
-                                  <p className="font-medium text-gray-700">Retention: {item.requirement}</p>
+                                  <p className="font-normal text-gray-700">Retention: {item.requirement}</p>
                                   {'includes' in item && item.includes && (
                                     <p className="text-gray-600 mt-1">Includes: {item.includes.join(', ')}</p>
                                   )}
@@ -566,8 +566,8 @@ export default function BusinessSetupGuidePage() {
                           toggleStep(step.id)
                         }}
                         className={completedSteps.includes(step.id) 
-                          ? "border-[#8FD0FC] text-[#5BADEA] hover:bg-blue-50" 
-                          : "bg-gradient-to-r from-[#73C2FB] to-[#5BADEA] text-white"}
+                          ? "border-[#8FD0FC] text-[#216477] hover:bg-petrol-50" 
+                          : "bg-gradient-to-r from-[#2A7A8F] to-[#216477] text-white"}
                       >
                         {completedSteps.includes(step.id) ? (
                           <>
@@ -586,7 +586,7 @@ export default function BusinessSetupGuidePage() {
                         <Button
                           variant="ghost"
                           onClick={() => setExpandedSection(setupSteps[index + 1].id)}
-                          className="text-[#73C2FB] hover:text-[#5BADEA]"
+                          className="text-[#2A7A8F] hover:text-[#216477]"
                         >
                           Next Step
                           <ArrowRight className="ml-2 h-4 w-4" />
@@ -605,7 +605,7 @@ export default function BusinessSetupGuidePage() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-normal text-gray-900 mb-4">
               Helpful Resources
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -617,16 +617,16 @@ export default function BusinessSetupGuidePage() {
             {resources.map((resource, index) => (
               <Card key={index} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <CardContent className="p-6">
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#5BADEA] p-0.5 mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#216477] p-0.5 mb-4">
                     <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
-                      <resource.icon className="h-6 w-6 text-[#73C2FB]" />
+                      <resource.icon className="h-6 w-6 text-[#2A7A8F]" />
                     </div>
                   </div>
-                  <h3 className="font-semibold text-lg mb-2">{resource.title}</h3>
+                  <h3 className="font-normal text-lg mb-2">{resource.title}</h3>
                   <p className="text-sm text-gray-600 mb-4">{resource.description}</p>
                   <Button 
                     variant="outline" 
-                    className="w-full text-[#73C2FB] border-[#73C2FB] hover:bg-blue-50"
+                    className="w-full text-[#2A7A8F] border-[#2A7A8F] hover:bg-petrol-50"
                     onClick={() => handleResourceClick(resource.title)}
                   >
                     {resource.action}
@@ -640,11 +640,11 @@ export default function BusinessSetupGuidePage() {
       </section>
 
       {/* Complete Service Offering & Contact Form */}
-      <section id="contact-form-section" className="py-20 bg-[#73C2FB]">
+      <section id="contact-form-section" className="py-20 bg-[#2A7A8F]">
         <div className="max-w-5xl mx-auto px-6 lg:px-8">
           <div className="bg-white rounded-2xl p-8 md:p-12 shadow-2xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl lg:text-4xl font-bold text-[#5BADEA] mb-4">
+              <h2 className="text-3xl lg:text-4xl font-normal text-[#216477] mb-4">
                 Complete Startup Guide For FREE!
               </h2>
               <p className="text-xl text-gray-700 max-w-3xl mx-auto">
@@ -784,7 +784,7 @@ export default function BusinessSetupGuidePage() {
                   <Button 
                     type="submit"
                     size="lg"
-                    className="bg-[#73C2FB] hover:bg-[#5BADEA] text-white font-semibold px-12 py-3"
+                    className="bg-[#2A7A8F] hover:bg-[#216477] text-white font-normal px-12 py-3"
                   >
                     Get Your FREE Guide
                     <ArrowRight className="ml-2 h-5 w-5" />

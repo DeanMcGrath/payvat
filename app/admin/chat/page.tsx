@@ -311,7 +311,7 @@ function AdminChatPage() {
       <div className="min-h-screen bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Live Chat Management</h1>
+            <h1 className="text-3xl font-normal text-gray-900 mb-2">Live Chat Management</h1>
             <p className="text-gray-600">Respond to customer inquiries and manage chat sessions</p>
           </div>
 
@@ -346,7 +346,7 @@ function AdminChatPage() {
                   <div className="space-y-0 max-h-[650px] overflow-y-auto">
                     {isLoading ? (
                       <div className="flex items-center justify-center py-12">
-                        <Loader2 className="h-6 w-6 animate-spin text-[#73C2FB]" />
+                        <Loader2 className="h-6 w-6 animate-spin text-[#2A7A8F]" />
                       </div>
                     ) : sessions.length === 0 ? (
                       <div className="text-center py-12 text-gray-500">
@@ -358,7 +358,7 @@ function AdminChatPage() {
                         <div
                           key={session.id}
                           className={`border-b p-4 cursor-pointer hover:bg-gray-100 ${
-                            selectedSession?.id === session.id ? 'bg-blue-50 border-l-4 border-l-[#73C2FB]' : ''
+                            selectedSession?.id === session.id ? 'bg-blue-50 border-l-4 border-l-[#2A7A8F]' : ''
                           }`}
                           onClick={() => setSelectedSession(session)}
                         >
@@ -368,7 +368,7 @@ function AdminChatPage() {
                                 <User className="h-4 w-4 text-gray-600" />
                               </div>
                               <div>
-                                <p className="font-medium text-sm">
+                                <p className="font-normal text-sm">
                                   {session.userName || 'Anonymous User'}
                                 </p>
                                 {session.userEmail && (
@@ -383,7 +383,7 @@ function AdminChatPage() {
                                   Resolved
                                 </Badge>
                               ) : session.isActive ? (
-                                <Badge variant="default" className="text-xs bg-[#73C2FB]">
+                                <Badge variant="default" className="text-xs bg-[#2A7A8F]">
                                   <Clock className="h-3 w-3 mr-1" />
                                   Active
                                 </Badge>
@@ -455,7 +455,7 @@ function AdminChatPage() {
                     <div className="flex-1 p-4 overflow-y-auto">
                       {isLoadingMessages ? (
                         <div className="flex items-center justify-center h-full">
-                          <Loader2 className="h-6 w-6 animate-spin text-[#73C2FB]" />
+                          <Loader2 className="h-6 w-6 animate-spin text-[#2A7A8F]" />
                           <span className="ml-2 text-sm text-gray-600">Loading messages...</span>
                         </div>
                       ) : (
@@ -470,7 +470,7 @@ function AdminChatPage() {
                               <div
                                 className={`rounded-lg p-3 max-w-[70%] ${
                                   msg.senderType === 'admin'
-                                    ? 'bg-blue-500 text-white'
+                                    ? 'bg-petrol-light text-white'
                                     : msg.senderType === 'user'
                                     ? 'bg-blue-100 text-gray-800'
                                     : 'bg-gray-100 text-gray-800'
@@ -529,7 +529,7 @@ function AdminChatPage() {
 
                         {/* Upload Progress */}
                         {isUploading && (
-                          <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-600 flex items-center space-x-2">
+                          <div className="mb-3 p-2 bg-blue-50 border border-petrol-200 rounded text-sm text-petrol-base flex items-center space-x-2">
                             <Loader2 className="h-4 w-4 animate-spin" />
                             <span>Uploading file...</span>
                           </div>
@@ -567,7 +567,7 @@ function AdminChatPage() {
                           <Button 
                             onClick={sendReply} 
                             disabled={isSending || isUploading || !replyMessage.trim()}
-                            className="bg-blue-500 hover:bg-blue-600"
+                            className="bg-petrol-light hover:bg-petrol-base"
                           >
                             {isSending ? (
                               <Loader2 className="h-4 w-4 animate-spin" />
@@ -590,7 +590,7 @@ function AdminChatPage() {
                   <CardContent className="flex items-center justify-center h-full">
                     <div className="text-center">
                       <MessageCircle className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      <h3 className="text-lg font-normal text-gray-900 mb-2">
                         Select a chat session
                       </h3>
                       <p className="text-gray-500">

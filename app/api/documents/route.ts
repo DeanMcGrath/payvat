@@ -55,10 +55,13 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
     } else {
       // Guest user - simplified approach to avoid complex joins
       try {
-        // FIXED: Simplify guest user query - no complex time filtering
+        // FIXED: Allow guest documents from last 7 days for better demo experience
         const guestUsers = await prisma.User.findMany({
           where: {
-            role: 'GUEST'
+            role: 'GUEST',
+            createdAt: {
+              gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7) // Last 7 days
+            }
           },
           select: { id: true },
           take: 100,
@@ -147,8 +150,12 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
         isScanned: true,
         scanResult: true,
         uploadedAt: true,
-        vatReturnId: true
-        // REMOVED: extractedDate, extractedYear, extractedMonth - columns don't exist in database
+        vatReturnId: true,
+        extractedDate: true,
+        extractedYear: true,
+        extractedMonth: true,
+        invoiceTotal: true,
+        extractionConfidence: true
       },
       orderBy: {
         uploadedAt: 'desc'
@@ -157,14 +164,40 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       take: limit,
     })
     
-    // FIXED: Simplified document processing
-    const processedDocuments = documents.map(doc => ({
-      ...doc,
-      // Basic compatibility fields
-      confidence: 0.8, // Default confidence for existing documents
-      vatAmount: null,
-      aiConfidence: 0.8
-    }))
+    // Enhanced document processing with extracted data parsing
+    const processedDocuments = documents.map(doc => {
+      // Parse extracted data from scanResult if needed
+      let extractedVATAmount = null
+      let parsedInvoiceTotal = doc.invoiceTotal ? Number(doc.invoiceTotal) : null
+      
+      if (doc.scanResult) {
+        // Try to extract VAT amounts from scan result
+        const vatMatches = doc.scanResult.match(/€([0-9,]+\.?[0-9]*)/g)
+        if (vatMatches && vatMatches.length > 0) {
+          const vatAmounts = vatMatches.map(match => parseFloat(match.replace('€', '').replace(',', '')))
+          extractedVATAmount = vatAmounts.reduce((sum, amount) => sum + amount, 0)
+        }
+        
+        // Try to extract invoice total if not already in database
+        if (!parsedInvoiceTotal) {
+          const totalMatch = doc.scanResult.match(/(?:Total|Amount|Invoice Total)[\s:]*€?([0-9,]+\.?[0-9]*)/i)
+          if (totalMatch) {
+            parsedInvoiceTotal = parseFloat(totalMatch[1].replace(',', ''))
+          }
+        }
+      }
+      
+      return {
+        ...doc,
+        // Convert Decimal to number for frontend
+        invoiceTotal: parsedInvoiceTotal,
+        extractedVATAmount,
+        // Compatibility fields
+        confidence: doc.extractionConfidence || 0.8,
+        vatAmount: extractedVATAmount,
+        aiConfidence: doc.extractionConfidence || 0.8
+      }
+    })
     
     logPerformance('documents-list-authenticated', Date.now() - startTime, {
       userId: user?.id,

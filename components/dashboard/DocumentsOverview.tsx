@@ -221,7 +221,7 @@ export default function DocumentsOverview({ className }: DocumentsOverviewProps)
     return (
       <Card className={`${className} card-modern`}>
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-bold text-foreground flex items-center justify-between">
+          <CardTitle className="text-xl font-normal text-foreground flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <FileText className="h-6 w-6 text-primary" />
               <span>Recent Documents</span>
@@ -251,7 +251,7 @@ export default function DocumentsOverview({ className }: DocumentsOverviewProps)
   return (
     <Card className={`${className} card-modern hover-lift`}>
       <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold text-foreground flex items-center justify-between">
+        <CardTitle className="text-xl font-normal text-foreground flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <FileText className="h-6 w-6 text-primary" />
             <span>Recent Documents</span>
@@ -283,7 +283,7 @@ export default function DocumentsOverview({ className }: DocumentsOverviewProps)
             ) : (
               <>
                 <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm font-medium text-foreground">Drop files here or click to upload</p>
+                <p className="text-sm font-normal text-foreground">Drop files here or click to upload</p>
                 <p className="text-xs text-muted-foreground">PDF, JPG, PNG up to 10MB</p>
               </>
             )}
@@ -316,7 +316,7 @@ export default function DocumentsOverview({ className }: DocumentsOverviewProps)
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
-                    <h4 className="text-sm font-medium text-foreground truncate">
+                    <h4 className="text-sm font-normal text-foreground truncate">
                       {doc.name}
                     </h4>
                     <div className="flex items-center space-x-2">
@@ -337,7 +337,7 @@ export default function DocumentsOverview({ className }: DocumentsOverviewProps)
                       {doc.vatAmount && (
                         <>
                           <span>•</span>
-                          <span className="text-primary font-medium">
+                          <span className="text-primary font-normal">
                             VAT: {formatCurrency(doc.vatAmount)}
                           </span>
                         </>
@@ -369,7 +369,7 @@ export default function DocumentsOverview({ className }: DocumentsOverviewProps)
         ) : (
           <div className="text-center py-6 text-muted-foreground">
             <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p className="text-lg font-medium">No documents yet</p>
+            <p className="text-lg font-normal">No documents yet</p>
             <p className="text-sm">Upload your first document to get started</p>
           </div>
         )}

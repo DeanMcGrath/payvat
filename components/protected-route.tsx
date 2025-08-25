@@ -91,7 +91,7 @@ export default function ProtectedRoute({
           <CardContent className="pt-6">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <AlertTriangle className="h-8 w-8 text-red-500" />
-              <span className="text-lg font-medium text-red-800">Authentication Required</span>
+              <span className="text-lg font-normal text-red-800">Authentication Required</span>
             </div>
             <p className="text-red-600 text-center mb-4">{authError}</p>
             <div className="flex space-x-2">

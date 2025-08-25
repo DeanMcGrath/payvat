@@ -55,7 +55,7 @@ export default function AccountantFeesVsPayVatSavings() {
               <div className="icon-premium mb-3 mx-auto">
                 <Euro className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Annual Cost <span className="text-gradient-primary">Comparison</span>
               </h2>
               <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
@@ -69,42 +69,42 @@ export default function AccountantFeesVsPayVatSavings() {
               <div className="grid lg:grid-cols-2 gap-8">
                 <div className="card-modern p-8 hover-lift border-l-4 border-red-500">
                   <div className="text-center mb-6">
-                    <h3 className="text-2xl font-bold text-foreground mb-2">Traditional Accountant</h3>
-                    <div className="text-4xl font-bold text-red-600 mb-2">€4,560</div>
+                    <h3 className="text-2xl font-normal text-foreground mb-2">Traditional Accountant</h3>
+                    <div className="text-4xl font-normal text-red-600 mb-2">€4,560</div>
                     <div className="text-sm text-muted-foreground">per year average</div>
                   </div>
                   
                   <div className="space-y-4">
                     <div className="flex justify-between items-center p-3 bg-red-50 rounded">
-                      <span className="text-sm font-medium">VAT return preparation (6x)</span>
-                      <span className="text-sm font-semibold text-red-600">€1,800</span>
+                      <span className="text-sm font-normal">VAT return preparation (6x)</span>
+                      <span className="text-sm font-normal text-red-600">€1,800</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-red-50 rounded">
-                      <span className="text-sm font-medium">VAT return filing (6x)</span>
-                      <span className="text-sm font-semibold text-red-600">€900</span>
+                      <span className="text-sm font-normal">VAT return filing (6x)</span>
+                      <span className="text-sm font-normal text-red-600">€900</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-red-50 rounded">
-                      <span className="text-sm font-medium">Annual VAT summary</span>
-                      <span className="text-sm font-semibold text-red-600">€450</span>
+                      <span className="text-sm font-normal">Annual VAT summary</span>
+                      <span className="text-sm font-normal text-red-600">€450</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-red-50 rounded">
-                      <span className="text-sm font-medium">Ad hoc VAT advice</span>
-                      <span className="text-sm font-semibold text-red-600">€600</span>
+                      <span className="text-sm font-normal">Ad hoc VAT advice</span>
+                      <span className="text-sm font-normal text-red-600">€600</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-red-50 rounded">
-                      <span className="text-sm font-medium">Penalty insurance/corrections</span>
-                      <span className="text-sm font-semibold text-red-600">€350</span>
+                      <span className="text-sm font-normal">Penalty insurance/corrections</span>
+                      <span className="text-sm font-normal text-red-600">€350</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-red-50 rounded">
-                      <span className="text-sm font-medium">Record review/organization</span>
-                      <span className="text-sm font-semibold text-red-600">€510</span>
+                      <span className="text-sm font-normal">Record review/organization</span>
+                      <span className="text-sm font-normal text-red-600">€510</span>
                     </div>
                   </div>
                   
                   <div className="mt-6 p-4 bg-red-100 rounded-lg">
                     <div className="flex items-center gap-2 text-red-800">
                       <Minus className="h-4 w-4" />
-                      <span className="text-sm font-semibold">Hidden Costs:</span>
+                      <span className="text-sm font-normal">Hidden Costs:</span>
                     </div>
                     <ul className="text-xs text-red-700 mt-2 space-y-1">
                       <li>• Waiting for accountant availability</li>
@@ -117,42 +117,42 @@ export default function AccountantFeesVsPayVatSavings() {
 
                 <div className="card-modern p-8 hover-lift border-l-4 border-green-500">
                   <div className="text-center mb-6">
-                    <h3 className="text-2xl font-bold text-foreground mb-2">PayVat Platform</h3>
-                    <div className="text-4xl font-bold text-green-600 mb-2">€360</div>
+                    <h3 className="text-2xl font-normal text-foreground mb-2">PayVat Platform</h3>
+                    <div className="text-4xl font-normal text-green-600 mb-2">€360</div>
                     <div className="text-sm text-muted-foreground">per year</div>
                   </div>
                   
                   <div className="space-y-4">
                     <div className="flex justify-between items-center p-3 bg-green-50 rounded">
-                      <span className="text-sm font-medium">Unlimited VAT calculations</span>
-                      <span className="text-sm font-semibold text-green-600">Included</span>
+                      <span className="text-sm font-normal">Unlimited VAT calculations</span>
+                      <span className="text-sm font-normal text-green-600">Included</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-green-50 rounded">
-                      <span className="text-sm font-medium">Automated ROS filing</span>
-                      <span className="text-sm font-semibold text-green-600">Included</span>
+                      <span className="text-sm font-normal">Automated ROS filing</span>
+                      <span className="text-sm font-normal text-green-600">Included</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-green-50 rounded">
-                      <span className="text-sm font-medium">Real-time compliance monitoring</span>
-                      <span className="text-sm font-semibold text-green-600">Included</span>
+                      <span className="text-sm font-normal">Real-time compliance monitoring</span>
+                      <span className="text-sm font-normal text-green-600">Included</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-green-50 rounded">
-                      <span className="text-sm font-medium">VAT advice and support</span>
-                      <span className="text-sm font-semibold text-green-600">Included</span>
+                      <span className="text-sm font-normal">VAT advice and support</span>
+                      <span className="text-sm font-normal text-green-600">Included</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-green-50 rounded">
-                      <span className="text-sm font-medium">Penalty protection guarantee</span>
-                      <span className="text-sm font-semibold text-green-600">Included</span>
+                      <span className="text-sm font-normal">Penalty protection guarantee</span>
+                      <span className="text-sm font-normal text-green-600">Included</span>
                     </div>
                     <div className="flex justify-between items-center p-3 bg-green-50 rounded">
-                      <span className="text-sm font-medium">Document management</span>
-                      <span className="text-sm font-semibold text-green-600">Included</span>
+                      <span className="text-sm font-normal">Document management</span>
+                      <span className="text-sm font-normal text-green-600">Included</span>
                     </div>
                   </div>
                   
                   <div className="mt-6 p-4 bg-green-100 rounded-lg">
                     <div className="flex items-center gap-2 text-green-800">
                       <Plus className="h-4 w-4" />
-                      <span className="text-sm font-semibold">Extra Benefits:</span>
+                      <span className="text-sm font-normal">Extra Benefits:</span>
                     </div>
                     <ul className="text-xs text-green-700 mt-2 space-y-1">
                       <li>• File anytime, always available</li>
@@ -166,8 +166,8 @@ export default function AccountantFeesVsPayVatSavings() {
 
               <div className="mt-8 p-8 bg-gray-50 rounded-lg border-2 border-green-200">
                 <div className="text-center">
-                  <h4 className="text-2xl font-bold text-foreground mb-2">Your Annual Savings</h4>
-                  <div className="text-5xl font-bold text-green-600 mb-2">€4,200</div>
+                  <h4 className="text-2xl font-normal text-foreground mb-2">Your Annual Savings</h4>
+                  <div className="text-5xl font-normal text-green-600 mb-2">€4,200</div>
                   <p className="text-lg text-muted-foreground mb-4">
                     That's <strong>92% savings</strong> compared to traditional accountant fees
                   </p>
@@ -187,7 +187,7 @@ export default function AccountantFeesVsPayVatSavings() {
               <div className="icon-modern bg-primary mb-3 mx-auto">
                 <TrendingUp className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Savings by <span className="text-gradient-primary">Business Size</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -200,21 +200,21 @@ export default function AccountantFeesVsPayVatSavings() {
               
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="card-modern p-6 hover-lift text-center">
-                  <h3 className="text-lg font-semibold text-foreground mb-3">Small Business</h3>
+                  <h3 className="text-lg font-normal text-foreground mb-3">Small Business</h3>
                   <div className="text-sm text-muted-foreground mb-4">€50k-€200k turnover</div>
                   
                   <div className="space-y-3 mb-6">
                     <div>
-                      <div className="text-sm font-medium text-muted-foreground">Accountant Cost</div>
-                      <div className="text-xl font-bold text-red-600">€3,200/year</div>
+                      <div className="text-sm font-normal text-muted-foreground">Accountant Cost</div>
+                      <div className="text-xl font-normal text-red-600">€3,200/year</div>
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-muted-foreground">PayVat Cost</div>
-                      <div className="text-xl font-bold text-green-600">€360/year</div>
+                      <div className="text-sm font-normal text-muted-foreground">PayVat Cost</div>
+                      <div className="text-xl font-normal text-green-600">€360/year</div>
                     </div>
                     <div className="border-t pt-3">
-                      <div className="text-sm font-medium text-muted-foreground">Your Savings</div>
-                      <div className="text-2xl font-bold text-primary">€2,840</div>
+                      <div className="text-sm font-normal text-muted-foreground">Your Savings</div>
+                      <div className="text-2xl font-normal text-primary">€2,840</div>
                       <div className="text-xs text-green-600">89% savings</div>
                     </div>
                   </div>
@@ -229,21 +229,21 @@ export default function AccountantFeesVsPayVatSavings() {
                     <Award className="h-3 w-3" />
                     Most Popular
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-3">Growing Business</h3>
+                  <h3 className="text-lg font-normal text-foreground mb-3">Growing Business</h3>
                   <div className="text-sm text-muted-foreground mb-4">€200k-€500k turnover</div>
                   
                   <div className="space-y-3 mb-6">
                     <div>
-                      <div className="text-sm font-medium text-muted-foreground">Accountant Cost</div>
-                      <div className="text-xl font-bold text-red-600">€5,800/year</div>
+                      <div className="text-sm font-normal text-muted-foreground">Accountant Cost</div>
+                      <div className="text-xl font-normal text-red-600">€5,800/year</div>
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-muted-foreground">PayVat Cost</div>
-                      <div className="text-xl font-bold text-green-600">€360/year</div>
+                      <div className="text-sm font-normal text-muted-foreground">PayVat Cost</div>
+                      <div className="text-xl font-normal text-green-600">€360/year</div>
                     </div>
                     <div className="border-t pt-3">
-                      <div className="text-sm font-medium text-muted-foreground">Your Savings</div>
-                      <div className="text-2xl font-bold text-primary">€5,440</div>
+                      <div className="text-sm font-normal text-muted-foreground">Your Savings</div>
+                      <div className="text-2xl font-normal text-primary">€5,440</div>
                       <div className="text-xs text-green-600">94% savings</div>
                     </div>
                   </div>
@@ -254,21 +254,21 @@ export default function AccountantFeesVsPayVatSavings() {
                 </div>
 
                 <div className="card-modern p-6 hover-lift text-center">
-                  <h3 className="text-lg font-semibold text-foreground mb-3">Established Business</h3>
+                  <h3 className="text-lg font-normal text-foreground mb-3">Established Business</h3>
                   <div className="text-sm text-muted-foreground mb-4">€500k+ turnover</div>
                   
                   <div className="space-y-3 mb-6">
                     <div>
-                      <div className="text-sm font-medium text-muted-foreground">Accountant Cost</div>
-                      <div className="text-xl font-bold text-red-600">€8,500/year</div>
+                      <div className="text-sm font-normal text-muted-foreground">Accountant Cost</div>
+                      <div className="text-xl font-normal text-red-600">€8,500/year</div>
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-muted-foreground">PayVat Cost</div>
-                      <div className="text-xl font-bold text-green-600">€360/year</div>
+                      <div className="text-sm font-normal text-muted-foreground">PayVat Cost</div>
+                      <div className="text-xl font-normal text-green-600">€360/year</div>
                     </div>
                     <div className="border-t pt-3">
-                      <div className="text-sm font-medium text-muted-foreground">Your Savings</div>
-                      <div className="text-2xl font-bold text-primary">€8,140</div>
+                      <div className="text-sm font-normal text-muted-foreground">Your Savings</div>
+                      <div className="text-2xl font-normal text-primary">€8,140</div>
                       <div className="text-xs text-green-600">96% savings</div>
                     </div>
                   </div>
@@ -289,7 +289,7 @@ export default function AccountantFeesVsPayVatSavings() {
               <div className="icon-premium mb-3 mx-auto">
                 <FileText className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Hidden Costs of <span className="text-gradient-primary">Traditional Accountants</span>
               </h2>
               <div className="w-24 h-1 bg-teal-500 mx-auto mb-4 rounded-full"></div>
@@ -303,77 +303,77 @@ export default function AccountantFeesVsPayVatSavings() {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">€</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">€</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Time Delays Cost Money</h4>
+                      <h4 className="font-normal text-foreground mb-1">Time Delays Cost Money</h4>
                       <p className="text-sm text-muted-foreground mb-2">
                         Waiting for accountant availability can delay important business decisions and cash flow.
                       </p>
-                      <div className="text-xs text-red-600 font-medium">Hidden cost: Lost opportunities + stress</div>
+                      <div className="text-xs text-red-600 font-normal">Hidden cost: Lost opportunities + stress</div>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">€</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">€</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Lack of Real-time Insights</h4>
+                      <h4 className="font-normal text-foreground mb-1">Lack of Real-time Insights</h4>
                       <p className="text-sm text-muted-foreground mb-2">
                         No visibility into VAT position until quarterly reviews. Miss optimization opportunities.
                       </p>
-                      <div className="text-xs text-red-600 font-medium">Hidden cost: Suboptimal cash flow management</div>
+                      <div className="text-xs text-red-600 font-normal">Hidden cost: Suboptimal cash flow management</div>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">€</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">€</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Penalty Risk</h4>
+                      <h4 className="font-normal text-foreground mb-1">Penalty Risk</h4>
                       <p className="text-sm text-muted-foreground mb-2">
                         Human error and manual processes increase risk of late filings and calculation mistakes.
                       </p>
-                      <div className="text-xs text-red-600 font-medium">Hidden cost: €150-€12,695 potential penalties</div>
+                      <div className="text-xs text-red-600 font-normal">Hidden cost: €150-€12,695 potential penalties</div>
                     </div>
                   </div>
                 </div>
                 
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">€</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">€</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Document Chasing</h4>
+                      <h4 className="font-normal text-foreground mb-1">Document Chasing</h4>
                       <p className="text-sm text-muted-foreground mb-2">
                         Time spent organizing and submitting documents. Multiple back-and-forth communications.
                       </p>
-                      <div className="text-xs text-red-600 font-medium">Hidden cost: 2-4 hours monthly @ your hourly rate</div>
+                      <div className="text-xs text-red-600 font-normal">Hidden cost: 2-4 hours monthly @ your hourly rate</div>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">€</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">€</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Lack of Control</h4>
+                      <h4 className="font-normal text-foreground mb-1">Lack of Control</h4>
                       <p className="text-sm text-muted-foreground mb-2">
                         Can't file when convenient for you. Dependent on accountant's schedule and priorities.
                       </p>
-                      <div className="text-xs text-red-600 font-medium">Hidden cost: Business inflexibility</div>
+                      <div className="text-xs text-red-600 font-normal">Hidden cost: Business inflexibility</div>
                     </div>
                   </div>
                   
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">€</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">€</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Knowledge Dependency</h4>
+                      <h4 className="font-normal text-foreground mb-1">Knowledge Dependency</h4>
                       <p className="text-sm text-muted-foreground mb-2">
                         When accountant is unavailable, you can't get urgent VAT advice or make informed decisions.
                       </p>
-                      <div className="text-xs text-red-600 font-medium">Hidden cost: Delayed decisions + dependency risk</div>
+                      <div className="text-xs text-red-600 font-normal">Hidden cost: Delayed decisions + dependency risk</div>
                     </div>
                   </div>
                 </div>
               </div>
               
               <div className="mt-8 p-6 bg-red-50 rounded-lg border-l-4 border-red-500">
-                <h4 className="font-semibold text-red-800 mb-3 text-center">Real Customer Experience</h4>
+                <h4 className="font-normal text-red-800 mb-3 text-center">Real Customer Experience</h4>
                 <blockquote className="text-sm text-red-700 italic text-center">
                   "My accountant charged €450 per VAT return but took 2 weeks to file. When I had urgent VAT questions, 
                   I had to wait for callbacks. The lack of control was frustrating and expensive. PayVat gives me everything 
@@ -392,7 +392,7 @@ export default function AccountantFeesVsPayVatSavings() {
               <div className="icon-modern bg-success mb-3 mx-auto">
                 <ChevronRight className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Why PayVat <span className="text-gradient-primary">Wins</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -405,7 +405,7 @@ export default function AccountantFeesVsPayVatSavings() {
               
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <h3 className="text-xl font-normal text-foreground mb-4 flex items-center gap-2">
                     <Clock className="h-5 w-5 text-primary" />
                     Speed & Convenience
                   </h3>
@@ -430,7 +430,7 @@ export default function AccountantFeesVsPayVatSavings() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <h3 className="text-xl font-normal text-foreground mb-4 flex items-center gap-2">
                     <Shield className="h-5 w-5 text-primary" />
                     Accuracy & Compliance
                   </h3>
@@ -455,7 +455,7 @@ export default function AccountantFeesVsPayVatSavings() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <h3 className="text-xl font-normal text-foreground mb-4 flex items-center gap-2">
                     <Users className="h-5 w-5 text-primary" />
                     Control & Transparency
                   </h3>
@@ -480,7 +480,7 @@ export default function AccountantFeesVsPayVatSavings() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <h3 className="text-xl font-normal text-foreground mb-4 flex items-center gap-2">
                     <DollarSign className="h-5 w-5 text-primary" />
                     Value & Flexibility
                   </h3>
@@ -515,7 +515,7 @@ export default function AccountantFeesVsPayVatSavings() {
               <div className="icon-premium mb-3 mx-auto">
                 <Calculator className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Your <span className="text-gradient-primary">ROI Calculator</span>
               </h2>
               <div className="w-24 h-1 bg-teal-500 mx-auto mb-4 rounded-full"></div>
@@ -528,12 +528,12 @@ export default function AccountantFeesVsPayVatSavings() {
               
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="text-center p-6 card-modern hover-lift">
-                  <h3 className="font-semibold text-foreground mb-3">First Year ROI</h3>
+                  <h3 className="font-normal text-foreground mb-3">First Year ROI</h3>
                   <div className="space-y-2 mb-4">
                     <div className="text-sm text-muted-foreground">Traditional cost: €4,560</div>
                     <div className="text-sm text-muted-foreground">PayVat cost: €360</div>
                     <div className="border-t pt-2">
-                      <div className="text-2xl font-bold text-green-600">€4,200</div>
+                      <div className="text-2xl font-normal text-green-600">€4,200</div>
                       <div className="text-sm text-green-700">saved in year 1</div>
                     </div>
                   </div>
@@ -543,12 +543,12 @@ export default function AccountantFeesVsPayVatSavings() {
                 </div>
 
                 <div className="text-center p-6 card-modern hover-lift border-2 border-green-500">
-                  <h3 className="font-semibold text-foreground mb-3">Three Year Total</h3>
+                  <h3 className="font-normal text-foreground mb-3">Three Year Total</h3>
                   <div className="space-y-2 mb-4">
                     <div className="text-sm text-muted-foreground">Traditional cost: €13,680</div>
                     <div className="text-sm text-muted-foreground">PayVat cost: €1,080</div>
                     <div className="border-t pt-2">
-                      <div className="text-2xl font-bold text-green-600">€12,600</div>
+                      <div className="text-2xl font-normal text-green-600">€12,600</div>
                       <div className="text-sm text-green-700">saved over 3 years</div>
                     </div>
                   </div>
@@ -558,12 +558,12 @@ export default function AccountantFeesVsPayVatSavings() {
                 </div>
 
                 <div className="text-center p-6 card-modern hover-lift">
-                  <h3 className="font-semibold text-foreground mb-3">Five Year Impact</h3>
+                  <h3 className="font-normal text-foreground mb-3">Five Year Impact</h3>
                   <div className="space-y-2 mb-4">
                     <div className="text-sm text-muted-foreground">Traditional cost: €22,800</div>
                     <div className="text-sm text-muted-foreground">PayVat cost: €1,800</div>
                     <div className="border-t pt-2">
-                      <div className="text-2xl font-bold text-green-600">€21,000</div>
+                      <div className="text-2xl font-normal text-green-600">€21,000</div>
                       <div className="text-sm text-green-700">saved over 5 years</div>
                     </div>
                   </div>
@@ -574,18 +574,18 @@ export default function AccountantFeesVsPayVatSavings() {
               </div>
               
               <div className="mt-8 p-6 bg-green-50 rounded-lg border border-green-200">
-                <h4 className="font-semibold text-green-800 mb-3 text-center">What Our Customers Do With Their Savings</h4>
+                <h4 className="font-normal text-green-800 mb-3 text-center">What Our Customers Do With Their Savings</h4>
                 <div className="grid md:grid-cols-3 gap-4 text-center">
                   <div>
-                    <div className="text-lg font-bold text-green-700">43%</div>
+                    <div className="text-lg font-normal text-green-700">43%</div>
                     <div className="text-xs text-green-600">Reinvest in marketing</div>
                   </div>
                   <div>
-                    <div className="text-lg font-bold text-green-700">31%</div>
+                    <div className="text-lg font-normal text-green-700">31%</div>
                     <div className="text-xs text-green-600">Hire additional staff</div>
                   </div>
                   <div>
-                    <div className="text-lg font-bold text-green-700">26%</div>
+                    <div className="text-lg font-normal text-green-700">26%</div>
                     <div className="text-xs text-green-600">Upgrade equipment/tools</div>
                   </div>
                 </div>
@@ -606,7 +606,7 @@ export default function AccountantFeesVsPayVatSavings() {
                     <Target className="h-12 w-12 text-white" />
                   </div>
                   
-                  <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
+                  <h3 className="text-3xl lg:text-4xl font-normal text-foreground mb-3">
                     Start Saving <span className="text-gradient-primary">€4,200+ Today</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -617,7 +617,7 @@ export default function AccountantFeesVsPayVatSavings() {
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-2">
                   <Button 
                     size="lg"
-                    className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"
+                    className="btn-primary px-12 py-4 text-lg font-normal hover-lift min-w-[220px]"
                     onClick={() => window.location.href = '/signup'}
                   >
                     Start Free Trial

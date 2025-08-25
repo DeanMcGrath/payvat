@@ -262,7 +262,7 @@ export default function TerminatePage() {
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'legal':
-        return <Building className="h-5 w-5 text-blue-600" />
+        return <Building className="h-5 w-5 text-petrol-base" />
       case 'tax':
         return <Calculator className="h-5 w-5 text-green-600" />
       case 'employees':
@@ -288,7 +288,7 @@ export default function TerminatePage() {
           <div className="flex items-start gap-3">
             <AlertTriangle className="h-6 w-6 text-orange-600 flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-medium text-orange-900">Important Notice</h3>
+              <h3 className="font-normal text-orange-900">Important Notice</h3>
               <p className="text-sm text-orange-800 mt-1">
                 Business termination is a complex legal process with significant implications. 
                 We strongly recommend consulting with qualified professionals before proceeding. 
@@ -305,10 +305,10 @@ export default function TerminatePage() {
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
               <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <XCircle className="h-6 w-6 text-blue-600" />
+                <XCircle className="h-6 w-6 text-petrol-base" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-gray-900">Termination Checklist</h3>
+                <h3 className="font-normal text-gray-900">Termination Checklist</h3>
                 <p className="text-sm text-gray-600">Step-by-step guidance for closing your business</p>
                 <div className="mt-2">
                   <Button 
@@ -331,7 +331,7 @@ export default function TerminatePage() {
                 <Phone className="h-6 w-6 text-green-600" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-gray-900">Expert Assistance</h3>
+                <h3 className="font-normal text-gray-900">Expert Assistance</h3>
                 <p className="text-sm text-gray-600">Get professional help with your business closure</p>
                 <div className="mt-2">
                   <Button 
@@ -353,12 +353,12 @@ export default function TerminatePage() {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-brand-700">
+              <CardTitle className="flex items-center gap-2 text-petrol-dark">
                 <XCircle className="h-5 w-5" />
                 Business Termination Checklist
               </CardTitle>
               <div className="text-sm">
-                <span className="font-medium">{completedSteps}/{totalSteps}</span> completed
+                <span className="font-normal">{completedSteps}/{totalSteps}</span> completed
               </div>
             </div>
             <div className="space-y-2">
@@ -368,7 +368,7 @@ export default function TerminatePage() {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
-                  className="bg-brand-700 h-2 rounded-full transition-all duration-300" 
+                  className="bg-petrol-dark h-2 rounded-full transition-all duration-300" 
                   style={{ width: `${progressPercentage}%` }}
                 ></div>
               </div>
@@ -379,13 +379,13 @@ export default function TerminatePage() {
               <div key={step.id} className="border rounded-lg p-4 space-y-3">
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-sm font-medium">
+                    <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-sm font-normal">
                       {index + 1}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         {getCategoryIcon(step.category)}
-                        <h4 className="font-medium text-gray-900">{step.title}</h4>
+                        <h4 className="font-normal text-gray-900">{step.title}</h4>
                         <Badge className={getPriorityColor(step.priority)}>
                           {step.priority}
                         </Badge>
@@ -394,7 +394,7 @@ export default function TerminatePage() {
                       
                       {step.estimatedCost && (
                         <div className="text-sm text-gray-600 mb-2">
-                          <span className="font-medium">Estimated cost:</span> €{step.estimatedCost}
+                          <span className="font-normal">Estimated cost:</span> €{step.estimatedCost}
                         </div>
                       )}
                     </div>
@@ -409,12 +409,12 @@ export default function TerminatePage() {
                 </div>
 
                 <div>
-                  <h5 className="font-medium text-sm text-gray-900 mb-2">Requirements:</h5>
+                  <h5 className="font-normal text-sm text-gray-900 mb-2">Requirements:</h5>
                   <ul className="space-y-1">
                     {step.requirements.map((requirement, reqIndex) => (
                       <li key={reqIndex} className="flex items-start gap-2 text-sm text-gray-600">
                         <div className="flex-shrink-0 w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center mt-0.5">
-                          <span className="text-xs font-medium text-blue-600">•</span>
+                          <span className="text-xs font-normal text-petrol-base">•</span>
                         </div>
                         {requirement}
                       </li>
@@ -424,7 +424,7 @@ export default function TerminatePage() {
 
                 {step.resources && step.resources.length > 0 && (
                   <div>
-                    <h5 className="font-medium text-sm text-gray-900 mb-2">Resources:</h5>
+                    <h5 className="font-normal text-sm text-gray-900 mb-2">Resources:</h5>
                     <div className="space-y-2">
                       {step.resources.map((resource, resIndex) => (
                         <Button
@@ -435,7 +435,7 @@ export default function TerminatePage() {
                           onClick={() => window.open(resource.url, '_blank')}
                         >
                           <div className="flex-1">
-                            <div className="font-medium text-xs">{resource.name}</div>
+                            <div className="font-normal text-xs">{resource.name}</div>
                             <div className="text-xs text-gray-500">{resource.description}</div>
                           </div>
                           <ExternalLink className="h-3 w-3 ml-2 flex-shrink-0" />
@@ -454,7 +454,7 @@ export default function TerminatePage() {
       {showRequestForm && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-brand-700">
+            <CardTitle className="flex items-center gap-2 text-petrol-dark">
               <Phone className="h-5 w-5" />
               Request Termination Assistance
             </CardTitle>
@@ -603,7 +603,7 @@ export default function TerminatePage() {
               </div>
 
               <div className="flex gap-4 pt-4">
-                <Button type="submit" disabled={loading} className="bg-brand-700 hover:bg-brand-800">
+                <Button type="submit" disabled={loading} className="bg-petrol-dark hover:bg-petrol-dark">
                   {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Mail className="h-4 w-4 mr-2" />}
                   Submit Request
                 </Button>
@@ -623,7 +623,7 @@ export default function TerminatePage() {
       {/* Contact Information */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-brand-700">
+          <CardTitle className="flex items-center gap-2 text-petrol-dark">
             <Phone className="h-5 w-5" />
             Need Immediate Help?
           </CardTitle>
@@ -631,7 +631,7 @@ export default function TerminatePage() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-medium mb-2">Professional Support</h4>
+              <h4 className="font-normal mb-2">Professional Support</h4>
               <p className="text-sm text-gray-600 mb-3">
                 Our team of qualified professionals can guide you through the entire business closure process.
               </p>
@@ -641,14 +641,14 @@ export default function TerminatePage() {
                   <span>+353 1 234 5678</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <Mail className="h-4 w-4 text-blue-600" />
+                  <Mail className="h-4 w-4 text-petrol-base" />
                   <span>closure@payvat.ie</span>
                 </div>
               </div>
             </div>
             
             <div>
-              <h4 className="font-medium mb-2">Office Hours</h4>
+              <h4 className="font-normal mb-2">Office Hours</h4>
               <div className="space-y-1 text-sm text-gray-600">
                 <div>Monday - Friday: 9:00 AM - 6:00 PM</div>
                 <div>Saturday: 10:00 AM - 2:00 PM</div>

@@ -177,7 +177,7 @@ export default function AITrainingDashboard() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="flex items-center space-x-2">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#73C2FB] border-t-transparent"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-[#2A7A8F] border-t-transparent"></div>
           <span className="text-gray-600">Loading AI Training Dashboard...</span>
         </div>
       </div>
@@ -191,7 +191,7 @@ export default function AITrainingDashboard() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <AlertCircle className="h-8 w-8 text-red-500" />
-              <span className="text-lg font-medium text-red-800">Error</span>
+              <span className="text-lg font-normal text-red-800">Error</span>
             </div>
             <p className="text-red-600 text-center mb-4">{error}</p>
             <Button onClick={loadDashboardData} className="w-full">
@@ -210,8 +210,8 @@ export default function AITrainingDashboard() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 flex items-center">
-              <Brain className="h-8 w-8 mr-3 text-[#73C2FB]" />
+            <h1 className="text-3xl font-normal text-gray-900 flex items-center">
+              <Brain className="h-8 w-8 mr-3 text-[#2A7A8F]" />
               AI Training Dashboard
             </h1>
             <p className="text-gray-600 mt-1">
@@ -267,11 +267,11 @@ export default function AITrainingDashboard() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <p className="text-sm font-medium text-gray-600">Active Jobs</p>
-                <p className="text-2xl font-bold">{pipelineStatus.currentJobs.length}</p>
+                <p className="text-sm font-normal text-gray-600">Active Jobs</p>
+                <p className="text-2xl font-normal">{pipelineStatus.currentJobs.length}</p>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-600">Last Run</p>
+                <p className="text-sm font-normal text-gray-600">Last Run</p>
                 <p className="text-lg">{metrics.lastLearningRun}</p>
               </div>
               <div>
@@ -290,18 +290,18 @@ export default function AITrainingDashboard() {
             {/* Current Jobs */}
             {pipelineStatus.currentJobs.length > 0 && (
               <div className="mt-4">
-                <h4 className="font-medium text-gray-900 mb-2">Current Jobs</h4>
+                <h4 className="font-normal text-gray-900 mb-2">Current Jobs</h4>
                 <div className="space-y-2">
                   {pipelineStatus.currentJobs.map((job, index) => (
                     <div key={index} className="flex items-center justify-between p-2 bg-white rounded border">
                       <div className="flex items-center space-x-2">
                         <div className={`w-2 h-2 rounded-full ${
-                          job.status === 'RUNNING' ? 'bg-blue-500 animate-pulse' :
+                          job.status === 'RUNNING' ? 'bg-petrol-light animate-pulse' :
                           job.status === 'COMPLETED' ? 'bg-green-500' :
                           job.status === 'FAILED' ? 'bg-red-500' :
                           'bg-gray-400'
                         }`} />
-                        <span className="text-sm font-medium">{job.type}</span>
+                        <span className="text-sm font-normal">{job.type}</span>
                       </div>
                       <Badge variant="outline">{job.status}</Badge>
                     </div>
@@ -316,26 +316,26 @@ export default function AITrainingDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+              <CardTitle className="text-sm font-normal text-gray-600 flex items-center">
                 <Users className="h-4 w-4 mr-2" />
                 Total Feedback
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-[#73C2FB]">{feedbackAnalytics.totalFeedback.toLocaleString()}</div>
+              <div className="text-2xl font-normal text-[#2A7A8F]">{feedbackAnalytics.totalFeedback.toLocaleString()}</div>
               <p className="text-xs text-gray-500 mt-1">User corrections collected</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+              <CardTitle className="text-sm font-normal text-gray-600 flex items-center">
                 <TrendingUp className="h-4 w-4 mr-2" />
                 Average Accuracy
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-normal text-green-600">
                 {(feedbackAnalytics.averageConfidence * 100).toFixed(1)}%
               </div>
               <p className="text-xs text-gray-500 mt-1">Based on user feedback</p>
@@ -344,13 +344,13 @@ export default function AITrainingDashboard() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+              <CardTitle className="text-sm font-normal text-gray-600 flex items-center">
                 <FileText className="h-4 w-4 mr-2" />
                 Active Templates
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-blue-600">{metrics.templatesActive}</div>
+              <div className="text-2xl font-normal text-petrol-base">{metrics.templatesActive}</div>
               <p className="text-xs text-gray-500 mt-1">
                 {metrics.templatesCreated} created total
               </p>
@@ -359,13 +359,13 @@ export default function AITrainingDashboard() {
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+              <CardTitle className="text-sm font-normal text-gray-600 flex items-center">
                 <Clock className="h-4 w-4 mr-2" />
                 Processing Jobs
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-[#73C2FB]">{pipelineStatus.currentJobs.length}</div>
+              <div className="text-2xl font-normal text-[#2A7A8F]">{pipelineStatus.currentJobs.length}</div>
               <p className="text-xs text-gray-500 mt-1">Currently running</p>
             </CardContent>
           </Card>
@@ -403,12 +403,12 @@ export default function AITrainingDashboard() {
                               item.type === 'PARTIALLY_CORRECT' ? 'bg-yellow-500' :
                               'bg-red-500'
                             }`} />
-                            <span className="text-sm font-medium">
+                            <span className="text-sm font-normal">
                               {item.type.replace('_', ' ').toLowerCase()}
                             </span>
                           </div>
                           <div className="text-right">
-                            <span className="text-sm font-bold">{item.percentage}%</span>
+                            <span className="text-sm font-normal">{item.percentage}%</span>
                             <span className="text-xs text-gray-500 ml-2">({item.count})</span>
                           </div>
                         </div>
@@ -433,7 +433,7 @@ export default function AITrainingDashboard() {
                     <div className="space-y-3">
                       {feedbackAnalytics.topCorrectedFields.slice(0, 8).map((field, index) => (
                         <div key={field.field} className="flex items-center justify-between">
-                          <span className="text-sm font-medium">{field.field}</span>
+                          <span className="text-sm font-normal">{field.field}</span>
                           <Badge variant="outline">{field.count} corrections</Badge>
                         </div>
                       ))}
@@ -456,7 +456,7 @@ export default function AITrainingDashboard() {
                         <div key={feedback.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                           <div className="flex-1">
                             <div className="flex items-center space-x-3">
-                              <span className="text-sm font-medium">{feedback.documentName}</span>
+                              <span className="text-sm font-normal">{feedback.documentName}</span>
                               <Badge 
                                 variant={
                                   feedback.feedback === 'CORRECT' ? 'default' :

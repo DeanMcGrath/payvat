@@ -31,9 +31,9 @@ export function VATExtractionError({
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
         <div className="flex items-center space-x-2">
           <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-            <span className="text-white text-xs font-bold">✓</span>
+            <span className="text-white text-xs font-normal">✓</span>
           </div>
-          <h3 className="font-semibold text-green-800">VAT Extraction Verified</h3>
+          <h3 className="font-normal text-green-800">VAT Extraction Verified</h3>
         </div>
         <p className="text-green-700 mt-1">
           {zeroToleranceCheck.isVWDocument 
@@ -71,7 +71,7 @@ export function VATExtractionError({
         </div>
         
         <div className="flex-1 min-w-0">
-          <h3 className={`text-lg font-bold ${
+          <h3 className={`text-lg font-normal ${
             isError ? 'text-red-900' : 'text-yellow-900'
           }`}>
             {isError ? '🚨 CRITICAL TAX COMPLIANCE ERROR' : '⚠️ VAT EXTRACTION WARNING'}
@@ -102,11 +102,11 @@ export function VATExtractionError({
         <div className="mt-4 p-3 bg-white/50 rounded border">
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="font-medium text-gray-700">Expected (VW Financial):</span>
+              <span className="font-normal text-gray-700">Expected (VW Financial):</span>
               <div className="text-green-600 font-mono">€111.36</div>
             </div>
             <div>
-              <span className="font-medium text-gray-700">Actually Extracted:</span>
+              <span className="font-normal text-gray-700">Actually Extracted:</span>
               <div className={`font-mono ${
                 zeroToleranceCheck.extractedAmounts.length === 0 
                   ? 'text-gray-500' 
@@ -127,7 +127,7 @@ export function VATExtractionError({
         <div className="mt-4 p-3 bg-red-100 border border-red-200 rounded">
           <div className="flex items-center space-x-2">
             <FileX className="w-5 h-5 text-red-600" />
-            <span className="font-semibold text-red-900">Impact on VAT Filing</span>
+            <span className="font-normal text-red-900">Impact on VAT Filing</span>
           </div>
           <p className="text-red-800 text-sm mt-1">
             Using this incorrect VAT amount in your Irish Revenue VAT return will result in:
@@ -146,7 +146,7 @@ export function VATExtractionError({
         {onManualOverride && (
           <button
             onClick={onManualOverride}
-            className={`px-4 py-2 text-sm font-medium rounded-md border ${
+            className={`px-4 py-2 text-sm font-normal rounded-md border ${
               isError
                 ? 'bg-red-600 text-white border-red-600 hover:bg-red-700'
                 : 'bg-yellow-600 text-white border-yellow-600 hover:bg-yellow-700'
@@ -159,7 +159,7 @@ export function VATExtractionError({
         {onReprocess && (
           <button
             onClick={onReprocess}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+            className="px-4 py-2 text-sm font-normal text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
           >
             Reprocess Document
           </button>
@@ -167,7 +167,7 @@ export function VATExtractionError({
         
         <button
           onClick={() => window.open('/api/admin/override-vat', '_blank')}
-          className="px-4 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-300 rounded-md hover:bg-blue-50 transition-colors"
+          className="px-4 py-2 text-sm font-normal text-petrol-base bg-white border border-petrol-300 rounded-md hover:bg-petrol-50 transition-colors"
         >
           Admin Override Panel
         </button>

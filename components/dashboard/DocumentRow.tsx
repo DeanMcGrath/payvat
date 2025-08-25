@@ -20,7 +20,7 @@ interface DocumentRowProps {
   showDetails?: boolean
 }
 
-export function DocumentRow({
+export const DocumentRow = React.memo<DocumentRowProps>(function DocumentRow({
   document,
   vatData,
   variant,
@@ -47,10 +47,10 @@ export function DocumentRow({
   const variantStyles = {
     sales: {
       bg: 'bg-brand-50',
-      border: 'border-brand-200',
-      hover: 'hover:bg-brand-100',
+      border: 'border-petrol-200',
+      hover: 'hover:bg-petrol-100',
       text: 'text-brand-900',
-      accent: 'text-brand-700',
+      accent: 'text-petrol-dark',
     },
     purchase: {
       bg: 'bg-green-50',
@@ -131,7 +131,7 @@ export function DocumentRow({
         <div className="flex items-center space-x-3 flex-1 min-w-0">
           <FileText className={`h-4 w-4 ${styles.accent} flex-shrink-0`} />
           <div className="min-w-0 flex-1">
-            <p className="body-sm font-medium truncate" title={document.originalName || document.fileName}>
+            <p className="body-sm font-normal truncate" title={document.originalName || document.fileName}>
               {document.originalName || document.fileName}
             </p>
             <p className="text-xs text-neutral-500">
@@ -142,7 +142,7 @@ export function DocumentRow({
         
         <div className="flex items-center space-x-2">
           {totalVAT > 0 && (
-            <span className={`body-xs font-medium ${styles.accent}`}>
+            <span className={`body-xs font-normal ${styles.accent}`}>
               {formatCurrency(totalVAT)}
             </span>
           )}
@@ -186,7 +186,7 @@ export function DocumentRow({
       
       {/* Document Name and Size */}
       <div className="col-span-2 min-w-0">
-        <p className="body-sm font-medium truncate" title={document.originalName || document.fileName}>
+        <p className="body-sm font-normal truncate" title={document.originalName || document.fileName}>
           {document.originalName || document.fileName}
         </p>
         <p className="text-xs text-neutral-500 mt-0.5">
@@ -203,7 +203,7 @@ export function DocumentRow({
       
       {/* Total Amount */}
       <div className="col-span-2">
-        <p className="body-sm font-medium text-neutral-800">
+        <p className="body-sm font-normal text-neutral-800">
           {document.invoiceTotal 
             ? formatCurrency(Number(document.invoiceTotal))
             : '—'
@@ -213,14 +213,14 @@ export function DocumentRow({
       
       {/* VAT Amount */}
       <div className="col-span-2">
-        <p className={`body-sm font-medium ${styles.accent}`}>
+        <p className={`body-sm font-normal ${styles.accent}`}>
           {totalVAT > 0 ? formatCurrency(totalVAT) : '—'}
         </p>
       </div>
       
       {/* Confidence % */}
       <div className="col-span-1">
-        <p className="body-sm font-medium text-neutral-700">
+        <p className="body-sm font-normal text-neutral-700">
           {confidence > 0 ? `${Math.round(confidence * 100)}%` : '—'}
         </p>
       </div>
@@ -260,21 +260,21 @@ export function DocumentRow({
         <div className="col-span-12 mt-4 p-4 bg-neutral-50 rounded-lg border">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
             <div>
-              <p className="font-medium text-neutral-700">VAT Amounts</p>
+              <p className="font-normal text-neutral-700">VAT Amounts</p>
               <p className="text-neutral-600">
                 {vatAmounts.map(amount => formatCurrency(amount)).join(', ')}
               </p>
             </div>
             <div>
-              <p className="font-medium text-neutral-700">Confidence</p>
+              <p className="font-normal text-neutral-700">Confidence</p>
               <p className="text-neutral-600">{Math.round(confidence * 100)}%</p>
             </div>
             <div>
-              <p className="font-medium text-neutral-700">Category</p>
+              <p className="font-normal text-neutral-700">Category</p>
               <p className="text-neutral-600">{document.category}</p>
             </div>
             <div>
-              <p className="font-medium text-neutral-700">Uploaded</p>
+              <p className="font-normal text-neutral-700">Uploaded</p>
               <p className="text-neutral-600">{formatDate(document.uploadedAt)}</p>
             </div>
           </div>
@@ -282,4 +282,4 @@ export function DocumentRow({
       )}
     </div>
   )
-}
+})

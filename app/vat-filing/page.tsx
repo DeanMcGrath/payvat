@@ -7,7 +7,7 @@ export default function VATSubmissionPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">Redirecting...</h1>
+        <h1 className="text-2xl font-normal mb-4">Redirecting...</h1>
         <p>Taking you to the VAT submission page.</p>
       </div>
     </div>

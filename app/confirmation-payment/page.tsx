@@ -127,7 +127,7 @@ export default function ConfirmationPayment() {
             {/* Business Information */}
             <Card className="card-premium ">
               <CardHeader>
-                <CardTitle className="text-xl font-semibold text-foreground flex items-center">
+                <CardTitle className="text-xl font-normal text-foreground flex items-center">
                   <Building className="h-5 w-5 mr-2 text-primary" />
                   Business Information
                 </CardTitle>
@@ -136,19 +136,19 @@ export default function ConfirmationPayment() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-muted-foreground">Trader Name</p>
-                    <p className="font-semibold text-foreground">{formData.traderName}</p>
+                    <p className="font-normal text-foreground">{formData.traderName}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Registration Number</p>
-                    <p className="font-mono font-semibold text-foreground">{formData.registrationNumber}</p>
+                    <p className="font-mono font-normal text-foreground">{formData.registrationNumber}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Filing Frequency</p>
-                    <p className="font-semibold text-foreground capitalize">{formData.filingFrequency.replace('-', ' ')}</p>
+                    <p className="font-normal text-foreground capitalize">{formData.filingFrequency.replace('-', ' ')}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Return Type</p>
-                    <p className="font-semibold text-foreground capitalize">{formData.returnType} VAT3</p>
+                    <p className="font-normal text-foreground capitalize">{formData.returnType} VAT3</p>
                   </div>
                 </div>
               </CardContent>
@@ -157,7 +157,7 @@ export default function ConfirmationPayment() {
             {/* Period Information */}
             <Card className="card-premium ">
               <CardHeader>
-                <CardTitle className="text-xl font-semibold text-foreground flex items-center">
+                <CardTitle className="text-xl font-normal text-foreground flex items-center">
                   <Calendar className="h-5 w-5 mr-2 text-primary" />
                   Period Information
                 </CardTitle>
@@ -166,11 +166,11 @@ export default function ConfirmationPayment() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-muted-foreground">Period</p>
-                    <p className="font-semibold text-foreground">{getPeriodLabel(selectedPeriod || 'jan-feb')} {selectedYear || '2025'}</p>
+                    <p className="font-normal text-foreground">{getPeriodLabel(selectedPeriod || 'jan-feb')} {selectedYear || '2025'}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Period Dates</p>
-                    <p className="font-semibold text-foreground">
+                    <p className="font-normal text-foreground">
                       {new Date(formData.periodBeginDate).toLocaleDateString('en-IE')} - {new Date(formData.periodEndDate).toLocaleDateString('en-IE')}
                     </p>
                   </div>
@@ -181,7 +181,7 @@ export default function ConfirmationPayment() {
             {/* VAT Amounts */}
             <Card className="card-premium ">
               <CardHeader>
-                <CardTitle className="text-xl font-semibold text-foreground flex items-center">
+                <CardTitle className="text-xl font-normal text-foreground flex items-center">
                   <Euro className="h-5 w-5 mr-2 text-primary" />
                   VAT Summary
                 </CardTitle>
@@ -190,12 +190,12 @@ export default function ConfirmationPayment() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                      <p className="text-sm text-green-700 font-medium mb-1">VAT on Sales (T1)</p>
-                      <p className="text-2xl font-bold text-green-800">€{formData.t1VATOnSales}</p>
+                      <p className="text-sm text-green-700 font-normal mb-1">VAT on Sales (T1)</p>
+                      <p className="text-2xl font-normal text-green-800">€{formData.t1VATOnSales}</p>
                     </div>
-                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <p className="text-sm text-blue-700 font-medium mb-1">VAT on Purchases (T2)</p>
-                      <p className="text-2xl font-bold text-blue-800">€{formData.t2VATOnPurchases}</p>
+                    <div className="p-4 bg-blue-50 rounded-lg border border-petrol-200">
+                      <p className="text-sm text-petrol-dark font-normal mb-1">VAT on Purchases (T2)</p>
+                      <p className="text-2xl font-normal text-petrol-dark">€{formData.t2VATOnPurchases}</p>
                     </div>
                   </div>
                   <div className="flex items-center justify-center">
@@ -203,13 +203,13 @@ export default function ConfirmationPayment() {
                       ? 'bg-red-50 border-red-200' 
                       : 'bg-green-50 border-green-200'
                     }`}>
-                      <p className={`text-sm font-medium mb-2 ${netAmount.type === 'payable' 
+                      <p className={`text-sm font-normal mb-2 ${netAmount.type === 'payable' 
                         ? 'text-red-700' 
                         : 'text-green-700'
                       }`}>
                         Net {netAmount.type === 'payable' ? 'Payable (T3)' : 'Repayable (T4)'}
                       </p>
-                      <p className={`text-3xl font-bold ${netAmount.type === 'payable' 
+                      <p className={`text-3xl font-normal ${netAmount.type === 'payable' 
                         ? 'text-red-800' 
                         : 'text-green-800'
                       }`}>
@@ -223,23 +223,23 @@ export default function ConfirmationPayment() {
                 {(parseFloat(formData.e1TotalGoodsTo) > 0 || parseFloat(formData.e2TotalGoodsFrom) > 0 || 
                   parseFloat(formData.es1TotalServicesTo) > 0 || parseFloat(formData.es2TotalServicesFrom) > 0) && (
                   <div className="mt-6 pt-6 border-t border-border">
-                    <h4 className="text-lg font-semibold text-foreground mb-4">Intra-EU Trade</h4>
+                    <h4 className="text-lg font-normal text-foreground mb-4">Intra-EU Trade</h4>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div>
                         <p className="text-muted-foreground">Goods To (E1)</p>
-                        <p className="font-semibold">€{formData.e1TotalGoodsTo}</p>
+                        <p className="font-normal">€{formData.e1TotalGoodsTo}</p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">Goods From (E2)</p>
-                        <p className="font-semibold">€{formData.e2TotalGoodsFrom}</p>
+                        <p className="font-normal">€{formData.e2TotalGoodsFrom}</p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">Services To (ES1)</p>
-                        <p className="font-semibold">€{formData.es1TotalServicesTo}</p>
+                        <p className="font-normal">€{formData.es1TotalServicesTo}</p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">Services From (ES2)</p>
-                        <p className="font-semibold">€{formData.es2TotalServicesFrom}</p>
+                        <p className="font-normal">€{formData.es2TotalServicesFrom}</p>
                       </div>
                     </div>
                   </div>
@@ -248,11 +248,11 @@ export default function ConfirmationPayment() {
                 {/* Unusual Expenditure */}
                 {formData.unusualExpenditure === 'yes' && (
                   <div className="mt-6 pt-6 border-t border-border">
-                    <h4 className="text-lg font-semibold text-foreground mb-4">Unusual Expenditure</h4>
+                    <h4 className="text-lg font-normal text-foreground mb-4">Unusual Expenditure</h4>
                     <div className="space-y-2">
                       <div>
                         <p className="text-muted-foreground">Amount (excl. VAT)</p>
-                        <p className="font-semibold">€{formData.unusualAmount}</p>
+                        <p className="font-normal">€{formData.unusualAmount}</p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">Details</p>
@@ -269,7 +269,7 @@ export default function ConfirmationPayment() {
           <div className="space-y-4 lg:space-y-6 order-1 lg:order-2">
             <Card className="card-premium lg:sticky lg:top-6 shadow-lg">
               <CardHeader>
-                <CardTitle className="text-xl font-semibold text-foreground">Final Confirmation</CardTitle>
+                <CardTitle className="text-xl font-normal text-foreground">Final Confirmation</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Declaration Section - Enhanced readability */}
@@ -277,7 +277,7 @@ export default function ConfirmationPayment() {
                   <div className="flex items-start space-x-3">
                     <Shield className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <div className="flex-1">
-                      <p className="text-sm lg:text-base font-medium text-foreground mb-3">Declaration</p>
+                      <p className="text-sm lg:text-base font-normal text-foreground mb-3">Declaration</p>
                       <p className="text-xs lg:text-sm text-muted-foreground leading-relaxed">
                         By proceeding, you confirm that the information provided is accurate, complete, and complies with Revenue requirements. 
                         You understand that providing false information may result in penalties.
@@ -290,7 +290,7 @@ export default function ConfirmationPayment() {
                 <Button 
                   onClick={handleConfirmSubmission}
                   disabled={isSubmitting}
-                  className="w-full btn-primary px-4 lg:px-6 py-3 lg:py-4 text-base lg:text-lg font-semibold hover-scale shadow-lg min-h-[48px]"
+                  className="w-full btn-primary px-4 lg:px-6 py-3 lg:py-4 text-base lg:text-lg font-normal hover-scale shadow-lg min-h-[48px]"
                   size="lg"
                 >
                   {isSubmitting ? (
@@ -325,24 +325,24 @@ export default function ConfirmationPayment() {
             {/* What happens next - Enhanced mobile display */}
             <Card className="card-modern shadow-sm">
               <CardHeader>
-                <CardTitle className="text-base lg:text-lg font-semibold text-foreground">What Happens Next?</CardTitle>
+                <CardTitle className="text-base lg:text-lg font-normal text-foreground">What Happens Next?</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <div className="w-7 h-7 lg:w-8 lg:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-xs lg:text-sm font-bold text-primary">1</span>
+                    <span className="text-xs lg:text-sm font-normal text-primary">1</span>
                   </div>
                   <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">Return submitted to Revenue instantly</p>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-7 h-7 lg:w-8 lg:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-xs lg:text-sm font-bold text-primary">2</span>
+                    <span className="text-xs lg:text-sm font-normal text-primary">2</span>
                   </div>
                   <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">Payment processed automatically</p>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-7 h-7 lg:w-8 lg:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-xs lg:text-sm font-bold text-primary">3</span>
+                    <span className="text-xs lg:text-sm font-normal text-primary">3</span>
                   </div>
                   <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">Confirmation receipt generated</p>
                 </div>
@@ -363,7 +363,7 @@ export default function ConfirmationPayment() {
               </div>
               
               <div>
-                <h3 className="text-2xl font-bold text-foreground mb-2">Submission Complete</h3>
+                <h3 className="text-2xl font-normal text-foreground mb-2">Submission Complete</h3>
                 <p className="text-muted-foreground">
                   Your VAT3 return has been successfully submitted to Revenue.
                 </p>

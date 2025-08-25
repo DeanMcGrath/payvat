@@ -60,7 +60,7 @@ export default function BusinessStructureComparison() {
         <section className="py-16 px-4" id="structure-comparison">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Interactive Business Structure Comparison
               </h2>
               <p className="text-lg text-gray-600">
@@ -76,11 +76,11 @@ export default function BusinessStructureComparison() {
                     onClick={() => setSelectedStructure(key)}
                     className={`p-4 text-center rounded-lg transition-all duration-300 ${
                       selectedStructure === key
-                        ? 'bg-[#73C2FB] text-white shadow-lg scale-105'
-                        : 'bg-gray-100 text-gray-700 hover:bg-blue-50'
+                        ? 'bg-[#2A7A8F] text-white shadow-lg scale-105'
+                        : 'bg-gray-100 text-gray-700 hover:bg-petrol-50'
                     }`}
                   >
-                    <h3 className="font-bold">{structure.name}</h3>
+                    <h3 className="font-normal">{structure.name}</h3>
                     <p className="text-sm mt-1">{structure.setup} Setup</p>
                   </button>
                 ))}
@@ -88,32 +88,32 @@ export default function BusinessStructureComparison() {
               
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">{structures[selectedStructure as keyof typeof structures].name} Overview</h3>
+                  <h3 className="text-2xl font-normal text-gray-900 mb-6">{structures[selectedStructure as keyof typeof structures].name} Overview</h3>
                   <div className="space-y-4">
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-gray-900 mb-2">Setup Complexity</h4>
+                      <h4 className="font-normal text-gray-900 mb-2">Setup Complexity</h4>
                       <p className="text-gray-700">{structures[selectedStructure as keyof typeof structures].setup}</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-gray-900 mb-2">Liability</h4>
+                      <h4 className="font-normal text-gray-900 mb-2">Liability</h4>
                       <p className="text-gray-700">{structures[selectedStructure as keyof typeof structures].liability}</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-gray-900 mb-2">Tax Rate</h4>
+                      <h4 className="font-normal text-gray-900 mb-2">Tax Rate</h4>
                       <p className="text-gray-700">{structures[selectedStructure as keyof typeof structures].tax}</p>
                     </div>
                     <div className="bg-gray-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-gray-900 mb-2">Setup Cost</h4>
+                      <h4 className="font-normal text-gray-900 mb-2">Setup Cost</h4>
                       <p className="text-gray-700">{structures[selectedStructure as keyof typeof structures].cost}</p>
                     </div>
                   </div>
                 </div>
                 
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Pros & Cons</h3>
+                  <h3 className="text-2xl font-normal text-gray-900 mb-6">Pros & Cons</h3>
                   <div className="space-y-6">
                     <div>
-                      <h4 className="font-semibold text-green-900 mb-3">Advantages</h4>
+                      <h4 className="font-normal text-green-900 mb-3">Advantages</h4>
                       <ul className="space-y-2">
                         {structures[selectedStructure as keyof typeof structures].advantages.map((advantage, index) => (
                           <li key={index} className="flex items-start space-x-2">
@@ -125,7 +125,7 @@ export default function BusinessStructureComparison() {
                     </div>
                     
                     <div>
-                      <h4 className="font-semibold text-red-900 mb-3">Disadvantages</h4>
+                      <h4 className="font-normal text-red-900 mb-3">Disadvantages</h4>
                       <ul className="space-y-2">
                         {structures[selectedStructure as keyof typeof structures].disadvantages.map((disadvantage, index) => (
                           <li key={index} className="flex items-start space-x-2">
@@ -146,7 +146,7 @@ export default function BusinessStructureComparison() {
         <section className="py-16 px-4 bg-gray-50" id="structure-details">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Detailed Business Structure Analysis
               </h2>
               <p className="text-lg text-gray-600">
@@ -158,51 +158,51 @@ export default function BusinessStructureComparison() {
               <table className="w-full bg-white rounded-lg shadow-sm">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Criteria</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">Sole Trader</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">Partnership</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">Limited Company</th>
-                    <th className="px-4 py-3 text-center text-sm font-semibold text-gray-900">DAC</th>
+                    <th className="px-4 py-3 text-left text-sm font-normal text-gray-900">Criteria</th>
+                    <th className="px-4 py-3 text-center text-sm font-normal text-gray-900">Sole Trader</th>
+                    <th className="px-4 py-3 text-center text-sm font-normal text-gray-900">Partnership</th>
+                    <th className="px-4 py-3 text-center text-sm font-normal text-gray-900">Limited Company</th>
+                    <th className="px-4 py-3 text-center text-sm font-normal text-gray-900">DAC</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-900">Setup Time</td>
+                    <td className="px-4 py-3 font-normal text-gray-900">Setup Time</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Same day</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">1-3 days</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">5-10 days</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">10-15 days</td>
                   </tr>
                   <tr className="bg-gray-50">
-                    <td className="px-4 py-3 font-medium text-gray-900">Annual Compliance</td>
+                    <td className="px-4 py-3 font-normal text-gray-900">Annual Compliance</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Form 11</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Form 1</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Form 1 + CRO</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Form 1 + CRO</td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-900">Tax Efficiency</td>
+                    <td className="px-4 py-3 font-normal text-gray-900">Tax Efficiency</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Low</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Medium</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">High</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">High</td>
                   </tr>
                   <tr className="bg-gray-50">
-                    <td className="px-4 py-3 font-medium text-gray-900">Investment Appeal</td>
+                    <td className="px-4 py-3 font-normal text-gray-900">Investment Appeal</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Very Low</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Low</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">High</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Very High</td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 font-medium text-gray-900">Credibility</td>
+                    <td className="px-4 py-3 font-normal text-gray-900">Credibility</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Low</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Medium</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">High</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">Very High</td>
                   </tr>
                   <tr className="bg-gray-50">
-                    <td className="px-4 py-3 font-medium text-gray-900">Ongoing Costs</td>
+                    <td className="px-4 py-3 font-normal text-gray-900">Ongoing Costs</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">€200/year</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">€400/year</td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700">€800/year</td>
@@ -218,7 +218,7 @@ export default function BusinessStructureComparison() {
         <section className="py-16 px-4" id="decision-framework">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Which Structure is Right for You?
               </h2>
               <p className="text-lg text-gray-600">
@@ -228,12 +228,12 @@ export default function BusinessStructureComparison() {
             
             <div className="space-y-8">
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Business Stage & Goals</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Business Stage & Goals</h3>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-4">Early Stage / Testing</h4>
+                    <h4 className="font-normal text-gray-900 mb-4">Early Stage / Testing</h4>
                     <div className="bg-green-50 p-4 rounded-lg">
-                      <p className="font-semibold text-green-900 mb-2">Recommended: Sole Trader</p>
+                      <p className="font-normal text-green-900 mb-2">Recommended: Sole Trader</p>
                       <ul className="text-green-800 text-sm space-y-1">
                         <li>• Quick to start</li>
                         <li>• Low cost</li>
@@ -243,10 +243,10 @@ export default function BusinessStructureComparison() {
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-4">Growth / Investment</h4>
+                    <h4 className="font-normal text-gray-900 mb-4">Growth / Investment</h4>
                     <div className="bg-blue-50 p-4 rounded-lg">
-                      <p className="font-semibold text-blue-900 mb-2">Recommended: Limited Company</p>
-                      <ul className="text-blue-800 text-sm space-y-1">
+                      <p className="font-normal text-blue-900 mb-2">Recommended: Limited Company</p>
+                      <ul className="text-petrol-dark text-sm space-y-1">
                         <li>• Limited liability protection</li>
                         <li>• Tax efficiency</li>
                         <li>• Investment ready</li>
@@ -258,12 +258,12 @@ export default function BusinessStructureComparison() {
               </div>
               
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Risk & Liability</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Risk & Liability</h3>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-4">Low Risk Business</h4>
+                    <h4 className="font-normal text-gray-900 mb-4">Low Risk Business</h4>
                     <div className="bg-yellow-50 p-4 rounded-lg">
-                      <p className="font-semibold text-yellow-900 mb-2">Consider: Sole Trader or Partnership</p>
+                      <p className="font-normal text-yellow-900 mb-2">Consider: Sole Trader or Partnership</p>
                       <ul className="text-yellow-800 text-sm space-y-1">
                         <li>• Consulting services</li>
                         <li>• Digital services</li>
@@ -273,9 +273,9 @@ export default function BusinessStructureComparison() {
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-4">High Risk Business</h4>
+                    <h4 className="font-normal text-gray-900 mb-4">High Risk Business</h4>
                     <div className="bg-red-50 p-4 rounded-lg">
-                      <p className="font-semibold text-red-900 mb-2">Recommended: Limited Company/DAC</p>
+                      <p className="font-normal text-red-900 mb-2">Recommended: Limited Company/DAC</p>
                       <ul className="text-red-800 text-sm space-y-1">
                         <li>• Manufacturing</li>
                         <li>• Construction</li>
@@ -288,32 +288,32 @@ export default function BusinessStructureComparison() {
               </div>
               
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Financial Considerations</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Financial Considerations</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">1</span>
+                      <span className="text-petrol-base font-normal text-sm">1</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Annual Turnover Under €50,000</h4>
+                      <h4 className="font-normal text-gray-900">Annual Turnover Under €50,000</h4>
                       <p className="text-gray-600">Sole trader often most tax-efficient due to low income tax bands</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">2</span>
+                      <span className="text-petrol-base font-normal text-sm">2</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Annual Turnover €50,000-€200,000</h4>
+                      <h4 className="font-normal text-gray-900">Annual Turnover €50,000-€200,000</h4>
                       <p className="text-gray-600">Limited company becomes more tax-efficient with 12.5% corporation tax</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">3</span>
+                      <span className="text-petrol-base font-normal text-sm">3</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Annual Turnover Above €200,000</h4>
+                      <h4 className="font-normal text-gray-900">Annual Turnover Above €200,000</h4>
                       <p className="text-gray-600">Limited company strongly recommended for tax efficiency and credibility</p>
                     </div>
                   </div>
@@ -327,7 +327,7 @@ export default function BusinessStructureComparison() {
         <section className="py-16 px-4 bg-gray-50" id="structure-migration">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Changing Business Structure
               </h2>
               <p className="text-lg text-gray-600">
@@ -338,10 +338,10 @@ export default function BusinessStructureComparison() {
             <div className="card-premium p-8">
               <div className="space-y-6">
                 <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Sole Trader to Limited Company</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">Sole Trader to Limited Company</h3>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-2">When to Consider:</h4>
+                      <h4 className="font-normal text-gray-900 mb-2">When to Consider:</h4>
                       <ul className="text-gray-800 text-sm space-y-1">
                         <li>• Profits exceeding €50,000</li>
                         <li>• Need liability protection</li>
@@ -350,7 +350,7 @@ export default function BusinessStructureComparison() {
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900 mb-2">Process:</h4>
+                      <h4 className="font-normal text-gray-900 mb-2">Process:</h4>
                       <ul className="text-gray-800 text-sm space-y-1">
                         <li>• Cease sole trader business</li>
                         <li>• Incorporate new company</li>
@@ -362,10 +362,10 @@ export default function BusinessStructureComparison() {
                 </div>
                 
                 <div className="bg-green-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-bold text-green-900 mb-4">Partnership to Limited Company</h3>
+                  <h3 className="text-xl font-normal text-green-900 mb-4">Partnership to Limited Company</h3>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="font-semibold text-green-900 mb-2">Benefits:</h4>
+                      <h4 className="font-normal text-green-900 mb-2">Benefits:</h4>
                       <ul className="text-green-800 text-sm space-y-1">
                         <li>• Remove personal liability</li>
                         <li>• Better tax efficiency</li>
@@ -374,7 +374,7 @@ export default function BusinessStructureComparison() {
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-green-900 mb-2">Considerations:</h4>
+                      <h4 className="font-normal text-green-900 mb-2">Considerations:</h4>
                       <ul className="text-green-800 text-sm space-y-1">
                         <li>• All partners must agree</li>
                         <li>• Asset transfer implications</li>
@@ -390,9 +390,9 @@ export default function BusinessStructureComparison() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-[#73C2FB] text-white">
+        <section className="py-20 px-4 bg-[#2A7A8F] text-white">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">
+            <h2 className="text-4xl font-normal mb-6">
               Get Expert Structure Advice
             </h2>
             <p className="text-xl mb-8 text-blue-50">
@@ -401,13 +401,13 @@ export default function BusinessStructureComparison() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-petrol-base px-8 py-4 text-lg font-normal rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Get Structure Consultation
               </a>
               <a 
                 href="/complete-business-setup-guide-ireland" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-normal rounded-xl hover:bg-white hover:text-petrol-base transition-all duration-300"
               >
                 Complete Setup Guide
               </a>

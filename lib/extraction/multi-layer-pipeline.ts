@@ -7,6 +7,7 @@
 import { logError, logWarn, logInfo, logPerformance } from '@/lib/secure-logger'
 import { processDocumentWithAI } from '@/lib/ai/documentAnalysis'
 import { isAIEnabled } from '@/lib/ai/openai'
+import { AIErrorTracker, AIErrorType } from '@/lib/ai/error-tracking'
 
 export interface ExtractionResult {
   success: boolean
@@ -89,8 +90,22 @@ export async function extractVATWithPipeline(context: ProcessingContext): Promis
  * Strategy 1: AI Vision Extraction
  */
 async function tryAIVisionExtraction(context: ProcessingContext): Promise<ExtractionResult> {
+  const startTime = Date.now()
+  
   try {
     if (!isAIEnabled()) {
+      await AIErrorTracker.logError({
+        documentId: context.documentId,
+        userId: context.userId,
+        errorType: 'API_ERROR',
+        errorCode: 'AI_SERVICE_DISABLED',
+        message: 'AI service is not enabled or available',
+        context: {
+          fileName: context.fileName,
+          processingMethod: 'AI_VISION'
+        },
+        processingMethod: 'AI_VISION'
+      })
       return createFailureResult('AI_VISION', 'AI service not available', context)
     }
 
@@ -104,6 +119,27 @@ async function tryAIVisionExtraction(context: ProcessingContext): Promise<Extrac
 
     if (aiResult.success && aiResult.extractedData) {
       const { salesVAT = [], purchaseVAT = [], confidence = 0 } = aiResult.extractedData
+      const processingTime = Date.now() - startTime
+
+      // Log low confidence as a warning
+      if (confidence < 0.5) {
+        await AIErrorTracker.logError({
+          documentId: context.documentId,
+          userId: context.userId,
+          errorType: 'CONFIDENCE_ERROR',
+          errorCode: 'LOW_CONFIDENCE_EXTRACTION',
+          message: `AI extraction confidence is low: ${Math.round(confidence * 100)}%`,
+          context: {
+            fileName: context.fileName,
+            confidence,
+            salesVAT,
+            purchaseVAT,
+            processingTime
+          },
+          processingMethod: 'AI_VISION',
+          confidence
+        })
+      }
 
       return {
         success: true,
@@ -114,21 +150,70 @@ async function tryAIVisionExtraction(context: ProcessingContext): Promise<Extrac
         extractedText: [Array.isArray(aiResult.extractedData.extractedText) 
           ? aiResult.extractedData.extractedText.join(' ') 
           : aiResult.extractedData.extractedText || ''],
-        issues: [],
+        issues: confidence < 0.5 ? ['Low confidence extraction'] : [],
         requiresManualReview: confidence < 0.8,
         userMessage: confidence > 0.8 
           ? `AI successfully extracted VAT amounts with ${Math.round(confidence * 100)}% confidence`
           : `AI extracted VAT amounts but confidence is ${Math.round(confidence * 100)}%. Please verify the amounts.`,
-        processingTimeMs: 0 // Will be set by caller
+        processingTimeMs: processingTime
       }
     }
 
+    // AI processing failed
+    await AIErrorTracker.logError({
+      documentId: context.documentId,
+      userId: context.userId,
+      errorType: 'EXTRACTION_ERROR',
+      errorCode: 'AI_EXTRACTION_FAILED',
+      message: 'AI processing completed but failed to extract VAT data',
+      context: {
+        fileName: context.fileName,
+        aiResultSuccess: aiResult.success,
+        hasExtractedData: !!aiResult.extractedData,
+        processingTime: Date.now() - startTime
+      },
+      processingMethod: 'AI_VISION'
+    })
+
     return createFailureResult('AI_VISION', 'AI processing failed to extract VAT data', context)
   } catch (error) {
+    const processingTime = Date.now() - startTime
+    
+    // Determine error type based on error message
+    let errorType: AIErrorType = 'SYSTEM_ERROR'
+    let errorCode = 'AI_VISION_EXCEPTION'
+    
+    if (error.message?.includes('timeout')) {
+      errorType = 'TIMEOUT_ERROR'
+      errorCode = 'AI_PROCESSING_TIMEOUT'
+    } else if (error.message?.includes('rate limit')) {
+      errorType = 'RATE_LIMIT_ERROR'
+      errorCode = 'API_RATE_LIMIT_EXCEEDED'
+    } else if (error.message?.includes('API')) {
+      errorType = 'API_ERROR'
+      errorCode = 'API_REQUEST_FAILED'
+    }
+
+    await AIErrorTracker.logError({
+      documentId: context.documentId,
+      userId: context.userId,
+      errorType,
+      errorCode,
+      message: error.message || 'Unknown error during AI vision extraction',
+      stack: error.stack,
+      context: {
+        fileName: context.fileName,
+        processingTime,
+        mimeType: context.mimeType
+      },
+      processingMethod: 'AI_VISION'
+    })
+
     logError('AI vision extraction failed', error, {
       documentId: context.documentId,
       operation: 'ai-vision-extraction'
     })
+    
     return createFailureResult('AI_VISION', 'AI extraction encountered an error', context)
   }
 }

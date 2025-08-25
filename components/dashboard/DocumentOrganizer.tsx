@@ -229,7 +229,7 @@ export default function DocumentOrganizer({
         {years.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <FolderOpen className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p className="text-lg font-medium">No documents organized yet</p>
+            <p className="text-lg font-normal">No documents organized yet</p>
             <p className="text-sm">Upload documents to see them organized by date</p>
           </div>
         ) : (
@@ -247,7 +247,7 @@ export default function DocumentOrganizer({
                     <ChevronRight className="h-4 w-4" />
                   )}
                   <Calendar className="h-4 w-4" />
-                  <span className="font-medium">{year}</span>
+                  <span className="font-normal">{year}</span>
                   <Badge variant="secondary">
                     {groupedFolders[year].length} month{groupedFolders[year].length !== 1 ? 's' : ''}
                   </Badge>
@@ -282,7 +282,7 @@ export default function DocumentOrganizer({
                           <Folder className="h-4 w-4 text-blue-500" />
                           <div>
                             <div className="flex items-center space-x-2">
-                              <span className="font-medium">{MONTHS[folder.month - 1]}</span>
+                              <span className="font-normal">{MONTHS[folder.month - 1]}</span>
                               <Badge variant="outline">
                                 {folder.documentCount} docs
                               </Badge>
@@ -321,7 +321,7 @@ export default function DocumentOrganizer({
                               <div className="flex items-center space-x-2">
                                 <FileText className="h-3 w-3 text-muted-foreground" />
                                 <div>
-                                  <div className="text-sm font-medium truncate max-w-48">
+                                  <div className="text-sm font-normal truncate max-w-48">
                                     {document.originalName}
                                   </div>
                                   <div className="flex items-center space-x-1 text-xs text-muted-foreground">

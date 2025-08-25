@@ -86,7 +86,7 @@ export default function VATTrendsChart({ className }: VATTrendsChartProps) {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-semibold text-gray-900 mb-2">{label}</p>
+          <p className="font-normal text-gray-900 mb-2">{label}</p>
           {payload.map((entry: any, index: number) => (
             <div key={index} className="flex items-center space-x-2 mb-1">
               <div 
@@ -94,7 +94,7 @@ export default function VATTrendsChart({ className }: VATTrendsChartProps) {
                 style={{ backgroundColor: entry.color }}
               />
               <span className="text-sm text-gray-600">{entry.name}:</span>
-              <span className="text-sm font-medium text-gray-900">
+              <span className="text-sm font-normal text-gray-900">
                 {formatCurrency(entry.value)}
               </span>
             </div>
@@ -127,7 +127,7 @@ export default function VATTrendsChart({ className }: VATTrendsChartProps) {
     return (
       <Card className={`${className} card-modern`}>
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-bold text-foreground flex items-center justify-between">
+          <CardTitle className="text-xl font-normal text-foreground flex items-center justify-between">
             VAT Trends
             <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
           </CardTitle>
@@ -148,13 +148,13 @@ export default function VATTrendsChart({ className }: VATTrendsChartProps) {
     return (
       <Card className={`${className} card-modern`}>
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-bold text-foreground">VAT Trends</CardTitle>
+          <CardTitle className="text-xl font-normal text-foreground">VAT Trends</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center h-64 text-muted-foreground">
             <div className="text-center">
               <TrendingUp className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p className="text-lg font-medium">No trend data available</p>
+              <p className="text-lg font-normal">No trend data available</p>
               <p className="text-sm">Submit more VAT returns to see trends</p>
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function VATTrendsChart({ className }: VATTrendsChartProps) {
     <Card className={`${className} card-modern hover-lift`}>
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xl font-bold text-foreground">VAT Trends</CardTitle>
+          <CardTitle className="text-xl font-normal text-foreground">VAT Trends</CardTitle>
           <div className="flex items-center space-x-2">
             {getTrendIcon()}
             <Badge variant={getTrendBadgeVariant()} className="text-xs">
@@ -183,8 +183,8 @@ export default function VATTrendsChart({ className }: VATTrendsChartProps) {
             <AreaChart data={data} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
               <defs>
                 <linearGradient id="salesGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#5BADEA" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#5BADEA" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#216477" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#216477" stopOpacity={0}/>
                 </linearGradient>
                 <linearGradient id="netGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#059669" stopOpacity={0.3}/>
@@ -207,7 +207,7 @@ export default function VATTrendsChart({ className }: VATTrendsChartProps) {
               <Area
                 type="monotone"
                 dataKey="salesVAT"
-                stroke="#5BADEA"
+                stroke="#216477"
                 strokeWidth={2}
                 fill="url(#salesGradient)"
                 name="Sales VAT"
@@ -236,10 +236,10 @@ export default function VATTrendsChart({ className }: VATTrendsChartProps) {
         <div className="mt-4 grid grid-cols-3 gap-4 text-center">
           <div className="space-y-1">
             <div className="flex items-center justify-center space-x-1">
-              <div className="w-3 h-3 bg-[#5BADEA] rounded-full" />
+              <div className="w-3 h-3 bg-[#216477] rounded-full" />
               <span className="text-xs text-muted-foreground">Sales VAT</span>
             </div>
-            <p className="text-sm font-semibold text-foreground">
+            <p className="text-sm font-normal text-foreground">
               {formatCurrency(data[data.length - 1]?.salesVAT || 0)}
             </p>
           </div>
@@ -248,7 +248,7 @@ export default function VATTrendsChart({ className }: VATTrendsChartProps) {
               <div className="w-3 h-3 bg-red-500 rounded-full" />
               <span className="text-xs text-muted-foreground">Purchase VAT</span>
             </div>
-            <p className="text-sm font-semibold text-foreground">
+            <p className="text-sm font-normal text-foreground">
               {formatCurrency(data[data.length - 1]?.purchaseVAT || 0)}
             </p>
           </div>
@@ -257,7 +257,7 @@ export default function VATTrendsChart({ className }: VATTrendsChartProps) {
               <div className="w-3 h-3 bg-green-600 rounded-full" />
               <span className="text-xs text-muted-foreground">Net VAT</span>
             </div>
-            <p className="text-sm font-semibold text-foreground">
+            <p className="text-sm font-normal text-foreground">
               {formatCurrency(data[data.length - 1]?.netVAT || 0)}
             </p>
           </div>

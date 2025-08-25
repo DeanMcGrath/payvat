@@ -151,7 +151,7 @@ export default function DocumentList({
     return (
       <div className="text-center py-12">
         <FolderOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No documents found</h3>
+        <h3 className="text-lg font-normal text-gray-900 mb-2">No documents found</h3>
         <p className="text-gray-500">Upload some documents to get started</p>
       </div>
     )
@@ -161,9 +161,9 @@ export default function DocumentList({
     <div className="space-y-4">
       {/* Bulk Actions */}
       {selectedDocuments.length > 0 && (
-        <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-petrol-200">
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-blue-700 font-medium">
+            <span className="text-sm text-petrol-dark font-normal">
               {selectedDocuments.length} document{selectedDocuments.length > 1 ? 's' : ''} selected
             </span>
           </div>
@@ -172,7 +172,7 @@ export default function DocumentList({
               variant="outline"
               size="sm"
               onClick={() => handleBulkAction('export')}
-              className="text-blue-600 hover:text-blue-700"
+              className="text-petrol-base hover:text-petrol-dark"
             >
               <Archive className="h-4 w-4 mr-1" />
               Export
@@ -222,7 +222,7 @@ export default function DocumentList({
                   <div className="flex items-center space-x-3">
                     {getFileTypeIcon(document.fileType)}
                     <div>
-                      <div className="font-medium text-gray-900">{document.name}</div>
+                      <div className="font-normal text-gray-900">{document.name}</div>
                       <div className="flex items-center space-x-2 mt-1">
                         <div className="text-sm text-gray-500 uppercase">{document.fileType}</div>
                         {document.isScanned && (
@@ -245,7 +245,7 @@ export default function DocumentList({
                   {document.vatAmount ? (
                     <div className="flex items-center text-sm">
                       <Euro className="h-4 w-4 mr-1 text-green-600" />
-                      <span className="font-bold text-base text-green-600">
+                      <span className="font-normal text-base text-green-600">
                         {formatCurrency(document.vatAmount)}
                       </span>
                     </div>
@@ -280,7 +280,7 @@ export default function DocumentList({
                       variant="ghost" 
                       size="sm" 
                       onClick={() => onView(document)}
-                      className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                      className="h-8 w-8 p-0 text-petrol-base hover:text-petrol-dark hover:bg-petrol-50"
                       title="View & Analyze"
                     >
                       <Eye className="h-4 w-4" />

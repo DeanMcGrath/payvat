@@ -760,6 +760,45 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     
     console.log(`📁 FOLDER ALLOCATION: Document will be placed in ${extractedYear}/${String(extractedMonth).padStart(2, '0')}/${document.category.includes('SALES') ? 'Sales' : 'Purchases'}`)
 
+    // Extract invoice total from processing results
+    let extractedInvoiceTotal: number | null = null
+    
+    if (result.extractedData) {
+      // Try different fields where the total might be stored
+      if (result.extractedData.totalAmount) {
+        extractedInvoiceTotal = result.extractedData.totalAmount
+      } else if (result.extractedData.transactionData?.total) {
+        extractedInvoiceTotal = result.extractedData.transactionData.total  
+      } else if (result.extractedData.invoiceTotal) {
+        extractedInvoiceTotal = result.extractedData.invoiceTotal
+      } else {
+        // Calculate from VAT amounts if available (rough estimate)
+        const totalVAT = [...(result.extractedData.salesVAT || []), ...(result.extractedData.purchaseVAT || [])].reduce((sum, vat) => sum + vat, 0)
+        if (totalVAT > 0) {
+          // Rough estimate: total = VAT / 0.23 (Irish VAT rate) 
+          extractedInvoiceTotal = Math.round((totalVAT / 0.23) * 100) / 100
+        }
+      }
+    }
+    
+    // If still no total, try to extract from scan result text
+    if (!extractedInvoiceTotal && result.scanResult) {
+      const totalMatches = result.scanResult.match(/(?:Total|Amount|Invoice Total|Final Amount)[\s:]*€?([0-9,]+\.?[0-9]*)/gi)
+      if (totalMatches && totalMatches.length > 0) {
+        const amounts = totalMatches.map(match => {
+          const numMatch = match.match(/([0-9,]+\.?[0-9]*)/)
+          return numMatch ? parseFloat(numMatch[1].replace(',', '')) : 0
+        }).filter(amount => amount > 0)
+        
+        if (amounts.length > 0) {
+          // Take the largest amount as the most likely total
+          extractedInvoiceTotal = Math.max(...amounts)
+        }
+      }
+    }
+
+    console.log(`💰 INVOICE TOTAL EXTRACTION: ${extractedInvoiceTotal ? `€${extractedInvoiceTotal}` : 'Not found'}`)
+
     const updatedDocument = await prisma.document.update({
       where: { id: documentId },
       data: {
@@ -769,6 +808,8 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         extractedDate: extractedDate,
         extractedYear: extractedYear,
         extractedMonth: extractedMonth,
+        // Add extracted invoice total
+        invoiceTotal: extractedInvoiceTotal,
         extractionConfidence: result.extractedData?.confidence || 0.8,
         dateExtractionConfidence: result.extractedData?.invoiceDate ? 0.9 : 0.5, // High confidence if date was found
       }

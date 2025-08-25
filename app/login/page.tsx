@@ -127,8 +127,8 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center">
-                <Link href="/" className="text-2xl font-bold font-mono text-white tracking-tight hover:text-white/90 transition-colors">
-                  Don't Be Like Me!
+                <Link href="/" className="text-2xl font-normal font-mono text-white tracking-tight hover:text-white/90 transition-colors">
+                  PayVAT!
                 </Link>
               </div>
               
@@ -179,7 +179,7 @@ export default function LoginPage() {
             <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-8">
-                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                  <span className="text-white/90 text-sm font-normal flex items-center space-x-2">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                     <span>Secure Login</span>
                   </span>
@@ -203,7 +203,7 @@ export default function LoginPage() {
             <div className="icon-premium mb-4 mx-auto">
               <Lock className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-1">Sign In to Your Account</h2>
+            <h2 className="text-2xl font-normal text-foreground mb-1">Sign In to Your Account</h2>
             <p className="text-muted-foreground">Access your secure VAT dashboard</p>
           </div>
           
@@ -217,7 +217,7 @@ export default function LoginPage() {
           
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground font-medium flex items-center gap-2">
+              <Label htmlFor="email" className="text-foreground font-normal flex items-center gap-2">
                 <Mail className="h-4 w-4 text-primary" />
                 Email Address
               </Label>
@@ -239,7 +239,7 @@ export default function LoginPage() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground font-medium flex items-center gap-2">
+              <Label htmlFor="password" className="text-foreground font-normal flex items-center gap-2">
                 <Lock className="h-4 w-4 text-primary" />
                 Password
               </Label>
@@ -263,7 +263,7 @@ export default function LoginPage() {
             <div className="pt-4">
               <Button 
                 type="button"
-                className="w-full btn-primary py-4 font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full btn-primary py-4 font-normal text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleLogin}
                 disabled={isLoading || loginAttempts >= 5}
               >
@@ -290,7 +290,7 @@ export default function LoginPage() {
               <Button 
                 type="button"
                 variant="outline"
-                className="btn-outline font-medium"
+                className="btn-outline font-normal"
                 onClick={() => router.push('/signup')}
               >
                 Create Account

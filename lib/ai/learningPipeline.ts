@@ -53,6 +53,7 @@ export class LearningPipeline {
   
   private static isRunning = false
   private static currentJobs: Map<string, LearningJob> = new Map()
+  private static startTime: number | null = null
   
   /**
    * Start the continuous learning pipeline
@@ -65,6 +66,7 @@ export class LearningPipeline {
     
     console.log('🚀 Starting continuous learning pipeline')
     this.isRunning = true
+    this.startTime = Date.now()
     
     try {
       // Schedule immediate processing of pending feedback
@@ -88,8 +90,8 @@ export class LearningPipeline {
         scheduledAt: new Date(Date.now() + 120000) // 2 minute delay
       })
       
-      // Start job processor
-      this.processJobs()
+      // Start job processor in background
+      this.startJobProcessor()
       
       console.log('✅ Learning pipeline started successfully')
       
@@ -404,6 +406,40 @@ export class LearningPipeline {
     
     return readyJobs[0] || null
   }
+
+  /**
+   * Start the background job processor
+   */
+  private static async startJobProcessor(): Promise<void> {
+    console.log('🔄 Starting job processor...')
+    
+    const processJobs = async () => {
+      while (this.isRunning) {
+        try {
+          const nextJob = this.getNextJob()
+          
+          if (nextJob) {
+            console.log(`📋 Found job to process: ${nextJob.type} (Priority: ${nextJob.priority})`)
+            await this.executeJob(nextJob)
+          } else {
+            // No jobs available, wait before checking again
+            await new Promise(resolve => setTimeout(resolve, 5000)) // Wait 5 seconds
+          }
+        } catch (error) {
+          console.error('Error in job processor:', error)
+          await new Promise(resolve => setTimeout(resolve, 10000)) // Wait 10 seconds after error
+        }
+      }
+    }
+    
+    // Start the job processor in the background
+    processJobs().catch(error => {
+      console.error('Job processor crashed:', error)
+      this.isRunning = false
+    })
+
+    console.log('✅ Job processor started')
+  }
   
   private static async executeJob(job: LearningJob): Promise<void> {
     console.log(`🔄 Executing job: ${job.type}`)
@@ -604,6 +640,81 @@ export class LearningPipeline {
         // This would include recent learning metrics
         jobsCompleted: 0,
         errorRate: 0
+      }
+    }
+  }
+
+  /**
+   * Get pipeline status for monitoring
+   */
+  static async getPipelineStatus(): Promise<{
+    isRunning: boolean
+    currentJobs: number
+    completedJobs: number
+    failedJobs: number
+    lastActivity: Date | null
+    uptime: number
+  }> {
+    const completedJobs = Array.from(this.currentJobs.values()).filter(job => job.status === 'COMPLETED').length
+    const failedJobs = Array.from(this.currentJobs.values()).filter(job => job.status === 'FAILED').length
+    const runningJobs = Array.from(this.currentJobs.values()).filter(job => job.status === 'RUNNING')
+    
+    const lastActivity = runningJobs.length > 0 ? 
+      Math.max(...runningJobs.map(job => job.startedAt?.getTime() || 0)) : 
+      null
+
+    return {
+      isRunning: this.isRunning,
+      currentJobs: this.currentJobs.size,
+      completedJobs,
+      failedJobs,
+      lastActivity: lastActivity ? new Date(lastActivity) : null,
+      uptime: this.startTime ? Date.now() - this.startTime : 0
+    }
+  }
+
+  /**
+   * Get current jobs for monitoring
+   */
+  static async getCurrentJobs(): Promise<LearningJob[]> {
+    return Array.from(this.currentJobs.values())
+  }
+
+  /**
+   * Get learning metrics for monitoring
+   */
+  static async getLearningMetrics(): Promise<{
+    totalFeedbackProcessed: number
+    templatesCreated: number
+    templatesOptimized: number
+    patternsLearned: number
+    accuracyImprovement: number
+    recentActivity: {
+      jobsCompletedToday: number
+      avgProcessingTime: number
+      successRate: number
+    }
+  }> {
+    // Mock metrics - in production, these would be calculated from database
+    const completedJobs = Array.from(this.currentJobs.values()).filter(job => job.status === 'COMPLETED')
+    const failedJobs = Array.from(this.currentJobs.values()).filter(job => job.status === 'FAILED')
+    
+    return {
+      totalFeedbackProcessed: 150, // Mock data
+      templatesCreated: 12,
+      templatesOptimized: 8,
+      patternsLearned: 25,
+      accuracyImprovement: 0.15, // 15% improvement
+      recentActivity: {
+        jobsCompletedToday: completedJobs.length,
+        avgProcessingTime: completedJobs.length > 0 ? 
+          completedJobs.reduce((sum, job) => {
+            const processingTime = job.completedAt && job.startedAt ? 
+              job.completedAt.getTime() - job.startedAt.getTime() : 0
+            return sum + processingTime
+          }, 0) / completedJobs.length : 0,
+        successRate: (completedJobs.length + failedJobs.length) > 0 ? 
+          completedJobs.length / (completedJobs.length + failedJobs.length) : 1.0
       }
     }
   }

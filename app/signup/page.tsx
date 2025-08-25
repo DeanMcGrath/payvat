@@ -61,7 +61,6 @@ export default function SignupPage() {
     setIsLoading(true)
 
     try {
-      console.log('📤 Starting registration request...')
       
       const response = await fetch('/api/auth/register', {
         method: 'POST',
@@ -175,8 +174,8 @@ export default function SignupPage() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <div className="flex items-center">
-                <Link href="/" className="text-2xl font-bold font-mono text-white tracking-tight hover:text-white/90 transition-colors">
-                  Don't Be Like Me!
+                <Link href="/" className="text-2xl font-normal font-mono text-white tracking-tight hover:text-white/90 transition-colors">
+                  PayVAT!
                 </Link>
               </div>
               
@@ -236,7 +235,7 @@ export default function SignupPage() {
             <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-8">
-                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                  <span className="text-white/90 text-sm font-normal flex items-center space-x-2">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                     <span>Create Account</span>
                   </span>
@@ -261,7 +260,7 @@ export default function SignupPage() {
             <div className="icon-premium mb-4 mx-auto">
               <Building className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-1">Create Your Business Account</h2>
+            <h2 className="text-2xl font-normal text-foreground mb-1">Create Your Business Account</h2>
             <p className="text-muted-foreground">Trusted by Irish businesses</p>
           </div>
           
@@ -282,7 +281,7 @@ export default function SignupPage() {
           {/* Form */}
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="businessName" className="text-foreground font-medium flex items-center gap-2">
+              <Label htmlFor="businessName" className="text-foreground font-normal flex items-center gap-2">
                 <Building className="h-4 w-4 text-primary" />
                 Business Name *
               </Label>
@@ -304,7 +303,7 @@ export default function SignupPage() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="vatNumber" className="text-foreground font-medium flex items-center gap-2">
+              <Label htmlFor="vatNumber" className="text-foreground font-normal flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-primary" />
                 VAT Number
               </Label>
@@ -326,7 +325,7 @@ export default function SignupPage() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground font-medium flex items-center gap-2">
+              <Label htmlFor="email" className="text-foreground font-normal flex items-center gap-2">
                 <Mail className="h-4 w-4 text-primary" />
                 Email Address *
               </Label>
@@ -348,7 +347,7 @@ export default function SignupPage() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground font-medium flex items-center gap-2">
+              <Label htmlFor="password" className="text-foreground font-normal flex items-center gap-2">
                 <Lock className="h-4 w-4 text-primary" />
                 Password * <span className="text-muted-foreground text-sm font-normal">(min. 6 characters)</span>
               </Label>
@@ -370,7 +369,7 @@ export default function SignupPage() {
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-foreground font-medium flex items-center gap-2">
+              <Label htmlFor="confirmPassword" className="text-foreground font-normal flex items-center gap-2">
                 <Lock className="h-4 w-4 text-primary" />
                 Confirm Password *
               </Label>
@@ -394,7 +393,7 @@ export default function SignupPage() {
             <div className="pt-4">
               <Button 
                 type="button"
-                className="w-full btn-primary py-4 font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full btn-primary py-4 font-normal text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleRegister}
                 disabled={isLoading || success}
               >
@@ -416,7 +415,7 @@ export default function SignupPage() {
               <Button 
                 type="button"
                 variant="outline"
-                className="btn-outline font-medium"
+                className="btn-outline font-normal"
                 onClick={() => router.push('/login')}
               >
                 Sign In

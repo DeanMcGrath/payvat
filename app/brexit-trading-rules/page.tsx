@@ -54,7 +54,7 @@ export default function BrexitTradingRules() {
         <section className="py-16 px-4" id="brexit-trading-guide">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Post-Brexit Trading Routes
               </h2>
               <p className="text-lg text-gray-600">
@@ -70,31 +70,31 @@ export default function BrexitTradingRules() {
                     onClick={() => setSelectedRoute(key)}
                     className={`p-4 text-center rounded-lg transition-all duration-300 ${
                       selectedRoute === key
-                        ? 'bg-blue-600 text-white shadow-lg scale-105'
-                        : 'bg-gray-100 text-gray-700 hover:bg-blue-50'
+                        ? 'bg-petrol-base text-white shadow-lg scale-105'
+                        : 'bg-gray-100 text-gray-700 hover:bg-petrol-50'
                     }`}
                   >
-                    <h3 className="font-bold text-sm">{route.name}</h3>
+                    <h3 className="font-normal text-sm">{route.name}</h3>
                     <p className="text-xs mt-1">{route.direction}</p>
                   </button>
                 ))}
               </div>
               
               <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">{tradingRoutes[selectedRoute as keyof typeof tradingRoutes].name} - {tradingRoutes[selectedRoute as keyof typeof tradingRoutes].direction}</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">{tradingRoutes[selectedRoute as keyof typeof tradingRoutes].name} - {tradingRoutes[selectedRoute as keyof typeof tradingRoutes].direction}</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   {tradingRoutes[selectedRoute as keyof typeof tradingRoutes].rules.map((rule, index) => (
                     <div key={index} className="bg-white p-4 rounded-lg border">
                       <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-semibold text-gray-900">{rule.title}</h4>
+                        <h4 className="font-normal text-gray-900">{rule.title}</h4>
                         <div className="flex gap-2">
                           {rule.vat && (
-                            <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">
+                            <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-normal">
                               {rule.vat}
                             </span>
                           )}
                           {rule.required !== undefined && (
-                            <span className={`px-2 py-1 rounded text-xs font-medium ${
+                            <span className={`px-2 py-1 rounded text-xs font-normal ${
                               rule.required ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'
                             }`}>
                               {rule.required ? 'Required' : 'Optional'}
@@ -115,7 +115,7 @@ export default function BrexitTradingRules() {
         <section className="py-16 px-4 bg-gray-50" id="vat-changes">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 VAT Changes Post-Brexit
               </h2>
               <p className="text-lg text-gray-600">
@@ -125,10 +125,10 @@ export default function BrexitTradingRules() {
             
             <div className="grid md:grid-cols-2 gap-8">
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Before Brexit</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Before Brexit</h3>
                 <div className="space-y-4">
                   <div className="bg-green-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-green-900 mb-2">EU Single Market</h4>
+                    <h4 className="font-normal text-green-900 mb-2">EU Single Market</h4>
                     <ul className="text-green-800 text-sm space-y-1">
                       <li>• Zero-rated intra-EU supplies</li>
                       <li>• No customs procedures</li>
@@ -138,8 +138,8 @@ export default function BrexitTradingRules() {
                   </div>
                   
                   <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">Simple Compliance</h4>
-                    <ul className="text-blue-800 text-sm space-y-1">
+                    <h4 className="font-normal text-blue-900 mb-2">Simple Compliance</h4>
+                    <ul className="text-petrol-dark text-sm space-y-1">
                       <li>• VAT number validation</li>
                       <li>• Standard EU procedures</li>
                       <li>• No border delays</li>
@@ -150,10 +150,10 @@ export default function BrexitTradingRules() {
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">After Brexit</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">After Brexit</h3>
                 <div className="space-y-4">
                   <div className="bg-red-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-red-900 mb-2">Third Country Rules</h4>
+                    <h4 className="font-normal text-red-900 mb-2">Third Country Rules</h4>
                     <ul className="text-red-800 text-sm space-y-1">
                       <li>• Full export/import procedures</li>
                       <li>• Customs declarations required</li>
@@ -163,7 +163,7 @@ export default function BrexitTradingRules() {
                   </div>
                   
                   <div className="bg-orange-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-orange-900 mb-2">Complex Compliance</h4>
+                    <h4 className="font-normal text-orange-900 mb-2">Complex Compliance</h4>
                     <ul className="text-orange-800 text-sm space-y-1">
                       <li>• Multiple documentation required</li>
                       <li>• Rules of origin certificates</li>
@@ -181,7 +181,7 @@ export default function BrexitTradingRules() {
         <section className="py-16 px-4" id="ni-protocol">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Northern Ireland Protocol Benefits
               </h2>
               <p className="text-lg text-gray-600">
@@ -192,11 +192,11 @@ export default function BrexitTradingRules() {
             <div className="card-premium p-8">
               <div className="space-y-6">
                 <div className="bg-green-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-bold text-green-900 mb-4">Dual Market Access</h3>
+                  <h3 className="text-xl font-normal text-green-900 mb-4">Dual Market Access</h3>
                   <p className="text-green-800 mb-4">Northern Ireland businesses enjoy unique access to both UK and EU markets with minimal barriers.</p>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <h4 className="font-semibold text-green-900 mb-2">EU Market Access</h4>
+                      <h4 className="font-normal text-green-900 mb-2">EU Market Access</h4>
                       <ul className="text-green-700 text-sm space-y-1">
                         <li>• Continued EU single market rules</li>
                         <li>• No customs for Ireland-NI trade</li>
@@ -205,7 +205,7 @@ export default function BrexitTradingRules() {
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-green-900 mb-2">UK Market Access</h4>
+                      <h4 className="font-normal text-green-900 mb-2">UK Market Access</h4>
                       <ul className="text-green-700 text-sm space-y-1">
                         <li>• Part of UK customs territory</li>
                         <li>• UK internal market access</li>
@@ -217,23 +217,23 @@ export default function BrexitTradingRules() {
                 </div>
                 
                 <div className="bg-blue-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-bold text-blue-900 mb-4">VAT Simplifications</h3>
+                  <h3 className="text-xl font-normal text-blue-900 mb-4">VAT Simplifications</h3>
                   <div className="space-y-3">
                     <div className="flex items-start space-x-3">
                       <span className="text-blue-500 mt-1">✓</span>
-                      <span className="text-blue-800 text-sm">EU VAT rules continue to apply for goods in Northern Ireland</span>
+                      <span className="text-petrol-dark text-sm">EU VAT rules continue to apply for goods in Northern Ireland</span>
                     </div>
                     <div className="flex items-start space-x-3">
                       <span className="text-blue-500 mt-1">✓</span>
-                      <span className="text-blue-800 text-sm">No VAT on goods moving from Ireland to Northern Ireland</span>
+                      <span className="text-petrol-dark text-sm">No VAT on goods moving from Ireland to Northern Ireland</span>
                     </div>
                     <div className="flex items-start space-x-3">
                       <span className="text-blue-500 mt-1">✓</span>
-                      <span className="text-blue-800 text-sm">Standard EU distance selling thresholds apply</span>
+                      <span className="text-petrol-dark text-sm">Standard EU distance selling thresholds apply</span>
                     </div>
                     <div className="flex items-start space-x-3">
                       <span className="text-blue-500 mt-1">✓</span>
-                      <span className="text-blue-800 text-sm">XI VAT numbers valid for EU transactions</span>
+                      <span className="text-petrol-dark text-sm">XI VAT numbers valid for EU transactions</span>
                     </div>
                   </div>
                 </div>
@@ -246,7 +246,7 @@ export default function BrexitTradingRules() {
         <section className="py-16 px-4 bg-gray-50" id="customs-documentation">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Customs & Documentation Requirements
               </h2>
               <p className="text-lg text-gray-600">
@@ -256,11 +256,11 @@ export default function BrexitTradingRules() {
             
             <div className="grid md:grid-cols-2 gap-8">
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Export Documentation</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Export Documentation</h3>
                 <div className="space-y-4">
                   <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">Mandatory Documents</h4>
-                    <ul className="text-blue-800 text-sm space-y-1">
+                    <h4 className="font-normal text-blue-900 mb-2">Mandatory Documents</h4>
+                    <ul className="text-petrol-dark text-sm space-y-1">
                       <li>• Export customs declaration</li>
                       <li>• Commercial invoice</li>
                       <li>• Packing list</li>
@@ -269,7 +269,7 @@ export default function BrexitTradingRules() {
                   </div>
                   
                   <div className="bg-green-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-green-900 mb-2">Preferential Trade</h4>
+                    <h4 className="font-normal text-green-900 mb-2">Preferential Trade</h4>
                     <ul className="text-green-800 text-sm space-y-1">
                       <li>• Rules of origin certificate</li>
                       <li>• Statement on origin</li>
@@ -279,7 +279,7 @@ export default function BrexitTradingRules() {
                   </div>
                   
                   <div className="bg-purple-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-purple-900 mb-2">Additional Requirements</h4>
+                    <h4 className="font-normal text-purple-900 mb-2">Additional Requirements</h4>
                     <ul className="text-purple-800 text-sm space-y-1">
                       <li>• Export licenses (controlled goods)</li>
                       <li>• Health certificates (food)</li>
@@ -291,10 +291,10 @@ export default function BrexitTradingRules() {
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Import Procedures</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Import Procedures</h3>
                 <div className="space-y-4">
                   <div className="bg-red-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-red-900 mb-2">Import Declarations</h4>
+                    <h4 className="font-normal text-red-900 mb-2">Import Declarations</h4>
                     <ul className="text-red-800 text-sm space-y-1">
                       <li>• Import customs declaration</li>
                       <li>• C88 or electronic equivalent</li>
@@ -304,7 +304,7 @@ export default function BrexitTradingRules() {
                   </div>
                   
                   <div className="bg-orange-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-orange-900 mb-2">Tax & Duty Payments</h4>
+                    <h4 className="font-normal text-orange-900 mb-2">Tax & Duty Payments</h4>
                     <ul className="text-orange-800 text-sm space-y-1">
                       <li>• Import VAT (23% standard rate)</li>
                       <li>• Customs duties (where applicable)</li>
@@ -314,7 +314,7 @@ export default function BrexitTradingRules() {
                   </div>
                   
                   <div className="bg-yellow-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-yellow-900 mb-2">Facilitations Available</h4>
+                    <h4 className="font-normal text-yellow-900 mb-2">Facilitations Available</h4>
                     <ul className="text-yellow-800 text-sm space-y-1">
                       <li>• Postponed accounting for VAT</li>
                       <li>• Duty deferment accounts</li>
@@ -332,7 +332,7 @@ export default function BrexitTradingRules() {
         <section className="py-16 px-4" id="brexit-checklist">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Brexit Trading Compliance Checklist
               </h2>
               <p className="text-lg text-gray-600">
@@ -342,10 +342,10 @@ export default function BrexitTradingRules() {
             
             <div className="space-y-6">
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Business Setup Requirements</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Business Setup Requirements</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Registration & Licensing</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Registration & Licensing</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li className="flex items-start space-x-2">
                         <span className="text-blue-500">✓</span>
@@ -366,7 +366,7 @@ export default function BrexitTradingRules() {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Systems & Processes</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Systems & Processes</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li className="flex items-start space-x-2">
                         <span className="text-blue-500">✓</span>
@@ -390,34 +390,34 @@ export default function BrexitTradingRules() {
               </div>
               
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Ongoing Compliance</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Ongoing Compliance</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">1</span>
+                      <span className="text-petrol-base font-normal text-sm">1</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Monitor Regulatory Changes</h4>
+                      <h4 className="font-normal text-gray-900">Monitor Regulatory Changes</h4>
                       <p className="text-gray-600">Stay updated on evolving Brexit trade arrangements and rule changes</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">2</span>
+                      <span className="text-petrol-base font-normal text-sm">2</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Maintain Documentation</h4>
+                      <h4 className="font-normal text-gray-900">Maintain Documentation</h4>
                       <p className="text-gray-600">Keep complete records of all cross-border transactions and declarations</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">3</span>
+                      <span className="text-petrol-base font-normal text-sm">3</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Review Supply Chains</h4>
+                      <h4 className="font-normal text-gray-900">Review Supply Chains</h4>
                       <p className="text-gray-600">Regularly assess supply chain efficiency and cost impacts of new procedures</p>
                     </div>
                   </div>
@@ -428,9 +428,9 @@ export default function BrexitTradingRules() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-gradient-to-r from-[#73C2FB] to-[#5BADEA] text-white">
+        <section className="py-20 px-4 bg-gradient-to-r from-[#2A7A8F] to-[#216477] text-white">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">
+            <h2 className="text-4xl font-normal mb-6">
               Navigate Brexit Trading Complexity
             </h2>
             <p className="text-xl mb-8 text-blue-100">
@@ -439,13 +439,13 @@ export default function BrexitTradingRules() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-petrol-base px-8 py-4 text-lg font-normal rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Get Brexit Trading Support
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-normal rounded-xl hover:bg-white hover:text-petrol-base transition-all duration-300"
               >
                 View Trading Plans
               </a>

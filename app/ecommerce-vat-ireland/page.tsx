@@ -35,7 +35,7 @@ export default function EcommerceVatIreland() {
         <section className="scroll-section py-16 px-4" id="distance-selling">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 EU Distance Selling Thresholds (2025)
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -45,10 +45,10 @@ export default function EcommerceVatIreland() {
             
             <div className="grid md:grid-cols-2 gap-8">
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Below €10,000 EU Sales</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Below €10,000 EU Sales</h3>
                 <div className="space-y-4">
                   <div className="bg-green-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-green-900 mb-2">Simple Compliance</h4>
+                    <h4 className="font-normal text-green-900 mb-2">Simple Compliance</h4>
                     <ul className="text-green-800 text-sm space-y-1">
                       <li>• Charge Irish 23% VAT to all EU customers</li>
                       <li>• No need for OSS registration</li>
@@ -57,18 +57,18 @@ export default function EcommerceVatIreland() {
                     </ul>
                   </div>
                   <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">Record Keeping</h4>
-                    <p className="text-blue-800 text-sm">Maintain evidence of annual EU sales to prove you're below threshold</p>
+                    <h4 className="font-normal text-blue-900 mb-2">Record Keeping</h4>
+                    <p className="text-petrol-dark text-sm">Maintain evidence of annual EU sales to prove you're below threshold</p>
                   </div>
                 </div>
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Above €10,000 EU Sales</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Above €10,000 EU Sales</h3>
                 <div className="space-y-4">
                   <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">OSS Registration Required</h4>
-                    <ul className="text-blue-800 text-sm space-y-1">
+                    <h4 className="font-normal text-blue-900 mb-2">OSS Registration Required</h4>
+                    <ul className="text-petrol-dark text-sm space-y-1">
                       <li>• Charge customer's country VAT rate</li>
                       <li>• Register for One Stop Shop (OSS)</li>
                       <li>• File quarterly OSS returns</li>
@@ -76,7 +76,7 @@ export default function EcommerceVatIreland() {
                     </ul>
                   </div>
                   <div className="bg-red-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-red-900 mb-2">Compliance Deadline</h4>
+                    <h4 className="font-normal text-red-900 mb-2">Compliance Deadline</h4>
                     <p className="text-red-800 text-sm">Must register by 10th day of month following threshold breach</p>
                   </div>
                 </div>
@@ -89,7 +89,7 @@ export default function EcommerceVatIreland() {
         <section className="scroll-section py-16 px-4 bg-gray-50" id="ecommerce-vat-guide">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Marketplace VAT Rules
               </h2>
               <p className="text-lg text-gray-600">
@@ -99,10 +99,10 @@ export default function EcommerceVatIreland() {
             
             <div className="grid md:grid-cols-3 gap-8">
               <div className="card-modern p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Amazon & eBay</h3>
+                <h3 className="text-xl font-normal text-gray-900 mb-4">Amazon & eBay</h3>
                 <div className="space-y-3">
                   <div className="text-sm text-gray-700">
-                    <p className="font-semibold mb-2">Platform Responsibilities:</p>
+                    <p className="font-normal mb-2">Platform Responsibilities:</p>
                     <ul className="space-y-1">
                       <li>• Collects VAT on B2C sales</li>
                       <li>• Handles OSS compliance</li>
@@ -110,7 +110,7 @@ export default function EcommerceVatIreland() {
                     </ul>
                   </div>
                   <div className="text-sm text-gray-700">
-                    <p className="font-semibold mb-2">Your Responsibilities:</p>
+                    <p className="font-normal mb-2">Your Responsibilities:</p>
                     <ul className="space-y-1">
                       <li>• Provide VAT number</li>
                       <li>• Track for Irish returns</li>
@@ -121,10 +121,10 @@ export default function EcommerceVatIreland() {
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Etsy & Others</h3>
+                <h3 className="text-xl font-normal text-gray-900 mb-4">Etsy & Others</h3>
                 <div className="space-y-3">
                   <div className="text-sm text-gray-700">
-                    <p className="font-semibold mb-2">Platform Responsibilities:</p>
+                    <p className="font-normal mb-2">Platform Responsibilities:</p>
                     <ul className="space-y-1">
                       <li>• May collect VAT</li>
                       <li>• Provides reports</li>
@@ -132,7 +132,7 @@ export default function EcommerceVatIreland() {
                     </ul>
                   </div>
                   <div className="text-sm text-gray-700">
-                    <p className="font-semibold mb-2">Your Responsibilities:</p>
+                    <p className="font-normal mb-2">Your Responsibilities:</p>
                     <ul className="space-y-1">
                       <li>• Verify VAT handling</li>
                       <li>• May need OSS</li>
@@ -143,10 +143,10 @@ export default function EcommerceVatIreland() {
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Own Website</h3>
+                <h3 className="text-xl font-normal text-gray-900 mb-4">Own Website</h3>
                 <div className="space-y-3">
                   <div className="text-sm text-gray-700">
-                    <p className="font-semibold mb-2">Full Responsibility:</p>
+                    <p className="font-normal mb-2">Full Responsibility:</p>
                     <ul className="space-y-1">
                       <li>• Calculate correct VAT</li>
                       <li>• OSS registration if needed</li>
@@ -166,7 +166,7 @@ export default function EcommerceVatIreland() {
         <section className="scroll-section py-16 px-4" id="brexit-ecommerce">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 UK E-commerce Post-Brexit
               </h2>
               <p className="text-lg text-gray-600">
@@ -177,19 +177,19 @@ export default function EcommerceVatIreland() {
             <div className="card-premium p-8">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Selling to UK Customers</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">Selling to UK Customers</h3>
                   <div className="space-y-4">
                     <div className="bg-blue-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-blue-900 mb-2">Under £135</h4>
-                      <ul className="text-blue-800 text-sm space-y-1">
+                      <h4 className="font-normal text-blue-900 mb-2">Under £135</h4>
+                      <ul className="text-petrol-dark text-sm space-y-1">
                         <li>• UK VAT registration required</li>
                         <li>• Charge 20% UK VAT at checkout</li>
                         <li>• File UK VAT returns</li>
                       </ul>
                     </div>
                     <div className="bg-blue-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-blue-900 mb-2">Over £135</h4>
-                      <ul className="text-blue-800 text-sm space-y-1">
+                      <h4 className="font-normal text-blue-900 mb-2">Over £135</h4>
+                      <ul className="text-petrol-dark text-sm space-y-1">
                         <li>• Zero-rate the sale</li>
                         <li>• Customer pays import VAT</li>
                         <li>• Customs declarations required</li>
@@ -199,10 +199,10 @@ export default function EcommerceVatIreland() {
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Northern Ireland Exception</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">Northern Ireland Exception</h3>
                   <div className="space-y-4">
                     <div className="bg-green-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-green-900 mb-2">NI Protocol Benefits</h4>
+                      <h4 className="font-normal text-green-900 mb-2">NI Protocol Benefits</h4>
                       <ul className="text-green-800 text-sm space-y-1">
                         <li>• Treated as EU for goods</li>
                         <li>• Standard EU VAT rules apply</li>
@@ -211,8 +211,8 @@ export default function EcommerceVatIreland() {
                       </ul>
                     </div>
                     <div className="bg-blue-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-blue-900 mb-2">Documentation</h4>
-                      <p className="text-blue-800 text-sm">XI prefix for NI businesses. Verify status before applying EU rules.</p>
+                      <h4 className="font-normal text-blue-900 mb-2">Documentation</h4>
+                      <p className="text-petrol-dark text-sm">XI prefix for NI businesses. Verify status before applying EU rules.</p>
                     </div>
                   </div>
                 </div>
@@ -225,7 +225,7 @@ export default function EcommerceVatIreland() {
         <section className="scroll-section py-16 px-4 bg-gray-50" id="ecommerce-checklist">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 E-commerce VAT Compliance Checklist
               </h2>
               <p className="text-lg text-gray-600">
@@ -235,10 +235,10 @@ export default function EcommerceVatIreland() {
             
             <div className="space-y-6">
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">1. Initial Setup</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">1. Initial Setup</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Irish VAT Registration</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Irish VAT Registration</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li className="flex items-start space-x-2">
                         <span className="text-green-500">✓</span>
@@ -255,7 +255,7 @@ export default function EcommerceVatIreland() {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">EU Compliance</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">EU Compliance</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li className="flex items-start space-x-2">
                         <span className="text-green-500">✓</span>
@@ -275,10 +275,10 @@ export default function EcommerceVatIreland() {
               </div>
               
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">2. Ongoing Compliance</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">2. Ongoing Compliance</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Returns & Reporting</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Returns & Reporting</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li className="flex items-start space-x-2">
                         <span className="text-blue-500">✓</span>
@@ -295,7 +295,7 @@ export default function EcommerceVatIreland() {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Documentation</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Documentation</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li className="flex items-start space-x-2">
                         <span className="text-blue-500">✓</span>
@@ -318,9 +318,9 @@ export default function EcommerceVatIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-[#73C2FB] text-white">
+        <section className="scroll-section py-20 px-4 bg-[#2A7A8F] text-white">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">
+            <h2 className="text-4xl font-normal mb-6">
               Automate Your E-commerce VAT Compliance
             </h2>
             <p className="text-xl mb-8 text-blue-100">
@@ -329,13 +329,13 @@ export default function EcommerceVatIreland() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-petrol-base px-8 py-4 text-lg font-normal rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Start E-commerce VAT Setup
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-normal rounded-xl hover:bg-white hover:text-petrol-base transition-all duration-300"
               >
                 View E-commerce Plans
               </a>

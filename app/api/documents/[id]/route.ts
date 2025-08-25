@@ -28,16 +28,16 @@ async function getDocument(request: NextRequest, user?: AuthUser) {
       // Authenticated user - ensure they can only access their own documents
       whereClause.userId = user.id
     } else {
-      // Guest user - find documents from recent guest users (last 24 hours)
+      // Guest user - find documents from recent guest users (last 7 days for better demo experience)
       const guestUsers = await prisma.user.findMany({
         where: {
           role: 'GUEST',
           createdAt: {
-            gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
+            gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7) // Last 7 days
           }
         },
         select: { id: true },
-        take: 50
+        take: 100
       })
       
       if (guestUsers.length === 0) {
@@ -129,16 +129,16 @@ async function deleteDocument(request: NextRequest, user?: AuthUser) {
       // Authenticated user - ensure they can only delete their own documents
       whereClause.userId = user.id
     } else {
-      // Guest user - find documents from recent guest users (last 24 hours)
+      // Guest user - find documents from recent guest users (last 7 days for better demo experience)
       const guestUsers = await prisma.user.findMany({
         where: {
           role: 'GUEST',
           createdAt: {
-            gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
+            gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7) // Last 7 days
           }
         },
         select: { id: true },
-        take: 50
+        take: 100
       })
       
       if (guestUsers.length === 0) {
@@ -415,16 +415,16 @@ async function downloadDocument(request: NextRequest, user?: AuthUser) {
       // Authenticated user - ensure they can only download their own documents
       whereClause.userId = user.id
     } else {
-      // Guest user - find documents from recent guest users (last 24 hours)
+      // Guest user - find documents from recent guest users (last 7 days for better demo experience)
       const guestUsers = await prisma.user.findMany({
         where: {
           role: 'GUEST',
           createdAt: {
-            gte: new Date(Date.now() - 1000 * 60 * 60 * 24) // Last 24 hours
+            gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7) // Last 7 days
           }
         },
         select: { id: true },
-        take: 50
+        take: 100
       })
       
       if (guestUsers.length === 0) {

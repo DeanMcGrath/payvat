@@ -213,7 +213,7 @@ export default function AnnualReturnsPage() {
       case 'overdue':
         return <AlertCircle className="h-5 w-5 text-red-600" />
       case 'upcoming':
-        return <Calendar className="h-5 w-5 text-blue-600" />
+        return <Calendar className="h-5 w-5 text-petrol-base" />
       default:
         return <AlertCircle className="h-5 w-5 text-gray-400" />
     }
@@ -224,7 +224,7 @@ export default function AnnualReturnsPage() {
       case 'paid':
         return <Badge className="bg-green-100 text-green-800">Paid</Badge>
       case 'submitted':
-        return <Badge className="bg-blue-100 text-blue-800">Submitted</Badge>
+        return <Badge className="bg-blue-100 text-petrol-dark">Submitted</Badge>
       case 'in_progress':
         return <Badge className="bg-yellow-100 text-yellow-800">In Progress</Badge>
       case 'overdue':
@@ -239,7 +239,7 @@ export default function AnnualReturnsPage() {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'CRO':
-        return <Building className="h-6 w-6 text-blue-600" />
+        return <Building className="h-6 w-6 text-petrol-base" />
       case 'Revenue':
         return <Calculator className="h-6 w-6 text-green-600" />
       case 'VAT_Annual':
@@ -278,9 +278,9 @@ export default function AnnualReturnsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Filings</p>
-                <p className="h3 text-brand-700">{stats.totalFilings}</p>
+                <p className="h3 text-petrol-dark">{stats.totalFilings}</p>
               </div>
-              <FileText className="h-8 w-8 text-brand-700" />
+              <FileText className="h-8 w-8 text-petrol-dark" />
             </div>
           </CardContent>
         </Card>
@@ -290,7 +290,7 @@ export default function AnnualReturnsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">On Time</p>
-                <p className="text-2xl font-bold text-green-600">{stats.onTimeFilings}</p>
+                <p className="text-2xl font-normal text-green-600">{stats.onTimeFilings}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
@@ -302,7 +302,7 @@ export default function AnnualReturnsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Pending</p>
-                <p className="text-2xl font-bold text-yellow-600">{stats.pendingFilings}</p>
+                <p className="text-2xl font-normal text-yellow-600">{stats.pendingFilings}</p>
               </div>
               <Clock className="h-8 w-8 text-yellow-600" />
             </div>
@@ -314,7 +314,7 @@ export default function AnnualReturnsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Costs</p>
-                <p className="text-2xl font-bold text-purple-600">
+                <p className="text-2xl font-normal text-purple-600">
                   {formatCurrency(stats.totalCosts)}
                 </p>
               </div>
@@ -327,7 +327,7 @@ export default function AnnualReturnsPage() {
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-brand-700">
+          <CardTitle className="flex items-center gap-2 text-petrol-dark">
             <Plus className="h-5 w-5" />
             Quick Actions
           </CardTitle>
@@ -339,9 +339,9 @@ export default function AnnualReturnsPage() {
               className="h-auto p-4 flex flex-col items-center gap-2"
               onClick={() => window.open('https://www.cro.ie/en-ie/online-services/companies-forms/annual-return-form-b1', '_blank')}
             >
-              <Building className="h-8 w-8 text-blue-600" />
+              <Building className="h-8 w-8 text-petrol-base" />
               <div className="text-center">
-                <div className="font-medium">CRO Annual Return</div>
+                <div className="font-normal">CRO Annual Return</div>
                 <div className="text-xs text-gray-500">File B1 form online</div>
               </div>
               <ExternalLink className="h-4 w-4" />
@@ -354,7 +354,7 @@ export default function AnnualReturnsPage() {
             >
               <Calculator className="h-8 w-8 text-green-600" />
               <div className="text-center">
-                <div className="font-medium">Revenue ROS</div>
+                <div className="font-normal">Revenue ROS</div>
                 <div className="text-xs text-gray-500">Corporation tax returns</div>
               </div>
               <ExternalLink className="h-4 w-4" />
@@ -366,7 +366,7 @@ export default function AnnualReturnsPage() {
             >
               <FileText className="h-8 w-8 text-purple-600" />
               <div className="text-center">
-                <div className="font-medium">Document Upload</div>
+                <div className="font-normal">Document Upload</div>
                 <div className="text-xs text-gray-500">Upload required documents</div>
               </div>
               <Upload className="h-4 w-4" />
@@ -417,8 +417,8 @@ export default function AnnualReturnsPage() {
                 {/* Key Information */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
                   <div>
-                    <span className="font-medium text-gray-700">Due Date:</span>
-                    <div className={`text-gray-600 ${overdue ? 'text-red-600 font-medium' : ''}`}>
+                    <span className="font-normal text-gray-700">Due Date:</span>
+                    <div className={`text-gray-600 ${overdue ? 'text-red-600 font-normal' : ''}`}>
                       {new Date(annualReturn.dueDate).toLocaleDateString()}
                       {!['submitted', 'paid'].includes(annualReturn.status) && (
                         <div className={`text-xs ${daysUntilDue < 30 ? 'text-yellow-600' : 'text-gray-500'}`}>
@@ -430,14 +430,14 @@ export default function AnnualReturnsPage() {
                   
                   {annualReturn.amount !== undefined && (
                     <div>
-                      <span className="font-medium text-gray-700">Cost:</span>
+                      <span className="font-normal text-gray-700">Cost:</span>
                       <div className="text-gray-600">{formatCurrency(annualReturn.amount)}</div>
                     </div>
                   )}
                   
                   {annualReturn.submittedAt && (
                     <div>
-                      <span className="font-medium text-gray-700">Submitted:</span>
+                      <span className="font-normal text-gray-700">Submitted:</span>
                       <div className="text-gray-600">
                         {new Date(annualReturn.submittedAt).toLocaleDateString()}
                       </div>
@@ -446,7 +446,7 @@ export default function AnnualReturnsPage() {
                   
                   {annualReturn.referenceNumber && (
                     <div>
-                      <span className="font-medium text-gray-700">Reference:</span>
+                      <span className="font-normal text-gray-700">Reference:</span>
                       <div className="text-gray-600">{annualReturn.referenceNumber}</div>
                     </div>
                   )}
@@ -455,12 +455,12 @@ export default function AnnualReturnsPage() {
                 {/* Requirements */}
                 {annualReturn.requirements && annualReturn.requirements.length > 0 && (
                   <div>
-                    <h4 className="font-medium text-gray-900 mb-2">Requirements:</h4>
+                    <h4 className="font-normal text-gray-900 mb-2">Requirements:</h4>
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {annualReturn.requirements.map((requirement, index) => (
                         <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
                           <div className="flex-shrink-0 w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center mt-0.5">
-                            <span className="text-xs font-medium text-blue-600">•</span>
+                            <span className="text-xs font-normal text-petrol-base">•</span>
                           </div>
                           {requirement}
                         </li>
@@ -472,13 +472,13 @@ export default function AnnualReturnsPage() {
                 {/* Documents */}
                 {annualReturn.documents && annualReturn.documents.length > 0 && (
                   <div>
-                    <h4 className="font-medium text-gray-900 mb-2">Documents:</h4>
+                    <h4 className="font-normal text-gray-900 mb-2">Documents:</h4>
                     <div className="space-y-2">
                       {annualReturn.documents.map((doc, index) => (
                         <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-md border border-green-200">
                           <div className="flex items-center gap-2">
                             <FileText className="h-4 w-4 text-green-600" />
-                            <span className="text-sm font-medium">{doc.name}</span>
+                            <span className="text-sm font-normal">{doc.name}</span>
                             <Badge variant="outline" className="text-xs">
                               {doc.type}
                             </Badge>
@@ -503,7 +503,7 @@ export default function AnnualReturnsPage() {
                 {/* Document Upload for pending returns */}
                 {['upcoming', 'in_progress'].includes(annualReturn.status) && (
                   <div className="pt-4 border-t">
-                    <h4 className="font-medium text-gray-900 mb-3">Upload Documents:</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Upload Documents:</h4>
                     <FileUpload
                       category={`ANNUAL_RETURN_${annualReturn.id}`}
                       title="Upload Required Documents"
@@ -528,7 +528,7 @@ export default function AnnualReturnsPage() {
         <Card>
           <CardContent className="p-8 text-center">
             <Calendar className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Annual Returns Found</h3>
+            <h3 className="text-lg font-normal text-gray-900 mb-2">No Annual Returns Found</h3>
             <p className="text-gray-500 mb-4">
               Your annual return requirements will appear here as due dates approach
             </p>

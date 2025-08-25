@@ -269,14 +269,14 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
   }
 
   return (
-    <Card className="border-blue-200 bg-blue-50/50">
+    <Card className="border-petrol-200 bg-blue-50/50">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Calculator className="h-5 w-5 text-blue-600" />
+            <Calculator className="h-5 w-5 text-petrol-base" />
             VAT Review & Correction
             {correctionCount > 0 && (
-              <Badge className="bg-blue-600">
+              <Badge className="bg-petrol-base">
                 {correctionCount} corrected
               </Badge>
             )}
@@ -296,27 +296,27 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center p-3 bg-white rounded-lg border">
             <div className="text-sm text-gray-600">Sales VAT</div>
-            <div className="text-lg font-semibold text-green-600">€{totals.salesVAT.toFixed(2)}</div>
+            <div className="text-lg font-normal text-green-600">€{totals.salesVAT.toFixed(2)}</div>
             {recalculatedTotals && (
-              <div className="text-xs text-blue-600">
+              <div className="text-xs text-petrol-base">
                 {recalculatedTotals.salesVAT !== extractedVAT.totalSalesVAT ? 'Corrected' : 'Original'}
               </div>
             )}
           </div>
           <div className="text-center p-3 bg-white rounded-lg border">
             <div className="text-sm text-gray-600">Purchase VAT</div>
-            <div className="text-lg font-semibold text-orange-600">€{totals.purchaseVAT.toFixed(2)}</div>
+            <div className="text-lg font-normal text-orange-600">€{totals.purchaseVAT.toFixed(2)}</div>
             {recalculatedTotals && (
-              <div className="text-xs text-blue-600">
+              <div className="text-xs text-petrol-base">
                 {recalculatedTotals.purchaseVAT !== extractedVAT.totalPurchaseVAT ? 'Corrected' : 'Original'}
               </div>
             )}
           </div>
           <div className="text-center p-3 bg-white rounded-lg border">
             <div className="text-sm text-gray-600">Net VAT</div>
-            <div className="text-lg font-semibold text-blue-600">€{totals.netVAT.toFixed(2)}</div>
+            <div className="text-lg font-normal text-petrol-base">€{totals.netVAT.toFixed(2)}</div>
             {recalculatedTotals && (
-              <div className="text-xs text-blue-600">
+              <div className="text-xs text-petrol-base">
                 {recalculatedTotals.netVAT !== extractedVAT.totalNetVAT ? 'Corrected' : 'Original'}
               </div>
             )}
@@ -345,7 +345,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
             {/* Sales Documents */}
             {extractedVAT.salesDocuments.length > 0 && (
               <div>
-                <h4 className="font-medium text-green-800 mb-2">Sales Documents ({extractedVAT.salesDocuments.length})</h4>
+                <h4 className="font-normal text-green-800 mb-2">Sales Documents ({extractedVAT.salesDocuments.length})</h4>
                 <div className="space-y-2">
                   {extractedVAT.salesDocuments.map((doc) => {
                     const correction = documentCorrections.get(doc.id)
@@ -356,7 +356,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
                       <div key={doc.id} className="bg-white p-3 rounded-lg border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium truncate">{doc.fileName}</span>
+                            <span className="text-sm font-normal truncate">{doc.fileName}</span>
                             {hasCorrection && <Badge variant="outline" className="text-xs">Corrected</Badge>}
                           </div>
                           <div className="flex items-center gap-2">
@@ -372,7 +372,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
                               doc.extractedAmounts.reduce((sum, amount) => sum + amount, 0)
                             ).toFixed(2)}
                             {hasCorrection && (
-                              <span className="text-blue-600 ml-1">(corrected)</span>
+                              <span className="text-petrol-base ml-1">(corrected)</span>
                             )}
                           </div>
                           <div className="flex gap-1">
@@ -388,7 +388,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
                               size="sm"
                               variant="ghost"
                               onClick={() => selectDocumentForCorrection(doc.id, 'sales')}
-                              className="text-blue-600 hover:text-blue-700"
+                              className="text-petrol-base hover:text-petrol-dark"
                             >
                               <Edit3 className="h-3 w-3" />
                             </Button>
@@ -404,7 +404,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
             {/* Purchase Documents */}
             {extractedVAT.purchaseDocuments.length > 0 && (
               <div>
-                <h4 className="font-medium text-orange-800 mb-2">Purchase Documents ({extractedVAT.purchaseDocuments.length})</h4>
+                <h4 className="font-normal text-orange-800 mb-2">Purchase Documents ({extractedVAT.purchaseDocuments.length})</h4>
                 <div className="space-y-2">
                   {extractedVAT.purchaseDocuments.map((doc) => {
                     const correction = documentCorrections.get(doc.id)
@@ -414,7 +414,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
                       <div key={doc.id} className="bg-white p-3 rounded-lg border">
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
-                            <span className="text-sm font-medium truncate">{doc.fileName}</span>
+                            <span className="text-sm font-normal truncate">{doc.fileName}</span>
                             {hasCorrection && <Badge variant="outline" className="text-xs">Corrected</Badge>}
                           </div>
                           <div className="flex items-center gap-2">
@@ -430,7 +430,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
                               doc.extractedAmounts.reduce((sum, amount) => sum + amount, 0)
                             ).toFixed(2)}
                             {hasCorrection && (
-                              <span className="text-blue-600 ml-1">(corrected)</span>
+                              <span className="text-petrol-base ml-1">(corrected)</span>
                             )}
                           </div>
                           <div className="flex gap-1">
@@ -446,7 +446,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
                               size="sm"
                               variant="ghost"
                               onClick={() => selectDocumentForCorrection(doc.id, 'purchase')}
-                              className="text-blue-600 hover:text-blue-700"
+                              className="text-petrol-base hover:text-petrol-dark"
                             >
                               <Edit3 className="h-3 w-3" />
                             </Button>
@@ -464,11 +464,11 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
         {/* Correction Modal */}
         {correctionMode && selectedDocument && (
           <div className="border-t pt-4 bg-blue-50 -mx-6 -mb-6 px-6 pb-6 rounded-b-lg">
-            <h4 className="font-medium mb-3">Correct VAT Amounts</h4>
+            <h4 className="font-normal mb-3">Correct VAT Amounts</h4>
             
             <div className="space-y-4">
               <div>
-                <Label className="text-sm font-medium">Feedback Type</Label>
+                <Label className="text-sm font-normal">Feedback Type</Label>
                 <Select 
                   value={currentCorrection.feedback} 
                   onValueChange={(value: any) => setCurrentCorrection({...currentCorrection, feedback: value})}
@@ -488,7 +488,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
               {(currentCorrection.correctedSalesVAT?.length || 0) > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <Label className="text-sm font-medium">Sales VAT Amounts</Label>
+                    <Label className="text-sm font-normal">Sales VAT Amounts</Label>
                     <Button variant="outline" size="sm" onClick={() => addVATAmount('sales')}>
                       Add
                     </Button>
@@ -521,7 +521,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
               {(currentCorrection.correctedPurchaseVAT?.length || 0) > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <Label className="text-sm font-medium">Purchase VAT Amounts</Label>
+                    <Label className="text-sm font-normal">Purchase VAT Amounts</Label>
                     <Button variant="outline" size="sm" onClick={() => addVATAmount('purchase')}>
                       Add
                     </Button>
@@ -551,7 +551,7 @@ export default function VATCorrectionPanel({ extractedVAT, onCorrection, onRecal
               )}
 
               <div>
-                <Label className="text-sm font-medium">Notes (Optional)</Label>
+                <Label className="text-sm font-normal">Notes (Optional)</Label>
                 <Textarea
                   placeholder="Explain the correction..."
                   value={currentCorrection.notes || ''}

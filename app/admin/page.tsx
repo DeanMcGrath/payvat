@@ -166,7 +166,7 @@ function AdminDashboardContent() {
         <div className="content-wrapper section-spacing">
           <div className="error-card">
             <AlertCircle className="error-icon" />
-            <h2 className="text-xl font-semibold mb-2 text-foreground">Error Loading Admin Dashboard</h2>
+            <h2 className="text-xl font-normal mb-2 text-foreground">Error Loading Admin Dashboard</h2>
             <p className="text-muted-foreground mb-4 max-w-md mx-auto">{error}</p>
             <div className="flex justify-center space-x-3">
               <Button onClick={fetchAnalytics} disabled={loading} className="btn-primary">
@@ -195,7 +195,7 @@ function AdminDashboardContent() {
             <div className="icon-premium mb-6 mx-auto opacity-50">
               <AlertCircle className="h-12 w-12 text-white" />
             </div>
-            <h2 className="text-2xl font-semibold mb-3 text-foreground">No Data Available</h2>
+            <h2 className="text-2xl font-normal mb-3 text-foreground">No Data Available</h2>
             <p className="text-muted-foreground mb-4">Analytics data is not available. This could be because:</p>
             <ul className="text-sm text-muted-foreground mb-6 text-left max-w-md mx-auto space-y-2">
               <li>• No users have registered yet</li>
@@ -246,7 +246,7 @@ function AdminDashboardContent() {
       case 'draft':
         return 'bg-gray-100 text-gray-800'
       default:
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-petrol-dark'
     }
   }
 
@@ -265,7 +265,7 @@ function AdminDashboardContent() {
           <div className="icon-premium mb-4 mx-auto">
             <BarChart3 className="h-12 w-12 text-white" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-3">
+          <h1 className="text-4xl md:text-5xl font-normal tracking-tight mb-3">
             <span className="text-gradient-primary">Admin Dashboard</span>
             <br />
             <span className="text-foreground">System Analytics</span>
@@ -310,12 +310,12 @@ function AdminDashboardContent() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="admin-stat-card hover-lift">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-muted-foreground">Total Users</h3>
+            <h3 className="text-sm font-normal text-muted-foreground">Total Users</h3>
             <div className="icon-modern gradient-primary">
               <Users className="h-4 w-4 text-white" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-foreground">{analytics.overview.totalUsers}</div>
+          <div className="text-2xl font-normal text-foreground">{analytics.overview.totalUsers}</div>
           <p className="text-xs text-muted-foreground mt-1">
             {analytics.overview.activeUsers} active (30 days)
           </p>
@@ -323,12 +323,12 @@ function AdminDashboardContent() {
 
         <div className="admin-stat-card hover-lift">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-muted-foreground">VAT Returns</h3>
-            <div className="icon-modern bg-[#73C2FB]">
+            <h3 className="text-sm font-normal text-muted-foreground">VAT Returns</h3>
+            <div className="icon-modern bg-[#2A7A8F]">
               <FileText className="h-4 w-4 text-white" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-foreground">{analytics.overview.totalVATReturns}</div>
+          <div className="text-2xl font-normal text-foreground">{analytics.overview.totalVATReturns}</div>
           <p className="text-xs text-success mt-1">
             +{analytics.overview.recentActivity.newReturns} this month
           </p>
@@ -336,12 +336,12 @@ function AdminDashboardContent() {
 
         <div className="admin-stat-card hover-lift">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-muted-foreground">Total Payments</h3>
-            <div className="icon-modern bg-[#73C2FB]">
+            <h3 className="text-sm font-normal text-muted-foreground">Total Payments</h3>
+            <div className="icon-modern bg-[#2A7A8F]">
               <CreditCard className="h-4 w-4 text-white" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-foreground">{analytics.overview.totalPayments}</div>
+          <div className="text-2xl font-normal text-foreground">{analytics.overview.totalPayments}</div>
           <p className="text-xs text-success mt-1">
             +{analytics.overview.recentActivity.newPayments} this month
           </p>
@@ -349,12 +349,12 @@ function AdminDashboardContent() {
 
         <div className="admin-stat-card hover-lift">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-muted-foreground">Payment Volume</h3>
-            <div className="icon-modern bg-gradient-to-br from-[#73C2FB] to-[#5BADEA]">
+            <h3 className="text-sm font-normal text-muted-foreground">Payment Volume</h3>
+            <div className="icon-modern bg-gradient-to-br from-[#2A7A8F] to-[#216477]">
               <Euro className="h-4 w-4 text-white" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-foreground">
+          <div className="text-2xl font-normal text-foreground">
             {formatCurrency(analytics.overview.totalPaymentVolume)}
           </div>
           <p className="text-xs text-muted-foreground mt-1">
@@ -384,25 +384,25 @@ function AdminDashboardContent() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">New Users</span>
+                  <span className="text-sm font-normal">New Users</span>
                   <Badge variant="secondary">
                     {analytics.overview.recentActivity.newUsers}
                   </Badge>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">New VAT Returns</span>
+                  <span className="text-sm font-normal">New VAT Returns</span>
                   <Badge variant="secondary">
                     {analytics.overview.recentActivity.newReturns}
                   </Badge>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">New Payments</span>
+                  <span className="text-sm font-normal">New Payments</span>
                   <Badge variant="secondary">
                     {analytics.overview.recentActivity.newPayments}
                   </Badge>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium">Total Documents</span>
+                  <span className="text-sm font-normal">Total Documents</span>
                   <Badge variant="secondary">
                     {analytics.overview.totalDocuments}
                   </Badge>
@@ -418,7 +418,7 @@ function AdminDashboardContent() {
               <CardContent className="space-y-3">
                 {analytics.distributions.userRoles.map((role) => (
                   <div key={role.role} className="flex justify-between items-center">
-                    <span className="text-sm font-medium capitalize">
+                    <span className="text-sm font-normal capitalize">
                       {role.role.toLowerCase().replace('_', ' ')}
                     </span>
                     <Badge variant="outline">{role.count}</Badge>
@@ -446,7 +446,7 @@ function AdminDashboardContent() {
                       </Badge>
                       <span className="text-sm">({status.count})</span>
                     </div>
-                    <span className="text-sm font-medium">
+                    <span className="text-sm font-normal">
                       {formatCurrency(status.totalVAT)}
                     </span>
                   </div>
@@ -464,12 +464,12 @@ function AdminDashboardContent() {
                 {analytics.distributions.paymentMethods.map((method) => (
                   <div key={method.method} className="flex justify-between items-center">
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium capitalize">
+                      <span className="text-sm font-normal capitalize">
                         {method.method}
                       </span>
                       <Badge variant="outline">({method.count})</Badge>
                     </div>
-                    <span className="text-sm font-medium">
+                    <span className="text-sm font-normal">
                       {formatCurrency(method.totalAmount)}
                     </span>
                   </div>
@@ -491,17 +491,17 @@ function AdminDashboardContent() {
                   <div key={business.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full">
-                        <span className="text-sm font-medium text-blue-600">
+                        <span className="text-sm font-normal text-petrol-base">
                           {index + 1}
                         </span>
                       </div>
                       <div>
-                        <p className="font-medium">{business.businessName}</p>
+                        <p className="font-normal">{business.businessName}</p>
                         <p className="text-sm text-gray-500">{business.vatNumber}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium">
+                      <p className="font-normal">
                         {formatCurrency(business.totalVATPaid)}
                       </p>
                       <p className="text-sm text-gray-500">

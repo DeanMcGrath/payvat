@@ -160,7 +160,7 @@ export function VideoModal({ isOpen, onClose, className }: VideoModalProps) {
               <div className="text-red-400 mb-4">
                 <ExternalLink className="h-12 w-12 mx-auto" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Demo Video Unavailable</h3>
+              <h3 className="text-lg font-normal mb-2">Demo Video Unavailable</h3>
               <p className="text-gray-300 mb-4">{error}</p>
               <div className="flex gap-3 justify-center">
                 <Button onClick={fetchDemoVideo} variant="outline">
@@ -199,7 +199,7 @@ export function VideoModal({ isOpen, onClose, className }: VideoModalProps) {
             <div className="p-6 bg-gradient-to-b from-gray-900 to-black text-white">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <h2 className="text-xl font-bold mb-2">{video.title}</h2>
+                  <h2 className="text-xl font-normal mb-2">{video.title}</h2>
                   {video.description && (
                     <p className="text-gray-300 text-sm leading-relaxed">
                       {video.description}
@@ -234,7 +234,7 @@ export function VideoModal({ isOpen, onClose, className }: VideoModalProps) {
                         onClose()
                         window.location.href = '/vat-guide'
                       }}
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                      className="bg-petrol-base hover:bg-petrol-dark text-white"
                     >
                       Get Started
                     </Button>
@@ -262,7 +262,7 @@ export function VideoModal({ isOpen, onClose, className }: VideoModalProps) {
               <div className="text-gray-400 mb-4">
                 <ExternalLink className="h-12 w-12 mx-auto" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Demo Coming Soon</h3>
+              <h3 className="text-lg font-normal mb-2">Demo Coming Soon</h3>
               <p className="text-gray-300 mb-4">
                 We're preparing a comprehensive demo video to show you how PayVAT works. 
                 Check back soon!
@@ -273,7 +273,7 @@ export function VideoModal({ isOpen, onClose, className }: VideoModalProps) {
                     onClose()
                     window.location.href = '/vat-guide'
                   }}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-petrol-base hover:bg-petrol-dark"
                 >
                   Learn More
                 </Button>

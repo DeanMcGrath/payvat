@@ -131,7 +131,7 @@ export default function SitemapPage() {
               return (
                 <Card key={key} className="card-modern hover-lift" data-animate>
                   <CardHeader className="pb-4">
-                    <CardTitle className="flex items-center gap-3 text-xl font-semibold text-foreground">
+                    <CardTitle className="flex items-center gap-3 text-xl font-normal text-foreground">
                       <div className="icon-modern bg-primary">
                         <IconComponent className="h-6 w-6 text-white" />
                       </div>
@@ -148,7 +148,7 @@ export default function SitemapPage() {
                         >
                           <CheckCircle className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                           <div>
-                            <div className="font-medium text-foreground group-hover:text-primary transition-colors">
+                            <div className="font-normal text-foreground group-hover:text-primary transition-colors">
                               {page.title}
                             </div>
                             <div className="text-sm text-muted-foreground">
@@ -171,15 +171,15 @@ export default function SitemapPage() {
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <div className="text-3xl font-bold text-primary mb-2">70+</div>
+              <div className="text-3xl font-normal text-primary mb-2">70+</div>
               <div className="text-muted-foreground">Total Pages</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary mb-2">7</div>
+              <div className="text-3xl font-normal text-primary mb-2">7</div>
               <div className="text-muted-foreground">Main Categories</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary mb-2">100%</div>
+              <div className="text-3xl font-normal text-primary mb-2">100%</div>
               <div className="text-muted-foreground">Coverage</div>
             </div>
           </div>

@@ -52,7 +52,7 @@ export default function VATBreakdownChart({ className }: VATBreakdownChartProps)
             {
               name: "Sales VAT",
               value: breakdown.salesVAT,
-              color: "#5BADEA",
+              color: "#216477",
               percentage: total > 0 ? (breakdown.salesVAT / total) * 100 : 0
             },
             {
@@ -88,13 +88,13 @@ export default function VATBreakdownChart({ className }: VATBreakdownChartProps)
       const data = payload[0].payload
       return (
         <div className="bg-white p-4 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-semibold text-gray-900 mb-2">{data.name}</p>
+          <p className="font-normal text-gray-900 mb-2">{data.name}</p>
           <div className="space-y-1">
             <p className="text-sm text-gray-600">
-              Amount: <span className="font-medium text-gray-900">{formatCurrency(data.value)}</span>
+              Amount: <span className="font-normal text-gray-900">{formatCurrency(data.value)}</span>
             </p>
             <p className="text-sm text-gray-600">
-              Share: <span className="font-medium text-gray-900">{data.percentage.toFixed(1)}%</span>
+              Share: <span className="font-normal text-gray-900">{data.percentage.toFixed(1)}%</span>
             </p>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function VATBreakdownChart({ className }: VATBreakdownChartProps)
         fill="white" 
         textAnchor={x > cx ? 'start' : 'end'} 
         dominantBaseline="central"
-        className="text-sm font-medium"
+        className="text-sm font-normal"
       >
         {`${(percent * 100).toFixed(0)}%`}
       </text>
@@ -129,7 +129,7 @@ export default function VATBreakdownChart({ className }: VATBreakdownChartProps)
     return (
       <Card className={`${className} card-modern`}>
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-bold text-foreground flex items-center justify-between">
+          <CardTitle className="text-xl font-normal text-foreground flex items-center justify-between">
             VAT Breakdown
             <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
           </CardTitle>
@@ -150,13 +150,13 @@ export default function VATBreakdownChart({ className }: VATBreakdownChartProps)
     return (
       <Card className={`${className} card-modern`}>
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-bold text-foreground">VAT Breakdown</CardTitle>
+          <CardTitle className="text-xl font-normal text-foreground">VAT Breakdown</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center h-64 text-muted-foreground">
             <div className="text-center">
               <PieChartIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p className="text-lg font-medium">No VAT data available</p>
+              <p className="text-lg font-normal">No VAT data available</p>
               <p className="text-sm">Submit VAT returns to see breakdown</p>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function VATBreakdownChart({ className }: VATBreakdownChartProps)
   return (
     <Card className={`${className} card-modern hover-lift`}>
       <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold text-foreground">VAT Breakdown</CardTitle>
+        <CardTitle className="text-xl font-normal text-foreground">VAT Breakdown</CardTitle>
         <p className="text-sm text-muted-foreground">Current year VAT composition</p>
       </CardHeader>
       <CardContent>
@@ -199,7 +199,7 @@ export default function VATBreakdownChart({ className }: VATBreakdownChartProps)
         <div className="mt-4 space-y-3">
           <div className="text-center mb-4">
             <p className="text-sm text-muted-foreground">Total VAT Activity</p>
-            <p className="text-2xl font-bold text-foreground">{formatCurrency(totalVAT)}</p>
+            <p className="text-2xl font-normal text-foreground">{formatCurrency(totalVAT)}</p>
           </div>
           
           <div className="grid grid-cols-1 gap-3">
@@ -210,10 +210,10 @@ export default function VATBreakdownChart({ className }: VATBreakdownChartProps)
                     className="w-4 h-4 rounded-full" 
                     style={{ backgroundColor: item.color }}
                   />
-                  <span className="text-sm font-medium text-foreground">{item.name}</span>
+                  <span className="text-sm font-normal text-foreground">{item.name}</span>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-foreground">
+                  <p className="text-sm font-normal text-foreground">
                     {formatCurrency(item.value)}
                   </p>
                   <p className="text-xs text-muted-foreground">
@@ -226,8 +226,8 @@ export default function VATBreakdownChart({ className }: VATBreakdownChartProps)
           
           <div className="pt-3 border-t border-gray-200">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-foreground">Net VAT Due</span>
-              <span className="text-sm font-semibold text-primary">
+              <span className="text-sm font-normal text-foreground">Net VAT Due</span>
+              <span className="text-sm font-normal text-primary">
                 {formatCurrency(data[0]?.value - data[1]?.value || 0)}
               </span>
             </div>

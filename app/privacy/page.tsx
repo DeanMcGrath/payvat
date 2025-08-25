@@ -73,7 +73,7 @@ export default function PrivacyPage() {
           {/* Table of Contents - Sidebar */}
           <div className="lg:col-span-1">
             <div className="card-modern p-6 sticky top-6">
-              <h2 className="text-lg font-semibold text-foreground mb-2 flex items-center gap-3">
+              <h2 className="text-lg font-normal text-foreground mb-2 flex items-center gap-3">
                 <BookOpen className="h-5 w-5 text-primary" />
                 Contents
               </h2>
@@ -91,7 +91,7 @@ export default function PrivacyPage() {
                     onClick={() => scrollToSection(item.id)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 hover:bg-primary/10 hover:text-primary ${
                       activeSection === item.id 
-                        ? 'bg-primary/10 text-primary font-medium' 
+                        ? 'bg-primary/10 text-primary font-normal' 
                         : 'text-muted-foreground'
                     }`}
                   >
@@ -132,7 +132,7 @@ export default function PrivacyPage() {
                   <Database className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">1. Information We Collect</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">1. Information We Collect</h2>
                   <div className="w-16 h-1 gradient-primary rounded-full"></div>
                 </div>
               </div>
@@ -142,11 +142,11 @@ export default function PrivacyPage() {
               <div className="grid gap-4">
                 <div className="card-modern p-6 hover-lift">
                   <div className="flex items-start gap-4">
-                    <div className="icon-modern bg-blue-500">
+                    <div className="icon-modern bg-petrol-light">
                       <Users className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Account Information</h3>
+                      <h3 className="font-normal text-foreground mb-1">Account Information</h3>
                       <p className="text-sm text-muted-foreground">Email address, business name, VAT number, and contact details</p>
                     </div>
                   </div>
@@ -158,7 +158,7 @@ export default function PrivacyPage() {
                       <FileText className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Document Uploads</h3>
+                      <h3 className="font-normal text-foreground mb-1">Document Uploads</h3>
                       <p className="text-sm text-muted-foreground">VAT-related documents and invoices for processing</p>
                     </div>
                   </div>
@@ -170,7 +170,7 @@ export default function PrivacyPage() {
                       <Lock className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Payment Information</h3>
+                      <h3 className="font-normal text-foreground mb-1">Payment Information</h3>
                       <p className="text-sm text-muted-foreground">Processed securely through Stripe - we don't store card details</p>
                     </div>
                   </div>
@@ -182,7 +182,7 @@ export default function PrivacyPage() {
                       <Mail className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Communication Data</h3>
+                      <h3 className="font-normal text-foreground mb-1">Communication Data</h3>
                       <p className="text-sm text-muted-foreground">Support conversations and account-related communications</p>
                     </div>
                   </div>
@@ -196,7 +196,7 @@ export default function PrivacyPage() {
                   <Eye className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">2. How We Use Your Information</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">2. How We Use Your Information</h2>
                   <div className="w-16 h-1 bg-primary rounded-full"></div>
                 </div>
               </div>
@@ -205,23 +205,23 @@ export default function PrivacyPage() {
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3 p-4 card-modern hover-lift">
-                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold mt-1">1</div>
+                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-normal mt-1">1</div>
                   <span className="text-foreground">Provide and improve our VAT processing services</span>
                 </div>
                 <div className="flex items-start gap-3 p-4 card-modern hover-lift">
-                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold mt-1">2</div>
+                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-normal mt-1">2</div>
                   <span className="text-foreground">Process your documents and generate VAT returns</span>
                 </div>
                 <div className="flex items-start gap-3 p-4 card-modern hover-lift">
-                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold mt-1">3</div>
+                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-normal mt-1">3</div>
                   <span className="text-foreground">Handle payments and billing securely</span>
                 </div>
                 <div className="flex items-start gap-3 p-4 card-modern hover-lift">
-                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold mt-1">4</div>
+                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-normal mt-1">4</div>
                   <span className="text-foreground">Communicate with you about your account and services</span>
                 </div>
                 <div className="flex items-start gap-3 p-4 card-modern hover-lift">
-                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold mt-1">5</div>
+                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-normal mt-1">5</div>
                   <span className="text-foreground">Comply with legal obligations and regulatory requirements</span>
                 </div>
               </div>
@@ -233,7 +233,7 @@ export default function PrivacyPage() {
                   <Shield className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">3. Information Sharing</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">3. Information Sharing</h2>
                   <div className="w-16 h-1 bg-warning rounded-full"></div>
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default function PrivacyPage() {
                 <div className="flex items-start gap-4">
                   <Shield className="h-6 w-6 text-warning mt-1" />
                   <div>
-                    <h3 className="font-semibold text-foreground mb-1">We Never Sell Your Data</h3>
+                    <h3 className="font-normal text-foreground mb-1">We Never Sell Your Data</h3>
                     <p className="text-muted-foreground leading-relaxed">
                       We do not sell or rent your personal information. Your privacy is our priority.
                     </p>
@@ -254,11 +254,11 @@ export default function PrivacyPage() {
               <div className="grid gap-4">
                 <div className="card-modern p-6 hover-lift">
                   <div className="flex items-start gap-4">
-                    <div className="icon-modern bg-blue-500">
+                    <div className="icon-modern bg-petrol-light">
                       <CheckCircle className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Service Providers</h3>
+                      <h3 className="font-normal text-foreground mb-1">Service Providers</h3>
                       <p className="text-sm text-muted-foreground">With trusted partners who help us operate our services (e.g., hosting, payment processing)</p>
                     </div>
                   </div>
@@ -269,7 +269,7 @@ export default function PrivacyPage() {
                       <Shield className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">Legal Requirements</h3>
+                      <h3 className="font-normal text-foreground mb-1">Legal Requirements</h3>
                       <p className="text-sm text-muted-foreground">When required by law or to protect our rights and users</p>
                     </div>
                   </div>
@@ -280,7 +280,7 @@ export default function PrivacyPage() {
                       <Users className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-1">With Your Consent</h3>
+                      <h3 className="font-normal text-foreground mb-1">With Your Consent</h3>
                       <p className="text-sm text-muted-foreground">Only when you explicitly agree to share information</p>
                     </div>
                   </div>
@@ -294,7 +294,7 @@ export default function PrivacyPage() {
                   <Lock className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">4. Data Security</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">4. Data Security</h2>
                   <div className="w-16 h-1 gradient-primary rounded-full"></div>
                 </div>
               </div>
@@ -308,28 +308,28 @@ export default function PrivacyPage() {
                   <div className="card-modern p-6 hover-lift">
                     <div className="flex items-center gap-3 mb-3">
                       <Lock className="h-6 w-6 text-success" />
-                      <h3 className="font-semibold text-foreground">Encryption</h3>
+                      <h3 className="font-normal text-foreground">Encryption</h3>
                     </div>
                     <p className="text-sm text-muted-foreground">Enterprise-grade encryption in transit and at rest; data hosted in the EU</p>
                   </div>
                   <div className="card-modern p-6 hover-lift">
                     <div className="flex items-center gap-3 mb-3">
                       <Shield className="h-6 w-6 text-success" />
-                      <h3 className="font-semibold text-foreground">Access Control</h3>
+                      <h3 className="font-normal text-foreground">Access Control</h3>
                     </div>
                     <p className="text-sm text-muted-foreground">Multi-factor authentication and role-based access controls</p>
                   </div>
                   <div className="card-modern p-6 hover-lift">
                     <div className="flex items-center gap-3 mb-3">
                       <Database className="h-6 w-6 text-success" />
-                      <h3 className="font-semibold text-foreground">EU Data Centers</h3>
+                      <h3 className="font-normal text-foreground">EU Data Centers</h3>
                     </div>
                     <p className="text-sm text-muted-foreground">All data stored in GDPR-compliant EU facilities</p>
                   </div>
                   <div className="card-modern p-6 hover-lift">
                     <div className="flex items-center gap-3 mb-3">
                       <Clock className="h-6 w-6 text-success" />
-                      <h3 className="font-semibold text-foreground">Regular Audits</h3>
+                      <h3 className="font-normal text-foreground">Regular Audits</h3>
                     </div>
                     <p className="text-sm text-muted-foreground">Continuous security monitoring and vulnerability assessments</p>
                   </div>
@@ -343,7 +343,7 @@ export default function PrivacyPage() {
                   <CheckCircle className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">5. Your Rights</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">5. Your Rights</h2>
                   <div className="w-16 h-1 bg-success rounded-full"></div>
                 </div>
               </div>
@@ -353,11 +353,11 @@ export default function PrivacyPage() {
               <div className="grid gap-6">
                 <div className="card-modern p-8 hover-lift">
                   <div className="flex items-start gap-6">
-                    <div className="icon-modern bg-blue-500">
+                    <div className="icon-modern bg-petrol-light">
                       <Eye className="h-6 w-6 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-foreground mb-1">Access Your Data</h3>
+                      <h3 className="text-lg font-normal text-foreground mb-1">Access Your Data</h3>
                       <p className="text-muted-foreground mb-3">Request a copy of all personal information we hold about you</p>
                       <Button size="sm" variant="outline">Request Data Export</Button>
                     </div>
@@ -370,7 +370,7 @@ export default function PrivacyPage() {
                       <FileText className="h-6 w-6 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-foreground mb-1">Correct Information</h3>
+                      <h3 className="text-lg font-normal text-foreground mb-1">Correct Information</h3>
                       <p className="text-muted-foreground mb-3">Update or correct any inaccurate personal information</p>
                       <Button size="sm" variant="outline">Update Profile</Button>
                     </div>
@@ -383,7 +383,7 @@ export default function PrivacyPage() {
                       <Database className="h-6 w-6 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-foreground mb-1">Delete Your Account</h3>
+                      <h3 className="text-lg font-normal text-foreground mb-1">Delete Your Account</h3>
                       <p className="text-muted-foreground mb-3">Request deletion of your account and associated data</p>
                       <Button size="sm" variant="outline" className="border-red-200 text-red-700 hover:bg-red-50">Delete Account</Button>
                     </div>
@@ -396,7 +396,7 @@ export default function PrivacyPage() {
                       <Users className="h-6 w-6 text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-foreground mb-1">Data Portability</h3>
+                      <h3 className="text-lg font-normal text-foreground mb-1">Data Portability</h3>
                       <p className="text-muted-foreground mb-3">Export your data in a structured, commonly used format</p>
                       <Button size="sm" variant="outline">Export Data</Button>
                     </div>
@@ -411,7 +411,7 @@ export default function PrivacyPage() {
                   <Mail className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">6. Contact Us</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">6. Contact Us</h2>
                   <div className="w-16 h-1 gradient-primary rounded-full"></div>
                 </div>
               </div>
@@ -423,8 +423,8 @@ export default function PrivacyPage() {
                   <div className="icon-modern bg-success mb-4 mx-auto">
                     <Mail className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-1">Contact Us</h3>
-                  <a href="mailto:support@payvat.ie" className="text-primary hover:text-primary/80 font-semibold transition-colors">
+                  <h3 className="font-normal text-foreground mb-1">Contact Us</h3>
+                  <a href="mailto:support@payvat.ie" className="text-primary hover:text-primary/80 font-normal transition-colors">
                     support@payvat.ie
                   </a>
                   <p className="text-sm text-muted-foreground mt-2">For all support and privacy inquiries</p>

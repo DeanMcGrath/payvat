@@ -325,7 +325,7 @@ export default function PaymentsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Incoming</p>
-                <p className="text-2xl font-bold text-green-600">{formatCurrency(stats.totalIncoming)}</p>
+                <p className="text-2xl font-normal text-green-600">{formatCurrency(stats.totalIncoming)}</p>
               </div>
               <TrendingUp className="h-8 w-8 text-green-600" />
             </div>
@@ -337,7 +337,7 @@ export default function PaymentsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Outgoing</p>
-                <p className="text-2xl font-bold text-red-600">{formatCurrency(stats.totalOutgoing)}</p>
+                <p className="text-2xl font-normal text-red-600">{formatCurrency(stats.totalOutgoing)}</p>
               </div>
               <TrendingDown className="h-8 w-8 text-red-600" />
             </div>
@@ -349,11 +349,11 @@ export default function PaymentsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Net Flow</p>
-                <p className={`text-2xl font-bold ${stats.netFlow >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-2xl font-normal ${stats.netFlow >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {formatCurrency(stats.netFlow)}
                 </p>
               </div>
-              <Euro className="h-8 w-8 text-brand-700" />
+              <Euro className="h-8 w-8 text-petrol-dark" />
             </div>
           </CardContent>
         </Card>
@@ -363,11 +363,11 @@ export default function PaymentsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">VAT Relevant</p>
-                <p className="h3 text-brand-700">
+                <p className="h3 text-petrol-dark">
                   {stats.vatRelevantCount}/{stats.transactionCount}
                 </p>
               </div>
-              <CheckCircle className="h-8 w-8 text-brand-700" />
+              <CheckCircle className="h-8 w-8 text-petrol-dark" />
             </div>
           </CardContent>
         </Card>
@@ -376,7 +376,7 @@ export default function PaymentsPage() {
       {/* Bank Statement Upload */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-brand-700">
+          <CardTitle className="flex items-center gap-2 text-petrol-dark">
             <Upload className="h-5 w-5" />
             Upload Bank Statements
           </CardTitle>
@@ -399,14 +399,14 @@ export default function PaymentsPage() {
             
             {bankStatements.length > 0 && (
               <div className="mt-6">
-                <h4 className="font-medium mb-3">Uploaded Statements</h4>
+                <h4 className="font-normal mb-3">Uploaded Statements</h4>
                 <div className="space-y-2">
                   {bankStatements.map((statement) => (
                     <div key={statement.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-md border">
                       <div className="flex items-center gap-3">
-                        <FileText className="h-5 w-5 text-blue-600" />
+                        <FileText className="h-5 w-5 text-petrol-base" />
                         <div>
-                          <div className="font-medium text-sm">{statement.originalName}</div>
+                          <div className="font-normal text-sm">{statement.originalName}</div>
                           <div className="text-xs text-gray-500">
                             {statement.bankName} • {statement.accountNumber} • 
                             {statement.transactionCount} transactions •
@@ -435,7 +435,7 @@ export default function PaymentsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-brand-700">
+            <CardTitle className="flex items-center gap-2 text-petrol-dark">
               <Filter className="h-5 w-5" />
               Transaction Filters
               {activeFiltersCount > 0 && (
@@ -453,7 +453,7 @@ export default function PaymentsPage() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Search</label>
+              <label className="text-sm font-normal">Search</label>
               <Input
                 placeholder="Search transactions..."
                 value={searchQuery}
@@ -462,7 +462,7 @@ export default function PaymentsPage() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium">Month</label>
+              <label className="text-sm font-normal">Month</label>
               <Select value={selectedMonth} onValueChange={setSelectedMonth}>
                 <SelectTrigger>
                   <SelectValue />
@@ -479,7 +479,7 @@ export default function PaymentsPage() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium">Type</label>
+              <label className="text-sm font-normal">Type</label>
               <Select value={selectedType} onValueChange={setSelectedType}>
                 <SelectTrigger>
                   <SelectValue />
@@ -493,7 +493,7 @@ export default function PaymentsPage() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium">Category</label>
+              <label className="text-sm font-normal">Category</label>
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger>
                   <SelectValue />
@@ -509,7 +509,7 @@ export default function PaymentsPage() {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium">Sort By</label>
+              <label className="text-sm font-normal">Sort By</label>
               <div className="flex gap-2">
                 <Select value={sortBy} onValueChange={(value: "date" | "amount") => setSortBy(value)}>
                   <SelectTrigger>
@@ -537,7 +537,7 @@ export default function PaymentsPage() {
       {/* Transactions */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-brand-700">
+          <CardTitle className="flex items-center gap-2 text-petrol-dark">
             <CreditCard className="h-5 w-5" />
             Transaction History
             <Badge variant="secondary">{filteredTransactions.length}</Badge>
@@ -546,7 +546,7 @@ export default function PaymentsPage() {
         <CardContent>
           {filteredTransactions.length > 0 ? (
             <div className="space-y-2">
-              <div className="grid grid-cols-12 gap-4 items-center px-4 py-2 bg-gray-50 rounded-lg text-xs font-medium text-gray-600 uppercase tracking-wide">
+              <div className="grid grid-cols-12 gap-4 items-center px-4 py-2 bg-gray-50 rounded-lg text-xs font-normal text-gray-600 uppercase tracking-wide">
                 <div className="col-span-2">Date</div>
                 <div className="col-span-4">Description</div>
                 <div className="col-span-2">Category</div>
@@ -561,7 +561,7 @@ export default function PaymentsPage() {
                     {new Date(transaction.date).toLocaleDateString()}
                   </div>
                   <div className="col-span-4">
-                    <div className="text-sm font-medium">{transaction.description}</div>
+                    <div className="text-sm font-normal">{transaction.description}</div>
                   </div>
                   <div className="col-span-2">
                     {transaction.category && (
@@ -569,7 +569,7 @@ export default function PaymentsPage() {
                     )}
                   </div>
                   <div className="col-span-2">
-                    <div className={`text-sm font-medium ${
+                    <div className={`text-sm font-normal ${
                       transaction.type === 'credit' ? 'text-green-600' : 'text-red-600'
                     }`}>
                       {transaction.type === 'credit' ? '+' : '-'}{formatCurrency(Math.abs(transaction.amount))}
@@ -584,7 +584,7 @@ export default function PaymentsPage() {
                   </div>
                   <div className="col-span-1">
                     {transaction.vatRelevant && (
-                      <CheckCircle className="h-4 w-4 text-blue-600" />
+                      <CheckCircle className="h-4 w-4 text-petrol-base" />
                     )}
                   </div>
                 </div>
@@ -593,7 +593,7 @@ export default function PaymentsPage() {
           ) : (
             <div className="text-center py-8 text-gray-500">
               <CreditCard className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Transactions Found</h3>
+              <h3 className="text-lg font-normal text-gray-900 mb-2">No Transactions Found</h3>
               <p className="text-gray-500 mb-4">
                 Upload bank statements to import your transaction history
               </p>

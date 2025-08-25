@@ -156,7 +156,7 @@ export default function ReportsPage() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-center space-x-2 mb-4">
               <AlertCircle className="h-8 w-8 text-red-500" />
-              <span className="text-lg font-medium text-red-800">Error Loading Page</span>
+              <span className="text-lg font-normal text-red-800">Error Loading Page</span>
             </div>
             <p className="text-red-600 text-center mb-4">{userError}</p>
             <div className="flex space-x-2">
@@ -177,7 +177,7 @@ export default function ReportsPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="error-card max-w-md mx-auto">
-          <h2 className="text-xl font-bold text-foreground mb-2">Error Loading Reports</h2>
+          <h2 className="text-xl font-normal text-foreground mb-2">Error Loading Reports</h2>
           <p className="text-muted-foreground mb-4">{error}</p>
           <Button 
             onClick={() => window.location.reload()}
@@ -235,7 +235,7 @@ export default function ReportsPage() {
 
                 {/* Company Info */}
                 <div className="text-right hidden sm:block glass-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20">
-                  <h3 className="text-sm lg:text-base font-bold text-white truncate">{user.businessName}</h3>
+                  <h3 className="text-sm lg:text-base font-normal text-white truncate">{user.businessName}</h3>
                   <p className="text-white/70 font-mono text-xs">VAT: {user.vatNumber}</p>
                 </div>
                 
@@ -291,7 +291,7 @@ export default function ReportsPage() {
                     <ArrowLeft className="h-4 w-4" />
                     <span>Dashboard</span>
                   </Button>
-                  <span className="text-white/90 text-sm font-medium flex items-center space-x-2">
+                  <span className="text-white/90 text-sm font-normal flex items-center space-x-2">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                     <span>Reports & Analytics</span>
                   </span>
@@ -311,17 +311,17 @@ export default function ReportsPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-2">
           <Card className="card-premium hover-lift">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total VAT Paid (2024)</CardTitle>
-              <div className="icon-modern bg-[#73C2FB]">
+              <CardTitle className="text-sm font-normal text-muted-foreground">Total VAT Paid (2024)</CardTitle>
+              <div className="icon-modern bg-[#2A7A8F]">
                 <Euro className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
               {statsLoading ? (
-                <div className="text-2xl font-bold text-muted-foreground">Loading...</div>
+                <div className="text-2xl font-normal text-muted-foreground">Loading...</div>
               ) : (
                 <>
-                  <div className="text-2xl font-bold text-foreground">
+                  <div className="text-2xl font-normal text-foreground">
                     €{userStats?.totalVATPayments?.toLocaleString('en-IE', { minimumFractionDigits: 2 }) || '0.00'}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
@@ -334,17 +334,17 @@ export default function ReportsPage() {
 
           <Card className="card-premium hover-lift">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Returns Filed</CardTitle>
+              <CardTitle className="text-sm font-normal text-muted-foreground">Returns Filed</CardTitle>
               <div className="icon-modern gradient-primary">
                 <FileText className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
               {statsLoading ? (
-                <div className="text-2xl font-bold text-muted-foreground">Loading...</div>
+                <div className="text-2xl font-normal text-muted-foreground">Loading...</div>
               ) : (
                 <>
-                  <div className="text-2xl font-bold text-foreground">
+                  <div className="text-2xl font-normal text-foreground">
                     {userStats?.returnsFiled || 0}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
@@ -357,17 +357,17 @@ export default function ReportsPage() {
 
           <Card className="card-premium hover-lift">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Average VAT</CardTitle>
-              <div className="icon-modern bg-[#73C2FB]">
+              <CardTitle className="text-sm font-normal text-muted-foreground">Average VAT</CardTitle>
+              <div className="icon-modern bg-[#2A7A8F]">
                 <BarChart3 className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
               {statsLoading ? (
-                <div className="text-2xl font-bold text-muted-foreground">Loading...</div>
+                <div className="text-2xl font-normal text-muted-foreground">Loading...</div>
               ) : (
                 <>
-                  <div className="text-2xl font-bold text-foreground">
+                  <div className="text-2xl font-normal text-foreground">
                     €{userStats?.averageVATPerReturn?.toLocaleString('en-IE', { minimumFractionDigits: 2 }) || '0.00'}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">Average per period</p>
@@ -378,17 +378,17 @@ export default function ReportsPage() {
 
           <Card className="card-premium hover-lift">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">On-Time Payments</CardTitle>
-              <div className="icon-modern bg-[#73C2FB]">
+              <CardTitle className="text-sm font-normal text-muted-foreground">On-Time Payments</CardTitle>
+              <div className="icon-modern bg-[#2A7A8F]">
                 <Calendar className="h-4 w-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
               {statsLoading ? (
-                <div className="text-2xl font-bold text-muted-foreground">Loading...</div>
+                <div className="text-2xl font-normal text-muted-foreground">Loading...</div>
               ) : (
                 <>
-                  <div className="text-2xl font-bold text-foreground">
+                  <div className="text-2xl font-normal text-foreground">
                     {userStats?.onTimePaymentRate || 0}%
                   </div>
                   <p className="text-xs text-success mt-1 flex items-center gap-1">
@@ -408,7 +408,7 @@ export default function ReportsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2">
           <Card className="card-modern hover-lift group cursor-pointer">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-foreground flex items-center">
+              <CardTitle className="text-lg font-normal text-foreground flex items-center">
                 <div className="icon-modern gradient-primary mr-3">
                   <PieChart className="h-5 w-5 text-white" />
                 </div>
@@ -428,8 +428,8 @@ export default function ReportsPage() {
 
           <Card className="card-modern hover-lift group cursor-pointer">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                <div className="icon-modern bg-[#73C2FB] mr-3">
+              <CardTitle className="text-lg font-normal text-foreground flex items-center">
+                <div className="icon-modern bg-[#2A7A8F] mr-3">
                   <LineChart className="h-5 w-5 text-white" />
                 </div>
                 Trend Analysis
@@ -448,8 +448,8 @@ export default function ReportsPage() {
 
           <Card className="card-modern hover-lift group cursor-pointer">
             <CardHeader>
-              <CardTitle className="text-lg font-semibold text-foreground flex items-center">
-                <div className="icon-modern bg-[#73C2FB] mr-3">
+              <CardTitle className="text-lg font-normal text-foreground flex items-center">
+                <div className="icon-modern bg-[#2A7A8F] mr-3">
                   <BarChart3 className="h-5 w-5 text-white" />
                 </div>
                 Annual Reports
@@ -470,7 +470,7 @@ export default function ReportsPage() {
         {/* Reports List */}
         <Card className="card-premium mb-2">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-foreground flex items-center justify-between">
+            <CardTitle className="text-lg font-normal text-foreground flex items-center justify-between">
               <div className="flex items-center">
                 <div className="icon-modern gradient-primary mr-3">
                   <FileText className="h-5 w-5 text-white" />
@@ -501,14 +501,14 @@ export default function ReportsPage() {
                         <FileText className="h-5 w-5 text-white" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-foreground">{report.title}</h4>
+                        <h4 className="font-normal text-foreground">{report.title}</h4>
                         <p className="text-sm text-muted-foreground">{report.period} • {report.date}</p>
                       </div>
                     </div>
                     
                     <div className="flex items-center space-x-4">
                       <div className="text-right">
-                        <p className="font-semibold text-foreground">{report.amount}</p>
+                        <p className="font-normal text-foreground">{report.amount}</p>
                         <Badge className={getStatusColor(report.status)}>
                           {report.status}
                         </Badge>

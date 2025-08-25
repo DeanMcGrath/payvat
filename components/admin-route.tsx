@@ -155,7 +155,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
         <Card className="w-full max-w-md">
           <CardContent className="pt-6">
             <div className="flex items-center justify-center space-x-2">
-              <Shield className="h-5 w-5 text-[#73C2FB] animate-spin" />
+              <Shield className="h-5 w-5 text-[#2A7A8F] animate-spin" />
               <span className="text-gray-600">Verifying admin access...</span>
             </div>
             <div className="mt-4 text-center">
@@ -190,7 +190,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
             <div className="flex items-start space-x-3 p-4 bg-red-50 border border-red-200 rounded-lg">
               <Lock className="h-5 w-5 text-red-600 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-red-800">Admin Access Required</p>
+                <p className="text-sm font-normal text-red-800">Admin Access Required</p>
                 <p className="text-sm text-red-600 mt-1">
                   {error || 'You need administrator privileges to access this page.'}
                 </p>
@@ -202,7 +202,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
                 <p className="text-sm text-gray-600 mb-3">Please log in with an admin account</p>
                 <Button 
                   onClick={() => window.location.href = '/login'}
-                  className="bg-[#73C2FB] hover:bg-[#5BADEA] text-white"
+                  className="bg-[#2A7A8F] hover:bg-[#216477] text-white"
                 >
                   Go to Login
                 </Button>
@@ -212,8 +212,8 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
             {user && !hasAdminRole(user.role, requiredRole) && (
               <div className="text-center">
                 <div className="bg-gray-100 rounded-lg p-3 mb-3">
-                  <p className="text-sm text-gray-600">Current Role: <span className="font-medium">{user.role}</span></p>
-                  <p className="text-sm text-gray-600">Required: <span className="font-medium">{requiredRole}+</span></p>
+                  <p className="text-sm text-gray-600">Current Role: <span className="font-normal">{user.role}</span></p>
+                  <p className="text-sm text-gray-600">Required: <span className="font-normal">{requiredRole}+</span></p>
                 </div>
                 <Button 
                   onClick={() => window.location.href = '/dashboard'}
@@ -248,7 +248,7 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
         <Card className="w-full max-w-md">
           <CardContent className="pt-6">
             <div className="flex items-center justify-center space-x-2">
-              <Shield className="h-5 w-5 text-[#73C2FB] animate-spin" />
+              <Shield className="h-5 w-5 text-[#2A7A8F] animate-spin" />
               <span className="text-gray-600">Initializing admin panel...</span>
             </div>
           </CardContent>
@@ -260,12 +260,12 @@ export default function AdminRoute({ children, requiredRole = 'ADMIN' }: AdminRo
   return (
     <div className="admin-context">
       {/* Admin Header Bar */}
-      <div className="bg-gradient-to-r from-[#73C2FB] to-[#5BADEA] text-white py-2 px-4">
+      <div className="bg-gradient-to-r from-[#2A7A8F] to-[#216477] text-white py-2 px-4">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div className="flex items-center space-x-3">
             <Shield className="h-4 w-4" />
-            <span className="text-sm font-medium">Admin Panel</span>
-            <span className="text-xs bg-[#73C2FB] px-2 py-1 rounded">{user.role}</span>
+            <span className="text-sm font-normal">Admin Panel</span>
+            <span className="text-xs bg-[#2A7A8F] px-2 py-1 rounded">{user.role}</span>
           </div>
           <div className="text-sm">
             {user.businessName} • {user.email}

@@ -67,7 +67,7 @@ export default function SearchComponent({
       <Button 
         variant="ghost" 
         size="sm" 
-        className={`text-white hover:bg-[#73C2FB] p-2 min-w-[44px] min-h-[44px] ${className}`}
+        className={`text-white hover:bg-[#2A7A8F] p-2 min-w-[44px] min-h-[44px] ${className}`}
         onClick={handleMobileSearch}
         title="Search"
       >
@@ -124,7 +124,7 @@ export default function SearchComponent({
       />
       <Button 
         size={size === 'lg' ? 'default' : 'sm'}
-        className={`bg-blue-700 hover:bg-blue-800 ${buttonClassName}`}
+        className={`bg-blue-700 hover:bg-petrol-dark ${buttonClassName}`}
         onClick={handleSearch}
         disabled={!query.trim() || isLoading}
       >

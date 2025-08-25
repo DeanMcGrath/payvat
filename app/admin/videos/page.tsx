@@ -279,7 +279,7 @@ function AdminVideosContent() {
         <div className="content-wrapper section-spacing">
           <div className="error-card">
             <AlertCircle className="error-icon" />
-            <h2 className="text-xl font-semibold mb-2 text-foreground">Error Loading Videos</h2>
+            <h2 className="text-xl font-normal mb-2 text-foreground">Error Loading Videos</h2>
             <p className="text-muted-foreground mb-4">{error}</p>
             <Button onClick={fetchVideos} className="btn-primary">Try Again</Button>
           </div>
@@ -303,7 +303,7 @@ function AdminVideosContent() {
           <div className="icon-premium mb-4 mx-auto">
             <Video className="h-12 w-12 text-white" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-3">
+          <h1 className="text-4xl md:text-5xl font-normal tracking-tight mb-3">
             <span className="text-gradient-primary">Demo Videos</span>
             <br />
             <span className="text-foreground">Management</span>
@@ -317,7 +317,7 @@ function AdminVideosContent() {
         <div className="flex justify-center mb-8">
           <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="btn-primary px-8 py-4 text-lg font-semibold hover-lift">
+              <Button className="btn-primary px-8 py-4 text-lg font-normal hover-lift">
                 <Plus className="h-5 w-5 mr-2" />
                 Upload Video
               </Button>
@@ -407,7 +407,7 @@ function AdminVideosContent() {
           <div className="icon-premium mb-6 mx-auto opacity-50">
             <Video className="h-12 w-12 text-white" />
           </div>
-          <h3 className="text-2xl font-semibold text-foreground mb-3">No Videos Yet</h3>
+          <h3 className="text-2xl font-normal text-foreground mb-3">No Videos Yet</h3>
           <p className="text-muted-foreground text-center mb-6 max-w-md mx-auto leading-relaxed">
             Upload your first demo video to get started. This video will be displayed on the PayVAT homepage.
           </p>
@@ -441,7 +441,7 @@ function AdminVideosContent() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900 truncate">
+                        <h3 className="text-lg font-normal text-gray-900 truncate">
                           {video.title}
                         </h3>
                         {video.description && (

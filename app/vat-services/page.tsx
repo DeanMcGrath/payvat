@@ -33,7 +33,7 @@ export default function VATServicesPage() {
         "Bulk calculations",
         "Export to Excel/PDF"
       ],
-      color: "from-[#8FD0FC] to-[#73C2FB]"
+      color: "from-[#8FD0FC] to-[#2A7A8F]"
     },
     {
       id: "submission",
@@ -61,7 +61,7 @@ export default function VATServicesPage() {
         "Payment confirmations",
         "Late payment protection"
       ],
-      color: "from-[#73C2FB] to-[#5BADEA]"
+      color: "from-[#2A7A8F] to-[#216477]"
     },
     {
       id: "compliance",
@@ -171,7 +171,7 @@ export default function VATServicesPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-4">
               Complete VAT <span className="text-gradient-primary">Management Suite</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -197,7 +197,7 @@ export default function VATServicesPage() {
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-foreground mb-2 group-hover:text-blue-600 transition-colors">
+                      <h3 className="text-2xl font-normal text-foreground mb-2 group-hover:text-petrol-base transition-colors">
                         {service.title}
                       </h3>
                       <p className="text-muted-foreground mb-4">
@@ -206,7 +206,7 @@ export default function VATServicesPage() {
                       <ul className="space-y-2">
                         {service.features.map((feature, idx) => (
                           <li key={idx} className="flex items-start gap-2 text-sm">
-                            <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                            <CheckCircle className="h-4 w-4 text-petrol-base mt-0.5 flex-shrink-0" />
                             <span className="text-gray-700">{feature}</span>
                           </li>
                         ))}
@@ -224,7 +224,7 @@ export default function VATServicesPage() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-4">
               Choose Your Plan
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -238,14 +238,14 @@ export default function VATServicesPage() {
                 key={plan.id}
                 className={`relative transition-all duration-300 ${
                   plan.popular 
-                    ? 'shadow-2xl scale-105 border-blue-500' 
+                    ? 'shadow-2xl scale-105 border-petrol-500' 
                     : 'hover:shadow-xl hover:-translate-y-1'
                 } ${selectedPlan === plan.id ? 'ring-2 ring-blue-500' : ''}`}
                 onClick={() => setSelectedPlan(plan.id)}
               >
                 {plan.badge && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-gradient-to-r from-[#73C2FB] to-cyan-600 text-white px-4 py-1">
+                    <Badge className="bg-gradient-to-r from-[#2A7A8F] to-cyan-600 text-white px-4 py-1">
                       {plan.badge}
                     </Badge>
                   </div>
@@ -254,14 +254,14 @@ export default function VATServicesPage() {
                 <CardHeader className="text-center pb-4">
                   <CardTitle className="text-2xl">{plan.name}</CardTitle>
                   <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-4xl font-bold text-foreground">{plan.price}</span>
+                    <span className="text-4xl font-normal text-foreground">{plan.price}</span>
                     <span className="text-gray-600">{plan.period}</span>
                   </div>
                   <CardDescription className="text-base mt-2">
                     {plan.description}
                   </CardDescription>
                   {plan.savings && (
-                    <p className="text-primary font-semibold text-sm mt-2">{plan.savings}</p>
+                    <p className="text-primary font-normal text-sm mt-2">{plan.savings}</p>
                   )}
                 </CardHeader>
                 
@@ -269,7 +269,7 @@ export default function VATServicesPage() {
                   <ul className="space-y-3">
                     {plan.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-5 w-5 text-petrol-base mt-0.5 flex-shrink-0" />
                         <span className="text-gray-700">{feature}</span>
                       </li>
                     ))}
@@ -277,10 +277,10 @@ export default function VATServicesPage() {
                   
                   <Button 
                     size="lg" 
-                    className={`w-full font-semibold ${
+                    className={`w-full font-normal ${
                       plan.popular 
-                        ? 'bg-gradient-to-r from-[#73C2FB] to-cyan-600 text-white' 
-                        : 'border border-blue-600 text-blue-600 hover:bg-blue-50'
+                        ? 'bg-gradient-to-r from-[#2A7A8F] to-cyan-600 text-white' 
+                        : 'border border-petrol-600 text-petrol-base hover:bg-petrol-50'
                     }`}
                     variant={plan.popular ? "default" : "outline"}
                   >
@@ -318,7 +318,7 @@ export default function VATServicesPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-4">
               PayVAT vs Traditional Methods
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -330,12 +330,12 @@ export default function VATServicesPage() {
             <table className="w-full border-collapse bg-white rounded-lg shadow-lg">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="border-b border-gray-200 px-6 py-4 text-left font-semibold">Feature</th>
-                  <th className="border-b border-gray-200 px-6 py-4 text-center font-semibold">Manual Process</th>
-                  <th className="border-b border-gray-200 px-6 py-4 text-center font-semibold">Traditional Accountant</th>
-                  <th className="border-b border-gray-200 px-6 py-4 text-center font-semibold bg-blue-50">
+                  <th className="border-b border-gray-200 px-6 py-4 text-left font-normal">Feature</th>
+                  <th className="border-b border-gray-200 px-6 py-4 text-center font-normal">Manual Process</th>
+                  <th className="border-b border-gray-200 px-6 py-4 text-center font-normal">Traditional Accountant</th>
+                  <th className="border-b border-gray-200 px-6 py-4 text-center font-normal bg-blue-50">
                     <div className="flex items-center justify-center gap-2">
-                      <BadgeCheck className="h-5 w-5 text-blue-600" />
+                      <BadgeCheck className="h-5 w-5 text-petrol-base" />
                       PayVAT
                     </div>
                   </th>
@@ -375,10 +375,10 @@ export default function VATServicesPage() {
                   }
                 ].map((row, index) => (
                   <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                    <td className="border-b border-gray-200 px-6 py-4 font-medium">{row.feature}</td>
+                    <td className="border-b border-gray-200 px-6 py-4 font-normal">{row.feature}</td>
                     <td className="border-b border-gray-200 px-6 py-4 text-center text-gray-600">{row.manual}</td>
                     <td className="border-b border-gray-200 px-6 py-4 text-center text-gray-600">{row.accountant}</td>
-                    <td className="border-b border-gray-200 px-6 py-4 text-center font-semibold text-blue-600 bg-blue-50">{row.payvat}</td>
+                    <td className="border-b border-gray-200 px-6 py-4 text-center font-normal text-petrol-base bg-blue-50">{row.payvat}</td>
                   </tr>
                 ))}
               </tbody>
@@ -391,7 +391,7 @@ export default function VATServicesPage() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
+            <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-4">
               What Our Customers Say
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -413,13 +413,13 @@ export default function VATServicesPage() {
                   </blockquote>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-semibold text-foreground">{testimonial.name}</div>
+                      <div className="font-normal text-foreground">{testimonial.name}</div>
                       <div className="text-sm text-gray-600">{testimonial.role}</div>
-                      <div className="text-sm font-medium text-blue-600">{testimonial.company}</div>
+                      <div className="text-sm font-normal text-petrol-base">{testimonial.company}</div>
                     </div>
                     <div className="text-right">
                       <div className="text-sm text-gray-500">Saves</div>
-                      <div className="font-bold text-green-600">{testimonial.savings}</div>
+                      <div className="font-normal text-green-600">{testimonial.savings}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -430,11 +430,11 @@ export default function VATServicesPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-[#73C2FB] to-cyan-600">
+      <section className="py-20 bg-gradient-to-br from-[#2A7A8F] to-cyan-600">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-12">
             <Calculator className="h-16 w-16 text-white mx-auto mb-6" />
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl lg:text-4xl font-normal text-white mb-4">
               Ready to Simplify Your VAT?
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
@@ -444,7 +444,7 @@ export default function VATServicesPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
               <Button 
                 size="lg" 
-                className="bg-white text-blue-600 hover:bg-gray-100 font-semibold px-8"
+                className="bg-white text-petrol-base hover:bg-gray-100 font-normal px-8"
               >
                 Start 14-Day Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -452,7 +452,7 @@ export default function VATServicesPage() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-white text-white hover:bg-white/10 font-semibold px-8"
+                className="border-white text-white hover:bg-white/10 font-normal px-8"
               >
                 <Phone className="mr-2 h-5 w-5" />
                 Book a Demo

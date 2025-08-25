@@ -491,8 +491,8 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
         {/* Validation Score */}
         <div className="text-center p-4 bg-gray-50 rounded-lg">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <span className="text-2xl font-bold">Validation Score:</span>
-            <span className={`text-3xl font-bold ${getScoreColor(validationScore)}`}>
+            <span className="text-2xl font-normal">Validation Score:</span>
+            <span className={`text-3xl font-normal ${getScoreColor(validationScore)}`}>
               {validationScore}/100
             </span>
           </div>
@@ -505,21 +505,21 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
           <div className="text-center p-3 border rounded-lg">
             <div className="flex items-center justify-center gap-1 text-red-600 mb-1">
               <XCircle className="h-4 w-4" />
-              <span className="text-lg font-semibold">{errorCount}</span>
+              <span className="text-lg font-normal">{errorCount}</span>
             </div>
             <p className="text-sm text-gray-600">Errors</p>
           </div>
           <div className="text-center p-3 border rounded-lg">
             <div className="flex items-center justify-center gap-1 text-yellow-600 mb-1">
               <AlertTriangle className="h-4 w-4" />
-              <span className="text-lg font-semibold">{warningCount}</span>
+              <span className="text-lg font-normal">{warningCount}</span>
             </div>
             <p className="text-sm text-gray-600">Warnings</p>
           </div>
           <div className="text-center p-3 border rounded-lg">
-            <div className="flex items-center justify-center gap-1 text-blue-600 mb-1">
+            <div className="flex items-center justify-center gap-1 text-petrol-base mb-1">
               <Info className="h-4 w-4" />
-              <span className="text-lg font-semibold">{infoCount}</span>
+              <span className="text-lg font-normal">{infoCount}</span>
             </div>
             <p className="text-sm text-gray-600">Info</p>
           </div>
@@ -537,7 +537,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
                   </div>
                   
                   <div className="flex-1 min-w-0">
-                    <AlertTitle className="text-sm font-medium mb-1">
+                    <AlertTitle className="text-sm font-normal mb-1">
                       {issue.title}
                       {issue.affectedAmount && (
                         <Badge variant="outline" className="ml-2">
@@ -550,7 +550,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
                     </AlertDescription>
                     
                     {issue.suggestion && (
-                      <p className="text-xs text-blue-600 mb-2">💡 {issue.suggestion}</p>
+                      <p className="text-xs text-petrol-base mb-2">💡 {issue.suggestion}</p>
                     )}
                     
                     {issue.documentName && (
@@ -560,7 +560,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
 
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {issue.documentId && (
-                      <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-700">
+                      <Button variant="ghost" size="sm" className="text-petrol-base hover:text-petrol-dark">
                         <Eye className="h-3 w-3" />
                       </Button>
                     )}
@@ -586,7 +586,7 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
         ) : (
           <div className="text-center py-8">
             <CheckCircle className="h-12 w-12 mx-auto mb-2 text-green-500" />
-            <p className="text-lg font-medium text-green-700">All Validations Passed!</p>
+            <p className="text-lg font-normal text-green-700">All Validations Passed!</p>
             <p className="text-sm text-gray-600">Your VAT data looks good and ready for submission</p>
           </div>
         )}
@@ -596,19 +596,19 @@ export default function VATValidation({ extractedVAT, period, onIssueClick, onAu
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
           <div>
             <span className="text-gray-600">Documents:</span>
-            <span className="ml-1 font-medium">{extractedVAT.processedDocuments}/{extractedVAT.documentCount}</span>
+            <span className="ml-1 font-normal">{extractedVAT.processedDocuments}/{extractedVAT.documentCount}</span>
           </div>
           <div>
             <span className="text-gray-600">Avg Confidence:</span>
-            <span className="ml-1 font-medium">{Math.round(extractedVAT.averageConfidence * 100)}%</span>
+            <span className="ml-1 font-normal">{Math.round(extractedVAT.averageConfidence * 100)}%</span>
           </div>
           <div>
             <span className="text-gray-600">Period:</span>
-            <span className="ml-1 font-medium">{period.year} {period.period}</span>
+            <span className="ml-1 font-normal">{period.year} {period.period}</span>
           </div>
           <div>
             <span className="text-gray-600">Net VAT:</span>
-            <span className="ml-1 font-medium">{formatCurrency(extractedVAT.totalNetVAT || 0)}</span>
+            <span className="ml-1 font-normal">{formatCurrency(extractedVAT.totalNetVAT || 0)}</span>
           </div>
         </div>
       </CardContent>

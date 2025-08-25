@@ -249,7 +249,7 @@ function AdminUserDetailContent() {
       case 'admin':
         return 'bg-purple-100 text-purple-800'
       case 'user':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-petrol-dark'
       default:
         return 'bg-gray-100 text-gray-800'
     }
@@ -269,7 +269,7 @@ function AdminUserDetailContent() {
       case 'rejected':
         return 'bg-red-100 text-red-800'
       default:
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-petrol-dark'
     }
   }
 
@@ -277,7 +277,7 @@ function AdminUserDetailContent() {
     return (
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#73C2FB]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2A7A8F]"></div>
           <span className="ml-2 text-gray-600">Loading user details...</span>
         </div>
       </div>
@@ -289,7 +289,7 @@ function AdminUserDetailContent() {
       <div className="container mx-auto p-6">
         <div className="text-center">
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Error Loading User</h2>
+          <h2 className="text-xl font-normal mb-2">Error Loading User</h2>
           <p className="text-gray-600 mb-4 max-w-md mx-auto">{error || 'User not found'}</p>
           <div className="flex justify-center space-x-3">
             <Button onClick={() => window.location.reload()}>
@@ -312,7 +312,7 @@ function AdminUserDetailContent() {
       <div className="flex justify-between items-center">
         <div>
           <div className="flex items-center space-x-3 mb-2">
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-normal text-gray-900">
               {user.firstName && user.lastName 
                 ? `${user.firstName} ${user.lastName}` 
                 : user.businessName}
@@ -340,38 +340,38 @@ function AdminUserDetailContent() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">VAT Returns</CardTitle>
+            <CardTitle className="text-sm font-normal">VAT Returns</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{user.stats.totalVATReturns}</div>
+            <div className="text-2xl font-normal">{user.stats.totalVATReturns}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Documents</CardTitle>
+            <CardTitle className="text-sm font-normal">Documents</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{user.stats.totalDocuments}</div>
+            <div className="text-2xl font-normal">{user.stats.totalDocuments}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Payments</CardTitle>
+            <CardTitle className="text-sm font-normal">Payments</CardTitle>
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{user.stats.totalPayments}</div>
+            <div className="text-2xl font-normal">{user.stats.totalPayments}</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total VAT Paid</CardTitle>
+            <CardTitle className="text-sm font-normal">Total VAT Paid</CardTitle>
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(user.stats.totalVATPaid)}</div>
+            <div className="text-2xl font-normal">{formatCurrency(user.stats.totalVATPaid)}</div>
           </CardContent>
         </Card>
       </div>
@@ -400,11 +400,11 @@ function AdminUserDetailContent() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-500">First Name</label>
+                    <label className="text-sm font-normal text-gray-500">First Name</label>
                     <p className="text-sm">{user.firstName || 'Not provided'}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Last Name</label>
+                    <label className="text-sm font-normal text-gray-500">Last Name</label>
                     <p className="text-sm">{user.lastName || 'Not provided'}</p>
                   </div>
                 </div>
@@ -441,19 +441,19 @@ function AdminUserDetailContent() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Account Created</label>
+                  <label className="text-sm font-normal text-gray-500">Account Created</label>
                   <p className="text-sm">{formatDate(user.createdAt)}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Last Updated</label>
+                  <label className="text-sm font-normal text-gray-500">Last Updated</label>
                   <p className="text-sm">{formatDate(user.updatedAt)}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Last Login</label>
+                  <label className="text-sm font-normal text-gray-500">Last Login</label>
                   <p className="text-sm">{formatDate(user.lastLoginAt)}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Email Verified</label>
+                  <label className="text-sm font-normal text-gray-500">Email Verified</label>
                   <div className="flex items-center space-x-2">
                     <span className="text-sm">
                       {user.emailVerified ? 'Yes' : 'No'}
@@ -492,7 +492,7 @@ function AdminUserDetailContent() {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
-                            <h4 className="font-medium">{document.originalName}</h4>
+                            <h4 className="font-normal">{document.originalName}</h4>
                             <Badge variant="outline">{document.documentType}</Badge>
                             <Badge variant="outline">{document.category}</Badge>
                             {document.isScanned && (
@@ -550,7 +550,7 @@ function AdminUserDetailContent() {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
-                            <h4 className="font-medium">
+                            <h4 className="font-normal">
                               Period: {formatDateOnly(vatReturn.periodStart)} - {formatDateOnly(vatReturn.periodEnd)}
                             </h4>
                             <Badge className={getStatusColor(vatReturn.status)}>
@@ -560,15 +560,15 @@ function AdminUserDetailContent() {
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                             <div>
                               <p className="text-gray-500">Sales VAT</p>
-                              <p className="font-medium">{formatCurrency(vatReturn.salesVAT)}</p>
+                              <p className="font-normal">{formatCurrency(vatReturn.salesVAT)}</p>
                             </div>
                             <div>
                               <p className="text-gray-500">Purchase VAT</p>
-                              <p className="font-medium">{formatCurrency(vatReturn.purchaseVAT)}</p>
+                              <p className="font-normal">{formatCurrency(vatReturn.purchaseVAT)}</p>
                             </div>
                             <div>
                               <p className="text-gray-500">Net VAT</p>
-                              <p className="font-medium">{formatCurrency(vatReturn.netVAT)}</p>
+                              <p className="font-normal">{formatCurrency(vatReturn.netVAT)}</p>
                             </div>
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm mt-3">
@@ -588,7 +588,7 @@ function AdminUserDetailContent() {
                           {vatReturn.revenueRefNumber && (
                             <div className="mt-3">
                               <p className="text-gray-500 text-sm">Revenue Reference</p>
-                              <p className="font-medium">{vatReturn.revenueRefNumber}</p>
+                              <p className="font-normal">{vatReturn.revenueRefNumber}</p>
                             </div>
                           )}
                         </div>
@@ -627,7 +627,7 @@ function AdminUserDetailContent() {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
-                            <h4 className="font-medium">{formatCurrency(payment.amount)}</h4>
+                            <h4 className="font-normal">{formatCurrency(payment.amount)}</h4>
                             <Badge className={getStatusColor(payment.status)}>
                               {payment.status}
                             </Badge>
@@ -652,13 +652,13 @@ function AdminUserDetailContent() {
                           {payment.receiptNumber && (
                             <div className="mt-3">
                               <p className="text-gray-500 text-sm">Receipt Number</p>
-                              <p className="font-medium">{payment.receiptNumber}</p>
+                              <p className="font-normal">{payment.receiptNumber}</p>
                             </div>
                           )}
                           {payment.stripePaymentId && (
                             <div className="mt-2">
                               <p className="text-gray-500 text-sm">Stripe Payment ID</p>
-                              <p className="font-medium text-xs">{payment.stripePaymentId}</p>
+                              <p className="font-normal text-xs">{payment.stripePaymentId}</p>
                             </div>
                           )}
                           {payment.failureReason && (
@@ -697,26 +697,26 @@ function AdminUserDetailContent() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-gray-500">Business Name</label>
-                <p className="text-lg font-medium">{user.businessName}</p>
+                <label className="text-sm font-normal text-gray-500">Business Name</label>
+                <p className="text-lg font-normal">{user.businessName}</p>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-500">VAT Number</label>
-                <p className="text-lg font-medium">{user.vatNumber}</p>
+                <label className="text-sm font-normal text-gray-500">VAT Number</label>
+                <p className="text-lg font-normal">{user.vatNumber}</p>
               </div>
               {user.address && (
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Business Address</label>
+                  <label className="text-sm font-normal text-gray-500">Business Address</label>
                   <p className="text-sm">{user.address}</p>
                 </div>
               )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Registration Date</label>
+                  <label className="text-sm font-normal text-gray-500">Registration Date</label>
                   <p className="text-sm">{formatDateOnly(user.createdAt)}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Account Status</label>
+                  <label className="text-sm font-normal text-gray-500">Account Status</label>
                   <div className="flex items-center space-x-2">
                     <Badge className={getRoleColor(user.role || 'user')}>
                       {(user.role || 'user').toLowerCase().replace('_', ' ')}
@@ -755,11 +755,11 @@ function AdminUserDetailContent() {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
-                            <h4 className="font-medium">Session {session.sessionId.slice(-8)}</h4>
+                            <h4 className="font-normal">Session {session.sessionId.slice(-8)}</h4>
                             <Badge className={session.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
                               {session.isActive ? 'Active' : 'Inactive'}
                             </Badge>
-                            <Badge className={session.isResolved ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800'}>
+                            <Badge className={session.isResolved ? 'bg-blue-100 text-petrol-dark' : 'bg-yellow-100 text-yellow-800'}>
                               {session.isResolved ? 'Resolved' : 'Unresolved'}
                             </Badge>
                           </div>

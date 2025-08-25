@@ -33,13 +33,13 @@ export default function SiteHeader({
       <div className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 z-50">
         <a 
           href="#main-content" 
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
+          className="bg-petrol-base text-white px-4 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
           Skip to main content
         </a>
         <a 
           href="#navigation" 
-          className="bg-blue-600 text-white px-4 py-2 ml-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
+          className="bg-petrol-base text-white px-4 py-2 ml-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
         >
           Skip to navigation
         </a>
@@ -54,7 +54,7 @@ export default function SiteHeader({
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
-              <Link href="/" className="text-2xl font-bold text-white tracking-tight hover:text-white/90 transition-colors">
+              <Link href="/" className="text-2xl font-normal text-white tracking-tight hover:text-white/90 transition-colors">
                 <span className="payvat-brand">
                   PayVAT
                 </span>
@@ -67,7 +67,7 @@ export default function SiteHeader({
               {/* User Profile - Desktop */}
               {user && (
                 <div className="text-right hidden lg:block max-w-48">
-                  <h3 className="text-sm font-bold text-white truncate">{user.businessName}</h3>
+                  <h3 className="text-sm font-normal text-white truncate">{user.businessName}</h3>
                   <p className="text-white/70 font-mono text-xs">VAT: {user.vatNumber}</p>
                 </div>
               )}
@@ -78,13 +78,13 @@ export default function SiteHeader({
                 {!hideNavLinks && (
                   <>
                     <button 
-                      className="text-white/90 hover:text-white transition-colors font-medium"
+                      className="text-white/90 hover:text-white transition-colors font-normal"
                       onClick={() => window.location.href = '/about'}
                     >
                       About
                     </button>
                     <button 
-                      className="text-white/90 hover:text-white transition-colors font-medium"
+                      className="text-white/90 hover:text-white transition-colors font-normal"
                       onClick={() => window.location.href = '/contact'}
                     >
                       Contact
@@ -96,7 +96,7 @@ export default function SiteHeader({
                   <>
                     {/* Sign Up Link */}
                     <button 
-                      className="text-white/90 hover:text-white transition-colors font-medium"
+                      className="text-white/90 hover:text-white transition-colors font-normal"
                       onClick={() => window.location.href = '/signup'}
                     >
                       Sign Up
@@ -171,11 +171,11 @@ export default function SiteHeader({
           />
           
           {/* Mobile Menu */}
-          <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] shadow-2xl z-50 md:hidden animate-slide-in-right" style={{background: 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'}}>
+          <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] shadow-2xl z-50 md:hidden animate-slide-in-right" style={{background: 'linear-gradient(135deg, #2A7A8F 0%, #1A4F5C 100%)'}}>
             <div className="p-6 space-y-6">
               {/* Mobile Menu Header */}
               <div className="flex items-center justify-between pb-4 border-b border-white/20">
-                <div className="text-white font-bold text-lg">Menu</div>
+                <div className="text-white font-normal text-lg">Menu</div>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -190,7 +190,7 @@ export default function SiteHeader({
               {/* User Profile - Mobile */}
               {user && (
                 <div className="pb-4 border-b border-white/20">
-                  <h3 className="text-base font-bold text-white mb-1">{user.businessName}</h3>
+                  <h3 className="text-base font-normal text-white mb-1">{user.businessName}</h3>
                   <p className="text-white/70 font-mono text-sm">VAT: {user.vatNumber}</p>
                 </div>
               )}
@@ -228,7 +228,7 @@ export default function SiteHeader({
                   <>
                     {/* Sign Up */}
                     <Button 
-                      className="w-full bg-white text-[#005A8B] hover:bg-white/90 font-semibold min-h-[44px]"
+                      className="w-full bg-white text-[#1A4F5C] hover:bg-white/90 font-normal min-h-[44px]"
                       onClick={() => {
                         window.location.href = '/signup'
                         setIsMobileMenuOpen(false)

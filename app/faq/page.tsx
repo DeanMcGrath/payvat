@@ -66,8 +66,8 @@ export default function FAQPage() {
                 <div className="icon-premium group-hover:scale-110 transition-transform duration-300">
                   <HelpCircle className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                  What is Don't Be Like Me?
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
+                  What is PayVAT?
                 </h3>
               </div>
               <div className="text-muted-foreground group-hover:text-primary transition-colors">
@@ -78,7 +78,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px gradient-primary mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Don't Be Like Me is an online platform that lets Irish businesses complete their VAT submissions and make payments directly to the Revenue Commissioners—without paying hefty third-party fees.
+                  PayVAT is an online platform that lets Irish businesses complete their VAT submissions and make payments directly to the Revenue Commissioners—without paying hefty third-party fees.
                 </p>
               </div>
             )}
@@ -87,11 +87,11 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(1)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-petrol-light group-hover:scale-110 transition-transform duration-300">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                  Who can use Don't Be Like Me?
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
+                  Who can use PayVAT?
                 </h3>
               </div>
               <div className="text-muted-foreground group-hover:text-primary transition-colors">
@@ -100,9 +100,9 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(1) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
+                <div className="w-full h-px bg-petrol-light/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Any Irish-registered business required to Submit VAT returns can use Don't Be Like Me. Whether you're a micro-enterprise, an SME, or a growing startup, our platform scales to suit your needs.
+                  Any Irish-registered business required to Submit VAT returns can use PayVAT. Whether you're a micro-enterprise, an SME, or a growing startup, our platform scales to suit your needs.
                 </p>
               </div>
             )}
@@ -114,7 +114,7 @@ export default function FAQPage() {
                 <div className="icon-modern bg-green-500 group-hover:scale-110 transition-transform duration-300">
                   <Settings className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   How do I register?
                 </h3>
               </div>
@@ -127,19 +127,19 @@ export default function FAQPage() {
                 <div className="w-full h-px bg-green-500/30 mb-4"></div>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
-                    <span className="text-muted-foreground">Visit Don't Be Like Me.ie/about for contact information</span>
+                    <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-normal">1</div>
+                    <span className="text-muted-foreground">Visit PayVAT.ie/about for contact information</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                    <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-normal">2</div>
                     <span className="text-muted-foreground">Choose your plan (monthly or annual)</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                    <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-normal">3</div>
                     <span className="text-muted-foreground">Enter your company details and create a password</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                    <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm font-normal">4</div>
                     <span className="text-muted-foreground">Verify your email, and you're ready to file your first VAT return!</span>
                   </div>
                 </div>
@@ -150,10 +150,10 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(3)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-petrol-light group-hover:scale-110 transition-transform duration-300">
                   <CreditCard className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   How does payment work?
                 </h3>
               </div>
@@ -163,11 +163,11 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(3) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
+                <div className="w-full h-px bg-petrol-light/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  After you submit your VAT return through Don't Be Like Me, you can initiate your VAT payment via Revenue's Online Service (ROS) with one click—no need to log in separately.
+                  After you submit your VAT return through PayVAT, you can initiate your VAT payment via Revenue's Online Service (ROS) with one click—no need to log in separately.
                 </p>
-                <div className="flex items-center gap-2 text-success font-medium">
+                <div className="flex items-center gap-2 text-success font-normal">
                   <Shield className="h-4 w-4" />
                   <span>Secure security for all payments</span>
                 </div>
@@ -181,7 +181,7 @@ export default function FAQPage() {
                 <div className="icon-premium group-hover:scale-110 transition-transform duration-300">
                   <Euro className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   How much does it cost?
                 </h3>
               </div>
@@ -197,22 +197,22 @@ export default function FAQPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                          <span className="text-white font-bold text-sm">M</span>
+                          <span className="text-white font-normal text-sm">M</span>
                         </div>
                         <div>
-                          <span className="font-semibold text-foreground">Monthly Plan</span>
+                          <span className="font-normal text-foreground">Monthly Plan</span>
                           <p className="text-sm text-muted-foreground">Cancel anytime</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="text-2xl font-bold text-primary">€90</span>
+                        <span className="text-2xl font-normal text-primary">€90</span>
                         <span className="text-muted-foreground">/month</span>
                       </div>
                     </div>
                   </div>
                   <div className="card-premium p-4 hover-lift group relative">
                     <div className="absolute -top-2 -right-2">
-                      <div className="bg-warning text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                      <div className="bg-warning text-white px-2 py-1 rounded-full text-xs font-normal flex items-center gap-1">
                         <BadgeCheck className="h-3 w-3" />
                         Popular
                       </div>
@@ -220,15 +220,15 @@ export default function FAQPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 gradient-primary rounded-full flex items-center justify-center">
-                          <span className="text-white font-bold text-sm">A</span>
+                          <span className="text-white font-normal text-sm">A</span>
                         </div>
                         <div>
-                          <span className="font-semibold text-foreground">Annual Plan</span>
-                          <p className="text-sm text-success font-medium">Save €180 with annual billing!</p>
+                          <span className="font-normal text-foreground">Annual Plan</span>
+                          <p className="text-sm text-success font-normal">Save €180 with annual billing!</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="text-2xl font-bold text-primary">€900</span>
+                        <span className="text-2xl font-normal text-primary">€900</span>
                         <span className="text-muted-foreground">/year</span>
                       </div>
                     </div>
@@ -244,7 +244,7 @@ export default function FAQPage() {
                 <div className="icon-modern bg-success group-hover:scale-110 transition-transform duration-300">
                   <Clock className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   Is there a free trial?
                 </h3>
               </div>
@@ -258,7 +258,7 @@ export default function FAQPage() {
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   Yes, 14-day free trial with no setup fees.
                 </p>
-                <div className="flex items-center gap-2 text-success font-medium">
+                <div className="flex items-center gap-2 text-success font-normal">
                   <CheckCircle className="h-4 w-4" />
                   <span>No credit card required</span>
                 </div>
@@ -269,10 +269,10 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(13)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-petrol-light group-hover:scale-110 transition-transform duration-300">
                   <CheckCircle className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   What's included in the service?
                 </h3>
               </div>
@@ -282,32 +282,32 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(13) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
+                <div className="w-full h-px bg-petrol-light/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   VAT calculations, submissions via ROS, payment processing, unlimited transactions, reporting, and expert support.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>VAT calculations</span>
                   </div>
-                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>ROS submissions</span>
                   </div>
-                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>Payment processing</span>
                   </div>
-                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>Unlimited transactions</span>
                   </div>
-                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>VAT reporting</span>
                   </div>
-                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>Expert support</span>
                   </div>
@@ -322,7 +322,7 @@ export default function FAQPage() {
                 <div className="icon-modern bg-success group-hover:scale-110 transition-transform duration-300">
                   <Shield className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   Is my data secure?
                 </h3>
               </div>
@@ -337,19 +337,19 @@ export default function FAQPage() {
                   Absolutely. We use secure encryption (AES-256) and multi-factor authentication to protect your information. Data is hosted in EU-based, GDPR-compliant data centers.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2 text-success text-sm font-medium">
+                  <div className="flex items-center gap-2 text-success text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>AES-256 Encryption</span>
                   </div>
-                  <div className="flex items-center gap-2 text-success text-sm font-medium">
+                  <div className="flex items-center gap-2 text-success text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>GDPR Compliant</span>
                   </div>
-                  <div className="flex items-center gap-2 text-success text-sm font-medium">
+                  <div className="flex items-center gap-2 text-success text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>Multi-factor Auth</span>
                   </div>
-                  <div className="flex items-center gap-2 text-success text-sm font-medium">
+                  <div className="flex items-center gap-2 text-success text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>EU Data Centers</span>
                   </div>
@@ -364,7 +364,7 @@ export default function FAQPage() {
                 <div className="icon-modern bg-warning group-hover:scale-110 transition-transform duration-300">
                   <Clock className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   What if I miss a deadline?
                 </h3>
               </div>
@@ -376,13 +376,13 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px bg-warning/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Don't Be Like Me will send you automated reminders well before your filing and payment deadlines. If you do miss a deadline, you'll need to contact Revenue directly for extensions or penalties.
+                  PayVAT will send you automated reminders well before your filing and payment deadlines. If you do miss a deadline, you'll need to contact Revenue directly for extensions or penalties.
                 </p>
                 <div className="card-modern p-4 bg-warning/10 border-warning/20">
                   <div className="flex items-center gap-3">
                     <Bell className="h-5 w-5 text-warning" />
                     <div>
-                      <span className="font-semibold text-warning">Smart Reminders</span>
+                      <span className="font-normal text-warning">Smart Reminders</span>
                       <p className="text-sm text-muted-foreground mt-1">Email and in-app notifications 7, 3, and 1 days before deadlines</p>
                     </div>
                   </div>
@@ -394,10 +394,10 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(7)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-petrol-light group-hover:scale-110 transition-transform duration-300">
                   <Settings className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   Can I switch plans?
                 </h3>
               </div>
@@ -407,11 +407,11 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(7) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
+                <div className="w-full h-px bg-petrol-light/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   Yes—upgrade or downgrade at any time from your account settings. Changes to billing take effect at your next renewal date.
                 </p>
-                <div className="flex items-center gap-2 text-blue-500 font-medium">
+                <div className="flex items-center gap-2 text-blue-500 font-normal">
                   <CheckCircle className="h-4 w-4" />
                   <span>No cancellation fees</span>
                 </div>
@@ -425,7 +425,7 @@ export default function FAQPage() {
                 <div className="icon-premium group-hover:scale-110 transition-transform duration-300">
                   <HelpCircle className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   Do you offer support?
                 </h3>
               </div>
@@ -441,11 +441,11 @@ export default function FAQPage() {
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center p-4 card-modern hover-scale">
-                    <div className="text-2xl font-bold text-primary mb-1">7 days</div>
+                    <div className="text-2xl font-normal text-primary mb-1">7 days</div>
                     <div className="text-sm text-muted-foreground">Live Chat & Email</div>
                   </div>
                   <div className="text-center p-4 card-modern hover-scale">
-                    <div className="text-2xl font-bold text-primary mb-1">Always</div>
+                    <div className="text-2xl font-normal text-primary mb-1">Always</div>
                     <div className="text-sm text-muted-foreground">Help Center</div>
                   </div>
                 </div>
@@ -456,10 +456,10 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(9)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-petrol-light group-hover:scale-110 transition-transform duration-300">
                   <Building className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   Do you offer business setup?
                 </h3>
               </div>
@@ -469,24 +469,24 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(9) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
+                <div className="w-full h-px bg-petrol-light/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   Yes, €500 complete package that handles everything from company registration to VAT setup, plus 6 months free VAT services.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>Company registration</span>
                   </div>
-                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>VAT setup</span>
                   </div>
-                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>6 months free VAT services</span>
                   </div>
-                  <div className="flex items-center gap-2 text-blue-500 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
                     <span>Complete done-for-you service</span>
                   </div>
@@ -501,7 +501,7 @@ export default function FAQPage() {
                 <div className="icon-modern bg-green-500 group-hover:scale-110 transition-transform duration-300">
                   <Users className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   Do you cover my industry?
                 </h3>
               </div>
@@ -517,15 +517,15 @@ export default function FAQPage() {
                 </p>
                 <div className="grid grid-cols-3 gap-3 text-sm">
                   <div className="text-center p-3 bg-green-50 rounded-lg border border-green-200">
-                    <div className="font-medium text-green-800">Freelancers</div>
+                    <div className="font-normal text-green-800">Freelancers</div>
                     <div className="text-xs text-green-600">VAT & setup guidance</div>
                   </div>
                   <div className="text-center p-3 bg-green-50 rounded-lg border border-green-200">
-                    <div className="font-medium text-green-800">E-commerce</div>
+                    <div className="font-normal text-green-800">E-commerce</div>
                     <div className="text-xs text-green-600">Online business rules</div>
                   </div>
                   <div className="text-center p-3 bg-green-50 rounded-lg border border-green-200">
-                    <div className="font-medium text-green-800">Construction</div>
+                    <div className="font-normal text-green-800">Construction</div>
                     <div className="text-xs text-green-600">RCT & VAT guidance</div>
                   </div>
                 </div>
@@ -536,10 +536,10 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(11)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-petrol-light group-hover:scale-110 transition-transform duration-300">
                   <Calculator className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   Do you have business tools and calculators?
                 </h3>
               </div>
@@ -549,24 +549,24 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(11) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
+                <div className="w-full h-px bg-petrol-light/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   Yes! We provide free business tools including a VAT calculator, VAT registration checker, and various business planning resources.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="p-3 bg-blue-50 rounded-lg border border-petrol-200">
                     <div className="flex items-center gap-2 mb-2">
-                      <Calculator className="h-4 w-4 text-blue-600" />
-                      <span className="font-medium text-blue-800">VAT Calculator</span>
+                      <Calculator className="h-4 w-4 text-petrol-base" />
+                      <span className="font-normal text-petrol-dark">VAT Calculator</span>
                     </div>
-                    <div className="text-xs text-blue-600">Instant VAT calculations for Irish rates</div>
+                    <div className="text-xs text-petrol-base">Instant VAT calculations for Irish rates</div>
                   </div>
-                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                  <div className="p-3 bg-blue-50 rounded-lg border border-petrol-200">
                     <div className="flex items-center gap-2 mb-2">
-                      <Settings className="h-4 w-4 text-blue-600" />
-                      <span className="font-medium text-blue-800">Registration Checker</span>
+                      <Settings className="h-4 w-4 text-petrol-base" />
+                      <span className="font-normal text-petrol-dark">Registration Checker</span>
                     </div>
-                    <div className="text-xs text-blue-600">Check if you need VAT registration</div>
+                    <div className="text-xs text-petrol-base">Check if you need VAT registration</div>
                   </div>
                 </div>
               </div>
@@ -576,10 +576,10 @@ export default function FAQPage() {
           <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(12)}>
             <div className="flex items-center justify-between p-6">
               <div className="flex items-center gap-4">
-                <div className="icon-modern bg-blue-500 group-hover:scale-110 transition-transform duration-300">
+                <div className="icon-modern bg-petrol-light group-hover:scale-110 transition-transform duration-300">
                   <Euro className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
                   How much does business guidance cost?
                 </h3>
               </div>
@@ -589,11 +589,11 @@ export default function FAQPage() {
             </div>
             {expandedItems.has(12) && (
               <div className="px-6 pb-6 animate-fade-in">
-                <div className="w-full h-px bg-blue-500/30 mb-4"></div>
+                <div className="w-full h-px bg-petrol-light/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   All our business guides, tools, and resources are completely free to access. Our comprehensive library of 40+ guides costs nothing - we believe every Irish entrepreneur deserves access to quality business information.
                 </p>
-                <div className="flex items-center gap-2 text-blue-500 font-medium">
+                <div className="flex items-center gap-2 text-blue-500 font-normal">
                   <CheckCircle className="h-4 w-4" />
                   <span>100% free business guidance and resources</span>
                 </div>
@@ -616,18 +616,18 @@ export default function FAQPage() {
                     <HelpCircle className="h-12 w-12 text-white" />
                   </div>
                   
-                  <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
+                  <h3 className="text-3xl lg:text-4xl font-normal text-foreground mb-3">
                     Still Have <span className="text-gradient-primary">Questions?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                    Our support team is here to help you get started with Don't Be Like Me
+                    Our support team is here to help you get started with PayVAT
                   </p>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-2">
                   <Button 
                     size="lg"
-                    className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"
+                    className="btn-primary px-12 py-4 text-lg font-normal hover-lift min-w-[220px]"
                   >
                     Contact Support
                     <HelpCircle className="ml-2 h-5 w-5" />

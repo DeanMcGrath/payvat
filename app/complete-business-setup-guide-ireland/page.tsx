@@ -56,7 +56,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               <div className="icon-premium mb-3 mx-auto">
                 <CheckCircle className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Your <span className="text-gradient-primary">90-Day Launch Plan</span>
               </h2>
               <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
@@ -64,10 +64,10 @@ export default function CompleteBusinessSetupGuideIreland() {
             
             <div className="grid lg:grid-cols-3 gap-8">
               <div className="card-modern p-6 hover-lift">
-                <div className="icon-modern bg-[#73C2FB] mb-4">
+                <div className="icon-modern bg-[#2A7A8F] mb-4">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-3">Days 1-30: Foundation</h3>
+                <h3 className="text-xl font-normal text-foreground mb-3">Days 1-30: Foundation</h3>
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-success" />
@@ -92,7 +92,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 <div className="icon-modern bg-green-500 mb-4">
                   <UserCheck className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-3">Days 31-60: Registration</h3>
+                <h3 className="text-xl font-normal text-foreground mb-3">Days 31-60: Registration</h3>
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-success" />
@@ -114,10 +114,10 @@ export default function CompleteBusinessSetupGuideIreland() {
               </div>
 
               <div className="card-modern p-6 hover-lift">
-                <div className="icon-modern bg-[#73C2FB] mb-4">
+                <div className="icon-modern bg-[#2A7A8F] mb-4">
                   <ChevronRight className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-3">Days 61-90: Launch Ready</h3>
+                <h3 className="text-xl font-normal text-foreground mb-3">Days 61-90: Launch Ready</h3>
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-success" />
@@ -148,7 +148,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               <div className="icon-modern bg-primary mb-3 mx-auto">
                 <Building className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Step 1: Choose Your <span className="text-gradient-primary">Business Structure</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -161,7 +161,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="card-modern p-8 hover-lift border-l-4 border-green-500">
-                  <h3 className="text-xl font-semibold text-foreground mb-3">Sole Trader</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-3">Sole Trader</h3>
                   <div className="space-y-3 mb-6">
                     <div className="flex items-center gap-2 text-success">
                       <CheckCircle className="h-4 w-4" />
@@ -192,7 +192,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
 
                 <div className="card-modern p-8 hover-lift border-l-4 border-primary">
-                  <h3 className="text-xl font-semibold text-foreground mb-3">Limited Company</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-3">Limited Company</h3>
                   <div className="space-y-3 mb-6">
                     <div className="flex items-center gap-2 text-success">
                       <CheckCircle className="h-4 w-4" />
@@ -224,7 +224,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               </div>
               
               <div className="mt-8 p-6 card-modern bg-blue-50 border-l-4 border-[#8FD0FC]">
-                <h4 className="font-semibold text-foreground mb-2">VAT Consideration</h4>
+                <h4 className="font-normal text-foreground mb-2">VAT Consideration</h4>
                 <p className="text-muted-foreground text-sm">
                   Both structures must register for VAT when turnover exceeds <strong>€42,500 (services)</strong> or <strong>€85,000 (goods)</strong> in any 12-month period. 
                   Many businesses register early to reclaim input VAT on startup costs.
@@ -241,7 +241,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               <div className="icon-premium mb-3 mx-auto">
                 <FileText className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Step 2: Register Your <span className="text-gradient-primary">Business</span>
               </h2>
               <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
@@ -250,26 +250,26 @@ export default function CompleteBusinessSetupGuideIreland() {
             <div className="max-w-4xl mx-auto">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Business Name Registration</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">Business Name Registration</h3>
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">1</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal">1</div>
                       <div>
-                        <p className="font-medium text-foreground">Check name availability</p>
+                        <p className="font-normal text-foreground">Check name availability</p>
                         <p className="text-sm text-muted-foreground">Search the CRO database for existing names</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">2</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal">2</div>
                       <div>
-                        <p className="font-medium text-foreground">Reserve your name</p>
+                        <p className="font-normal text-foreground">Reserve your name</p>
                         <p className="text-sm text-muted-foreground">Valid for 28 days</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-semibold">3</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center font-normal">3</div>
                       <div>
-                        <p className="font-medium text-foreground">Complete incorporation</p>
+                        <p className="font-normal text-foreground">Complete incorporation</p>
                         <p className="text-sm text-muted-foreground">Submit Form A1 with required documents</p>
                       </div>
                     </div>
@@ -277,7 +277,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Required Documents</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">Required Documents</h3>
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-success" />
@@ -319,7 +319,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               <div className="icon-modern bg-success mb-3 mx-auto">
                 <Shield className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Step 3: Tax <span className="text-gradient-primary">Registration</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -328,10 +328,10 @@ export default function CompleteBusinessSetupGuideIreland() {
             <div className="max-w-4xl mx-auto">
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="card-modern p-6 hover-lift text-center">
-                  <div className="icon-modern bg-[#73C2FB] mb-4 mx-auto">
+                  <div className="icon-modern bg-[#2A7A8F] mb-4 mx-auto">
                     <FileText className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">Tax Reference Number</h3>
+                  <h3 className="font-normal text-foreground mb-2">Tax Reference Number</h3>
                   <p className="text-sm text-muted-foreground mb-4">Essential for all tax obligations</p>
                   <div className="text-xs text-muted-foreground">
                     Apply through Revenue's MyAccount or Form TR1/TR2
@@ -342,7 +342,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                   <div className="icon-modern bg-green-500 mb-4 mx-auto">
                     <Euro className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">VAT Registration</h3>
+                  <h3 className="font-normal text-foreground mb-2">VAT Registration</h3>
                   <p className="text-sm text-muted-foreground mb-4">When turnover exceeds thresholds</p>
                   <div className="text-xs text-muted-foreground">
                     €42,500 services / €85,000 goods
@@ -350,10 +350,10 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
 
                 <div className="card-modern p-6 hover-lift text-center">
-                  <div className="icon-modern bg-[#73C2FB] mb-4 mx-auto">
+                  <div className="icon-modern bg-[#2A7A8F] mb-4 mx-auto">
                     <UserCheck className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-2">ROS Access</h3>
+                  <h3 className="font-normal text-foreground mb-2">ROS Access</h3>
                   <p className="text-sm text-muted-foreground mb-4">Online tax filing system</p>
                   <div className="text-xs text-muted-foreground">
                     Digital certificate required
@@ -362,7 +362,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               </div>
 
               <div className="mt-8 p-6 card-premium bg-gradient-to-r from-blue-50 to-blue-50">
-                <h4 className="font-semibold text-foreground mb-3 text-center">Early VAT Registration Benefits</h4>
+                <h4 className="font-normal text-foreground mb-3 text-center">Early VAT Registration Benefits</h4>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-success" />
@@ -393,7 +393,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               <div className="icon-modern bg-warning mb-3 mx-auto">
                 <CreditCard className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Step 4: Banking & <span className="text-gradient-primary">Finance</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -406,7 +406,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Business Bank Account Requirements</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">Business Bank Account Requirements</h3>
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-success" />
@@ -432,7 +432,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">Account Features to Consider</h3>
+                  <h3 className="text-xl font-normal text-foreground mb-4">Account Features to Consider</h3>
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <Euro className="h-4 w-4 text-primary" />
@@ -468,7 +468,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               <div className="icon-premium mb-3 mx-auto">
                 <Shield className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Common Mistakes <span className="text-gradient-primary">to Avoid</span>
               </h2>
               <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
@@ -478,46 +478,46 @@ export default function CompleteBusinessSetupGuideIreland() {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">1</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">1</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Leaving VAT registration too late</h4>
+                      <h4 className="font-normal text-foreground mb-1">Leaving VAT registration too late</h4>
                       <p className="text-sm text-muted-foreground">Can result in back-dated liabilities and penalties</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">2</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">2</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Mixing personal and business finances</h4>
+                      <h4 className="font-normal text-foreground mb-1">Mixing personal and business finances</h4>
                       <p className="text-sm text-muted-foreground">Makes accounting and VAT compliance extremely difficult</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">3</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">3</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Poor record keeping from day one</h4>
+                      <h4 className="font-normal text-foreground mb-1">Poor record keeping from day one</h4>
                       <p className="text-sm text-muted-foreground">Digital receipts and systematic filing prevent future headaches</p>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">4</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">4</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Ignoring compliance deadlines</h4>
+                      <h4 className="font-normal text-foreground mb-1">Ignoring compliance deadlines</h4>
                       <p className="text-sm text-muted-foreground">Set up reminders for VAT, company filings, and tax payments</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">5</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">5</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Not planning for growth</h4>
+                      <h4 className="font-normal text-foreground mb-1">Not planning for growth</h4>
                       <p className="text-sm text-muted-foreground">Consider future needs when choosing structure and systems</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-semibold">6</div>
+                    <div className="w-8 h-8 rounded-full bg-destructive text-white text-sm flex items-center justify-center font-normal">6</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Not setting up proper systems</h4>
+                      <h4 className="font-normal text-foreground mb-1">Not setting up proper systems</h4>
                       <p className="text-sm text-muted-foreground">Establish accounting and compliance systems from the start</p>
                     </div>
                   </div>
@@ -528,10 +528,10 @@ export default function CompleteBusinessSetupGuideIreland() {
         </section>
 
         {/* Complete Startup Package Section */}
-        <section id="contact-form" className="py-20 bg-[#73C2FB]">
+        <section id="contact-form" className="py-20 bg-[#2A7A8F]">
           <div className="max-w-4xl mx-auto px-6 lg:px-8">
             <div className="text-center text-white mb-12">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+              <h2 className="text-3xl lg:text-4xl font-normal mb-4">
                 Complete Startup Guide For FREE!
               </h2>
               <p className="text-xl leading-relaxed">
@@ -543,7 +543,7 @@ export default function CompleteBusinessSetupGuideIreland() {
               <form className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="fullName" className="block text-sm font-normal text-gray-700 mb-2">
                       Full Name *
                     </label>
                     <input
@@ -551,12 +551,12 @@ export default function CompleteBusinessSetupGuideIreland() {
                       id="fullName"
                       name="fullName"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2A7A8F] focus:border-transparent"
                       placeholder="Enter your full name"
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="email" className="block text-sm font-normal text-gray-700 mb-2">
                       Email Address *
                     </label>
                     <input
@@ -564,7 +564,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                       id="email"
                       name="email"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2A7A8F] focus:border-transparent"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -572,7 +572,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="phone" className="block text-sm font-normal text-gray-700 mb-2">
                       Phone Number *
                     </label>
                     <input
@@ -580,19 +580,19 @@ export default function CompleteBusinessSetupGuideIreland() {
                       id="phone"
                       name="phone"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2A7A8F] focus:border-transparent"
                       placeholder="+353..."
                     />
                   </div>
                   <div>
-                    <label htmlFor="businessType" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="businessType" className="block text-sm font-normal text-gray-700 mb-2">
                       Business Type *
                     </label>
                     <select
                       id="businessType"
                       name="businessType"
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2A7A8F] focus:border-transparent"
                     >
                       <option value="">Select business type</option>
                       <option value="sole-trader">Sole Trader</option>
@@ -603,14 +603,14 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
                 
                 <div>
-                  <label htmlFor="currentStage" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="currentStage" className="block text-sm font-normal text-gray-700 mb-2">
                     Current Stage *
                   </label>
                   <select
                     id="currentStage"
                     name="currentStage"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2A7A8F] focus:border-transparent"
                   >
                     <option value="">Select current stage</option>
                     <option value="just-starting">Just Starting</option>
@@ -621,14 +621,14 @@ export default function CompleteBusinessSetupGuideIreland() {
                 </div>
                 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="message" className="block text-sm font-normal text-gray-700 mb-2">
                     Message/Additional Information
                   </label>
                   <textarea
                     id="message"
                     name="message"
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#73C2FB] focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2A7A8F] focus:border-transparent"
                     placeholder="Tell us about your business goals or any specific requirements..."
                   ></textarea>
                 </div>
@@ -637,7 +637,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                   <Button
                     type="submit"
                     size="lg"
-                    className="bg-[#73C2FB] hover:bg-[#5BADEA] text-white px-12 py-4 text-lg font-semibold"
+                    className="bg-[#2A7A8F] hover:bg-[#216477] text-white px-12 py-4 text-lg font-normal"
                   >
                     Get Your FREE Guide
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -660,7 +660,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                     <Target className="h-12 w-12 text-white" />
                   </div>
                   
-                  <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
+                  <h3 className="text-3xl lg:text-4xl font-normal text-foreground mb-3">
                     Ready to <span className="text-gradient-primary">Launch Your Business?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -671,7 +671,7 @@ export default function CompleteBusinessSetupGuideIreland() {
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-2">
                   <Button 
                     size="lg"
-                    className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"
+                    className="btn-primary px-12 py-4 text-lg font-normal hover-lift min-w-[220px]"
                     onClick={() => window.location.href = '/signup'}
                   >
                     Start Free Trial

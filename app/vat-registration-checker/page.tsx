@@ -85,14 +85,14 @@ export default function VatRegistrationChecker() {
         <section className="py-16 px-4" id="vat-checker">
           <div className="max-w-4xl mx-auto">
             <div className="card-premium p-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
+              <h2 className="text-3xl font-normal text-gray-900 mb-8 text-center">
                 VAT Registration Requirement Checker
               </h2>
               
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-normal text-gray-700 mb-2">
                       Business Type
                     </label>
                     <select
@@ -108,7 +108,7 @@ export default function VatRegistrationChecker() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-normal text-gray-700 mb-2">
                       Current Annual Turnover (€)
                     </label>
                     <input
@@ -121,7 +121,7 @@ export default function VatRegistrationChecker() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-normal text-gray-700 mb-2">
                       Projected Annual Turnover (€) - Optional
                     </label>
                     <input
@@ -135,16 +135,16 @@ export default function VatRegistrationChecker() {
                 </div>
                 
                 <div className="bg-gray-50 p-6 rounded-lg">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">VAT Registration Status</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">VAT Registration Status</h3>
                   {result ? (
                     <div className="space-y-4">
                       <div className={`p-4 rounded-lg ${
                         result.status === 'required' ? 'bg-red-50 border border-red-200' :
-                        result.status === 'will-be-required' ? 'bg-blue-50 border border-blue-200' :
-                        result.status === 'consider' ? 'bg-blue-50 border border-blue-200' :
+                        result.status === 'will-be-required' ? 'bg-blue-50 border border-petrol-200' :
+                        result.status === 'consider' ? 'bg-blue-50 border border-petrol-200' :
                         'bg-green-50 border border-green-200'
                       }`}>
-                        <div className={`text-lg font-bold mb-2 ${
+                        <div className={`text-lg font-normal mb-2 ${
                           result.status === 'required' ? 'text-red-900' :
                           result.status === 'will-be-required' ? 'text-blue-900' :
                           result.status === 'consider' ? 'text-blue-900' :
@@ -157,13 +157,13 @@ export default function VatRegistrationChecker() {
                         </div>
                         <p className={`text-sm mb-3 ${
                           result.status === 'required' ? 'text-red-800' :
-                          result.status === 'will-be-required' ? 'text-blue-800' :
-                          result.status === 'consider' ? 'text-blue-800' :
+                          result.status === 'will-be-required' ? 'text-petrol-dark' :
+                          result.status === 'consider' ? 'text-petrol-dark' :
                           'text-green-800'
                         }`}>
                           {result.message}
                         </p>
-                        <p className={`text-sm font-medium ${
+                        <p className={`text-sm font-normal ${
                           result.status === 'required' ? 'text-red-900' :
                           result.status === 'will-be-required' ? 'text-blue-900' :
                           result.status === 'consider' ? 'text-blue-900' :
@@ -174,12 +174,12 @@ export default function VatRegistrationChecker() {
                       </div>
                       
                       <div className="bg-white p-4 rounded-lg border">
-                        <h4 className="font-semibold text-gray-900 mb-2">Recommendation</h4>
+                        <h4 className="font-normal text-gray-900 mb-2">Recommendation</h4>
                         <p className="text-gray-700 text-sm">{result.recommendation}</p>
                       </div>
                       
                       <div className="bg-white p-4 rounded-lg border">
-                        <h4 className="font-semibold text-gray-900 mb-2">Key Details</h4>
+                        <h4 className="font-normal text-gray-900 mb-2">Key Details</h4>
                         <ul className="text-gray-700 text-sm space-y-1">
                           <li>• Threshold: €{result.threshold.toLocaleString()}</li>
                           <li>• Current turnover: €{result.turnover.toLocaleString()}</li>
@@ -200,7 +200,7 @@ export default function VatRegistrationChecker() {
         <section className="py-16 px-4 bg-gray-50" id="vat-thresholds">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Irish VAT Registration Thresholds (2025)
               </h2>
               <p className="text-lg text-gray-600">
@@ -211,12 +211,12 @@ export default function VatRegistrationChecker() {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="card-modern p-8">
                 <div className="text-center mb-6">
-                  <div className="text-5xl font-bold text-emerald-600 mb-2">€42,500</div>
-                  <h3 className="text-2xl font-bold text-gray-900">Services Threshold</h3>
+                  <div className="text-5xl font-normal text-emerald-600 mb-2">€42,500</div>
+                  <h3 className="text-2xl font-normal text-gray-900">Services Threshold</h3>
                   <p className="text-gray-600">Annual turnover for service providers</p>
                 </div>
                 <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900">Includes:</h4>
+                  <h4 className="font-normal text-gray-900">Includes:</h4>
                   <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Consulting and professional services</li>
                     <li>• Digital and online services</li>
@@ -230,12 +230,12 @@ export default function VatRegistrationChecker() {
               
               <div className="card-modern p-8">
                 <div className="text-center mb-6">
-                  <div className="text-5xl font-bold text-blue-600 mb-2">€85,000</div>
-                  <h3 className="text-2xl font-bold text-gray-900">Goods Threshold</h3>
+                  <div className="text-5xl font-normal text-petrol-base mb-2">€85,000</div>
+                  <h3 className="text-2xl font-normal text-gray-900">Goods Threshold</h3>
                   <p className="text-gray-600">Annual turnover for goods suppliers</p>
                 </div>
                 <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900">Includes:</h4>
+                  <h4 className="font-normal text-gray-900">Includes:</h4>
                   <ul className="text-gray-700 text-sm space-y-1">
                     <li>• Physical product sales</li>
                     <li>• Manufacturing and production</li>
@@ -254,7 +254,7 @@ export default function VatRegistrationChecker() {
         <section className="py-16 px-4" id="vat-benefits">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Benefits of VAT Registration
               </h2>
               <p className="text-lg text-gray-600">
@@ -265,37 +265,37 @@ export default function VatRegistrationChecker() {
             <div className="card-premium p-8">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Financial Benefits</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">Financial Benefits</h3>
                   <div className="space-y-4">
                     <div className="bg-green-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-green-900 mb-2">Input VAT Recovery</h4>
+                      <h4 className="font-normal text-green-900 mb-2">Input VAT Recovery</h4>
                       <p className="text-green-800 text-sm">Reclaim VAT on business expenses, equipment, and services - can save thousands annually</p>
                     </div>
                     <div className="bg-blue-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-blue-900 mb-2">Cash Flow Benefits</h4>
-                      <p className="text-blue-800 text-sm">Monthly VAT refunds if input VAT exceeds output VAT in early trading periods</p>
+                      <h4 className="font-normal text-blue-900 mb-2">Cash Flow Benefits</h4>
+                      <p className="text-petrol-dark text-sm">Monthly VAT refunds if input VAT exceeds output VAT in early trading periods</p>
                     </div>
                     <div className="bg-teal-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-blue-900 mb-2">B2B Advantages</h4>
-                      <p className="text-blue-800 text-sm">VAT-registered clients can reclaim VAT, making your services effectively cheaper</p>
+                      <h4 className="font-normal text-blue-900 mb-2">B2B Advantages</h4>
+                      <p className="text-petrol-dark text-sm">VAT-registered clients can reclaim VAT, making your services effectively cheaper</p>
                     </div>
                   </div>
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Business Benefits</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">Business Benefits</h3>
                   <div className="space-y-4">
                     <div className="bg-teal-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-blue-900 mb-2">Professional Credibility</h4>
-                      <p className="text-blue-800 text-sm">VAT number signals established business status to clients and suppliers</p>
+                      <h4 className="font-normal text-blue-900 mb-2">Professional Credibility</h4>
+                      <p className="text-petrol-dark text-sm">VAT number signals established business status to clients and suppliers</p>
                     </div>
                     <div className="bg-red-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-red-900 mb-2">Future-Proofing</h4>
+                      <h4 className="font-normal text-red-900 mb-2">Future-Proofing</h4>
                       <p className="text-red-800 text-sm">Avoid mandatory registration disruption when rapidly approaching thresholds</p>
                     </div>
                     <div className="bg-teal-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-blue-900 mb-2">EU Trading</h4>
-                      <p className="text-blue-800 text-sm">Essential for B2B EU trading and accessing certain business opportunities</p>
+                      <h4 className="font-normal text-blue-900 mb-2">EU Trading</h4>
+                      <p className="text-petrol-dark text-sm">Essential for B2B EU trading and accessing certain business opportunities</p>
                     </div>
                   </div>
                 </div>
@@ -308,7 +308,7 @@ export default function VatRegistrationChecker() {
         <section className="py-16 px-4 bg-gray-50" id="registration-process">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 VAT Registration Process
               </h2>
               <p className="text-lg text-gray-600">
@@ -318,50 +318,50 @@ export default function VatRegistrationChecker() {
             
             <div className="space-y-6">
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Registration Steps</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Registration Steps</h3>
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-emerald-600 font-bold text-sm">1</span>
+                      <span className="text-emerald-600 font-normal text-sm">1</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Determine Registration Need</h4>
+                      <h4 className="font-normal text-gray-900">Determine Registration Need</h4>
                       <p className="text-gray-600">Use this checker tool or consult with accountant to confirm requirement</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-emerald-600 font-bold text-sm">2</span>
+                      <span className="text-emerald-600 font-normal text-sm">2</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Prepare Documentation</h4>
+                      <h4 className="font-normal text-gray-900">Prepare Documentation</h4>
                       <p className="text-gray-600">Business registration, bank details, activity description, and projected turnover</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-emerald-600 font-bold text-sm">3</span>
+                      <span className="text-emerald-600 font-normal text-sm">3</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Submit Application</h4>
+                      <h4 className="font-normal text-gray-900">Submit Application</h4>
                       <p className="text-gray-600">Complete Form TR1 online through ROS or paper submission to Revenue</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-emerald-600 font-bold text-sm">4</span>
+                      <span className="text-emerald-600 font-normal text-sm">4</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Receive VAT Number</h4>
+                      <h4 className="font-normal text-gray-900">Receive VAT Number</h4>
                       <p className="text-gray-600">Processing takes 10-15 business days for complete applications</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-emerald-600 font-bold text-sm">5</span>
+                      <span className="text-emerald-600 font-normal text-sm">5</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Setup VAT Systems</h4>
+                      <h4 className="font-normal text-gray-900">Setup VAT Systems</h4>
                       <p className="text-gray-600">Update invoicing, accounting, and start filing bi-monthly returns</p>
                     </div>
                   </div>
@@ -372,9 +372,9 @@ export default function VatRegistrationChecker() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-20 px-4 bg-gradient-to-r from-emerald-600 to-[#73C2FB] text-white">
+        <section className="py-20 px-4 bg-gradient-to-r from-emerald-600 to-[#2A7A8F] text-white">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">
+            <h2 className="text-4xl font-normal mb-6">
               Need Help with VAT Registration?
             </h2>
             <p className="text-xl mb-8 text-emerald-100">
@@ -383,13 +383,13 @@ export default function VatRegistrationChecker() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-emerald-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-emerald-600 px-8 py-4 text-lg font-normal rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Get VAT Registration Help
               </a>
               <a 
                 href="/vat-calculator-ireland" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-emerald-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-normal rounded-xl hover:bg-white hover:text-emerald-600 transition-all duration-300"
               >
                 Use VAT Calculator
               </a>

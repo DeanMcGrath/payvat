@@ -133,7 +133,7 @@ export function VideoAnalytics({ videoId, className }: VideoAnalyticsProps) {
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center h-48">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-petrol-600"></div>
           </div>
         </CardContent>
       </Card>
@@ -219,11 +219,11 @@ export function VideoAnalytics({ videoId, className }: VideoAnalyticsProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Views</CardTitle>
+            <CardTitle className="text-sm font-normal">Total Views</CardTitle>
             <Eye className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics.summary.totalViews.toLocaleString()}</div>
+            <div className="text-2xl font-normal">{analytics.summary.totalViews.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               All video plays
             </p>
@@ -232,11 +232,11 @@ export function VideoAnalytics({ videoId, className }: VideoAnalyticsProps) {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Unique Viewers</CardTitle>
+            <CardTitle className="text-sm font-normal">Unique Viewers</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics.summary.uniqueViewers.toLocaleString()}</div>
+            <div className="text-2xl font-normal">{analytics.summary.uniqueViewers.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
               Individual visitors
             </p>
@@ -245,11 +245,11 @@ export function VideoAnalytics({ videoId, className }: VideoAnalyticsProps) {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Watch Time</CardTitle>
+            <CardTitle className="text-sm font-normal">Avg Watch Time</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-normal">
               {formatDuration(analytics.summary.avgWatchDuration)}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -260,11 +260,11 @@ export function VideoAnalytics({ videoId, className }: VideoAnalyticsProps) {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completion Rate</CardTitle>
+            <CardTitle className="text-sm font-normal">Completion Rate</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-normal">
               {analytics.summary.avgCompletionRate.toFixed(1)}%
             </div>
             <p className="text-xs text-muted-foreground">
@@ -293,7 +293,7 @@ export function VideoAnalytics({ videoId, className }: VideoAnalyticsProps) {
                   <div key={device} className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       {getDeviceIcon(device)}
-                      <span className="text-sm font-medium capitalize">{device}</span>
+                      <span className="text-sm font-normal capitalize">{device}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Badge variant="secondary" className="text-xs">
@@ -327,7 +327,7 @@ export function VideoAnalytics({ videoId, className }: VideoAnalyticsProps) {
                   <div key={browser} className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <Globe className="h-4 w-4" />
-                      <span className="text-sm font-medium capitalize">{browser}</span>
+                      <span className="text-sm font-normal capitalize">{browser}</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Badge variant="secondary" className="text-xs">
@@ -353,14 +353,14 @@ export function VideoAnalytics({ videoId, className }: VideoAnalyticsProps) {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-muted/50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">
+              <div className="text-2xl font-normal text-petrol-base">
                 {formatDuration(analytics.summary.totalWatchTime)}
               </div>
               <div className="text-sm text-muted-foreground">Total Watch Time</div>
             </div>
             
             <div className="text-center p-4 bg-muted/50 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">
+              <div className="text-2xl font-normal text-green-600">
                 {analytics.summary.uniqueViewers > 0 
                   ? (analytics.summary.totalViews / analytics.summary.uniqueViewers).toFixed(1)
                   : '0'
@@ -370,7 +370,7 @@ export function VideoAnalytics({ videoId, className }: VideoAnalyticsProps) {
             </div>
             
             <div className="text-center p-4 bg-muted/50 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600">
+              <div className="text-2xl font-normal text-purple-600">
                 {Object.keys(analytics.timeline).length}
               </div>
               <div className="text-sm text-muted-foreground">Days with Views</div>

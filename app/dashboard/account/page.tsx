@@ -191,7 +191,7 @@ export default function AccountPage() {
       {/* Account Info Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-brand-700">
+          <CardTitle className="flex items-center gap-2 text-petrol-dark">
             <User className="h-5 w-5" />
             Account Information
             <Button
@@ -289,7 +289,7 @@ export default function AccountPage() {
       {/* Business Profile Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-brand-700">
+          <CardTitle className="flex items-center gap-2 text-petrol-dark">
             <Building className="h-5 w-5" />
             Business Profile
           </CardTitle>
@@ -316,7 +316,7 @@ export default function AccountPage() {
       {billing && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-brand-700">
+            <CardTitle className="flex items-center gap-2 text-petrol-dark">
               <CreditCard className="h-5 w-5" />
               Billing & Subscription
             </CardTitle>
@@ -324,7 +324,7 @@ export default function AccountPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <div className="font-medium">{billing.planType} Plan</div>
+                <div className="font-normal">{billing.planType} Plan</div>
                 <div className="text-sm text-gray-600">
                   Status: <Badge variant={billing.subscriptionStatus === 'active' ? 'default' : 'secondary'}>
                     {billing.subscriptionStatus}
@@ -333,7 +333,7 @@ export default function AccountPage() {
               </div>
               {billing.amount && (
                 <div className="text-right">
-                  <div className="font-medium">{formatCurrency(billing.amount)}/month</div>
+                  <div className="font-normal">{formatCurrency(billing.amount)}/month</div>
                   {billing.nextBillingDate && (
                     <div className="text-sm text-gray-600">
                       Next billing: {new Date(billing.nextBillingDate).toLocaleDateString()}
@@ -344,18 +344,18 @@ export default function AccountPage() {
             </div>
 
             <div className="pt-4 border-t">
-              <h4 className="font-medium mb-3">Recent Payments</h4>
+              <h4 className="font-normal mb-3">Recent Payments</h4>
               <div className="space-y-2">
                 {billing.paymentHistory.map((payment) => (
                   <div key={payment.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
                     <div>
-                      <div className="font-medium text-sm">{payment.description}</div>
+                      <div className="font-normal text-sm">{payment.description}</div>
                       <div className="text-xs text-gray-600">
                         {new Date(payment.date).toLocaleDateString()}
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="font-medium">{formatCurrency(payment.amount)}</div>
+                      <div className="font-normal">{formatCurrency(payment.amount)}</div>
                       <Badge variant={payment.status === 'paid' ? 'default' : 'secondary'}>
                         {payment.status}
                       </Badge>
@@ -371,7 +371,7 @@ export default function AccountPage() {
       {/* Messages Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-brand-700">
+          <CardTitle className="flex items-center gap-2 text-petrol-dark">
             <Bell className="h-5 w-5" />
             Messages & Alerts
             {messages.filter(msg => !msg.read).length > 0 && (
@@ -387,17 +387,17 @@ export default function AccountPage() {
               <div
                 key={message.id}
                 className={`p-4 rounded-lg border ${
-                  message.read ? 'bg-gray-50' : 'bg-blue-50 border-blue-200'
+                  message.read ? 'bg-gray-50' : 'bg-blue-50 border-petrol-200'
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       {message.type === 'warning' && <AlertCircle className="h-4 w-4 text-yellow-600" />}
-                      {message.type === 'info' && <Bell className="h-4 w-4 text-blue-600" />}
+                      {message.type === 'info' && <Bell className="h-4 w-4 text-petrol-base" />}
                       {message.type === 'success' && <Check className="h-4 w-4 text-green-600" />}
                       {message.type === 'error' && <X className="h-4 w-4 text-red-600" />}
-                      <h4 className="font-medium text-sm">{message.title}</h4>
+                      <h4 className="font-normal text-sm">{message.title}</h4>
                       {!message.read && (
                         <Badge variant="secondary" className="text-xs">New</Badge>
                       )}

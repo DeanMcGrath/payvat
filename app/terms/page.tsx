@@ -73,7 +73,7 @@ export default function TermsPage() {
           {/* Table of Contents - Sidebar */}
           <div className="lg:col-span-1">
             <div className="card-modern p-6 sticky top-6">
-              <h2 className="text-lg font-semibold text-foreground mb-2 flex items-center gap-3">
+              <h2 className="text-lg font-normal text-foreground mb-2 flex items-center gap-3">
                 <BookOpen className="h-5 w-5 text-primary" />
                 Contents
               </h2>
@@ -96,7 +96,7 @@ export default function TermsPage() {
                     onClick={() => scrollToSection(item.id)}
                     className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 hover:bg-primary/10 hover:text-primary ${
                       activeSection === item.id 
-                        ? 'bg-primary/10 text-primary font-medium' 
+                        ? 'bg-primary/10 text-primary font-normal' 
                         : 'text-muted-foreground'
                     }`}
                   >
@@ -133,7 +133,7 @@ export default function TermsPage() {
                   <CheckCircle className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">1. Acceptance of Terms</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">1. Acceptance of Terms</h2>
                   <div className="w-16 h-1 bg-primary rounded-full"></div>
                 </div>
               </div>
@@ -146,12 +146,12 @@ export default function TermsPage() {
 
             <section id="service" data-animate>
               <div className="flex items-start gap-4 mb-2">
-                <div className="icon-modern bg-blue-500">
+                <div className="icon-modern bg-petrol-light">
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">2. Service Description</h2>
-                  <div className="w-16 h-1 bg-blue-500 rounded-full"></div>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">2. Service Description</h2>
+                  <div className="w-16 h-1 bg-petrol-light rounded-full"></div>
                 </div>
               </div>
               <p className="text-lg text-muted-foreground leading-relaxed mb-2">
@@ -161,25 +161,25 @@ export default function TermsPage() {
                 <div className="card-modern p-4 hover-lift">
                   <div className="flex items-center gap-3">
                     <CheckCircle className="h-5 w-5 text-success" />
-                    <span className="font-medium text-foreground">Document analysis and VAT extraction</span>
+                    <span className="font-normal text-foreground">Document analysis and VAT extraction</span>
                   </div>
                 </div>
                 <div className="card-modern p-4 hover-lift">
                   <div className="flex items-center gap-3">
                     <CheckCircle className="h-5 w-5 text-success" />
-                    <span className="font-medium text-foreground">Automated VAT return generation</span>
+                    <span className="font-normal text-foreground">Automated VAT return generation</span>
                   </div>
                 </div>
                 <div className="card-modern p-4 hover-lift">
                   <div className="flex items-center gap-3">
                     <CheckCircle className="h-5 w-5 text-success" />
-                    <span className="font-medium text-foreground">Secure document storage</span>
+                    <span className="font-normal text-foreground">Secure document storage</span>
                   </div>
                 </div>
                 <div className="card-modern p-4 hover-lift">
                   <div className="flex items-center gap-3">
                     <CheckCircle className="h-5 w-5 text-success" />
-                    <span className="font-medium text-foreground">Payment processing for VAT submissions</span>
+                    <span className="font-normal text-foreground">Payment processing for VAT submissions</span>
                   </div>
                 </div>
               </div>
@@ -191,7 +191,7 @@ export default function TermsPage() {
                   <Shield className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">3. User Responsibilities</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">3. User Responsibilities</h2>
                   <div className="w-16 h-1 bg-green-500 rounded-full"></div>
                 </div>
               </div>
@@ -200,23 +200,23 @@ export default function TermsPage() {
               </p>
               <div className="space-y-4">
                 <div className="flex items-start gap-3 p-4 card-modern hover-lift">
-                  <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mt-1">✓</div>
+                  <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-normal mt-1">✓</div>
                   <span className="text-foreground">Provide accurate and complete information</span>
                 </div>
                 <div className="flex items-start gap-3 p-4 card-modern hover-lift">
-                  <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mt-1">✓</div>
+                  <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-normal mt-1">✓</div>
                   <span className="text-foreground">Maintain the security of your account credentials</span>
                 </div>
                 <div className="flex items-start gap-3 p-4 card-modern hover-lift">
-                  <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mt-1">✓</div>
+                  <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-normal mt-1">✓</div>
                   <span className="text-foreground">Use the service only for legitimate business purposes</span>
                 </div>
                 <div className="flex items-start gap-3 p-4 card-modern hover-lift">
-                  <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mt-1">✓</div>
+                  <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-normal mt-1">✓</div>
                   <span className="text-foreground">Comply with all applicable Irish VAT regulations</span>
                 </div>
                 <div className="flex items-start gap-3 p-4 card-modern hover-lift">
-                  <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold mt-1">✓</div>
+                  <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-normal mt-1">✓</div>
                   <span className="text-foreground">Review all generated VAT returns before submission</span>
                 </div>
               </div>
@@ -228,7 +228,7 @@ export default function TermsPage() {
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">4. Payment Terms</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">4. Payment Terms</h2>
                   <div className="w-16 h-1 bg-purple-500 rounded-full"></div>
                 </div>
               </div>
@@ -242,25 +242,25 @@ export default function TermsPage() {
                       <CheckCircle className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-0">Credit and Debit Cards</h3>
+                      <h3 className="font-normal text-foreground mb-0">Credit and Debit Cards</h3>
                       <p className="text-sm text-muted-foreground">Processed securely via Stripe with secure encryption</p>
                     </div>
                   </div>
                 </div>
                 <div className="card-modern p-6 hover-lift">
                   <div className="flex items-center gap-4">
-                    <div className="icon-modern bg-blue-500">
+                    <div className="icon-modern bg-petrol-light">
                       <CheckCircle className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground mb-0">Bank Transfers</h3>
+                      <h3 className="font-normal text-foreground mb-0">Bank Transfers</h3>
                       <p className="text-sm text-muted-foreground">Available for enterprise accounts with special terms</p>
                     </div>
                   </div>
                 </div>
               </div>
               <div className="card-modern p-4 bg-warning/10 border-warning/20">
-                <p className="text-foreground font-medium">
+                <p className="text-foreground font-normal">
                   ⚠️ All fees are non-refundable unless otherwise specified in your service agreement.
                 </p>
               </div>
@@ -272,7 +272,7 @@ export default function TermsPage() {
                   <Shield className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">5. Limitation of Liability</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">5. Limitation of Liability</h2>
                   <div className="w-16 h-1 bg-warning rounded-full"></div>
                 </div>
               </div>
@@ -297,7 +297,7 @@ export default function TermsPage() {
                   <Shield className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">6. Data Protection</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">6. Data Protection</h2>
                   <div className="w-16 h-1 gradient-primary rounded-full"></div>
                 </div>
               </div>
@@ -310,11 +310,11 @@ export default function TermsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex items-center gap-3 p-4 bg-success/10 rounded-lg">
                     <CheckCircle className="h-5 w-5 text-success" />
-                    <span className="font-medium text-foreground">GDPR Compliant</span>
+                    <span className="font-normal text-foreground">GDPR Compliant</span>
                   </div>
                   <div className="flex items-center gap-3 p-4 bg-success/10 rounded-lg">
                     <CheckCircle className="h-5 w-5 text-success" />
-                    <span className="font-medium text-foreground">Irish Data Protection Laws</span>
+                    <span className="font-normal text-foreground">Irish Data Protection Laws</span>
                   </div>
                 </div>
               </div>
@@ -322,12 +322,12 @@ export default function TermsPage() {
 
             <section id="availability" data-animate>
               <div className="flex items-start gap-4 mb-2">
-                <div className="icon-modern bg-blue-500">
+                <div className="icon-modern bg-petrol-light">
                   <Clock className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">7. Service Availability</h2>
-                  <div className="w-16 h-1 bg-blue-500 rounded-full"></div>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">7. Service Availability</h2>
+                  <div className="w-16 h-1 bg-petrol-light rounded-full"></div>
                 </div>
               </div>
               <p className="text-lg text-muted-foreground leading-relaxed mb-2">
@@ -336,11 +336,11 @@ export default function TermsPage() {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="card-modern p-6 text-center hover-lift">
-                  <div className="text-3xl font-bold text-success mb-2">Reliable</div>
+                  <div className="text-3xl font-normal text-success mb-2">Reliable</div>
                   <div className="text-sm text-muted-foreground">Service</div>
                 </div>
                 <div className="card-modern p-6 text-center hover-lift">
-                  <div className="text-3xl font-bold text-primary mb-2">Expert</div>
+                  <div className="text-3xl font-normal text-primary mb-2">Expert</div>
                   <div className="text-sm text-muted-foreground">Monitoring</div>
                 </div>
               </div>
@@ -352,7 +352,7 @@ export default function TermsPage() {
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">8. Termination</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">8. Termination</h2>
                   <div className="w-16 h-1 bg-orange-500 rounded-full"></div>
                 </div>
               </div>
@@ -371,7 +371,7 @@ export default function TermsPage() {
                   <Bell className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">9. Changes to Terms</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">9. Changes to Terms</h2>
                   <div className="w-16 h-1 bg-indigo-500 rounded-full"></div>
                 </div>
               </div>
@@ -382,7 +382,7 @@ export default function TermsPage() {
                 </p>
                 <div className="flex items-center gap-3 p-4 bg-indigo-500/10 rounded-lg">
                   <Bell className="h-5 w-5 text-indigo-500" />
-                  <span className="text-foreground font-medium">You'll receive 30 days notice of any significant changes</span>
+                  <span className="text-foreground font-normal">You'll receive 30 days notice of any significant changes</span>
                 </div>
               </div>
             </section>
@@ -393,7 +393,7 @@ export default function TermsPage() {
                   <FileText className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">10. Contact Information</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">10. Contact Information</h2>
                   <div className="w-16 h-1 bg-green-500 rounded-full"></div>
                 </div>
               </div>
@@ -405,8 +405,8 @@ export default function TermsPage() {
                   <div className="icon-modern bg-success mb-4 mx-auto">
                     <FileText className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-semibold text-foreground mb-1">Email Support</h3>
-                  <a href="mailto:support@payvat.ie" className="text-primary hover:text-primary/80 font-semibold transition-colors">
+                  <h3 className="font-normal text-foreground mb-1">Email Support</h3>
+                  <a href="mailto:support@payvat.ie" className="text-primary hover:text-primary/80 font-normal transition-colors">
                     support@payvat.ie
                   </a>
                   <p className="text-sm text-muted-foreground mt-2">We respond within 24 hours</p>
@@ -420,7 +420,7 @@ export default function TermsPage() {
                   <Scale className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-1">11. Governing Law</h2>
+                  <h2 className="text-2xl font-normal text-foreground mb-1">11. Governing Law</h2>
                   <div className="w-16 h-1 gradient-primary rounded-full"></div>
                 </div>
               </div>
@@ -430,7 +430,7 @@ export default function TermsPage() {
                     <Scale className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">Irish Law Jurisdiction</h3>
+                    <h3 className="font-normal text-foreground">Irish Law Jurisdiction</h3>
                     <p className="text-sm text-muted-foreground">All disputes subject to Irish courts</p>
                   </div>
                 </div>

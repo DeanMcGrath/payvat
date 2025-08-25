@@ -307,22 +307,22 @@ export default function LiveChat() {
     <>
       {/* Chat Widget */}
       {isOpen && (
-        <div className="fixed bottom-20 right-4 w-80 h-96 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] bg-white border border-gray-200 rounded-lg shadow-xl z-[900] chat-widget">
+        <div className="fixed bottom-20 right-4 w-80 h-96 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] bg-white border-2 border-petrol-base rounded-lg shadow-xl z-[900] chat-widget">
           {/* Drag and Drop Overlay */}
           {isDragOver && (
-            <div className="absolute inset-0 bg-[#8FD0FC] bg-opacity-20 border-2 border-dashed border-[#73C2FB] rounded-lg flex items-center justify-center z-10">
-              <div className="text-center text-blue-600">
+            <div className="absolute inset-0 bg-petrol-base/20 border-2 border-dashed border-petrol-base rounded-lg flex items-center justify-center z-10">
+              <div className="text-center text-petrol-base">
                 <Upload className="h-8 w-8 mx-auto mb-2" />
-                <p className="font-semibold">Drop file to upload</p>
+                <p className="font-normal">Drop file to upload</p>
                 <p className="text-sm">PDF, DOC, XLS, Images, CSV</p>
               </div>
             </div>
           )}
 
           <Card className="h-full" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
-            <CardHeader className="bg-[#8FD0FC] text-white rounded-t-lg">
+            <CardHeader className="bg-gradient-to-r from-petrol-base to-petrol-dark text-white rounded-t-lg">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg font-semibold">
+                <CardTitle className="text-lg font-normal">
                   Live Chat Support
                   {session && (
                     <span className="text-xs font-normal opacity-80 block">
@@ -334,7 +334,7 @@ export default function LiveChat() {
                   variant="ghost"
                   size="sm"
                   onClick={toggleChat}
-                  className="text-white hover:bg-[#73C2FB]"
+                  className="text-white hover:bg-petrol-dark/30"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -358,17 +358,17 @@ export default function LiveChat() {
                           key={msg.id}
                           className={`rounded-lg p-3 max-w-[85%] ${
                             msg.senderType === 'user'
-                              ? 'bg-[#8FD0FC] text-white ml-auto'
+                              ? 'bg-petrol-base text-white ml-auto'
                               : msg.senderType === 'admin'
                               ? isAI 
-                                ? 'bg-gradient-to-r from-blue-50 to-slate-50 text-gray-800 border border-blue-200'
+                                ? 'bg-gradient-to-r from-blue-50 to-slate-50 text-gray-800 border border-petrol-200'
                                 : 'bg-blue-100 text-gray-800'
                               : 'bg-gray-100 text-gray-800'
                           }`}
                         >
                           <div className="flex items-start space-x-2">
                             {isAI && (
-                              <Bot className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                              <Bot className="h-4 w-4 text-petrol-base mt-0.5 flex-shrink-0" />
                             )}
                             <div className="flex-1">
                               {/* Text message */}
@@ -441,7 +441,7 @@ export default function LiveChat() {
 
                 {/* Upload Progress */}
                 {isUploading && (
-                  <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-600 flex items-center space-x-2">
+                  <div className="mb-3 p-2 bg-blue-50 border border-petrol-200 rounded text-sm text-petrol-base flex items-center space-x-2">
                     <Loader2 className="h-4 w-4 animate-spin" />
                     <span>Uploading file...</span>
                   </div>
@@ -480,7 +480,7 @@ export default function LiveChat() {
                   <Button 
                     onClick={sendMessage} 
                     size="sm" 
-                    className="bg-[#8FD0FC] hover:bg-[#73C2FB]"
+                    className="bg-gradient-to-r from-petrol-base to-petrol-dark hover:from-petrol-dark hover:to-petrol-base"
                     disabled={isLoading || isSending || isUploading || !session || !message.trim()}
                   >
                     {isSending ? (
@@ -506,7 +506,7 @@ export default function LiveChat() {
       {/* Chat Button */}
       <Button
         onClick={toggleChat}
-        className="fixed bottom-4 right-4 w-14 h-14 rounded-full bg-[#8FD0FC] hover:bg-[#73C2FB] text-white shadow-lg z-[899] chat-button transition-all duration-200 hover:scale-110 sm:w-14 sm:h-14"
+        className="fixed bottom-4 right-4 w-14 h-14 rounded-full bg-gradient-to-r from-petrol-base to-petrol-dark hover:from-petrol-dark hover:to-petrol-base text-white shadow-lg z-[899] chat-button transition-all duration-200 hover:scale-110 sm:w-14 sm:h-14"
       >
         <MessageCircle className="h-6 w-6" />
       </Button>

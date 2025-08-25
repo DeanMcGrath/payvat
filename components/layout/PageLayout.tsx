@@ -60,7 +60,7 @@ export function PageLayout({
       {/* Skip to content link for accessibility */}
       <a 
         href="#main-content" 
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand-600 focus:text-white focus:rounded-md focus:shadow-lg"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-petrol-base focus:text-white focus:rounded-md focus:shadow-lg"
       >
         Skip to main content
       </a>
@@ -88,7 +88,7 @@ export function PageLayout({
                             {crumb.label}
                           </BreadcrumbLink>
                         ) : (
-                          <span className="text-neutral-900 font-medium">{crumb.label}</span>
+                          <span className="text-neutral-900 font-normal">{crumb.label}</span>
                         )}
                       </BreadcrumbItem>
                       {index < breadcrumbs.length - 1 && <BreadcrumbSeparator />}
@@ -230,7 +230,7 @@ export function CenteredLayout({
         {/* Logo */}
         {showLogo && (
           <div className="text-center">
-            <h1 className="text-brand-heading text-3xl font-light">
+            <h1 className="text-brand-heading text-3xl payvat-brand">
               PayVAT
             </h1>
           </div>

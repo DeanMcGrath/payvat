@@ -15,21 +15,25 @@ const config: Config = {
       // Custom fonts with advanced features
       fontFamily: {
         sans: [
-          '"Helvetica Neue"',
-          'ui-sans-serif',
-          'system-ui',
+          'Helvetica Neue',
+          'Avenir',
+          'Proxima Nova',
           '-apple-system',
           'BlinkMacSystemFont',
           '"Segoe UI"',
           'Roboto',
           'Arial',
-          '"Noto Sans"',
           'sans-serif',
-          '"Apple Color Emoji"',
-          '"Segoe UI Emoji"',
-          '"Segoe UI Symbol"',
-          '"Noto Color Emoji"',
         ],
+      },
+      fontWeight: {
+        thin: '100',
+        extralight: '200',
+        light: '300',
+        normal: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
       },
       
       // Enhanced color system with CSS variables (for compatibility)
@@ -71,6 +75,24 @@ const config: Config = {
         success: 'hsl(var(--success))',
         warning: 'hsl(var(--warning))',
         error: 'hsl(var(--error))',
+        // Petrol Blue Brand Colors
+        brand: {
+          50: '#f0f8fa',
+          100: '#daeef3',
+          200: '#b8dde8',
+          300: '#87c5d7',
+          400: '#4ea4bf',
+          500: '#2A7A8F',
+          600: '#216477',
+          700: '#1d5363',
+          800: '#1A4F5C',
+          900: '#1b434f',
+        },
+        petrol: {
+          base: '#216477',
+          dark: '#1A4F5C',
+          light: '#2A7A8F',
+        },
       },
       
       // Enhanced spacing and sizing

@@ -22,7 +22,7 @@ export function ServerDashboard() {
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Document Management</h1>
+        <h1 className="text-3xl font-normal text-gray-900">Document Management</h1>
         <div className="flex gap-3">
           <Button onClick={() => window.location.reload()} variant="outline">
             <RefreshCw className="h-4 w-4 mr-2" />
@@ -41,8 +41,8 @@ export function ServerDashboard() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Documents</p>
-                <p className="text-2xl font-bold text-gray-900">Loading...</p>
+                <p className="text-sm font-normal text-gray-600">Documents</p>
+                <p className="text-2xl font-normal text-gray-900">Loading...</p>
               </div>
               <FileText className="h-8 w-8 text-gray-400" />
             </div>
@@ -53,11 +53,11 @@ export function ServerDashboard() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Sales VAT</p>
-                <p className="text-2xl font-bold text-green-600">€0.00</p>
+                <p className="text-sm font-normal text-gray-600">Sales VAT</p>
+                <p className="text-2xl font-normal text-green-600">€0.00</p>
               </div>
               <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                <span className="text-green-600 font-bold">+</span>
+                <span className="text-green-600 font-normal">+</span>
               </div>
             </div>
           </CardContent>
@@ -67,11 +67,11 @@ export function ServerDashboard() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Purchase VAT</p>
-                <p className="text-2xl font-bold text-blue-600">€0.00</p>
+                <p className="text-sm font-normal text-gray-600">Purchase VAT</p>
+                <p className="text-2xl font-normal text-petrol-base">€0.00</p>
               </div>
               <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
-                <span className="text-blue-600 font-bold">-</span>
+                <span className="text-petrol-base font-normal">-</span>
               </div>
             </div>
           </CardContent>
@@ -81,11 +81,11 @@ export function ServerDashboard() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Net VAT</p>
-                <p className="text-2xl font-bold text-purple-600">€0.00</p>
+                <p className="text-sm font-normal text-gray-600">Net VAT</p>
+                <p className="text-2xl font-normal text-purple-600">€0.00</p>
               </div>
               <div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center">
-                <span className="text-purple-600 font-bold">=</span>
+                <span className="text-purple-600 font-normal">=</span>
               </div>
             </div>
           </CardContent>
@@ -150,7 +150,7 @@ export function ServerDashboard() {
         <CardContent>
           <div className="text-center py-8">
             <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Loading Documents...</h3>
+            <h3 className="text-lg font-normal text-gray-900 mb-2">Loading Documents...</h3>
             <p className="text-gray-600 mb-6">
               If this page doesn't load properly, try refreshing or enable JavaScript.
             </p>
@@ -173,12 +173,12 @@ export function ServerDashboard() {
         <p>
           Having trouble? Try <button 
             onClick={() => window.location.reload()} 
-            className="text-blue-600 hover:text-blue-800 underline"
+            className="text-petrol-base hover:text-petrol-dark underline"
           >
             refreshing the page
           </button> or <a 
             href="/contact" 
-            className="text-blue-600 hover:text-blue-800 underline"
+            className="text-petrol-base hover:text-petrol-dark underline"
           >
             contact support
           </a>.

@@ -632,7 +632,7 @@ export default function AdvancedSearch({ onResultSelect, className }: AdvancedSe
                     <FileText className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <div className="flex items-center space-x-2 mb-1">
-                        <p className="text-sm font-medium">{result.originalName}</p>
+                        <p className="text-sm font-normal">{result.originalName}</p>
                         {result.isDuplicate && (
                           <Badge variant="destructive" className="text-xs">Duplicate</Badge>
                         )}
@@ -680,7 +680,7 @@ export default function AdvancedSearch({ onResultSelect, className }: AdvancedSe
           {!loading && results.length === 0 && (filters.query || hasActiveFilters()) && (
             <div className="text-center py-8 text-muted-foreground">
               <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p className="text-lg font-medium">No documents found</p>
+              <p className="text-lg font-normal">No documents found</p>
               <p className="text-sm">Try adjusting your search criteria</p>
             </div>
           )}
@@ -689,7 +689,7 @@ export default function AdvancedSearch({ onResultSelect, className }: AdvancedSe
           {!loading && results.length === 0 && !filters.query && !hasActiveFilters() && (
             <div className="text-center py-8 text-muted-foreground">
               <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p className="text-lg font-medium">Start searching your documents</p>
+              <p className="text-lg font-normal">Start searching your documents</p>
               <p className="text-sm">Enter a search term or use filters to find documents</p>
             </div>
           )}

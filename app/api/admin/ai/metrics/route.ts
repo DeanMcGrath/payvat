@@ -32,7 +32,13 @@ async function getAIMetrics(request: NextRequest, user?: AuthUser) {
       activeTemplates,
       avgConfidence,
       recentAnalytics,
-      lastLearningRun
+      lastLearningRun,
+      totalDocuments,
+      successfulExtractions,
+      errorCount,
+      averageProcessingTime,
+      templatePerformance,
+      confidenceTrends
     ] = await Promise.all([
       // Total feedback count
       prisma.learningFeedback.count({
@@ -49,10 +55,10 @@ async function getAIMetrics(request: NextRequest, user?: AuthUser) {
         where: { isActive: true }
       }),
       
-      // Average confidence from feedback
-      prisma.learningFeedback.aggregate({
+      // Average confidence from analytics
+      prisma.aIProcessingAnalytics.aggregate({
         where: {
-          createdAt: { gte: thirtyDaysAgo },
+          processedAt: { gte: thirtyDaysAgo },
           confidenceScore: { not: null }
         },
         _avg: { confidenceScore: true }
@@ -72,10 +78,68 @@ async function getAIMetrics(request: NextRequest, user?: AuthUser) {
         where: { wasProcessed: true },
         orderBy: { processedAt: 'desc' },
         select: { processedAt: true }
-      })
+      }),
+
+      // Total documents processed
+      prisma.document.count({
+        where: {
+          createdAt: { gte: thirtyDaysAgo },
+          status: 'PROCESSED'
+        }
+      }),
+
+      // Successful extractions (high confidence)
+      prisma.aIProcessingAnalytics.count({
+        where: {
+          processedAt: { gte: thirtyDaysAgo },
+          confidenceScore: { gte: 0.7 }
+        }
+      }),
+
+      // Error count
+      prisma.aIProcessingAnalytics.count({
+        where: {
+          processedAt: { gte: thirtyDaysAgo },
+          hadErrors: true
+        }
+      }),
+
+      // Average processing time
+      prisma.aIProcessingAnalytics.aggregate({
+        where: {
+          processedAt: { gte: thirtyDaysAgo }
+        },
+        _avg: { processingTime: true }
+      }),
+
+      // Template performance
+      prisma.templateUsage.aggregate({
+        where: {
+          createdAt: { gte: thirtyDaysAgo }
+        },
+        _count: { _all: true },
+        _avg: { 
+          similarity: true,
+          confidence: true,
+          processingTime: true
+        }
+      }),
+
+      // Confidence trends (daily averages)
+      prisma.$queryRaw`
+        SELECT 
+          DATE("processedAt") as date,
+          AVG("confidenceScore")::float as avg_confidence,
+          COUNT(*)::int as document_count
+        FROM "ai_processing_analytics"
+        WHERE "processedAt" >= ${thirtyDaysAgo}
+        GROUP BY DATE("processedAt")
+        ORDER BY date DESC
+        LIMIT 30
+      ` as any[]
     ])
     
-    // Calculate accuracy metrics
+    // Calculate accuracy metrics from extraction accuracy and success rates
     let averageAccuracy = 0
     if (recentAnalytics.length > 0) {
       const accuracySum = recentAnalytics
@@ -85,42 +149,55 @@ async function getAIMetrics(request: NextRequest, user?: AuthUser) {
       const accuracyCount = recentAnalytics.filter((a: any) => a.extractionAccuracy !== null).length
       averageAccuracy = accuracyCount > 0 ? accuracySum / accuracyCount : 0
     }
+
+    // Calculate success rate
+    const successRate = totalDocuments > 0 ? (successfulExtractions / totalDocuments) * 100 : 0
+    const errorRate = recentAnalytics.length > 0 ? (errorCount / recentAnalytics.length) * 100 : 0
     
-    // Calculate processing efficiency
-    const avgProcessingTime = recentAnalytics.length > 0 
-      ? recentAnalytics.reduce((sum: number, a: any) => sum + a.processingTime, 0) / recentAnalytics.length
-      : 0
+    // Calculate processing efficiency improvement
+    const avgProcessingTimeMs = averageProcessingTime._avg.processingTime || 0
     
-    // Template usage statistics
-    const templateUsage = await prisma.templateUsage.aggregate({
-      where: {
-        createdAt: { gte: thirtyDaysAgo }
-      },
-      _count: { _all: true },
-      _avg: { 
-        similarity: true,
-        confidence: true
-      }
-    })
+    // Template effectiveness
+    const templateEffectiveness = templatePerformance._count._all > 0 ? 
+      (templatePerformance._avg.confidence || 0) * 100 : 0
     
     const metrics = {
+      // Core metrics
       totalFeedback,
-      averageAccuracy,
-      averageConfidence: avgConfidence._avg.confidenceScore || 0,
+      totalDocuments,
+      averageAccuracy: Math.round(averageAccuracy * 100), // Convert to percentage
+      averageConfidence: Math.round((avgConfidence._avg.confidenceScore || 0) * 100),
+      successRate: Math.round(successRate),
+      errorRate: Math.round(errorRate * 100) / 100, // Keep 2 decimal places
+      
+      // Template metrics
       templatesCreated: totalTemplates,
       templatesActive: activeTemplates,
-      processingJobs: 0, // This would come from the learning pipeline
+      templateUsageCount: templatePerformance._count._all,
+      templateEffectiveness: Math.round(templateEffectiveness),
+      
+      // Processing metrics
+      avgProcessingTime: Math.round(avgProcessingTimeMs),
+      avgTemplateSimilarity: Math.round((templatePerformance._avg.similarity || 0) * 100),
+      
+      // System health
       lastLearningRun: lastLearningRun?.processedAt 
         ? formatTimeAgo(lastLearningRun.processedAt)
         : 'Never',
       
-      // Additional insights
+      // Trends and analytics
+      confidenceTrends: confidenceTrends.map(row => ({
+        date: row.date.toISOString().split('T')[0],
+        confidence: Math.round((row.avg_confidence || 0) * 100),
+        documentCount: row.document_count
+      })),
+      
+      // Performance insights
       insights: {
-        avgProcessingTime: Math.round(avgProcessingTime),
-        templateUsageCount: templateUsage._count._all,
-        avgTemplateSimilarity: templateUsage._avg.similarity || 0,
-        avgTemplateConfidence: templateUsage._avg.confidence || 0,
-        recentDocumentsProcessed: recentAnalytics.length
+        documentsPerDay: Math.round(totalDocuments / 30),
+        improvementRate: calculateImprovementRate(confidenceTrends),
+        topPerformingMethod: getTopPerformingMethod(recentAnalytics),
+        systemStatus: calculateSystemStatus(successRate, errorRate, avgConfidence._avg.confidenceScore || 0)
       }
     }
     
@@ -158,6 +235,68 @@ function formatTimeAgo(date: Date): string {
   if (diffDays < 30) return `${diffDays} days ago`
   
   return date.toLocaleDateString()
+}
+
+/**
+ * Calculate improvement rate from confidence trends
+ */
+function calculateImprovementRate(trends: any[]): number {
+  if (trends.length < 2) return 0
+  
+  const recent = trends.slice(0, 7) // Last 7 days
+  const previous = trends.slice(7, 14) // Previous 7 days
+  
+  if (recent.length === 0 || previous.length === 0) return 0
+  
+  const recentAvg = recent.reduce((sum, t) => sum + t.avg_confidence, 0) / recent.length
+  const previousAvg = previous.reduce((sum, t) => sum + t.avg_confidence, 0) / previous.length
+  
+  return Math.round(((recentAvg - previousAvg) / previousAvg) * 100)
+}
+
+/**
+ * Get top performing processing method
+ */
+function getTopPerformingMethod(analytics: any[]): string {
+  if (analytics.length === 0) return 'N/A'
+  
+  const methodPerformance: Record<string, { count: number, totalConfidence: number }> = {}
+  
+  analytics.forEach(a => {
+    const method = a.processingStrategy || 'UNKNOWN'
+    if (!methodPerformance[method]) {
+      methodPerformance[method] = { count: 0, totalConfidence: 0 }
+    }
+    methodPerformance[method].count++
+    methodPerformance[method].totalConfidence += (a.confidenceScore || 0)
+  })
+  
+  let bestMethod = 'UNKNOWN'
+  let bestScore = 0
+  
+  Object.keys(methodPerformance).forEach(method => {
+    const avgConfidence = methodPerformance[method].totalConfidence / methodPerformance[method].count
+    const score = avgConfidence * Math.log(methodPerformance[method].count + 1) // Weight by usage
+    
+    if (score > bestScore) {
+      bestScore = score
+      bestMethod = method
+    }
+  })
+  
+  return bestMethod
+}
+
+/**
+ * Calculate overall system status
+ */
+function calculateSystemStatus(successRate: number, errorRate: number, avgConfidence: number): string {
+  const confidenceScore = avgConfidence * 100
+  
+  if (successRate >= 90 && errorRate <= 2 && confidenceScore >= 85) return 'Excellent'
+  if (successRate >= 80 && errorRate <= 5 && confidenceScore >= 75) return 'Good'
+  if (successRate >= 70 && errorRate <= 10 && confidenceScore >= 65) return 'Fair'
+  return 'Needs Attention'
 }
 
 export const GET = createGuestFriendlyRoute(getAIMetrics)

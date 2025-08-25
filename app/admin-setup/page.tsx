@@ -93,14 +93,14 @@ export default function AdminSetup() {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2 text-[#5BADEA]">
+          <CardTitle className="flex items-center space-x-2 text-[#216477]">
             <Shield className="h-5 w-5" />
             <span>Admin Setup</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800">
+          <div className="mb-4 p-3 bg-blue-50 border border-petrol-200 rounded-lg">
+            <p className="text-sm text-petrol-dark">
               <strong>First-time setup:</strong> Create the initial administrator account for payvat.ie
             </p>
           </div>
@@ -208,7 +208,7 @@ export default function AdminSetup() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#73C2FB] hover:bg-[#5BADEA] text-white"
+              className="w-full bg-[#2A7A8F] hover:bg-[#216477] text-white"
             >
               {loading ? 'Creating Admin...' : 'Create Admin User'}
             </Button>
@@ -217,7 +217,7 @@ export default function AdminSetup() {
           <div className="mt-4 pt-4 border-t text-center">
             <p className="text-sm text-gray-500">
               Already have an account?{' '}
-              <a href="/login" className="text-[#73C2FB] hover:text-[#5BADEA] font-medium">
+              <a href="/login" className="text-[#2A7A8F] hover:text-[#216477] font-normal">
                 Login here
               </a>
             </p>

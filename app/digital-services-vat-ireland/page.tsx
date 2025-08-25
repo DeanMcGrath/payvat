@@ -35,7 +35,7 @@ export default function DigitalServicesVatIreland() {
         <section className="scroll-section py-16 px-4" id="digital-services-definition">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 What Are Digital Services for VAT Purposes?
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -45,40 +45,40 @@ export default function DigitalServicesVatIreland() {
             
             <div className="grid md:grid-cols-2 gap-8">
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Digital Services Include</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Digital Services Include</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Software & Apps</h4>
+                      <h4 className="font-normal text-gray-900">Software & Apps</h4>
                       <p className="text-gray-600 text-sm">SaaS platforms, mobile apps, cloud software, licenses</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Digital Content</h4>
+                      <h4 className="font-normal text-gray-900">Digital Content</h4>
                       <p className="text-gray-600 text-sm">E-books, music, videos, games, online courses</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Web Services</h4>
+                      <h4 className="font-normal text-gray-900">Web Services</h4>
                       <p className="text-gray-600 text-sm">Website development, hosting, domain registration</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Online Platforms</h4>
+                      <h4 className="font-normal text-gray-900">Online Platforms</h4>
                       <p className="text-gray-600 text-sm">Marketplaces, advertising platforms, subscription services</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Digital Training</h4>
+                      <h4 className="font-normal text-gray-900">Digital Training</h4>
                       <p className="text-gray-600 text-sm">Online courses, webinars, e-learning platforms</p>
                     </div>
                   </div>
@@ -86,40 +86,40 @@ export default function DigitalServicesVatIreland() {
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">NOT Digital Services</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">NOT Digital Services</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Traditional Consulting</h4>
+                      <h4 className="font-normal text-gray-900">Traditional Consulting</h4>
                       <p className="text-gray-600 text-sm">Business advice, strategy consulting (even if delivered online)</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Professional Services</h4>
+                      <h4 className="font-normal text-gray-900">Professional Services</h4>
                       <p className="text-gray-600 text-sm">Legal advice, accounting, architectural services</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Physical Goods</h4>
+                      <h4 className="font-normal text-gray-900">Physical Goods</h4>
                       <p className="text-gray-600 text-sm">Software sold on physical media, printed materials</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Telecommunications</h4>
+                      <h4 className="font-normal text-gray-900">Telecommunications</h4>
                       <p className="text-gray-600 text-sm">Phone services, internet access provision</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-red-500 rounded-full mt-2"></div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Educational Services</h4>
+                      <h4 className="font-normal text-gray-900">Educational Services</h4>
                       <p className="text-gray-600 text-sm">Formal education, tutoring (personal instruction)</p>
                     </div>
                   </div>
@@ -133,7 +133,7 @@ export default function DigitalServicesVatIreland() {
         <section className="scroll-section py-16 px-4 bg-gray-50" id="digital-vat-guide">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Digital Services Place of Supply Rules
               </h2>
               <p className="text-lg text-gray-600">
@@ -143,11 +143,11 @@ export default function DigitalServicesVatIreland() {
             
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">B2B Digital Services</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">B2B Digital Services</h3>
                 <div className="space-y-4">
                   <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">EU Business Customers</h4>
-                    <ul className="text-blue-800 text-sm space-y-1">
+                    <h4 className="font-normal text-blue-900 mb-2">EU Business Customers</h4>
+                    <ul className="text-petrol-dark text-sm space-y-1">
                       <li>• Reverse charge applies (0% VAT in Ireland)</li>
                       <li>• Customer pays VAT in their country</li>
                       <li>• Must validate customer's VAT number</li>
@@ -156,7 +156,7 @@ export default function DigitalServicesVatIreland() {
                     </ul>
                   </div>
                   <div className="bg-green-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-green-900 mb-2">Non-EU Business Customers</h4>
+                    <h4 className="font-normal text-green-900 mb-2">Non-EU Business Customers</h4>
                     <ul className="text-green-800 text-sm space-y-1">
                       <li>• Zero-rated (0% VAT) as export</li>
                       <li>• Evidence of business status required</li>
@@ -167,10 +167,10 @@ export default function DigitalServicesVatIreland() {
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">B2C Digital Services</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">B2C Digital Services</h3>
                 <div className="space-y-4">
                   <div className="bg-orange-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-orange-900 mb-2">EU Consumer Customers</h4>
+                    <h4 className="font-normal text-orange-900 mb-2">EU Consumer Customers</h4>
                     <ul className="text-orange-800 text-sm space-y-1">
                       <li>• VAT charged at customer's country rate</li>
                       <li>• Must register for OSS or country-specific VAT</li>
@@ -179,7 +179,7 @@ export default function DigitalServicesVatIreland() {
                     </ul>
                   </div>
                   <div className="bg-purple-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-purple-900 mb-2">Irish Consumer Customers</h4>
+                    <h4 className="font-normal text-purple-900 mb-2">Irish Consumer Customers</h4>
                     <ul className="text-purple-800 text-sm space-y-1">
                       <li>• Charge 23% Irish VAT</li>
                       <li>• Standard VAT registration thresholds apply</li>
@@ -196,7 +196,7 @@ export default function DigitalServicesVatIreland() {
         <section className="scroll-section py-16 px-4" id="oss-registration">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 One Stop Shop (OSS) Registration
               </h2>
               <p className="text-lg text-gray-600">
@@ -206,10 +206,10 @@ export default function DigitalServicesVatIreland() {
             
             <div className="space-y-6">
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">When You Need OSS Registration</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">When You Need OSS Registration</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Mandatory Registration</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Mandatory Registration</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li>• Selling digital services to EU consumers</li>
                       <li>• From the first €1 of sales (no threshold)</li>
@@ -218,7 +218,7 @@ export default function DigitalServicesVatIreland() {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Optional Registration</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Optional Registration</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li>• Planning to sell to EU consumers</li>
                       <li>• Want simplified compliance</li>
@@ -230,41 +230,41 @@ export default function DigitalServicesVatIreland() {
               </div>
               
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">OSS Registration Process</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">OSS Registration Process</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-cyan-600 font-bold text-sm">1</span>
+                      <span className="text-cyan-600 font-normal text-sm">1</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Apply Through ROS</h4>
+                      <h4 className="font-normal text-gray-900">Apply Through ROS</h4>
                       <p className="text-gray-600">Submit OSS application via Revenue Online Service with business details and projected EU sales</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-cyan-600 font-bold text-sm">2</span>
+                      <span className="text-cyan-600 font-normal text-sm">2</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Receive OSS Number</h4>
+                      <h4 className="font-normal text-gray-900">Receive OSS Number</h4>
                       <p className="text-gray-600">Get unique OSS identification number starting with "IM" for Ireland</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-cyan-600 font-bold text-sm">3</span>
+                      <span className="text-cyan-600 font-normal text-sm">3</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Setup Customer Location Detection</h4>
+                      <h4 className="font-normal text-gray-900">Setup Customer Location Detection</h4>
                       <p className="text-gray-600">Implement systems to identify customer location and apply correct VAT rates</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-cyan-600 font-bold text-sm">4</span>
+                      <span className="text-cyan-600 font-normal text-sm">4</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Submit Quarterly OSS Returns</h4>
+                      <h4 className="font-normal text-gray-900">Submit Quarterly OSS Returns</h4>
                       <p className="text-gray-600">File quarterly returns by 31st of month following quarter end</p>
                     </div>
                   </div>
@@ -272,10 +272,10 @@ export default function DigitalServicesVatIreland() {
               </div>
               
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Customer Location Evidence</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Customer Location Evidence</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Required Evidence (2 pieces)</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Required Evidence (2 pieces)</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li>• Billing address</li>
                       <li>• IP address location</li>
@@ -286,7 +286,7 @@ export default function DigitalServicesVatIreland() {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Conflicting Evidence</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Conflicting Evidence</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li>• Use billing address if available</li>
                       <li>• Otherwise use IP address location</li>
@@ -304,7 +304,7 @@ export default function DigitalServicesVatIreland() {
         <section className="scroll-section py-16 px-4 bg-gray-50" id="eu-vat-rates">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 EU Digital Services VAT Rates (2025)
               </h2>
               <p className="text-lg text-gray-600">
@@ -314,91 +314,91 @@ export default function DigitalServicesVatIreland() {
             
             <div className="grid md:grid-cols-3 gap-6">
               <div className="card-modern p-6">
-                <h3 className="font-bold text-gray-900 mb-4">Western Europe</h3>
+                <h3 className="font-normal text-gray-900 mb-4">Western Europe</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Ireland</span>
-                    <span className="font-semibold">23%</span>
+                    <span className="font-normal">23%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>United Kingdom</span>
-                    <span className="font-semibold">20%</span>
+                    <span className="font-normal">20%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Germany</span>
-                    <span className="font-semibold">19%</span>
+                    <span className="font-normal">19%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>France</span>
-                    <span className="font-semibold">20%</span>
+                    <span className="font-normal">20%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Netherlands</span>
-                    <span className="font-semibold">21%</span>
+                    <span className="font-normal">21%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Belgium</span>
-                    <span className="font-semibold">21%</span>
+                    <span className="font-normal">21%</span>
                   </div>
                 </div>
               </div>
               
               <div className="card-modern p-6">
-                <h3 className="font-bold text-gray-900 mb-4">Northern Europe</h3>
+                <h3 className="font-normal text-gray-900 mb-4">Northern Europe</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Denmark</span>
-                    <span className="font-semibold">25%</span>
+                    <span className="font-normal">25%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Sweden</span>
-                    <span className="font-semibold">25%</span>
+                    <span className="font-normal">25%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Finland</span>
-                    <span className="font-semibold">24%</span>
+                    <span className="font-normal">24%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Norway</span>
-                    <span className="font-semibold">25%</span>
+                    <span className="font-normal">25%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Estonia</span>
-                    <span className="font-semibold">20%</span>
+                    <span className="font-normal">20%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Latvia</span>
-                    <span className="font-semibold">21%</span>
+                    <span className="font-normal">21%</span>
                   </div>
                 </div>
               </div>
               
               <div className="card-modern p-6">
-                <h3 className="font-bold text-gray-900 mb-4">Southern & Eastern</h3>
+                <h3 className="font-normal text-gray-900 mb-4">Southern & Eastern</h3>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Spain</span>
-                    <span className="font-semibold">21%</span>
+                    <span className="font-normal">21%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Italy</span>
-                    <span className="font-semibold">22%</span>
+                    <span className="font-normal">22%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Portugal</span>
-                    <span className="font-semibold">23%</span>
+                    <span className="font-normal">23%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Poland</span>
-                    <span className="font-semibold">23%</span>
+                    <span className="font-normal">23%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Czech Republic</span>
-                    <span className="font-semibold">21%</span>
+                    <span className="font-normal">21%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Hungary</span>
-                    <span className="font-semibold">27%</span>
+                    <span className="font-normal">27%</span>
                   </div>
                 </div>
               </div>
@@ -410,7 +410,7 @@ export default function DigitalServicesVatIreland() {
         <section className="scroll-section py-16 px-4" id="digital-automation">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Automate Digital Services VAT Compliance
               </h2>
               <p className="text-lg text-gray-600">
@@ -421,7 +421,7 @@ export default function DigitalServicesVatIreland() {
             <div className="card-premium p-8">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Automated Compliance</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">Automated Compliance</h3>
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 bg-cyan-500 rounded-full mt-2"></div>
@@ -443,7 +443,7 @@ export default function DigitalServicesVatIreland() {
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Evidence & Documentation</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">Evidence & Documentation</h3>
                   <ul className="space-y-3 text-gray-700">
                     <li className="flex items-start space-x-3">
                       <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
@@ -469,13 +469,13 @@ export default function DigitalServicesVatIreland() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <a 
                     href="/signup" 
-                    className="btn-primary px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105"
+                    className="btn-primary px-8 py-4 text-lg font-normal rounded-xl transition-all duration-300 hover:scale-105"
                   >
                     Start Digital Services VAT
                   </a>
                   <a 
                     href="/pricing" 
-                    className="px-8 py-4 text-lg font-semibold text-cyan-600 border-2 border-cyan-200 rounded-xl hover:bg-cyan-50 transition-all duration-300"
+                    className="px-8 py-4 text-lg font-normal text-cyan-600 border-2 border-cyan-200 rounded-xl hover:bg-cyan-50 transition-all duration-300"
                   >
                     View Digital Services Plans
                   </a>
@@ -488,7 +488,7 @@ export default function DigitalServicesVatIreland() {
         {/* Call to Action */}
         <section className="scroll-section py-20 px-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">
+            <h2 className="text-4xl font-normal mb-6">
               Ready to Simplify Digital Services VAT Compliance?
             </h2>
             <p className="text-xl mb-8 text-cyan-100">
@@ -497,13 +497,13 @@ export default function DigitalServicesVatIreland() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-cyan-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-cyan-600 px-8 py-4 text-lg font-normal rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Get Started Free
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-cyan-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-normal rounded-xl hover:bg-white hover:text-cyan-600 transition-all duration-300"
               >
                 View Pricing
               </a>

@@ -16,7 +16,7 @@ export default function Footer() {
           <div className="flex justify-center">
             <button 
               onClick={scrollToTop}
-              className="group text-gray-600 hover:text-[#065666] font-medium transition-all duration-300 flex items-center gap-2 py-2 px-4 rounded-full hover:bg-white hover:shadow-md"
+              className="group text-gray-600 hover:text-[#065666] font-normal transition-all duration-300 flex items-center gap-2 py-2 px-4 rounded-full hover:bg-white hover:shadow-md"
             >
               Back to Top <ArrowUp className="h-4 w-4 group-hover:-translate-y-0.5 transition-transform" />
             </button>
@@ -35,7 +35,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* Column 1 - Company & Services */}
             <div className="animate-fade-in">
-              <h4 className="text-xl font-bold text-white mb-2">Company & Services</h4>
+              <h4 className="text-xl font-normal text-white mb-2">Company & Services</h4>
               <ul className="space-y-4">
                 <li>
                   <Link 
@@ -87,7 +87,7 @@ export default function Footer() {
 
             {/* Column 2 - Business Setup */}
             <div className="animate-fade-in" style={{animationDelay: '0.2s'}}>
-              <h4 className="text-xl font-bold text-white mb-2">Business Setup</h4>
+              <h4 className="text-xl font-normal text-white mb-2">Business Setup</h4>
               <ul className="space-y-4">
                 <li>
                   <Link 
@@ -130,7 +130,7 @@ export default function Footer() {
 
             {/* Column 3 - VAT & Tax */}
             <div className="animate-fade-in" style={{animationDelay: '0.4s'}}>
-              <h4 className="text-xl font-bold text-white mb-2">VAT & Tax</h4>
+              <h4 className="text-xl font-normal text-white mb-2">VAT & Tax</h4>
               <ul className="space-y-4">
                 <li>
                   <Link 
@@ -173,7 +173,7 @@ export default function Footer() {
 
             {/* Column 4 - Industry & Tools */}
             <div className="animate-fade-in" style={{animationDelay: '0.6s'}}>
-              <h4 className="text-xl font-bold text-white mb-2">Industry & Tools</h4>
+              <h4 className="text-xl font-normal text-white mb-2">Industry & Tools</h4>
               <ul className="space-y-4">
                 <li>
                   <Link 
@@ -214,7 +214,7 @@ export default function Footer() {
                 © 2025 <span className="payvat-brand">PayVAT</span>. All rights reserved.
               </p>
               <div className="flex items-center space-x-4">
-                <span className="text-blue-100 text-center sm:text-right font-medium">Ireland's complete business guidance platform</span>
+                <span className="text-blue-100 text-center sm:text-right font-normal">Ireland's complete business guidance platform</span>
               </div>
             </div>
           </div>

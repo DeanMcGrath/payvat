@@ -123,7 +123,7 @@ export function OptimizedImage({
       {/* Loading Indicator */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-[#73C2FB] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-[#2A7A8F] border-t-transparent rounded-full animate-spin" />
         </div>
       )}
     </div>

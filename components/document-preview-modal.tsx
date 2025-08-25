@@ -120,7 +120,7 @@ export default function DocumentPreviewModal({
           <div className="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center bg-gray-50">
             {getFileTypeIcon(currentDocument.fileType)}
             <div className="mt-4">
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Document Preview</h3>
+              <h3 className="text-lg font-normal text-gray-900 mb-2">Document Preview</h3>
               <p className="text-gray-500">
                 Preview for {currentDocument.fileType.toUpperCase()} files is not available in this demo
               </p>
@@ -129,7 +129,7 @@ export default function DocumentPreviewModal({
 
           {/* Document Information */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Document Information</h3>
+            <h3 className="text-lg font-normal text-gray-900">Document Information</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Document Name */}

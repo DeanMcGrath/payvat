@@ -12,6 +12,8 @@ import { invalidateUserCache } from '@/app/api/documents/extracted-vat/route'
 import { generateDocumentFingerprint, checkForDuplicates, storeDocumentHash, markAsDuplicate } from '@/lib/duplicateDetection'
 
 async function uploadFile(request: NextRequest, user?: AuthUser) {
+  console.log('✅ STEP 2: uploadFile function called')
+  
   const startTime = Date.now()
   logAudit('FILE_UPLOAD_STARTED', {
     userId: user?.id,
@@ -19,13 +21,17 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     result: 'SUCCESS'
   })
   
+  console.log('✅ STEP 3: Audit log completed')
+  
   let processingResult: any = null // Track processing result for debugging
   let processingError: any = null // Track processing errors
   
   try {
     // Check if request has multipart form data
+    console.log('✅ STEP 4: Checking content type')
     const contentType = request.headers.get('content-type')
     if (!contentType?.includes('multipart/form-data')) {
+      console.error('❌ STEP 4 FAILED: Invalid content type:', contentType)
       return NextResponse.json(
         { error: 'Content-Type must be multipart/form-data' },
         { status: 400 }
@@ -33,16 +39,23 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     }
     
     // Parsing form data
+    console.log('✅ STEP 5: Parsing form data')
     const formData = await request.formData()
-    // Form data parsed
+    console.log('✅ STEP 6: Form data parsed successfully')
     
+    console.log('✅ STEP 7: Extracting form fields')
     const file = formData.get('file') as File
     const category = formData.get('category') as string
     const vatReturnId = formData.get('vatReturnId') as string | null
     
-    // Form data extracted and validated
+    console.log('✅ STEP 8: Form data extracted successfully', {
+      hasFile: !!file,
+      category,
+      fileSize: file?.size
+    })
     
     if (!file) {
+      console.error('❌ STEP 8 FAILED: No file provided')
       return NextResponse.json(
         { error: 'No file provided' },
         { status: 400 }
@@ -85,25 +98,33 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     }
     
     // Test basic database connectivity
+    console.log('✅ STEP 9: Testing database connection')
     try {
       await prisma.$queryRaw`SELECT 1`
+      console.log('✅ STEP 10: Database connection successful')
     } catch (dbError) {
+      console.error('❌ STEP 10 FAILED: Database connection error:', dbError)
       logError('Database connection failed in upload', dbError, {
         userId: user?.id,
         operation: 'upload-db-test'
       })
       return NextResponse.json({
         success: false,
-        error: 'Service temporarily unavailable. Please try again later.'
+        error: 'Service temporarily unavailable. Please try again later.',
+        step: 'DATABASE_CONNECTION_FAILED',
+        details: dbError instanceof Error ? dbError.message : String(dbError)
       }, { status: 503 })
     }
 
     // Generate session-based user ID for guests - but we need a valid User record for DB constraint
+    console.log('✅ STEP 11: Setting up user ID')
     let userId: string;
     if (user) {
       userId = user.id;
+      console.log('✅ STEP 12: Using authenticated user ID:', userId)
     } else {
       // For guest uploads, create a minimal guest user record to satisfy foreign key constraint
+      console.log('✅ STEP 12: Creating guest user')
       try {
         const guestEmail = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}@guest.payvat.ie`;
         const guestUser = await prisma.User.create({
@@ -116,17 +137,21 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           }
         });
         userId = guestUser.id;
+        console.log('✅ STEP 13: Guest user created:', userId)
         logInfo('Created guest user for upload', { 
           operation: 'guest-user-creation',
           userId: userId 
         });
       } catch (guestUserError) {
+        console.error('❌ STEP 13 FAILED: Guest user creation error:', guestUserError)
         logError('Failed to create guest user', guestUserError, {
           operation: 'guest-user-creation'
         })
         return NextResponse.json({
           success: false,
-          error: 'Unable to process guest upload. Please try again.'
+          error: 'Unable to process guest upload. Please try again.',
+          step: 'GUEST_USER_CREATION_FAILED',
+          details: guestUserError instanceof Error ? guestUserError.message : String(guestUserError)
         }, { status: 500 })
       }
     }
@@ -161,10 +186,16 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     }
     
     // Process file for serverless environment
+    console.log('✅ STEP 14: Starting file processing for serverless')
     let processedFile
     try {
       processedFile = await processFileForServerless(file, userId)
+      console.log('✅ STEP 15: File processed successfully', {
+        fileName: processedFile?.fileName,
+        fileSize: processedFile?.fileSize
+      })
     } catch (processingError) {
+      console.error('❌ STEP 15 FAILED: File processing error:', processingError)
       logError('File processing failed', processingError, {
         userId,
         fileName: file.name,
@@ -172,30 +203,37 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       })
       return NextResponse.json({
         success: false,
-        error: 'File processing failed. Please ensure the file is not corrupted and try again.'
+        error: 'File processing failed. Please ensure the file is not corrupted and try again.',
+        step: 'FILE_PROCESSING_FAILED',
+        details: processingError instanceof Error ? processingError.message : String(processingError)
       }, { status: 500 })
     }
     
     // Save document metadata to database
+    console.log('✅ STEP 16: Creating document record in database')
     let document
     try {
+      // Test with absolute minimum required fields only
       document = await prisma.Document.create({
         data: {
           userId: userId,
-          vatReturnId: vatReturnId || null,
           fileName: processedFile.fileName,
           originalName: processedFile.originalName,
-          filePath: null, // Not used in serverless
-          fileData: processedFile.fileData,
           fileSize: processedFile.fileSize,
           mimeType: processedFile.mimeType,
           fileHash: processedFile.fileHash,
           documentType: getDocumentType(processedFile.extension) as any,
           category: category as any,
-          isScanned: false, // Will be updated by document processing
+          isScanned: false
+          // Only absolute essentials to avoid schema conflicts
         }
       })
+      console.log('✅ STEP 17: Document record created successfully', {
+        documentId: document.id,
+        fileName: document.fileName
+      })
     } catch (dbCreateError) {
+      console.error('❌ STEP 17 FAILED: Document creation error:', dbCreateError)
       logError('Document creation failed', dbCreateError, {
         userId,
         fileName: processedFile.fileName,
@@ -203,7 +241,9 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       })
       return NextResponse.json({
         success: false,
-        error: 'Failed to save document. Please try again.'
+        error: 'Failed to save document. Please try again.',
+        step: 'DOCUMENT_CREATION_FAILED',
+        details: dbCreateError instanceof Error ? dbCreateError.message : String(dbCreateError)
       }, { status: 500 })
     }
     
@@ -317,20 +357,15 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           invoiceTotal = processingResult.extractedData.vatData.grandTotal
         }
         
-        // Update document with processing results including extracted date and total
+        // Update document with processing results (basic fields only)
         await prisma.Document.update({
           where: { id: document.id },
           data: {
             isScanned: true,
             scanResult: processingResult.scanResult,
-            ...(extractedDate && {
-              extractedDate,
-              extractedYear,
-              extractedMonth
-            }),
-            ...(invoiceTotal && {
-              invoiceTotal
-            })
+            // Skip advanced fields that may not exist in database yet
+            // ...(extractedDate && { extractedDate, extractedYear, extractedMonth }),
+            // ...(invoiceTotal && { invoiceTotal })
           }
         })
         
@@ -478,24 +513,26 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           // Extract enhanced metadata (simplified version)
           const enhancedData = await extractDocumentMetadataSimple(enhancedResult, document)
           
-          // Update document with enhanced metadata
+          // Update document with enhanced metadata (skip fields that may not exist)
           await prisma.Document.update({
             where: { id: document.id },
             data: {
-              // Enhanced fields
-              extractedDate: enhancedData.extractedDate,
-              extractedYear: enhancedData.extractedYear,
-              extractedMonth: enhancedData.extractedMonth,
-              invoiceTotal: enhancedData.invoiceTotal,
-              vatAmount: enhancedData.vatAmount,
-              vatAccuracy: enhancedData.vatAccuracy,
-              processingQuality: enhancedData.processingQuality,
-              extractionConfidence: enhancedData.extractionConfidence,
-              dateExtractionConfidence: enhancedData.dateExtractionConfidence,
-              totalExtractionConfidence: enhancedData.totalExtractionConfidence,
-              validationStatus: enhancedData.validationStatus,
-              complianceIssues: enhancedData.complianceIssues,
-              isDuplicate: false
+              // Only update basic fields that exist in all database versions
+              isScanned: true,
+              // Enhanced fields disabled until database migration
+              // extractedDate: enhancedData.extractedDate,
+              // extractedYear: enhancedData.extractedYear, 
+              // extractedMonth: enhancedData.extractedMonth,
+              // invoiceTotal: enhancedData.invoiceTotal,
+              // vatAmount: enhancedData.vatAmount,
+              // vatAccuracy: enhancedData.vatAccuracy,
+              // processingQuality: enhancedData.processingQuality,
+              // extractionConfidence: enhancedData.extractionConfidence,
+              // dateExtractionConfidence: enhancedData.dateExtractionConfidence,
+              // totalExtractionConfidence: enhancedData.totalExtractionConfidence,
+              // validationStatus: enhancedData.validationStatus,
+              // complianceIssues: enhancedData.complianceIssues,
+              // isDuplicate: false
             }
           })
           
@@ -651,15 +688,20 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     })
     
   } catch (error) {
+    console.error('❌ UPLOAD FAILED - TOP LEVEL EXCEPTION:', error)
+    console.error('❌ STACK TRACE:', error instanceof Error ? error.stack : 'No stack trace')
+    
     logError('Upload API exception at top level', error, {
       operation: 'file-upload-top-level'
     })
     
     logger.error('File upload error', error, 'UPLOAD_API')
-    return NextResponse.json(
-      { error: 'File upload failed' },
-      { status: 500 }
-    )
+    return NextResponse.json({
+      success: false,
+      error: 'File upload failed: ' + (error instanceof Error ? error.message : String(error)),
+      step: 'TOP_LEVEL_EXCEPTION',
+      details: error instanceof Error ? error.stack : String(error)
+    }, { status: 500 })
   }
 }
 
@@ -804,20 +846,20 @@ async function extractDocumentMetadataSimple(result: any, document: any) {
   return metadata
 }
 
-// Debug: test basic functionality
-export const POST = async (request: NextRequest) => {
+// POST handler with step-by-step error logging
+export const POST = createGuestFriendlyRoute(async (request: NextRequest, user?: AuthUser) => {
+  console.log('🚀 UPLOAD POST CALLED - STEP BY STEP DEBUG')
+  
   try {
-    console.log('Upload POST called')
+    console.log('✅ STEP 1: Route handler executing')
+    return await uploadFile(request, user)
+  } catch (handlerError) {
+    console.error('❌ STEP 1 FAILED: Route handler exception:', handlerError)
     return NextResponse.json({
-      debug: 'Upload endpoint reached',
-      method: request.method,
-      url: request.url,
-      headers: Object.fromEntries(request.headers.entries())
-    })
-  } catch (error) {
-    console.error('BASIC ERROR:', error)
-    return NextResponse.json({
-      error: 'Basic endpoint error: ' + (error instanceof Error ? error.message : String(error))
+      success: false,
+      error: 'Handler error: ' + (handlerError instanceof Error ? handlerError.message : String(handlerError)),
+      step: 'ROUTE_HANDLER_EXCEPTION',
+      details: handlerError instanceof Error ? handlerError.stack : undefined
     }, { status: 500 })
   }
-}
+})

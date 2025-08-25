@@ -458,7 +458,7 @@ export function VideoPlayer({
 
           <div className="flex items-center space-x-2">
             {title && (
-              <span className="text-white text-sm font-medium hidden md:block">
+              <span className="text-white text-sm font-normal hidden md:block">
                 {title}
               </span>
             )}

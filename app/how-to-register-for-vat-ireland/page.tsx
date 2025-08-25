@@ -55,7 +55,7 @@ export default function HowToRegisterForVATIreland() {
               <div className="icon-premium mb-3 mx-auto">
                 <Calculator className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 VAT Registration <span className="text-gradient-primary">Thresholds 2025</span>
               </h2>
               <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
@@ -67,19 +67,19 @@ export default function HowToRegisterForVATIreland() {
               </p>
               
               <div className="grid lg:grid-cols-2 gap-8">
-                <div className="card-modern p-8 hover-lift border-l-4 border-blue-500">
+                <div className="card-modern p-8 hover-lift border-l-4 border-petrol-500">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="icon-modern bg-blue-500">
+                    <div className="icon-modern bg-petrol-light">
                       <FileText className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold text-foreground">€42,500</h3>
+                      <h3 className="text-2xl font-normal text-foreground">€42,500</h3>
                       <p className="text-muted-foreground">Services threshold</p>
                     </div>
                   </div>
                   
                   <div className="space-y-3 mb-6">
-                    <h4 className="font-semibold text-foreground">Includes:</h4>
+                    <h4 className="font-normal text-foreground">Includes:</h4>
                     <ul className="text-sm text-muted-foreground space-y-1">
                       <li>• Professional services (legal, accounting, consulting)</li>
                       <li>• Digital services and software</li>
@@ -91,7 +91,7 @@ export default function HowToRegisterForVATIreland() {
                   </div>
                   
                   <div className="p-4 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-800">
+                    <p className="text-sm text-petrol-dark">
                       <strong>Key point:</strong> This is for services where the place of supply is Ireland, 
                       regardless of where you're physically located.
                     </p>
@@ -104,13 +104,13 @@ export default function HowToRegisterForVATIreland() {
                       <Building className="h-6 w-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold text-foreground">€85,000</h3>
+                      <h3 className="text-2xl font-normal text-foreground">€85,000</h3>
                       <p className="text-muted-foreground">Goods threshold</p>
                     </div>
                   </div>
                   
                   <div className="space-y-3 mb-6">
-                    <h4 className="font-semibold text-foreground">Includes:</h4>
+                    <h4 className="font-normal text-foreground">Includes:</h4>
                     <ul className="text-sm text-muted-foreground space-y-1">
                       <li>• Physical products and merchandise</li>
                       <li>• Food, drinks, and groceries</li>
@@ -134,7 +134,7 @@ export default function HowToRegisterForVATIreland() {
                 <div className="flex items-start gap-3">
                   <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
                   <div>
-                    <h4 className="font-semibold text-yellow-800 mb-2">Mixed Business Alert</h4>
+                    <h4 className="font-normal text-yellow-800 mb-2">Mixed Business Alert</h4>
                     <p className="text-sm text-yellow-700">
                       If you supply both goods and services, monitor both thresholds separately. 
                       You must register when either threshold is exceeded, not the combined total.
@@ -153,7 +153,7 @@ export default function HowToRegisterForVATIreland() {
               <div className="icon-modern bg-warning mb-3 mx-auto">
                 <Calendar className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 When to <span className="text-gradient-primary">Register</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -166,13 +166,13 @@ export default function HowToRegisterForVATIreland() {
               
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <h3 className="text-xl font-normal text-foreground mb-4 flex items-center gap-2">
                     <AlertTriangle className="h-5 w-5 text-red-500" />
                     Mandatory Registration
                   </h3>
                   <div className="space-y-4">
                     <div className="p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
-                      <h4 className="font-semibold text-red-800 mb-2">You MUST register within 30 days if:</h4>
+                      <h4 className="font-normal text-red-800 mb-2">You MUST register within 30 days if:</h4>
                       <ul className="text-sm text-red-700 space-y-1">
                         <li>• Turnover has exceeded the threshold</li>
                         <li>• You expect to exceed threshold in next 30 days</li>
@@ -182,7 +182,7 @@ export default function HowToRegisterForVATIreland() {
                     </div>
                     
                     <div className="p-4 bg-orange-50 rounded-lg">
-                      <h4 className="font-semibold text-orange-800 mb-2">Penalty for Late Registration</h4>
+                      <h4 className="font-normal text-orange-800 mb-2">Penalty for Late Registration</h4>
                       <ul className="text-sm text-orange-700 space-y-1">
                         <li>• 5% of tax due (minimum €125, maximum €12,695)</li>
                         <li>• Back-dated VAT liability from threshold date</li>
@@ -194,13 +194,13 @@ export default function HowToRegisterForVATIreland() {
                 </div>
 
                 <div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <h3 className="text-xl font-normal text-foreground mb-4 flex items-center gap-2">
                     <CheckCircle className="h-5 w-5 text-green-500" />
                     Voluntary Registration
                   </h3>
                   <div className="space-y-4">
                     <div className="p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-                      <h4 className="font-semibold text-green-800 mb-2">You MAY register early if:</h4>
+                      <h4 className="font-normal text-green-800 mb-2">You MAY register early if:</h4>
                       <ul className="text-sm text-green-700 space-y-1">
                         <li>• You want to reclaim input VAT on startup costs</li>
                         <li>• Customers expect you to be VAT registered</li>
@@ -210,8 +210,8 @@ export default function HowToRegisterForVATIreland() {
                     </div>
                     
                     <div className="p-4 bg-blue-50 rounded-lg">
-                      <h4 className="font-semibold text-blue-800 mb-2">Benefits of Early Registration</h4>
-                      <ul className="text-sm text-blue-700 space-y-1">
+                      <h4 className="font-normal text-petrol-dark mb-2">Benefits of Early Registration</h4>
+                      <ul className="text-sm text-petrol-dark space-y-1">
                         <li>• Reclaim VAT on pre-registration expenses</li>
                         <li>• Professional credibility with B2B customers</li>
                         <li>• No surprise compliance requirements</li>
@@ -232,7 +232,7 @@ export default function HowToRegisterForVATIreland() {
               <div className="icon-premium mb-3 mx-auto">
                 <UserCheck className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Registration <span className="text-gradient-primary">Process</span>
               </h2>
               <div className="w-24 h-1 gradient-primary mx-auto mb-4 rounded-full"></div>
@@ -245,15 +245,15 @@ export default function HowToRegisterForVATIreland() {
               
               <div className="space-y-8">
                 <div className="flex items-start gap-6">
-                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-semibold flex-shrink-0">1</div>
+                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-normal flex-shrink-0">1</div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Get Your Tax Reference Number (TRN)</h3>
+                    <h3 className="text-xl font-normal text-foreground mb-3">Get Your Tax Reference Number (TRN)</h3>
                     <p className="text-muted-foreground mb-4">
                       You need a TRN before applying for VAT registration. If you don't have one, apply through Revenue's MyAccount or submit Form TR1 (individuals) or TR2 (companies).
                     </p>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="p-4 card-modern">
-                        <h4 className="font-semibold text-foreground mb-2">For Individuals/Sole Traders</h4>
+                        <h4 className="font-normal text-foreground mb-2">For Individuals/Sole Traders</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
                           <li>• Complete Form TR1</li>
                           <li>• Provide PPS number and ID</li>
@@ -261,7 +261,7 @@ export default function HowToRegisterForVATIreland() {
                         </ul>
                       </div>
                       <div className="p-4 card-modern">
-                        <h4 className="font-semibold text-foreground mb-2">For Companies</h4>
+                        <h4 className="font-normal text-foreground mb-2">For Companies</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
                           <li>• Complete Form TR2</li>
                           <li>• Provide CRO number and incorporation cert</li>
@@ -273,17 +273,17 @@ export default function HowToRegisterForVATIreland() {
                 </div>
 
                 <div className="flex items-start gap-6">
-                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-semibold flex-shrink-0">2</div>
+                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-normal flex-shrink-0">2</div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Complete VAT Registration Application</h3>
+                    <h3 className="text-xl font-normal text-foreground mb-3">Complete VAT Registration Application</h3>
                     <p className="text-muted-foreground mb-4">
                       Apply through ROS or submit paper forms. Online applications are processed faster and are less prone to errors.
                     </p>
                     
                     <div className="space-y-4">
                       <div className="p-4 bg-blue-50 rounded-lg">
-                        <h4 className="font-semibold text-blue-800 mb-2">Required Information</h4>
-                        <div className="grid md:grid-cols-2 gap-4 text-sm text-blue-700">
+                        <h4 className="font-normal text-petrol-dark mb-2">Required Information</h4>
+                        <div className="grid md:grid-cols-2 gap-4 text-sm text-petrol-dark">
                           <ul className="space-y-1">
                             <li>• Business name and address</li>
                             <li>• Nature of business activities</li>
@@ -300,7 +300,7 @@ export default function HowToRegisterForVATIreland() {
                       </div>
                       
                       <div className="p-4 bg-green-50 rounded-lg">
-                        <h4 className="font-semibold text-green-800 mb-2">Documents to Provide</h4>
+                        <h4 className="font-normal text-green-800 mb-2">Documents to Provide</h4>
                         <div className="grid md:grid-cols-2 gap-4 text-sm text-green-700">
                           <ul className="space-y-1">
                             <li>• Evidence of business activity</li>
@@ -321,16 +321,16 @@ export default function HowToRegisterForVATIreland() {
                 </div>
 
                 <div className="flex items-start gap-6">
-                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-semibold flex-shrink-0">3</div>
+                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-normal flex-shrink-0">3</div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Submit Application and Await Processing</h3>
+                    <h3 className="text-xl font-normal text-foreground mb-3">Submit Application and Await Processing</h3>
                     <p className="text-muted-foreground mb-4">
                       Revenue will review your application and may request additional information. Response time is typically 15-30 days.
                     </p>
                     
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="p-4 card-modern">
-                        <h4 className="font-semibold text-foreground mb-2">If Approved</h4>
+                        <h4 className="font-normal text-foreground mb-2">If Approved</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
                           <li>• VAT number issued (IE + 7 digits + letter)</li>
                           <li>• VAT certificate posted to you</li>
@@ -339,7 +339,7 @@ export default function HowToRegisterForVATIreland() {
                         </ul>
                       </div>
                       <div className="p-4 card-modern">
-                        <h4 className="font-semibold text-foreground mb-2">If Queries Raised</h4>
+                        <h4 className="font-normal text-foreground mb-2">If Queries Raised</h4>
                         <ul className="text-sm text-muted-foreground space-y-1">
                           <li>• Respond quickly with requested info</li>
                           <li>• Delays can push effective date back</li>
@@ -352,9 +352,9 @@ export default function HowToRegisterForVATIreland() {
                 </div>
 
                 <div className="flex items-start gap-6">
-                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-semibold flex-shrink-0">4</div>
+                  <div className="w-12 h-12 rounded-full bg-primary text-white text-lg flex items-center justify-center font-normal flex-shrink-0">4</div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-foreground mb-3">Set Up Compliance Systems</h3>
+                    <h3 className="text-xl font-normal text-foreground mb-3">Set Up Compliance Systems</h3>
                     <p className="text-muted-foreground mb-4">
                       Once registered, implement systems to stay compliant and avoid penalties.
                     </p>
@@ -391,7 +391,7 @@ export default function HowToRegisterForVATIreland() {
               <div className="icon-modern bg-purple-500 mb-3 mx-auto">
                 <Globe className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Special <span className="text-gradient-primary">Situations</span>
               </h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-4 rounded-full"></div>
@@ -405,7 +405,7 @@ export default function HowToRegisterForVATIreland() {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div className="p-6 card-modern hover-lift">
-                    <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <h3 className="font-normal text-foreground mb-3 flex items-center gap-2">
                       <Building className="h-5 w-5 text-primary" />
                       Non-Resident Businesses
                     </h3>
@@ -421,7 +421,7 @@ export default function HowToRegisterForVATIreland() {
                   </div>
                   
                   <div className="p-6 card-modern hover-lift">
-                    <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <h3 className="font-normal text-foreground mb-3 flex items-center gap-2">
                       <FileText className="h-5 w-5 text-primary" />
                       Distance Sales (E-commerce)
                     </h3>
@@ -439,7 +439,7 @@ export default function HowToRegisterForVATIreland() {
                 
                 <div className="space-y-6">
                   <div className="p-6 card-modern hover-lift">
-                    <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <h3 className="font-normal text-foreground mb-3 flex items-center gap-2">
                       <UserCheck className="h-5 w-5 text-primary" />
                       Exempt Businesses
                     </h3>
@@ -455,7 +455,7 @@ export default function HowToRegisterForVATIreland() {
                   </div>
                   
                   <div className="p-6 card-modern hover-lift">
-                    <h3 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <h3 className="font-normal text-foreground mb-3 flex items-center gap-2">
                       <Calculator className="h-5 w-5 text-primary" />
                       Acquisitions from EU
                     </h3>
@@ -482,7 +482,7 @@ export default function HowToRegisterForVATIreland() {
               <div className="icon-premium mb-3 mx-auto" style={{background: 'linear-gradient(to bottom right, #dc2626, #991b1b)'}}>
                 <AlertTriangle className="h-10 w-10 text-white" />
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-2">
                 Common Mistakes <span className="text-gradient-primary">to Avoid</span>
               </h2>
               <div className="w-24 h-1 bg-red-500 mx-auto mb-4 rounded-full"></div>
@@ -492,46 +492,46 @@ export default function HowToRegisterForVATIreland() {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">1</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">1</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Leaving registration too late</h4>
+                      <h4 className="font-normal text-foreground mb-1">Leaving registration too late</h4>
                       <p className="text-sm text-muted-foreground">Monitor turnover monthly. Register when you expect to hit threshold, not after you've exceeded it.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">2</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">2</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Insufficient evidence of trade</h4>
+                      <h4 className="font-normal text-foreground mb-1">Insufficient evidence of trade</h4>
                       <p className="text-sm text-muted-foreground">Provide real invoices, contracts, or evidence of actual business activity. Revenue checks thoroughly.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">3</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">3</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Mixing personal and business</h4>
+                      <h4 className="font-normal text-foreground mb-1">Mixing personal and business</h4>
                       <p className="text-sm text-muted-foreground">Keep business and personal finances completely separate from day one of trading.</p>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">4</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">4</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Vague business description</h4>
+                      <h4 className="font-normal text-foreground mb-1">Vague business description</h4>
                       <p className="text-sm text-muted-foreground">Be specific about what you do. "Consultancy" is too vague. "IT security consulting" is better.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">5</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">5</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Not setting up ROS access</h4>
+                      <h4 className="font-normal text-foreground mb-1">Not setting up ROS access</h4>
                       <p className="text-sm text-muted-foreground">Get ROS set up immediately. You'll need it for filing returns and avoiding penalties.</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-semibold">6</div>
+                    <div className="w-8 h-8 rounded-full bg-red-500 text-white text-sm flex items-center justify-center font-normal">6</div>
                     <div>
-                      <h4 className="font-semibold text-foreground mb-1">Ignoring ongoing compliance</h4>
+                      <h4 className="font-normal text-foreground mb-1">Ignoring ongoing compliance</h4>
                       <p className="text-sm text-muted-foreground">Registration is just the start. Set up systems to stay compliant with returns and payments.</p>
                     </div>
                   </div>
@@ -553,7 +553,7 @@ export default function HowToRegisterForVATIreland() {
                     <Target className="h-12 w-12 text-white" />
                   </div>
                   
-                  <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
+                  <h3 className="text-3xl lg:text-4xl font-normal text-foreground mb-3">
                     Ready to <span className="text-gradient-primary">Register for VAT?</span>
                   </h3>
                   <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
@@ -564,7 +564,7 @@ export default function HowToRegisterForVATIreland() {
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-2">
                   <Button 
                     size="lg"
-                    className="btn-primary px-12 py-4 text-lg font-semibold hover-lift min-w-[220px]"
+                    className="btn-primary px-12 py-4 text-lg font-normal hover-lift min-w-[220px]"
                     onClick={() => window.location.href = '/signup'}
                   >
                     Start Registration

@@ -2,7 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global Typography System - Readable Geometric Sans-Serif */
+@layer base {
+  html, body {
+    font-family: 'Helvetica Neue', 'Avenir', 'Proxima Nova', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400; /* Regular weight for better readability */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+  
+  /* Headings with Semi-bold weight for emphasis */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Helvetica Neue', 'Avenir', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600; /* Semi-bold weight for emphasis */
+    letter-spacing: -0.02em;
+  }
+  
+  /* Buttons with Medium weight for clarity */
+  button, .btn, [role="button"] {
+    font-weight: 500; /* Medium weight for buttons */
+  }
+  
+  /* Strong emphasis */
+  strong, b {
+    font-weight: 600; /* Semi-bold for emphasis */
+  }
+}
+
 :root {
+  /* Font Weight Variables - Readable Scale */
+  --font-weight-extralight: 200; /* Brand elements only */
+  --font-weight-light: 300; /* Brand elements only */
+  --font-weight-normal: 400; /* Body text */
+  --font-weight-medium: 500; /* Buttons */
+  --font-weight-semibold: 600; /* Headings */
+  --font-weight-bold: 700; /* Strong emphasis */
+  
   /* Premium Shadow System */
   --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-soft: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -10,12 +46,12 @@
   --shadow-premium-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   --shadow-dramatic: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 35px 65px -15px rgba(0, 0, 0, 0.15);
   
-  /* Professional Business Gradients - Light to Dark Blue Theme */
-  --gradient-primary: linear-gradient(135deg, #73C2FB 0%, #005A8B 100%);
-  --gradient-accent: linear-gradient(135deg, #73C2FB 0%, #4A90E2 50%, #005A8B 100%);
+  /* Professional Business Gradients - Petrol Blue Theme */
+  --gradient-primary: linear-gradient(135deg, #216477 0%, #1A4F5C 100%);
+  --gradient-accent: linear-gradient(135deg, #216477 0%, #1d5363 50%, #1A4F5C 100%);
   --gradient-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
   --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
-  --gradient-blue-dark: linear-gradient(135deg, #73C2FB 0%, #005A8B 100%);
+  --gradient-blue-dark: linear-gradient(135deg, #216477 0%, #1A4F5C 100%);
 
   /* Light Theme - HSL values for better compatibility */
   --background: 0 0% 100%;
@@ -24,7 +60,7 @@
   --card-foreground: 222.2 84% 4.9%;
   --popover: 0 0% 100%;
   --popover-foreground: 222.2 84% 4.9%;
-  --primary: 203 100% 35%;
+  --primary: 195 55% 30%;
   --primary-foreground: 0 0% 98%;
   --secondary: 210 40% 98%;
   --secondary-foreground: 222.2 84% 4.9%;
@@ -36,8 +72,8 @@
   --destructive-foreground: 0 0% 98%;
   --border: 214.3 31.8% 91.4%;
   --input: 214.3 31.8% 91.4%;
-  --ring: 203 100% 35%;
-  --chart-1: 203 100% 35%;
+  --ring: 195 55% 30%;
+  --chart-1: 195 55% 30%;
   --chart-2: 221.2 83.2% 53.3%;
   --chart-3: 142.1 76.2% 36.3%;
   --chart-4: 47.9 95.8% 53.1%;
@@ -52,7 +88,7 @@
   --card-foreground: 0 0% 98%;
   --popover: 222.2 84% 4.9%;
   --popover-foreground: 0 0% 98%;
-  --primary: 203 100% 35%;
+  --primary: 195 55% 30%;
   --primary-foreground: 222.2 84% 4.9%;
   --secondary: 217.2 32.6% 17.5%;
   --secondary-foreground: 0 0% 98%;
@@ -64,8 +100,8 @@
   --destructive-foreground: 0 0% 98%;
   --border: 217.2 32.6% 17.5%;
   --input: 217.2 32.6% 17.5%;
-  --ring: 203 100% 35%;
-  --chart-1: 203 100% 35%;
+  --ring: 195 55% 30%;
+  --chart-1: 195 55% 30%;
   --chart-2: 217.2 91.2% 59.8%;
   --chart-3: 142.1 70.6% 45.3%;
   --chart-4: 47.9 95.8% 53.1%;
@@ -248,7 +284,7 @@ body {
   
   .btn-primary:hover {
     box-shadow: var(--shadow-premium);
-    background: linear-gradient(135deg, #5BADEA 0%, #003F63 100%);
+    background: linear-gradient(135deg, #2A7A8F 0%, #1A4F5C 100%);
   }
   
   .btn-primary:hover::before {
@@ -270,7 +306,7 @@ body {
   
   .btn-outline:hover {
     background-color: #f9fafb;
-    border-color: #73C2FB;
+    border-color: #216477;
     box-shadow: var(--shadow-soft);
   }
   
@@ -285,7 +321,7 @@ body {
     padding: 0.25rem 0.625rem;
     border-radius: 9999px;
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: 400;
     background-color: #f0fdf4;
     color: #166534;
   }
@@ -296,7 +332,7 @@ body {
     padding: 0.25rem 0.625rem;
     border-radius: 9999px;
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: 400;
     background-color: #fefcf3;
     color: #92400e;
   }
@@ -307,7 +343,7 @@ body {
     padding: 0.25rem 0.625rem;
     border-radius: 9999px;
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: 400;
     background-color: #fef2f2;
     color: #991b1b;
   }
@@ -318,7 +354,7 @@ body {
     padding: 0.25rem 0.625rem;
     border-radius: 9999px;
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: 400;
     background-color: #f0fdfa;
     color: #1e40af;
   }
@@ -735,21 +771,21 @@ svg {
 /* Standardized Typography Hierarchy */
 .heading-hero {
   font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.025em;
 }
 
 .heading-section {
   font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
 .heading-card {
   font-size: clamp(1.25rem, 2.5vw, 1.5rem);
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.3;
 }
 
@@ -822,7 +858,7 @@ svg {
   background-color: white;
   border: 2px solid #e5e7eb;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  font-weight: 600;
+  font-weight: 400;
   font-size: 14px;
   color: #6b7280;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
@@ -852,8 +888,8 @@ svg {
 }
 
 .step-label.completed {
-  color: #73C2FB;
-  font-weight: 600;
+  color: #216477;
+  font-weight: 400;
 }
 
 .progress-step:hover .step-label {
@@ -861,7 +897,7 @@ svg {
 }
 
 .progress-step:hover .step-label.completed {
-  color: #5BADEA;
+  color: #2A7A8F;
 }
 
 /* Z-Index Management - Header and Modal Hierarchy */
@@ -916,6 +952,25 @@ svg {
   display: inline-block;
   min-height: 1em;
   position: relative;
+}
+
+/* PayVAT Brand Typography - Thin & Narrow */
+.payvat-brand {
+  font-family: 'Helvetica Neue', 'Avenir', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 200; /* Extra light for brand */
+  letter-spacing: 0.5px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.text-brand-heading {
+  font-weight: 200; /* Extra light weight */
+  font-family: 'Helvetica Neue', 'Avenir', 'Proxima Nova', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: 1.5px;
+  font-stretch: condensed;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  color: hsl(var(--primary));
 }
 
 /* Responsive Design Helpers */

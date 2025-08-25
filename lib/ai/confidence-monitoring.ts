@@ -371,17 +371,9 @@ export class ConfidenceMonitor {
   }
   
   private static async calculatePerformanceMetrics(documents: any[], timeRange: string): Promise<ConfidenceMetrics['performance']> {
-    // Mock performance data
-    const dailyVolume = [
-      { date: '2024-01-01', count: 25, avgConfidence: 0.86 },
-      { date: '2024-01-02', count: 32, avgConfidence: 0.89 },
-      { date: '2024-01-03', count: 28, avgConfidence: 0.87 }
-    ]
-    
-    const weeklyTrends = [
-      { week: 'Week 1', confidence: 0.85, volume: 150 },
-      { week: 'Week 2', confidence: 0.88, volume: 180 }
-    ]
+    // Calculate actual performance data
+    const dailyVolume = await this.calculateDailyVolume(timeRange)
+    const weeklyTrends = await this.calculateWeeklyTrends()
     
     const avgConfidence = documents.reduce((sum: number, doc: any) => sum + doc.confidence, 0) / (documents.length || 1)
     const systemHealth = avgConfidence > 0.9 ? 'excellent' : avgConfidence > 0.8 ? 'good' : avgConfidence > 0.6 ? 'fair' : 'poor'
@@ -421,6 +413,119 @@ export class ConfidenceMonitor {
       qualityMetrics: { irishVATCompliance: 0, averageQualityScore: 0, commonIssues: [] },
       userFeedback: { totalCorrections: 0, accuracyImprovement: 0, commonCorrectionTypes: {} },
       performance: { dailyVolume: [], weeklyTrends: [], systemHealth: 'poor' }
+    }
+  }
+
+  /**
+   * Calculate quality score from document and analytics data
+   */
+  private static calculateQualityScore(doc: any, analytics: any): number {
+    let score = 60 // Base score
+    
+    // Boost for successful extraction
+    if (doc.extractedData && Object.keys(doc.extractedData).length > 0) score += 20
+    
+    // Boost for high confidence
+    const confidence = analytics?.confidenceScore || 0
+    score += Math.round(confidence * 20)
+    
+    // Penalty for validation flags
+    if (doc.validationFlags && doc.validationFlags.length > 0) score -= 10
+    
+    return Math.max(0, Math.min(100, score))
+  }
+
+  /**
+   * Calculate actual accuracy from learning feedback
+   */
+  private static calculateActualAccuracy(feedback: any): number {
+    try {
+      const corrections = feedback.corrections || {}
+      const correctionCount = Object.keys(corrections).length
+      
+      // If no corrections, assume high accuracy
+      if (correctionCount === 0) return 0.95
+      
+      // Reduce accuracy based on number of corrections
+      return Math.max(0.3, 0.9 - (correctionCount * 0.1))
+    } catch (error) {
+      return 0.7 // Default accuracy
+    }
+  }
+
+  /**
+   * Determine correction type from feedback
+   */
+  private static determineCorrectionType(feedback: any): string {
+    const corrections = feedback.corrections || {}
+    
+    if (corrections.salesVAT || corrections.purchaseVAT) return 'WRONG_AMOUNT'
+    if (corrections.vatNumber) return 'WRONG_VAT_NUMBER'
+    if (corrections.documentType) return 'WRONG_DOCUMENT_TYPE'
+    if (corrections.supplierName) return 'WRONG_BUSINESS_NAME'
+    
+    return 'OTHER'
+  }
+
+  /**
+   * Calculate daily volume metrics
+   */
+  private static async calculateDailyVolume(timeRange: string): Promise<Array<{ date: string, count: number, avgConfidence: number }>> {
+    try {
+      const days = timeRange === 'day' ? 1 : timeRange === 'week' ? 7 : 30
+      const startDate = new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+      
+      // Group by day and calculate metrics
+      const dailyData = await prisma.$queryRaw`
+        SELECT 
+          DATE("processedAt") as date,
+          COUNT(*)::int as count,
+          AVG("confidenceScore")::float as "avgConfidence"
+        FROM "ai_processing_analytics"
+        WHERE "processedAt" >= ${startDate}
+        GROUP BY DATE("processedAt")
+        ORDER BY date DESC
+        LIMIT 30
+      ` as any[]
+      
+      return dailyData.map(row => ({
+        date: row.date.toISOString().split('T')[0],
+        count: row.count,
+        avgConfidence: row.avgConfidence || 0
+      }))
+    } catch (error) {
+      console.error('Failed to calculate daily volume:', error)
+      return []
+    }
+  }
+
+  /**
+   * Calculate weekly trends
+   */
+  private static async calculateWeeklyTrends(): Promise<Array<{ week: string, confidence: number, volume: number }>> {
+    try {
+      const fourWeeksAgo = new Date(Date.now() - 28 * 24 * 60 * 60 * 1000)
+      
+      const weeklyData = await prisma.$queryRaw`
+        SELECT 
+          EXTRACT(WEEK FROM "processedAt") as week,
+          COUNT(*)::int as volume,
+          AVG("confidenceScore")::float as confidence
+        FROM "ai_processing_analytics"
+        WHERE "processedAt" >= ${fourWeeksAgo}
+        GROUP BY EXTRACT(WEEK FROM "processedAt")
+        ORDER BY week DESC
+        LIMIT 4
+      ` as any[]
+      
+      return weeklyData.map((row, index) => ({
+        week: `Week ${weeklyData.length - index}`,
+        confidence: row.confidence || 0,
+        volume: row.volume
+      }))
+    } catch (error) {
+      console.error('Failed to calculate weekly trends:', error)
+      return []
     }
   }
 }

@@ -211,15 +211,15 @@ export default function DocumentUploadDashboard({
     <div className="space-y-6">
       {/* Processing Queue Status */}
       {processingQueue.length > 0 && (
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-petrol-200 bg-blue-50">
           <CardContent className="pt-4">
             <div className="flex items-center space-x-3">
-              <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+              <Loader2 className="h-5 w-5 animate-spin text-petrol-base" />
               <div>
-                <p className="text-sm font-medium text-blue-900">
+                <p className="text-sm font-normal text-blue-900">
                   Processing {processingQueue.length} document{processingQueue.length > 1 ? 's' : ''}...
                 </p>
-                <p className="text-xs text-blue-700">AI is extracting data and organizing documents</p>
+                <p className="text-xs text-petrol-dark">AI is extracting data and organizing documents</p>
               </div>
             </div>
           </CardContent>
@@ -234,7 +234,7 @@ export default function DocumentUploadDashboard({
               <div className="flex items-center space-x-3">
                 <AlertCircle className="h-5 w-5 text-orange-600" />
                 <div>
-                  <p className="text-sm font-medium text-orange-900">
+                  <p className="text-sm font-normal text-orange-900">
                     {duplicateAlerts.length} possible duplicate{duplicateAlerts.length > 1 ? 's' : ''} detected
                   </p>
                   <p className="text-xs text-orange-700">Review and resolve duplicate documents</p>
@@ -256,16 +256,16 @@ export default function DocumentUploadDashboard({
       {/* Sales Documents Upload Section */}
       <Card className="border-[#99D3FF]">
         <CardHeader className="bg-[#E6F4FF]">
-          <CardTitle className="text-lg font-semibold text-blue-900 flex items-center justify-between">
+          <CardTitle className="text-lg font-normal text-blue-900 flex items-center justify-between">
             <div className="flex items-center">
-              <TrendingUp className="h-5 w-5 mr-2 text-[#73C2FB]" />
+              <TrendingUp className="h-5 w-5 mr-2 text-[#2A7A8F]" />
               Sales Documents {salesDocuments.length > 0 && (
                 <>({salesDocuments.length})</>
               )}
             </div>
             {extractedVATData?.totalSalesVAT && extractedVATData.totalSalesVAT > 0 && (
               <div className="text-right">
-                <div className="text-sm font-medium text-[#73C2FB]">
+                <div className="text-sm font-normal text-[#2A7A8F]">
                   Total VAT: {formatCurrency(extractedVATData.totalSalesVAT)}
                 </div>
               </div>
@@ -289,7 +289,7 @@ export default function DocumentUploadDashboard({
       {/* Purchase Documents Upload Section */}
       <Card className="border-green-200">
         <CardHeader className="bg-green-50">
-          <CardTitle className="text-lg font-semibold text-green-900 flex items-center justify-between">
+          <CardTitle className="text-lg font-normal text-green-900 flex items-center justify-between">
             <div className="flex items-center">
               <Euro className="h-5 w-5 mr-2 text-green-600" />
               Purchase Documents {purchaseDocuments.length > 0 && (
@@ -298,7 +298,7 @@ export default function DocumentUploadDashboard({
             </div>
             {extractedVATData?.totalPurchaseVAT && extractedVATData.totalPurchaseVAT > 0 && (
               <div className="text-right">
-                <div className="text-sm font-medium text-green-600">
+                <div className="text-sm font-normal text-green-600">
                   Total VAT: {formatCurrency(extractedVATData.totalPurchaseVAT)}
                 </div>
               </div>
@@ -323,8 +323,8 @@ export default function DocumentUploadDashboard({
       {extractedVATData && extractedVATData.processedDocuments > 0 && (
         <Card className="bg-gradient-to-r from-[#E6F4FF] to-[#CCE7FF] border-[#99D3FF]">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-blue-900 flex items-center">
-              <FolderOpen className="h-5 w-5 mr-2 text-[#73C2FB]" />
+            <CardTitle className="text-lg font-normal text-blue-900 flex items-center">
+              <FolderOpen className="h-5 w-5 mr-2 text-[#2A7A8F]" />
               Document Summary
             </CardTitle>
           </CardHeader>
@@ -332,7 +332,7 @@ export default function DocumentUploadDashboard({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white/70 p-3 rounded-lg border border-[#99D3FF]">
                 <div className="text-sm text-gray-600">Sales VAT</div>
-                <div className="text-lg font-semibold text-[#73C2FB]">
+                <div className="text-lg font-normal text-[#2A7A8F]">
                   {formatCurrency(extractedVATData.totalSalesVAT)}
                 </div>
                 <div className="text-xs text-gray-500">
@@ -342,7 +342,7 @@ export default function DocumentUploadDashboard({
               
               <div className="bg-white/70 p-3 rounded-lg border border-[#99D3FF]">
                 <div className="text-sm text-gray-600">Purchase VAT</div>
-                <div className="text-lg font-semibold text-[#73C2FB]">
+                <div className="text-lg font-normal text-[#2A7A8F]">
                   {formatCurrency(extractedVATData.totalPurchaseVAT)}
                 </div>
                 <div className="text-xs text-gray-500">
@@ -352,7 +352,7 @@ export default function DocumentUploadDashboard({
               
               <div className="bg-white/70 p-3 rounded-lg border border-[#99D3FF]">
                 <div className="text-sm text-gray-600">AI Confidence</div>
-                <div className="text-lg font-semibold text-[#73C2FB]">
+                <div className="text-lg font-normal text-[#2A7A8F]">
                   {(extractedVATData.averageConfidence * 100).toFixed(0)}%
                 </div>
                 <div className="text-xs text-gray-500">
@@ -365,7 +365,7 @@ export default function DocumentUploadDashboard({
               <Button 
                 onClick={loadExtractedVATData}
                 variant="outline" 
-                className="border-[#99D3FF] text-[#5BADEA]"
+                className="border-[#99D3FF] text-[#216477]"
                 disabled={loadingExtractedData}
               >
                 <RefreshCw className={`h-4 w-4 mr-2 ${loadingExtractedData ? 'animate-spin' : ''}`} />

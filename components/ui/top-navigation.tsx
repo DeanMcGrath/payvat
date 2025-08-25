@@ -119,10 +119,10 @@ export function TopNavigation({ user, onLogout, onHome }: TopNavigationProps) {
       <Link 
         href={item.href} 
         className={cn(
-          "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+          "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-normal transition-colors",
           "hover:bg-neutral-100 hover:text-neutral-900",
           isActive 
-            ? "bg-brand-50 text-brand-700 font-semibold" 
+            ? "bg-brand-50 text-petrol-dark font-normal" 
             : "text-neutral-600"
         )}
         onClick={onClick}
@@ -141,10 +141,10 @@ export function TopNavigation({ user, onLogout, onHome }: TopNavigationProps) {
           <div className="flex items-center justify-between px-4 py-3">
             {/* Logo */}
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-700">
-                <span className="text-sm font-bold text-white">PV</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-petrol-dark">
+                <span className="text-sm font-normal text-white">PV</span>
               </div>
-              <span className="font-semibold text-brand-700">PayVat</span>
+              <span className="font-normal text-petrol-dark payvat-brand">PayVAT</span>
             </div>
 
             {/* Mobile Menu Button */}
@@ -178,7 +178,7 @@ export function TopNavigation({ user, onLogout, onHome }: TopNavigationProps) {
                 {user && (
                   <div className="pt-4">
                     <div className="pb-3 border-b border-neutral-100">
-                      <div className="text-sm font-medium text-neutral-900">
+                      <div className="text-sm font-normal text-neutral-900">
                         {user.firstName && user.lastName 
                           ? `${user.firstName} ${user.lastName}` 
                           : user.businessName}
@@ -237,11 +237,11 @@ export function TopNavigation({ user, onLogout, onHome }: TopNavigationProps) {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-700">
-              <span className="text-sm font-bold text-white">PV</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-petrol-dark">
+              <span className="text-sm font-normal text-white">PV</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-semibold text-brand-700 text-sm">PayVat</span>
+              <span className="font-normal text-petrol-dark text-sm payvat-brand">PayVAT</span>
               <span className="text-xs text-neutral-500">Business Dashboard</span>
             </div>
           </div>
@@ -263,7 +263,7 @@ export function TopNavigation({ user, onLogout, onHome }: TopNavigationProps) {
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant="ghost"
-                        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+                        className="flex items-center gap-2 px-3 py-2 text-sm font-normal text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
                       >
                         More
                         <ChevronDown className="h-3 w-3" />
@@ -278,7 +278,7 @@ export function TopNavigation({ user, onLogout, onHome }: TopNavigationProps) {
                               href={item.href}
                               className={cn(
                                 "flex items-center gap-2",
-                                isActive && "bg-brand-50 text-brand-700 font-medium"
+                                isActive && "bg-brand-50 text-petrol-dark font-normal"
                               )}
                             >
                               <item.icon className="h-4 w-4" />
@@ -303,7 +303,7 @@ export function TopNavigation({ user, onLogout, onHome }: TopNavigationProps) {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center gap-2 px-3 py-2">
                   <div className="text-right">
-                    <div className="text-sm font-medium">
+                    <div className="text-sm font-normal">
                       {user.firstName && user.lastName 
                         ? `${user.firstName} ${user.lastName}` 
                         : user.businessName}

@@ -60,7 +60,7 @@ export default function CorporateTaxIreland() {
         <section className="py-16 px-4" id="corporation-tax-guide">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Interactive Corporation Tax Guide
               </h2>
               <p className="text-lg text-gray-600">
@@ -80,19 +80,19 @@ export default function CorporateTaxIreland() {
                         : 'bg-gray-100 text-gray-700 hover:bg-rose-50'
                     }`}
                   >
-                    <h3 className="font-bold">{topic.name}</h3>
+                    <h3 className="font-normal">{topic.name}</h3>
                   </button>
                 ))}
               </div>
               
               <div className="bg-gray-50 p-6 rounded-lg">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">{topics[selectedTopic as keyof typeof topics].content.title}</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">{topics[selectedTopic as keyof typeof topics].content.title}</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   {topics[selectedTopic as keyof typeof topics].content.items.map((item, index) => (
                     <div key={index} className="bg-white p-4 rounded-lg border">
                       <div className="flex justify-between items-start mb-2">
-                        <h4 className="font-semibold text-gray-900">{item.label}</h4>
-                        <span className="bg-rose-100 text-rose-800 px-2 py-1 rounded text-sm font-medium">
+                        <h4 className="font-normal text-gray-900">{item.label}</h4>
+                        <span className="bg-rose-100 text-rose-800 px-2 py-1 rounded text-sm font-normal">
                           {item.rate}
                         </span>
                       </div>
@@ -109,7 +109,7 @@ export default function CorporateTaxIreland() {
         <section className="py-16 px-4 bg-gray-50" id="tax-calculation">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Corporation Tax Calculation Example
               </h2>
               <p className="text-lg text-gray-600">
@@ -118,10 +118,10 @@ export default function CorporateTaxIreland() {
             </div>
             
             <div className="card-premium p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Example Company Calculation</h3>
+              <h3 className="text-2xl font-normal text-gray-900 mb-6">Example Company Calculation</h3>
               <div className="bg-blue-50 p-6 rounded-lg mb-6">
-                <h4 className="font-bold text-blue-900 mb-4">Company Profile</h4>
-                <ul className="text-blue-800 text-sm space-y-1">
+                <h4 className="font-normal text-blue-900 mb-4">Company Profile</h4>
+                <ul className="text-petrol-dark text-sm space-y-1">
                   <li>• Software development company</li>
                   <li>• Annual trading profits: €500,000</li>
                   <li>• Property rental income: €50,000</li>
@@ -131,23 +131,23 @@ export default function CorporateTaxIreland() {
               
               <div className="space-y-4">
                 <div className="flex justify-between items-center border-b border-gray-200 pb-3">
-                  <span className="font-medium text-gray-700">Trading Profits @ 12.5%:</span>
-                  <span className="font-bold text-gray-900">€500,000 × 12.5% = €62,500</span>
+                  <span className="font-normal text-gray-700">Trading Profits @ 12.5%:</span>
+                  <span className="font-normal text-gray-900">€500,000 × 12.5% = €62,500</span>
                 </div>
                 
                 <div className="flex justify-between items-center border-b border-gray-200 pb-3">
-                  <span className="font-medium text-gray-700">Rental Income @ 25%:</span>
-                  <span className="font-bold text-gray-900">€50,000 × 25% = €12,500</span>
+                  <span className="font-normal text-gray-700">Rental Income @ 25%:</span>
+                  <span className="font-normal text-gray-900">€50,000 × 25% = €12,500</span>
                 </div>
                 
                 <div className="flex justify-between items-center border-b border-gray-200 pb-3">
-                  <span className="font-medium text-gray-700">Capital Gains @ 33%:</span>
-                  <span className="font-bold text-gray-900">€100,000 × 33% = €33,000</span>
+                  <span className="font-normal text-gray-700">Capital Gains @ 33%:</span>
+                  <span className="font-normal text-gray-900">€100,000 × 33% = €33,000</span>
                 </div>
                 
                 <div className="flex justify-between items-center pt-3 text-lg">
-                  <span className="font-bold text-gray-900">Total Corporation Tax:</span>
-                  <span className="font-bold text-rose-600">€108,000</span>
+                  <span className="font-normal text-gray-900">Total Corporation Tax:</span>
+                  <span className="font-normal text-rose-600">€108,000</span>
                 </div>
                 
                 <div className="bg-green-50 p-4 rounded-lg mt-6">
@@ -165,7 +165,7 @@ export default function CorporateTaxIreland() {
         <section className="py-16 px-4" id="filing-requirements">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Corporation Tax Filing Requirements
               </h2>
               <p className="text-lg text-gray-600">
@@ -175,11 +175,11 @@ export default function CorporateTaxIreland() {
             
             <div className="grid md:grid-cols-2 gap-8">
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Annual Obligations</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Annual Obligations</h3>
                 <div className="space-y-4">
                   <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">Form CT1 Return</h4>
-                    <ul className="text-blue-800 text-sm space-y-1">
+                    <h4 className="font-normal text-blue-900 mb-2">Form CT1 Return</h4>
+                    <ul className="text-petrol-dark text-sm space-y-1">
                       <li>• Due 9 months after year end</li>
                       <li>• Must be filed even if no tax due</li>
                       <li>• Include audited accounts</li>
@@ -188,7 +188,7 @@ export default function CorporateTaxIreland() {
                   </div>
                   
                   <div className="bg-green-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-green-900 mb-2">Annual Return of Accounting Period</h4>
+                    <h4 className="font-normal text-green-900 mb-2">Annual Return of Accounting Period</h4>
                     <ul className="text-green-800 text-sm space-y-1">
                       <li>• Due 9 months after year end</li>
                       <li>• Filed alongside CT1</li>
@@ -198,7 +198,7 @@ export default function CorporateTaxIreland() {
                   </div>
                   
                   <div className="bg-orange-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-orange-900 mb-2">CRO Annual Return</h4>
+                    <h4 className="font-normal text-orange-900 mb-2">CRO Annual Return</h4>
                     <ul className="text-orange-800 text-sm space-y-1">
                       <li>• Due by annual return date</li>
                       <li>• Filed with Companies Registration Office</li>
@@ -210,10 +210,10 @@ export default function CorporateTaxIreland() {
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Payment Requirements</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Payment Requirements</h3>
                 <div className="space-y-4">
                   <div className="bg-purple-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-purple-900 mb-2">Small Companies (Turnover ≤€3m)</h4>
+                    <h4 className="font-normal text-purple-900 mb-2">Small Companies (Turnover ≤€3m)</h4>
                     <ul className="text-purple-800 text-sm space-y-1">
                       <li>• Pay in full 9 months after year end</li>
                       <li>• No preliminary tax required</li>
@@ -223,7 +223,7 @@ export default function CorporateTaxIreland() {
                   </div>
                   
                   <div className="bg-red-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-red-900 mb-2">Large Companies (Turnover &gt;€3m)</h4>
+                    <h4 className="font-normal text-red-900 mb-2">Large Companies (Turnover &gt;€3m)</h4>
                     <ul className="text-red-800 text-sm space-y-1">
                       <li>• Pay in full 6 months after year end</li>
                       <li>• Preliminary tax due in month 6</li>
@@ -233,7 +233,7 @@ export default function CorporateTaxIreland() {
                   </div>
                   
                   <div className="bg-yellow-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-yellow-900 mb-2">Payment Methods</h4>
+                    <h4 className="font-normal text-yellow-900 mb-2">Payment Methods</h4>
                     <ul className="text-yellow-800 text-sm space-y-1">
                       <li>• ROS online payment</li>
                       <li>• Bank transfer to Revenue</li>
@@ -251,7 +251,7 @@ export default function CorporateTaxIreland() {
         <section className="py-16 px-4 bg-gray-50" id="tax-planning">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Corporation Tax Planning Strategies
               </h2>
               <p className="text-lg text-gray-600">
@@ -261,54 +261,54 @@ export default function CorporateTaxIreland() {
             
             <div className="space-y-6">
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Key Planning Areas</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Key Planning Areas</h3>
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-rose-600 font-bold text-sm">1</span>
+                      <span className="text-rose-600 font-normal text-sm">1</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Timing of Income & Expenses</h4>
+                      <h4 className="font-normal text-gray-900">Timing of Income & Expenses</h4>
                       <p className="text-gray-600">Accelerate deductible expenses and defer taxable income where possible to optimize cash flow.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-rose-600 font-bold text-sm">2</span>
+                      <span className="text-rose-600 font-normal text-sm">2</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Capital Allowances Optimization</h4>
+                      <h4 className="font-normal text-gray-900">Capital Allowances Optimization</h4>
                       <p className="text-gray-600">Maximize capital allowances on plant, machinery, and equipment purchases to reduce taxable profits.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-rose-600 font-bold text-sm">3</span>
+                      <span className="text-rose-600 font-normal text-sm">3</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">R&D Tax Credits</h4>
+                      <h4 className="font-normal text-gray-900">R&D Tax Credits</h4>
                       <p className="text-gray-600">Claim 25% R&D tax credits for qualifying research and development expenditure.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-rose-600 font-bold text-sm">4</span>
+                      <span className="text-rose-600 font-normal text-sm">4</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Pension Contributions</h4>
+                      <h4 className="font-normal text-gray-900">Pension Contributions</h4>
                       <p className="text-gray-600">Corporate pension contributions are fully deductible and provide valuable employee benefits.</p>
                     </div>
                   </div>
                   
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-rose-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-rose-600 font-bold text-sm">5</span>
+                      <span className="text-rose-600 font-normal text-sm">5</span>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Loss Relief Planning</h4>
+                      <h4 className="font-normal text-gray-900">Loss Relief Planning</h4>
                       <p className="text-gray-600">Utilize trading losses effectively through carry forward or group relief arrangements.</p>
                     </div>
                   </div>
@@ -322,7 +322,7 @@ export default function CorporateTaxIreland() {
         <section className="py-16 px-4" id="compliance-issues">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Common Corporation Tax Compliance Issues
               </h2>
               <p className="text-lg text-gray-600">
@@ -333,7 +333,7 @@ export default function CorporateTaxIreland() {
             <div className="card-premium p-8">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Filing Errors</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">Filing Errors</h3>
                   <div className="space-y-3">
                     <div className="flex items-start space-x-2">
                       <span className="text-red-500 mt-1">×</span>
@@ -355,7 +355,7 @@ export default function CorporateTaxIreland() {
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Payment Mistakes</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">Payment Mistakes</h3>
                   <div className="space-y-3">
                     <div className="flex items-start space-x-2">
                       <span className="text-red-500 mt-1">×</span>
@@ -378,7 +378,7 @@ export default function CorporateTaxIreland() {
               </div>
               
               <div className="mt-8 bg-green-50 p-6 rounded-lg">
-                <h4 className="font-semibold text-green-900 mb-3">Best Practice Recommendations</h4>
+                <h4 className="font-normal text-green-900 mb-3">Best Practice Recommendations</h4>
                 <ul className="text-green-800 text-sm space-y-2">
                   <li className="flex items-start space-x-2">
                     <span className="text-green-500 mt-1">✓</span>
@@ -405,7 +405,7 @@ export default function CorporateTaxIreland() {
         {/* Call to Action */}
         <section className="py-20 px-4 bg-gradient-to-r from-rose-600 to-pink-600 text-white">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">
+            <h2 className="text-4xl font-normal mb-6">
               Simplify Your Corporation Tax Compliance
             </h2>
             <p className="text-xl mb-8 text-rose-100">
@@ -414,13 +414,13 @@ export default function CorporateTaxIreland() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-rose-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-rose-600 px-8 py-4 text-lg font-normal rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Get Corporation Tax Help
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-rose-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-normal rounded-xl hover:bg-white hover:text-rose-600 transition-all duration-300"
               >
                 View Tax Plans
               </a>

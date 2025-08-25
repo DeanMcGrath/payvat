@@ -41,10 +41,10 @@ export function StatCard({
       icon: 'text-neutral-500',
     },
     brand: {
-      card: 'bg-brand-50 border-brand-200',
-      title: 'text-brand-700',
+      card: 'bg-brand-50 border-petrol-200',
+      title: 'text-petrol-dark',
       value: 'text-brand-900',
-      icon: 'text-brand-600',
+      icon: 'text-petrol-base',
     },
     success: {
       card: 'bg-green-50 border-green-200',
@@ -120,12 +120,12 @@ export function StatCard({
         <div className="flex items-center justify-between">
           <div className="space-y-2 flex-1">
             {/* Title */}
-            <p className={`body-sm font-medium ${styles.title}`}>
+            <p className={`body-sm font-normal ${styles.title}`}>
               {title}
             </p>
             
             {/* Value */}
-            <p className={`text-2xl lg:text-3xl font-bold ${styles.value}`}>
+            <p className={`text-2xl lg:text-3xl font-normal ${styles.value}`}>
               {typeof value === 'number' ? value.toLocaleString() : value}
             </p>
             
@@ -141,7 +141,7 @@ export function StatCard({
               <div className="flex items-center space-x-2">
                 <div className={`flex items-center space-x-1 px-2 py-1 rounded-full ${trendStyles.bg}`}>
                   <trendStyles.icon className={`h-3 w-3 ${trendStyles.color}`} />
-                  <span className={`text-xs font-medium ${trendStyles.color}`}>
+                  <span className={`text-xs font-normal ${trendStyles.color}`}>
                     {Math.abs(trend.value)}%
                   </span>
                 </div>

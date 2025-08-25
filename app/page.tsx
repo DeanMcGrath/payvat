@@ -19,7 +19,7 @@ export default function LandingPage() {
   const router = useRouter()
 
   useEffect(() => {
-    const fullText = "Don't Be Like Me!"
+    const fullText = "PayVAT"
     let currentIndex = 0
 
     const typewriterTimer = setInterval(() => {
@@ -30,14 +30,14 @@ export default function LandingPage() {
         clearInterval(typewriterTimer)
         setTimeout(() => setShowCursor(false), 500)
       }
-    }, 150)
+    }, 100)
 
     const brandTimer = setTimeout(() => {
       setShowFullScreenBrand(false)
       setTimeout(() => {
         setBrandAnimationComplete(true)
-      }, 1000)
-    }, 4000)
+      }, 500)
+    }, 2000)
 
     const timer = setTimeout(() => {
       setIsVisible(true)
@@ -81,7 +81,7 @@ export default function LandingPage() {
       id: 2,
       title: "Established Business?",
       heading: "Looking to improve your Business?",
-      subtext: "Discover how Don't Be Like Me streamlines your VAT submissions and payments",
+      subtext: "Discover how PayVAT streamlines your VAT submissions and payments",
       buttonText: "Learn More",
       link: "/vat-services",
       features: ["VAT automation", "Revenue compliance", "Save time & money"],
@@ -98,11 +98,11 @@ export default function LandingPage() {
   ]
 
   return (
-    <div className="min-h-screen relative" style={{background: 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'}}>
+    <div className="min-h-screen relative" style={{background: 'linear-gradient(135deg, #2A7A8F 0%, #1A4F5C 100%)'}}>
       {showFullScreenBrand && (
-        <div className="fixed inset-0 z-[10000] opening-animation flex items-center justify-center" style={{background: 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'}}>
+        <div className="fixed inset-0 z-[10000] opening-animation flex items-center justify-center" style={{background: 'linear-gradient(135deg, #2A7A8F 0%, #1A4F5C 100%)'}}>
           <div className="text-center">
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold font-mono text-white drop-shadow-2xl">
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-normal payvat-brand text-white drop-shadow-2xl">
               {typewriterText}
               {showCursor && <span className="animate-pulse">|</span>}
             </h1>
@@ -136,17 +136,17 @@ export default function LandingPage() {
                     <CardContent className="p-8 space-y-6">
                       <div className="space-y-4">
                         <div className="space-y-3">
-                          <h3 className="text-2xl font-bold font-sans text-slate-800 leading-tight">{box.heading}</h3>
+                          <h3 className="text-2xl font-normal font-sans text-slate-800 leading-tight">{box.heading}</h3>
                           <p className="text-slate-600 leading-relaxed font-sans text-base">{box.subtext}</p>
                         </div>
 
                         <div className="space-y-3 pt-2">
                           {box.features.map((feature, idx) => (
                             <div key={idx} className="flex items-center gap-3 text-sm text-slate-600">
-                              <div className="w-5 h-5 rounded-full bg-[#73C2FB] flex items-center justify-center flex-shrink-0">
+                              <div className="w-5 h-5 rounded-full bg-[#2A7A8F] flex items-center justify-center flex-shrink-0">
                                 <CheckCircle className="h-3 w-3 text-white" />
                               </div>
-                              <span className="font-sans font-medium">{feature}</span>
+                              <span className="font-sans font-normal">{feature}</span>
                             </div>
                           ))}
                         </div>
@@ -154,17 +154,17 @@ export default function LandingPage() {
 
                       <Button
                         size="lg"
-                        className="w-full font-semibold font-sans text-white shadow-md hover:shadow-lg transition-all duration-300 min-h-[52px] text-base rounded-lg"
-                        style={{background: 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'}}
+                        className="w-full font-normal font-sans text-white shadow-md hover:shadow-lg transition-all duration-300 min-h-[52px] text-base rounded-lg"
+                        style={{background: 'linear-gradient(135deg, #2A7A8F 0%, #1A4F5C 100%)'}}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.background = 'linear-gradient(135deg, #5BADEA 0%, #003F63 100%)'
+                          e.currentTarget.style.background = 'linear-gradient(135deg, #216477 0%, #003F63 100%)'
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.background = 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'
+                          e.currentTarget.style.background = 'linear-gradient(135deg, #2A7A8F 0%, #1A4F5C 100%)'
                         }}
                         onClick={() => router.push(box.link)}
                       >
-                        <span className="font-bold">{box.buttonText}</span>
+                        <span className="font-normal">{box.buttonText}</span>
                         <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                       </Button>
                     </CardContent>

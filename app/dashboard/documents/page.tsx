@@ -1,13 +1,13 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Filter, X, ArrowUpDown, Home, RefreshCw, Video, Play, Calendar, Clock, ArrowRight, Search, FileText, Loader2, AlertCircle } from 'lucide-react'
+import { Filter, X, ArrowUpDown, Home, RefreshCw, Video, Play, Calendar, Clock, ArrowRight, Search, FileText, Loader2, AlertCircle, CheckCircle, Eye } from 'lucide-react'
 import { VideoModal } from "@/components/video-modal"
 import { toast } from "sonner"
 import { useVATData } from "@/contexts/vat-data-context"
@@ -16,8 +16,8 @@ import { ErrorBoundary, useErrorHandler } from "@/components/ErrorBoundary"
 
 // New imports for refactored components
 import { useDocumentsData } from "@/hooks/useDocumentsData"
-import { DocumentSection } from "@/components/dashboard/DocumentSection"
-import { StatCard, StatCardGrid, DocumentsStatCard, VATStatCard, NetVATStatCard } from "@/components/dashboard/StatCard"
+import FileUpload from "@/components/file-upload"
+import { StatCardGrid, DocumentsStatCard, VATStatCard, NetVATStatCard } from "@/components/dashboard/StatCard"
 import { PageLayout } from "@/components/layout/PageLayout"
 import { Document, VATReturn, UserProfile } from "@/types/dashboard"
 import { userApi, vatApi } from "@/lib/apiClient"
@@ -25,7 +25,7 @@ import { userApi, vatApi } from "@/lib/apiClient"
 // Dynamic imports for better performance
 const DocumentViewer = dynamic(() => import("@/components/document-viewer"), {
   ssr: false,
-  loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600"></div></div>
+  loading: () => <div className="flex items-center justify-center p-8"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-petrol-600"></div></div>
 })
 
 function DashboardDocumentsContent() {
@@ -74,7 +74,7 @@ function DashboardDocumentsContent() {
   ]
 
   // Memoized filtered and sorted documents - single computation replaces multiple filter calls
-  const { filteredSalesDocuments, filteredPurchaseDocuments, stats } = useMemo(() => {
+  const { filteredSalesDocuments, filteredPurchaseDocuments, allFilteredDocuments, stats } = useMemo(() => {
     const yearFilter = selectedFilterYear
     const monthFilter = selectedMonth
     const query = searchQuery.toLowerCase()
@@ -102,9 +102,9 @@ function DashboardDocumentsContent() {
       }
     })
 
-    // Split into categories
-    const sales = filtered.filter(d => d.category === "SALES")
-    const purchase = filtered.filter(d => d.category === "PURCHASE")
+    // Split into categories - FIXED: Match category prefixes instead of exact match
+    const sales = filtered.filter(d => d.category?.startsWith("SALES"))
+    const purchase = filtered.filter(d => d.category?.startsWith("PURCHASE"))
 
     // Calculate stats
     const stats = {
@@ -121,6 +121,7 @@ function DashboardDocumentsContent() {
     return {
       filteredSalesDocuments: sales,
       filteredPurchaseDocuments: purchase,
+      allFilteredDocuments: filtered,
       stats
     }
   }, [documents, selectedFilterYear, selectedMonth, searchQuery, sortBy, sortOrder, vatData])
@@ -135,7 +136,6 @@ function DashboardDocumentsContent() {
           setUser(userResponse.data.user)
         }
       } catch (err) {
-        console.log('Authentication check failed:', err)
         setUser(null)
       } finally {
         setUserLoading(false)
@@ -176,7 +176,7 @@ function DashboardDocumentsContent() {
     })
   }
 
-  const handleDocumentRemove = async (id: string) => {
+  const handleDocumentRemove = useCallback(async (id: string) => {
     try {
       await removeDocument(id)
       toast.success('Document removed successfully')
@@ -185,18 +185,18 @@ function DashboardDocumentsContent() {
       errorHandler(err instanceof Error ? err : new Error('Failed to remove document'))
       toast.error('Failed to remove document')
     }
-  }
+  }, [removeDocument, errorHandler])
 
-  // Document viewer handlers
-  const handleViewDocument = (document: Document) => {
+  // Document viewer handlers - memoized for performance
+  const handleViewDocument = useCallback((document: Document) => {
     setSelectedDocument(document)
     setDocumentViewerOpen(true)
-  }
+  }, [])
 
-  const handleCloseDocumentViewer = () => {
+  const handleCloseDocumentViewer = useCallback(() => {
     setDocumentViewerOpen(false)
     setSelectedDocument(null)
-  }
+  }, [])
 
   // Helper function to get VAT extraction data for a document
   const getDocumentVATExtraction = (documentId: string) => {
@@ -243,7 +243,7 @@ function DashboardDocumentsContent() {
       <PageLayout>
         <div className="flex items-center justify-center py-20">
           <div className="flex items-center space-x-3">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-600" />
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-petrol-600" />
             <span className="body-lg text-neutral-600">Loading dashboard...</span>
           </div>
         </div>
@@ -279,25 +279,30 @@ function DashboardDocumentsContent() {
 
   return (
     <PageLayout
-      title="Document Management"
-      subtitle="Upload, process, and manage your VAT documents"
       headerProps={{
         currentPage: "Document Management Dashboard",
         user: user,
         onLogout: handleLogout,
       }}
-      actions={
-        <Button 
-          variant="outline" 
-          onClick={() => router.push('/')}
-          className="text-brand-700 border-brand-300 hover:bg-brand-50"
-        >
-          <Home className="h-4 w-4 mr-2" />
-          Back to Home
-        </Button>
-      }
     >
       <div className="space-y-8">
+        {/* PayVAT Heading at Top */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-normal text-brand-heading mb-2">
+              PayVAT
+            </h1>
+            <p className="text-lg text-neutral-600">Upload, process, and manage your VAT documents</p>
+          </div>
+          <Button 
+            variant="outline" 
+            onClick={() => router.push('/')}
+            className="text-petrol-dark border-petrol-300 hover:bg-petrol-50"
+          >
+            <Home className="h-4 w-4 mr-2" />
+            Back to Home
+          </Button>
+        </div>
         {/* Fallback Mode Warning */}
         {inFallbackMode && (
           <Card className="bg-yellow-50 border-yellow-200">
@@ -305,7 +310,7 @@ function DashboardDocumentsContent() {
               <div className="flex items-center gap-3">
                 <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0" />
                 <div>
-                  <h3 className="font-semibold text-yellow-800">Service Temporarily Unavailable</h3>
+                  <h3 className="font-normal text-yellow-800">Service Temporarily Unavailable</h3>
                   <p className="text-yellow-700 text-sm mt-1">
                     {fallbackMessage || 'Database maintenance in progress. Showing demo data.'} 
                     <Button 
@@ -343,15 +348,15 @@ function DashboardDocumentsContent() {
         </StatCardGrid>
 
         {/* Watch Demo Video Section */}
-        <Card className="bg-gradient-brand-subtle border-brand-200">
+        <Card className="bg-gradient-brand-subtle border-petrol-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-center">
               <div className="text-center">
                 <div className="flex items-center justify-center mb-3">
-                  <Video className="h-8 w-8 text-brand-600 mr-3" />
+                  <Video className="h-8 w-8 text-petrol-base mr-3" />
                   <h2 className="h4 text-brand-900">Learn How It Works</h2>
                 </div>
-                <p className="body-lg text-brand-700 mb-4">
+                <p className="body-lg text-petrol-dark mb-4">
                   Watch our demo to see how easy VAT submission can be
                 </p>
                 <Button 
@@ -369,13 +374,13 @@ function DashboardDocumentsContent() {
 
         {/* Past VAT Submissions Section */}
         {user && (
-          <Card className="border-brand-200">
+          <Card className="border-petrol-200">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-brand-700">
+              <CardTitle className="flex items-center gap-2 text-petrol-dark">
                 <Calendar className="h-5 w-5" />
                 Past VAT Submissions
                 {pastSubmissions.length > 0 && (
-                  <span className="bg-brand-600 text-white text-xs rounded-full px-2 py-1">
+                  <span className="bg-petrol-base text-white text-xs rounded-full px-2 py-1">
                     {pastSubmissions.length}
                   </span>
                 )}
@@ -384,7 +389,7 @@ function DashboardDocumentsContent() {
             <CardContent>
               {loadingSubmissions ? (
                 <div className="flex items-center justify-center py-8">
-                  <Loader2 className="h-6 w-6 animate-spin text-brand-500" />
+                  <Loader2 className="h-6 w-6 animate-spin text-petrol-light" />
                   <span className="ml-2 body-md text-neutral-600">Loading submissions...</span>
                 </div>
               ) : pastSubmissions.length > 0 ? (
@@ -393,16 +398,16 @@ function DashboardDocumentsContent() {
                     <div key={submission.id} className="flex items-center justify-between p-4 bg-neutral-50 rounded-lg border border-neutral-200">
                       <div className="flex items-center space-x-4">
                         <div className="flex-shrink-0">
-                          <Calendar className="h-8 w-8 text-brand-600" />
+                          <Calendar className="h-8 w-8 text-petrol-base" />
                         </div>
                         <div>
-                          <p className="body-sm font-medium text-neutral-900">
+                          <p className="body-sm font-normal text-neutral-900">
                             {new Date(submission.periodStart).toLocaleDateString()} - {new Date(submission.periodEnd).toLocaleDateString()}
                           </p>
                           <div className="flex items-center space-x-4 mt-1">
                             <span className={`text-xs px-2 py-1 rounded-full ${
                               submission.status === 'SUBMITTED' ? 'bg-green-100 text-green-800' :
-                              submission.status === 'PAID' ? 'bg-blue-100 text-blue-800' :
+                              submission.status === 'PAID' ? 'bg-blue-100 text-petrol-dark' :
                               'bg-yellow-100 text-yellow-800'
                             }`}>
                               {submission.status}
@@ -418,7 +423,7 @@ function DashboardDocumentsContent() {
                           variant="outline"
                           size="sm"
                           onClick={() => router.push(`/vat-submission?returnId=${submission.id}`)}
-                          className="text-brand-700 border-brand-300 hover:bg-brand-50"
+                          className="text-petrol-dark border-petrol-300 hover:bg-petrol-50"
                         >
                           {submission.status === 'DRAFT' ? 'Continue' : 'View'}
                           <ArrowRight className="h-4 w-4 ml-1" />
@@ -453,45 +458,78 @@ function DashboardDocumentsContent() {
           </Card>
         )}
 
-        {/* VAT on Sales Documents - Unified Section with Upload + Display */}
-        <DocumentSection
-          variant="sales"
-          title="VAT on Sales Documents"
-          documents={filteredSalesDocuments}
-          vatData={vatData}
-          onView={handleViewDocument}
-          onRemove={handleDocumentRemove}
-          loading={loadingDocuments}
-          emptyMessage="Upload sales-related documents including invoices, receipts, and payment records"
-          onUploadSuccess={handleDocumentUpload}
-          enableBatchMode={enableBatchMode}
-          maxConcurrentUploads={maxConcurrentUploads}
-        />
+        {/* Side-by-Side Upload Sections */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Sales Documents Upload - Left Side */}
+          <Card className="border-petrol-200 bg-brand-50 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+            <CardHeader className="bg-brand-100 rounded-t-xl">
+              <div className="flex items-center space-x-3">
+                <FileText className="h-5 w-5 text-petrol-base" />
+                <div>
+                  <h3 className="h5 text-brand-900">
+                    Upload Sales Documents
+                  </h3>
+                  <p className="text-sm text-petrol-dark mt-1">
+                    Upload sales-related documents including invoices, receipts, and payment records
+                  </p>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4">
+              <FileUpload
+                category="SALES"
+                title="Upload Sales Documents"
+                description="Upload sales-related documents including invoices, receipts, and payment records"
+                acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
+                enableBatchMode={enableBatchMode}
+                maxConcurrentUploads={maxConcurrentUploads}
+                showBatchProgress={true}
+                onUploadSuccess={handleDocumentUpload}
+                vatReturnId={undefined}
+              />
+            </CardContent>
+          </Card>
 
-        {/* VAT on Purchases Documents - Unified Section with Upload + Display */}
-        <DocumentSection
-          variant="purchase"
-          title="VAT on Purchases Documents"
-          documents={filteredPurchaseDocuments}
-          vatData={vatData}
-          onView={handleViewDocument}
-          onRemove={handleDocumentRemove}
-          loading={loadingDocuments}
-          emptyMessage="Upload purchase-related documents including invoices, receipts, and expense records"
-          onUploadSuccess={handleDocumentUpload}
-          enableBatchMode={enableBatchMode}
-          maxConcurrentUploads={maxConcurrentUploads}
-        />
+          {/* Purchase Documents Upload - Right Side */}
+          <Card className="border-green-200 bg-green-50 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+            <CardHeader className="bg-green-100 rounded-t-xl">
+              <div className="flex items-center space-x-3">
+                <FileText className="h-5 w-5 text-green-600" />
+                <div>
+                  <h3 className="h5 text-green-900">
+                    Upload Purchase Documents
+                  </h3>
+                  <p className="text-sm text-green-700 mt-1">
+                    Upload purchase-related documents including invoices, receipts, and expense records
+                  </p>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-4">
+              <FileUpload
+                category="PURCHASES"
+                title="Upload Purchase Documents"
+                description="Upload purchase-related documents including invoices, receipts, and expense records"
+                acceptedFiles={['.pdf', '.csv', '.xlsx', '.xls', '.jpg', '.jpeg', '.png']}
+                enableBatchMode={enableBatchMode}
+                maxConcurrentUploads={maxConcurrentUploads}
+                showBatchProgress={true}
+                onUploadSuccess={handleDocumentUpload}
+                vatReturnId={undefined}
+              />
+            </CardContent>
+          </Card>
+        </div>
 
-        {/* Search & Filter Documents - Positioned at bottom for result filtering */}
+        {/* Search & Filter Documents - Moved ABOVE document list */}
         <Card className="border-neutral-200">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-brand-700">
+              <CardTitle className="flex items-center gap-2 text-petrol-dark">
                 <Filter className="h-5 w-5" />
                 Search & Filter Documents
                 {activeFiltersCount > 0 && (
-                  <span className="bg-brand-600 text-white text-xs rounded-full px-2 py-1">
+                  <span className="bg-petrol-base text-white text-xs rounded-full px-2 py-1">
                     {activeFiltersCount}
                   </span>
                 )}
@@ -502,7 +540,7 @@ function DashboardDocumentsContent() {
                   size="sm" 
                   onClick={refreshData}
                   disabled={loadingDocuments}
-                  className="text-brand-700 border-brand-300 hover:bg-brand-50"
+                  className="text-petrol-dark border-petrol-300 hover:bg-petrol-50"
                 >
                   <RefreshCw className={`h-4 w-4 mr-2 ${loadingDocuments ? 'animate-spin' : ''}`} />
                   {loadingDocuments ? 'Refreshing...' : 'Refresh Data'}
@@ -518,7 +556,7 @@ function DashboardDocumentsContent() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="space-y-2">
-                <label className="body-sm font-medium text-neutral-700">Year</label>
+                <label className="body-sm font-normal text-neutral-700">Year</label>
                 <Select value={selectedFilterYear} onValueChange={setSelectedFilterYear}>
                   <SelectTrigger>
                     <SelectValue />
@@ -534,7 +572,7 @@ function DashboardDocumentsContent() {
               </div>
 
               <div className="space-y-2">
-                <label className="body-sm font-medium text-neutral-700">Month</label>
+                <label className="body-sm font-normal text-neutral-700">Month</label>
                 <Select value={selectedMonth} onValueChange={setSelectedMonth}>
                   <SelectTrigger>
                     <SelectValue />
@@ -551,7 +589,7 @@ function DashboardDocumentsContent() {
               </div>
 
               <div className="space-y-2">
-                <label className="body-sm font-medium text-neutral-700">Sort By</label>
+                <label className="body-sm font-normal text-neutral-700">Sort By</label>
                 <Select value={sortBy} onValueChange={(value: "date" | "name") => setSortBy(value)}>
                   <SelectTrigger>
                     <SelectValue />
@@ -564,7 +602,7 @@ function DashboardDocumentsContent() {
               </div>
 
               <div className="space-y-2">
-                <label className="body-sm font-medium text-neutral-700">Search</label>
+                <label className="body-sm font-normal text-neutral-700">Search</label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-neutral-400" />
                   <Input
@@ -604,6 +642,205 @@ function DashboardDocumentsContent() {
           </CardContent>
         </Card>
 
+        {/* Unified All Documents List */}
+        <Card className="border-neutral-200">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2 text-petrol-dark">
+                <FileText className="h-5 w-5" />
+                All Documents
+                {allFilteredDocuments.length > 0 && (
+                  <span className="bg-petrol-base text-white text-xs rounded-full px-2 py-1">
+                    {allFilteredDocuments.length}
+                  </span>
+                )}
+              </CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0">
+            {loadingDocuments ? (
+              <div className="p-6 space-y-3">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="grid grid-cols-12 gap-4 items-center p-4 animate-pulse">
+                    <div className="col-span-1 flex justify-center">
+                      <div className="h-6 w-6 bg-neutral-200 rounded" />
+                    </div>
+                    <div className="col-span-2">
+                      <div className="h-4 bg-neutral-200 rounded mb-2" />
+                      <div className="h-3 bg-neutral-100 rounded w-16" />
+                    </div>
+                    <div className="col-span-2">
+                      <div className="h-4 bg-neutral-200 rounded w-20" />
+                    </div>
+                    <div className="col-span-2">
+                      <div className="h-4 bg-neutral-200 rounded w-16" />
+                    </div>
+                    <div className="col-span-2">
+                      <div className="h-4 bg-neutral-200 rounded w-14" />
+                    </div>
+                    <div className="col-span-1">
+                      <div className="h-4 bg-neutral-200 rounded w-10" />
+                    </div>
+                    <div className="col-span-1">
+                      <div className="h-6 w-16 bg-neutral-200 rounded-full" />
+                    </div>
+                    <div className="col-span-1 flex justify-end space-x-1">
+                      <div className="h-8 w-8 bg-neutral-200 rounded" />
+                      <div className="h-8 w-8 bg-neutral-200 rounded" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : allFilteredDocuments.length > 0 ? (
+              <div className="w-full">
+                {/* Table Headers */}
+                <div className="grid grid-cols-12 gap-4 items-center px-6 py-3 bg-neutral-50 border-b text-xs font-normal text-neutral-600 uppercase tracking-wide">
+                  <div className="col-span-1 text-center">Type</div>
+                  <div className="col-span-2">Document Name</div>
+                  <div className="col-span-2">Date on Doc</div>
+                  <div className="col-span-2">Total on Doc</div>
+                  <div className="col-span-2">VAT Amount</div>
+                  <div className="col-span-1">Confidence %</div>
+                  <div className="col-span-1">Status</div>
+                  <div className="col-span-1 text-right">Actions</div>
+                </div>
+                
+                {/* Document Rows */}
+                <div className="divide-y divide-neutral-100">
+                  {allFilteredDocuments.map((document) => {
+                    const isVATSalesDoc = document.category?.startsWith("SALES")
+                    const isVATPurchaseDoc = document.category?.startsWith("PURCHASE")
+                    const variant = isVATSalesDoc ? 'sales' : 'purchase'
+                    
+                    return (
+                      <div key={document.id} className={`grid grid-cols-12 gap-4 items-center p-4 hover:bg-neutral-50 transition-colors group`}>
+                        {/* Type Badge */}
+                        <div className="col-span-1 flex justify-center">
+                          <div className={`px-2 py-1 text-xs font-normal rounded-full ${
+                            isVATSalesDoc 
+                              ? 'bg-brand-100 text-brand-900' 
+                              : 'bg-green-100 text-green-900'
+                          }`}>
+                            {isVATSalesDoc ? 'Sales' : 'Purchase'}
+                          </div>
+                        </div>
+                        
+                        {/* Document Name and Size */}
+                        <div className="col-span-2 min-w-0">
+                          <p className="body-sm font-normal truncate" title={document.originalName || document.fileName}>
+                            {document.originalName || document.fileName}
+                          </p>
+                          <p className="text-xs text-neutral-500 mt-0.5">
+                            {Math.round(document.fileSize / 1024)} KB
+                          </p>
+                        </div>
+                        
+                        {/* Date */}
+                        <div className="col-span-2">
+                          <p className="body-sm text-neutral-700">
+                            {document.extractedDate 
+                              ? new Date(document.extractedDate).toLocaleDateString('en-IE', {
+                                  day: '2-digit',
+                                  month: '2-digit', 
+                                  year: 'numeric'
+                                })
+                              : '—'
+                            }
+                          </p>
+                        </div>
+                        
+                        {/* Total Amount */}
+                        <div className="col-span-2">
+                          <p className="body-sm font-normal text-neutral-800">
+                            {document.invoiceTotal 
+                              ? formatCurrency(Number(document.invoiceTotal))
+                              : '—'
+                            }
+                          </p>
+                        </div>
+                        
+                        {/* VAT Amount */}
+                        <div className="col-span-2">
+                          <p className={`body-sm font-normal ${
+                            isVATSalesDoc ? 'text-petrol-dark' : 'text-green-700'
+                          }`}>
+                            {/* Get VAT amount from vatData */}
+                            {(() => {
+                              const vatDoc = isVATSalesDoc 
+                                ? vatData?.salesDocuments?.find(d => d.id === document.id)
+                                : vatData?.purchaseDocuments?.find(d => d.id === document.id)
+                              const totalVAT = vatDoc?.extractedAmounts?.reduce((sum, amount) => sum + amount, 0) || 0
+                              return totalVAT > 0 ? formatCurrency(totalVAT) : '—'
+                            })()}
+                          </p>
+                        </div>
+                        
+                        {/* Confidence % */}
+                        <div className="col-span-1">
+                          <p className="body-sm font-normal text-neutral-700">
+                            {(() => {
+                              const vatDoc = isVATSalesDoc 
+                                ? vatData?.salesDocuments?.find(d => d.id === document.id)
+                                : vatData?.purchaseDocuments?.find(d => d.id === document.id)
+                              const confidence = vatDoc?.confidence || 0
+                              return confidence > 0 ? `${Math.round(confidence * 100)}%` : '—'
+                            })()}
+                          </p>
+                        </div>
+                        
+                        {/* Status */}
+                        <div className="col-span-1">
+                          <div className={`inline-flex items-center px-2 py-1 text-xs font-normal rounded-full ${
+                            document.isScanned 
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-amber-100 text-amber-800'
+                          }`}>
+                            {document.isScanned ? (
+                              <><CheckCircle className="h-3 w-3 mr-1" />Processed</>
+                            ) : (
+                              <><Clock className="h-3 w-3 mr-1" />Processing</>
+                            )}
+                          </div>
+                        </div>
+                        
+                        {/* Actions */}
+                        <div className="col-span-1 flex justify-end space-x-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleViewDocument(document)}
+                            className="h-8 w-8 p-0 opacity-100 transition-opacity"
+                            aria-label="View document"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDocumentRemove(document.id)}
+                            className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 opacity-100 transition-opacity"
+                            aria-label="Remove document"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ) : (
+              <div className="p-8 text-center">
+                <FileText className="h-16 w-16 mx-auto mb-4 text-neutral-400 opacity-50" />
+                <h4 className="h6 text-neutral-900 mb-2">No Documents Found</h4>
+                <p className="body-sm text-neutral-600">
+                  Upload your documents using the sections above or adjust your filters
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Empty State */}
         {!loadingDocuments && documents.length === 0 && (
           <Card className="border-neutral-200">
@@ -629,7 +866,6 @@ function DashboardDocumentsContent() {
         document={selectedDocument}
         extractedVAT={selectedDocument ? getDocumentVATExtraction(selectedDocument.id) : null}
         onVATCorrection={(correctionData) => {
-          console.log('VAT correction submitted:', correctionData)
           // Handle VAT corrections for AI training
         }}
       />

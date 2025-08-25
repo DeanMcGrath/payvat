@@ -236,7 +236,7 @@ function AdminUsersContent() {
       case 'admin':
         return 'bg-purple-100 text-purple-800'
       case 'user':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-petrol-dark'
       default:
         return 'bg-gray-100 text-gray-800'
     }
@@ -257,7 +257,7 @@ function AdminUsersContent() {
       case 'draft':
         return 'bg-gray-100 text-gray-800'
       default:
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-petrol-dark'
     }
   }
 
@@ -382,7 +382,7 @@ function AdminUsersContent() {
     return (
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#73C2FB]"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#2A7A8F]"></div>
           <span className="ml-2 text-gray-600">Loading users...</span>
         </div>
       </div>
@@ -394,7 +394,7 @@ function AdminUsersContent() {
       <div className="container mx-auto p-6">
         <div className="text-center">
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Error Loading Users</h2>
+          <h2 className="text-xl font-normal mb-2">Error Loading Users</h2>
           <p className="text-gray-600 mb-4 max-w-md mx-auto">{error}</p>
           <div className="flex justify-center space-x-3">
             <Button onClick={fetchUsers} disabled={loading}>
@@ -414,7 +414,7 @@ function AdminUsersContent() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">User Management</h1>
+          <h1 className="text-3xl font-normal text-gray-900">User Management</h1>
           <p className="text-gray-600">Manage and monitor user accounts</p>
         </div>
         <Link href="/admin">
@@ -526,7 +526,7 @@ function AdminUsersContent() {
                   onCheckedChange={(checked) => handleSelectAll(checked as boolean)}
                   aria-label="Select all users"
                 />
-                <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                <label className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   Select all
                 </label>
               </div>
@@ -566,7 +566,7 @@ function AdminUsersContent() {
                         <div>
                           <div className="flex items-center space-x-2">
                             <Link href={`/admin/users/${user.id}`}>
-                              <h3 className="font-semibold text-lg hover:text-[#73C2FB] cursor-pointer">
+                              <h3 className="font-normal text-lg hover:text-[#2A7A8F] cursor-pointer">
                                 {user.firstName && user.lastName 
                                   ? `${user.firstName} ${user.lastName}` 
                                   : user.businessName}
@@ -604,21 +604,21 @@ function AdminUsersContent() {
                     {/* Stats */}
                     <div className="flex flex-wrap gap-4 text-sm">
                       <div className="text-center">
-                        <div className="font-semibold flex items-center">
+                        <div className="font-normal flex items-center">
                           <FileText className="h-4 w-4 mr-1" />
                           {user.stats?.totalVATReturns || 0}
                         </div>
                         <div className="text-gray-500">VAT Returns</div>
                       </div>
                       <div className="text-center">
-                        <div className="font-semibold flex items-center">
+                        <div className="font-normal flex items-center">
                           <CreditCard className="h-4 w-4 mr-1" />
                           {user.stats?.totalPayments || 0}
                         </div>
                         <div className="text-gray-500">Payments</div>
                       </div>
                       <div className="text-center">
-                        <div className="font-semibold">
+                        <div className="font-normal">
                           {formatCurrency(user.stats?.totalVATPaid)}
                         </div>
                         <div className="text-gray-500">VAT Paid</div>
@@ -629,7 +629,7 @@ function AdminUsersContent() {
                     {user.stats?.lastVATReturn && (
                       <div className="min-w-[200px]">
                         <div className="text-sm">
-                          <div className="font-medium">Last VAT Return</div>
+                          <div className="font-normal">Last VAT Return</div>
                           <div className="flex items-center space-x-2">
                             <Badge className={getStatusColor(user.stats.lastVATReturn?.status || 'unknown')}>
                               {user.stats.lastVATReturn?.status || 'Unknown'}

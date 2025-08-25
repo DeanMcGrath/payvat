@@ -140,7 +140,7 @@ export default function AdminAnalytics() {
       case 'draft':
         return 'bg-gray-100 text-gray-800'
       default:
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-petrol-dark'
     }
   }
 
@@ -161,7 +161,7 @@ export default function AdminAnalytics() {
     return (
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-petrol-600"></div>
         </div>
       </div>
     )
@@ -172,7 +172,7 @@ export default function AdminAnalytics() {
       <div className="container mx-auto p-6">
         <div className="text-center">
           <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Error Loading Analytics</h2>
+          <h2 className="text-xl font-normal mb-2">Error Loading Analytics</h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <Button onClick={fetchAnalytics}>Try Again</Button>
         </div>
@@ -185,7 +185,7 @@ export default function AdminAnalytics() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">System Analytics</h1>
+          <h1 className="text-3xl font-normal text-gray-900">System Analytics</h1>
           <p className="text-gray-600">Detailed analytics and performance metrics</p>
         </div>
         <div className="flex items-center space-x-4">
@@ -213,11 +213,11 @@ export default function AdminAnalytics() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <CardTitle className="text-sm font-normal">Total Users</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics.overview.totalUsers}</div>
+            <div className="text-2xl font-normal">{analytics.overview.totalUsers}</div>
             <div className="flex items-center text-xs text-muted-foreground">
               {getTrendIcon(analytics.overview.activeUsers, analytics.overview.totalUsers - analytics.overview.activeUsers)}
               <span className="ml-1">
@@ -229,11 +229,11 @@ export default function AdminAnalytics() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">VAT Returns</CardTitle>
+            <CardTitle className="text-sm font-normal">VAT Returns</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics.overview.totalVATReturns}</div>
+            <div className="text-2xl font-normal">{analytics.overview.totalVATReturns}</div>
             <div className="flex items-center text-xs text-muted-foreground">
               <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
               +{analytics.overview.recentActivity.newReturns} recent
@@ -243,11 +243,11 @@ export default function AdminAnalytics() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Payment Volume</CardTitle>
+            <CardTitle className="text-sm font-normal">Payment Volume</CardTitle>
             <Euro className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-normal">
               {formatCurrency(analytics.overview.totalPaymentVolume)}
             </div>
             <div className="text-xs text-muted-foreground">
@@ -259,11 +259,11 @@ export default function AdminAnalytics() {
         {performance && (
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Avg Processing</CardTitle>
+              <CardTitle className="text-sm font-normal">Avg Processing</CardTitle>
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{performance.performance.averageProcessingTime}min</div>
+              <div className="text-2xl font-normal">{performance.performance.averageProcessingTime}min</div>
               <div className="text-xs text-muted-foreground">
                 {performance.performance.systemErrors} errors
               </div>
@@ -294,8 +294,8 @@ export default function AdminAnalytics() {
               <CardContent className="space-y-4">
                 <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
                   <div className="flex items-center space-x-2">
-                    <Users className="h-5 w-5 text-blue-600" />
-                    <span className="font-medium">New User Registrations</span>
+                    <Users className="h-5 w-5 text-petrol-base" />
+                    <span className="font-normal">New User Registrations</span>
                   </div>
                   <Badge variant="secondary" className="text-lg">
                     {analytics.overview.recentActivity.newUsers}
@@ -304,7 +304,7 @@ export default function AdminAnalytics() {
                 <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
                   <div className="flex items-center space-x-2">
                     <FileText className="h-5 w-5 text-green-600" />
-                    <span className="font-medium">VAT Returns Submitted</span>
+                    <span className="font-normal">VAT Returns Submitted</span>
                   </div>
                   <Badge variant="secondary" className="text-lg">
                     {analytics.overview.recentActivity.newReturns}
@@ -313,7 +313,7 @@ export default function AdminAnalytics() {
                 <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
                   <div className="flex items-center space-x-2">
                     <CreditCard className="h-5 w-5 text-purple-600" />
-                    <span className="font-medium">Payments Processed</span>
+                    <span className="font-normal">Payments Processed</span>
                   </div>
                   <Badge variant="secondary" className="text-lg">
                     {analytics.overview.recentActivity.newPayments}
@@ -322,7 +322,7 @@ export default function AdminAnalytics() {
                 <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
                   <div className="flex items-center space-x-2">
                     <FileText className="h-5 w-5 text-orange-600" />
-                    <span className="font-medium">Documents Uploaded</span>
+                    <span className="font-normal">Documents Uploaded</span>
                   </div>
                   <Badge variant="secondary" className="text-lg">
                     {analytics.overview.totalDocuments}
@@ -340,7 +340,7 @@ export default function AdminAnalytics() {
               <CardContent className="space-y-3">
                 {analytics.distributions.userRoles.map((role) => (
                   <div key={role.role} className="flex items-center justify-between p-2 border rounded">
-                    <span className="font-medium capitalize">
+                    <span className="font-normal capitalize">
                       {role.role.toLowerCase().replace('_', ' ')}
                     </span>
                     <div className="flex items-center space-x-2">
@@ -371,7 +371,7 @@ export default function AdminAnalytics() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* User Growth */}
                   <div>
-                    <h4 className="font-medium mb-3 flex items-center">
+                    <h4 className="font-normal mb-3 flex items-center">
                       <Users className="h-4 w-4 mr-2 text-blue-500" />
                       User Growth
                     </h4>
@@ -381,10 +381,10 @@ export default function AdminAnalytics() {
                         const widthPercent = maxUsers > 0 ? (month.newUsers / maxUsers) * 100 : 0
                         return (
                           <div key={index} className="flex items-center space-x-3">
-                            <span className="text-sm font-medium w-12">{month.month}</span>
+                            <span className="text-sm font-normal w-12">{month.month}</span>
                             <div className="flex-1 bg-gray-200 rounded-full h-2">
                               <div 
-                                className="bg-blue-500 h-2 rounded-full" 
+                                className="bg-petrol-light h-2 rounded-full" 
                                 style={{ width: `${widthPercent}%` }}
                               />
                             </div>
@@ -397,7 +397,7 @@ export default function AdminAnalytics() {
 
                   {/* Payment Volume */}
                   <div>
-                    <h4 className="font-medium mb-3 flex items-center">
+                    <h4 className="font-normal mb-3 flex items-center">
                       <Euro className="h-4 w-4 mr-2 text-green-500" />
                       Payment Volume
                     </h4>
@@ -407,7 +407,7 @@ export default function AdminAnalytics() {
                         const widthPercent = maxVolume > 0 ? (month.paymentVolume / maxVolume) * 100 : 0
                         return (
                           <div key={index} className="flex items-center space-x-3">
-                            <span className="text-sm font-medium w-12">{month.month}</span>
+                            <span className="text-sm font-normal w-12">{month.month}</span>
                             <div className="flex-1 bg-gray-200 rounded-full h-2">
                               <div 
                                 className="bg-green-500 h-2 rounded-full" 
@@ -445,7 +445,7 @@ export default function AdminAnalytics() {
                       </Badge>
                       <span className="text-sm">({status.count})</span>
                     </div>
-                    <span className="text-sm font-medium">
+                    <span className="text-sm font-normal">
                       {formatCurrency(status.totalVAT)}
                     </span>
                   </div>
@@ -463,12 +463,12 @@ export default function AdminAnalytics() {
                 {analytics.distributions.paymentMethods.map((method) => (
                   <div key={method.method} className="flex justify-between items-center p-3 border rounded-lg">
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium capitalize">
+                      <span className="text-sm font-normal capitalize">
                         {method.method.replace('_', ' ')}
                       </span>
                       <Badge variant="outline">({method.count})</Badge>
                     </div>
-                    <span className="text-sm font-medium">
+                    <span className="text-sm font-normal">
                       {formatCurrency(method.totalAmount)}
                     </span>
                   </div>
@@ -486,7 +486,7 @@ export default function AdminAnalytics() {
                   <CardTitle className="text-sm">Processing Time</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
+                  <div className="text-2xl font-normal">
                     {performance.performance.averageProcessingTime} min
                   </div>
                   <p className="text-xs text-muted-foreground">Average payment processing</p>
@@ -498,7 +498,7 @@ export default function AdminAnalytics() {
                   <CardTitle className="text-sm">Failure Rate</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
+                  <div className="text-2xl font-normal">
                     {formatPercent(
                       performance.performance.paymentFailureRate,
                       performance.performance.totalPaymentAttempts
@@ -515,7 +515,7 @@ export default function AdminAnalytics() {
                   <CardTitle className="text-sm">System Errors</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">
+                  <div className="text-2xl font-normal">
                     {performance.performance.systemErrors}
                   </div>
                   <p className="text-xs text-muted-foreground">
@@ -529,7 +529,7 @@ export default function AdminAnalytics() {
                   <CardTitle className="text-sm">Success Rate</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold text-green-600">
+                  <div className="text-2xl font-normal text-green-600">
                     {formatPercent(
                       performance.performance.totalPaymentAttempts - performance.performance.paymentFailureRate,
                       performance.performance.totalPaymentAttempts
@@ -555,17 +555,17 @@ export default function AdminAnalytics() {
               <div key={business.id} className="flex items-center justify-between p-3 border rounded-lg">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full">
-                    <span className="text-sm font-medium text-blue-600">
+                    <span className="text-sm font-normal text-petrol-base">
                       {index + 1}
                     </span>
                   </div>
                   <div>
-                    <p className="font-medium">{business.businessName}</p>
+                    <p className="font-normal">{business.businessName}</p>
                     <p className="text-sm text-gray-500">{business.vatNumber}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-medium">
+                  <p className="font-normal">
                     {formatCurrency(business.totalVATPaid)}
                   </p>
                   <p className="text-sm text-gray-500">

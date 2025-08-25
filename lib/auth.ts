@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { NextRequest } from 'next/server'
+import { cookies } from 'next/headers'
 import { User } from './generated/prisma'
 import { prisma } from './prisma'
 
@@ -129,5 +130,54 @@ export function toAuthUser(user: User): AuthUser {
     role: user.role,
     businessName: user.businessName,
     vatNumber: user.vatNumber
+  }
+}
+
+// Get current user from server components
+export async function getCurrentUser(): Promise<AuthUser | null> {
+  try {
+    const cookieStore = await cookies()
+    const token = cookieStore.get('auth_token')?.value
+    
+    if (!token) {
+      return null
+    }
+    
+    const payload = verifyJWTToken(token)
+    if (!payload) {
+      return null
+    }
+    
+    // Load full user data from database with error handling
+    try {
+      const user = await prisma.User.findUnique({
+        where: { id: payload.userId },
+        select: {
+          id: true,
+          email: true,
+          role: true,
+          businessName: true,
+          vatNumber: true
+        }
+      })
+      
+      if (!user) {
+        return null
+      }
+      
+      return {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        businessName: user.businessName,
+        vatNumber: user.vatNumber
+      }
+    } catch (dbError) {
+      console.error('Database error in getCurrentUser:', dbError)
+      return null
+    }
+  } catch (error) {
+    console.error('Error getting current user:', error)
+    return null
   }
 }

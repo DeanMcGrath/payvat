@@ -91,7 +91,7 @@ export class ErrorBoundary extends Component<Props, State> {
               <div className="flex space-x-2">
                 <Button 
                   onClick={this.handleRetry}
-                  className="flex-1 bg-[#73C2FB] hover:bg-[#5BADEA]"
+                  className="flex-1 bg-[#2A7A8F] hover:bg-[#216477]"
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Try Again
@@ -110,7 +110,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   If the problem persists, please contact support at{' '}
                   <a 
                     href="mailto:support@payvat.ie" 
-                    className="text-[#73C2FB] hover:text-[#5BADEA]"
+                    className="text-[#2A7A8F] hover:text-[#216477]"
                   >
                     support@payvat.ie
                   </a>

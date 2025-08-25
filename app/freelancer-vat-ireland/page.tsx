@@ -35,7 +35,7 @@ export default function FreelancerVatIreland() {
         <section className="scroll-section py-16 px-4" id="freelancer-thresholds">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 VAT Registration Thresholds for Freelancers
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -45,9 +45,9 @@ export default function FreelancerVatIreland() {
             
             <div className="grid md:grid-cols-2 gap-8 mb-12">
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Service VAT Threshold</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Service VAT Threshold</h3>
                 <div className="text-center mb-6">
-                  <div className="text-5xl font-bold text-blue-600 mb-2">€42,500</div>
+                  <div className="text-5xl font-normal text-petrol-base mb-2">€42,500</div>
                   <p className="text-gray-600">Annual turnover threshold for freelance services</p>
                 </div>
                 <div className="space-y-3">
@@ -71,18 +71,18 @@ export default function FreelancerVatIreland() {
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Registration Timing</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Registration Timing</h3>
                 <div className="space-y-4">
                   <div className="bg-yellow-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-yellow-900 mb-2">Mandatory Registration</h4>
+                    <h4 className="font-normal text-yellow-900 mb-2">Mandatory Registration</h4>
                     <p className="text-yellow-800 text-sm">Must register within 30 days of exceeding €42,500 threshold</p>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-2">Voluntary Registration</h4>
+                    <h4 className="font-normal text-gray-900 mb-2">Voluntary Registration</h4>
                     <p className="text-gray-800 text-sm">Can register early for credibility and expense recovery</p>
                   </div>
                   <div className="bg-green-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-green-900 mb-2">Benefits of Early Registration</h4>
+                    <h4 className="font-normal text-green-900 mb-2">Benefits of Early Registration</h4>
                     <p className="text-green-800 text-sm">Reclaim VAT on equipment, software, training costs</p>
                   </div>
                 </div>
@@ -95,7 +95,7 @@ export default function FreelancerVatIreland() {
         <section className="scroll-section py-16 px-4 bg-gray-50" id="freelancer-guide">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Complete Freelancer VAT Compliance Guide
               </h2>
               <p className="text-lg text-gray-600">
@@ -105,32 +105,32 @@ export default function FreelancerVatIreland() {
             
             <div className="space-y-6">
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">1. VAT Registration Process</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">1. VAT Registration Process</h3>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-4">
                     <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-[#73C2FB] rounded-full"></div>
+                      <div className="w-3 h-3 bg-[#2A7A8F] rounded-full"></div>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Obtain Tax Reference Number (TRN)</h4>
+                      <h4 className="font-normal text-gray-900">Obtain Tax Reference Number (TRN)</h4>
                       <p className="text-gray-600">Apply through myAccount on revenue.ie or submit Form TR1 (individuals)</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-[#73C2FB] rounded-full"></div>
+                      <div className="w-3 h-3 bg-[#2A7A8F] rounded-full"></div>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">VAT Registration Application</h4>
+                      <h4 className="font-normal text-gray-900">VAT Registration Application</h4>
                       <p className="text-gray-600">Submit through ROS with evidence of trading and projected turnover</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-4">
                     <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <div className="w-3 h-3 bg-[#73C2FB] rounded-full"></div>
+                      <div className="w-3 h-3 bg-[#2A7A8F] rounded-full"></div>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Receive VAT Number</h4>
+                      <h4 className="font-normal text-gray-900">Receive VAT Number</h4>
                       <p className="text-gray-600">Typically issued within 15-30 days. Start charging VAT from registration date</p>
                     </div>
                   </div>
@@ -138,10 +138,10 @@ export default function FreelancerVatIreland() {
               </div>
               
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">2. VAT Invoicing Requirements</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">2. VAT Invoicing Requirements</h3>
                 <div className="space-y-4">
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-3">Required Invoice Information</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Required Invoice Information</h4>
                     <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-700">
                       <div>• Your VAT number</div>
                       <div>• Invoice date and number</div>
@@ -154,17 +154,17 @@ export default function FreelancerVatIreland() {
                     </div>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-2">Reverse Charge for B2B EU Services</h4>
+                    <h4 className="font-normal text-gray-900 mb-2">Reverse Charge for B2B EU Services</h4>
                     <p className="text-gray-800 text-sm">For services to EU businesses with valid VAT numbers, apply 0% VAT and state "Reverse charge applies"</p>
                   </div>
                 </div>
               </div>
               
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">3. Allowable Business Expenses</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">3. Allowable Business Expenses</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Claimable Expenses (with VAT)</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Claimable Expenses (with VAT)</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li>• Office equipment & software</li>
                       <li>• Professional development courses</li>
@@ -177,7 +177,7 @@ export default function FreelancerVatIreland() {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Home Office Expenses</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Home Office Expenses</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li>• Utilities (proportional usage)</li>
                       <li>• Rent (business use portion)</li>
@@ -192,24 +192,24 @@ export default function FreelancerVatIreland() {
               </div>
               
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">4. VAT Return Filing</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">4. VAT Return Filing</h3>
                 <div className="space-y-4">
                   <div className="grid md:grid-cols-3 gap-4">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600">Bi-Monthly</div>
+                      <div className="text-2xl font-normal text-petrol-base">Bi-Monthly</div>
                       <p className="text-gray-600 text-sm">Most freelancers file every 2 months</p>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600">19th</div>
+                      <div className="text-2xl font-normal text-petrol-base">19th</div>
                       <p className="text-gray-600 text-sm">Payment due date</p>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600">23rd</div>
+                      <div className="text-2xl font-normal text-petrol-base">23rd</div>
                       <p className="text-gray-600 text-sm">ROS filing deadline</p>
                     </div>
                   </div>
                   <div className="bg-red-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-red-900 mb-2">Late Filing Penalties</h4>
+                    <h4 className="font-normal text-red-900 mb-2">Late Filing Penalties</h4>
                     <p className="text-red-800 text-sm">€150 initial penalty + €10/day after 20 days + 8% annual interest on tax due</p>
                   </div>
                 </div>
@@ -222,7 +222,7 @@ export default function FreelancerVatIreland() {
         <section className="scroll-section py-16 px-4" id="cross-border-vat">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Cross-Border VAT Rules for Freelancers
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -232,10 +232,10 @@ export default function FreelancerVatIreland() {
             
             <div className="grid md:grid-cols-2 gap-8">
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">EU Business Clients (B2B)</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">EU Business Clients (B2B)</h3>
                 <div className="space-y-4">
                   <div className="bg-green-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-green-900 mb-2">Reverse Charge Applies</h4>
+                    <h4 className="font-normal text-green-900 mb-2">Reverse Charge Applies</h4>
                     <ul className="text-green-800 text-sm space-y-1">
                       <li>• Charge 0% VAT on invoice</li>
                       <li>• Client must have valid EU VAT number</li>
@@ -244,17 +244,17 @@ export default function FreelancerVatIreland() {
                     </ul>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-2">EC Sales List Required</h4>
+                    <h4 className="font-normal text-gray-900 mb-2">EC Sales List Required</h4>
                     <p className="text-gray-800 text-sm">Monthly return listing all EU B2B sales. Due by 15th of following month.</p>
                   </div>
                 </div>
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">EU Consumer Clients (B2C)</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">EU Consumer Clients (B2C)</h3>
                 <div className="space-y-4">
                   <div className="bg-yellow-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-yellow-900 mb-2">Place of Supply Rules</h4>
+                    <h4 className="font-normal text-yellow-900 mb-2">Place of Supply Rules</h4>
                     <ul className="text-yellow-800 text-sm space-y-1">
                       <li>• Generally where client is established</li>
                       <li>• May need to register for VAT in client's country</li>
@@ -263,7 +263,7 @@ export default function FreelancerVatIreland() {
                     </ul>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-2">Non-EU Clients</h4>
+                    <h4 className="font-normal text-gray-900 mb-2">Non-EU Clients</h4>
                     <p className="text-gray-800 text-sm">Generally zero-rated (0% VAT) as exports of services outside EU.</p>
                   </div>
                 </div>
@@ -276,7 +276,7 @@ export default function FreelancerVatIreland() {
         <section className="scroll-section py-16 px-4 bg-gray-50" id="freelancer-tools">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Essential Tools for Freelancer VAT Compliance
               </h2>
               <p className="text-lg text-gray-600">
@@ -286,33 +286,33 @@ export default function FreelancerVatIreland() {
             
             <div className="grid md:grid-cols-2 gap-8">
               <div className="card-modern p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Invoicing & Accounting</h3>
+                <h3 className="text-xl font-normal text-gray-900 mb-4">Invoicing & Accounting</h3>
                 <ul className="space-y-3 text-gray-700">
                   <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-petrol-light rounded-full mt-2"></div>
                     <span>VAT-compliant invoicing software</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-petrol-light rounded-full mt-2"></div>
                     <span>Automated VAT calculations</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-petrol-light rounded-full mt-2"></div>
                     <span>Expense tracking and categorization</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-petrol-light rounded-full mt-2"></div>
                     <span>Digital receipt storage</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-petrol-light rounded-full mt-2"></div>
                     <span>Bank reconciliation</span>
                   </li>
                 </ul>
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">VAT Return Filing</h3>
+                <h3 className="text-xl font-normal text-gray-900 mb-4">VAT Return Filing</h3>
                 <ul className="space-y-3 text-gray-700">
                   <li className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
@@ -339,7 +339,7 @@ export default function FreelancerVatIreland() {
             </div>
             
             <div className="card-premium p-8 mt-8 text-center">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              <h3 className="text-2xl font-normal text-gray-900 mb-4">
                 PayVat: Complete Freelancer VAT Solution
               </h3>
               <p className="text-lg text-gray-600 mb-6 max-w-3xl mx-auto">
@@ -348,13 +348,13 @@ export default function FreelancerVatIreland() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a 
                   href="/signup" 
-                  className="btn-primary px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105"
+                  className="btn-primary px-8 py-4 text-lg font-normal rounded-xl transition-all duration-300 hover:scale-105"
                 >
                   Start Free Freelancer Setup
                 </a>
                 <a 
                   href="/pricing" 
-                  className="px-8 py-4 text-lg font-semibold text-blue-600 border-2 border-blue-200 rounded-xl hover:bg-blue-50 transition-all duration-300"
+                  className="px-8 py-4 text-lg font-normal text-petrol-base border-2 border-petrol-200 rounded-xl hover:bg-petrol-50 transition-all duration-300"
                 >
                   View Freelancer Plans
                 </a>
@@ -364,9 +364,9 @@ export default function FreelancerVatIreland() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-[#73C2FB] text-white">
+        <section className="scroll-section py-20 px-4 bg-[#2A7A8F] text-white">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">
+            <h2 className="text-4xl font-normal mb-6">
               Ready to Simplify Your Freelancer VAT Compliance?
             </h2>
             <p className="text-xl mb-8 text-blue-100">
@@ -375,13 +375,13 @@ export default function FreelancerVatIreland() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-petrol-base px-8 py-4 text-lg font-normal rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Get Started Free
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-normal rounded-xl hover:bg-white hover:text-petrol-base transition-all duration-300"
               >
                 View Pricing
               </a>

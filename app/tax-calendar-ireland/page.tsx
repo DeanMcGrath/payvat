@@ -246,7 +246,7 @@ export default function TaxCalendarIrelandPage() {
       <section className="section-after-header relative z-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl lg:text-5xl font-normal text-gray-900 mb-6">
               Irish Tax Calendar 2025
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
@@ -254,11 +254,11 @@ export default function TaxCalendarIrelandPage() {
               PAYE deadlines, and other important dates for Irish businesses.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-gradient-to-r from-[#73C2FB] to-[#5BADEA] text-white">
+              <Button size="lg" className="bg-gradient-to-r from-[#2A7A8F] to-[#216477] text-white">
                 <Bell className="mr-2 h-5 w-5" />
                 Set Up Reminders
               </Button>
-              <Button variant="outline" size="lg" className="text-[#73C2FB] border-[#73C2FB]">
+              <Button variant="outline" size="lg" className="text-[#2A7A8F] border-[#2A7A8F]">
                 <Download className="mr-2 h-5 w-5" />
                 Download Calendar
               </Button>
@@ -281,12 +281,12 @@ export default function TaxCalendarIrelandPage() {
                       <div className="flex items-center gap-3">
                         {getTypeIcon(deadline.type)}
                         <div>
-                          <h4 className="font-semibold text-red-900">{deadline.title}</h4>
+                          <h4 className="font-normal text-red-900">{deadline.title}</h4>
                           <p className="text-sm text-red-700">{deadline.description}</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-bold text-red-900">{deadline.date}</div>
+                        <div className="font-normal text-red-900">{deadline.date}</div>
                         <Badge className={getPriorityColor(deadline.priority)}>
                           {deadline.priority.toUpperCase()}
                         </Badge>
@@ -297,7 +297,7 @@ export default function TaxCalendarIrelandPage() {
               ) : (
                 <div className="text-center py-4">
                   <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-2" />
-                  <p className="text-green-700 font-medium">No deadlines in the next 30 days!</p>
+                  <p className="text-green-700 font-normal">No deadlines in the next 30 days!</p>
                 </div>
               )}
             </CardContent>
@@ -315,8 +315,8 @@ export default function TaxCalendarIrelandPage() {
                 variant={selectedMonth === index ? "default" : "outline"}
                 onClick={() => setSelectedMonth(index)}
                 className={selectedMonth === index 
-                  ? "bg-gradient-to-r from-[#73C2FB] to-[#5BADEA] text-white" 
-                  : "text-[#73C2FB] border-[#73C2FB] hover:bg-blue-50"
+                  ? "bg-gradient-to-r from-[#2A7A8F] to-[#216477] text-white" 
+                  : "text-[#2A7A8F] border-[#2A7A8F] hover:bg-petrol-50"
                 }
               >
                 {month}
@@ -330,7 +330,7 @@ export default function TaxCalendarIrelandPage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-normal text-gray-900 mb-4">
               {months[selectedMonth]} {currentYear} - Tax Deadlines
             </h2>
             <p className="text-lg text-gray-600">
@@ -351,7 +351,7 @@ export default function TaxCalendarIrelandPage() {
                         </Badge>
                       </div>
                       <div className="text-right">
-                        <div className="text-2xl font-bold text-[#73C2FB]">
+                        <div className="text-2xl font-normal text-[#2A7A8F]">
                           {new Date(deadline.date).getDate()}
                         </div>
                         <div className="text-sm text-gray-500">
@@ -367,7 +367,7 @@ export default function TaxCalendarIrelandPage() {
                       <span className="text-sm text-gray-500">
                         Due: {deadline.date}
                       </span>
-                      <Button variant="outline" size="sm" className="text-[#73C2FB] border-[#73C2FB]">
+                      <Button variant="outline" size="sm" className="text-[#2A7A8F] border-[#2A7A8F]">
                         <Bell className="mr-1 h-3 w-3" />
                         Remind Me
                       </Button>
@@ -380,7 +380,7 @@ export default function TaxCalendarIrelandPage() {
             <Card className="text-center py-12">
               <CardContent>
                 <CalendarDays className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-600 mb-2">No Deadlines This Month</h3>
+                <h3 className="text-xl font-normal text-gray-600 mb-2">No Deadlines This Month</h3>
                 <p className="text-gray-500">Enjoy a deadline-free month!</p>
               </CardContent>
             </Card>
@@ -392,7 +392,7 @@ export default function TaxCalendarIrelandPage() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-normal text-gray-900 mb-4">
               Irish Tax Types & Deadlines
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -403,9 +403,9 @@ export default function TaxCalendarIrelandPage() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <Card className="hover:shadow-xl transition-all duration-300">
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#5BADEA] p-0.5 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#216477] p-0.5 mb-4">
                   <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
-                    <Euro className="h-6 w-6 text-[#73C2FB]" />
+                    <Euro className="h-6 w-6 text-[#2A7A8F]" />
                   </div>
                 </div>
                 <CardTitle>VAT Returns</CardTitle>
@@ -423,9 +423,9 @@ export default function TaxCalendarIrelandPage() {
 
             <Card className="hover:shadow-xl transition-all duration-300">
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#5BADEA] p-0.5 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#216477] p-0.5 mb-4">
                   <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
-                    <Building2 className="h-6 w-6 text-[#73C2FB]" />
+                    <Building2 className="h-6 w-6 text-[#2A7A8F]" />
                   </div>
                 </div>
                 <CardTitle>Corporation Tax</CardTitle>
@@ -443,9 +443,9 @@ export default function TaxCalendarIrelandPage() {
 
             <Card className="hover:shadow-xl transition-all duration-300">
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#5BADEA] p-0.5 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#216477] p-0.5 mb-4">
                   <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
-                    <Users className="h-6 w-6 text-[#73C2FB]" />
+                    <Users className="h-6 w-6 text-[#2A7A8F]" />
                   </div>
                 </div>
                 <CardTitle>PAYE/PRSI</CardTitle>
@@ -463,9 +463,9 @@ export default function TaxCalendarIrelandPage() {
 
             <Card className="hover:shadow-xl transition-all duration-300">
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#5BADEA] p-0.5 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#216477] p-0.5 mb-4">
                   <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
-                    <FileText className="h-6 w-6 text-[#73C2FB]" />
+                    <FileText className="h-6 w-6 text-[#2A7A8F]" />
                   </div>
                 </div>
                 <CardTitle>CRO Filings</CardTitle>
@@ -483,9 +483,9 @@ export default function TaxCalendarIrelandPage() {
 
             <Card className="hover:shadow-xl transition-all duration-300">
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#5BADEA] p-0.5 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#216477] p-0.5 mb-4">
                   <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
-                    <TrendingUp className="h-6 w-6 text-[#73C2FB]" />
+                    <TrendingUp className="h-6 w-6 text-[#2A7A8F]" />
                   </div>
                 </div>
                 <CardTitle>RCT Returns</CardTitle>
@@ -503,9 +503,9 @@ export default function TaxCalendarIrelandPage() {
 
             <Card className="hover:shadow-xl transition-all duration-300">
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#5BADEA] p-0.5 mb-4">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#8FD0FC] to-[#216477] p-0.5 mb-4">
                   <div className="w-full h-full rounded-lg bg-white flex items-center justify-center">
-                    <Clock className="h-6 w-6 text-[#73C2FB]" />
+                    <Clock className="h-6 w-6 text-[#2A7A8F]" />
                   </div>
                 </div>
                 <CardTitle>Other Deadlines</CardTitle>
@@ -525,9 +525,9 @@ export default function TaxCalendarIrelandPage() {
       </section>
 
       {/* Reminder Setup */}
-      <section className="py-20 bg-[#73C2FB] text-white">
+      <section className="py-20 bg-[#2A7A8F] text-white">
         <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
-          <h2 className="text-4xl font-bold mb-6">
+          <h2 className="text-4xl font-normal mb-6">
             Never Miss a Deadline Again
           </h2>
           <p className="text-xl mb-8 text-blue-100">
@@ -539,7 +539,7 @@ export default function TaxCalendarIrelandPage() {
             <Card className="bg-white/10 border-white/20 text-white">
               <CardContent className="p-6 text-center">
                 <Mail className="h-12 w-12 mx-auto mb-4 text-blue-200" />
-                <h3 className="font-semibold mb-2">Email Reminders</h3>
+                <h3 className="font-normal mb-2">Email Reminders</h3>
                 <p className="text-sm text-blue-100">Get detailed deadline information via email</p>
               </CardContent>
             </Card>
@@ -547,7 +547,7 @@ export default function TaxCalendarIrelandPage() {
             <Card className="bg-white/10 border-white/20 text-white">
               <CardContent className="p-6 text-center">
                 <Smartphone className="h-12 w-12 mx-auto mb-4 text-blue-200" />
-                <h3 className="font-semibold mb-2">SMS Alerts</h3>
+                <h3 className="font-normal mb-2">SMS Alerts</h3>
                 <p className="text-sm text-blue-100">Quick text reminders on your phone</p>
               </CardContent>
             </Card>
@@ -555,18 +555,18 @@ export default function TaxCalendarIrelandPage() {
             <Card className="bg-white/10 border-white/20 text-white">
               <CardContent className="p-6 text-center">
                 <Bell className="h-12 w-12 mx-auto mb-4 text-blue-200" />
-                <h3 className="font-semibold mb-2">App Notifications</h3>
+                <h3 className="font-normal mb-2">App Notifications</h3>
                 <p className="text-sm text-blue-100">Push notifications in our mobile app</p>
               </CardContent>
             </Card>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="bg-white text-[#73C2FB] hover:bg-gray-50">
+            <Button size="lg" variant="secondary" className="bg-white text-[#2A7A8F] hover:bg-gray-50">
               <Bell className="mr-2 h-5 w-5" />
               Set Up Reminders
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-[#73C2FB]">
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-[#2A7A8F]">
               <Download className="mr-2 h-5 w-5" />
               Download Full Calendar
             </Button>

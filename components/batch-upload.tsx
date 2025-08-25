@@ -247,7 +247,7 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
   const getStatusColor = (status: BatchFile['status']) => {
     switch (status) {
       case 'pending': return 'bg-gray-500'
-      case 'uploading': return 'bg-blue-500'
+      case 'uploading': return 'bg-petrol-light'
       case 'processing': return 'bg-yellow-500'
       case 'completed': return 'bg-green-500'
       case 'error': return 'bg-red-500'
@@ -292,19 +292,19 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
           {...getRootProps()}
           className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
             isDragActive 
-              ? 'border-blue-500 bg-blue-50' 
+              ? 'border-petrol-500 bg-blue-50' 
               : 'border-gray-300 hover:border-gray-400'
           }`}
         >
           <input {...getInputProps()} />
           <Upload className="h-12 w-12 mx-auto mb-4 text-gray-400" />
           {isDragActive ? (
-            <p className="text-lg text-blue-600">Drop files here...</p>
+            <p className="text-lg text-petrol-base">Drop files here...</p>
           ) : (
             <div>
               <p className="text-lg text-gray-600 mb-2">Drag & drop files here, or click to select</p>
               <p className="text-sm text-gray-500">Supports PDF, Images, Excel, CSV (max 10MB per file)</p>
-              <p className="text-sm text-blue-600 mt-2">⚡ Smart batch upload with automatic categorization and concurrent processing</p>
+              <p className="text-sm text-petrol-base mt-2">⚡ Smart batch upload with automatic categorization and concurrent processing</p>
             </div>
           )}
         </div>
@@ -368,7 +368,7 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <p className="text-sm font-medium truncate">{batchFile.file.name}</p>
+                      <p className="text-sm font-normal truncate">{batchFile.file.name}</p>
                       <Badge className={`text-xs ${getStatusColor(batchFile.status)} text-white`}>
                         {getStatusText(batchFile.status)}
                       </Badge>
@@ -377,7 +377,7 @@ export default function BatchUpload({ onUploadComplete, onUploadProgress }: Batc
                     <div className="flex items-center gap-4 text-xs text-gray-500">
                       <span>{Math.round(batchFile.file.size / 1024)}KB</span>
                       
-                      <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded">
+                      <span className="text-xs px-2 py-1 bg-blue-100 text-petrol-dark rounded">
                         {batchFile.category === 'SALES' ? 'Sales' : 'Purchase'} (auto)
                       </span>
 

@@ -1,7 +1,10 @@
 /**
  * AI Prompt Templates
  * Centralized prompts for consistent AI behavior across PayVAT features
+ * Now includes prompt optimization and A/B testing capabilities
  */
+
+import { PromptOptimizer } from './prompt-optimization'
 
 /**
  * Document Processing Prompts - Optimized for Irish VAT Compliance
@@ -540,4 +543,97 @@ export const PROMPT_VARIABLES = {
     TOURISM: '9%',
     ZERO: '0%'
   }
-} as const
+}
+
+/**
+ * Get optimized prompt based on A/B testing and performance data
+ */
+export async function getOptimizedPrompt(
+  category: 'VAT_EXTRACTION' | 'IRISH_VAT_OPTIMIZED' | 'CLEAN_VAT_EXTRACTION' | 'BUSINESS_DETAILS',
+  context: {
+    documentType?: string
+    userId?: string
+    isTestMode?: boolean
+  } = {}
+): Promise<{ prompt: string, variationId: string, isTestVariation: boolean }> {
+  try {
+    const { variation, isTestVariation } = await PromptOptimizer.selectPromptVariation(category, context)
+    
+    return {
+      prompt: variation.promptText,
+      variationId: variation.id,
+      isTestVariation
+    }
+  } catch (error) {
+    console.warn('Failed to get optimized prompt, using fallback:', error)
+    
+    // Fallback to default prompts
+    const defaultPrompt = getDefaultPrompt(category)
+    return {
+      prompt: defaultPrompt,
+      variationId: 'default',
+      isTestVariation: false
+    }
+  }
+}
+
+/**
+ * Record the results of using a prompt for optimization
+ */
+export async function recordPromptPerformance(
+  variationId: string,
+  documentId: string,
+  results: {
+    confidence: number
+    accuracy?: number
+    extractionSuccess: boolean
+    processingTime: number
+    errorMessage?: string
+    documentType?: string
+    fileSize?: number
+    userId?: string
+  }
+): Promise<void> {
+  try {
+    if (variationId === 'default') {
+      // Don't record performance for fallback prompts
+      return
+    }
+
+    await PromptOptimizer.recordPromptTest({
+      variationId,
+      documentId,
+      userId: results.userId,
+      confidence: results.confidence,
+      accuracy: results.accuracy,
+      extractionSuccess: results.extractionSuccess,
+      processingTime: results.processingTime,
+      errorMessage: results.errorMessage,
+      testContext: {
+        documentType: results.documentType || 'unknown',
+        fileSize: results.fileSize || 0,
+        originalPromptId: variationId
+      }
+    })
+  } catch (error) {
+    console.warn('Failed to record prompt performance:', error)
+  }
+}
+
+/**
+ * Get default prompt for category (fallback)
+ */
+function getDefaultPrompt(category: string): string {
+  switch (category) {
+    case 'VAT_EXTRACTION':
+      return DOCUMENT_PROMPTS.VAT_EXTRACTION
+    case 'IRISH_VAT_OPTIMIZED':
+      return DOCUMENT_PROMPTS.IRISH_VAT_OPTIMIZED
+    case 'CLEAN_VAT_EXTRACTION':
+      return DOCUMENT_PROMPTS.CLEAN_VAT_EXTRACTION
+    case 'BUSINESS_DETAILS':
+      return SUPPORT_PROMPTS.BUSINESS_INFO_EXTRACTION
+    default:
+      return DOCUMENT_PROMPTS.VAT_EXTRACTION
+  }
+}

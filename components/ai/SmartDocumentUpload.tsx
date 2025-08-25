@@ -325,8 +325,8 @@ export default function SmartDocumentUpload({
     
     const config = {
       'TEMPLATE_MATCH': { color: 'bg-green-100 text-green-800', icon: '✓', label: 'Template Match' },
-      'HYBRID': { color: 'bg-blue-100 text-blue-800', icon: '⇄', label: 'Hybrid AI' },
-      'AI_VISION': { color: 'bg-blue-100 text-[#5BADEA]', icon: 'AI', label: 'AI Vision' },
+      'HYBRID': { color: 'bg-blue-100 text-petrol-dark', icon: '⇄', label: 'Hybrid AI' },
+      'AI_VISION': { color: 'bg-blue-100 text-[#216477]', icon: 'AI', label: 'AI Vision' },
       'FALLBACK': { color: 'bg-yellow-100 text-yellow-800', icon: '→', label: 'Fallback' }
     }
     
@@ -342,23 +342,23 @@ export default function SmartDocumentUpload({
 
   return (
     <div>
-      <h4 className="text-md font-semibold text-gray-900 mb-3 flex items-center">
-        <Brain className="h-5 w-5 mr-2 text-blue-600" />
+      <h4 className="text-md font-normal text-gray-900 mb-3 flex items-center">
+        <Brain className="h-5 w-5 mr-2 text-petrol-base" />
         {title}
       </h4>
       
       {/* Enhanced Upload Area */}
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#73C2FB] transition-colors bg-gradient-to-br from-blue-50 to-blue-50">
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#2A7A8F] transition-colors bg-gradient-to-br from-blue-50 to-blue-50">
         <div className="flex justify-center mb-3">
-          <Upload className="h-10 w-10 text-blue-600" />
+          <Upload className="h-10 w-10 text-petrol-base" />
         </div>
-        <p className="text-gray-700 mb-2 font-medium">{description}</p>
+        <p className="text-gray-700 mb-2 font-normal">{description}</p>
         <p className="text-sm text-gray-600 mb-1">Enhanced with AI learning</p>
         <p className="text-xs text-gray-500 mb-4">Templates, pattern recognition, and continuous improvement</p>
         
         <Button 
           variant="outline" 
-          className="border-[#73C2FB] text-[#5BADEA] hover:bg-blue-50 font-medium"
+          className="border-[#2A7A8F] text-[#216477] hover:bg-petrol-50 font-normal"
           onClick={(event) => {
             event.stopPropagation() // Prevent event bubbling
             handleFileSelect(event)
@@ -367,7 +367,7 @@ export default function SmartDocumentUpload({
         >
           {isUploading ? (
             <>
-              <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#73C2FB] border-t-transparent mr-2" />
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#2A7A8F] border-t-transparent mr-2" />
               AI Processing...
             </>
           ) : (
@@ -401,13 +401,13 @@ export default function SmartDocumentUpload({
                         <div className="relative">
                           <FileText className="h-8 w-8 text-gray-500" />
                           {file.learningApplied && (
-                            <Brain className="h-3 w-3 text-blue-600 absolute -top-1 -right-1" />
+                            <Brain className="h-3 w-3 text-petrol-base absolute -top-1 -right-1" />
                           )}
                         </div>
                       </div>
                       
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
+                        <p className="text-sm font-normal text-gray-900 truncate">
                           {file.fileName}
                         </p>
                         
@@ -443,7 +443,7 @@ export default function SmartDocumentUpload({
                           
                           {/* Matched Features */}
                           {file.matchedFeatures && file.matchedFeatures.length > 0 && (
-                            <div className="flex items-center text-blue-600 text-xs">
+                            <div className="flex items-center text-petrol-base text-xs">
                               <TrendingUp className="h-3 w-3 mr-1" />
                               {file.matchedFeatures.length} patterns matched
                             </div>
@@ -451,7 +451,7 @@ export default function SmartDocumentUpload({
                           
                           {/* Suggested Improvements */}
                           {file.suggestedImprovements && file.suggestedImprovements.length > 0 && (
-                            <div className="flex items-center text-blue-600 text-xs">
+                            <div className="flex items-center text-petrol-base text-xs">
                               <Info className="h-3 w-3 mr-1" />
                               {file.suggestedImprovements.length} suggestions
                             </div>
@@ -467,7 +467,7 @@ export default function SmartDocumentUpload({
                           variant="outline"
                           size="sm"
                           onClick={() => setSelectedFileForFeedback(file)}
-                          className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                          className="text-petrol-base border-petrol-200 hover:bg-petrol-50"
                         >
                           Feedback
                         </Button>
@@ -496,7 +496,7 @@ export default function SmartDocumentUpload({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[1001] modal-content">
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div className="p-4 border-b flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Provide Feedback</h3>
+              <h3 className="text-lg font-normal">Provide Feedback</h3>
               <Button
                 variant="ghost"
                 size="sm"
@@ -522,7 +522,7 @@ export default function SmartDocumentUpload({
       {/* Enhanced Guidelines */}
       <div className="mt-3 text-xs text-gray-500 bg-gray-50 p-3 rounded-lg">
         <div className="flex items-center mb-2">
-          <span className="font-medium">AI-Enhanced Processing</span>
+          <span className="font-normal">AI-Enhanced Processing</span>
         </div>
         <ul className="space-y-1">
           {category === 'SALES' ? (
@@ -538,8 +538,8 @@ export default function SmartDocumentUpload({
               <li>• Expense reports and summaries</li>
             </>
           )}
-          <li className="text-blue-600 font-medium">• AI learns from your feedback to improve accuracy</li>
-          <li className="text-blue-600 font-medium">• Templates auto-created for similar documents</li>
+          <li className="text-petrol-base font-normal">• AI learns from your feedback to improve accuracy</li>
+          <li className="text-petrol-base font-normal">• Templates auto-created for similar documents</li>
         </ul>
       </div>
     </div>

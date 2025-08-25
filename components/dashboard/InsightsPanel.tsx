@@ -198,7 +198,7 @@ export default function InsightsPanel({ className }: InsightsPanelProps) {
     return (
       <Card className={`${className} card-modern`}>
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-bold text-foreground flex items-center justify-between">
+          <CardTitle className="text-xl font-normal text-foreground flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Lightbulb className="h-6 w-6 text-primary" />
               <span>Smart Insights</span>
@@ -229,7 +229,7 @@ export default function InsightsPanel({ className }: InsightsPanelProps) {
     return (
       <Card className={`${className} card-modern`}>
         <CardHeader className="pb-4">
-          <CardTitle className="text-xl font-bold text-foreground flex items-center space-x-2">
+          <CardTitle className="text-xl font-normal text-foreground flex items-center space-x-2">
             <Lightbulb className="h-6 w-6 text-primary" />
             <span>Smart Insights</span>
           </CardTitle>
@@ -238,7 +238,7 @@ export default function InsightsPanel({ className }: InsightsPanelProps) {
           <div className="flex items-center justify-center py-8 text-muted-foreground">
             <div className="text-center">
               <Lightbulb className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p className="text-lg font-medium">No insights available</p>
+              <p className="text-lg font-normal">No insights available</p>
               <p className="text-sm">Insights will appear as you use the platform</p>
             </div>
           </div>
@@ -250,7 +250,7 @@ export default function InsightsPanel({ className }: InsightsPanelProps) {
   return (
     <Card className={`${className} card-modern hover-lift`}>
       <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold text-foreground flex items-center justify-between">
+        <CardTitle className="text-xl font-normal text-foreground flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Lightbulb className="h-6 w-6 text-primary" />
             <span>Smart Insights</span>
@@ -276,7 +276,7 @@ export default function InsightsPanel({ className }: InsightsPanelProps) {
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between mb-2">
-                    <h4 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                    <h4 className="text-sm font-normal text-foreground group-hover:text-primary transition-colors">
                       {insight.title}
                     </h4>
                     <div className="flex items-center space-x-2">

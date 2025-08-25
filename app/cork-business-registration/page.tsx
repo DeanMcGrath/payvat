@@ -35,7 +35,7 @@ export default function CorkBusinessRegistration() {
         <section className="scroll-section py-16 px-4" id="cork-registration-guide">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Business Registration Process in Cork
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -48,10 +48,10 @@ export default function CorkBusinessRegistration() {
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">1</span>
+                      <span className="text-petrol-base font-normal text-sm">1</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">Choose Business Structure</h3>
+                      <h3 className="text-xl font-normal text-gray-900 mb-3">Choose Business Structure</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
                           <span className="text-blue-500">•</span>
@@ -77,10 +77,10 @@ export default function CorkBusinessRegistration() {
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">2</span>
+                      <span className="text-petrol-base font-normal text-sm">2</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">Register with CRO</h3>
+                      <h3 className="text-xl font-normal text-gray-900 mb-3">Register with CRO</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
                           <span className="text-blue-500">•</span>
@@ -106,10 +106,10 @@ export default function CorkBusinessRegistration() {
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">3</span>
+                      <span className="text-petrol-base font-normal text-sm">3</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">Revenue Registration</h3>
+                      <h3 className="text-xl font-normal text-gray-900 mb-3">Revenue Registration</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
                           <span className="text-blue-500">•</span>
@@ -137,10 +137,10 @@ export default function CorkBusinessRegistration() {
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">4</span>
+                      <span className="text-petrol-base font-normal text-sm">4</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">Insurance & Compliance</h3>
+                      <h3 className="text-xl font-normal text-gray-900 mb-3">Insurance & Compliance</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
                           <span className="text-blue-500">•</span>
@@ -166,10 +166,10 @@ export default function CorkBusinessRegistration() {
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">5</span>
+                      <span className="text-petrol-base font-normal text-sm">5</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">Business Licenses</h3>
+                      <h3 className="text-xl font-normal text-gray-900 mb-3">Business Licenses</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
                           <span className="text-blue-500">•</span>
@@ -195,10 +195,10 @@ export default function CorkBusinessRegistration() {
                 <div className="card-modern p-8">
                   <div className="flex items-start space-x-4">
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-blue-600 font-bold text-sm">6</span>
+                      <span className="text-petrol-base font-normal text-sm">6</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">Cork Local Requirements</h3>
+                      <h3 className="text-xl font-normal text-gray-900 mb-3">Cork Local Requirements</h3>
                       <ul className="space-y-2 text-gray-700 text-sm">
                         <li className="flex items-start space-x-2">
                           <span className="text-blue-500">•</span>
@@ -229,7 +229,7 @@ export default function CorkBusinessRegistration() {
         <section className="scroll-section py-16 px-4 bg-gray-50" id="cork-supports">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Cork Business Support Services
               </h2>
               <p className="text-lg text-gray-600">
@@ -239,10 +239,10 @@ export default function CorkBusinessRegistration() {
             
             <div className="grid md:grid-cols-3 gap-8">
               <div className="card-modern p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Local Enterprise Office Cork</h3>
+                <h3 className="text-xl font-normal text-gray-900 mb-4">Local Enterprise Office Cork</h3>
                 <div className="space-y-3">
                   <div className="text-sm text-gray-700">
-                    <p className="font-semibold mb-2">Services Available:</p>
+                    <p className="font-normal mb-2">Services Available:</p>
                     <ul className="space-y-1">
                       <li>• Business plan development</li>
                       <li>• Start-up grants up to €15,000</li>
@@ -251,16 +251,16 @@ export default function CorkBusinessRegistration() {
                     </ul>
                   </div>
                   <div className="bg-blue-50 p-3 rounded">
-                    <p className="text-blue-800 text-xs font-medium">Contact: Cork City Hall, Anglesea Street</p>
+                    <p className="text-petrol-dark text-xs font-normal">Contact: Cork City Hall, Anglesea Street</p>
                   </div>
                 </div>
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Cork Chamber of Commerce</h3>
+                <h3 className="text-xl font-normal text-gray-900 mb-4">Cork Chamber of Commerce</h3>
                 <div className="space-y-3">
                   <div className="text-sm text-gray-700">
-                    <p className="font-semibold mb-2">Business Benefits:</p>
+                    <p className="font-normal mb-2">Business Benefits:</p>
                     <ul className="space-y-1">
                       <li>• Networking opportunities</li>
                       <li>• Business development support</li>
@@ -269,16 +269,16 @@ export default function CorkBusinessRegistration() {
                     </ul>
                   </div>
                   <div className="bg-blue-50 p-3 rounded">
-                    <p className="text-blue-800 text-xs font-medium">Member benefits and events</p>
+                    <p className="text-petrol-dark text-xs font-normal">Member benefits and events</p>
                   </div>
                 </div>
               </div>
               
               <div className="card-modern p-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">UCC Innovation & Research</h3>
+                <h3 className="text-xl font-normal text-gray-900 mb-4">UCC Innovation & Research</h3>
                 <div className="space-y-3">
                   <div className="text-sm text-gray-700">
-                    <p className="font-semibold mb-2">Tech Supports:</p>
+                    <p className="font-normal mb-2">Tech Supports:</p>
                     <ul className="space-y-1">
                       <li>• Technology transfer</li>
                       <li>• R&D partnerships</li>
@@ -287,7 +287,7 @@ export default function CorkBusinessRegistration() {
                     </ul>
                   </div>
                   <div className="bg-blue-50 p-3 rounded">
-                    <p className="text-blue-800 text-xs font-medium">University-industry collaboration</p>
+                    <p className="text-petrol-dark text-xs font-normal">University-industry collaboration</p>
                   </div>
                 </div>
               </div>
@@ -299,7 +299,7 @@ export default function CorkBusinessRegistration() {
         <section className="scroll-section py-16 px-4" id="cork-sectors">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Key Business Sectors in Cork
               </h2>
               <p className="text-lg text-gray-600">
@@ -310,11 +310,11 @@ export default function CorkBusinessRegistration() {
             <div className="card-premium p-8">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Established Sectors</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">Established Sectors</h3>
                   <div className="space-y-4">
                     <div className="bg-blue-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-blue-900 mb-2">Pharmaceuticals</h4>
-                      <ul className="text-blue-800 text-sm space-y-1">
+                      <h4 className="font-normal text-blue-900 mb-2">Pharmaceuticals</h4>
+                      <ul className="text-petrol-dark text-sm space-y-1">
                         <li>• Major global companies present</li>
                         <li>• Supply chain opportunities</li>
                         <li>• Life sciences ecosystem</li>
@@ -322,7 +322,7 @@ export default function CorkBusinessRegistration() {
                       </ul>
                     </div>
                     <div className="bg-green-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-green-900 mb-2">Technology</h4>
+                      <h4 className="font-normal text-green-900 mb-2">Technology</h4>
                       <ul className="text-green-800 text-sm space-y-1">
                         <li>• Software development</li>
                         <li>• Fintech and cybersecurity</li>
@@ -334,10 +334,10 @@ export default function CorkBusinessRegistration() {
                 </div>
                 
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Growing Opportunities</h3>
+                  <h3 className="text-xl font-normal text-gray-900 mb-4">Growing Opportunities</h3>
                   <div className="space-y-4">
                     <div className="bg-orange-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-orange-900 mb-2">Tourism & Hospitality</h4>
+                      <h4 className="font-normal text-orange-900 mb-2">Tourism & Hospitality</h4>
                       <ul className="text-orange-800 text-sm space-y-1">
                         <li>• Wild Atlantic Way gateway</li>
                         <li>• Food and beverage tourism</li>
@@ -346,7 +346,7 @@ export default function CorkBusinessRegistration() {
                       </ul>
                     </div>
                     <div className="bg-purple-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-purple-900 mb-2">Creative Industries</h4>
+                      <h4 className="font-normal text-purple-900 mb-2">Creative Industries</h4>
                       <ul className="text-purple-800 text-sm space-y-1">
                         <li>• Film and television</li>
                         <li>• Music and performing arts</li>
@@ -365,7 +365,7 @@ export default function CorkBusinessRegistration() {
         <section className="scroll-section py-16 px-4 bg-gray-50" id="cork-checklist">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-normal text-gray-900 mb-4">
                 Cork Business Registration Checklist
               </h2>
               <p className="text-lg text-gray-600">
@@ -375,10 +375,10 @@ export default function CorkBusinessRegistration() {
             
             <div className="space-y-6">
               <div className="card-premium p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Essential Steps</h3>
+                <h3 className="text-2xl font-normal text-gray-900 mb-6">Essential Steps</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Legal & Compliance</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Legal & Compliance</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li className="flex items-start space-x-2">
                         <span className="text-green-500">✓</span>
@@ -403,7 +403,7 @@ export default function CorkBusinessRegistration() {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 mb-3">Local Requirements</h4>
+                    <h4 className="font-normal text-gray-900 mb-3">Local Requirements</h4>
                     <ul className="space-y-2 text-gray-700 text-sm">
                       <li className="flex items-start space-x-2">
                         <span className="text-blue-500">✓</span>
@@ -434,9 +434,9 @@ export default function CorkBusinessRegistration() {
         </section>
 
         {/* Call to Action */}
-        <section className="scroll-section py-20 px-4 bg-gradient-to-r from-[#73C2FB] to-[#5BADEA] text-white">
+        <section className="scroll-section py-20 px-4 bg-gradient-to-r from-[#2A7A8F] to-[#216477] text-white">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-6">
+            <h2 className="text-4xl font-normal mb-6">
               Start Your Cork Business Journey Today
             </h2>
             <p className="text-xl mb-8 text-blue-100">
@@ -445,13 +445,13 @@ export default function CorkBusinessRegistration() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-blue-600 px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
+                className="bg-white text-petrol-base px-8 py-4 text-lg font-normal rounded-xl hover:bg-gray-50 transition-all duration-300 hover:scale-105"
               >
                 Start Cork Business Setup
               </a>
               <a 
                 href="/pricing" 
-                className="border-2 border-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
+                className="border-2 border-white px-8 py-4 text-lg font-normal rounded-xl hover:bg-white hover:text-petrol-base transition-all duration-300"
               >
                 View Business Plans
               </a>

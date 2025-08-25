@@ -50,7 +50,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <Card className="w-full max-w-2xl bg-white shadow-2xl">
-        <CardHeader className="relative bg-gradient-to-r from-[#73C2FB] to-[#5BADEA] text-white rounded-t-lg">
+        <CardHeader className="relative bg-gradient-to-r from-[#2A7A8F] to-[#216477] text-white rounded-t-lg">
           <Button
             variant="ghost"
             size="sm"
@@ -63,7 +63,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
             <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
               <Crown className="h-8 w-8 text-white" />
             </div>
-            <CardTitle className="text-2xl font-bold mb-2">Unlock Premium VAT Features</CardTitle>
+            <CardTitle className="text-2xl font-normal mb-2">Unlock Premium VAT Features</CardTitle>
             <p className="text-blue-100">
               Get full access to VAT submissions, payments, and advanced reporting
             </p>
@@ -75,8 +75,8 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
             <div className="space-y-6">
               {/* Premium Features */}
               <div className="bg-gray-100 rounded-lg p-6">
-                <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
-                  <Lock className="h-5 w-5 mr-2 text-blue-600" />
+                <h3 className="font-normal text-gray-900 mb-4 flex items-center">
+                  <Lock className="h-5 w-5 mr-2 text-petrol-base" />
                   Premium Features Include:
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -110,17 +110,17 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
               {/* Pricing Plans */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Monthly Plan */}
-                <Card className="border-2 border-gray-200 hover:border-[#73C2FB] transition-colors">
+                <Card className="border-2 border-gray-200 hover:border-[#2A7A8F] transition-colors">
                   <CardHeader className="text-center pb-4">
-                    <CardTitle className="text-lg font-semibold text-gray-900">Monthly Plan</CardTitle>
-                    <div className="text-3xl font-bold text-gray-900">€90</div>
+                    <CardTitle className="text-lg font-normal text-gray-900">Monthly Plan</CardTitle>
+                    <div className="text-3xl font-normal text-gray-900">€90</div>
                     <p className="text-sm text-gray-600">per month</p>
                   </CardHeader>
                   <CardContent className="pt-0">
                     <Button 
                       onClick={() => handleSubscribe('monthly')}
                       disabled={isProcessing}
-                      className="w-full bg-[#8FD0FC] hover:bg-[#73C2FB] text-white"
+                      className="w-full bg-[#8FD0FC] hover:bg-[#2A7A8F] text-white"
                     >
                       {isProcessing ? "Processing..." : "Choose Monthly"}
                     </Button>
@@ -131,25 +131,25 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
                 </Card>
 
                 {/* Annual Plan */}
-                <Card className="border-2 border-[#73C2FB] bg-blue-50 relative">
+                <Card className="border-2 border-[#2A7A8F] bg-blue-50 relative">
                   <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-[#8FD0FC] text-white">
                     Save €180
                   </Badge>
                   <CardHeader className="text-center pb-4">
-                    <CardTitle className="text-lg font-semibold text-[#5BADEA]">Annual Plan</CardTitle>
-                    <div className="text-3xl font-bold text-[#5BADEA]">€900</div>
-                    <p className="text-sm text-blue-700">per year</p>
-                    <p className="text-xs text-blue-600">€75/month when paid annually</p>
+                    <CardTitle className="text-lg font-normal text-[#216477]">Annual Plan</CardTitle>
+                    <div className="text-3xl font-normal text-[#216477]">€900</div>
+                    <p className="text-sm text-petrol-dark">per year</p>
+                    <p className="text-xs text-petrol-base">€75/month when paid annually</p>
                   </CardHeader>
                   <CardContent className="pt-0">
                     <Button 
                       onClick={() => handleSubscribe('annual')}
                       disabled={isProcessing}
-                      className="w-full bg-[#73C2FB] hover:bg-[#5BADEA] text-white"
+                      className="w-full bg-[#2A7A8F] hover:bg-[#216477] text-white"
                     >
                       {isProcessing ? "Processing..." : "Choose Annual"}
                     </Button>
-                    <p className="text-xs text-blue-600 text-center mt-2">
+                    <p className="text-xs text-petrol-base text-center mt-2">
                       Best value - 2 months free!
                     </p>
                   </CardContent>
@@ -161,7 +161,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
                 <div className="text-center">
                   <div className="flex items-center justify-center mb-3">
                     <Gift className="h-5 w-5 text-amber-500 mr-2" />
-                    <span className="text-sm font-medium text-gray-700">Have a promotional code?</span>
+                    <span className="text-sm font-normal text-gray-700">Have a promotional code?</span>
                   </div>
                   <Button 
                     variant="outline" 
@@ -182,7 +182,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-amber-100 rounded-full mb-4">
                   <Gift className="h-6 w-6 text-amber-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Enter Promotional Code</h3>
+                <h3 className="text-xl font-normal text-gray-900 mb-2">Enter Promotional Code</h3>
                 <p className="text-gray-600">
                   Enter your promotional code to get 2 months of free access
                 </p>
@@ -190,7 +190,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
 
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="promo-code" className="text-gray-700 font-medium">
+                  <Label htmlFor="promo-code" className="text-gray-700 font-normal">
                     Promotional Code
                   </Label>
                   <Input
@@ -228,7 +228,7 @@ export default function PaywallPopup({ isOpen, onClose, onSubscribe, onFreeTrial
               </div>
 
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                <h4 className="font-medium text-amber-900 mb-2">Free Trial Includes:</h4>
+                <h4 className="font-normal text-amber-900 mb-2">Free Trial Includes:</h4>
                 <ul className="text-sm text-amber-800 space-y-1">
                   <li>• 2 months of full access</li>
                   <li>• 1 complete VAT submission cycle</li>

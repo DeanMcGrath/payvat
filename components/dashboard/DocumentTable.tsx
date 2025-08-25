@@ -31,7 +31,7 @@ export function DocumentTable({
   return (
     <div className="w-full">
       {showHeaders && (
-        <div className="grid grid-cols-12 gap-4 items-center px-6 py-3 bg-neutral-50 border-b text-xs font-medium text-neutral-600 uppercase tracking-wide">
+        <div className="grid grid-cols-12 gap-4 items-center px-6 py-3 bg-neutral-50 border-b text-xs font-normal text-neutral-600 uppercase tracking-wide">
           <div className="col-span-1 text-center">Type</div>
           <div className="col-span-2">Document Name</div>
           <div className="col-span-2">Date on Doc</div>

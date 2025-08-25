@@ -48,13 +48,13 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, onClose, compact = fals
   // Get file type icon
   const getFileIcon = (mimeType: string) => {
     if (mimeType.startsWith('image/')) {
-      return <ImageIcon className="h-5 w-5 text-blue-600" />
+      return <ImageIcon className="h-5 w-5 text-petrol-base" />
     } else if (mimeType.includes('pdf')) {
       return <FileText className="h-5 w-5 text-red-600" />
     } else if (mimeType.includes('spreadsheet') || mimeType.includes('excel') || mimeType.includes('csv')) {
       return <FileSpreadsheet className="h-5 w-5 text-green-600" />
     } else if (mimeType.includes('word') || mimeType.includes('document')) {
-      return <FileText className="h-5 w-5 text-blue-600" />
+      return <FileText className="h-5 w-5 text-petrol-base" />
     }
     return <File className="h-5 w-5 text-gray-600" />
   }
@@ -135,7 +135,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, onClose, compact = fals
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2 mb-1">
-            <p className="text-sm font-medium text-gray-900 truncate">
+            <p className="text-sm font-normal text-gray-900 truncate">
               {file.originalName}
             </p>
             {getSecurityBadge(file.scanResult)}
@@ -150,7 +150,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, onClose, compact = fals
               variant="outline"
               size="sm"
               onClick={handleView}
-              className="hover:bg-blue-50"
+              className="hover:bg-petrol-50"
             >
               <Eye className="h-4 w-4" />
             </Button>
@@ -180,7 +180,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, onClose, compact = fals
         <div className="flex items-center space-x-3">
           {getFileIcon(file.mimeType)}
           <div>
-            <h3 className="text-sm font-medium text-gray-900 truncate max-w-64">
+            <h3 className="text-sm font-normal text-gray-900 truncate max-w-64">
               {file.originalName}
             </h3>
             <p className="text-xs text-gray-500">
@@ -228,7 +228,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, onClose, compact = fals
             <div className="flex items-start space-x-2">
               <AlertTriangle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-yellow-800">Security Warning</p>
+                <p className="text-sm font-normal text-yellow-800">Security Warning</p>
                 <p className="text-sm text-yellow-700">
                   This file has been flagged as suspicious. Exercise caution when downloading.
                 </p>
@@ -242,7 +242,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, onClose, compact = fals
             <div className="flex items-start space-x-2">
               <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-red-800">File Blocked</p>
+                <p className="text-sm font-normal text-red-800">File Blocked</p>
                 <p className="text-sm text-red-700">
                   This file has been blocked due to security threats and cannot be downloaded.
                 </p>
@@ -257,7 +257,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ file, onClose, compact = fals
             <Button
               variant="outline"
               onClick={handleView}
-              className="flex-1 hover:bg-blue-50"
+              className="flex-1 hover:bg-petrol-50"
             >
               <Eye className="h-4 w-4 mr-2" />
               View

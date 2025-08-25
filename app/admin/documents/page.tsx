@@ -150,7 +150,7 @@ export default function AdminDocuments() {
       case 'sales':
         return 'bg-green-100 text-green-800'
       case 'purchases':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-petrol-dark'
       case 'expenses':
         return 'bg-orange-100 text-orange-800'
       case 'other':
@@ -175,7 +175,7 @@ export default function AdminDocuments() {
       case 'draft':
         return 'bg-gray-100 text-gray-800'
       default:
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-petrol-dark'
     }
   }
 
@@ -360,7 +360,7 @@ export default function AdminDocuments() {
     return (
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-petrol-600"></div>
         </div>
       </div>
     )
@@ -371,7 +371,7 @@ export default function AdminDocuments() {
       <div className="container mx-auto p-6">
         <div className="text-center">
           <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Error Loading Documents</h2>
+          <h2 className="text-xl font-normal mb-2">Error Loading Documents</h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <Button onClick={fetchDocuments}>Try Again</Button>
         </div>
@@ -384,7 +384,7 @@ export default function AdminDocuments() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Document Review</h1>
+          <h1 className="text-3xl font-normal text-gray-900">Document Review</h1>
           <p className="text-gray-600">Review and manage uploaded documents</p>
         </div>
         <Link href="/admin">
@@ -532,7 +532,7 @@ export default function AdminDocuments() {
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-1">
                             <div className="flex items-center space-x-2">
-                              <h3 className="font-semibold text-lg truncate">
+                              <h3 className="font-normal text-lg truncate">
                                 {document.fileName}
                               </h3>
                               <Badge className={getCategoryColor(document.category)}>
@@ -549,7 +549,7 @@ export default function AdminDocuments() {
                                     <div className="flex items-center bg-green-50 text-green-800 px-3 py-1 rounded-md border border-green-200">
                                       <CheckCircle className="h-4 w-4 mr-2 text-green-600" />
                                       <div className="text-right">
-                                        <div className="font-semibold">
+                                        <div className="font-normal">
                                           VAT: {vatInfo.vatAmounts.join(', ')}
                                         </div>
                                         <div className="text-xs opacity-75">
@@ -590,7 +590,7 @@ export default function AdminDocuments() {
                       <div className="ml-11 mb-2">
                         <div className="flex items-center space-x-2 text-sm">
                           <Building className="h-4 w-4 text-gray-400" />
-                          <span className="font-medium">{document.user.businessName}</span>
+                          <span className="font-normal">{document.user.businessName}</span>
                           <span className="text-gray-500">({document.user.vatNumber})</span>
                           <span className="text-gray-500">•</span>
                           <span className="text-gray-500">{document.user.email}</span>
@@ -631,9 +631,9 @@ export default function AdminDocuments() {
 
                   {/* Scan Results */}
                   {document.isScanned && document.scanResult && (
-                    <div className="ml-11 mt-3 p-3 bg-blue-50 border border-blue-200 rounded text-sm">
-                      <div className="font-medium text-blue-800 mb-1">Scan Results:</div>
-                      <div className="text-blue-700">
+                    <div className="ml-11 mt-3 p-3 bg-blue-50 border border-petrol-200 rounded text-sm">
+                      <div className="font-normal text-petrol-dark mb-1">Scan Results:</div>
+                      <div className="text-petrol-dark">
                         {typeof document.scanResult === 'object' 
                           ? (
                               <pre className="whitespace-pre-wrap font-mono text-xs bg-white p-2 rounded border max-h-32 overflow-y-auto">
@@ -663,7 +663,7 @@ export default function AdminDocuments() {
             <div className="flex items-center space-x-2">
               <FileText className="h-5 w-5 text-blue-500" />
               <div>
-                <div className="text-2xl font-bold">{pagination.totalCount}</div>
+                <div className="text-2xl font-normal">{pagination.totalCount}</div>
                 <div className="text-sm text-gray-500">Total Documents</div>
               </div>
             </div>
@@ -675,7 +675,7 @@ export default function AdminDocuments() {
             <div className="flex items-center space-x-2">
               <CheckCircle className="h-5 w-5 text-green-500" />
               <div>
-                <div className="text-2xl font-bold">
+                <div className="text-2xl font-normal">
                   {documents.filter(d => d.isScanned).length}
                 </div>
                 <div className="text-sm text-gray-500">Scanned</div>
@@ -689,7 +689,7 @@ export default function AdminDocuments() {
             <div className="flex items-center space-x-2">
               <XCircle className="h-5 w-5 text-yellow-500" />
               <div>
-                <div className="text-2xl font-bold">
+                <div className="text-2xl font-normal">
                   {documents.filter(d => !d.isScanned).length}
                 </div>
                 <div className="text-sm text-gray-500">Not Scanned</div>
@@ -703,7 +703,7 @@ export default function AdminDocuments() {
             <div className="flex items-center space-x-2">
               <Building className="h-5 w-5 text-purple-500" />
               <div>
-                <div className="text-2xl font-bold">
+                <div className="text-2xl font-normal">
                   {new Set(documents.map(d => d.user.id)).size}
                 </div>
                 <div className="text-sm text-gray-500">Unique Users</div>

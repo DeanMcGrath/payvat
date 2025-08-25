@@ -77,7 +77,7 @@ export default function ContactPage() {
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <Card className="card-premium">
             <CardHeader className="text-center pb-8">
-              <CardTitle className="text-3xl font-bold text-slate-800 mb-4">
+              <CardTitle className="text-3xl font-normal text-slate-800 mb-4">
                 Contact Our Team
               </CardTitle>
               <p className="text-lg text-slate-600 max-w-2xl mx-auto">
@@ -90,7 +90,7 @@ export default function ContactPage() {
                 <div className="mb-8 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
                   <CheckCircle className="h-5 w-5 text-green-600" />
                   <div>
-                    <p className="font-medium text-green-800">Message sent successfully!</p>
+                    <p className="font-normal text-green-800">Message sent successfully!</p>
                     <p className="text-sm text-green-600">We'll get back to you within 24 hours.</p>
                   </div>
                 </div>
@@ -100,7 +100,7 @@ export default function ContactPage() {
                 <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
                   <AlertCircle className="h-5 w-5 text-red-600" />
                   <div>
-                    <p className="font-medium text-red-800">Something went wrong</p>
+                    <p className="font-normal text-red-800">Something went wrong</p>
                     <p className="text-sm text-red-600">Please try again or email us directly at support@payvat.ie</p>
                   </div>
                 </div>
@@ -226,13 +226,13 @@ export default function ContactPage() {
                       type="submit"
                       size="lg"
                       disabled={isSubmitting}
-                      className="text-white font-semibold px-12 py-3 min-w-[200px] transition-all duration-300"
-                      style={{background: 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'}}
+                      className="text-white font-normal px-12 py-3 min-w-[200px] transition-all duration-300"
+                      style={{background: 'linear-gradient(135deg, #2A7A8F 0%, #1A4F5C 100%)'}}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'linear-gradient(135deg, #5BADEA 0%, #003F63 100%)'
+                        e.currentTarget.style.background = 'linear-gradient(135deg, #216477 0%, #003F63 100%)'
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'linear-gradient(135deg, #73C2FB 0%, #005A8B 100%)'
+                        e.currentTarget.style.background = 'linear-gradient(135deg, #2A7A8F 0%, #1A4F5C 100%)'
                       }}
                     >
                       {isSubmitting ? (
@@ -259,7 +259,7 @@ export default function ContactPage() {
       <section className="py-16 bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-slate-800 mb-4">
+            <h2 className="text-3xl font-normal text-slate-800 mb-4">
               Other Ways to Reach Us
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
@@ -273,9 +273,9 @@ export default function ContactPage() {
                 <div className="icon-modern mx-auto mb-4">
                   <Mail className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-slate-800">Email Support</h3>
+                <h3 className="text-xl font-normal mb-2 text-slate-800">Email Support</h3>
                 <p className="text-slate-600 mb-4">Get a response within 24 hours</p>
-                <a href="mailto:support@payvat.ie" className="text-[#005A8B] font-medium hover:text-[#003F63] transition-colors">
+                <a href="mailto:support@payvat.ie" className="text-[#1A4F5C] font-normal hover:text-[#003F63] transition-colors">
                   support@payvat.ie
                 </a>
               </CardContent>
@@ -286,9 +286,9 @@ export default function ContactPage() {
                 <div className="icon-modern mx-auto mb-4">
                   <Phone className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-slate-800">Phone Support</h3>
+                <h3 className="text-xl font-normal mb-2 text-slate-800">Phone Support</h3>
                 <p className="text-slate-600 mb-4">Monday - Friday, 9:00 AM - 5:00 PM</p>
-                <p className="text-[#005A8B] font-medium">Available via contact form</p>
+                <p className="text-[#1A4F5C] font-normal">Available via contact form</p>
               </CardContent>
             </Card>
 
@@ -297,9 +297,9 @@ export default function ContactPage() {
                 <div className="icon-modern mx-auto mb-4">
                   <MessageCircle className="h-6 w-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-slate-800">Live Chat</h3>
+                <h3 className="text-xl font-normal mb-2 text-slate-800">Live Chat</h3>
                 <p className="text-slate-600 mb-4">Real-time assistance available</p>
-                <p className="text-[#005A8B] font-medium">Check bottom right corner</p>
+                <p className="text-[#1A4F5C] font-normal">Check bottom right corner</p>
               </CardContent>
             </Card>
           </div>

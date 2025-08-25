@@ -56,8 +56,8 @@ export default function PricingPage() {
 
           {/* Pricing Cards */}
           <div className="text-center mb-2 animate-slide-up">
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-1">
-              <span className="text-gradient-primary">Don't Be Like Me</span>
+            <h2 className="text-3xl lg:text-4xl font-normal text-foreground mb-1">
+              <span className="text-gradient-primary">PayVAT</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Complete VAT management solution for Irish businesses
@@ -73,7 +73,7 @@ export default function PricingPage() {
                   <Euro className="h-12 w-12 text-white" />
                 </div>
                 
-                <h3 className="text-3xl lg:text-4xl font-bold text-foreground mb-8">Don't Be Like Me</h3>
+                <h3 className="text-3xl lg:text-4xl font-normal text-foreground mb-8">PayVAT</h3>
                 
                 {/* Features List */}
                 <div className="grid md:grid-cols-2 gap-6 mb-12 text-left max-w-3xl mx-auto">
@@ -121,13 +121,13 @@ export default function PricingPage() {
                   <div className="card-modern p-8 text-center">
                     <div className="flex items-center justify-center space-x-2 mb-4">
                       <Euro className="h-8 w-8 text-primary" />
-                      <span className="text-5xl font-bold text-foreground">30</span>
+                      <span className="text-5xl font-normal text-foreground">30</span>
                       <span className="text-muted-foreground text-lg">/month</span>
                     </div>
                     <p className="text-muted-foreground mb-6">Perfect for getting started</p>
                     <Button 
                       size="lg"
-                      className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
+                      className="btn-primary px-8 py-3 text-lg font-normal hover-lift w-full"
                       onClick={() => router.push('/signup')}
                     >
                       Start Free Trial
@@ -138,20 +138,20 @@ export default function PricingPage() {
                   {/* Annual Option */}
                   <div className="card-modern p-8 text-center border-2 border-primary relative">
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-medium">
+                      <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-normal">
                         Save €180
                       </span>
                     </div>
                     <div className="flex items-center justify-center space-x-2 mb-4">
                       <Euro className="h-8 w-8 text-primary" />
-                      <span className="text-5xl font-bold text-foreground">300</span>
+                      <span className="text-5xl font-normal text-foreground">300</span>
                       <span className="text-muted-foreground text-lg">/year</span>
                     </div>
-                    <p className="text-primary font-semibold mb-2">Two months free!</p>
+                    <p className="text-primary font-normal mb-2">Two months free!</p>
                     <p className="text-muted-foreground mb-6">Best value for growing businesses</p>
                     <Button 
                       size="lg"
-                      className="btn-primary px-8 py-3 text-lg font-semibold hover-lift w-full"
+                      className="btn-primary px-8 py-3 text-lg font-normal hover-lift w-full"
                       onClick={() => router.push('/signup')}
                     >
                       Get Started

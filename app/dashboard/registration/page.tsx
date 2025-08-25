@@ -195,7 +195,7 @@ export default function RegistrationPage() {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'company':
-        return <Building className="h-8 w-8 text-blue-600" />
+        return <Building className="h-8 w-8 text-petrol-base" />
       case 'revenue':
         return <FileText className="h-8 w-8 text-green-600" />
       case 'business_name':
@@ -220,7 +220,7 @@ export default function RegistrationPage() {
       {/* Overall Progress */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-brand-700">
+          <CardTitle className="flex items-center gap-2 text-petrol-dark">
             <FileCheck className="h-5 w-5" />
             Registration Progress Overview
           </CardTitle>
@@ -228,31 +228,31 @@ export default function RegistrationPage() {
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Overall Completion</span>
-              <span className="h6 text-brand-700">{overallProgress}%</span>
+              <span className="text-sm font-normal">Overall Completion</span>
+              <span className="h6 text-petrol-dark">{overallProgress}%</span>
             </div>
             <Progress value={overallProgress} className="h-3" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">
+                <div className="text-2xl font-normal text-green-600">
                   {registrations.filter(r => r.status === 'completed').length}
                 </div>
                 <div className="text-sm text-gray-600">Completed</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-600">
+                <div className="text-2xl font-normal text-yellow-600">
                   {registrations.filter(r => r.status === 'in_progress').length}
                 </div>
                 <div className="text-sm text-gray-600">In Progress</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-gray-400">
+                <div className="text-2xl font-normal text-gray-400">
                   {registrations.filter(r => r.status === 'not_started').length}
                 </div>
                 <div className="text-sm text-gray-600">Not Started</div>
               </div>
               <div className="text-center">
-                <div className="h3 text-brand-700">
+                <div className="h3 text-petrol-dark">
                   {registrations.length}
                 </div>
                 <div className="text-sm text-gray-600">Total Items</div>
@@ -296,7 +296,7 @@ export default function RegistrationPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 {registration.completedDate && (
                   <div>
-                    <span className="font-medium text-gray-700">Completed:</span>
+                    <span className="font-normal text-gray-700">Completed:</span>
                     <div className="text-gray-600">
                       {new Date(registration.completedDate).toLocaleDateString()}
                     </div>
@@ -304,7 +304,7 @@ export default function RegistrationPage() {
                 )}
                 {registration.dueDate && (
                   <div>
-                    <span className="font-medium text-gray-700">Due Date:</span>
+                    <span className="font-normal text-gray-700">Due Date:</span>
                     <div className="text-gray-600">
                       {new Date(registration.dueDate).toLocaleDateString()}
                     </div>
@@ -312,7 +312,7 @@ export default function RegistrationPage() {
                 )}
                 {registration.referenceNumber && (
                   <div>
-                    <span className="font-medium text-gray-700">Reference:</span>
+                    <span className="font-normal text-gray-700">Reference:</span>
                     <div className="text-gray-600">{registration.referenceNumber}</div>
                   </div>
                 )}
@@ -321,12 +321,12 @@ export default function RegistrationPage() {
               {/* Next Steps */}
               {registration.nextSteps && registration.nextSteps.length > 0 && (
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Next Steps:</h4>
+                  <h4 className="font-normal text-gray-900 mb-2">Next Steps:</h4>
                   <ul className="space-y-1">
                     {registration.nextSteps.map((step, index) => (
                       <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
                         <div className="flex-shrink-0 w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center mt-0.5">
-                          <span className="text-xs font-medium text-blue-600">{index + 1}</span>
+                          <span className="text-xs font-normal text-petrol-base">{index + 1}</span>
                         </div>
                         {step}
                       </li>
@@ -338,13 +338,13 @@ export default function RegistrationPage() {
               {/* Documents */}
               {registration.documents && registration.documents.length > 0 && (
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Documents:</h4>
+                  <h4 className="font-normal text-gray-900 mb-2">Documents:</h4>
                   <div className="space-y-2">
                     {registration.documents.map((doc, index) => (
                       <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-md border border-green-200">
                         <div className="flex items-center gap-2">
                           <FileText className="h-4 w-4 text-green-600" />
-                          <span className="text-sm font-medium">{doc.name}</span>
+                          <span className="text-sm font-normal">{doc.name}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-gray-500">
@@ -363,7 +363,7 @@ export default function RegistrationPage() {
               {/* External Links */}
               {registration.externalLinks && registration.externalLinks.length > 0 && (
                 <div className="pt-4 border-t">
-                  <h4 className="font-medium text-gray-900 mb-2">Helpful Links:</h4>
+                  <h4 className="font-normal text-gray-900 mb-2">Helpful Links:</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {registration.externalLinks.map((link, index) => (
                       <Button
@@ -374,7 +374,7 @@ export default function RegistrationPage() {
                         onClick={() => window.open(link.url, '_blank')}
                       >
                         <div className="flex-1">
-                          <div className="font-medium">{link.name}</div>
+                          <div className="font-normal">{link.name}</div>
                           <div className="text-xs text-gray-500">{link.description}</div>
                         </div>
                         <ExternalLink className="h-4 w-4 ml-2 flex-shrink-0" />

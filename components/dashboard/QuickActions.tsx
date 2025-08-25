@@ -135,7 +135,7 @@ export default function QuickActions({ className }: QuickActionsProps) {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'filing': return "text-red-600 bg-red-50"
-      case 'documents': return "text-blue-600 bg-blue-50"
+      case 'documents': return "text-petrol-base bg-blue-50"
       case 'reports': return "text-green-600 bg-green-50"
       case 'tools': return "text-purple-600 bg-purple-50"
       case 'help': return "text-gray-600 bg-gray-50"
@@ -179,7 +179,7 @@ export default function QuickActions({ className }: QuickActionsProps) {
       <div className="absolute inset-0 gradient-mesh opacity-10"></div>
       
       <CardHeader className="pb-4 relative z-10">
-        <CardTitle className="text-xl font-bold text-white flex items-center space-x-2">
+        <CardTitle className="text-xl font-normal text-white flex items-center space-x-2">
           <Zap className="h-6 w-6 text-white" />
           <span>Quick Actions</span>
         </CardTitle>
@@ -199,7 +199,7 @@ export default function QuickActions({ className }: QuickActionsProps) {
                       {getCategoryIcon(category)}
                     </div>
                   </div>
-                  <h4 className="text-sm font-semibold text-white">
+                  <h4 className="text-sm font-normal text-white">
                     {categoryNames[category as keyof typeof categoryNames]}
                   </h4>
                 </div>
@@ -214,13 +214,13 @@ export default function QuickActions({ className }: QuickActionsProps) {
                         onClick={() => handleActionClick(action)}
                       >
                         <div className="flex items-start space-x-3 w-full">
-                          <div className="flex-shrink-0 p-2 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
-                            <Icon className="h-5 w-5 text-blue-600" />
+                          <div className="flex-shrink-0 p-2 bg-blue-50 rounded-lg group-hover:bg-petrol-100 transition-colors">
+                            <Icon className="h-5 w-5 text-petrol-base" />
                           </div>
                           
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-1">
-                              <h5 className="text-sm font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
+                              <h5 className="text-sm font-normal text-gray-800 group-hover:text-petrol-dark transition-colors">
                                 {action.title}
                               </h5>
                               <div className="flex items-center space-x-1">
@@ -229,7 +229,7 @@ export default function QuickActions({ className }: QuickActionsProps) {
                                     {action.badge}
                                   </Badge>
                                 )}
-                                <ChevronRight className="h-3 w-3 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                                <ChevronRight className="h-3 w-3 text-gray-400 group-hover:text-petrol-base transition-colors" />
                               </div>
                             </div>
                             
@@ -268,15 +268,15 @@ export default function QuickActions({ className }: QuickActionsProps) {
         <div className="mt-6 pt-6 border-t border-white/20 relative z-10">
           <div className="grid grid-cols-3 gap-4 text-center">
             <div className="space-y-1">
-              <p className="text-lg font-bold text-white">12</p>
+              <p className="text-lg font-normal text-white">12</p>
               <p className="text-xs text-white/70">Tasks This Week</p>
             </div>
             <div className="space-y-1">
-              <p className="text-lg font-bold text-white">3</p>
+              <p className="text-lg font-normal text-white">3</p>
               <p className="text-xs text-white/70">Pending Actions</p>
             </div>
             <div className="space-y-1">
-              <p className="text-lg font-bold text-white">98%</p>
+              <p className="text-lg font-normal text-white">98%</p>
               <p className="text-xs text-white/70">On-Time Rate</p>
             </div>
           </div>

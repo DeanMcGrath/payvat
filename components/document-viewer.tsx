@@ -322,7 +322,7 @@ const SpreadsheetViewer = ({ fileUrl, fileName }: { fileUrl: string, fileName: s
           <div className="bg-red-200 rounded-full p-6 mb-4 inline-block">
             <FileText className="h-16 w-16 text-red-600" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">Spreadsheet Parse Error</h3>
+          <h3 className="text-lg font-normal text-gray-700 mb-2">Spreadsheet Parse Error</h3>
           <p className="text-gray-600 mb-4">{error}</p>
           <Button 
             onClick={() => window.open(fileUrl, '_blank')} 
@@ -353,7 +353,7 @@ const SpreadsheetViewer = ({ fileUrl, fileName }: { fileUrl: string, fileName: s
       <div className="p-4 bg-gray-50 border-b space-y-3">
         <div className="flex justify-between items-start">
           <div>
-            <h4 className="font-medium text-gray-900">{fileName}</h4>
+            <h4 className="font-normal text-gray-900">{fileName}</h4>
             <p className="text-sm text-gray-600">
               {totalRows} rows • {maxColumns} columns
               {workbookData.sheets.length > 1 && ` • Sheet: ${workbookData.currentSheet}`}
@@ -410,7 +410,7 @@ const SpreadsheetViewer = ({ fileUrl, fileName }: { fileUrl: string, fileName: s
                   return (
                     <th 
                       key={colIndex} 
-                      className="px-3 py-2 text-left font-medium text-gray-900 border-b cursor-pointer hover:bg-gray-200"
+                      className="px-3 py-2 text-left font-normal text-gray-900 border-b cursor-pointer hover:bg-gray-200"
                       onClick={() => handleSort(colIndex)}
                     >
                       <div className="flex items-center gap-1">
@@ -535,25 +535,23 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
   const loadDocument = useCallback(async () => {
     if (!document) return
     
-    // Skip API call for mock documents (simple numeric IDs like "1", "2", "3")
-    if (/^\d+$/.test(document.id)) {
-      // Mock documents don't have actual files to load
-      setLoading(false)
-      setDocumentUrl(null)
-      return
-    }
-    
     setLoading(true)
     try {
+      // Add timeout to prevent infinite loading
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 30000) // 30 second timeout
+      
       // Use preview action for viewing, not download
       const response = await fetch(`/api/documents/${document.id}?action=preview`, {
         method: 'GET',
         credentials: 'include',
+        signal: controller.signal,
         headers: {
-          'Content-Type': 'application/json',
           'Accept': '*/*'
         }
       })
+      
+      clearTimeout(timeoutId)
       
       if (response.ok) {
         const blob = await response.blob()
@@ -577,7 +575,11 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
       }
     } catch (error) {
       console.error('Error loading document:', error)
-      toast.error('Error loading document')
+      if (error instanceof Error && error.name === 'AbortError') {
+        toast.error('Document loading timed out. Please try again.')
+      } else {
+        toast.error('Error loading document')
+      }
     } finally {
       setLoading(false)
     }
@@ -585,12 +587,6 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
 
   const handleDownload = async () => {
     if (!document) return
-    
-    // Skip download for mock documents (simple numeric IDs like "1", "2", "3")
-    if (/^\d+$/.test(document.id)) {
-      toast.error('Mock documents cannot be downloaded')
-      return
-    }
     
     try {
       const response = await fetch(`/api/documents/${document.id}?action=download`, {
@@ -734,7 +730,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
       return (
         <div className="flex items-center justify-center min-h-[50vh] sm:min-h-[70vh] bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg border">
           <div className="text-center p-8">
-            <RefreshCw className="h-12 w-12 animate-spin mx-auto mb-4 text-blue-600" />
+            <RefreshCw className="h-12 w-12 animate-spin mx-auto mb-4 text-petrol-base" />
             <p className="text-gray-600 text-lg">Loading document...</p>
             <p className="text-gray-500 text-sm mt-2">Please wait while we prepare the preview</p>
           </div>
@@ -749,12 +745,12 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
             <div className="bg-gray-200 rounded-full p-6 mb-4 inline-block">
               <FileText className="h-16 w-16 text-gray-400" />
             </div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">Preview Not Available</h3>
+            <h3 className="text-lg font-normal text-gray-700 mb-2">Preview Not Available</h3>
             <p className="text-gray-600 mb-4">The document preview couldn't be loaded</p>
             <Button 
               onClick={handleDownload} 
               size="lg"
-              className="bg-[#73C2FB] hover:bg-[#5BADEA]"
+              className="bg-[#2A7A8F] hover:bg-[#216477]"
             >
               <Download className="h-5 w-5 mr-2" />
               Download to View
@@ -820,12 +816,12 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
           <div className="bg-gray-200 rounded-full p-6 mb-4 inline-block">
             <FileText className="h-16 w-16 text-gray-400" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">File Type Not Supported</h3>
+          <h3 className="text-lg font-normal text-gray-700 mb-2">File Type Not Supported</h3>
           <p className="text-gray-600 mb-4">Preview not available for this file type</p>
           <Button 
             onClick={handleDownload} 
             size="lg"
-            className="bg-[#73C2FB] hover:bg-[#5BADEA]"
+            className="bg-[#2A7A8F] hover:bg-[#216477]"
           >
             <Download className="h-5 w-5 mr-2" />
             Download to View
@@ -856,13 +852,13 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
           {/* Document Viewer - Takes 2/3 width on desktop, full width on mobile */}
           <div className="xl:col-span-2 flex flex-col space-y-4 min-h-0">
             <div className="flex-shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <h3 className="text-lg font-semibold">Document Preview</h3>
+              <h3 className="text-lg font-normal">Document Preview</h3>
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <Button 
                   variant="default" 
                   size="sm" 
                   onClick={handleDownload}
-                  className="bg-[#73C2FB] hover:bg-[#5BADEA] touch-manipulation"
+                  className="bg-[#2A7A8F] hover:bg-[#216477] touch-manipulation"
                 >
                   <Download className="h-4 w-4 sm:mr-2" />
                   <span className="hidden sm:inline">Download</span>
@@ -878,7 +874,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
           {/* VAT Data and Correction Panel - Takes 1/3 width on desktop, full width on mobile */}
           <div className="xl:col-span-1 flex flex-col space-y-4 min-h-0 overflow-y-auto">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <h3 className="text-lg font-semibold">VAT Information</h3>
+              <h3 className="text-lg font-normal">VAT Information</h3>
               <div className="flex gap-2">
                 <Button
                   variant={viewMode === 'view' ? 'default' : 'outline'}
@@ -940,7 +936,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <Label className="text-sm font-medium">Sales VAT</Label>
+                    <Label className="text-sm font-normal">Sales VAT</Label>
                     {extractedVAT.salesVAT && extractedVAT.salesVAT.length > 0 ? (
                       <div className="space-y-1">
                         {(extractedVAT.salesVAT || []).map((amount, index) => (
@@ -950,7 +946,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                           </div>
                         ))}
                         <div className="border-t pt-2 mt-2">
-                          <span className="text-sm font-medium">Total: {formatCurrency(extractedVAT.totalSalesVAT)}</span>
+                          <span className="text-sm font-normal">Total: {formatCurrency(extractedVAT.totalSalesVAT)}</span>
                         </div>
                       </div>
                     ) : (
@@ -961,7 +957,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                   <Separator />
 
                   <div>
-                    <Label className="text-sm font-medium">Purchase VAT</Label>
+                    <Label className="text-sm font-normal">Purchase VAT</Label>
                     {extractedVAT.purchaseVAT && extractedVAT.purchaseVAT.length > 0 ? (
                       <div className="space-y-1">
                         {(extractedVAT.purchaseVAT || []).map((amount, index) => (
@@ -971,7 +967,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                           </div>
                         ))}
                         <div className="border-t pt-2 mt-2">
-                          <span className="text-sm font-medium">Total: {formatCurrency(extractedVAT.totalPurchaseVAT)}</span>
+                          <span className="text-sm font-normal">Total: {formatCurrency(extractedVAT.totalPurchaseVAT)}</span>
                         </div>
                       </div>
                     ) : (
@@ -1010,7 +1006,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <Label className="text-sm font-medium">Feedback Type</Label>
+                    <Label className="text-sm font-normal">Feedback Type</Label>
                     <Select value={feedback} onValueChange={(value: any) => setFeedback(value)}>
                       <SelectTrigger>
                         <SelectValue />
@@ -1025,7 +1021,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
 
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <Label className="text-sm font-medium">Sales VAT Amounts</Label>
+                      <Label className="text-sm font-normal">Sales VAT Amounts</Label>
                       <Button variant="outline" size="sm" onClick={() => addVATLine('sales')}>
                         Add Line
                       </Button>
@@ -1061,7 +1057,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
 
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <Label className="text-sm font-medium">Purchase VAT Amounts</Label>
+                      <Label className="text-sm font-normal">Purchase VAT Amounts</Label>
                       <Button variant="outline" size="sm" onClick={() => addVATLine('purchase')}>
                         Add Line
                       </Button>
@@ -1096,7 +1092,7 @@ export default function DocumentViewer({ isOpen, onClose, document, extractedVAT
                   </div>
 
                   <div>
-                    <Label className="text-sm font-medium">Notes (Optional)</Label>
+                    <Label className="text-sm font-normal">Notes (Optional)</Label>
                     <Textarea
                       placeholder="Explain the correction to help train the AI..."
                       value={correctionNotes}

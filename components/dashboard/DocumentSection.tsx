@@ -47,11 +47,11 @@ export function DocumentSection({
   // Determine styling based on variant
   const variantStyles = {
     sales: {
-      card: 'border-brand-200 bg-brand-50',
+      card: 'border-petrol-200 bg-brand-50',
       header: 'bg-brand-100',
       title: 'text-brand-900',
-      accent: 'text-brand-700',
-      icon: 'text-brand-600',
+      accent: 'text-petrol-dark',
+      icon: 'text-petrol-base',
     },
     purchase: {
       card: 'border-green-200 bg-green-50',
@@ -100,7 +100,7 @@ export function DocumentSection({
           
           {totalVAT > 0 && (
             <div className="text-right">
-              <div className={`body-sm font-medium ${styles.accent}`}>
+              <div className={`body-sm font-normal ${styles.accent}`}>
                 Total VAT: {formatCurrency(totalVAT)}
               </div>
             </div>
@@ -159,7 +159,7 @@ export function DocumentSection({
  */
 export function DocumentSectionSkeleton({ variant }: { variant: 'sales' | 'purchase' }) {
   const styles = variant === 'sales' 
-    ? 'border-brand-200 bg-brand-50'
+    ? 'border-petrol-200 bg-brand-50'
     : 'border-green-200 bg-green-50'
 
   return (

@@ -165,7 +165,7 @@ export default function AdminPayments() {
       case 'cancelled':
         return 'bg-red-100 text-red-800'
       case 'refunded':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-petrol-dark'
       default:
         return 'bg-gray-100 text-gray-800'
     }
@@ -215,7 +215,7 @@ export default function AdminPayments() {
     return (
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-petrol-600"></div>
         </div>
       </div>
     )
@@ -226,7 +226,7 @@ export default function AdminPayments() {
       <div className="container mx-auto p-6">
         <div className="text-center">
           <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Error Loading Payments</h2>
+          <h2 className="text-xl font-normal mb-2">Error Loading Payments</h2>
           <p className="text-gray-600 mb-4">{error}</p>
           <Button onClick={fetchPayments}>Try Again</Button>
         </div>
@@ -239,7 +239,7 @@ export default function AdminPayments() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Payment Monitoring</h1>
+          <h1 className="text-3xl font-normal text-gray-900">Payment Monitoring</h1>
           <p className="text-gray-600">Monitor and manage payment transactions</p>
         </div>
         <Link href="/admin">
@@ -255,11 +255,11 @@ export default function AdminPayments() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Volume</CardTitle>
+              <CardTitle className="text-sm font-normal">Total Volume</CardTitle>
               <Euro className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-normal">
                 {formatCurrency(statistics.totalAmount)}
               </div>
               <p className="text-xs text-muted-foreground">
@@ -270,11 +270,11 @@ export default function AdminPayments() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Average Payment</CardTitle>
+              <CardTitle className="text-sm font-normal">Average Payment</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-normal">
                 {formatCurrency(statistics.averageAmount)}
               </div>
               <p className="text-xs text-muted-foreground">
@@ -285,11 +285,11 @@ export default function AdminPayments() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Payments</CardTitle>
+              <CardTitle className="text-sm font-normal">Total Payments</CardTitle>
               <CreditCard className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{pagination.totalCount}</div>
+              <div className="text-2xl font-normal">{pagination.totalCount}</div>
               <p className="text-xs text-muted-foreground">
                 All transactions
               </p>
@@ -298,11 +298,11 @@ export default function AdminPayments() {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+              <CardTitle className="text-sm font-normal">Success Rate</CardTitle>
               <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">
+              <div className="text-2xl font-normal">
                 {statistics.statusBreakdown.length > 0 
                   ? Math.round((statistics.statusBreakdown.find(s => s.status === 'COMPLETED')?.count || 0) / 
                       statistics.statusBreakdown.reduce((sum, s) => sum + s.count, 0) * 100)
@@ -330,9 +330,9 @@ export default function AdminPayments() {
                     <Badge className={getStatusColor(status.status)}>
                       {status.status}
                     </Badge>
-                    <span className="text-sm font-medium">{status.count}</span>
+                    <span className="text-sm font-normal">{status.count}</span>
                   </div>
-                  <div className="text-lg font-bold">
+                  <div className="text-lg font-normal">
                     {formatCurrency(status.totalAmount)}
                   </div>
                 </div>
@@ -440,7 +440,7 @@ export default function AdminPayments() {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-1">
-                            <h3 className="font-semibold text-lg">
+                            <h3 className="font-normal text-lg">
                               {formatCurrency(payment.amount, payment.currency)}
                             </h3>
                             <Badge className={getStatusColor(payment.status)}>
@@ -483,7 +483,7 @@ export default function AdminPayments() {
                       <div className="ml-11 mb-2">
                         <div className="flex items-center space-x-2 text-sm">
                           <Building className="h-4 w-4 text-gray-400" />
-                          <span className="font-medium">{payment.user.businessName}</span>
+                          <span className="font-normal">{payment.user.businessName}</span>
                           <span className="text-gray-500">({payment.user.vatNumber})</span>
                           <span className="text-gray-500">•</span>
                           <span className="text-gray-500">{payment.user.email}</span>
@@ -530,7 +530,7 @@ export default function AdminPayments() {
                     <div className="ml-11 mt-3 p-3 bg-red-50 border border-red-200 rounded text-sm">
                       <div className="flex items-center space-x-2">
                         <XCircle className="h-4 w-4 text-red-500" />
-                        <span className="font-medium text-red-800">Payment Failed</span>
+                        <span className="font-normal text-red-800">Payment Failed</span>
                       </div>
                       <div className="text-red-700 mt-1">
                         {payment.failureReason}

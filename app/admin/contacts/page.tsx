@@ -78,7 +78,7 @@ export default function AdminContactsPage() {
 
   const getSubjectColor = (subject: string) => {
     const colors: Record<string, string> = {
-      'general-inquiry': 'bg-blue-100 text-blue-800',
+      'general-inquiry': 'bg-blue-100 text-petrol-dark',
       'vat-services': 'bg-green-100 text-green-800',
       'business-setup': 'bg-purple-100 text-purple-800',
       'support': 'bg-orange-100 text-orange-800'
@@ -88,7 +88,7 @@ export default function AdminContactsPage() {
 
   const getSourceColor = (source: string) => {
     const colors: Record<string, string> = {
-      'contact-page': 'bg-blue-100 text-[#73C2FB]',
+      'contact-page': 'bg-blue-100 text-[#2A7A8F]',
       'business-setup-guide': 'bg-indigo-100 text-indigo-800'
     }
     return colors[source] || 'bg-gray-100 text-gray-800'
@@ -100,7 +100,7 @@ export default function AdminContactsPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-[#73C2FB] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-8 h-8 border-4 border-[#2A7A8F] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Loading contact submissions...</p>
         </div>
       </div>
@@ -114,10 +114,10 @@ export default function AdminContactsPage() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Contact Submissions</h1>
+              <h1 className="text-3xl font-normal text-gray-900">Contact Submissions</h1>
               <p className="text-gray-600 mt-1">Manage and review all contact form submissions</p>
             </div>
-            <Button onClick={fetchSubmissions} className="bg-[#73C2FB] hover:bg-[#5BADEA]">
+            <Button onClick={fetchSubmissions} className="bg-[#2A7A8F] hover:bg-[#216477]">
               Refresh
             </Button>
           </div>
@@ -167,9 +167,9 @@ export default function AdminContactsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Total Submissions</p>
-                  <p className="text-3xl font-bold text-gray-900">{submissions.length}</p>
+                  <p className="text-3xl font-normal text-gray-900">{submissions.length}</p>
                 </div>
-                <MessageSquare className="h-8 w-8 text-[#73C2FB]" />
+                <MessageSquare className="h-8 w-8 text-[#2A7A8F]" />
               </div>
             </CardContent>
           </Card>
@@ -179,7 +179,7 @@ export default function AdminContactsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Today</p>
-                  <p className="text-3xl font-bold text-gray-900">
+                  <p className="text-3xl font-normal text-gray-900">
                     {submissions.filter(s => 
                       new Date(s.createdAt).toDateString() === new Date().toDateString()
                     ).length}
@@ -195,11 +195,11 @@ export default function AdminContactsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">VAT Services</p>
-                  <p className="text-3xl font-bold text-gray-900">
+                  <p className="text-3xl font-normal text-gray-900">
                     {submissions.filter(s => s.subject === 'vat-services').length}
                   </p>
                 </div>
-                <Building className="h-8 w-8 text-blue-600" />
+                <Building className="h-8 w-8 text-petrol-base" />
               </div>
             </CardContent>
           </Card>
@@ -209,7 +209,7 @@ export default function AdminContactsPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-600">Business Setup</p>
-                  <p className="text-3xl font-bold text-gray-900">
+                  <p className="text-3xl font-normal text-gray-900">
                     {submissions.filter(s => s.subject === 'business-setup').length}
                   </p>
                 </div>
@@ -225,7 +225,7 @@ export default function AdminContactsPage() {
             <Card>
               <CardContent className="p-12 text-center">
                 <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No submissions found</h3>
+                <h3 className="text-lg font-normal text-gray-900 mb-2">No submissions found</h3>
                 <p className="text-gray-600">
                   {submissions.length === 0 
                     ? "No contact form submissions yet."
@@ -241,7 +241,7 @@ export default function AdminContactsPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <h3 className="text-xl font-semibold text-gray-900">{submission.fullName}</h3>
+                        <h3 className="text-xl font-normal text-gray-900">{submission.fullName}</h3>
                         {submission.companyName && (
                           <Badge variant="outline" className="text-xs">
                             {submission.companyName}
@@ -269,14 +269,14 @@ export default function AdminContactsPage() {
                   <div className="grid gap-4 md:grid-cols-2 mb-4">
                     <div className="flex items-center gap-2">
                       <Mail className="h-4 w-4 text-gray-400" />
-                      <a href={`mailto:${submission.email}`} className="text-[#73C2FB] hover:text-[#5BADEA]">
+                      <a href={`mailto:${submission.email}`} className="text-[#2A7A8F] hover:text-[#216477]">
                         {submission.email}
                       </a>
                       <ExternalLink className="h-3 w-3" />
                     </div>
                     <div className="flex items-center gap-2">
                       <Phone className="h-4 w-4 text-gray-400" />
-                      <a href={`tel:${submission.phone}`} className="text-[#73C2FB] hover:text-[#5BADEA]">
+                      <a href={`tel:${submission.phone}`} className="text-[#2A7A8F] hover:text-[#216477]">
                         {submission.phone}
                       </a>
                       <ExternalLink className="h-3 w-3" />
@@ -287,13 +287,13 @@ export default function AdminContactsPage() {
                     <div className="grid gap-2 md:grid-cols-2 mb-4 text-sm">
                       {submission.businessType && (
                         <div>
-                          <span className="font-medium text-gray-700">Business Type:</span>
+                          <span className="font-normal text-gray-700">Business Type:</span>
                           <span className="ml-2 text-gray-600">{submission.businessType.replace('-', ' ')}</span>
                         </div>
                       )}
                       {submission.currentStage && (
                         <div>
-                          <span className="font-medium text-gray-700">Current Stage:</span>
+                          <span className="font-normal text-gray-700">Current Stage:</span>
                           <span className="ml-2 text-gray-600">{submission.currentStage.replace('-', ' ')}</span>
                         </div>
                       )}
@@ -301,14 +301,14 @@ export default function AdminContactsPage() {
                   )}
 
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-medium text-gray-900 mb-2">Message:</h4>
+                    <h4 className="font-normal text-gray-900 mb-2">Message:</h4>
                     <p className="text-gray-700 whitespace-pre-wrap">{submission.message}</p>
                   </div>
 
                   <div className="flex gap-3 mt-4">
                     <Button 
                       size="sm" 
-                      className="bg-[#73C2FB] hover:bg-[#5BADEA]"
+                      className="bg-[#2A7A8F] hover:bg-[#216477]"
                       onClick={() => window.open(`mailto:${submission.email}?subject=Re: Your inquiry about ${submission.subject.replace('-', ' ')}`)}
                     >
                       <Mail className="h-4 w-4 mr-2" />

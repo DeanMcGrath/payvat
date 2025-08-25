@@ -240,13 +240,13 @@ export default function SellPage() {
   return (
     <div className="space-y-6">
       {/* Header Info */}
-      <Card className="border-blue-200 bg-blue-50">
+      <Card className="border-petrol-200 bg-blue-50">
         <CardContent className="p-4">
           <div className="flex items-start gap-3">
-            <Info className="h-6 w-6 text-blue-600 flex-shrink-0 mt-0.5" />
+            <Info className="h-6 w-6 text-petrol-base flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-medium text-blue-900">Business Sale Advisory</h3>
-              <p className="text-sm text-blue-800 mt-1">
+              <h3 className="font-normal text-blue-900">Business Sale Advisory</h3>
+              <p className="text-sm text-petrol-dark mt-1">
                 Selling a business involves complex legal, financial, and tax considerations. 
                 Our valuation tool provides estimates only. Professional advice is recommended for accurate valuations and sale processes.
               </p>
@@ -264,7 +264,7 @@ export default function SellPage() {
                 <Calculator className="h-6 w-6 text-green-600" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-gray-900">Business Valuation</h3>
+                <h3 className="font-normal text-gray-900">Business Valuation</h3>
                 <p className="text-sm text-gray-600">Get an estimated value for your business</p>
                 <div className="mt-2">
                   <Button 
@@ -287,7 +287,7 @@ export default function SellPage() {
                 <Phone className="h-6 w-6 text-purple-600" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-gray-900">Sale Assistance</h3>
+                <h3 className="font-normal text-gray-900">Sale Assistance</h3>
                 <p className="text-sm text-gray-600">Get professional help selling your business</p>
                 <div className="mt-2">
                   <Button 
@@ -309,7 +309,7 @@ export default function SellPage() {
         <>
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-brand-700">
+              <CardTitle className="flex items-center gap-2 text-petrol-dark">
                 <Calculator className="h-5 w-5" />
                 Business Valuation Calculator
               </CardTitle>
@@ -410,7 +410,7 @@ export default function SellPage() {
               <CardContent className="space-y-6">
                 {/* Summary */}
                 <div className="text-center p-6 bg-green-50 rounded-lg border border-green-200">
-                  <div className="text-3xl font-bold text-green-600 mb-2">
+                  <div className="text-3xl font-normal text-green-600 mb-2">
                     {formatCurrency(valuation.estimatedValue)}
                   </div>
                   <div className="text-sm text-green-700 mb-4">Estimated Business Value</div>
@@ -421,23 +421,23 @@ export default function SellPage() {
 
                 {/* Valuation Methods */}
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-4">Valuation Methods Used:</h4>
+                  <h4 className="font-normal text-gray-900 mb-4">Valuation Methods Used:</h4>
                   <div className="grid gap-4">
                     {valuationMethods.map((method, index) => (
                       <div key={index} className="p-4 border rounded-lg">
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <h5 className="font-medium text-gray-900">{method.name}</h5>
+                            <h5 className="font-normal text-gray-900">{method.name}</h5>
                             <p className="text-sm text-gray-600">{method.description}</p>
                           </div>
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${getConfidenceColor(method.confidence)}`}>
+                          <span className={`px-2 py-1 rounded-full text-xs font-normal ${getConfidenceColor(method.confidence)}`}>
                             {method.confidence} confidence
                           </span>
                         </div>
                         <div className="text-sm text-gray-600 mb-2">
                           Formula: {method.formula}
                         </div>
-                        <div className="h6 text-brand-700">
+                        <div className="h6 text-petrol-dark">
                           {formatCurrency(method.result)}
                         </div>
                       </div>
@@ -448,18 +448,18 @@ export default function SellPage() {
                 {/* Key Factors */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t">
                   <div className="text-center">
-                    <BarChart3 className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-                    <div className="font-medium">Revenue Multiple</div>
+                    <BarChart3 className="h-8 w-8 mx-auto mb-2 text-petrol-base" />
+                    <div className="font-normal">Revenue Multiple</div>
                     <div className="text-sm text-gray-600">{valuation.industryMultiplier}x</div>
                   </div>
                   <div className="text-center">
                     <PieChart className="h-8 w-8 mx-auto mb-2 text-green-600" />
-                    <div className="font-medium">Net Assets</div>
+                    <div className="font-normal">Net Assets</div>
                     <div className="text-sm text-gray-600">{formatCurrency(valuation.assets - valuation.liabilities)}</div>
                   </div>
                   <div className="text-center">
                     <Target className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-                    <div className="font-medium">Profit Margin</div>
+                    <div className="font-normal">Profit Margin</div>
                     <div className="text-sm text-gray-600">
                       {valuation.revenue > 0 ? Math.round((valuation.profit / valuation.revenue) * 100) : 0}%
                     </div>
@@ -475,7 +475,7 @@ export default function SellPage() {
       {showSaleRequest && (
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-brand-700">
+            <CardTitle className="flex items-center gap-2 text-petrol-dark">
               <DollarSign className="h-5 w-5" />
               Business Sale Inquiry
             </CardTitle>
@@ -623,7 +623,7 @@ export default function SellPage() {
               </div>
 
               <div className="flex gap-4 pt-4">
-                <Button type="submit" disabled={loading} className="bg-brand-700 hover:bg-brand-800">
+                <Button type="submit" disabled={loading} className="bg-petrol-dark hover:bg-petrol-dark">
                   {loading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Mail className="h-4 w-4 mr-2" />}
                   Submit Inquiry
                 </Button>
@@ -643,7 +643,7 @@ export default function SellPage() {
       {/* Contact Information */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-brand-700">
+          <CardTitle className="flex items-center gap-2 text-petrol-dark">
             <Phone className="h-5 w-5" />
             Professional Business Sale Services
           </CardTitle>
@@ -651,7 +651,7 @@ export default function SellPage() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-medium mb-2">What We Offer</h4>
+              <h4 className="font-normal mb-2">What We Offer</h4>
               <ul className="space-y-1 text-sm text-gray-600">
                 <li className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-600" />
@@ -677,14 +677,14 @@ export default function SellPage() {
             </div>
             
             <div>
-              <h4 className="font-medium mb-2">Get in Touch</h4>
+              <h4 className="font-normal mb-2">Get in Touch</h4>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm">
                   <Phone className="h-4 w-4 text-green-600" />
                   <span>+353 1 234 5678</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <Mail className="h-4 w-4 text-blue-600" />
+                  <Mail className="h-4 w-4 text-petrol-base" />
                   <span>sales@payvat.ie</span>
                 </div>
               </div>

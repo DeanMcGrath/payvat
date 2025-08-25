@@ -72,19 +72,10 @@ export function useDocumentsData(): UseDocumentsDataReturn {
       setLoadingDocuments(true)
       setError(null) // Clear any previous errors
       
-      console.log('Loading documents', {
-        timestamp: new Date().toISOString()
-      })
       
       const response = await documentsApi.getAll({ dashboard: true })
       
       const loadTime = Date.now() - startTime
-      console.log('Documents loaded successfully', {
-        loadTime: `${loadTime}ms`,
-        documentCount: response.documents?.length || 0,
-        fromFallback: response.fromFallback,
-        timestamp: new Date().toISOString()
-      })
       
       if (response.success && response.documents) {
         setDocuments(response.documents)
@@ -124,15 +115,10 @@ export function useDocumentsData(): UseDocumentsDataReturn {
     
     // Rate limiting check
     if (!force && (now - lastFetchTime.current) < MIN_INTERVAL) {
-      console.log('VAT data load skipped due to rate limiting', {
-        timeSinceLastFetch: now - lastFetchTime.current,
-        minInterval: MIN_INTERVAL
-      })
       return
     }
 
     if (loadingVAT && !force) {
-      console.log('VAT data load skipped - already loading')
       return
     }
 
