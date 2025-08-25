@@ -1,11 +1,19 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'PayVAT FAQ - Common Questions About Irish VAT Submission Software',
+  description: 'Get answers to frequently asked questions about PayVAT\'s VAT submission service. Pricing, free trial, registration, payment process, and Revenue compliance explained.',
+}
+
 "use client"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { HelpCircle, CreditCard, Shield, Clock, Euro, FileText, ChevronDown, ChevronUp, CheckCircle, BadgeCheck, Settings, Bell, Building, Users, Calculator } from 'lucide-react'
+import { HelpCircle, CreditCard, Shield, Clock, Euro, FileText, ChevronDown, ChevronUp, CheckCircle, BadgeCheck, Settings, Bell, Building, Users, Calculator, Calendar, AlertTriangle } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
+import FAQSchema from "@/components/faq-schema"
 
 export default function FAQPage() {
   const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set())
@@ -52,6 +60,7 @@ export default function FAQPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <FAQSchema />
       <SiteHeader />
 
 
@@ -596,6 +605,186 @@ export default function FAQPage() {
                 <div className="flex items-center gap-2 text-blue-500 font-normal">
                   <CheckCircle className="h-4 w-4" />
                   <span>100% free business guidance and resources</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* New VAT-Specific FAQs */}
+          <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(15)}>
+            <div className="flex items-center justify-between p-6">
+              <div className="flex items-center gap-4">
+                <div className="icon-modern bg-warning group-hover:scale-110 transition-transform duration-300">
+                  <Calendar className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
+                  What are the VAT filing deadlines in Ireland?
+                </h3>
+              </div>
+              <div className="text-muted-foreground group-hover:text-primary transition-colors">
+                {expandedItems.has(15) ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+              </div>
+            </div>
+            {expandedItems.has(15) && (
+              <div className="px-6 pb-6 animate-fade-in">
+                <div className="w-full h-px bg-warning/30 mb-4"></div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  VAT returns are due on the 19th of the second month following each period. For example, January-February returns are due March 19th. Annual returns (if applicable) are due November 19th.
+                </p>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="p-3 bg-warning/10 rounded-lg border border-warning/20">
+                    <div className="font-normal text-warning-foreground mb-1">Bi-monthly Returns</div>
+                    <div className="text-xs text-muted-foreground">Due 19th of second month after period</div>
+                  </div>
+                  <div className="p-3 bg-warning/10 rounded-lg border border-warning/20">
+                    <div className="font-normal text-warning-foreground mb-1">Annual Returns</div>
+                    <div className="text-xs text-muted-foreground">Due November 19th (if eligible)</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(16)}>
+            <div className="flex items-center justify-between p-6">
+              <div className="flex items-center gap-4">
+                <div className="icon-modern bg-success group-hover:scale-110 transition-transform duration-300">
+                  <Euro className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
+                  What are the current VAT rates in Ireland?
+                </h3>
+              </div>
+              <div className="text-muted-foreground group-hover:text-primary transition-colors">
+                {expandedItems.has(16) ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+              </div>
+            </div>
+            {expandedItems.has(16) && (
+              <div className="px-6 pb-6 animate-fade-in">
+                <div className="w-full h-px bg-success/30 mb-4"></div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Ireland has three main VAT rates. PayVAT automatically applies the correct rate based on your goods or services.
+                </p>
+                <div className="grid grid-cols-3 gap-3 text-sm">
+                  <div className="text-center p-4 bg-success/10 rounded-lg border border-success/20">
+                    <div className="text-2xl font-normal text-success mb-1">23%</div>
+                    <div className="font-normal text-success-foreground mb-1">Standard Rate</div>
+                    <div className="text-xs text-muted-foreground">Most goods & services</div>
+                  </div>
+                  <div className="text-center p-4 bg-success/10 rounded-lg border border-success/20">
+                    <div className="text-2xl font-normal text-success mb-1">13.5%</div>
+                    <div className="font-normal text-success-foreground mb-1">Reduced Rate</div>
+                    <div className="text-xs text-muted-foreground">Tourism, energy, some food</div>
+                  </div>
+                  <div className="text-center p-4 bg-success/10 rounded-lg border border-success/20">
+                    <div className="text-2xl font-normal text-success mb-1">0%</div>
+                    <div className="font-normal text-success-foreground mb-1">Zero Rate</div>
+                    <div className="text-xs text-muted-foreground">Books, medicine, exports</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(17)}>
+            <div className="flex items-center justify-between p-6">
+              <div className="flex items-center gap-4">
+                <div className="icon-modern bg-primary group-hover:scale-110 transition-transform duration-300">
+                  <FileText className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
+                  What documents do I need for VAT returns?
+                </h3>
+              </div>
+              <div className="text-muted-foreground group-hover:text-primary transition-colors">
+                {expandedItems.has(17) ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+              </div>
+            </div>
+            {expandedItems.has(17) && (
+              <div className="px-6 pb-6 animate-fade-in">
+                <div className="w-full h-px bg-primary/30 mb-4"></div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  PayVAT's AI processes your invoices, receipts, and expense documents automatically. Simply upload your documents and we handle the rest.
+                </p>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="flex items-center gap-2 text-primary">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>Sales invoices</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-primary">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>Purchase receipts</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-primary">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>Expense documents</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-primary">
+                    <CheckCircle className="h-4 w-4" />
+                    <span>Import/export documents</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="card-modern hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(18)}>
+            <div className="flex items-center justify-between p-6">
+              <div className="flex items-center gap-4">
+                <div className="icon-modern bg-destructive group-hover:scale-110 transition-transform duration-300">
+                  <AlertTriangle className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
+                  What happens if I miss a VAT deadline?
+                </h3>
+              </div>
+              <div className="text-muted-foreground group-hover:text-primary transition-colors">
+                {expandedItems.has(18) ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+              </div>
+            </div>
+            {expandedItems.has(18) && (
+              <div className="px-6 pb-6 animate-fade-in">
+                <div className="w-full h-px bg-destructive/30 mb-4"></div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Revenue Ireland imposes penalties for late VAT returns. PayVAT's automated reminders and submissions help you avoid these costly penalties entirely.
+                </p>
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+                    <div className="font-normal text-destructive-foreground mb-1">Late Filing</div>
+                    <div className="text-xs text-muted-foreground">€4 per day (min €125, max €1,520)</div>
+                  </div>
+                  <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+                    <div className="font-normal text-destructive-foreground mb-1">Late Payment</div>
+                    <div className="text-xs text-muted-foreground">Interest at 0.0274% per day</div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="card-premium hover-lift group cursor-pointer transition-all duration-300" onClick={() => toggleExpanded(19)}>
+            <div className="flex items-center justify-between p-6">
+              <div className="flex items-center gap-4">
+                <div className="icon-premium group-hover:scale-110 transition-transform duration-300">
+                  <Building className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
+                  Do I need to register for VAT if I'm a sole trader?
+                </h3>
+              </div>
+              <div className="text-muted-foreground group-hover:text-primary transition-colors">
+                {expandedItems.has(19) ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+              </div>
+            </div>
+            {expandedItems.has(19) && (
+              <div className="px-6 pb-6 animate-fade-in">
+                <div className="w-full h-px gradient-primary mb-4"></div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Yes, VAT registration thresholds apply to all business structures including sole traders. If your annual turnover exceeds €42,500 (services) or €85,000 (goods), you must register.
+                </p>
+                <div className="flex items-center gap-2 text-primary font-normal">
+                  <CheckCircle className="h-4 w-4" />
+                  <span>Use our free VAT registration checker to find out if you need to register</span>
                 </div>
               </div>
             )}

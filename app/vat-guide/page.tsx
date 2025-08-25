@@ -1,3 +1,10 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Complete Irish VAT Guide 2025 - Registration, Rates, Deadlines | PayVAT',
+  description: 'Comprehensive guide to Irish VAT compliance. Learn about VAT registration thresholds, rates, deadlines, and filing requirements. Updated for 2025. Expert advice from PayVAT.',
+}
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -6,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock, TrendingUp, Shield, ArrowRight, Euro, ChevronRight, Bell, Building, Globe, Home, UtensilsCrossed } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
+import ArticleSchema from "@/components/article-schema"
 
 export default function VATGuidePage() {
   const [isVisible, setIsVisible] = useState(false)
@@ -42,6 +50,12 @@ export default function VATGuidePage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <ArticleSchema
+        title="Complete Irish VAT Guide 2025 - Registration, Rates, Deadlines"
+        description="Comprehensive guide to Irish VAT compliance. Learn about VAT registration thresholds, rates, deadlines, and filing requirements. Updated for 2025."
+        keywords={["Irish VAT guide", "VAT registration Ireland", "VAT compliance", "Revenue Ireland", "VAT thresholds 2025", "VAT rates Ireland"]}
+        url="https://payvat.ie/vat-guide"
+      />
       <SiteHeader 
         searchPlaceholder="Search VAT guide..."
         currentPage="VAT Guide"

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@/lib/generated/prisma'
+import emailService from '@/lib/email-service'
 
 const prisma = new PrismaClient()
 
@@ -49,10 +50,32 @@ export async function POST(request: NextRequest) {
         businessType: data.businessType,
         currentStage: data.currentStage,
         source: data.source,
+        status: 'new',        // Default status for new submissions
+        priority: 'normal',   // Default priority for new submissions
+        tags: []             // Empty tags array by default
       },
     })
 
-    // console.log('New contact form submission saved:', submission.id)
+    // Send email notifications (don't wait for completion to avoid delays)
+    const emailData = {
+      fullName: submission.fullName,
+      email: submission.email,
+      subject: submission.subject,
+      message: submission.message,
+      submissionId: submission.id
+    }
+
+    // Send confirmation email to customer
+    emailService.sendContactConfirmationToCustomer(emailData).catch(error => {
+      console.error('Failed to send confirmation email:', error)
+    })
+
+    // Send notification to admin
+    emailService.sendContactNotificationToAdmin(emailData).catch(error => {
+      console.error('Failed to send admin notification:', error)
+    })
+
+    console.log('✅ New contact form submission saved:', submission.id)
 
     return NextResponse.json(
       { 

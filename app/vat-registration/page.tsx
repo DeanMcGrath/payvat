@@ -1,10 +1,17 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'VAT Registration Ireland 2025 - Complete Guide, Forms & Requirements',
+  description: 'Complete guide to VAT registration in Ireland. Learn thresholds (€42,500 services, €85,000 goods), forms, deadlines, and requirements. Step-by-step process explained.',
+}
+
 "use client"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock, ArrowRight, Download, Euro, Building, Mail, Phone, Loader2, AlertCircle as AlertCircleIcon, Shield, UserCheck, Globe, Home } from 'lucide-react'
+import { BookOpen, Users, Calculator, Calendar, AlertTriangle, CheckCircle, ExternalLink, FileText, Clock, ArrowRight, Download, Euro, Building, Mail, Phone, Loader2, AlertCircle as AlertCircleIcon, Shield, UserCheck, Globe, Home, HelpCircle, ChevronRight } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
 
@@ -78,6 +85,52 @@ export default function VATRegistrationPage() {
 
       <div className="max-w-7xl mx-auto px-6 content-after-header pb-8">
 
+        {/* Hero Section with H1 */}
+        <section className="py-12 mb-8">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl lg:text-5xl font-normal text-foreground mb-4">
+              VAT Registration Ireland: <span className="text-gradient-primary">Complete 2025 Guide</span>
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              Everything you need to know about <strong>VAT registration Ireland</strong> including 2025 thresholds, mandatory VAT registration requirements, and step-by-step application process through Revenue Ireland.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 mt-6">
+              <div className="px-4 py-2 bg-primary/10 rounded-full">
+                <span className="text-sm font-normal text-primary">Services: €42,500 threshold</span>
+              </div>
+              <div className="px-4 py-2 bg-success/10 rounded-full">
+                <span className="text-sm font-normal text-success">Goods: €85,000 threshold</span>
+              </div>
+              <div className="px-4 py-2 bg-warning/10 rounded-full">
+                <span className="text-sm font-normal text-warning">Updated for 2025</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Quick Navigation */}
+          <div className="card-modern p-6 max-w-4xl mx-auto">
+            <h2 className="text-lg font-normal text-foreground mb-4">Quick Navigation: VAT Registration Process</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
+              <a href="#step-1" className="flex items-center gap-2 p-3 hover:bg-muted/50 rounded-lg transition-colors">
+                <span className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm">1</span>
+                <span className="text-sm">Check Requirements</span>
+              </a>
+              <a href="#step-2" className="flex items-center gap-2 p-3 hover:bg-muted/50 rounded-lg transition-colors">
+                <span className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm">2</span>
+                <span className="text-sm">Gather Documents</span>
+              </a>
+              <a href="#step-3" className="flex items-center gap-2 p-3 hover:bg-muted/50 rounded-lg transition-colors">
+                <span className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm">3</span>
+                <span className="text-sm">Choose Forms</span>
+              </a>
+              <a href="#step-4" className="flex items-center gap-2 p-3 hover:bg-muted/50 rounded-lg transition-colors">
+                <span className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-sm">4</span>
+                <span className="text-sm">Submit via ROS</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* Business Setup Context */}
         <div className="mb-8">
           <div className="card-premium p-8 mb-4">
@@ -89,7 +142,7 @@ export default function VATRegistrationPage() {
                 Complete Your <span className="text-gradient-primary">Business Setup First</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Before applying for VAT registration, ensure your business structure and basic registrations are complete
+                Before applying for <strong>VAT registration Ireland</strong>, ensure your business structure and basic registrations are complete
               </p>
             </div>
             
@@ -702,11 +755,90 @@ export default function VATRegistrationPage() {
           </CardContent>
         </Card>
 
+        {/* FAQ Section - Target Long-tail Keywords */}
+        <Card className="card-modern hover-lift mb-6">
+          <CardHeader>
+            <CardTitle className="text-2xl font-normal text-gray-900 flex items-center">
+              <HelpCircle className="h-6 w-6 text-primary mr-2" />
+              VAT Registration Ireland: Frequently Asked Questions
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <details className="group p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <summary className="cursor-pointer font-normal text-gray-900 list-none flex items-center justify-between">
+                  <span>How to register for VAT in Ireland 2025?</span>
+                  <ChevronRight className="h-5 w-5 text-gray-500 group-open:rotate-90 transition-transform" />
+                </summary>
+                <div className="mt-3 text-gray-600 space-y-2">
+                  <p>To register for VAT in Ireland in 2025, you must complete Form TR1 (sole traders/partnerships) or TR2 (companies) through the Revenue Online Service (ROS). You'll need your Tax Reference Number, business details, turnover estimates, and supporting documentation.</p>
+                  <p><strong>Key steps:</strong> Check if you meet the €42,500 (services) or €85,000 (goods) threshold, gather required documents, complete the appropriate form via ROS, and await your VAT number from Revenue Ireland.</p>
+                </div>
+              </details>
+
+              <details className="group p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <summary className="cursor-pointer font-normal text-gray-900 list-none flex items-center justify-between">
+                  <span>VAT registration process for sole traders Ireland?</span>
+                  <ChevronRight className="h-5 w-5 text-gray-500 group-open:rotate-90 transition-transform" />
+                </summary>
+                <div className="mt-3 text-gray-600 space-y-2">
+                  <p>Sole traders must use Form TR1 for VAT registration in Ireland. You'll need your PPS number, evidence of trading activity, and projected annual turnover. The process typically takes 10-15 business days through ROS.</p>
+                  <p><strong>Sole trader requirements:</strong> Valid PPS number, proof of business activity (invoices/contracts), business bank account details, and confirmation of your service/goods classification for threshold purposes.</p>
+                </div>
+              </details>
+
+              <details className="group p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <summary className="cursor-pointer font-normal text-gray-900 list-none flex items-center justify-between">
+                  <span>VAT registration thresholds for services Ireland 2025?</span>
+                  <ChevronRight className="h-5 w-5 text-gray-500 group-open:rotate-90 transition-transform" />
+                </summary>
+                <div className="mt-3 text-gray-600 space-y-2">
+                  <p>The VAT registration threshold for services in Ireland increased to <strong>€42,500</strong> from January 1, 2025. This applies to professional services, consultancy, digital services, and other service-based businesses.</p>
+                  <p><strong>Important:</strong> You must register for VAT if your annual turnover exceeds this threshold in the current or previous calendar year. Voluntary VAT registration is also available for businesses below the threshold.</p>
+                </div>
+              </details>
+
+              <details className="group p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <summary className="cursor-pointer font-normal text-gray-900 list-none flex items-center justify-between">
+                  <span>Apply for VAT number online Ireland ROS?</span>
+                  <ChevronRight className="h-5 w-5 text-gray-500 group-open:rotate-90 transition-transform" />
+                </summary>
+                <div className="mt-3 text-gray-600 space-y-2">
+                  <p>Yes, you can apply for your VAT number online through Revenue's ROS (Revenue Online Service) system at ros.ie. This is the fastest method, with processing typically completed within 10-15 business days.</p>
+                  <p><strong>ROS application benefits:</strong> Faster processing, immediate confirmation, secure document upload, real-time application tracking, and digital receipts for all submissions to Revenue Ireland.</p>
+                </div>
+              </details>
+
+              <details className="group p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <summary className="cursor-pointer font-normal text-gray-900 list-none flex items-center justify-between">
+                  <span>When do I need mandatory VAT registration Ireland?</span>
+                  <ChevronRight className="h-5 w-5 text-gray-500 group-open:rotate-90 transition-transform" />
+                </summary>
+                <div className="mt-3 text-gray-600 space-y-2">
+                  <p>Mandatory VAT registration in Ireland is required when your annual turnover exceeds €42,500 for services or €85,000 for goods. You must register within 30 days of exceeding these thresholds.</p>
+                  <p><strong>Registration triggers:</strong> Reaching annual turnover thresholds, making intra-EU supplies, distance selling above €35,000, or receiving goods from other EU countries for business purposes.</p>
+                </div>
+              </details>
+
+              <details className="group p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                <summary className="cursor-pointer font-normal text-gray-900 list-none flex items-center justify-between">
+                  <span>What is voluntary VAT registration Ireland?</span>
+                  <ChevronRight className="h-5 w-5 text-gray-500 group-open:rotate-90 transition-transformation" />
+                </summary>
+                <div className="mt-3 text-gray-600 space-y-2">
+                  <p>Voluntary VAT registration allows businesses below the mandatory thresholds to register for VAT. This can be beneficial for businesses that purchase significant supplies with VAT, as you can reclaim input VAT.</p>
+                  <p><strong>Benefits of voluntary registration:</strong> Reclaim VAT on business purchases, appear more established to clients, easier intra-EU trading, and potential competitive advantages in B2B markets.</p>
+                </div>
+              </details>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* PayVAT CTA */}
         <Card className="card-premium hover-lift">
           <CardContent className="p-8 text-center">
             <h3 className="text-2xl font-normal text-gray-900 mb-4">Ready to Streamline Your VAT Management?</h3>
-            <p className="text-gray-600 mb-2 max-w-2xl mx-auto">Once you receive your VAT number, let PayVAT handle your VAT calculations, submissions, and payments. Focus on growing your business while we ensure your VAT compliance.</p>
+            <p className="text-gray-600 mb-2 max-w-2xl mx-auto">Once you receive your <strong>VAT number Ireland</strong>, let PayVAT handle your VAT calculations, submissions, and payments. Focus on growing your business while we ensure your VAT compliance.</p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button 
                 className="bg-[#2A7A8F] hover:bg-[#216477] text-white font-normal py-3 px-8 text-lg"

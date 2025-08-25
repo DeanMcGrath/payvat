@@ -1,3 +1,10 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'PayVAT Pricing - €30/Month VAT Software | 14-Day Free Trial',
+  description: 'Simple, transparent pricing for Irish VAT submission. €30/month or €300/year. Save €180 annually. 14-day free trial, no credit card required. Try PayVAT today.',
+}
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -7,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Euro, CheckCircle, Calendar, CreditCard, Shield, Clock, HelpCircle, BadgeCheck, ArrowRight } from 'lucide-react'
 import Footer from "@/components/footer"
 import SiteHeader from "@/components/site-header"
+import ProductSchema from "@/components/product-schema"
 
 export default function PricingPage() {
   const [isVisible, setIsVisible] = useState(false)
@@ -43,6 +51,7 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <ProductSchema />
       <SiteHeader 
         searchPlaceholder="Search pricing plans..."
         currentPage="Pricing Plans"
@@ -130,7 +139,7 @@ export default function PricingPage() {
                       className="btn-primary px-8 py-3 text-lg font-normal hover-lift w-full"
                       onClick={() => router.push('/signup')}
                     >
-                      Start Free Trial
+                      Try Free for 14 Days
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                   </div>
@@ -154,7 +163,7 @@ export default function PricingPage() {
                       className="btn-primary px-8 py-3 text-lg font-normal hover-lift w-full"
                       onClick={() => router.push('/signup')}
                     >
-                      Get Started
+                      Save €180 - Start Annual Plan
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                   </div>

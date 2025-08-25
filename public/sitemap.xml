@@ -156,4 +156,303 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Business Setup & Guides - High Priority -->
+  <url>
+    <loc>https://payvat.ie/business-setup-guide</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/how-to-register-for-vat-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/vat-calculator-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/vat-services</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/vat-deadlines-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/vat3-return</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/vat-registration-checker</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Business Sectors & Specific Industries -->
+  <url>
+    <loc>https://payvat.ie/construction-vat-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/digital-services-vat-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/ecommerce-vat-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/freelancer-vat-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/property-rental-vat-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Business Setup Guides by Type -->
+  <url>
+    <loc>https://payvat.ie/start-a-business-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/start-online-business-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/start-restaurant-business-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/start-retail-business-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/start-service-business-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Business Structure & Legal -->
+  <url>
+    <loc>https://payvat.ie/company-vs-sole-trader-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/business-structure-comparison</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/register-business-name-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/business-plan-template</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Regional Business Registration -->
+  <url>
+    <loc>https://payvat.ie/dublin-business-registration</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/cork-business-registration</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/galway-business-registration</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Additional Services & Tools -->
+  <url>
+    <loc>https://payvat.ie/expense-tracker-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/payroll-setup-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/corporate-tax-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/tax-calendar-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/revenue-audit-preparation</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/avoid-revenue-penalties-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/accountant-fees-vs-payvat-savings</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Complete Business Guide -->
+  <url>
+    <loc>https://payvat.ie/complete-business-setup-guide-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Brexit & International -->
+  <url>
+    <loc>https://payvat.ie/brexit-trading-rules</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- Legal Pages - Low Priority -->
+  <url>
+    <loc>https://payvat.ie/privacy</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/terms</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- New SEO-Optimized Pages - High Priority -->
+  <url>
+    <loc>https://payvat.ie/input-vat-reclaim-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/vat-compliance-checklist-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/vat-automation-software-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog Section -->
+  <url>
+    <loc>https://payvat.ie/blog</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Blog Posts - High Value Long-tail Keywords -->
+  <url>
+    <loc>https://payvat.ie/blog/common-vat-filing-mistakes-ireland</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://payvat.ie/blog/vat-threshold-changes-2025</loc>
+    <lastmod>2025-08-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>

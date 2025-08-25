@@ -1,3 +1,11 @@
+import { Metadata } from 'next'
+import { Button } from "@/components/ui/button"
+
+export const metadata: Metadata = {
+  title: 'PayVAT Ireland - AI-Powered VAT Submission Software for Irish Businesses',
+  description: 'Automate your Irish VAT returns with AI-powered document processing. Submit VAT to Revenue Ireland easily. €30/month. 14-day free trial. Trusted by Irish businesses.',
+}
+
 "use client"
 
 import { Button } from "@/components/ui/button"
@@ -73,7 +81,7 @@ export default function LandingPage() {
       title: "Startup?",
       heading: "Thinking of creating a business?",
       subtext: "Learn everything you need to know about starting a business in Ireland",
-      buttonText: "Get Started",
+      buttonText: "Start Your Business Today",
       link: "/business-setup-guide",
       features: ["Complete guides", "Step-by-step process", "Expert advice"],
     },
@@ -82,8 +90,8 @@ export default function LandingPage() {
       title: "Established Business?",
       heading: "Looking to improve your Business?",
       subtext: "Discover how PayVAT streamlines your VAT submissions and payments",
-      buttonText: "Learn More",
-      link: "/vat-services",
+      buttonText: "Start Free Trial - Save €180/Year",
+      link: "/signup",
       features: ["VAT automation", "Revenue compliance", "Save time & money"],
     },
     {
