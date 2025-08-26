@@ -799,21 +799,127 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
 
     console.log(`💰 INVOICE TOTAL EXTRACTION: ${extractedInvoiceTotal ? `€${extractedInvoiceTotal}` : 'Not found'}`)
 
-    const updatedDocument = await prisma.document.update({
-      where: { id: documentId },
-      data: {
-        isScanned: true,
-        scanResult: `${result.scanResult}\n\n[PROCESSING_STATUS: ${JSON.stringify(processingStatus)}]`,
-        // Add extracted date information for automatic folder allocation
-        extractedDate: extractedDate,
-        extractedYear: extractedYear,
-        extractedMonth: extractedMonth,
-        // Add extracted invoice total
-        invoiceTotal: extractedInvoiceTotal,
-        extractionConfidence: result.extractedData?.confidence || 0.8,
-        dateExtractionConfidence: result.extractedData?.invoiceDate ? 0.9 : 0.5, // High confidence if date was found
+    // 🔧 CRITICAL FIX: Create DocumentFolder before updating document to prevent foreign key constraint violation
+    let documentUpdateData: any = {
+      isScanned: true,
+      scanResult: `${result.scanResult}\n\n[PROCESSING_STATUS: ${JSON.stringify(processingStatus)}]`,
+      // Add extracted invoice total
+      invoiceTotal: extractedInvoiceTotal,
+      extractionConfidence: result.extractedData?.confidence || 0.8,
+      dateExtractionConfidence: result.extractedData?.invoiceDate ? 0.9 : 0.5, // High confidence if date was found
+    }
+
+    // Only add date fields and folder relationship if we have valid extracted date
+    if (extractedDate && extractedYear && extractedMonth && user) {
+      try {
+        console.log(`📁 CREATING/UPDATING DOCUMENT FOLDER: ${extractedYear}/${String(extractedMonth).padStart(2, '0')} for user ${user.id}`)
+        
+        // Create or update DocumentFolder to ensure it exists before creating relationship
+        await prisma.documentFolder.upsert({
+          where: {
+            userId_year_month: {
+              userId: user.id,
+              year: extractedYear,
+              month: extractedMonth
+            }
+          },
+          create: {
+            userId: user.id,
+            year: extractedYear,
+            month: extractedMonth,
+            totalSalesAmount: 0,
+            totalPurchaseAmount: 0,
+            totalSalesVAT: 0,
+            totalPurchaseVAT: 0,
+            totalNetVAT: 0,
+            documentCount: 0,
+            salesDocumentCount: 0,
+            purchaseDocumentCount: 0
+          },
+          update: {
+            // Update lastDocumentAt when adding new document
+            lastDocumentAt: new Date()
+          }
+        })
+        
+        console.log(`✅ DOCUMENT FOLDER READY: Foreign key relationship can now be created safely`)
+        
+        // Now it's safe to add the date fields that create the foreign key relationship
+        documentUpdateData.extractedDate = extractedDate
+        documentUpdateData.extractedYear = extractedYear
+        documentUpdateData.extractedMonth = extractedMonth
+        
+      } catch (folderError) {
+        console.error(`🚨 DOCUMENT FOLDER CREATION FAILED:`, folderError)
+        console.error(`   This will prevent automatic folder allocation, but document processing can continue`)
+        console.error(`   Document will be saved without folder relationship to prevent foreign key constraint violation`)
+        
+        // Still save the date fields for reference, but don't create the folder relationship
+        documentUpdateData.extractedDate = extractedDate
+        // Note: NOT adding extractedYear/extractedMonth to avoid foreign key constraint
+        
+        // Log the folder creation failure but don't fail the entire processing
       }
-    })
+    } else {
+      console.log(`📁 SKIPPING FOLDER ALLOCATION: ${extractedDate ? 'Valid date extracted' : 'No valid date'}, ${extractedYear && extractedMonth ? 'Valid year/month' : 'Invalid year/month'}, ${user ? 'User authenticated' : 'Guest user'}`)
+      
+      // For guests or when no date extracted, still save the date for reference
+      if (extractedDate) {
+        documentUpdateData.extractedDate = extractedDate
+      }
+    }
+
+    // 🔧 CRITICAL FIX: Wrap document update in try-catch to handle any remaining constraint issues
+    let updatedDocument
+    try {
+      updatedDocument = await prisma.document.update({
+        where: { id: documentId },
+        data: documentUpdateData
+      })
+      console.log(`✅ DOCUMENT UPDATE SUCCESSFUL: Document ${documentId} updated with processing results`)
+    } catch (documentUpdateError) {
+      console.error(`🚨 DOCUMENT UPDATE FAILED:`, documentUpdateError)
+      
+      // Check if it's a foreign key constraint error
+      if (documentUpdateError instanceof Error && documentUpdateError.message.includes('Foreign key constraint')) {
+        console.error(`🚨 FOREIGN KEY CONSTRAINT VIOLATION DETECTED`)
+        console.error(`   Attempting fallback update without folder relationship...`)
+        
+        // Fallback: Update without the foreign key relationship fields
+        const fallbackData = {
+          isScanned: true,
+          scanResult: `${result.scanResult}\n\n[PROCESSING_STATUS: ${JSON.stringify(processingStatus)}]`,
+          invoiceTotal: extractedInvoiceTotal,
+          extractionConfidence: result.extractedData?.confidence || 0.8,
+          dateExtractionConfidence: result.extractedData?.invoiceDate ? 0.9 : 0.5,
+          // Save date for reference but don't create folder relationship
+          extractedDate: extractedDate
+          // Note: NOT including extractedYear/extractedMonth to avoid constraint
+        }
+        
+        try {
+          updatedDocument = await prisma.document.update({
+            where: { id: documentId },
+            data: fallbackData
+          })
+          console.log(`✅ FALLBACK UPDATE SUCCESSFUL: Document saved without folder relationship`)
+        } catch (fallbackError) {
+          console.error(`🚨 FALLBACK UPDATE ALSO FAILED:`, fallbackError)
+          
+          // Last resort: throw the original error to trigger 500 response with proper error handling
+          throw new Error(`Document update failed: ${documentUpdateError.message}. Fallback also failed: ${fallbackError instanceof Error ? fallbackError.message : 'Unknown error'}`)
+        }
+      } else {
+        // Not a foreign key error, re-throw
+        throw documentUpdateError
+      }
+    }
+    
+    // 🔧 CRITICAL FIX: Ensure updatedDocument exists before proceeding
+    if (!updatedDocument) {
+      console.error(`🚨 CRITICAL: updatedDocument is null - this should not happen`)
+      throw new Error('Document update failed - updatedDocument is null')
+    }
     
     // Store extracted VAT data in a separate table for easy querying (skip for guests) - with safe error handling
     if (user && result.extractedData && (result.extractedData.salesVAT?.length > 0 || result.extractedData.purchaseVAT?.length > 0)) {
@@ -1012,12 +1118,28 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     if (error instanceof Error) {
       const errorMessage = error.message.toLowerCase()
       
-      // Database errors
-      if (errorMessage.includes('prismaclient') || errorMessage.includes('database') || errorMessage.includes('connection')) {
+      // 🔧 CRITICAL FIX: Add specific handling for foreign key constraint errors
+      if (errorMessage.includes('foreign key constraint') || errorMessage.includes('constraint violation')) {
+        specificError = 'Document folder relationship error - processing incomplete'
+        errorCode = 'FOREIGN_KEY_CONSTRAINT_ERROR'
+        suggestions.push('The document was uploaded but automatic folder organization failed')
+        suggestions.push('You can manually organize the document or try re-processing it')
+        suggestions.push('Contact support if this issue persists')
+      }
+      // Database connection errors
+      else if (errorMessage.includes('prismaclient') || errorMessage.includes('database') || errorMessage.includes('connection')) {
         specificError = 'Database connection failed'
         errorCode = 'DATABASE_ERROR'
         suggestions.push('Please try again in a moment')
         suggestions.push('If the issue persists, contact support')
+      }
+      // 🔧 NEW: Document update specific errors
+      else if (errorMessage.includes('document update failed')) {
+        specificError = 'Failed to save document processing results'
+        errorCode = 'DOCUMENT_UPDATE_ERROR'
+        suggestions.push('The document may have been processed but results could not be saved')
+        suggestions.push('Try re-processing the document')
+        suggestions.push('Check that the document still exists and is accessible')
       }
       // Document not found errors
       else if (errorMessage.includes('document not found') || errorMessage.includes('not authorized')) {
@@ -1053,6 +1175,14 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         suggestions.push('The document may contain unexpected data structures')
         suggestions.push('Try uploading a different document format')
       }
+      // 🔧 NEW: VAT extraction specific errors
+      else if (errorMessage.includes('vat') && errorMessage.includes('extraction')) {
+        specificError = 'VAT data extraction failed'
+        errorCode = 'VAT_EXTRACTION_ERROR'
+        suggestions.push('The document was processed but VAT amounts could not be extracted')
+        suggestions.push('Ensure the document contains clear VAT information')
+        suggestions.push('Try using a higher quality scan or different document format')
+      }
       else {
         specificError = error.message
       }
@@ -1062,6 +1192,30 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
     console.error('   User-friendly message:', specificError)
     console.error('   Suggestions:', suggestions)
     
+    // 🔧 CRITICAL FIX: Try to mark document as failed for user feedback
+    try {
+      const body = await request.clone().json()
+      const documentId = body.documentId
+      
+      if (documentId) {
+        console.log(`🚨 MARKING DOCUMENT ${documentId} AS FAILED DUE TO PROCESSING ERROR`)
+        
+        // 🔧 CRITICAL FIX: Update document to show failed status (mark as scanned to prevent "Processing" status)
+        await prisma.document.update({
+          where: { id: documentId },
+          data: {
+            isScanned: true,  // Mark as scanned so it doesn't appear as "Processing"
+            scanResult: `PROCESSING FAILED: ${specificError}\n\nError Code: ${errorCode}\nTimestamp: ${new Date().toISOString()}\n\nDetails:\n${suggestions.map(s => `• ${s}`).join('\n')}\n\nThis document can be re-processed by trying the operation again.`
+          }
+        })
+        
+        console.log(`✅ DOCUMENT MARKED AS FAILED: User will see failure status in dashboard`)
+      }
+    } catch (markFailedError) {
+      console.error(`🚨 FAILED TO MARK DOCUMENT AS FAILED:`, markFailedError)
+      // Don't let this secondary error affect the main error response
+    }
+    
     return NextResponse.json(
       { 
         success: false,
@@ -1069,6 +1223,16 @@ async function processDocumentEndpoint(request: NextRequest, user?: AuthUser) {
         errorCode: errorCode,
         suggestions: suggestions,
         timestamp: new Date().toISOString(),
+        // 🔧 NEW: Add recovery instructions
+        recoveryInstructions: {
+          canRetry: true,
+          retryDelay: errorCode === 'DATABASE_ERROR' ? 30000 : 5000, // 30s for DB errors, 5s for others
+          alternativeActions: [
+            'Try re-processing the document',
+            'Check the document format and quality',
+            'Contact support if the issue persists'
+          ]
+        },
         // Include more details in development
         ...(process.env.NODE_ENV === 'development' && {
           debugInfo: {

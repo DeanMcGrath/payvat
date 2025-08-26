@@ -148,13 +148,16 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           timeWindow: '24 hours'
         })
         
-        // FIXED: Simplify guest query - no time filtering, no joins
+        // FIXED: Simplify guest query - match documents API (7 days)
         const recentGuestUsers = await prisma.User.findMany({
           where: {
-            role: 'GUEST'
+            role: 'GUEST',
+            createdAt: {
+              gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7) // Last 7 days
+            }
           },
           select: { id: true },
-          take: 50,
+          take: 100,
           orderBy: { createdAt: 'desc' }
         })
 
@@ -384,7 +387,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           totalPurchaseVAT: Math.round(guestTotalPurchaseVAT * 100) / 100,
           totalNetVAT: Math.round((guestTotalSalesVAT - guestTotalPurchaseVAT) * 100) / 100,
           documentCount: finalGuestDocs.length,
-          processedDocuments: guestProcessedDocuments,
+          processedDocuments: finalGuestDocs.length,
           averageConfidence: weightedAverageConfidence,
           // ENHANCED: Add processing stats for guests too
           failedDocuments: guestFailedDocs,
@@ -827,7 +830,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       totalPurchaseVAT: Math.round(totalPurchaseVAT * 100) / 100,
       totalNetVAT: Math.round(totalNetVAT * 100) / 100,
       documentCount: documents.length,
-      processedDocuments,
+      processedDocuments: documents.length,
       averageConfidence: averageConfidence,
       // ENHANCED: Add processing stats
       failedDocuments: failedDocs,

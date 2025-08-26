@@ -6,7 +6,7 @@
 import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { FileText, Eye, X, CheckCircle, Clock, AlertTriangle } from 'lucide-react'
+import { FileText, Eye, X, CheckCircle, Clock, AlertTriangle, RefreshCw } from 'lucide-react'
 import { Document, VATData, VATExtraction } from '@/types/dashboard'
 import { formatCurrency } from '@/lib/vatUtils'
 
@@ -16,6 +16,7 @@ interface DocumentRowProps {
   variant: 'sales' | 'purchase'
   onView: (document: Document) => void
   onRemove: (id: string) => void
+  onRetry?: (document: Document) => void
   compact?: boolean
   showDetails?: boolean
 }
@@ -26,6 +27,7 @@ export const DocumentRow = React.memo<DocumentRowProps>(function DocumentRow({
   variant,
   onView,
   onRemove,
+  onRetry,
   compact = false,
   showDetails = false,
 }: DocumentRowProps) {
@@ -88,6 +90,22 @@ export const DocumentRow = React.memo<DocumentRowProps>(function DocumentRow({
 
   // Get processing status
   const getProcessingStatus = () => {
+    // 🔧 CRITICAL FIX: Better status detection logic
+    
+    // Check if processing failed (scanResult indicates failure but isScanned is false)
+    if (!document.isScanned && document.scanResult) {
+      const scanResult = document.scanResult.toLowerCase()
+      if (scanResult.includes('failed') || scanResult.includes('error') || scanResult.includes('validation failed')) {
+        return {
+          label: 'Failed',
+          icon: AlertTriangle,
+          variant: 'destructive' as const,
+          className: 'text-red-600',
+        }
+      }
+    }
+    
+    // Still processing (no scanResult yet or processing in progress)
     if (!document.isScanned) {
       return {
         label: 'Processing',
@@ -97,6 +115,7 @@ export const DocumentRow = React.memo<DocumentRowProps>(function DocumentRow({
       }
     }
 
+    // Successfully processed with VAT data
     if (vatExtraction && vatAmounts.length > 0) {
       return {
         label: 'Processed',
@@ -106,6 +125,7 @@ export const DocumentRow = React.memo<DocumentRowProps>(function DocumentRow({
       }
     }
 
+    // Scanned but no VAT data extracted (partial success)
     if (document.isScanned) {
       return {
         label: 'Completed',
@@ -115,11 +135,12 @@ export const DocumentRow = React.memo<DocumentRowProps>(function DocumentRow({
       }
     }
 
+    // Fallback for unknown status
     return {
-      label: 'Error',
+      label: 'Unknown',
       icon: AlertTriangle,
-      variant: 'destructive' as const,
-      className: 'text-red-600',
+      variant: 'secondary' as const,
+      className: 'text-gray-600',
     }
   }
 
@@ -235,6 +256,19 @@ export const DocumentRow = React.memo<DocumentRowProps>(function DocumentRow({
       
       {/* Actions */}
       <div className="col-span-1 flex justify-end space-x-1">
+        {/* 🔧 CRITICAL FIX: Add retry button for failed documents */}
+        {status.label === 'Failed' && onRetry && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onRetry(document)}
+            className="h-8 w-8 p-0 text-amber-600 hover:text-amber-700 hover:bg-amber-50 opacity-0 group-hover:opacity-100 transition-opacity"
+            aria-label="Retry processing"
+            title="Retry processing this document"
+          >
+            <RefreshCw className="h-4 w-4" />
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="sm"

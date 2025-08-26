@@ -164,17 +164,72 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       take: limit,
     })
     
+    // Get audit logs for VAT data like extracted-vat endpoint does
+    const auditLogs = await prisma.AuditLog.findMany({
+      where: {
+        action: 'VAT_DATA_EXTRACTED',
+        entityType: 'DOCUMENT',
+        entityId: {
+          in: documents.map(doc => doc.id)
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+    
+    // Create map of most recent audit log per document
+    const auditLogMap = new Map<string, any>()
+    auditLogs.forEach(log => {
+      if (log.entityId && !auditLogMap.has(log.entityId)) {
+        auditLogMap.set(log.entityId, log)
+      }
+    })
+    
     // Enhanced document processing with extracted data parsing
     const processedDocuments = documents.map(doc => {
       // Parse extracted data from scanResult if needed
       let extractedVATAmount = null
       let parsedInvoiceTotal = doc.invoiceTotal ? Number(doc.invoiceTotal) : null
       
-      if (doc.scanResult) {
-        // Try to extract VAT amounts from scan result
-        const vatMatches = doc.scanResult.match(/€([0-9,]+\.?[0-9]*)/g)
-        if (vatMatches && vatMatches.length > 0) {
-          const vatAmounts = vatMatches.map(match => parseFloat(match.replace('€', '').replace(',', '')))
+      // First check audit log for VAT data (most reliable source)
+      const auditLog = auditLogMap.get(doc.id)
+      if (auditLog && auditLog.metadata) {
+        const extractedData = auditLog.metadata as any
+        if (extractedData.extractedData) {
+          const { salesVAT = [], purchaseVAT = [] } = extractedData.extractedData
+          const salesTotal = salesVAT.reduce((sum: number, amount: number) => sum + amount, 0)
+          const purchaseTotal = purchaseVAT.reduce((sum: number, amount: number) => sum + amount, 0)
+          extractedVATAmount = salesTotal + purchaseTotal
+        }
+      }
+      
+      // If no audit log data, try scanResult
+      if (extractedVATAmount === null && doc.scanResult) {
+        // Try to extract VAT amounts from scan result using same logic as extracted-vat endpoint
+        const vatMatches = doc.scanResult.match(/€([0-9,]+\.?[0-9]*)/g) || []
+        const vatAmounts = vatMatches.map(match => parseFloat(match.replace('€', '').replace(',', '')))
+        
+        // Also check for VAT amounts without euro symbol (same patterns as extracted-vat)
+        const additionalPatterns = [
+          /VAT.*?([0-9]+\.?[0-9]+)/gi,
+          /Total.*VAT.*?([0-9]+\.?[0-9]+)/gi,
+          /([0-9]+\.?[0-9]+).*?VAT/gi
+        ]
+        
+        for (const pattern of additionalPatterns) {
+          const matches = [...doc.scanResult.matchAll(pattern)]
+          for (const match of matches) {
+            if (match[1]) {
+              const amount = parseFloat(match[1])
+              if (!isNaN(amount) && amount > 0 && amount < 10000 && !vatAmounts.includes(amount)) {
+                vatAmounts.push(amount)
+              }
+            }
+          }
+        }
+        
+        if (vatAmounts.length > 0) {
           extractedVATAmount = vatAmounts.reduce((sum, amount) => sum + amount, 0)
         }
         

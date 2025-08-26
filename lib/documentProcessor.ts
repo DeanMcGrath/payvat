@@ -2612,8 +2612,8 @@ async function processWithAIVision(
   
   if (!isAIEnabled()) {
     console.log('⚠️ AI not available, falling back to legacy processing for AI Vision')
-    // Fallback to legacy processing instead of throwing error
-    const legacyResult = await processDocument(fileData, mimeType, fileName, category)
+    // Fallback to legacy processing instead of throwing error - avoid circular calls
+    const legacyResult = await processWithLegacyMethod(fileData, mimeType, fileName, category, Date.now())
     if (legacyResult.success && legacyResult.extractedData) {
       return legacyResult.extractedData
     } else {
@@ -2627,7 +2627,7 @@ async function processWithAIVision(
   } catch (aiError) {
     console.log('🚨 AI Vision processing failed, falling back to legacy processing')
     console.error('AI Error:', aiError)
-    const legacyResult = await processDocument(fileData, mimeType, fileName, category)
+    const legacyResult = await processWithLegacyMethod(fileData, mimeType, fileName, category, Date.now())
     if (legacyResult.success && legacyResult.extractedData) {
       return legacyResult.extractedData
     } else {
@@ -2637,7 +2637,7 @@ async function processWithAIVision(
   
   if (!result.success || !result.extractedData) {
     console.log('🚨 AI Vision returned failure, falling back to legacy processing')
-    const legacyResult = await processDocument(fileData, mimeType, fileName, category)
+    const legacyResult = await processWithLegacyMethod(fileData, mimeType, fileName, category, Date.now())
     if (legacyResult.success && legacyResult.extractedData) {
       return legacyResult.extractedData
     } else {
@@ -2703,7 +2703,7 @@ async function processWithExcelParser(
   } catch (excelError) {
     console.log('🚨 Excel parsing failed, falling back to legacy processing')
     console.error('Excel Error:', excelError)
-    const legacyResult = await processDocument(fileData, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName, category)
+    const legacyResult = await processWithLegacyMethod(fileData, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName, category, Date.now())
     if (legacyResult.success && legacyResult.extractedData) {
       return legacyResult.extractedData
     } else {
@@ -2742,7 +2742,7 @@ async function processWithOCRText(
   } catch (ocrError) {
     console.log('🚨 OCR text processing failed, falling back to legacy processing')
     console.error('OCR Error:', ocrError)
-    const legacyResult = await processDocument(fileData, mimeType, fileName, category)
+    const legacyResult = await processWithLegacyMethod(fileData, mimeType, fileName, category, Date.now())
     if (legacyResult.success && legacyResult.extractedData) {
       return legacyResult.extractedData
     } else {
@@ -2763,7 +2763,7 @@ async function processWithFallback(
   console.log('🔄 Fallback processing using legacy method...')
   
   try {
-    const legacyResult = await processDocument(fileData, mimeType, fileName, category)
+    const legacyResult = await processWithLegacyMethod(fileData, mimeType, fileName, category, Date.now())
     if (legacyResult.success && legacyResult.extractedData) {
       return {
         ...legacyResult.extractedData,
@@ -2807,9 +2807,9 @@ async function validateIrishVATCompliance(
   
   // Perform comprehensive Irish VAT compliance check
   const complianceResult = checkIrishVATCompliance({
-    documentType: vatData.documentType,
+    documentType: vatData.documentType || 'OTHER',
     vatAmounts: allVATAmounts,
-    vatRates: vatData.vatRate ? [vatData.vatRate] : [],
+    vatRates: vatData.vatRate ? [vatData.vatRate] : [], // Handle undefined vatRate
     totalAmount: vatData.totalAmount,
     supplierVATNumber: vatData.vatNumber,
     invoiceDate: vatData.invoiceDate,

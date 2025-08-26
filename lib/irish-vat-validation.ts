@@ -136,9 +136,13 @@ export function checkIrishVATCompliance(check: VATComplianceCheck): IrishVATVali
     recommendations: []
   }
 
+  // Provide defaults for missing fields to handle legacy fallback gracefully
+  const currency = check.currency || 'EUR'
+  const vatRates = check.vatRates || []
+
   // Check currency - should be EUR for Irish businesses
-  if (check.currency !== 'EUR') {
-    result.warnings.push(`Currency is ${check.currency}, but Irish businesses typically use EUR`)
+  if (currency !== 'EUR') {
+    result.warnings.push(`Currency is ${currency}, but Irish businesses typically use EUR`)
     result.recommendations.push('Ensure foreign currency transactions are properly converted to EUR for VAT reporting')
   }
 
@@ -161,13 +165,16 @@ export function checkIrishVATCompliance(check: VATComplianceCheck): IrishVATVali
   }
 
   // Validate VAT rates if provided
-  if (check.vatRates && check.vatRates.length > 0) {
-    const rateValidation = validateIrishVATRates(check.vatRates)
+  if (vatRates.length > 0) {
+    const rateValidation = validateIrishVATRates(vatRates)
     result.warnings.push(...rateValidation.warnings)
     
     if (rateValidation.invalidRates.length > 0) {
       result.errors.push(`Non-standard Irish VAT rates detected: ${rateValidation.invalidRates.join(', ')}%`)
     }
+  } else {
+    // Handle legacy fallback case where no VAT rates are provided
+    result.warnings.push('VAT rates not specified - using standard validation')
   }
 
   // Validate supplier VAT number if provided

@@ -425,9 +425,25 @@ async function processDocumentWithAI_Internal(
         console.log('🔄 PDF BUFFER PROCESSING START:')
         console.log(`   Base64 data length: ${fileData.length} characters`)
         
+        // 🔧 CRITICAL FIX: Validate base64 data before conversion
+        const base64Validation = validateBase64Data(fileData)
+        if (!base64Validation.isValid) {
+          console.error('🚨 BASE64 VALIDATION FAILED:', base64Validation.error)
+          throw new Error(`Invalid base64 data: ${base64Validation.error}`)
+        }
+        console.log('✅ Base64 data validation passed')
+        
         const pdfBuffer = Buffer.from(fileData, 'base64')
         console.log(`   Buffer created: ${pdfBuffer.length} bytes`)
         console.log(`   Buffer header: ${pdfBuffer.subarray(0, 10).toString('hex')}`)
+        
+        // 🔧 CRITICAL FIX: Validate PDF buffer immediately after creation
+        const pdfValidation = validatePDFBuffer(pdfBuffer)
+        if (!pdfValidation.isValid) {
+          console.error('🚨 PDF BUFFER VALIDATION FAILED:', pdfValidation.error)
+          throw new Error(`Invalid PDF file: ${pdfValidation.error}`)
+        }
+        console.log('✅ PDF buffer validation passed')
         
         let extractedPDFText: string
         
@@ -440,16 +456,28 @@ async function processDocumentWithAI_Internal(
         } catch (pdfError) {
           console.error('🚨 PDF-parse extraction failed:', pdfError)
           
-          // Fallback to emergency extraction if pdf-parse fails
-          console.log('🔄 Attempting emergency extraction as fallback...')
-          try {
-            extractedPDFText = await emergencyPDFTextExtraction(pdfBuffer)
-            console.log('✅ Emergency PDF extraction succeeded!')
-          } catch (emergencyError) {
-            console.error('🚨 Emergency extraction also failed:', emergencyError)
-            
-            // Return error text that will still allow processing to continue
-            extractedPDFText = `PDF extraction failed: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}. File size: ${pdfBuffer.length} bytes.`
+          // 🔧 CRITICAL FIX: Better error categorization for validation failures
+          let shouldTryFallback = true
+          if (pdfError instanceof Error) {
+            if (pdfError.message.includes('validation failed') || pdfError.message.includes('Invalid PDF file')) {
+              console.error('🚨 PDF validation failed - file is corrupted or not a valid PDF')
+              shouldTryFallback = false // Don't try fallback for validation failures
+              extractedPDFText = `PDF file validation failed: ${pdfError.message}. The uploaded file is not a valid PDF or is corrupted.`
+            }
+          }
+          
+          // Fallback to emergency extraction only if validation passed but parsing failed
+          if (shouldTryFallback) {
+            console.log('🔄 Attempting emergency extraction as fallback...')
+            try {
+              extractedPDFText = await emergencyPDFTextExtraction(pdfBuffer)
+              console.log('✅ Emergency PDF extraction succeeded!')
+            } catch (emergencyError) {
+              console.error('🚨 Emergency extraction also failed:', emergencyError)
+              
+              // Return error text that will still allow processing to continue
+              extractedPDFText = `PDF extraction failed: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}. File size: ${pdfBuffer ? pdfBuffer.length : 'unknown'} bytes.`
+            }
           }
         }
         
@@ -1986,28 +2014,101 @@ async function convertPDFToImage(pdfBase64: string): Promise<{
 }
 
 /**
+ * Validate base64 data integrity before processing
+ */
+function validateBase64Data(base64String: string): { isValid: boolean; error?: string } {
+  try {
+    // Check if base64 string has valid format
+    if (!base64String || typeof base64String !== 'string') {
+      return { isValid: false, error: 'Base64 data is empty or not a string' }
+    }
+    
+    // Remove data URL prefix if present (data:application/pdf;base64,)
+    const cleanBase64 = base64String.replace(/^data:[^;]+;base64,/, '')
+    
+    // Check base64 format (should only contain valid base64 characters)
+    const base64Regex = /^[A-Za-z0-9+/]*={0,2}$/
+    if (!base64Regex.test(cleanBase64)) {
+      return { isValid: false, error: 'Invalid base64 format - contains invalid characters' }
+    }
+    
+    // Check if base64 length is valid (must be multiple of 4)
+    if (cleanBase64.length % 4 !== 0) {
+      return { isValid: false, error: 'Invalid base64 format - incorrect padding' }
+    }
+    
+    // Try to decode to verify it's valid
+    Buffer.from(cleanBase64, 'base64')
+    
+    return { isValid: true }
+  } catch (error) {
+    return { isValid: false, error: `Base64 validation failed: ${error instanceof Error ? error.message : 'Unknown error'}` }
+  }
+}
+
+/**
+ * Validate PDF buffer integrity and format
+ */
+function validatePDFBuffer(pdfBuffer: Buffer): { isValid: boolean; error?: string } {
+  try {
+    // Check buffer is valid
+    if (!Buffer.isBuffer(pdfBuffer) || pdfBuffer.length === 0) {
+      return { isValid: false, error: 'Invalid PDF buffer - must be non-empty Buffer object' }
+    }
+    
+    // Check minimum size (PDF header + some content)
+    if (pdfBuffer.length < 20) {
+      return { isValid: false, error: 'PDF buffer too small - likely corrupted' }
+    }
+    
+    // Check PDF magic number (must start with %PDF-)
+    const pdfHeader = pdfBuffer.subarray(0, 5).toString('ascii')
+    if (!pdfHeader.startsWith('%PDF-')) {
+      return { isValid: false, error: `Invalid PDF header: "${pdfHeader}" - not a valid PDF file` }
+    }
+    
+    // Check PDF version
+    const versionMatch = pdfHeader.match(/%PDF-([0-9]\.[0-9])/)
+    if (!versionMatch) {
+      return { isValid: false, error: 'Invalid PDF version in header' }
+    }
+    
+    // Check for PDF trailer (should contain 'startxref' near end)
+    const endSection = pdfBuffer.subarray(-1024).toString('ascii')
+    if (!endSection.includes('startxref')) {
+      return { isValid: false, error: 'PDF trailer missing - file appears incomplete or corrupted' }
+    }
+    
+    return { isValid: true }
+  } catch (error) {
+    return { isValid: false, error: `PDF validation failed: ${error instanceof Error ? error.message : 'Unknown error'}` }
+  }
+}
+
+/**
  * Extract text from PDF using pdf-parse library with proper serverless handling
  * This function avoids the ENOENT bug by preventing debug code execution
  */
 async function extractPDFTextWithPdfParse(pdfBuffer: Buffer): Promise<string> {
   try {
-    console.log('📄 PDF PROCESSING WITH PDF-PARSE (SERVERLESS OPTIMIZED):')
+    console.log('📄 PDF PROCESSING WITH PDF-PARSE (ENHANCED VALIDATION):')
     console.log(`   Buffer size: ${pdfBuffer.length} bytes`)
     console.log(`   Buffer type: ${Buffer.isBuffer(pdfBuffer)}`)
     console.log(`   Buffer first 50 bytes: ${pdfBuffer.subarray(0, 50).toString('hex')}`)
     
-    // Validate PDF buffer
-    if (!Buffer.isBuffer(pdfBuffer) || pdfBuffer.length === 0) {
-      throw new Error('Invalid PDF buffer - must be non-empty Buffer object')
+    // 🔧 CRITICAL FIX: Strict PDF validation
+    const validation = validatePDFBuffer(pdfBuffer)
+    if (!validation.isValid) {
+      console.error('🚨 PDF VALIDATION FAILED:', validation.error)
+      throw new Error(`PDF validation failed: ${validation.error}`)
     }
     
-    // Check PDF header
-    const pdfHeader = pdfBuffer.subarray(0, 4).toString('ascii')
+    console.log('✅ PDF validation passed - file appears to be a valid PDF')
+    
+    // Enhanced PDF header info
+    const pdfHeader = pdfBuffer.subarray(0, 8).toString('ascii')
     console.log(`   PDF header: "${pdfHeader}"`)
-    
-    if (!pdfHeader.startsWith('%PDF')) {
-      console.warn('⚠️ Warning: Buffer does not start with PDF header, but attempting to parse anyway')
-    }
+    console.log(`   PDF appears valid and ready for parsing`)
     
     console.log('📄 Using pdf-parse with serverless configuration...')
     
@@ -2096,7 +2197,11 @@ async function extractPDFTextWithPdfParse(pdfBuffer: Buffer): Promise<string> {
     if (error instanceof Error) {
       const errorMsg = error.message.toLowerCase()
       
-      if (errorMsg.includes('enoent') || errorMsg.includes('no such file')) {
+      // 🔧 CRITICAL FIX: Enhanced error categorization with validation info
+      if (errorMsg.includes('pdf validation failed')) {
+        // This is our validation error - pass it through with more context
+        throw new Error(`PDF file validation failed: ${error.message}. The uploaded file is not a valid PDF or is corrupted.`)
+      } else if (errorMsg.includes('enoent') || errorMsg.includes('no such file')) {
         console.error('🚨 CRITICAL: ENOENT error detected - pdf-parse configuration issue')
         throw new Error('PDF processing failed: Library trying to access test files. Check Next.js serverless configuration.')
       } else if (errorMsg.includes('timeout')) {
@@ -2104,9 +2209,12 @@ async function extractPDFTextWithPdfParse(pdfBuffer: Buffer): Promise<string> {
       } else if (errorMsg.includes('encrypted')) {
         throw new Error('PDF is encrypted and cannot be processed')
       } else if (errorMsg.includes('invalid pdf') || errorMsg.includes('corrupt')) {
-        throw new Error('Invalid or corrupted PDF file')
+        throw new Error('Invalid or corrupted PDF file - the PDF structure is damaged')
       } else if (errorMsg.includes('import') || errorMsg.includes('module')) {
         throw new Error('PDF processing library not properly configured for serverless deployment')
+      } else {
+        // Generic parsing error - might still be a corrupted file
+        throw new Error(`PDF parsing failed: ${error.message}. The file may be corrupted or in an unsupported format.`)
       }
     }
     

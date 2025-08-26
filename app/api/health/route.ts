@@ -16,7 +16,8 @@ export async function GET() {
     
     return NextResponse.json({
       status: isHealthy ? 'healthy' : 'unhealthy',
-      database: {
+      database: isHealthy ? 'connected' : 'disconnected',
+      databaseDetails: {
         connected: isHealthy,
         responseTime,
         circuit: circuitStats
@@ -36,7 +37,8 @@ export async function GET() {
     
     return NextResponse.json({
       status: 'unhealthy',
-      database: {
+      database: 'disconnected',
+      databaseDetails: {
         connected: false,
         error: error instanceof Error ? error.message : 'Unknown error',
         responseTime,

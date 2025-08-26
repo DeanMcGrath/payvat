@@ -137,7 +137,7 @@ export function TopNavigation({ user, onLogout, onHome }: TopNavigationProps) {
     return (
       <>
         {/* Mobile Navigation */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-neutral-200 shadow-sm">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-neutral-200 shadow-sm header-navigation">
           <div className="flex items-center justify-between px-4 py-3">
             {/* Logo */}
             <div className="flex items-center gap-2">
@@ -222,7 +222,7 @@ export function TopNavigation({ user, onLogout, onHome }: TopNavigationProps) {
         {/* Mobile Menu Backdrop */}
         {mobileMenuOpen && (
           <div 
-            className="fixed inset-0 bg-black/20 z-40"
+            className="fixed inset-0 bg-black/20 modal-backdrop"
             onClick={() => setMobileMenuOpen(false)}
           />
         )}

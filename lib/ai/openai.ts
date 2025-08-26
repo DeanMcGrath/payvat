@@ -6,9 +6,9 @@
 import { OpenAI } from 'openai'
 import { env } from '@/lib/env-validation'
 
-// Initialize OpenAI client
+// Initialize OpenAI client with fallback to direct process.env access
 export const openai = new OpenAI({
-  apiKey: env.OPENAI_API_KEY || '',
+  apiKey: env.OPENAI_API_KEY || process.env.OPENAI_API_KEY || '',
 })
 
 // AI Service Configuration
@@ -37,16 +37,27 @@ export const AI_CONFIG = {
 export function isAIEnabled(): boolean {
   console.log('🔍 CHECKING AI AVAILABILITY:')
   
-  const hasApiKey = !!env.OPENAI_API_KEY
-  const isValidFormat = env.OPENAI_API_KEY?.startsWith('sk-') ?? false
-  const isNotPlaceholder = env.OPENAI_API_KEY !== 'your_openai_api_key_here'
+  // Check both env validation and direct process.env access
+  const envApiKey = env.OPENAI_API_KEY
+  const processApiKey = process.env.OPENAI_API_KEY
   
-  console.log('   Environment check:')
+  console.log('   Environment comparison:')
+  console.log(`     - env.OPENAI_API_KEY: ${envApiKey ? `"${envApiKey.substring(0, 7)}..." (${envApiKey.length} chars)` : 'undefined'}`)
+  console.log(`     - process.env.OPENAI_API_KEY: ${processApiKey ? `"${processApiKey.substring(0, 7)}..." (${processApiKey.length} chars)` : 'undefined'}`)
+  
+  // Use direct process.env access as fallback
+  const apiKey = envApiKey || processApiKey
+  
+  const hasApiKey = !!apiKey
+  const isValidFormat = apiKey?.startsWith('sk-') ?? false
+  const isNotPlaceholder = apiKey !== 'your_openai_api_key_here'
+  
+  console.log('   Final check:')
   console.log(`     - API Key exists: ${hasApiKey}`)
-  console.log(`     - Key length: ${env.OPENAI_API_KEY?.length || 0} chars`)
+  console.log(`     - Key length: ${apiKey?.length || 0} chars`)
   console.log(`     - Valid format (sk-*): ${isValidFormat}`)
   console.log(`     - Not placeholder: ${isNotPlaceholder}`)
-  console.log(`     - Key preview: ${env.OPENAI_API_KEY ? `"${env.OPENAI_API_KEY.substring(0, 7)}..."` : '"undefined"'}`)
+  console.log(`     - Key preview: ${apiKey ? `"${apiKey.substring(0, 7)}..."` : '"undefined"'}`)
   
   const isEnabled = hasApiKey && isValidFormat && isNotPlaceholder
   

@@ -19,6 +19,7 @@ interface DocumentSectionProps {
   variant: 'sales' | 'purchase'
   onView: (document: Document) => void
   onRemove: (id: string) => void
+  onRetry?: (document: Document) => void
   loading?: boolean
   emptyMessage?: string
   children?: React.ReactNode
@@ -36,6 +37,7 @@ export function DocumentSection({
   variant,
   onView,
   onRemove,
+  onRetry,
   loading = false,
   emptyMessage,
   children,
@@ -139,6 +141,7 @@ export function DocumentSection({
             variant={variant}
             onView={onView}
             onRemove={onRemove}
+            onRetry={onRetry}
           />
         ) : (
           <div className="p-8 text-center">

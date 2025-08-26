@@ -13,6 +13,7 @@ interface DocumentTableProps {
   variant: 'sales' | 'purchase'
   onView: (document: Document) => void
   onRemove: (id: string) => void
+  onRetry?: (document: Document) => void
   showHeaders?: boolean
 }
 
@@ -22,6 +23,7 @@ export function DocumentTable({
   variant,
   onView,
   onRemove,
+  onRetry,
   showHeaders = true,
 }: DocumentTableProps) {
   if (documents.length === 0) {
@@ -52,6 +54,7 @@ export function DocumentTable({
             variant={variant}
             onView={onView}
             onRemove={onRemove}
+            onRetry={onRetry}
           />
         ))}
       </div>
@@ -68,6 +71,7 @@ export function DocumentTableCompact({
   variant,
   onView,
   onRemove,
+  onRetry,
 }: DocumentTableProps) {
   if (documents.length === 0) {
     return null
@@ -83,6 +87,7 @@ export function DocumentTableCompact({
           variant={variant}
           onView={onView}
           onRemove={onRemove}
+          onRetry={onRetry}
           compact
         />
       ))}

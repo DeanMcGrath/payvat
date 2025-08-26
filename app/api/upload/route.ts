@@ -38,26 +38,55 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       )
     }
     
-    // Parsing form data
+    // Parsing form data with enhanced error handling
     console.log('✅ STEP 5: Parsing form data')
-    const formData = await request.formData()
-    console.log('✅ STEP 6: Form data parsed successfully')
+    let formData: FormData
+    try {
+      formData = await request.formData()
+      console.log('✅ STEP 6: Form data parsed successfully')
+    } catch (formError) {
+      console.error('❌ STEP 6 FAILED: Form data parsing error:', formError)
+      return NextResponse.json(
+        { 
+          error: 'Failed to parse form data',
+          details: formError instanceof Error ? formError.message : 'Unknown parsing error',
+          step: 'form-data-parsing'
+        },
+        { status: 400 }
+      )
+    }
     
     console.log('✅ STEP 7: Extracting form fields')
-    const file = formData.get('file') as File
-    const category = formData.get('category') as string
+    
+    // Enhanced field extraction with validation
+    const file = formData.get('file') as File | null
+    const category = formData.get('category') as string | null
     const vatReturnId = formData.get('vatReturnId') as string | null
     
+    // Log all form fields for debugging
+    const allFields = Array.from(formData.keys())
+    console.log('Form fields received:', allFields)
+    
+    // Also try alternative field names in case frontend uses different names
+    const fileAlternative = file || formData.get('files') as File | null
+    const finalFile = fileAlternative
+    
     console.log('✅ STEP 8: Form data extracted successfully', {
-      hasFile: !!file,
+      hasFile: !!finalFile,
+      hasOriginalFile: !!file,
+      allFields: allFields,
       category,
-      fileSize: file?.size
+      fileSize: finalFile?.size
     })
     
-    if (!file) {
-      console.error('❌ STEP 8 FAILED: No file provided')
+    if (!finalFile) {
+      console.error('❌ STEP 8 FAILED: No file provided in any field')
       return NextResponse.json(
-        { error: 'No file provided' },
+        { 
+          error: 'No file provided',
+          details: `Expected field 'file' or 'files', found fields: ${allFields.join(', ')}`,
+          receivedFields: allFields
+        },
         { status: 400 }
       )
     }
@@ -89,7 +118,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     }
     
     // Validate file
-    const validation = validateFile(file)
+    const validation = validateFile(finalFile)
     if (!validation.isValid) {
       return NextResponse.json(
         { error: validation.error },
@@ -189,7 +218,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
     console.log('✅ STEP 14: Starting file processing for serverless')
     let processedFile
     try {
-      processedFile = await processFileForServerless(file, userId)
+      processedFile = await processFileForServerless(finalFile, userId)
       console.log('✅ STEP 15: File processed successfully', {
         fileName: processedFile?.fileName,
         fileSize: processedFile?.fileSize
@@ -198,7 +227,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       console.error('❌ STEP 15 FAILED: File processing error:', processingError)
       logError('File processing failed', processingError, {
         userId,
-        fileName: file.name,
+        fileName: finalFile.name,
         operation: 'upload-file-processing'
       })
       return NextResponse.json({
@@ -319,6 +348,10 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         let extractedYear = null
         let extractedMonth = null
         
+        // 🔧 CRITICAL FIX: Enhanced date extraction with comprehensive debug logging
+        console.log('📅 EXTRACTING DATE FROM PROCESSING RESULT:')
+        console.log('   Full extractedData structure:', JSON.stringify(processingResult.extractedData, null, 2))
+        
         // Try basic processing format first
         if (processingResult.extractedData?.invoiceDate) {
           try {
@@ -329,9 +362,10 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
               console.log(`✅ EXTRACTION SUCCESS: Date extracted from invoiceDate - ${extractedDate.toISOString()}`)
             } else {
               extractedDate = null
+              console.log('🚨 Date extraction failed: invoiceDate is not a valid date')
             }
           } catch (dateError) {
-            console.warn('Failed to parse extracted date:', processingResult.extractedData.invoiceDate)
+            console.warn('Failed to parse extracted date:', processingResult.extractedData.invoiceDate, dateError)
             extractedDate = null
           }
         } 
@@ -342,41 +376,195 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
             if (!isNaN(extractedDate.getTime())) {
               extractedYear = extractedDate.getFullYear()
               extractedMonth = extractedDate.getMonth() + 1 // 1-based month
+              console.log(`✅ EXTRACTION SUCCESS: Date extracted from transactionData.date - ${extractedDate.toISOString()}`)
             } else {
               extractedDate = null
+              console.log('🚨 Date extraction failed: transactionData.date is not a valid date')
             }
           } catch (dateError) {
-            console.warn('Failed to parse AI extracted date:', processingResult.extractedData.transactionData.date)
+            console.warn('Failed to parse AI extracted date:', processingResult.extractedData.transactionData.date, dateError)
             extractedDate = null
+          }
+        } else {
+          console.log('🚨 NO DATE FOUND in processing result - attempting fallback extraction')
+          console.log('   Available fields in extractedData:', processingResult.extractedData ? Object.keys(processingResult.extractedData) : 'none')
+          
+          // 🔧 CRITICAL FIX: Fallback date extraction from extractedText
+          if (processingResult.extractedData?.extractedText) {
+            const textArray = Array.isArray(processingResult.extractedData.extractedText) 
+              ? processingResult.extractedData.extractedText 
+              : [processingResult.extractedData.extractedText];
+            
+            const fullText = textArray.join(' ');
+            console.log('   Attempting to extract date from text:', fullText);
+            
+            // Look for date patterns in the text
+            const datePatterns = [
+              /Date:\s*(\d{4}-\d{2}-\d{2})/i,           // "Date: 2024-03-15"
+              /Invoice\s+Date:\s*(\d{4}-\d{2}-\d{2})/i, // "Invoice Date: 2024-03-15"
+              /(\d{4}-\d{2}-\d{2})/,                    // Just "2024-03-15"
+              /(\d{1,2}\/\d{1,2}\/\d{4})/,              // "15/03/2024"
+              /(\d{1,2}-\d{1,2}-\d{4})/                 // "15-03-2024"
+            ];
+            
+            for (const pattern of datePatterns) {
+              const match = fullText.match(pattern);
+              if (match) {
+                try {
+                  let dateString = match[1];
+                  
+                  // Convert DD/MM/YYYY to YYYY-MM-DD
+                  if (dateString.includes('/')) {
+                    const [day, month, year] = dateString.split('/');
+                    dateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                  }
+                  // Convert DD-MM-YYYY to YYYY-MM-DD  
+                  else if (dateString.match(/^\d{1,2}-\d{1,2}-\d{4}$/)) {
+                    const [day, month, year] = dateString.split('-');
+                    dateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                  }
+                  
+                  const testDate = new Date(dateString);
+                  if (!isNaN(testDate.getTime())) {
+                    extractedDate = testDate;
+                    extractedYear = testDate.getFullYear();
+                    extractedMonth = testDate.getMonth() + 1;
+                    console.log(`✅ FALLBACK DATE EXTRACTION SUCCESS: ${dateString} -> ${extractedDate.toISOString()}`);
+                    break;
+                  }
+                } catch (dateError) {
+                  console.log(`   Failed to parse date: ${match[1]} - ${dateError.message}`);
+                }
+              }
+            }
+            
+            if (!extractedDate) {
+              console.log('   No valid date found in extracted text using fallback patterns');
+            }
           }
         }
         
-        // Extract total amount from basic or AI processing
+        // 🔧 CRITICAL FIX: Enhanced total amount extraction with comprehensive debug logging
+        console.log('💰 EXTRACTING TOTAL AMOUNT FROM PROCESSING RESULT:')
+        console.log('   Looking for totalAmount:', processingResult.extractedData?.totalAmount)
+        console.log('   Looking for vatData.grandTotal:', processingResult.extractedData?.vatData?.grandTotal)
+        console.log('   Full vatData:', processingResult.extractedData?.vatData)
+        
         let invoiceTotal = null
         if (processingResult.extractedData?.totalAmount) {
           invoiceTotal = processingResult.extractedData.totalAmount
-          console.log(`✅ EXTRACTION SUCCESS: Total extracted from totalAmount - €${invoiceTotal}`)
+          console.log(`✅ TOTAL EXTRACTED from totalAmount - €${invoiceTotal}`)
         } else if (processingResult.extractedData?.vatData?.grandTotal) {
           invoiceTotal = processingResult.extractedData.vatData.grandTotal
-          console.log(`✅ EXTRACTION SUCCESS: Total extracted from vatData.grandTotal - €${invoiceTotal}`)
+          console.log(`✅ TOTAL EXTRACTED from vatData.grandTotal - €${invoiceTotal}`)
         } else {
-          console.log(`⚠️  EXTRACTION WARNING: No total amount found in processing result`)
+          console.log(`🚨 NO TOTAL AMOUNT FOUND in processing result`)
+          console.log('   Available fields in extractedData:', processingResult.extractedData ? Object.keys(processingResult.extractedData) : 'none')
+          
+          // Try to find any amount-related fields
+          if (processingResult.extractedData) {
+            const amountFields = Object.keys(processingResult.extractedData).filter(key => 
+              key.toLowerCase().includes('total') || 
+              key.toLowerCase().includes('amount') || 
+              key.toLowerCase().includes('price')
+            )
+            console.log('   Amount-related fields found:', amountFields)
+            amountFields.forEach(field => {
+              console.log(`     ${field}:`, processingResult.extractedData[field])
+            })
+          }
         }
         
-        // Update document with processing results (basic fields only)
-        await prisma.Document.update({
-          where: { id: document.id },
-          data: {
-            isScanned: true,
-            scanResult: processingResult.scanResult,
-            // Save extracted fields to database for proper display
-            ...(extractedDate && { extractedDate, extractedYear, extractedMonth }),
-            ...(invoiceTotal && { invoiceTotal })
-          }
-        })
+        // 🔧 CRITICAL FIX: Handle DocumentFolder creation to prevent foreign key constraint violation
+        let documentUpdateData: any = {
+          isScanned: true,
+          scanResult: processingResult.scanResult,
+          ...(invoiceTotal && { invoiceTotal })
+        }
         
-        // LOG CRITICAL FIX: Confirm what was saved to database
-        console.log(`🎯 DATABASE UPDATE COMPLETE:`)
+        // Only add year/month fields if we have valid date and authenticated user
+        if (extractedDate && extractedYear && extractedMonth && user) {
+          try {
+            console.log(`📁 UPLOAD: Creating/updating DocumentFolder for ${extractedYear}/${extractedMonth}`)
+            
+            // Create or update DocumentFolder to ensure it exists
+            await prisma.DocumentFolder.upsert({
+              where: {
+                userId_year_month: {
+                  userId: user.id,
+                  year: extractedYear,
+                  month: extractedMonth
+                }
+              },
+              create: {
+                userId: user.id,
+                year: extractedYear,
+                month: extractedMonth,
+                totalSalesAmount: 0,
+                totalPurchaseAmount: 0,
+                totalSalesVAT: 0,
+                totalPurchaseVAT: 0,
+                totalNetVAT: 0,
+                documentCount: 0,
+                salesDocumentCount: 0,
+                purchaseDocumentCount: 0
+              },
+              update: {
+                lastDocumentAt: new Date()
+              }
+            })
+            
+            // Now safe to add the foreign key fields
+            documentUpdateData.extractedDate = extractedDate
+            documentUpdateData.extractedYear = extractedYear
+            documentUpdateData.extractedMonth = extractedMonth
+            
+            console.log(`✅ UPLOAD: DocumentFolder ready, safe to create relationship`)
+            
+          } catch (folderError) {
+            console.error(`🚨 UPLOAD: DocumentFolder creation failed:`, folderError)
+            // Save date but not year/month to avoid constraint violation
+            documentUpdateData.extractedDate = extractedDate
+          }
+        } else {
+          // For guests or invalid dates, just save the date without folder relationship
+          if (extractedDate) {
+            documentUpdateData.extractedDate = extractedDate
+          }
+        }
+        
+        // Update document with safe error handling
+        try {
+          await prisma.Document.update({
+            where: { id: document.id },
+            data: documentUpdateData
+          })
+          console.log(`✅ UPLOAD: Document update successful`)
+        } catch (updateError) {
+          console.error(`🚨 UPLOAD: Document update failed:`, updateError)
+          
+          if (updateError instanceof Error && updateError.message.includes('Foreign key constraint')) {
+            console.error(`🚨 UPLOAD: Foreign key constraint - attempting fallback`)
+            
+            // Fallback: update without foreign key fields
+            await prisma.Document.update({
+              where: { id: document.id },
+              data: {
+                isScanned: true,
+                scanResult: processingResult.scanResult,
+                extractedDate: extractedDate,
+                ...(invoiceTotal && { invoiceTotal })
+                // Note: no extractedYear/extractedMonth to avoid constraint
+              }
+            })
+            console.log(`✅ UPLOAD: Fallback update successful`)
+          } else {
+            throw updateError
+          }
+        }
+        
+        // 🔧 CRITICAL FIX: Enhanced database save confirmation logging
+        console.log(`🎯 DATABASE UPDATE COMPLETE - CONFIRMING DATA SAVED:`)
         console.log(`   Document ID: ${document.id}`)
         console.log(`   isScanned: true`)
         console.log(`   extractedDate: ${extractedDate ? extractedDate.toISOString() : 'null'}`)
@@ -384,6 +572,26 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         console.log(`   extractedMonth: ${extractedMonth || 'null'}`) 
         console.log(`   invoiceTotal: €${invoiceTotal || 'null'}`)
         console.log(`   fileData saved: ${document.fileData ? 'YES' : 'NO'} (${document.fileData ? `${Math.round(document.fileData.length/1024)}KB` : '0KB'})`)
+        console.log(`   documentUpdateData sent to database:`, JSON.stringify(documentUpdateData, null, 2))
+        
+        // Fetch the document back from database to confirm what was actually saved
+        try {
+          const savedDocument = await prisma.Document.findUnique({
+            where: { id: document.id },
+            select: { 
+              id: true, 
+              isScanned: true, 
+              extractedDate: true, 
+              extractedYear: true, 
+              extractedMonth: true, 
+              invoiceTotal: true,
+              scanResult: true
+            }
+          })
+          console.log(`🔍 VERIFICATION - Document as saved in database:`, JSON.stringify(savedDocument, null, 2))
+        } catch (verificationError) {
+          console.error(`🚨 Failed to verify saved document:`, verificationError)
+        }
         
         // 🔧 CRITICAL FIX: Log extracted VAT data for audit trail (NOW INCLUDING GUESTS!)
         // This was the root cause of "processedDocuments": 0 - guest users weren't getting audit logs
@@ -434,12 +642,12 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           operation: 'document-processing'
         })
         logger.warn('Document processing failed', { error: processingResult.error }, 'UPLOAD_API')
-        // Update with failed status
+        // 🔧 CRITICAL FIX: Mark as scanned with failure status so it doesn't appear as "Processing"
         await prisma.Document.update({
           where: { id: document.id },
           data: {
-            isScanned: false,
-            scanResult: processingResult.scanResult || 'Processing failed',
+            isScanned: true,  // Mark as scanned to prevent "Processing" status
+            scanResult: `Processing failed: ${processingResult.error || 'Unknown error'}\n\nThe document could not be processed. This may be due to:\n- Corrupted or invalid file format\n- Unsupported PDF structure\n- Processing timeout\n\nYou can try re-uploading the document or contact support if the issue persists.`,
           }
         })
       }
@@ -450,12 +658,12 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         operation: 'document-processing-exception'
       })
       logger.error('Document processing error', docProcessingError, 'UPLOAD_API')
-      // Update with error status
+      // 🔧 CRITICAL FIX: Mark as scanned with error status so it doesn't appear as "Processing"
       await prisma.Document.update({
         where: { id: document.id },
         data: {
-          isScanned: false,
-          scanResult: 'Processing failed due to technical error',
+          isScanned: true,  // Mark as scanned to prevent "Processing" status
+          scanResult: `Processing failed: ${docProcessingError instanceof Error ? docProcessingError.message : 'Technical error occurred'}\n\nA technical error prevented the document from being processed.\n\nYou can try re-uploading the document or contact support if the issue persists.`,
         }
       })
     }
