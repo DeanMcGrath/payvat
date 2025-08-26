@@ -230,12 +230,48 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         fileName: finalFile.name,
         operation: 'upload-file-processing'
       })
-      return NextResponse.json({
-        success: false,
-        error: 'File processing failed. Please ensure the file is not corrupted and try again.',
-        step: 'FILE_PROCESSING_FAILED',
-        details: processingError instanceof Error ? processingError.message : String(processingError)
-      }, { status: 500 })
+      
+      // 🔧 CRITICAL FIX: Create document record even when file processing fails
+      // This ensures users can see what happened instead of getting a generic 500 error
+      try {
+        const failedDocument = await prisma.Document.create({
+          data: {
+            userId: userId,
+            fileName: `FAILED_${finalFile.name}`,
+            originalName: finalFile.name,
+            fileSize: finalFile.size,
+            mimeType: finalFile.type,
+            fileHash: 'failed-processing',
+            documentType: getDocumentType(path.extname(finalFile.name).toLowerCase()) as any,
+            category: category as any,
+            isScanned: true, // Mark as scanned immediately
+            scanResult: `File processing failed: ${processingError instanceof Error ? processingError.message : 'Unknown error'}\n\nThe file could not be processed. This may be due to:\n- Corrupted or invalid file format\n- Unsupported file type\n- File size or structure issues\n\nPlease try uploading a different file or contact support.`
+          }
+        })
+        
+        console.log(`✅ RECOVERY: Created failed document record ${failedDocument.id} so user can see the failure`)
+        
+        return NextResponse.json({
+          success: false,
+          error: 'File processing failed. Please ensure the file is not corrupted and try again.',
+          step: 'FILE_PROCESSING_FAILED',
+          details: processingError instanceof Error ? processingError.message : String(processingError),
+          document: {
+            id: failedDocument.id,
+            fileName: failedDocument.originalName,
+            status: 'Failed'
+          }
+        }, { status: 422 }) // Use 422 instead of 500 since we handled the error
+        
+      } catch (dbError) {
+        console.error('❌ CRITICAL: Could not create failed document record:', dbError)
+        return NextResponse.json({
+          success: false,
+          error: 'File processing failed. Please ensure the file is not corrupted and try again.',
+          step: 'FILE_PROCESSING_FAILED',
+          details: processingError instanceof Error ? processingError.message : String(processingError)
+        }, { status: 500 })
+      }
     }
     
     // Save document metadata to database
@@ -659,13 +695,19 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       })
       logger.error('Document processing error', docProcessingError, 'UPLOAD_API')
       // 🔧 CRITICAL FIX: Mark as scanned with error status so it doesn't appear as "Processing"
-      await prisma.Document.update({
-        where: { id: document.id },
-        data: {
-          isScanned: true,  // Mark as scanned to prevent "Processing" status
-          scanResult: `Processing failed: ${docProcessingError instanceof Error ? docProcessingError.message : 'Technical error occurred'}\n\nA technical error prevented the document from being processed.\n\nYou can try re-uploading the document or contact support if the issue persists.`,
-        }
-      })
+      try {
+        await prisma.Document.update({
+          where: { id: document.id },
+          data: {
+            isScanned: true,  // Mark as scanned to prevent "Processing" status
+            scanResult: `Processing failed: ${docProcessingError instanceof Error ? docProcessingError.message : 'Technical error occurred'}\n\nA technical error prevented the document from being processed.\n\nYou can try re-uploading the document or contact support if the issue persists.`,
+          }
+        })
+        console.log(`✅ RECOVERY: Document ${document.id} marked as failed to prevent stuck Processing status`)
+      } catch (updateError) {
+        console.error(`🚨 CRITICAL: Could not update document ${document.id} failure status:`, updateError)
+        // This is a critical failure - document will remain in Processing state
+      }
     }
     
     // Enhanced AI Processing - trigger after basic processing (ASYNC TO PREVENT TIMEOUT)

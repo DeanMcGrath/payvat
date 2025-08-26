@@ -2638,13 +2638,92 @@ CRITICAL:
     } catch (parseError) {
       console.error('🚨 Failed to parse GPT-4 response as JSON, trying fallback extraction:', parseError)
       
-      // Fallback: extract numbers from the response
+      // 🔧 CRITICAL FIX: Enhanced fallback extraction for all fields
+      console.log(`🔧 FALLBACK: JSON parsing failed, attempting comprehensive text extraction`)
+      console.log(`   AI Response preview: ${aiResult.substring(0, 200)}...`)
+      
+      // Extract dates from AI response text
+      let extractedDate = null
+      const datePatterns = [
+        /(?:invoice\s+date|date|due\s+date):\s*(\d{4}-\d{2}-\d{2})/i,
+        /(?:invoice\s+date|date|due\s+date):\s*(\d{1,2}\/\d{1,2}\/\d{4})/i,
+        /(?:invoice\s+date|date|due\s+date):\s*(\d{1,2}-\d{1,2}-\d{4})/i,
+        /(\d{4}-\d{2}-\d{2})/,
+        /(\d{1,2}\/\d{1,2}\/\d{4})/,
+        /(\d{1,2}-\d{1,2}-\d{4})/
+      ]
+      
+      for (const pattern of datePatterns) {
+        const dateMatch = aiResult.match(pattern)
+        if (dateMatch) {
+          try {
+            let dateString = dateMatch[1]
+            
+            // Convert DD/MM/YYYY to YYYY-MM-DD
+            if (dateString.includes('/')) {
+              const [day, month, year] = dateString.split('/')
+              dateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+            }
+            // Convert DD-MM-YYYY to YYYY-MM-DD  
+            else if (dateString.match(/^\d{1,2}-\d{1,2}-\d{4}$/)) {
+              const [day, month, year] = dateString.split('-')
+              dateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+            }
+            
+            const testDate = new Date(dateString)
+            if (!isNaN(testDate.getTime())) {
+              extractedDate = dateString
+              console.log(`✅ FALLBACK: Extracted date: ${extractedDate}`)
+              break
+            }
+          } catch (error) {
+            console.log(`   Failed to parse date: ${dateMatch[1]}`)
+          }
+        }
+      }
+      
+      // Extract invoice total from AI response text
+      let extractedTotal = null
+      const totalPatterns = [
+        /(?:total|grand\s+total|invoice\s+total|amount\s+due):\s*[€$£]?(\d+\.?\d*)/i,
+        /total.*?[€$£](\d+\.?\d*)/i,
+        /[€$£](\d+\.?\d*)\s*(?:total|grand|due)/i,
+        /(?:amount|sum):\s*[€$£]?(\d+\.?\d*)/i
+      ]
+      
+      for (const pattern of totalPatterns) {
+        const totalMatch = aiResult.match(pattern)
+        if (totalMatch) {
+          const amount = parseFloat(totalMatch[1])
+          if (!isNaN(amount) && amount > 0 && amount < 100000) { // Reasonable total range
+            extractedTotal = amount
+            console.log(`✅ FALLBACK: Extracted invoice total: €${extractedTotal}`)
+            break
+          }
+        }
+      }
+      
+      // Extract VAT amounts from the response
       const vatAmounts = aiResult.match(/\d+\.\d+/g) || []
       const foundNumbers = vatAmounts.map(n => parseFloat(n)).filter(n => n > 0 && n < 1000)
       
-      console.log(`🔧 FALLBACK: Found potential VAT amounts in GPT-4 response: ${foundNumbers.join(', ')}`)
+      // If no specific total found, use largest amount as total (common pattern)
+      if (!extractedTotal && foundNumbers.length > 0) {
+        const potentialTotals = foundNumbers.filter(n => n > 10) // Totals usually > €10
+        if (potentialTotals.length > 0) {
+          extractedTotal = Math.max(...potentialTotals)
+          console.log(`🔧 FALLBACK: Using largest amount as total: €${extractedTotal}`)
+        }
+      }
+      
+      console.log(`🔧 FALLBACK EXTRACTION RESULTS:`)
+      console.log(`   Date: ${extractedDate || 'Not found'}`)
+      console.log(`   Invoice Total: €${extractedTotal || 'Not found'}`)
+      console.log(`   VAT Amounts: [${foundNumbers.join(', ')}]`)
       
       parsedData = {
+        invoiceDate: extractedDate,
+        invoiceTotal: extractedTotal,
         totalVatAmount: foundNumbers.length > 0 ? Math.max(...foundNumbers) : null,
         lineItems: foundNumbers.map((amount, index) => ({
           description: `VAT Item ${index + 1}`,
