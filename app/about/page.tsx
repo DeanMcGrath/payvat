@@ -1,11 +1,11 @@
+"use client"
+
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About PayVAT Ireland - AI-Powered VAT Solutions for Irish Businesses',
   description: 'Learn about PayVAT Ireland\'s mission to simplify VAT compliance for Irish businesses. Trusted by 1,247+ companies. Expert team, AI technology, Revenue-compliant solutions.',
 }
-
-"use client"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"

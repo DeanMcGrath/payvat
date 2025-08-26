@@ -1,11 +1,11 @@
+"use client"
+
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'PayVAT FAQ - Common Questions About Irish VAT Submission Software',
   description: 'Get answers to frequently asked questions about PayVAT\'s VAT submission service. Pricing, free trial, registration, payment process, and Revenue compliance explained.',
 }
-
-"use client"
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
