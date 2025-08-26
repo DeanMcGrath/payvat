@@ -2411,18 +2411,35 @@ export async function processDocumentEnhanced(
     let result: ExtractedVATData
     const processingStart = Date.now()
 
-    switch (documentIntel.recommendedMethod) {
-      case 'AI_VISION':
-        result = await processWithAIVision(fileData, mimeType, fileName, category, documentIntel)
-        break
-      case 'EXCEL_PARSER':
-        result = await processWithExcelParser(fileData, fileName, category, documentIntel)
-        break
-      case 'OCR_TEXT':
-        result = await processWithOCRText(fileData, mimeType, fileName, category, documentIntel)
-        break
-      default:
+    try {
+      switch (documentIntel.recommendedMethod) {
+        case 'AI_VISION':
+          console.log('🤖 Attempting AI Vision processing...')
+          result = await processWithAIVision(fileData, mimeType, fileName, category, documentIntel)
+          break
+        case 'EXCEL_PARSER':
+          console.log('📊 Attempting Excel parsing...')
+          result = await processWithExcelParser(fileData, fileName, category, documentIntel)
+          break
+        case 'OCR_TEXT':
+          console.log('📝 Attempting OCR text processing...')
+          result = await processWithOCRText(fileData, mimeType, fileName, category, documentIntel)
+          break
+        default:
+          console.log('🔄 Using fallback processing method...')
+          result = await processWithFallback(fileData, mimeType, fileName, category)
+      }
+      console.log('✅ Enhanced processing method succeeded:', documentIntel.recommendedMethod)
+    } catch (processingError) {
+      console.error('🚨 Enhanced processing method failed:', documentIntel.recommendedMethod, processingError)
+      console.log('🔄 Attempting fallback processing as last resort...')
+      try {
         result = await processWithFallback(fileData, mimeType, fileName, category)
+        console.log('✅ Fallback processing succeeded')
+      } catch (fallbackError) {
+        console.error('🚨 All processing methods failed:', fallbackError)
+        throw new Error(`Enhanced processing failed: ${processingError instanceof Error ? processingError.message : 'Unknown error'}`)
+      }
     }
 
     processingSteps.push({
@@ -2594,13 +2611,38 @@ async function processWithAIVision(
   console.log('🤖 AI Vision processing with Irish VAT optimization...')
   
   if (!isAIEnabled()) {
-    throw new Error('AI Vision processing requires OpenAI API configuration')
+    console.log('⚠️ AI not available, falling back to legacy processing for AI Vision')
+    // Fallback to legacy processing instead of throwing error
+    const legacyResult = await processDocument(fileData, mimeType, fileName, category)
+    if (legacyResult.success && legacyResult.extractedData) {
+      return legacyResult.extractedData
+    } else {
+      throw new Error('Both AI Vision and legacy processing failed')
+    }
   }
   
-  const result = await processDocumentWithAI(fileData, mimeType, fileName, category)
+  let result
+  try {
+    result = await processDocumentWithAI(fileData, mimeType, fileName, category)
+  } catch (aiError) {
+    console.log('🚨 AI Vision processing failed, falling back to legacy processing')
+    console.error('AI Error:', aiError)
+    const legacyResult = await processDocument(fileData, mimeType, fileName, category)
+    if (legacyResult.success && legacyResult.extractedData) {
+      return legacyResult.extractedData
+    } else {
+      throw new Error('Both AI Vision and legacy processing failed: ' + (aiError instanceof Error ? aiError.message : 'Unknown error'))
+    }
+  }
   
   if (!result.success || !result.extractedData) {
-    throw new Error('AI Vision processing failed: ' + result.error)
+    console.log('🚨 AI Vision returned failure, falling back to legacy processing')
+    const legacyResult = await processDocument(fileData, mimeType, fileName, category)
+    if (legacyResult.success && legacyResult.extractedData) {
+      return legacyResult.extractedData
+    } else {
+      throw new Error('AI Vision processing failed: ' + result.error)
+    }
   }
   
   // Map AI document types to ExtractedVATData enum
@@ -2641,21 +2683,32 @@ async function processWithExcelParser(
 ): Promise<ExtractedVATData> {
   console.log('📊 Excel processing with WooCommerce optimization...')
   
-  // Use existing Excel processing logic but with enhancements
-  const textResult = await extractTextFromExcel(fileData, fileName)
-  if (!textResult.success || !textResult.text) {
-    throw new Error('Excel parsing failed: ' + textResult.error)
-  }
-  
-  // Enhanced VAT extraction from Excel text
-  const vatData = await extractVATFromText(textResult.text, category)
-  
-  return {
-    ...vatData,
-    processingMethod: 'EXCEL_PARSER',
-    processingTimeMs: 0,
-    validationFlags: [],
-    irishVATCompliant: false
+  try {
+    // Use existing Excel processing logic but with enhancements
+    const textResult = await extractTextFromExcel(fileData, fileName)
+    if (!textResult.success || !textResult.text) {
+      throw new Error('Excel parsing failed: ' + textResult.error)
+    }
+    
+    // Enhanced VAT extraction from Excel text
+    const vatData = await extractVATFromText(textResult.text, category)
+    
+    return {
+      ...vatData,
+      processingMethod: 'EXCEL_PARSER',
+      processingTimeMs: 0,
+      validationFlags: [],
+      irishVATCompliant: false
+    }
+  } catch (excelError) {
+    console.log('🚨 Excel parsing failed, falling back to legacy processing')
+    console.error('Excel Error:', excelError)
+    const legacyResult = await processDocument(fileData, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', fileName, category)
+    if (legacyResult.success && legacyResult.extractedData) {
+      return legacyResult.extractedData
+    } else {
+      throw new Error('Both Excel parsing and legacy processing failed: ' + (excelError instanceof Error ? excelError.message : 'Unknown error'))
+    }
   }
 }
 
@@ -2671,19 +2724,30 @@ async function processWithOCRText(
 ): Promise<ExtractedVATData> {
   console.log('📝 OCR text processing...')
   
-  const textResult = await extractTextFromDocument(fileData, mimeType, fileName)
-  if (!textResult.success || !textResult.text) {
-    throw new Error('OCR text extraction failed: ' + textResult.error)
-  }
-  
-  const vatData = await extractVATFromText(textResult.text, category)
-  
-  return {
-    ...vatData,
-    processingMethod: 'OCR_TEXT',
-    processingTimeMs: 0,
-    validationFlags: [],
-    irishVATCompliant: false
+  try {
+    const textResult = await extractTextFromDocument(fileData, mimeType, fileName)
+    if (!textResult.success || !textResult.text) {
+      throw new Error('OCR text extraction failed: ' + textResult.error)
+    }
+    
+    const vatData = await extractVATFromText(textResult.text, category)
+    
+    return {
+      ...vatData,
+      processingMethod: 'OCR_TEXT',
+      processingTimeMs: 0,
+      validationFlags: [],
+      irishVATCompliant: false
+    }
+  } catch (ocrError) {
+    console.log('🚨 OCR text processing failed, falling back to legacy processing')
+    console.error('OCR Error:', ocrError)
+    const legacyResult = await processDocument(fileData, mimeType, fileName, category)
+    if (legacyResult.success && legacyResult.extractedData) {
+      return legacyResult.extractedData
+    } else {
+      throw new Error('Both OCR text processing and legacy processing failed: ' + (ocrError instanceof Error ? ocrError.message : 'Unknown error'))
+    }
   }
 }
 
@@ -2696,9 +2760,21 @@ async function processWithFallback(
   fileName: string,
   category: string
 ): Promise<ExtractedVATData> {
-  console.log('🔄 Fallback processing...')
+  console.log('🔄 Fallback processing using legacy method...')
   
-  // Basic processing with minimal features
+  try {
+    const legacyResult = await processDocument(fileData, mimeType, fileName, category)
+    if (legacyResult.success && legacyResult.extractedData) {
+      return {
+        ...legacyResult.extractedData,
+        processingMethod: 'FALLBACK'
+      }
+    }
+  } catch (error) {
+    console.error('Legacy processing also failed:', error)
+  }
+  
+  // Last resort - return minimal data structure
   return {
     salesVAT: [],
     purchaseVAT: [],
