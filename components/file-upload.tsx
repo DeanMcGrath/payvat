@@ -41,6 +41,25 @@ interface ProcessingState {
   qualityScore?: number
 }
 
+type FileLifecycleStatus = 'uploading' | 'uploaded' | 'processing' | 'processed' | 'needs_review' | 'failed'
+
+interface FileResult {
+  status: FileLifecycleStatus
+  document?: UploadedDocument
+  error?: string
+  validation?: {
+    passed: boolean
+    reasons: string[]
+    warnings: string[]
+  }
+  extracted?: {
+    invoiceDate: string | null
+    invoiceTotal: number | null
+    vatAmount: number
+    confidence: number
+  }
+}
+
 interface FileUploadProps {
   category: 'SALES' | 'PURCHASES'
   title: string
@@ -79,7 +98,7 @@ export default function FileUpload({
   // Batch upload state
   const [uploadQueue, setUploadQueue] = useState<File[]>([])
   const [currentUploads, setCurrentUploads] = useState<Set<string>>(new Set())
-  const [uploadResults, setUploadResults] = useState<Map<string, {status: 'success' | 'error' | 'uploading', document?: UploadedDocument, error?: string}>>(new Map())
+  const [uploadResults, setUploadResults] = useState<Map<string, FileResult>>(new Map())
   const [batchProgress, setBatchProgress] = useState({ completed: 0, total: 0, failed: 0 })
   const [isPaused, setIsPaused] = useState(false)
   const safeConcurrentUploads = Math.max(1, Math.min(maxConcurrentUploads, 2))
@@ -187,27 +206,12 @@ export default function FileUpload({
         toast.success(`Starting upload of ${validFiles.length} files...`)
       }
 
-      // Handle batch or sequential upload based on file count
       console.log(`Starting upload of ${validFiles.length} valid files`)
-      if (validFiles.length > 1) {
-        // Initialize batch progress for multiple files
-        setBatchProgress({ completed: 0, total: validFiles.length, failed: 0 })
-        setUploadQueue(validFiles)
-        setUploadResults(new Map())
-        
-        // Start concurrent uploads and wait for completion before clearing state
-        await processBatchQueue(validFiles)
-      } else {
-        // Sequential upload for single files
-        for (const file of validFiles) {
-          console.log(`About to upload file: ${file.name}`)
-          await uploadFile(file)
-          console.log(`Finished uploading file: ${file.name}`)
-        }
-      }
-      
-      // All files uploaded successfully - reset states
-      console.log('All files uploaded successfully, resetting upload state')
+      setBatchProgress({ completed: 0, total: validFiles.length, failed: 0 })
+      setUploadQueue(validFiles)
+      setUploadResults(new Map())
+      await processBatchQueue(validFiles)
+
       setIsUploading(false)
       
       // Reset file input to allow re-selection of the same files if needed
@@ -231,31 +235,63 @@ export default function FileUpload({
   // Batch queue processing with concurrent uploads
   const processBatchQueue = async (files: File[]) => {
     const activeUploads = new Set<string>()
-    const results = new Map<string, any>()
+    const results = new Map<string, FileResult>()
     let completedCount = 0
     let failedCount = 0
+    let processedCount = 0
+    let needsReviewCount = 0
 
     const processFile = async (file: File) => {
       const fileId = `${file.name}_${file.lastModified}`
       activeUploads.add(fileId)
       setCurrentUploads(new Set(activeUploads))
       
-      // Update upload results to show uploading status
+      // Uploading
       results.set(fileId, { status: 'uploading' })
       setUploadResults(new Map(results))
 
       try {
         // Use user's original category choice - no smart override
-        const uploadedDocument = await uploadFileBatch(file, category)
+        const uploadOutcome = await uploadFileBatch(file, category)
         
-        results.set(fileId, { status: 'success', document: uploadedDocument })
+        // Uploaded + processing transitions for transparent lifecycle
+        results.set(fileId, {
+          status: 'uploaded',
+          document: uploadOutcome.document
+        })
+        setUploadResults(new Map(results))
+
+        results.set(fileId, {
+          status: 'processing',
+          document: uploadOutcome.document
+        })
+        setUploadResults(new Map(results))
+
+        const terminalStatus = uploadOutcome.processingOutcome?.processingStatus === 'processed'
+          ? 'processed'
+          : uploadOutcome.processingOutcome?.processingStatus === 'needs_review'
+          ? 'needs_review'
+          : uploadOutcome.processingOutcome?.processingStatus === 'failed'
+          ? 'failed'
+          : 'needs_review'
+
+        results.set(fileId, {
+          status: terminalStatus,
+          document: uploadOutcome.document,
+          validation: uploadOutcome.processingOutcome?.validation,
+          extracted: uploadOutcome.processingOutcome?.extracted
+        })
         completedCount++
-        
-        toast.success(`✅ ${file.name} uploaded successfully`)
+        if (terminalStatus === 'processed') {
+          processedCount++
+        } else if (terminalStatus === 'needs_review') {
+          needsReviewCount++
+        } else {
+          failedCount++
+        }
       } catch (error) {
-        results.set(fileId, { status: 'error', error: error instanceof Error ? error.message : 'Upload failed' })
+        results.set(fileId, { status: 'failed', error: error instanceof Error ? error.message : 'Upload failed' })
         failedCount++
-        toast.error(`❌ ${file.name} upload failed`)
       } finally {
         activeUploads.delete(fileId)
         setCurrentUploads(new Set(activeUploads))
@@ -276,18 +312,24 @@ export default function FileUpload({
     }
 
     // Show batch completion summary
-    if (completedCount > 0 || failedCount > 0) {
-      if (failedCount === 0) {
-        toast.success(`Batch upload complete: ${completedCount} successful`)
-      } else if (completedCount === 0) {
-        toast.error(`Batch upload failed: ${failedCount} failed`)
-      } else {
-        toast.error(`Batch upload partial success: ${completedCount} successful, ${failedCount} failed`)
-      }
+    if (completedCount > 0 || failedCount > 0 || needsReviewCount > 0) {
+      toast.info(
+        `Batch complete: ${processedCount} processed, ${needsReviewCount} needs review, ${failedCount} failed`
+      )
     }
   }
 
-  const uploadFileBatch = async (file: File, fileCategory: 'SALES' | 'PURCHASES'): Promise<UploadedDocument> => {
+  const uploadFileBatch = async (
+    file: File,
+    fileCategory: 'SALES' | 'PURCHASES'
+  ): Promise<{
+    document: UploadedDocument
+    processingOutcome?: {
+      processingStatus: FileLifecycleStatus
+      validation: { passed: boolean; reasons: string[]; warnings: string[] }
+      extracted: { invoiceDate: string | null; invoiceTotal: number | null; vatAmount: number; confidence: number }
+    }
+  }> => {
     const formData = new FormData()
     formData.append('file', file)
     const categoryValue = getCategoryValue(fileCategory, file.name)
@@ -316,11 +358,10 @@ export default function FileUpload({
 
     const newDocument: UploadedDocument = result.document
     setUploadedFiles(prev => [...prev, newDocument])
-    
-    // Trigger processing without blocking
-    processDocumentInBackground(newDocument)
-    
-    return newDocument
+    return {
+      document: newDocument,
+      processingOutcome: result.processingOutcome
+    }
   }
 
   const processDocumentInBackground = async (document: UploadedDocument) => {
@@ -662,19 +703,11 @@ export default function FileUpload({
     
     setIsUploading(true)
     
-    // Handle batch or sequential upload based on file count
-    if (validFiles.length > 1) {
-      setBatchProgress({ completed: 0, total: validFiles.length, failed: 0 })
-      setUploadResults(new Map())
-      await processBatchQueue(validFiles)
-      setIsUploading(false)
-    } else {
-      // Sequential upload for single files
-      for (const file of validFiles) {
-        await uploadFile(file)
-      }
-      setIsUploading(false)
-    }
+    setBatchProgress({ completed: 0, total: validFiles.length, failed: 0 })
+    setUploadQueue(validFiles)
+    setUploadResults(new Map())
+    await processBatchQueue(validFiles)
+    setIsUploading(false)
   }
 
   // Batch control functions
@@ -699,10 +732,10 @@ export default function FileUpload({
 
   const retryFailed = () => {
     const failedFiles = Array.from(uploadResults.entries())
-      .filter(([, result]) => result.status === 'error')
+      .filter(([, result]) => result.status === 'failed')
       .map(([fileId]) => {
-        // Extract file info from fileId (this is a simplified approach)
-        const fileName = fileId.split('_')[0]
+        const separatorIndex = fileId.lastIndexOf('_')
+        const fileName = separatorIndex > 0 ? fileId.slice(0, separatorIndex) : fileId
         return uploadQueue.find(f => f.name === fileName)
       })
       .filter(Boolean) as File[]
@@ -717,7 +750,7 @@ export default function FileUpload({
       setUploadResults(newResults)
       
       // Restart upload for failed files
-      processBatchQueue(failedFiles)
+      void processBatchQueue(failedFiles)
       toast.info(`Retrying ${failedFiles.length} failed uploads`)
     }
   }
@@ -924,24 +957,63 @@ export default function FileUpload({
 
           {uploadResults.size > 0 && (
             <div className="mt-3 space-y-2 max-h-40 overflow-auto">
+              <div className="grid grid-cols-3 gap-2 text-xs">
+                <div className="rounded-md border bg-white px-2 py-1 text-green-700">
+                  Processed: {Array.from(uploadResults.values()).filter(r => r.status === 'processed').length}
+                </div>
+                <div className="rounded-md border bg-white px-2 py-1 text-amber-700">
+                  Needs review: {Array.from(uploadResults.values()).filter(r => r.status === 'needs_review').length}
+                </div>
+                <div className="rounded-md border bg-white px-2 py-1 text-red-700">
+                  Failed: {Array.from(uploadResults.values()).filter(r => r.status === 'failed').length}
+                </div>
+              </div>
               {Array.from(uploadResults.entries()).map(([fileId, result]) => (
-                <div key={fileId} className="flex items-center justify-between text-xs bg-white border rounded-md px-2 py-1.5">
-                  <span className="truncate max-w-[45%]" title={fileId.split('_')[0]}>
-                    {fileId.split('_')[0]}
-                  </span>
-                  <span className={
-                    result.status === 'success'
-                      ? 'text-green-700'
-                      : result.status === 'error'
-                      ? 'text-red-700'
-                      : 'text-blue-700'
-                  }>
-                    {result.status === 'success' ? 'Uploaded' : result.status === 'error' ? 'Failed' : 'Uploading'}
-                  </span>
-                  {result.status === 'error' && result.error && (
-                    <span className="truncate text-red-600 max-w-[45%]" title={result.error}>
-                      {result.error}
+                <div key={fileId} className="text-xs bg-white border rounded-md px-2 py-2 space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="truncate max-w-[50%]" title={fileId.split('_')[0]}>
+                      {fileId.split('_')[0]}
                     </span>
+                    <span
+                      className={
+                        result.status === 'processed'
+                          ? 'text-green-700'
+                          : result.status === 'needs_review'
+                          ? 'text-amber-700'
+                          : result.status === 'failed'
+                          ? 'text-red-700'
+                          : 'text-blue-700'
+                      }
+                    >
+                      {{
+                        uploading: 'Uploading',
+                        uploaded: 'Uploaded',
+                        processing: 'Processing',
+                        processed: 'Processed',
+                        needs_review: 'Needs review',
+                        failed: 'Failed'
+                      }[result.status]}
+                    </span>
+                  </div>
+                  {(result.extracted || result.validation || result.error) && (
+                    <div className="text-[11px] text-neutral-600 space-y-0.5">
+                      {result.extracted && (
+                        <div>
+                          Date: {result.extracted.invoiceDate ? new Date(result.extracted.invoiceDate).toLocaleDateString('en-IE') : '—'} | Total: {typeof result.extracted.invoiceTotal === 'number' ? `€${result.extracted.invoiceTotal.toFixed(2)}` : '—'} | VAT: {`€${(result.extracted.vatAmount || 0).toFixed(2)}`} | Confidence: {`${Math.round((result.extracted.confidence || 0) * 100)}%`}
+                        </div>
+                      )}
+                      {result.validation?.reasons?.length ? (
+                        <div className="text-amber-700">
+                          {result.validation.reasons.join(' • ')}
+                        </div>
+                      ) : null}
+                      {result.validation?.warnings?.length ? (
+                        <div className="text-sky-700">
+                          {result.validation.warnings.join(' • ')}
+                        </div>
+                      ) : null}
+                      {result.error ? <div className="text-red-700">{result.error}</div> : null}
+                    </div>
                   )}
                 </div>
               ))}

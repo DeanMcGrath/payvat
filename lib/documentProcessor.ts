@@ -1394,11 +1394,222 @@ export function extractVATDataFromText(
   }
   
   // Normalize text for processing
-  const normalizedText = text.toLowerCase().replace(/\s+/g, ' ').trim()
+  const sanitizedText = text.replace(/\u00a0/g, ' ')
+  const normalizedText = sanitizedText.toLowerCase().replace(/\s+/g, ' ').trim()
+  const compactText = sanitizedText.replace(/\r/g, '')
   extractedText.push(text)
+  const vendorHints = {
+    isThree: /three\s+ireland|this month'?s invoice/i.test(compactText),
+    isVolkswagen: /volkswagen\s+financial|vw\s+financial/i.test(compactText),
+    isGoogle: /google\s+workspace|google ireland|google cloud emea/i.test(compactText),
+    isDropbox: /dropbox/i.test(compactText),
+    isEurobase: /eurobase/i.test(compactText),
+    isCallCentre: /callcentre\s+solutions|call centre solutions/i.test(compactText),
+    isTAS: /tas\s+consulting|tas consulting/i.test(compactText),
+  }
   
   // Analyze document type for smart categorization
   const docAnalysis = analyzeDocumentType(text)
+
+  const normalizeCurrencyValue = (raw: string | undefined): number | null => {
+    if (!raw) return null
+    const normalized = raw.replace(/[€¤,\s]/g, '')
+    const num = Number(normalized)
+    if (!Number.isFinite(num) || num <= 0 || num > 1000000) return null
+    return Math.round(num * 100) / 100
+  }
+
+  const parseDateToken = (raw: string | undefined): string | undefined => {
+    if (!raw) return undefined
+    const monthMap: Record<string, string> = {
+      jan: '01', january: '01', feb: '02', february: '02', mar: '03', march: '03',
+      apr: '04', april: '04', may: '05', jun: '06', june: '06', jul: '07', july: '07',
+      aug: '08', august: '08', sep: '09', september: '09', oct: '10', october: '10',
+      nov: '11', november: '11', dec: '12', december: '12'
+    }
+
+    const iso = raw.match(/\b(\d{4})-(\d{2})-(\d{2})\b/)
+    if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`
+
+    const dmy = raw.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/)
+    if (dmy) {
+      const year = dmy[3].length === 2 ? `20${dmy[3]}` : dmy[3]
+      return `${year}-${dmy[2].padStart(2, '0')}-${dmy[1].padStart(2, '0')}`
+    }
+
+    const monthNameFirst = raw.match(/([a-z]{3,9})\s+(\d{1,2}),\s*(\d{4})/i)
+    if (monthNameFirst) {
+      const month = monthMap[monthNameFirst[1].toLowerCase()]
+      if (month) return `${monthNameFirst[3]}-${month}-${monthNameFirst[2].padStart(2, '0')}`
+    }
+
+    const dayMonthName = raw.match(/(\d{1,2})\s+([a-z]{3,9})\s+(\d{2,4})/i)
+    if (dayMonthName) {
+      const month = monthMap[dayMonthName[2].toLowerCase()]
+      const year = dayMonthName[3].length === 2 ? `20${dayMonthName[3]}` : dayMonthName[3]
+      if (month) return `${year}-${month}-${dayMonthName[1].padStart(2, '0')}`
+    }
+    return undefined
+  }
+
+  // Targeted vendor-grade parsing for known recurring invoice families
+  if (/sin-\d+/i.test(fileName) || /invoice no\.?\s*sin-\d+/i.test(compactText)) {
+    const sinVatCandidates = [
+      ...compactText.matchAll(/\bvat\s*amount\b\D{0,40}([0-9]+(?:[.,][0-9]{2})?)/gi),
+      ...compactText.matchAll(/\bvat\s*amount\b([0-9]+(?:[.,][0-9]{2})?)/gi)
+    ].map(match => normalizeCurrencyValue(match[1])).filter((value): value is number => typeof value === 'number')
+    const sinTotal = normalizeCurrencyValue(
+      compactText.match(/total\s*[€¤]?\s*incl\.?\s*vat[^0-9€¤]{0,20}[€¤]?\s*([0-9,]+\.?[0-9]*)/i)?.[1]
+    )
+      || normalizeCurrencyValue(
+        compactText.match(/total[^0-9€¤]{0,15}[€¤]\s*incl\.?\s*vat[^0-9€¤]{0,20}([0-9,]+\.?[0-9]*)/i)?.[1]
+      )
+    const sinSubtotal = normalizeCurrencyValue(
+      compactText.match(/subtotal[^0-9€¤]{0,20}[€¤]?\s*([0-9,]+\.?[0-9]*)/i)?.[1]
+    )
+    let sinVat = sinVatCandidates.length > 0 ? sinVatCandidates[sinVatCandidates.length - 1] : null
+    if (sinTotal && sinVatCandidates.length > 0) {
+      const plausibleVatCandidates = sinVatCandidates.filter(value => value > 0 && value < sinTotal * 0.6)
+      if (plausibleVatCandidates.length > 0) {
+        const targetVat = sinTotal * 0.23
+        plausibleVatCandidates.sort((a, b) => Math.abs(a - targetVat) - Math.abs(b - targetVat))
+        sinVat = plausibleVatCandidates[0]
+      }
+    }
+    if (!sinVat && sinSubtotal && sinTotal && sinTotal > sinSubtotal) {
+      const derivedVat = Math.round((sinTotal - sinSubtotal) * 100) / 100
+      if (derivedVat > 0 && derivedVat < sinTotal * 0.6) {
+        sinVat = derivedVat
+      }
+    }
+    const sinDate = parseDateToken(
+      compactText.match(/document date[^0-9]{0,20}([0-9]{1,2}\s+[a-z]{3,9}\s+[0-9]{2,4})/i)?.[1]
+      || compactText.match(/invoice date[^0-9]{0,20}([0-9]{1,2}\s+[a-z]{3,9}\s+[0-9]{2,4})/i)?.[1]
+    )
+    if (sinVat && sinTotal) {
+      return {
+        salesVAT: category.includes('SALES') ? [sinVat] : [],
+        purchaseVAT: category.includes('PURCHASE') ? [sinVat] : [],
+        totalAmount: sinTotal,
+        confidence: sinDate ? 0.96 : 0.86,
+        extractedText: [text],
+        documentType: category.includes('SALES') ? 'SALES_INVOICE' : 'PURCHASE_INVOICE',
+        invoiceDate: sinDate,
+        processingMethod: 'OCR_TEXT',
+        processingTimeMs: 0,
+        validationFlags: sinDate ? ['SIN_VENDOR_PARSE'] : ['SIN_VENDOR_PARSE', 'MISSING_INVOICE_DATE', 'REQUIRES_MANUAL_REVIEW'],
+        irishVATCompliant: true
+      }
+    }
+  }
+
+  if (vendorHints.isThree) {
+    const threeVat = normalizeCurrencyValue(compactText.match(/vat at\s*([0-9,\s.]+)\s*23%/i)?.[1])
+    const threeTotal = normalizeCurrencyValue(compactText.match(/this month'?s invoice\s*\(incl\.?\s*vat\)\s*[:\s]*[€¤]?([0-9,\s.]+)/i)?.[1])
+    const threeDateRaw =
+      compactText.match(/([0-9]{1,2}\s+[a-z]{3,9}\s+[0-9]{2,4})\s+your bill number/i)?.[1]
+      || compactText.match(/bill date[^0-9]{0,40}([0-9]{1,2}\s+[a-z]{3,9}\s+[0-9]{2,4})/i)?.[1]
+      || compactText.match(/payments received by\s+([0-9]{1,2}\s+[a-z]{3,9}\s+[0-9]{2,4})/i)?.[1]
+    const threeDate = parseDateToken(threeDateRaw)
+    if (threeVat && threeTotal) {
+      return {
+        salesVAT: category.includes('SALES') ? [threeVat] : [],
+        purchaseVAT: category.includes('PURCHASE') ? [threeVat] : [],
+        totalAmount: threeTotal,
+        confidence: threeDate ? 0.95 : 0.85,
+        extractedText: [text],
+        documentType: category.includes('SALES') ? 'SALES_INVOICE' : 'PURCHASE_INVOICE',
+        invoiceDate: threeDate,
+        processingMethod: 'OCR_TEXT',
+        processingTimeMs: 0,
+        validationFlags: threeDate ? ['THREE_VENDOR_PARSE'] : ['THREE_VENDOR_PARSE', 'MISSING_INVOICE_DATE', 'REQUIRES_MANUAL_REVIEW'],
+        irishVATCompliant: true
+      }
+    }
+  }
+
+  if (vendorHints.isGoogle) {
+    const totalsTriple = compactText.match(/total in eur\s*[€¤]?([0-9.,]+)\s*[€¤]?([0-9.,]+)\s*[€¤]?([0-9.,]+)/i)
+    const googleVat = normalizeCurrencyValue(totalsTriple?.[2] || compactText.match(/vat\s*\(23%\)\s*[€¤]?([0-9.,]+)/i)?.[1])
+    const googleTotal = normalizeCurrencyValue(totalsTriple?.[3] || compactText.match(/total in eur\s*[€¤]?([0-9.,]+)/i)?.[1])
+    const googleDate = parseDateToken(compactText.match(/invoice date[^0-9a-z]{0,20}([a-z]{3,9}\s+\d{1,2},\s+\d{4}|\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/i)?.[1])
+    if (googleVat && googleTotal) {
+      return {
+        salesVAT: category.includes('SALES') ? [googleVat] : [],
+        purchaseVAT: category.includes('PURCHASE') ? [googleVat] : [],
+        totalAmount: googleTotal,
+        confidence: googleDate ? 0.94 : 0.82,
+        extractedText: [text],
+        documentType: category.includes('SALES') ? 'SALES_INVOICE' : 'PURCHASE_INVOICE',
+        invoiceDate: googleDate,
+        processingMethod: 'OCR_TEXT',
+        processingTimeMs: 0,
+        validationFlags: googleDate ? ['GOOGLE_VENDOR_PARSE'] : ['GOOGLE_VENDOR_PARSE', 'MISSING_INVOICE_DATE', 'REQUIRES_MANUAL_REVIEW'],
+        irishVATCompliant: true
+      }
+    }
+  }
+
+  if (vendorHints.isVolkswagen) {
+    let vwVat = normalizeCurrencyValue(compactText.match(/total amount vat[^0-9€¤]{0,30}[€¤]?([0-9.,]+)/i)?.[1])
+      || normalizeCurrencyValue(compactText.match(/([0-9.,]+)\s*total amount vat/i)?.[1])
+    const vwEuroAmounts = [...compactText.matchAll(/[€¤]\s*([0-9]+\.[0-9]{2})/g)].map(m => normalizeCurrencyValue(m[1])).filter((v): v is number => typeof v === 'number')
+    const vwTotal = normalizeCurrencyValue(compactText.match(/invoice amount including vat[^0-9€¤]{0,30}[€¤]?([0-9.,]+)/i)?.[1])
+      || normalizeCurrencyValue(compactText.match(/€\s*([0-9.,]+)\s*contract\/vehicle registration number/i)?.[1])
+      || (vwEuroAmounts.length ? Math.max(...vwEuroAmounts) : null)
+    const vwDate = parseDateToken(compactText.match(/invoice date[^0-9]{0,40}([0-9]{1,2}[\/\-][0-9]{1,2}[\/\-][0-9]{2,4})/i)?.[1])
+      || parseDateToken(compactText.match(/(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4})/)?.[1])
+    if (vwTotal && (!vwVat || vwVat > vwTotal * 0.6)) {
+      const candidateAmounts = vwEuroAmounts.filter(a => a > 0 && a < vwTotal * 0.5)
+      if (candidateAmounts.length) {
+        const targetVat = vwTotal * 0.23
+        candidateAmounts.sort((a, b) => Math.abs(a - targetVat) - Math.abs(b - targetVat))
+        vwVat = candidateAmounts[0]
+      }
+    }
+    if (vwVat && vwTotal) {
+      return {
+        salesVAT: category.includes('SALES') ? [vwVat] : [],
+        purchaseVAT: category.includes('PURCHASE') ? [vwVat] : [],
+        totalAmount: vwTotal,
+        confidence: vwDate ? 0.96 : 0.84,
+        extractedText: [text],
+        documentType: category.includes('SALES') ? 'SALES_INVOICE' : 'PURCHASE_INVOICE',
+        invoiceDate: vwDate,
+        processingMethod: 'OCR_TEXT',
+        processingTimeMs: 0,
+        validationFlags: vwDate ? ['VW_VENDOR_PARSE'] : ['VW_VENDOR_PARSE', 'MISSING_INVOICE_DATE', 'REQUIRES_MANUAL_REVIEW'],
+        irishVATCompliant: true
+      }
+    }
+  }
+
+  if (vendorHints.isCallCentre || vendorHints.isTAS || /brianc-\d+/i.test(fileName)) {
+    const ccVat = normalizeCurrencyValue(compactText.match(/vat\s*@\s*23%\D*([0-9]+\.[0-9]{2})/i)?.[1])
+      || normalizeCurrencyValue(compactText.match(/vat\s*\(23\.?0*%?\)\s*[:\s]*[€¤]?([0-9.,]+)/i)?.[1])
+    const ccTotal = normalizeCurrencyValue(compactText.match(/total now due\s*[€¤]?([0-9.,]+)/i)?.[1])
+      || normalizeCurrencyValue(compactText.match(/\btotal\b:\s*[€¤]?([0-9.,]+)/i)?.[1])
+      || normalizeCurrencyValue(compactText.match(/invoice total\s*[:\s]*[€¤]?([0-9.,]+)/i)?.[1])
+      || normalizeCurrencyValue(compactText.match(/amount due\s*\(eur\)\s*[:\s]*[€¤]?([0-9.,]+)/i)?.[1])
+      || normalizeCurrencyValue(compactText.match(/[€¤]\s*([0-9]+\.[0-9]{2})\s*terms/i)?.[1])
+    const ccDate = parseDateToken(compactText.match(/invoice date[:\s]*([0-9]{1,2}[\/\-][0-9]{1,2}[\/\-][0-9]{2,4})/i)?.[1])
+      || parseDateToken(compactText.match(/([a-z]{3,9}\s+\d{1,2},\s+\d{4})/i)?.[1])
+    if (ccVat && ccTotal) {
+      return {
+        salesVAT: category.includes('SALES') ? [ccVat] : [],
+        purchaseVAT: category.includes('PURCHASE') ? [ccVat] : [],
+        totalAmount: ccTotal,
+        confidence: ccDate ? 0.95 : 0.83,
+        extractedText: [text],
+        documentType: category.includes('SALES') ? 'SALES_INVOICE' : 'PURCHASE_INVOICE',
+        invoiceDate: ccDate,
+        processingMethod: 'OCR_TEXT',
+        processingTimeMs: 0,
+        validationFlags: ccDate ? ['SERVICE_VENDOR_PARSE'] : ['SERVICE_VENDOR_PARSE', 'MISSING_INVOICE_DATE', 'REQUIRES_MANUAL_REVIEW'],
+        irishVATCompliant: true
+      }
+    }
+  }
   
   // ENHANCED: Prioritized VAT amount patterns with comprehensive format coverage
   const highPriorityVATPatterns = [
@@ -1413,6 +1624,8 @@ export function extractVATDataFromText(
     /total\s+vat\s+amount[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s+total[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /vat\s*amount[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /vat at\s*23%[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /\+\s*vat\s*\(23%?\)\s*[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     
     // Pattern 3: VAT: €92.00
     /VAT\s*:\s*€([0-9,]+\.?[0-9]*)/gi,
@@ -1454,18 +1667,12 @@ export function extractVATDataFromText(
   ]
   
   const genericVATPatterns = [
-    // Pattern 8: VAT 92.00 (without currency symbol)
-    /VAT\s*([0-9,]+\.?[0-9]*)/gi,
-    
-    // Pattern 9: Multiple currency formats
-    /VAT[^0-9]*([0-9,]+\.?[0-9]*)/gi,
-    
-    // Pattern 10: Line items with percentages
+    // Pattern 8: Line items with percentages
     /([0-9.]+)%[^€]*€([0-9,]+\.?[0-9]*)/gi,
     
     // Generic VAT patterns (lower priority)
-    /(?:total\s+)?vat[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
-    /(?:total\s+)?tax[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /(?:total\s+)?vat[:\s]*€([0-9,]+\.?[0-9]*)/gi,
+    /(?:total\s+)?tax[:\s]*€([0-9,]+\.?[0-9]*)/gi,
     
     // VAT table row patterns
     /min\s+€?([0-9,]+\.?[0-9]*)/gi,
@@ -1493,16 +1700,38 @@ export function extractVATDataFromText(
     /payment\s+due[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
   ]
   
-  // Total amount patterns
+  // Total amount patterns (ordered from most explicit to generic)
   const totalPatterns = [
-    /total[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
-    /amount\s*due[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
-    /grand\s*total[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
+    /this month'?s invoice\s*\(incl\.?\s*vat\)\s*[:\s]*€?([0-9,\s]+\.?[0-9]*)/gi,
+    /invoice total[:\s]*€?([0-9,\s]+\.?[0-9]*)/gi,
+    /total\s*[€¤]?\s*incl\.?\s*vat[:\s]*€?([0-9,\s]+\.?[0-9]*)/gi,
+    /total incl(?:uding)? vat[:\s]*€?([0-9,\s]+\.?[0-9]*)/gi,
+    /total\s*incl(?:uding)?\s*vat[:\s]*€?([0-9,\s]+\.?[0-9]*)/gi,
+    /total now due[:\s]*€?([0-9,\s]+\.?[0-9]*)/gi,
+    /amount\s*due[:\s]*€?([0-9,\s]+\.?[0-9]*)/gi,
+    /grand\s*total[:\s]*€?([0-9,\s]+\.?[0-9]*)/gi,
+    /\btotal\b[:\s]*€?([0-9,\s]+\.?[0-9]*)/gi,
+  ]
+
+  const datePatterns = [
+    /invoice date\s*[:\s]*([0-9]{1,2}[\/\-][0-9]{1,2}[\/\-][0-9]{2,4})/i,
+    /bill date\s*[:\s]*([0-9]{1,2}\s+[a-z]{3,9}\s+[0-9]{2,4})/i,
+    /document date\s*[:\s]*([0-9]{1,2}\s+[a-z]{3,9}\s+[0-9]{2,4})/i,
+    /document date\s*[:\s]*([0-9]{1,2}[\/\-][0-9]{1,2}[\/\-][0-9]{2,4})/i,
+    /([a-z]{3,9}\s+[0-9]{1,2},\s+[0-9]{4})/i,
+    /([0-9]{1,2}\s+[a-z]{3,9}\s+[0-9]{4})/i,
+    /issue date\s*[:\s]*([0-9]{1,2}[\/\-][0-9]{1,2}[\/\-][0-9]{2,4})/i,
+    /\b([0-9]{1,2}[\/\-][0-9]{1,2}[\/\-][0-9]{2,4})\b/,
+    /\b([0-9]{4}-[0-9]{2}-[0-9]{2})\b/
   ]
 
   const parseCandidateAmount = (rawValue: string | undefined): number | null => {
     if (!rawValue) return null
-    const normalized = rawValue.replace(/[€,\s]/g, '').trim()
+    const normalized = rawValue
+      .replace(/€/g, '')
+      .replace(/,/g, '')
+      .replace(/\s/g, '')
+      .trim()
     if (!normalized) return null
     const parsed = Number(normalized)
     if (Number.isNaN(parsed) || parsed <= 0 || parsed > 1000000) {
@@ -1514,6 +1743,65 @@ export function extractVATDataFromText(
   const extractMatchedAmount = (match: RegExpExecArray): number | null => {
     // Some patterns capture VAT rate as group 1 and amount as group 2.
     return parseCandidateAmount(match[2] ?? match[1])
+  }
+
+  const hasNoiseContext = (match: RegExpExecArray) => {
+    const index = match.index ?? 0
+    const context = normalizedText.slice(Math.max(0, index - 40), Math.min(normalizedText.length, index + 80))
+    const noisePattern = /(phone|account|bill\s*(no|number)|page\s*\d|usage|mb|gb|minutes|customer\s*number|sim|mobile)/i
+    const allowedPattern = /(vat|tax|total|invoice|amount due|incl\.?\s*vat)/i
+    return noisePattern.test(context) && !allowedPattern.test(context)
+  }
+
+  const parseInvoiceDate = (): string | undefined => {
+    const monthMap: Record<string, string> = {
+      jan: '01', january: '01',
+      feb: '02', february: '02',
+      mar: '03', march: '03',
+      apr: '04', april: '04',
+      may: '05',
+      jun: '06', june: '06',
+      jul: '07', july: '07',
+      aug: '08', august: '08',
+      sep: '09', september: '09',
+      oct: '10', october: '10',
+      nov: '11', november: '11',
+      dec: '12', december: '12'
+    }
+
+    for (const pattern of datePatterns) {
+      const match = compactText.match(pattern)
+      if (!match?.[1]) continue
+      const raw = match[1]
+      const monthNameFirst = raw.match(/([a-z]{3,9})\s+([0-9]{1,2}),\s*([0-9]{4})/i)
+      if (monthNameFirst) {
+        const month = monthMap[monthNameFirst[1].toLowerCase()]
+        const day = monthNameFirst[2].padStart(2, '0')
+        const year = monthNameFirst[3]
+        if (month) return `${year}-${month}-${day}`
+      }
+
+      const dayMonthName = raw.match(/([0-9]{1,2})\s+([a-z]{3,9})\s+([0-9]{2,4})/i)
+      if (dayMonthName) {
+        const day = dayMonthName[1].padStart(2, '0')
+        const month = monthMap[dayMonthName[2].toLowerCase()]
+        const yearRaw = dayMonthName[3]
+        const year = yearRaw.length === 2 ? `20${yearRaw}` : yearRaw
+        if (month) return `${year}-${month}-${day}`
+      }
+
+      if (raw.includes('-') && raw.length === 10 && raw.indexOf('-') === 4) return raw
+      const parts = raw.split(/[\/\-]/).map(p => p.trim())
+      if (parts.length !== 3) continue
+      const [dayRaw, monthRaw, yearRaw] = parts
+      const year = yearRaw.length === 2 ? `20${yearRaw}` : yearRaw
+      const day = dayRaw.padStart(2, '0')
+      const month = monthRaw.padStart(2, '0')
+      const iso = `${year}-${month}-${day}`
+      const parsed = new Date(iso)
+      if (!Number.isNaN(parsed.getTime())) return iso
+    }
+    return undefined
   }
   
   // Extract amounts to exclude (lease payments, etc.)
@@ -1536,6 +1824,7 @@ export function extractVATDataFromText(
   for (const pattern of highPriorityVATPatterns) {
     let match
     while ((match = pattern.exec(normalizedText)) !== null) {
+      if (hasNoiseContext(match)) continue
       const amount = extractMatchedAmount(match)
       if (amount !== null) {
         const roundedAmount = amount
@@ -1565,6 +1854,7 @@ export function extractVATDataFromText(
     for (const pattern of standardVATPatterns) {
       let match
       while ((match = pattern.exec(normalizedText)) !== null) {
+        if (hasNoiseContext(match)) continue
         const amount = extractMatchedAmount(match)
         if (amount !== null) {
           const roundedAmount = amount
@@ -1592,6 +1882,7 @@ export function extractVATDataFromText(
     for (const pattern of genericVATPatterns) {
       let match
       while ((match = pattern.exec(normalizedText)) !== null) {
+        if (hasNoiseContext(match)) continue
         const amount = extractMatchedAmount(match)
         if (amount !== null) {
           const roundedAmount = amount
@@ -1617,13 +1908,29 @@ export function extractVATDataFromText(
   
   // Extract total amounts
   for (const pattern of totalPatterns) {
+    const candidates: number[] = []
     let match
     while ((match = pattern.exec(normalizedText)) !== null) {
+      if (hasNoiseContext(match)) continue
       const amount = extractMatchedAmount(match)
       if (amount !== null) {
-        totalAmount = amount
-        confidence += 0.2
+        candidates.push(amount)
       }
+    }
+    if (candidates.length > 0) {
+      totalAmount = Math.max(...candidates)
+      confidence += 0.25
+      break
+    }
+  }
+
+  // Three Ireland billing rule: prefer explicit "This month's invoice (incl.VAT)"
+  if (vendorHints.isThree) {
+    const threeInvoiceMatch = compactText.match(/this month'?s invoice\s*\(incl\.?\s*vat\)\s*[:\s]*€?([0-9,\s]+\.?[0-9]*)/i)
+    const threeInvoiceTotal = parseCandidateAmount(threeInvoiceMatch?.[1])
+    if (threeInvoiceTotal) {
+      totalAmount = threeInvoiceTotal
+      confidence += 0.2
     }
   }
   
@@ -1682,9 +1989,39 @@ export function extractVATDataFromText(
   } else if (category.includes('PURCHASE')) {
     documentType = normalizedText.includes('invoice') ? 'PURCHASE_INVOICE' : 'PURCHASE_RECEIPT'
   }
+
+  if (vendorHints.isThree || vendorHints.isVolkswagen || vendorHints.isGoogle || vendorHints.isDropbox || vendorHints.isEurobase || vendorHints.isCallCentre || vendorHints.isTAS) {
+    confidence += 0.1
+  }
   
   // Cap confidence at 1.0
   confidence = Math.min(confidence, 1.0)
+
+  const invoiceDate = parseInvoiceDate()
+  const totalVATAmount = [...salesVAT, ...purchaseVAT].reduce((sum, amount) => sum + amount, 0)
+  const validationFlags: string[] = []
+
+  if (totalAmount && totalVATAmount > 0) {
+    const vatRatio = totalVATAmount / totalAmount
+    if (vatRatio > 0.6) {
+      validationFlags.push('IMPLAUSIBLE_VAT_RATIO')
+      confidence = Math.min(confidence, 0.65)
+    } else if (vatRatio > 0.35) {
+      validationFlags.push('HIGH_VAT_RATIO_REVIEW')
+      confidence = Math.min(confidence, 0.8)
+    }
+  }
+
+  if (totalAmount && (!invoiceDate || totalVATAmount <= 0)) {
+    validationFlags.push('REQUIRES_MANUAL_REVIEW')
+    if (!invoiceDate) validationFlags.push('MISSING_INVOICE_DATE')
+    if (totalVATAmount <= 0) validationFlags.push('MISSING_VAT_AMOUNT')
+    confidence = Math.min(confidence, 0.7)
+  }
+
+  if (validationFlags.length > 0 && confidence >= 0.99) {
+    confidence = 0.95
+  }
   
   return {
     salesVAT,
@@ -1694,10 +2031,11 @@ export function extractVATDataFromText(
     confidence,
     extractedText,
     documentType,
+    invoiceDate,
     // Enhanced fields required by new interface
     processingMethod: 'OCR_TEXT',
     processingTimeMs: 0,
-    validationFlags: [],
+    validationFlags,
     irishVATCompliant: true, // Default for now
     // Enhanced extraction metadata
     extractionDetails: [] as any[] // Default for now

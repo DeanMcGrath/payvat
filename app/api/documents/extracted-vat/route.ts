@@ -265,7 +265,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
           const vatTotal = vatAmounts.reduce((sum, amount) => sum + amount, 0)
           
           // Extract confidence from scan result - improved pattern matching
-          let confidence = 0.85 // Default high confidence for successfully processed documents
+          let confidence = doc.extractionConfidence ?? 0
           
           if (doc.scanResult) {
             // Try multiple confidence patterns
@@ -718,7 +718,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
         if (vatAmounts.length > 0) {
           const isSales = document.category?.includes('SALES')
           const vatTotal = vatAmounts.reduce((sum, amount) => sum + amount, 0)
-          const confidence = 0.85 // High confidence for successfully processed authenticated user documents
+          const confidence = document.extractionConfidence ?? 0
           
           // VAT found in scan result
           
@@ -830,7 +830,7 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       totalPurchaseVAT: Math.round(totalPurchaseVAT * 100) / 100,
       totalNetVAT: Math.round(totalNetVAT * 100) / 100,
       documentCount: documents.length,
-      processedDocuments: documents.length,
+      processedDocuments,
       averageConfidence: averageConfidence,
       // ENHANCED: Add processing stats
       failedDocuments: failedDocs,
@@ -841,11 +841,21 @@ async function getExtractedVAT(request: NextRequest, user?: AuthUser) {
       },
       salesDocuments: salesDocuments.map(doc => ({
         ...doc,
-        processingStatus: parseProcessingStatus(doc.scanResult)
+        processingStatus: parseProcessingStatus(doc.scanResult),
+        validation: {
+          passed: (documents.find(d => d.id === doc.id)?.validationStatus || '') === 'COMPLIANT',
+          reasons: documents.find(d => d.id === doc.id)?.complianceIssues || [],
+          warnings: []
+        }
       })),
       purchaseDocuments: purchaseDocuments.map(doc => ({
         ...doc,
-        processingStatus: parseProcessingStatus(doc.scanResult)
+        processingStatus: parseProcessingStatus(doc.scanResult),
+        validation: {
+          passed: (documents.find(d => d.id === doc.id)?.validationStatus || '') === 'COMPLIANT',
+          reasons: documents.find(d => d.id === doc.id)?.complianceIssues || [],
+          warnings: []
+        }
       }))
     }
     

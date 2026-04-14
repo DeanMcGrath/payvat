@@ -813,7 +813,27 @@ function DashboardDocumentsContent() {
                   {paginatedDocuments.map((document) => {
                     const isVATSalesDoc = document.category?.startsWith("SALES")
                     const isVATPurchaseDoc = document.category?.startsWith("PURCHASE")
-                    const variant = isVATSalesDoc ? 'sales' : 'purchase'
+                    const vatDoc = isVATSalesDoc
+                      ? vatData?.salesDocuments?.find(d => d.id === document.id)
+                      : vatData?.purchaseDocuments?.find(d => d.id === document.id)
+                    const totalVAT = vatDoc?.extractedAmounts?.reduce((sum, amount) => sum + amount, 0) || 0
+                    const confidence = vatDoc?.confidence || document.extractionConfidence || 0
+                    const statusFromProcessing = document.processingStatus?.status
+                    const hasCoreGaps = !document.extractedDate || !document.invoiceTotal || totalVAT <= 0
+                    const needsReview = statusFromProcessing === 'needs_review' || document.validationStatus === 'NEEDS_REVIEW' || hasCoreGaps
+                    const isFailed = statusFromProcessing === 'failed'
+                    const isProcessing = !document.isScanned || statusFromProcessing === 'processing' || statusFromProcessing === 'uploaded' || statusFromProcessing === 'uploading'
+                    const statusLabel = isFailed ? 'Failed' : isProcessing ? 'Processing' : needsReview ? 'Needs review' : 'Processed'
+                    const statusClass = isFailed
+                      ? 'bg-red-100 text-red-800'
+                      : isProcessing
+                      ? 'bg-amber-100 text-amber-800'
+                      : needsReview
+                      ? 'bg-amber-100 text-amber-800'
+                      : 'bg-green-100 text-green-800'
+                    const reasonText = document.validation?.reasons?.[0]
+                      || document.complianceIssues?.[0]
+                      || (hasCoreGaps ? 'Missing total or VAT amount' : '')
                     
                     return (
                       <div key={document.id} className={`grid grid-cols-12 gap-4 items-center p-4 hover:bg-neutral-50 transition-colors group`}>
@@ -867,43 +887,24 @@ function DashboardDocumentsContent() {
                           <p className={`body-sm font-normal ${
                             isVATSalesDoc ? 'text-petrol-dark' : 'text-green-700'
                           }`}>
-                            {/* Get VAT amount from vatData */}
-                            {(() => {
-                              const vatDoc = isVATSalesDoc 
-                                ? vatData?.salesDocuments?.find(d => d.id === document.id)
-                                : vatData?.purchaseDocuments?.find(d => d.id === document.id)
-                              const totalVAT = vatDoc?.extractedAmounts?.reduce((sum, amount) => sum + amount, 0) || 0
-                              return totalVAT > 0 ? formatCurrency(totalVAT) : '—'
-                            })()}
+                            {totalVAT > 0 ? formatCurrency(totalVAT) : '—'}
                           </p>
                         </div>
                         
                         {/* Confidence % */}
                         <div className="col-span-1">
                           <p className="body-sm font-normal text-neutral-700">
-                            {(() => {
-                              const vatDoc = isVATSalesDoc 
-                                ? vatData?.salesDocuments?.find(d => d.id === document.id)
-                                : vatData?.purchaseDocuments?.find(d => d.id === document.id)
-                              const confidence = vatDoc?.confidence || 0
-                              return confidence > 0 ? `${Math.round(confidence * 100)}%` : '—'
-                            })()}
+                            {confidence > 0 ? `${Math.round(confidence * 100)}%` : '—'}
                           </p>
                         </div>
                         
                         {/* Status */}
                         <div className="col-span-1">
-                          <div className={`inline-flex items-center px-2 py-1 text-xs font-normal rounded-full ${
-                            document.isScanned 
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-amber-100 text-amber-800'
-                          }`}>
-                            {document.isScanned ? (
-                              <><CheckCircle className="h-3 w-3 mr-1" />Processed</>
-                            ) : (
-                              <><Clock className="h-3 w-3 mr-1" />Processing</>
-                            )}
+                          <div className={`inline-flex items-center px-2 py-1 text-xs font-normal rounded-full ${statusClass}`}>
+                            {isFailed ? <AlertCircle className="h-3 w-3 mr-1" /> : needsReview ? <AlertCircle className="h-3 w-3 mr-1" /> : isProcessing ? <Clock className="h-3 w-3 mr-1" /> : <CheckCircle className="h-3 w-3 mr-1" />}
+                            {statusLabel}
                           </div>
+                          {reasonText ? <p className="mt-1 text-[11px] text-amber-700 leading-tight">{reasonText}</p> : null}
                         </div>
                         
                         {/* Actions */}

@@ -11,6 +11,53 @@ import { logError, logWarn, logInfo, logAudit, logPerformance } from '@/lib/secu
 import { invalidateUserCache } from '@/app/api/documents/extracted-vat/route'
 import { generateDocumentFingerprint, checkForDuplicates, storeDocumentHash, markAsDuplicate } from '@/lib/duplicateDetection'
 
+type UploadProcessingStatus = 'uploaded' | 'processing' | 'processed' | 'needs_review' | 'failed'
+
+interface UploadValidationResult {
+  passed: boolean
+  reasons: string[]
+  warnings: string[]
+}
+
+function createUploadValidation(input: {
+  invoiceDate: Date | null
+  invoiceTotal: number | null
+  vatAmount: number
+  confidence: number
+}): UploadValidationResult {
+  const reasons: string[] = []
+  const warnings: string[] = []
+
+  const hasDate = !!input.invoiceDate
+  const hasTotal = typeof input.invoiceTotal === 'number' && input.invoiceTotal > 0
+  const hasVAT = input.vatAmount > 0
+
+  if (hasTotal && !hasVAT) reasons.push('Invoice total found but VAT amount is missing')
+  if (hasTotal && !hasDate) reasons.push('Invoice total found but invoice date is missing')
+  if (hasDate && !hasTotal) reasons.push('Invoice date found but invoice total is missing')
+  if (hasVAT && !hasTotal) reasons.push('VAT found but invoice total is missing')
+  if (!hasDate && !hasTotal && !hasVAT) reasons.push('No reliable invoice fields were extracted')
+
+  if (hasTotal && hasVAT) {
+    const ratio = input.vatAmount / input.invoiceTotal
+    if (ratio > 0.6) {
+      reasons.push('Detected unusually large VAT value; manual review recommended')
+    } else if (ratio > 0.35) {
+      warnings.push('VAT is high relative to total; please confirm')
+    }
+  }
+
+  if (input.confidence >= 0.99 && reasons.length > 0) {
+    warnings.push('Confidence reduced because extracted fields are inconsistent')
+  }
+
+  return {
+    passed: reasons.length === 0,
+    reasons,
+    warnings
+  }
+}
+
 async function uploadFile(request: NextRequest, user?: AuthUser) {
   console.log('✅ STEP 2: uploadFile function called')
   
@@ -513,11 +560,40 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           }
         }
         
+        const extractedVATAmount = [
+          ...(processingResult.extractedData?.salesVAT || []),
+          ...(processingResult.extractedData?.purchaseVAT || [])
+        ].reduce((sum: number, amount: number) => sum + amount, 0)
+
+        const validation = createUploadValidation({
+          invoiceDate: extractedDate,
+          invoiceTotal,
+          vatAmount: extractedVATAmount,
+          confidence: processingResult.extractedData?.confidence || 0
+        })
+
+        const terminalStatus: UploadProcessingStatus = validation.passed ? 'processed' : 'needs_review'
+        const adjustedConfidence = validation.passed
+          ? (processingResult.extractedData?.confidence || 0)
+          : Math.min(processingResult.extractedData?.confidence || 0, 0.95)
+
+        const processingStatus = {
+          status: terminalStatus,
+          timestamp: new Date().toISOString(),
+          warnings: validation.warnings,
+          failureReasons: validation.reasons
+        }
+
+        const scanResultWithStatus = `${processingResult.scanResult}\n\n[PROCESSING_STATUS: ${JSON.stringify(processingStatus)}]`
+
         // 🔧 CRITICAL FIX: Handle DocumentFolder creation to prevent foreign key constraint violation
         let documentUpdateData: any = {
           isScanned: true,
-          scanResult: processingResult.scanResult,
-          ...(invoiceTotal && { invoiceTotal })
+          scanResult: scanResultWithStatus,
+          ...(invoiceTotal && { invoiceTotal }),
+          extractionConfidence: adjustedConfidence,
+          validationStatus: validation.passed ? 'COMPLIANT' : 'NEEDS_REVIEW',
+          complianceIssues: validation.reasons
         }
         
         // Only add year/month fields if we have valid date and authenticated user
@@ -589,9 +665,12 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
               where: { id: document.id },
               data: {
                 isScanned: true,
-                scanResult: processingResult.scanResult,
+                scanResult: scanResultWithStatus,
                 extractedDate: extractedDate,
-                ...(invoiceTotal && { invoiceTotal })
+                ...(invoiceTotal && { invoiceTotal }),
+                extractionConfidence: adjustedConfidence,
+                validationStatus: validation.passed ? 'COMPLIANT' : 'NEEDS_REVIEW',
+                complianceIssues: validation.reasons
                 // Note: no extractedYear/extractedMonth to avoid constraint
               }
             })
@@ -623,7 +702,10 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
               extractedYear: true, 
               extractedMonth: true, 
               invoiceTotal: true,
-              scanResult: true
+              scanResult: true,
+              extractionConfidence: true,
+              validationStatus: true,
+              complianceIssues: true
             }
           })
           console.log(`🔍 VERIFICATION - Document as saved in database:`, JSON.stringify(savedDocument, null, 2))
@@ -685,7 +767,9 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           where: { id: document.id },
           data: {
             isScanned: true,  // Mark as scanned to prevent "Processing" status
-            scanResult: `Processing failed: ${processingResult.error || 'Unknown error'}\n\nThe document could not be processed. This may be due to:\n- Corrupted or invalid file format\n- Unsupported PDF structure\n- Processing timeout\n\nYou can try re-uploading the document or contact support if the issue persists.`,
+            scanResult: `Processing failed: ${processingResult.error || 'Unknown error'}\n\nThe document could not be processed. This may be due to:\n- Corrupted or invalid file format\n- Unsupported PDF structure\n- Processing timeout\n\nYou can try re-uploading the document or contact support if the issue persists.\n\n[PROCESSING_STATUS: ${JSON.stringify({ status: 'failed', timestamp: new Date().toISOString(), error: processingResult.error || 'Unknown error' })}]`,
+            validationStatus: 'NEEDS_REVIEW',
+            complianceIssues: ['Document processing failed']
           }
         })
       }
@@ -702,7 +786,9 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           where: { id: document.id },
           data: {
             isScanned: true,  // Mark as scanned to prevent "Processing" status
-            scanResult: `Processing failed: ${docProcessingError instanceof Error ? docProcessingError.message : 'Technical error occurred'}\n\nA technical error prevented the document from being processed.\n\nYou can try re-uploading the document or contact support if the issue persists.`,
+            scanResult: `Processing failed: ${docProcessingError instanceof Error ? docProcessingError.message : 'Technical error occurred'}\n\nA technical error prevented the document from being processed.\n\nYou can try re-uploading the document or contact support if the issue persists.\n\n[PROCESSING_STATUS: ${JSON.stringify({ status: 'failed', timestamp: new Date().toISOString(), error: docProcessingError instanceof Error ? docProcessingError.message : 'Technical error occurred' })}]`,
+            validationStatus: 'NEEDS_REVIEW',
+            complianceIssues: ['Document processing failed']
           }
         })
         console.log(`✅ RECOVERY: Document ${document.id} marked as failed to prevent stuck Processing status`)
@@ -950,7 +1036,42 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           reasons: duplicateResult.reasons,
           similarityScore: duplicateResult.similarityScore
         } : null
-      }
+      },
+      processingOutcome: (() => {
+        const savedStatus = updatedDocument?.scanResult?.match(/\[PROCESSING_STATUS: (.*?)\]/)
+        let parsedStatus = null
+        if (savedStatus?.[1]) {
+          try {
+            parsedStatus = JSON.parse(savedStatus[1])
+          } catch {
+            parsedStatus = null
+          }
+        }
+
+        const invoiceDate = updatedDocument?.extractedDate || null
+        const invoiceTotal = updatedDocument?.invoiceTotal ? Number(updatedDocument.invoiceTotal) : null
+        const vatAmount = [
+          ...(processingResult?.extractedData?.salesVAT || []),
+          ...(processingResult?.extractedData?.purchaseVAT || [])
+        ].reduce((sum: number, amount: number) => sum + amount, 0)
+        const reasons = updatedDocument?.complianceIssues || []
+        const warnings = parsedStatus?.warnings || []
+
+        return {
+          processingStatus: (parsedStatus?.status || (processingResult?.success ? 'processed' : 'failed')) as UploadProcessingStatus,
+          validation: {
+            passed: reasons.length === 0,
+            reasons,
+            warnings
+          },
+          extracted: {
+            invoiceDate: invoiceDate ? new Date(invoiceDate).toISOString() : null,
+            invoiceTotal,
+            vatAmount,
+            confidence: updatedDocument?.extractionConfidence || processingResult?.extractedData?.confidence || 0
+          }
+        }
+      })()
     })
     
   } catch (error) {

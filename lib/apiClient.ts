@@ -44,6 +44,21 @@ export interface Document {
   invoiceTotal?: string
   isScanned: boolean
   scanResult?: string
+  validationStatus?: string
+  complianceIssues?: string[]
+  extractionConfidence?: number
+  processingStatus?: {
+    status: 'uploading' | 'uploaded' | 'processing' | 'processed' | 'needs_review' | 'failed'
+    timestamp: string
+    error?: string
+    warnings?: string[]
+    failureReasons?: string[]
+  }
+  validation?: {
+    passed: boolean
+    reasons: string[]
+    warnings: string[]
+  }
 }
 
 export interface VATData {
@@ -57,11 +72,35 @@ export interface VATData {
     id: string
     extractedAmounts: number[]
     confidence: number
+    processingStatus?: {
+      status: 'uploading' | 'uploaded' | 'processing' | 'processed' | 'needs_review' | 'failed'
+      timestamp: string
+      error?: string
+      warnings?: string[]
+      failureReasons?: string[]
+    }
+    validation?: {
+      passed: boolean
+      reasons: string[]
+      warnings: string[]
+    }
   }>
   purchaseDocuments?: Array<{
     id: string
     extractedAmounts: number[]
     confidence: number
+    processingStatus?: {
+      status: 'uploading' | 'uploaded' | 'processing' | 'processed' | 'needs_review' | 'failed'
+      timestamp: string
+      error?: string
+      warnings?: string[]
+      failureReasons?: string[]
+    }
+    validation?: {
+      passed: boolean
+      reasons: string[]
+      warnings: string[]
+    }
   }>
 }
 

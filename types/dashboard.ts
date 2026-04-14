@@ -26,6 +26,18 @@ export interface Document {
   validationStatus?: string | null
   complianceIssues?: string[] | null
   extractionConfidence?: number | null
+  processingStatus?: {
+    status: 'uploading' | 'uploaded' | 'processing' | 'processed' | 'needs_review' | 'failed'
+    timestamp: string
+    error?: string
+    warnings?: string[]
+    failureReasons?: string[]
+  } | null
+  validation?: {
+    passed: boolean
+    reasons: string[]
+    warnings: string[]
+  } | null
   dateExtractionConfidence?: number | null
   totalExtractionConfidence?: number | null
   // Computed fields for dashboard compatibility
@@ -41,9 +53,16 @@ export interface VATExtraction {
   confidence: number
   scanResult?: string
   processingStatus?: {
-    status: 'pending' | 'completed' | 'failed'
+    status: 'uploading' | 'uploaded' | 'processing' | 'processed' | 'needs_review' | 'failed'
     timestamp: string
     error?: string
+    warnings?: string[]
+    failureReasons?: string[]
+  }
+  validation?: {
+    passed: boolean
+    reasons: string[]
+    warnings: string[]
   }
 }
 

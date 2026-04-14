@@ -5,6 +5,17 @@ import { prisma, withDatabaseRetry } from '@/lib/prisma'
 import { AuthUser } from '@/lib/auth'
 import { logError, logAudit, logPerformance } from '@/lib/secure-logger'
 
+function parseProcessingStatus(scanResult: string | null) {
+  if (!scanResult) return null
+  const statusMatch = scanResult.match(/\[PROCESSING_STATUS: (.*?)\]/)
+  if (!statusMatch) return null
+  try {
+    return JSON.parse(statusMatch[1])
+  } catch {
+    return null
+  }
+}
+
 // GET /api/documents - List user's documents
 async function getDocuments(request: NextRequest, user?: AuthUser) {
   try {
@@ -155,7 +166,9 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
         extractedYear: true,
         extractedMonth: true,
         invoiceTotal: true,
-        extractionConfidence: true
+        extractionConfidence: true,
+        validationStatus: true,
+        complianceIssues: true
       },
       orderBy: {
         uploadedAt: 'desc'
@@ -248,9 +261,15 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
         invoiceTotal: parsedInvoiceTotal,
         extractedVATAmount,
         // Compatibility fields
-        confidence: doc.extractionConfidence || 0.8,
+        confidence: doc.extractionConfidence || 0,
         vatAmount: extractedVATAmount,
-        aiConfidence: doc.extractionConfidence || 0.8
+        aiConfidence: doc.extractionConfidence || 0,
+        processingStatus: parseProcessingStatus(doc.scanResult),
+        validation: {
+          passed: doc.validationStatus === 'COMPLIANT',
+          reasons: doc.validationStatus === 'NEEDS_REVIEW' ? (doc.complianceIssues || []) : [],
+          warnings: doc.validationStatus === 'PENDING' ? ['Processing still in progress'] : []
+        }
       }
     })
     
