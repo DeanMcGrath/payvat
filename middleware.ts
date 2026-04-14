@@ -66,6 +66,25 @@ function cleanupRateLimit() {
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const clientIP = getClientIP(request)
+
+  const indexablePublicRoutes = new Set([
+    '/',
+    '/pricing',
+    '/contact',
+    '/login',
+    '/signup'
+  ])
+
+  const shouldNoIndexPath = (() => {
+    if (pathname.startsWith('/api/') || pathname.startsWith('/_next/')) return false
+    if (pathname.startsWith('/dashboard')) return true
+    if (pathname.startsWith('/admin')) return true
+    if (pathname.startsWith('/vat-submission')) return true
+    if (pathname.startsWith('/sitemap')) return true
+    if (pathname.startsWith('/blog')) return true
+    if (pathname.startsWith('/beta-limitations')) return true
+    return !indexablePublicRoutes.has(pathname)
+  })()
   
   // Security: Force HTTPS redirect (except for localhost development)
   const protocol = request.headers.get('x-forwarded-proto') || 'https'
@@ -174,6 +193,10 @@ export function middleware(request: NextRequest) {
   // Add security headers to all responses
   // Re-enabled with Next.js compatible CSP configuration
   addSecurityHeaders(response.headers)
+
+  if (shouldNoIndexPath) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow')
+  }
   
   return response
 }

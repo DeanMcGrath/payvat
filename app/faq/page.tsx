@@ -56,6 +56,13 @@ export default function FAQPage() {
       <FAQSchema />
       <SiteHeader />
 
+      <div className="max-w-4xl mx-auto px-6 pt-6">
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+          Paid beta notice: PayVAT helps you prepare, review, record, export, and track VAT returns.
+          It does not file directly with Revenue ROS in this beta.
+          <a href="/beta-limitations" className="ml-1 underline">How PayVAT works today</a>.
+        </div>
+      </div>
 
       <div className="max-w-4xl mx-auto px-6 content-after-header pb-8">
 

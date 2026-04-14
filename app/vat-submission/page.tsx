@@ -1080,11 +1080,11 @@ export default function VATSubmissionPage() {
             
             {/* VAT Data Extracted from Documents - Moved from top */}
             {extractedVATData && extractedVATData.processedDocuments > 0 && (
-              <Card className="card-premium ">
+              <Card className="border-[#B8DDF6] bg-[#F5FAFF]">
                 <CardHeader>
-                  <CardTitle className="text-lg font-normal text-blue-900 flex items-center">
+                  <CardTitle className="text-lg font-normal text-[#114B5F] flex items-center">
                     <BadgeCheck className="h-5 w-5 mr-2 text-[#2A7A8F]" />
-                    VAT Data Extracted from Documents
+                    Draft totals from reviewed documents
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -1127,7 +1127,7 @@ export default function VATSubmissionPage() {
                       disabled={useExtractedData}
                     >
                       <Calculator className="h-4 w-4 mr-2" />
-                      {useExtractedData ? 'Using Extracted Data' : 'Use Extracted Amounts'}
+                      {useExtractedData ? 'Using document totals' : 'Use document totals'}
                     </Button>
                     
                     <Button 
@@ -1152,7 +1152,7 @@ export default function VATSubmissionPage() {
             )}
             
             {/* VAT Calculation - Moved from top */}
-            <Card className="card-modern ">
+            <Card className="border-neutral-200 bg-white">
               <CardHeader>
                 <CardTitle className="text-lg font-normal text-foreground flex items-center">
                   <Calculator className="h-5 w-5 mr-2 text-[#2A7A8F]" />
@@ -1236,7 +1236,7 @@ export default function VATSubmissionPage() {
             </Card>
             
             {/* Return Summary Panel - Moved from Sidebar */}
-            <Card className="card-modern">
+            <Card className="border-neutral-200 bg-neutral-50">
               <CardHeader>
                 <CardTitle className="text-lg font-normal text-foreground">Return Summary</CardTitle>
               </CardHeader>
@@ -1251,7 +1251,7 @@ export default function VATSubmissionPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Status:</span>
-                  <Badge variant="outline" className="text-yellow-600 border-yellow-200">
+                  <Badge className="bg-amber-100 text-amber-800 border-0">
                     Draft
                   </Badge>
                 </div>
@@ -1265,10 +1265,12 @@ export default function VATSubmissionPage() {
             </Card>
             
             {/* Ready to Submit Section - Moved from Sidebar */}
-            <Card className="bg-gradient-to-r from-[#E6F4FF] to-[#CCE7FF] border-[#99D3FF]">
+            <Card className="bg-[#F5FAFF] border-[#B8DDF6]">
               <CardHeader className="text-center">
-                <CardTitle className="text-xl font-normal text-blue-900">Ready to Submit?</CardTitle>
-                <p className="text-[#216477] text-sm">Review your VAT return and submit to Revenue Ireland</p>
+                <CardTitle className="text-xl font-normal text-[#114B5F]">Ready to record guided submission?</CardTitle>
+                <p className="text-[#216477] text-sm">
+                  This records your return in PayVAT and creates a PayVAT tracking reference.
+                </p>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Summary info */}
@@ -1290,9 +1292,10 @@ export default function VATSubmissionPage() {
                   <Button 
                     variant="outline" 
                     className="w-full bg-white/50 border-[#99D3FF] text-[#216477] hover:bg-white/80 justify-start text-base py-6"
+                    onClick={() => router.push('/dashboard/documents')}
                   >
                     <FileText className="h-5 w-5 mr-3" />
-                    Save as Draft
+                    Review source documents
                   </Button>
                   <Button 
                     className="w-full bg-[#2A7A8F] hover:bg-[#216477] text-white justify-start text-base py-6 shadow-lg"
@@ -1309,12 +1312,15 @@ export default function VATSubmissionPage() {
                     }}
                   >
                     <CheckCircle className="h-5 w-5 mr-3" />
-                    Submit VAT Return
+                    Continue to record guided submission
                   </Button>
                 </div>
                 
-                <div className="text-xs text-[#216477] text-center mt-4">
-                  ✓ Secure submission via ROS  ✓ Automatic filing confirmation
+                <div className="rounded-md border border-[#B8DDF6] bg-white/80 p-3 text-xs text-[#216477] text-center mt-4">
+                  This does not file the return with Revenue ROS. This export is a PayVAT record, not a Revenue ROS filing receipt.
+                </div>
+                <div className="text-xs text-[#216477] text-center">
+                  Need help? <a href="mailto:support@payvat.ie" className="underline">support@payvat.ie</a> · <a href="/beta-limitations" className="underline">How PayVAT works today</a>
                 </div>
               </CardContent>
             </Card>

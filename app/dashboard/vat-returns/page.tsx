@@ -40,24 +40,9 @@ interface VATReturn {
   documentCount?: number
 }
 
-interface UpcomingReturn {
-  id: string
-  periodStart: string
-  periodEnd: string
-  dueDate: string
-  estimatedSalesVAT: number
-  estimatedPurchaseVAT: number
-  estimatedNetVAT: number
-  documentCount: number
-  confidence: 'high' | 'medium' | 'low'
-  isOverdue: boolean
-  daysUntilDue: number
-}
-
 export default function VATReturnsPage() {
   const router = useRouter()
   const [pastReturns, setPastReturns] = useState<VATReturn[]>([])
-  const [upcomingReturns, setUpcomingReturns] = useState<UpcomingReturn[]>([])
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState({
     totalSubmitted: 0,
@@ -99,39 +84,6 @@ export default function VATReturnsPage() {
         }
       }
 
-      // Mock upcoming returns data - replace with real API call based on document analysis
-      const currentDate = new Date()
-      const mockUpcomingReturns: UpcomingReturn[] = [
-        {
-          id: 'upcoming-1',
-          periodStart: '2024-11-01',
-          periodEnd: '2024-12-31',
-          dueDate: '2025-01-19',
-          estimatedSalesVAT: 2850.50,
-          estimatedPurchaseVAT: 1200.75,
-          estimatedNetVAT: 1649.75,
-          documentCount: 45,
-          confidence: 'high',
-          isOverdue: false,
-          daysUntilDue: Math.ceil((new Date('2025-01-19').getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24))
-        },
-        {
-          id: 'upcoming-2',
-          periodStart: '2025-01-01',
-          periodEnd: '2025-02-28',
-          dueDate: '2025-03-19',
-          estimatedSalesVAT: 0,
-          estimatedPurchaseVAT: 0,
-          estimatedNetVAT: 0,
-          documentCount: 0,
-          confidence: 'low',
-          isOverdue: false,
-          daysUntilDue: Math.ceil((new Date('2025-03-19').getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24))
-        }
-      ]
-      
-      setUpcomingReturns(mockUpcomingReturns)
-
     } catch (error) {
       console.error('Failed to load VAT returns data:', error)
       toast.error('Failed to load VAT returns information')
@@ -156,28 +108,15 @@ export default function VATReturnsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'PAID':
-        return <Badge className="bg-green-100 text-green-800">Paid</Badge>
+        return <Badge className="bg-green-100 text-green-800 border-0">Paid</Badge>
       case 'SUBMITTED':
-        return <Badge className="bg-blue-100 text-petrol-dark">Submitted</Badge>
+        return <Badge className="bg-blue-100 text-blue-800 border-0">Submitted</Badge>
       case 'OVERDUE':
-        return <Badge className="bg-red-100 text-red-800">Overdue</Badge>
+        return <Badge className="bg-red-100 text-red-800 border-0">Blocked</Badge>
       case 'DRAFT':
-        return <Badge variant="secondary">Draft</Badge>
+        return <Badge className="bg-amber-100 text-amber-800 border-0">Draft</Badge>
       default:
         return <Badge variant="secondary">Unknown</Badge>
-    }
-  }
-
-  const getConfidenceColor = (confidence: string) => {
-    switch (confidence) {
-      case 'high':
-        return 'text-green-600 bg-green-50'
-      case 'medium':
-        return 'text-yellow-600 bg-yellow-50'
-      case 'low':
-        return 'text-red-600 bg-red-50'
-      default:
-        return 'text-gray-600 bg-gray-50'
     }
   }
 
@@ -244,106 +183,77 @@ export default function VATReturnsPage() {
         </Card>
       </div>
 
-      {/* Upcoming Returns */}
+      {/* Current Draft */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-petrol-dark">
               <Calendar className="h-5 w-5" />
-              Upcoming VAT Returns
+              Current Draft Return
             </CardTitle>
             <Button onClick={() => router.push('/vat-submission')}>
               <Plus className="h-4 w-4 mr-2" />
-              New Return
+              Open Submission Review
             </Button>
           </div>
         </CardHeader>
         <CardContent>
-          {upcomingReturns.length > 0 ? (
+          {pastReturns.find((item) => item.status === 'DRAFT') ? (
             <div className="space-y-4">
-              {upcomingReturns.map((upcomingReturn) => (
-                <div
-                  key={upcomingReturn.id}
-                  className={`p-4 rounded-lg border ${
-                    upcomingReturn.isOverdue 
-                      ? 'border-red-200 bg-red-50' 
-                      : upcomingReturn.daysUntilDue <= 7
-                      ? 'border-yellow-200 bg-yellow-50'
-                      : 'border-gray-200 bg-gray-50'
-                  }`}
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h4 className="font-normal">
-                        {new Date(upcomingReturn.periodStart).toLocaleDateString()} - {new Date(upcomingReturn.periodEnd).toLocaleDateString()}
-                      </h4>
-                      <p className="text-sm text-gray-600">
-                        Due: {new Date(upcomingReturn.dueDate).toLocaleDateString()}
-                        <span className={`ml-2 ${
-                          upcomingReturn.daysUntilDue <= 7 ? 'text-yellow-600' : 'text-gray-500'
-                        }`}>
-                          ({upcomingReturn.daysUntilDue} days)
-                        </span>
-                      </p>
-                    </div>
-                    <Badge className={`${getConfidenceColor(upcomingReturn.confidence)} border-0`}>
-                      {upcomingReturn.confidence} confidence
-                    </Badge>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                    <div className="text-center">
-                      <div className="text-lg font-normal text-petrol-base">
-                        {formatCurrency(upcomingReturn.estimatedSalesVAT)}
+              {(() => {
+                const draftReturn = pastReturns.find((item) => item.status === 'DRAFT')!
+                return (
+                  <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-amber-900">Draft period</p>
+                        <h4 className="font-normal text-amber-900">
+                          {new Date(draftReturn.periodStart).toLocaleDateString()} - {new Date(draftReturn.periodEnd).toLocaleDateString()}
+                        </h4>
+                        <p className="text-xs text-amber-800 mt-1">
+                          Due: {new Date(draftReturn.dueDate).toLocaleDateString()}
+                        </p>
                       </div>
-                      <div className="text-xs text-gray-500">Sales VAT</div>
+                      {getStatusBadge(draftReturn.status)}
                     </div>
-                    <div className="text-center">
-                      <div className="text-lg font-normal text-green-600">
-                        {formatCurrency(upcomingReturn.estimatedPurchaseVAT)}
+                    <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-xs text-amber-800">Sales VAT</p>
+                        <p className="text-lg font-normal text-amber-900">{formatCurrency(Number(draftReturn.salesVAT))}</p>
                       </div>
-                      <div className="text-xs text-gray-500">Purchase VAT</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="h6 text-petrol-dark">
-                        {formatCurrency(upcomingReturn.estimatedNetVAT)}
+                      <div>
+                        <p className="text-xs text-amber-800">Purchase VAT</p>
+                        <p className="text-lg font-normal text-amber-900">{formatCurrency(Number(draftReturn.purchaseVAT))}</p>
                       </div>
-                      <div className="text-xs text-gray-500">Net VAT</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg font-normal text-gray-600">
-                        {upcomingReturn.documentCount}
+                      <div>
+                        <p className="text-xs text-amber-800">Net VAT</p>
+                        <p className="text-lg font-normal text-amber-900">{formatCurrency(Number(draftReturn.netVAT))}</p>
                       </div>
-                      <div className="text-xs text-gray-500">Documents</div>
                     </div>
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <Button
-                      variant="default"
-                      size="sm"
-                      onClick={() => router.push(`/vat-submission?period=${upcomingReturn.periodStart}-${upcomingReturn.periodEnd}`)}
-                    >
-                      Start Return
-                      <ArrowRight className="h-4 w-4 ml-1" />
-                    </Button>
-                    {upcomingReturn.documentCount === 0 && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => router.push('/dashboard/documents')}
-                      >
-                        Upload Documents
+                    <div className="mt-4 flex gap-2">
+                      <Button size="sm" onClick={() => router.push(`/vat-submission?returnId=${draftReturn.id}`)}>
+                        Continue Draft Review
+                        <ArrowRight className="h-4 w-4 ml-1" />
                       </Button>
-                    )}
+                      <Button variant="outline" size="sm" onClick={() => router.push('/dashboard/documents')}>
+                        Review Source Documents
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })()}
+              <div className="rounded-md border border-neutral-200 bg-neutral-50 p-3 text-xs text-neutral-700">
+                Forecast-style upcoming returns are hidden in paid beta until they are generated from live document data.
+              </div>
+              <div className="rounded-md border border-[#B8DDF6] bg-[#F5FAFF] p-3 text-xs text-[#216477]">
+                Need help reviewing your draft? Contact <a href="mailto:support@payvat.ie" className="underline">support@payvat.ie</a> or read <a href="/beta-limitations" className="underline">How PayVAT works today</a>.
+              </div>
             </div>
           ) : (
             <div className="text-center py-8 text-gray-500">
               <Calendar className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-              <p>No upcoming returns</p>
+              <p>No draft return yet</p>
+              <p className="text-sm mt-1">Upload and review documents to prepare the next return.</p>
             </div>
           )}
         </CardContent>

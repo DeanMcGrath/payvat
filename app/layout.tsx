@@ -11,20 +11,20 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: {
-    default: 'PayVAT Ireland - AI-Powered VAT Submission Software for Irish Businesses',
+    default: 'PayVAT Ireland - Guided VAT Preparation and Filing Workflow for Irish Businesses',
     template: '%s | PayVAT.ie'
   },
-  description: 'Automate your Irish VAT returns with AI-powered document processing. Submit VAT to Revenue Ireland easily. €30/month. 14-day free trial. Trusted by Irish businesses.',
+  description: 'Prepare, review, record, export, and track Irish VAT returns in one workflow. PayVAT does not file directly with Revenue ROS in this beta.',
   keywords: [
     'VAT submission Ireland',
     'Irish VAT returns',
     'VAT calculation software Ireland',
-    'Revenue Ireland VAT filing',
+    'guided VAT workflow Ireland',
     'VAT registration Ireland',
     'Irish VAT compliance',
     'automated VAT processing',
     'VAT software Ireland',
-    'Revenue ROS integration',
+    'VAT export record',
     'Irish business VAT',
     'VAT3 returns Ireland',
     'VAT payment Ireland'
@@ -33,11 +33,11 @@ export const metadata: Metadata = {
   creator: 'PayVAT Ireland',
   publisher: 'PayVAT Ireland',
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
     googleBot: {
-      index: true,
-      follow: true,
+      index: false,
+      follow: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
@@ -48,8 +48,8 @@ export const metadata: Metadata = {
     locale: 'en_IE',
     url: 'https://payvat.ie',
     siteName: 'PayVAT Ireland',
-    title: 'PayVAT Ireland - AI-Powered VAT Submission Software',
-    description: 'Automate your Irish VAT returns with AI. Submit to Revenue Ireland easily. Trusted by Irish businesses.',
+    title: 'PayVAT Ireland - Guided VAT Preparation Workflow',
+    description: 'Prepare, review, record, export, and track Irish VAT returns. This beta does not file directly with Revenue ROS.',
     images: [
       {
         url: 'https://payvat.ie/og-image.jpg',
@@ -61,8 +61,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PayVAT Ireland - AI-Powered VAT Software',
-    description: 'Automate Irish VAT returns with AI. Submit to Revenue easily.',
+    title: 'PayVAT Ireland - Guided VAT Workflow',
+    description: 'Prepare, review, record, export, and track Irish VAT returns in PayVAT.',
     images: ['https://payvat.ie/twitter-image.jpg'],
     creator: '@payvat_ie',
   },

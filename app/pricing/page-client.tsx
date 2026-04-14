@@ -62,8 +62,13 @@ export default function PricingPage() {
               <span className="text-gradient-primary">PayVAT</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Complete VAT management solution for Irish businesses
+              Paid beta access for guided VAT preparation, review, recording, export, and payment tracking
             </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto mb-8 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            PayVAT does not file returns directly with Revenue ROS in this beta. A PayVAT tracking reference is not a Revenue ROS confirmation.
+            <a href="/beta-limitations" className="ml-1 underline">How PayVAT works today</a>.
           </div>
 
           <div className="max-w-5xl mx-auto">
@@ -86,11 +91,11 @@ export default function PricingPage() {
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
-                      <span className="text-foreground">VAT submissions via ROS</span>
+                      <span className="text-foreground">Record guided submission in PayVAT</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />
-                      <span className="text-foreground">Payment processing</span>
+                      <span className="text-foreground">Payment tracking workflow</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />

@@ -2,12 +2,15 @@ import type { Metadata } from 'next'
 import PricingPageClient from './page-client'
 
 export const metadata: Metadata = {
-  title: 'PayVAT Pricing - €30/Month VAT Software | 14-Day Free Trial',
+  title: 'PayVAT Paid Beta - Guided VAT Workflow Pricing',
   description:
-    'Simple, transparent pricing for Irish VAT submission. €30/month or €300/year. Save €180 annually. 14-day free trial, no credit card required. Try PayVAT today.',
+    'Paid beta pricing for PayVAT guided VAT preparation, review, recording, export, and payment tracking. This beta does not file directly with Revenue ROS.',
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function PricingPage() {
   return <PricingPageClient />
 }
-
