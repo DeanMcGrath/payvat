@@ -82,6 +82,7 @@ export default function FileUpload({
   const [uploadResults, setUploadResults] = useState<Map<string, {status: 'success' | 'error' | 'uploading', document?: UploadedDocument, error?: string}>>(new Map())
   const [batchProgress, setBatchProgress] = useState({ completed: 0, total: 0, failed: 0 })
   const [isPaused, setIsPaused] = useState(false)
+  const safeConcurrentUploads = Math.max(1, Math.min(maxConcurrentUploads, 2))
 
   // Removed smart categorization - always respect user's category choice
 
@@ -192,9 +193,10 @@ export default function FileUpload({
         // Initialize batch progress for multiple files
         setBatchProgress({ completed: 0, total: validFiles.length, failed: 0 })
         setUploadQueue(validFiles)
+        setUploadResults(new Map())
         
-        // Start concurrent uploads
-        processBatchQueue(validFiles)
+        // Start concurrent uploads and wait for completion before clearing state
+        await processBatchQueue(validFiles)
       } else {
         // Sequential upload for single files
         for (const file of validFiles) {
@@ -264,8 +266,8 @@ export default function FileUpload({
 
     // Process files with concurrent limit
     const chunks = []
-    for (let i = 0; i < files.length; i += maxConcurrentUploads) {
-      chunks.push(files.slice(i, i + maxConcurrentUploads))
+    for (let i = 0; i < files.length; i += safeConcurrentUploads) {
+      chunks.push(files.slice(i, i + safeConcurrentUploads))
     }
 
     for (const chunk of chunks) {
@@ -275,8 +277,13 @@ export default function FileUpload({
 
     // Show batch completion summary
     if (completedCount > 0 || failedCount > 0) {
-      const summary = `Batch upload complete: ${completedCount} successful, ${failedCount} failed`
-      failedCount > 0 ? toast.error(summary) : toast.success(summary)
+      if (failedCount === 0) {
+        toast.success(`Batch upload complete: ${completedCount} successful`)
+      } else if (completedCount === 0) {
+        toast.error(`Batch upload failed: ${failedCount} failed`)
+      } else {
+        toast.error(`Batch upload partial success: ${completedCount} successful, ${failedCount} failed`)
+      }
     }
   }
 
@@ -299,7 +306,12 @@ export default function FileUpload({
     const result = await response.json()
 
     if (!response.ok || !result.success) {
-      throw new Error(result.error || 'Upload failed')
+      const failureCode = result?.errorCode || result?.step
+      const failureDetail = result?.details
+      const combinedMessage = failureCode === 'UPLOAD_SERVICE_UNAVAILABLE'
+        ? `${result.error || 'Service temporarily unavailable'} [${failureCode}]${failureDetail ? ` ${failureDetail}` : ''}`
+        : result.error || 'Upload failed'
+      throw new Error(combinedMessage)
     }
 
     const newDocument: UploadedDocument = result.document
@@ -653,7 +665,9 @@ export default function FileUpload({
     // Handle batch or sequential upload based on file count
     if (validFiles.length > 1) {
       setBatchProgress({ completed: 0, total: validFiles.length, failed: 0 })
-      processBatchQueue(validFiles)
+      setUploadResults(new Map())
+      await processBatchQueue(validFiles)
+      setIsUploading(false)
     } else {
       // Sequential upload for single files
       for (const file of validFiles) {
@@ -749,7 +763,7 @@ export default function FileUpload({
             <p className="text-sm text-gray-500 mb-3">
               Drag & drop files here, or click to select • PDF, Excel, CSV, Images • Up to 10MB each
               <span className="block text-[#2A7A8F] mt-1">
-                ⚡ Smart upload: Multiple files with automatic categorization and concurrent processing
+                ⚡ Smart upload: Multiple files with bounded, reliable concurrent processing
               </span>
             </p>
           </>
@@ -905,6 +919,32 @@ export default function FileUpload({
             <div className="mt-3 text-xs text-[#2A7A8F]">
               Currently uploading: {Array.from(currentUploads).map(fileId => 
                 fileId.split('_')[0]).join(', ')}
+            </div>
+          )}
+
+          {uploadResults.size > 0 && (
+            <div className="mt-3 space-y-2 max-h-40 overflow-auto">
+              {Array.from(uploadResults.entries()).map(([fileId, result]) => (
+                <div key={fileId} className="flex items-center justify-between text-xs bg-white border rounded-md px-2 py-1.5">
+                  <span className="truncate max-w-[45%]" title={fileId.split('_')[0]}>
+                    {fileId.split('_')[0]}
+                  </span>
+                  <span className={
+                    result.status === 'success'
+                      ? 'text-green-700'
+                      : result.status === 'error'
+                      ? 'text-red-700'
+                      : 'text-blue-700'
+                  }>
+                    {result.status === 'success' ? 'Uploaded' : result.status === 'error' ? 'Failed' : 'Uploading'}
+                  </span>
+                  {result.status === 'error' && result.error && (
+                    <span className="truncate text-red-600 max-w-[45%]" title={result.error}>
+                      {result.error}
+                    </span>
+                  )}
+                </div>
+              ))}
             </div>
           )}
         </div>

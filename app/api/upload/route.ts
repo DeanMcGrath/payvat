@@ -140,7 +140,9 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       return NextResponse.json({
         success: false,
         error: 'Service temporarily unavailable. Please try again later.',
+        errorCode: 'UPLOAD_SERVICE_UNAVAILABLE',
         step: 'DATABASE_CONNECTION_FAILED',
+        retryable: true,
         details: dbError instanceof Error ? dbError.message : String(dbError)
       }, { status: 503 })
     }

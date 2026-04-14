@@ -7,6 +7,7 @@
 import { processDocumentWithAI, type AIDocumentProcessingResult } from './ai/documentAnalysis'
 import { isAIEnabled } from './ai/openai'
 import { processWooCommerceVATReport, detectWooCommerceFormat, WOOCOMMERCE_PATTERNS } from './woocommerce-processor'
+import { safePdfParse } from './safePdfParse'
 import * as XLSX from 'xlsx'
 import { 
   VATExtractionError, 
@@ -214,12 +215,22 @@ async function extractPDFTextContent(buffer: Buffer): Promise<string> {
     // FIRST: Try using pdf-parse if available
     try {
       console.log('📄 Attempting proper PDF parsing with pdf-parse...')
-      
-      // Dynamic import pdf-parse
-      const pdfParse = await import('pdf-parse')
-      const parseFunction = pdfParse.default || pdfParse
-      
-      const result = await parseFunction(buffer)
+
+      const parseOptions = {
+        max: 50,
+        version: 'v1.10.100',
+        normalizeWhitespace: true,
+        disableFontFace: true
+      }
+
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('PDF parsing timeout after 30 seconds')), 30000)
+      })
+
+      const result = await Promise.race([
+        safePdfParse(buffer, parseOptions),
+        timeoutPromise
+      ])
       
       if (result && result.text && result.text.trim().length > 20) {
         const extractedText = result.text.trim()
@@ -1488,15 +1499,31 @@ export function extractVATDataFromText(
     /amount\s*due[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
     /grand\s*total[:\s]*€?([0-9,]+\.?[0-9]*)/gi,
   ]
+
+  const parseCandidateAmount = (rawValue: string | undefined): number | null => {
+    if (!rawValue) return null
+    const normalized = rawValue.replace(/[€,\s]/g, '').trim()
+    if (!normalized) return null
+    const parsed = Number(normalized)
+    if (Number.isNaN(parsed) || parsed <= 0 || parsed > 1000000) {
+      return null
+    }
+    return Math.round(parsed * 100) / 100
+  }
+
+  const extractMatchedAmount = (match: RegExpExecArray): number | null => {
+    // Some patterns capture VAT rate as group 1 and amount as group 2.
+    return parseCandidateAmount(match[2] ?? match[1])
+  }
   
   // Extract amounts to exclude (lease payments, etc.)
   const excludedAmounts = new Set<number>()
   for (const pattern of excludePatterns) {
     let match
     while ((match = pattern.exec(normalizedText)) !== null) {
-      const amount = parseFloat(match[1].replace(/,/g, ''))
-      if (!isNaN(amount) && amount > 0) {
-        excludedAmounts.add(Math.round(amount * 100) / 100)
+      const amount = parseCandidateAmount(match[1])
+      if (amount !== null) {
+        excludedAmounts.add(amount)
       }
     }
   }
@@ -1509,9 +1536,9 @@ export function extractVATDataFromText(
   for (const pattern of highPriorityVATPatterns) {
     let match
     while ((match = pattern.exec(normalizedText)) !== null) {
-      const amount = parseFloat(match[1].replace(/,/g, ''))
-      if (!isNaN(amount) && amount > 0) {
-        const roundedAmount = Math.round(amount * 100) / 100
+      const amount = extractMatchedAmount(match)
+      if (amount !== null) {
+        const roundedAmount = amount
         // Skip if this amount is in excluded list
         if (excludedAmounts.has(roundedAmount)) continue
         
@@ -1538,9 +1565,9 @@ export function extractVATDataFromText(
     for (const pattern of standardVATPatterns) {
       let match
       while ((match = pattern.exec(normalizedText)) !== null) {
-        const amount = parseFloat(match[1].replace(/,/g, ''))
-        if (!isNaN(amount) && amount > 0) {
-          const roundedAmount = Math.round(amount * 100) / 100
+        const amount = extractMatchedAmount(match)
+        if (amount !== null) {
+          const roundedAmount = amount
           if (excludedAmounts.has(roundedAmount)) continue
           
           if (!foundVATAmounts.has(roundedAmount)) {
@@ -1565,9 +1592,9 @@ export function extractVATDataFromText(
     for (const pattern of genericVATPatterns) {
       let match
       while ((match = pattern.exec(normalizedText)) !== null) {
-        const amount = parseFloat(match[1].replace(/,/g, ''))
-        if (!isNaN(amount) && amount > 0) {
-          const roundedAmount = Math.round(amount * 100) / 100
+        const amount = extractMatchedAmount(match)
+        if (amount !== null) {
+          const roundedAmount = amount
           if (excludedAmounts.has(roundedAmount)) continue
           
           if (!foundVATAmounts.has(roundedAmount)) {
@@ -1592,8 +1619,8 @@ export function extractVATDataFromText(
   for (const pattern of totalPatterns) {
     let match
     while ((match = pattern.exec(normalizedText)) !== null) {
-      const amount = parseFloat(match[1].replace(/,/g, ''))
-      if (!isNaN(amount) && amount > 0) {
+      const amount = extractMatchedAmount(match)
+      if (amount !== null) {
         totalAmount = amount
         confidence += 0.2
       }
@@ -1777,65 +1804,43 @@ export async function processDocument(
     if (aiAvailable) {
       console.log('🤖 ATTEMPTING AI PROCESSING...')
       console.log('   - OpenAI API key configured')
-      console.log('   - Testing connectivity...')
-      
-      // Quick connectivity test
+      console.log('   - Calling AI processor directly (no pre-flight connectivity gate)')
+
       try {
-        const { quickConnectivityTest } = await import('./ai/diagnostics')
-        const connectivityCheck = await quickConnectivityTest()
-        
-        if (connectivityCheck.success) {
-          console.log('✅ OpenAI connectivity confirmed')
-          
-          // Attempt AI processing
-          console.log('📤 CALLING processDocumentWithAI()...')
-          const aiResult = await processDocumentWithAI(fileData, mimeType, fileName, category, userId)
-          console.log('📥 AI PROCESSING RESULT:')
-          console.log(`   Success: ${aiResult.success}`)
-          console.log(`   Has extracted data: ${!!aiResult.extractedData}`)
-          console.log(`   Error: ${aiResult.error || 'none'}`)
-          
-          if (aiResult.success && aiResult.extractedData) {
-            const allVATAmounts = [...aiResult.extractedData.salesVAT, ...aiResult.extractedData.purchaseVAT]
-            console.log('✅ AI PROCESSING SUCCESS')
-            console.log(`   VAT amounts found: ${allVATAmounts.length}`)
-            console.log(`   VAT values: €${allVATAmounts.join(', €')}`)
-            console.log(`   Confidence: ${aiResult.extractedData.confidence}`)
-            console.log('   🎉 THIS WILL COUNT AS A PROCESSED DOCUMENT!')
-            
-            return {
+        console.log('📤 CALLING processDocumentWithAI()...')
+        const aiResult = await processDocumentWithAI(fileData, mimeType, fileName, category, userId)
+        console.log('📥 AI PROCESSING RESULT:')
+        console.log(`   Success: ${aiResult.success}`)
+        console.log(`   Has extracted data: ${!!aiResult.extractedData}`)
+        console.log(`   Error: ${aiResult.error || 'none'}`)
+
+        if (aiResult.success && aiResult.extractedData) {
+          const allVATAmounts = [...aiResult.extractedData.salesVAT, ...aiResult.extractedData.purchaseVAT]
+          console.log('✅ AI PROCESSING SUCCESS')
+          console.log(`   VAT amounts found: ${allVATAmounts.length}`)
+          console.log(`   VAT values: €${allVATAmounts.join(', €')}`)
+          console.log(`   Confidence: ${aiResult.extractedData.confidence}`)
+
+          return {
+            success: true,
+            isScanned: true,
+            scanResult: `AI processed document successfully: ${aiResult.scanResult}`,
+            extractedData: convertToLegacyFormat(aiResult.extractedData),
+            error: undefined,
+            processingSteps: [{
+              step: 'Enhanced AI Processing',
               success: true,
-              isScanned: true,
-              scanResult: `AI processed document successfully: ${aiResult.scanResult}`,
-              extractedData: convertToLegacyFormat(aiResult.extractedData),
-              error: undefined,
-              processingSteps: [{
-                step: 'Enhanced AI Processing',
-                success: true,
-                duration: 2000,
-                details: 'Successfully processed with enhanced AI engine'
-              }],
-              qualityScore: aiResult.extractedData.confidence || 85
-            }
-          } else {
-            console.log('⚠️ AI PROCESSING FAILED:')
-            console.log(`   Reason: ${aiResult.error || 'Unknown error'}`)
-            console.log('   Falling back to legacy processing...')
-            
-            // Store AI error for reporting to frontend
-            const aiError = {
-              type: 'AI_PROCESSING_FAILED',
-              message: aiResult.error || 'Unknown AI processing error',
-              scanResult: aiResult.scanResult || 'AI processing failed',
-              timestamp: new Date().toISOString()
-            }
-            console.log('📊 AI ERROR DETAILS:', JSON.stringify(aiError, null, 2))
+              duration: 2000,
+              details: 'Successfully processed with enhanced AI engine'
+            }],
+            qualityScore: aiResult.extractedData.confidence || 85
           }
-        } else {
-          console.log('⚠️ OpenAI connectivity failed, using legacy processing')
         }
-      } catch (connectivityError) {
-        console.log('⚠️ Connectivity test failed, using legacy processing')
+
+        console.log('⚠️ AI processing returned no extracted data, using legacy fallback')
+      } catch (aiError) {
+        console.log('⚠️ AI path unavailable, falling back to legacy processing')
+        console.log(`   Reason: ${aiError instanceof Error ? aiError.message : 'Unknown AI error'}`)
       }
     } else {
       console.log('⚠️ AI not available, using legacy processing')
@@ -1843,11 +1848,6 @@ export async function processDocument(
     
     // Fallback to legacy processing
     console.log('🔧 USING LEGACY PROCESSING...')
-    console.log('   ⚠️  WARNING: Legacy processing does NOT count as "processed" in API!')
-    console.log('   ⚠️  This is why you see "processedDocuments": 0')
-    console.log('   ⚠️  Only AI processing counts as truly "processed"')
-    console.log('')
-    
     const legacyResult = await processWithLegacyMethod(fileData, mimeType, fileName, category, processingStartTime)
     
     console.log('🔧 LEGACY PROCESSING COMPLETE:')
@@ -1866,12 +1866,12 @@ export async function processDocument(
     // Return a clear error with helpful information
     const errorMessage = error instanceof Error ? error.message : 'Unknown processing error'
     
-    // Even when processing fails, try to mark the document as attempted
-    // This ensures that documents are counted as "processed" even with errors
+    // Return a failure result so callers can persist an explicit failed status
+    // instead of showing this as successfully processed with empty values.
     return {
-      success: true, // Mark as successful so document gets stored as processed
-      isScanned: true, // Mark as scanned so it counts as processed
-      scanResult: `Processing attempted but failed (${processingTime}ms): ${errorMessage}. Document uploaded successfully but requires manual review.`,
+      success: false,
+      isScanned: false,
+      scanResult: `Processing failed (${processingTime}ms): ${errorMessage}`,
       error: errorMessage,
       extractedData: {
         salesVAT: [],
