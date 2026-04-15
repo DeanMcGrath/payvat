@@ -39,10 +39,10 @@ function statusBadge(status: PaymentStatus) {
 }
 
 function returnBadge(status: ReturnStatus) {
-  if (status === "PAID") return <Badge className="bg-green-100 text-green-800 border-0">Return Paid</Badge>
-  if (status === "SUBMITTED") return <Badge className="bg-blue-100 text-blue-800 border-0">Return Recorded</Badge>
-  if (status === "OVERDUE") return <Badge className="bg-red-100 text-red-800 border-0">Return Overdue</Badge>
-  return <Badge className="bg-amber-100 text-amber-800 border-0">Draft Return</Badge>
+  if (status === "PAID") return <Badge className="bg-green-100 text-green-800 border-0">Paid</Badge>
+  if (status === "SUBMITTED") return <Badge className="bg-blue-100 text-blue-800 border-0">Submitted</Badge>
+  if (status === "OVERDUE") return <Badge className="bg-red-100 text-red-800 border-0">Blocked</Badge>
+  return <Badge className="bg-amber-100 text-amber-800 border-0">Draft</Badge>
 }
 
 export default function PaymentsPage() {
