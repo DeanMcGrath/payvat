@@ -877,7 +877,7 @@ export default function VATSubmissionPage() {
                                         <div className="flex items-center justify-between">
                                           <span className="inline-flex items-center text-green-600 text-xs">
                                             <CheckCircle className="h-3 w-3 mr-1" />
-                                            AI Processed
+                                            Processed
                                           </span>
                                           
                                           {/* Quality indicator for processed documents without VAT */}
@@ -895,7 +895,7 @@ export default function VATSubmissionPage() {
                                         <div className="flex items-center">
                                           <span className="inline-flex items-center text-yellow-600 text-xs">
                                             <div className="animate-spin rounded-full h-3 w-3 border border-yellow-600 border-t-transparent mr-2"></div>
-                                            AI Processing...
+                                            Processing...
                                           </span>
                                         </div>
                                       )}
@@ -978,7 +978,7 @@ export default function VATSubmissionPage() {
                                       {document.isScanned && (!docVATData || vatAmounts.length === 0) && (
                                         <span className="inline-flex items-center text-green-600 text-xs">
                                           <CheckCircle className="h-3 w-3 mr-1" />
-                                          AI Processed
+                                          Processed
                                         </span>
                                       )}
                                       
@@ -1050,7 +1050,7 @@ export default function VATSubmissionPage() {
                                 {document.isScanned && (
                                   <span className="inline-flex items-center text-green-600 text-xs">
                                     <CheckCircle className="h-3 w-3 mr-1" />
-                                    AI Processed
+                                    Processed
                                   </span>
                                 )}
                                 {!document.isScanned && (

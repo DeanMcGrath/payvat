@@ -10,6 +10,7 @@
     "start": "next start",
     "test:extraction-fixtures": "node scripts/extraction-fixture-check.js",
     "test:trust-copy": "node scripts/trust-copy-audit.js",
+    "test:status-vocabulary": "node scripts/status-vocabulary-audit.js",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
