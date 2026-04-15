@@ -1,0 +1,66 @@
+{
+  "families": {
+    "vat_sales_invoice": {
+      "domain": "vat",
+      "requiredFields": ["invoice_date", "invoice_total", "vat_amount"]
+    },
+    "vat_purchase_invoice": {
+      "domain": "vat",
+      "requiredFields": ["invoice_date", "invoice_total", "vat_amount"]
+    },
+    "vat_credit_note": {
+      "domain": "vat",
+      "requiredFields": ["invoice_date", "invoice_total", "vat_amount"]
+    },
+    "corporation_tax_return_summary": {
+      "domain": "compliance",
+      "requiredFields": [
+        "company_name",
+        "tax_reference_number",
+        "cro_number",
+        "return_date",
+        "accounting_period_start",
+        "accounting_period_end",
+        "corporation_tax_balance_payable"
+      ]
+    },
+    "annual_accounts_abridged": {
+      "domain": "compliance",
+      "requiredFields": [
+        "company_name",
+        "registration_number",
+        "financial_year_end",
+        "board_approval_date",
+        "shareholders_funds"
+      ]
+    },
+    "annual_accounts_full": {
+      "domain": "compliance",
+      "requiredFields": [
+        "company_name",
+        "registration_number",
+        "financial_year_end",
+        "board_approval_date",
+        "turnover",
+        "profit_or_loss_before_tax",
+        "profit_or_loss_after_tax"
+      ]
+    },
+    "year_end_trial_balance": {
+      "domain": "compliance",
+      "requiredFields": ["period_start", "period_end", "ledger_lines"]
+    },
+    "general_ledger_export": {
+      "domain": "compliance",
+      "requiredFields": ["period_start", "period_end", "ledger_lines"]
+    },
+    "bank_statement_year_end": {
+      "domain": "compliance",
+      "requiredFields": ["statement_end_date", "closing_balance"]
+    },
+    "cro_annual_return_b1": {
+      "domain": "compliance",
+      "requiredFields": ["company_name", "registration_number", "annual_return_date"]
+    }
+  }
+}

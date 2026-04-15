@@ -9,6 +9,12 @@ import { isAIEnabled } from './ai/openai'
 import { processWooCommerceVATReport, detectWooCommerceFormat, WOOCOMMERCE_PATTERNS } from './woocommerce-processor'
 import { safePdfParse } from './safePdfParse'
 import * as XLSX from 'xlsx'
+import {
+  type ComplianceDocumentFamily,
+  type ComplianceExtractionResult,
+  buildComplianceExtractionFromRegistry,
+  detectComplianceFamilyFromRegistry
+} from './extraction/document-family-registry'
 import { 
   VATExtractionError, 
   CircuitBreaker, 
@@ -49,6 +55,12 @@ export interface ExtractedVATData {
     recoveryMethod?: string
     fallbacksUsed: string[]
   }
+  classification?: {
+    family: 'vat_invoice' | 'corporation_tax_return_summary' | 'annual_accounts_abridged' | 'annual_accounts_full'
+    confidence: number
+    uncertain?: boolean
+  }
+  complianceExtraction?: ComplianceExtractionResult
 }
 
 export interface DocumentProcessingResult {
@@ -70,6 +82,7 @@ export interface ProcessingStep {
   details?: string
   error?: string
 }
+
 
 /**
  * Extract text content from base64 encoded files
@@ -1398,6 +1411,36 @@ export function extractVATDataFromText(
   const normalizedText = sanitizedText.toLowerCase().replace(/\s+/g, ' ').trim()
   const compactText = sanitizedText.replace(/\r/g, '')
   extractedText.push(text)
+
+  // Compliance document families (non-VAT schema path)
+  const complianceDetection = detectComplianceFamilyFromRegistry(compactText, fileName)
+  const complianceExtraction = buildComplianceExtractionFromRegistry(compactText, fileName)
+  if (complianceExtraction) {
+    const requiresReview = complianceExtraction.reviewReasons.length > 0
+    const complianceFlags = complianceExtraction.reviewReasons.map(reason => `REVIEW: ${reason}`)
+    if (requiresReview) {
+      complianceFlags.push('REQUIRES_MANUAL_REVIEW')
+    }
+    return {
+      salesVAT: [],
+      purchaseVAT: [],
+      confidence: requiresReview ? Math.min(complianceExtraction.confidence, 0.85) : complianceExtraction.confidence,
+      extractedText: [text],
+      documentType: 'OTHER',
+      processingMethod: 'OCR_TEXT',
+      processingTimeMs: 0,
+      validationFlags: complianceFlags,
+      irishVATCompliant: true,
+      extractionDetails: [],
+      classification: {
+        family: complianceExtraction.document_type,
+        confidence: complianceExtraction.confidence,
+        uncertain: complianceDetection?.uncertain || false
+      },
+      complianceExtraction
+    }
+  }
+
   const vendorHints = {
     isThree: /three\s+ireland|this month'?s invoice/i.test(compactText),
     isVolkswagen: /volkswagen\s+financial|vw\s+financial/i.test(compactText),
@@ -2304,6 +2347,15 @@ export function validateExtractedVAT(extractedData: ExtractedVATData | any): {
     if (!extractedData) {
       issues.push('No extracted data available')
       return { isValid: false, issues, warnings }
+    }
+
+    if (extractedData.complianceExtraction) {
+      const complianceReasons = extractedData.complianceExtraction.reviewReasons || []
+      return {
+        isValid: complianceReasons.length === 0,
+        issues: complianceReasons,
+        warnings
+      }
     }
     
     // Check VAT amounts
