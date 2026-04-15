@@ -13,292 +13,92 @@ interface SearchResult {
 // Static content index for searching
 const SEARCHABLE_CONTENT = [
   {
-    id: 'vat-registration',
-    title: 'How to Apply for a VAT Number in Ireland',
-    content: 'This guide outlines the process for new businesses in Ireland to register for a Value-Added Tax (VAT) number, ensuring compliance with Irish tax regulations. Registration requirements mandatory voluntary intention trade documents forms Revenue Online Service ROS TR1 TR2 processing obligations compliance',
-    url: '/vat-registration',
-    type: 'guide' as const,
-    category: 'VAT Registration'
-  },
-  {
-    id: 'vat-guide',
-    title: 'Everything You Need to Know About VAT in Ireland',
-    content: 'Value-Added Tax VAT indirect tax applied sale goods services Ireland registered businesses charge output reclaim input VAT rates 23% 13.5% 9% 0% filing payment deadlines periodic returns Revenue Commissioners',
-    url: '/vat-guide',
-    type: 'guide' as const,
-    category: 'VAT Guide'
-  },
-  {
-    id: 'dashboard',
-    title: 'VAT Dashboard',
-    content: 'Dashboard overview VAT returns records payments tracking analytics reports upcoming deadlines business summary financial overview compliance status',
-    url: '/dashboard',
+    id: 'home',
+    title: 'PayVAT',
+    content: 'Prepare review record export and track Irish VAT returns in a guided workflow for paid beta users',
+    url: '/',
     type: 'page' as const,
-    category: 'Dashboard'
-  },
-  {
-    id: 'vat-submission',
-    title: 'VAT Return Submission',
-    content: 'Review VAT returns calculate sales VAT purchase VAT net VAT due upload supporting documents AI processing record guided submission ROS-ready export compliance',
-    url: '/vat-submission',
-    type: 'page' as const,
-    category: 'VAT Returns'
-  },
-  {
-    id: 'submit-return',
-    title: 'Submit VAT Return',
-    content: 'Review VAT return calculations confirm PayVAT record prepare ROS handoff supporting documents approval payment tracking process',
-    url: '/submit-return',
-    type: 'page' as const,
-    category: 'VAT Returns'
-  },
-  {
-    id: 'vat3-return',
-    title: 'VAT3 Return Form',
-    content: 'Complete VAT3 return form preparation ROS-compatible export workflow trader name registration number filing frequency period details unusual expenditure EU trade postponed accounting',
-    url: '/vat3-return',
-    type: 'page' as const,
-    category: 'VAT Returns'
-  },
-  {
-    id: 'confirmation-payment',
-    title: 'Confirmation & Payment',
-    content: 'Review confirm VAT return record payment tracking secure transaction compliance business information period summary final confirmation',
-    url: '/confirmation-payment',
-    type: 'page' as const,
-    category: 'Payments'
-  },
-  {
-    id: 'secure-payment',
-    title: 'Secure VAT Payment',
-    content: 'Secure payment tracking VAT dues credit card debit card bank transfer payment confirmation SSL security PCI compliant payment methods',
-    url: '/secure-payment',
-    type: 'page' as const,
-    category: 'Payments'
-  },
-  {
-    id: 'payment-confirmed',
-    title: 'Payment Confirmed',
-    content: 'Payment confirmation VAT payment recorded in PayVAT tracking reference details business information payment method',
-    url: '/payment-confirmed',
-    type: 'page' as const,
-    category: 'Payments'
-  },
-  {
-    id: 'reports',
-    title: 'VAT Reports & Analytics',
-    content: 'VAT reports analytics financial summaries annual reports trend analysis EC Sales List reporting statistics business insights Revenue compliance tracking',
-    url: '/reports',
-    type: 'page' as const,
-    category: 'Reports'
-  },
-  {
-    id: 'vat-period',
-    title: 'VAT Period Selection',
-    content: 'VAT period selection bi-monthly taxable period VAT return submission choose period year Revenue compliance due dates deadline management',
-    url: '/vat-period',
-    type: 'page' as const,
-    category: 'VAT Returns'
-  },
-  {
-    id: 'vat-calculator',
-    title: 'VAT Calculator Ireland',
-    content: 'VAT calculator Ireland calculate VAT amounts rates 23% 13.5% 9% input output VAT computation business calculations tax planning freelancer construction ecommerce',
-    url: '/vat-calculator-ireland',
-    type: 'page' as const,
-    category: 'Calculator'
+    category: 'Product'
   },
   {
     id: 'pricing',
-    title: 'Pricing Plans',
-    content: 'PayVAT pricing plans subscription costs VAT management service fees business plans enterprise solutions monthly annual billing payment tracking €35 monthly €350 yearly',
+    title: 'Paid Beta Pricing',
+    content: 'Paid beta access for guided VAT preparation review recording export and payment tracking',
     url: '/pricing',
     type: 'page' as const,
     category: 'Pricing'
   },
   {
-    id: 'about',
-    title: 'About PayVAT',
-    content: 'About PayVAT Irish VAT compliance software VAT preparation review export workflow business tax management Irish businesses VAT processing company information',
-    url: '/about',
-    type: 'page' as const,
-    category: 'Company'
+    id: 'contact',
+    title: 'Contact PayVAT',
+    content: 'Contact the PayVAT team for onboarding support and paid beta access',
+    url: '/contact',
+    type: 'help' as const,
+    category: 'Support'
   },
   {
     id: 'faq',
     title: 'Frequently Asked Questions',
-    content: 'FAQ frequently asked questions VAT help support common issues troubleshooting ROS-ready workflow payment tracking return preparation business guidance',
+    content: 'Guided filing workflow ROS boundary PayVAT tracking reference export artifact payment tracking and support',
     url: '/faq',
     type: 'help' as const,
-    category: 'Help & Support'
+    category: 'Help'
+  },
+  {
+    id: 'beta-limitations',
+    title: 'How PayVAT Works Today',
+    content: 'Paid beta limitations ROS filing boundary export artifact guidance and user responsibilities',
+    url: '/beta-limitations',
+    type: 'help' as const,
+    category: 'Help'
+  },
+  {
+    id: 'dashboard-documents',
+    title: 'Documents Workspace',
+    content: 'Upload documents review flagged items correct totals and VAT amounts and track processing outcomes',
+    url: '/dashboard/documents',
+    type: 'page' as const,
+    category: 'Workflow'
+  },
+  {
+    id: 'dashboard-returns',
+    title: 'VAT Returns',
+    content: 'Review draft VAT returns see period totals and continue to submission checkpoint',
+    url: '/dashboard/vat-returns',
+    type: 'page' as const,
+    category: 'Workflow'
+  },
+  {
+    id: 'vat-submission',
+    title: 'VAT Submission Review',
+    content: 'Record guided submission generate PayVAT tracking reference and export filing artifact for ROS handoff',
+    url: '/vat-submission',
+    type: 'page' as const,
+    category: 'Workflow'
+  },
+  {
+    id: 'dashboard-payments',
+    title: 'Payments',
+    content: 'Track payment records references pending and completed payment states after return recording',
+    url: '/dashboard/payments',
+    type: 'page' as const,
+    category: 'Workflow'
   },
   {
     id: 'signup',
-    title: 'Sign Up for PayVAT',
-    content: 'Sign up register PayVAT account business registration VAT number company details subscription start trial create account user registration',
+    title: 'Sign Up',
+    content: 'Create your PayVAT account and start paid beta onboarding',
     url: '/signup',
     type: 'page' as const,
     category: 'Account'
   },
   {
     id: 'login',
-    title: 'Login to PayVAT',
-    content: 'Login sign in PayVAT account user authentication email password access dashboard business account user login credentials',
+    title: 'Login',
+    content: 'Sign in to your PayVAT workspace',
     url: '/login',
     type: 'page' as const,
     category: 'Account'
-  },
-  {
-    id: 'vat-deadlines',
-    title: 'VAT Deadlines Ireland',
-    content: 'VAT deadlines Ireland filing dates payment due dates Revenue Online Service ROS extension deadline management bi-monthly returns periodic obligations',
-    url: '/vat-deadlines-ireland',
-    type: 'guide' as const,
-    category: 'VAT Guide'
-  },
-  {
-    id: 'avoid-revenue-penalties',
-    title: 'Avoid Revenue Penalties Ireland',
-    content: 'Avoid Revenue penalties Ireland VAT compliance late filing penalties late payment charges Revenue enforcement action business compliance tax obligations',
-    url: '/avoid-revenue-penalties-ireland',
-    type: 'guide' as const,
-    category: 'VAT Guide'
-  },
-  {
-    id: 'how-to-register-vat',
-    title: 'How to Register for VAT Ireland',
-    content: 'How to register for VAT Ireland VAT registration process eligibility requirements turnover thresholds voluntary registration mandatory registration business setup',
-    url: '/how-to-register-for-vat-ireland',
-    type: 'guide' as const,
-    category: 'VAT Registration'
-  },
-  {
-    id: 'dublin-business-registration',
-    title: 'Dublin Business Registration',
-    content: 'Dublin business registration setup business Dublin city register company sole trader partnership business permits licenses Dublin City Council',
-    url: '/dublin-business-registration',
-    type: 'guide' as const,
-    category: 'Business Registration'
-  },
-  {
-    id: 'cork-business-registration',
-    title: 'Cork Business Registration',
-    content: 'Cork business registration setup business Cork city register company sole trader partnership business permits licenses Cork City Council',
-    url: '/cork-business-registration',
-    type: 'guide' as const,
-    category: 'Business Registration'
-  },
-  {
-    id: 'galway-business-registration',
-    title: 'Galway Business Registration',
-    content: 'Galway business registration setup business Galway city register company sole trader partnership business permits licenses Galway City Council',
-    url: '/galway-business-registration',
-    type: 'guide' as const,
-    category: 'Business Registration'
-  },
-  {
-    id: 'complete-business-setup',
-    title: 'Complete Business Setup Guide Ireland',
-    content: 'Complete business setup guide Ireland comprehensive guide starting business Ireland business registration VAT registration tax compliance company formation',
-    url: '/complete-business-setup-guide-ireland',
-    type: 'guide' as const,
-    category: 'Business Setup'
-  },
-  {
-    id: 'start-business-ireland',
-    title: 'Start a Business Ireland',
-    content: 'Start a business Ireland step by step guide business registration company formation sole trader partnership business plan funding licenses permits',
-    url: '/start-a-business-ireland',
-    type: 'guide' as const,
-    category: 'Business Setup'
-  },
-  {
-    id: 'start-online-business',
-    title: 'Start Online Business Ireland',
-    content: 'Start online business Ireland ecommerce business digital business online retail VAT registration digital services marketplace selling online',
-    url: '/start-online-business-ireland',
-    type: 'guide' as const,
-    category: 'Business Setup'
-  },
-  {
-    id: 'start-retail-business',
-    title: 'Start Retail Business Ireland',
-    content: 'Start retail business Ireland physical store retail business setup shop permits licenses business registration retail VAT obligations',
-    url: '/start-retail-business-ireland',
-    type: 'guide' as const,
-    category: 'Business Setup'
-  },
-  {
-    id: 'company-vs-sole-trader',
-    title: 'Company vs Sole Trader Ireland',
-    content: 'Company vs sole trader Ireland business structure comparison limited company sole proprietorship liability tax implications registration requirements',
-    url: '/company-vs-sole-trader-ireland',
-    type: 'guide' as const,
-    category: 'Business Setup'
-  },
-  {
-    id: 'register-business-name',
-    title: 'Register Business Name Ireland',
-    content: 'Register business name Ireland business name registration Company Registration Office CRO business trading name sole trader company name',
-    url: '/register-business-name-ireland',
-    type: 'guide' as const,
-    category: 'Business Registration'
-  },
-  {
-    id: 'corporate-tax-ireland',
-    title: 'Corporate Tax Ireland',
-    content: 'Corporate tax Ireland corporation tax rate 12.5% tax compliance company tax obligations Revenue Commissioners business tax planning',
-    url: '/corporate-tax-ireland',
-    type: 'guide' as const,
-    category: 'Tax Guide'
-  },
-  {
-    id: 'freelancer-vat',
-    title: 'Freelancer VAT Ireland',
-    content: 'Freelancer VAT Ireland self-employed VAT obligations VAT registration thresholds services VAT rates freelance business tax compliance',
-    url: '/freelancer-vat-ireland',
-    type: 'guide' as const,
-    category: 'VAT Guide'
-  },
-  {
-    id: 'construction-vat',
-    title: 'Construction VAT Ireland',
-    content: 'Construction VAT Ireland construction industry VAT obligations reverse charge mechanism subcontractor VAT building supplies construction services',
-    url: '/construction-vat-ireland',
-    type: 'guide' as const,
-    category: 'VAT Guide'
-  },
-  {
-    id: 'ecommerce-vat',
-    title: 'Ecommerce VAT Ireland',
-    content: 'Ecommerce VAT Ireland online business VAT obligations digital services VAT MOSS scheme cross-border sales EU VAT rules marketplace selling',
-    url: '/ecommerce-vat-ireland',
-    type: 'guide' as const,
-    category: 'VAT Guide'
-  },
-  {
-    id: 'accountant-fees-savings',
-    title: 'Accountant Fees vs PayVAT Savings',
-    content: 'Accountant fees vs PayVAT savings cost comparison traditional accounting fees automated VAT compliance cost savings business expense reduction',
-    url: '/accountant-fees-vs-payvat-savings',
-    type: 'page' as const,
-    category: 'Cost Comparison'
-  },
-  {
-    id: 'privacy',
-    title: 'Privacy Policy',
-    content: 'Privacy policy data protection GDPR compliance personal data processing cookies privacy rights user data security PayVAT privacy terms',
-    url: '/privacy',
-    type: 'page' as const,
-    category: 'Legal'
-  },
-  {
-    id: 'terms',
-    title: 'Terms of Service',
-    content: 'Terms of service terms and conditions user agreement service terms PayVAT usage agreement legal terms subscription terms cancellation policy',
-    url: '/terms',
-    type: 'page' as const,
-    category: 'Legal'
   }
 ]
 
