@@ -484,7 +484,7 @@ export default function CompanyVsSoleTraderIreland() {
                         <h4 className="font-normal text-green-800 mb-1">PayVat Advantage</h4>
                         <p className="text-sm text-green-700">
                           Regardless of structure, PayVat simplifies VAT compliance with automated calculations, 
-                          ROS integration, and deadline reminders.
+                          ROS-ready export guidance, and deadline reminders.
                         </p>
                       </div>
                     </div>

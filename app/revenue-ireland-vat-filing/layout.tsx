@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Revenue Ireland VAT Filing Guide',
-    description: 'Complete guide to filing VAT returns with Irish Revenue. ROS submissions, deadlines, and requirements.',
+    description: 'Complete guide to filing VAT returns with Irish Revenue, including ROS steps, deadlines, and requirements.',
   },
   alternates: {
     canonical: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://payvat.ie'}/revenue-ireland-vat-filing`,

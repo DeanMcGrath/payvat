@@ -569,9 +569,9 @@ export default function VATDeadlinesIreland() {
                   <div className="icon-modern bg-green-500 mb-4 mx-auto">
                     <ChevronRight className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-normal text-foreground mb-2">Auto Filing</h3>
+                  <h3 className="font-normal text-foreground mb-2">Filing-Ready Workflow</h3>
                   <p className="text-sm text-muted-foreground">
-                    Direct ROS integration files your returns automatically. No manual entry or delays.
+                    Keep returns ready with validation checks, export artifacts, and deadline prompts.
                   </p>
                 </div>
 

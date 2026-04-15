@@ -35,8 +35,8 @@ export default function VATAutomationSoftwarePage() {
     },
     {
       icon: Upload,
-      title: "One-Click Revenue Submission",
-      description: "Direct integration with Revenue Ireland systems for automated VAT3 return submission",
+      title: "Guided ROS-Ready Export",
+      description: "Prepare VAT3 records with validation checks and export-ready filing packages",
       benefit: "Never miss deadlines",
       timesSaved: "5 hours/month"
     },
@@ -63,9 +63,9 @@ export default function VATAutomationSoftwarePage() {
       improvement: "100% accurate"
     },
     {
-      task: "Revenue Submission",
+      task: "ROS Filing Preparation",
       traditional: "1-2 hours ROS navigation",
-      automated: "One-click submission", 
+      automated: "Validated export package",
       improvement: "90% time saved"
     },
     {
@@ -94,8 +94,8 @@ export default function VATAutomationSoftwarePage() {
     },
     {
       category: "Revenue Systems",
-      systems: ["ROS", "VAT3 Portal", "Revenue API", "Digital Certificates", "myAccount"],
-      description: "Direct submission to all Irish Revenue platforms"
+      systems: ["ROS", "VAT3 Portal", "Digital Certificates", "myAccount"],
+      description: "Guided workflow for ROS-compatible filing handoff"
     }
   ]
 
@@ -147,7 +147,7 @@ export default function VATAutomationSoftwarePage() {
       features: [
         "Up to 100 documents/month",
         "AI VAT extraction",
-        "Basic Revenue submission", 
+        "Basic ROS-ready export",
         "Email support",
         "Mobile app access"
       ],
@@ -161,7 +161,7 @@ export default function VATAutomationSoftwarePage() {
       features: [
         "Up to 500 documents/month",
         "Advanced AI processing",
-        "Priority Revenue submission",
+        "Priority filing review support",
         "Accounting software integration",
         "Phone + email support",
         "Custom VAT rules",
@@ -190,11 +190,11 @@ export default function VATAutomationSoftwarePage() {
   const faqItems = [
     {
       question: "How does VAT automation software work for Irish businesses?",
-      answer: "VAT automation software uses AI to process your business documents, extract VAT information, apply correct Irish VAT rates (23%, 13.5%, 9%, 0%), and automatically submit VAT3 returns to Revenue Ireland. The system integrates with your existing accounting software and bank accounts to capture all VAT-eligible transactions without manual input."
+      answer: "VAT automation software uses AI to process your business documents, extract VAT information, apply correct Irish VAT rates (23%, 13.5%, 9%, 0%), and prepare VAT3 returns for review and ROS-compatible handoff. The system integrates with your existing accounting software and bank accounts to capture VAT-eligible transactions with less manual input."
     },
     {
-      question: "Is automated VAT submission to Revenue Ireland secure and compliant?",
-      answer: "Yes, PayVAT uses the same security protocols as Revenue's ROS system with 256-bit encryption and digital certificates. All submissions are made through official Revenue APIs with full audit trails. The system is designed to meet all Irish VAT compliance requirements and includes built-in validation checks."
+      question: "Is PayVAT's filing workflow secure and compliant?",
+      answer: "Yes. PayVAT uses strong security controls with audit trails and built-in validation checks to support compliant VAT workflows. In this beta, PayVAT does not submit returns directly to ROS."
     },
     {
       question: "Can VAT software handle complex Irish VAT scenarios?",
@@ -202,24 +202,24 @@ export default function VATAutomationSoftwarePage() {
     },
     {
       question: "How much time does automated VAT processing save monthly?", 
-      answer: "Most Irish businesses save 20-40 hours per month with VAT automation. This includes eliminating manual receipt entry (15 hours), automatic VAT calculations (8 hours), simplified Revenue submission (5 hours), and continuous compliance monitoring (12 hours). ROI typically achieved within 2-3 months."
+      answer: "Most Irish businesses save 20-40 hours per month with VAT automation. This includes reducing manual receipt entry (15 hours), faster VAT calculations (8 hours), simpler filing preparation (5 hours), and ongoing compliance checks (12 hours). ROI is typically achieved within 2-3 months."
     },
     {
-      question: "What happens if the VAT software makes an error in my submission?",
-      answer: "Professional VAT automation systems include error protection with manual review options for flagged transactions. PayVAT provides error insurance covering any automated submission mistakes, plus dedicated support to handle any Revenue queries. All submissions include detailed audit trails for transparency."
+      question: "What happens if the VAT software flags uncertain extraction?",
+      answer: "PayVAT includes review controls for uncertain extraction results so you can correct fields before recording a return. Every recorded step keeps an audit trail for transparency and support."
     },
     {
       question: "Does VAT automation software integrate with Irish accounting systems?",
-      answer: "Yes, leading VAT automation platforms integrate with all major Irish accounting software including Sage, QuickBooks, Xero, and FreeAgent. The integration syncs VAT data both ways, ensuring your accounting records stay current with automated VAT submissions while maintaining existing workflows."
+      answer: "Yes, leading VAT automation platforms integrate with major Irish accounting software including Sage, QuickBooks, Xero, and FreeAgent. Integration keeps your VAT data aligned with your accounting records while maintaining existing workflows."
     }
   ]
 
   return (
     <div className="min-h-screen bg-background">
       <ArticleSchema
-        title="VAT Automation Software Ireland: AI-Powered Revenue Submission System"
-        description="Advanced VAT automation software for Irish businesses featuring AI document processing, automated Revenue submissions, and comprehensive compliance monitoring."
-        keywords={["VAT software Ireland", "automated VAT submission Ireland", "VAT automation Ireland", "AI VAT processing", "Revenue VAT integration"]}
+        title="VAT Automation Software Ireland: AI-Powered Workflow System"
+        description="Advanced VAT automation software for Irish businesses featuring AI document processing, review controls, ROS-ready exports, and compliance monitoring."
+        keywords={["VAT software Ireland", "VAT filing preparation Ireland", "VAT automation Ireland", "AI VAT processing", "ROS-ready export workflow"]}
         url="https://payvat.ie/vat-automation-software-ireland"
       />
       <SiteHeader />
@@ -230,10 +230,10 @@ export default function VATAutomationSoftwarePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-5xl font-normal text-foreground mb-6">
-                VAT Automation Software Ireland: <span className="text-gradient-primary">AI-Powered Revenue Integration</span>
+                VAT Automation Software Ireland: <span className="text-gradient-primary">AI-Powered Review Workflow</span>
               </h1>
               <p className="text-xl text-muted-foreground mb-6 leading-relaxed">
-                Transform your VAT processing with <strong>VAT software Ireland</strong> that delivers AI-powered document processing, automated Revenue submissions, and 90% time savings for Irish businesses.
+                Transform your VAT processing with <strong>VAT software Ireland</strong> that delivers AI-powered document processing, validation-first review, and 90% time savings for Irish businesses.
               </p>
               <div className="flex flex-wrap gap-4 mb-8">
                 <div className="flex items-center gap-2">
@@ -242,7 +242,7 @@ export default function VATAutomationSoftwarePage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-success" />
-                  <span className="text-sm font-normal text-foreground">Direct Revenue integration</span>
+                  <span className="text-sm font-normal text-foreground">ROS-ready export workflow</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-success" />
@@ -288,8 +288,8 @@ export default function VATAutomationSoftwarePage() {
                     <CheckCircle className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-normal text-foreground">Submit to Revenue</p>
-                    <p className="text-sm text-muted-foreground">Automatic VAT3 filing</p>
+                    <p className="font-normal text-foreground">Record and export VAT return</p>
+                    <p className="text-sm text-muted-foreground">ROS-ready handoff package</p>
                   </div>
                   <Badge className="bg-success text-white">1 click</Badge>
                 </div>
@@ -305,7 +305,7 @@ export default function VATAutomationSoftwarePage() {
               Why Choose <span className="text-gradient-primary">Automated VAT Submission Ireland</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Advanced automation features designed specifically for Irish VAT requirements and Revenue integration.
+              Advanced automation features designed specifically for Irish VAT requirements and filing-readiness checks.
             </p>
           </div>
           

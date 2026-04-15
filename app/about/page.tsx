@@ -62,10 +62,10 @@ export default function AboutPayVat() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  PayVat saves Irish businesses <strong>80% of their VAT compliance time</strong> while ensuring perfect Revenue compliance. Founded by Irish entrepreneurs who understand the daily struggles of VAT submissions, we've helped over 1,247 businesses eliminate VAT stress and avoid costly penalties.
+                  PayVAT saves Irish businesses <strong>80% of their VAT compliance time</strong> with a structured document review and VAT workflow. Founded by Irish entrepreneurs who understand the daily struggles of VAT preparation, we help teams reduce filing stress and improve audit readiness.
                 </p>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  Your business will save <strong>€180 annually</strong> compared to traditional accountant fees, while getting automated calculations, one-click submissions, and expert support that keeps you compliant with changing Revenue regulations.
+                  Your business can save <strong>€180 annually</strong> compared to traditional accountant fees while getting automated calculations, guided filing preparation, and expert support that keeps you aligned with changing Revenue regulations.
                 </p>
                 
                 <div className="flex items-center gap-4 p-6 card-modern hover-scale">
@@ -226,11 +226,11 @@ export default function AboutPayVat() {
                     Self-Service VAT Filing
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Create your account on PayVat.ie and submit returns directly to the Revenue Commissioners.
+                    Create your account on PayVAT.ie and complete document review, return recording, export, and payment tracking in one workflow.
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-success font-normal text-sm">
                     <CheckCircle className="h-4 w-4" />
-                    <span>Direct to Revenue integration</span>
+                    <span>Guided ROS-ready handoff</span>
                   </div>
                 </div>
               </div>

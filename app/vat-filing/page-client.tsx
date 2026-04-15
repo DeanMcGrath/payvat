@@ -72,15 +72,15 @@ export default function VATFilingPage() {
     {
       mistake: "Late submission",
       impact: "€4 daily penalty (min €125)",
-      prevention: "Automated submission reminders and processing"
+      prevention: "Automated reminders and early preparation workflow"
     }
   ]
 
   return (
     <div className="min-h-screen bg-background">
       <ArticleSchema
-        title="VAT Filing Ireland: Complete Guide to Automated Submission"
-        description="Comprehensive guide to VAT filing Ireland covering bimonthly returns, input VAT reclaim, and automated submission software for Revenue compliance."
+        title="VAT Filing Ireland: Complete Guide to Filing Preparation"
+        description="Comprehensive guide to VAT filing Ireland covering bimonthly returns, input VAT reclaim, and review-first filing preparation for Revenue compliance."
         keywords={["VAT filing Ireland", "VAT submission Ireland", "bimonthly VAT filing", "input VAT reclaim", "Revenue VAT submission"]}
         url="https://payvat.ie/vat-filing"
       />
@@ -91,17 +91,17 @@ export default function VATFilingPage() {
         <section className="py-12 mb-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl lg:text-5xl font-normal text-foreground mb-4">
-              VAT Filing Ireland: <span className="text-gradient-primary">Automated Submission Guide</span>
+              VAT Filing Ireland: <span className="text-gradient-primary">Preparation and Review Guide</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              Complete guide to <strong>VAT filing Ireland</strong> including bimonthly VAT filing requirements, input VAT reclaim procedures, and automated VAT submission software for seamless Revenue compliance.
+              Complete guide to <strong>VAT filing Ireland</strong> including bimonthly VAT filing requirements, input VAT reclaim procedures, and review-first VAT software workflows for Revenue compliance.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mt-6">
               <div className="px-4 py-2 bg-primary/10 rounded-full">
                 <span className="text-sm font-normal text-primary">Due 19th of second month</span>
               </div>
               <div className="px-4 py-2 bg-success/10 rounded-full">
-                <span className="text-sm font-normal text-success">Automated submissions available</span>
+                <span className="text-sm font-normal text-success">Guided filing preparation available</span>
               </div>
               <div className="px-4 py-2 bg-warning/10 rounded-full">
                 <span className="text-sm font-normal text-warning">Avoid €4/day penalties</span>
@@ -285,7 +285,7 @@ export default function VATFilingPage() {
                   <ChevronRight className="h-5 w-5 text-gray-500 group-open:rotate-90 transition-transform" />
                 </summary>
                 <div className="mt-3 text-muted-foreground space-y-2">
-                  <p>File VAT returns online through Revenue's ROS system or use automated VAT submission software like PayVAT. Log in to ROS, complete Form VAT3, verify calculations, and submit before the deadline.</p>
+                  <p>File VAT returns online through Revenue's ROS system or use VAT preparation software like PayVAT. Log in to ROS, complete Form VAT3, verify calculations, and submit before the deadline.</p>
                   <p><strong>Benefits of online filing:</strong> Faster processing, immediate confirmation, reduced errors, and automatic deadline reminders.</p>
                 </div>
               </details>
@@ -306,7 +306,7 @@ export default function VATFilingPage() {
                   <ChevronRight className="h-5 w-5 text-gray-500 group-open:rotate-90 transition-transform" />
                 </summary>
                 <div className="mt-3 text-muted-foreground space-y-2">
-                  <p>Automated VAT software saves time, reduces errors, ensures compliance, and provides audit trails. PayVAT processes documents with AI, calculates VAT automatically, and submits directly to Revenue.</p>
+                  <p>Automated VAT software saves time, reduces errors, ensures compliance, and provides audit trails. PayVAT processes documents with AI, calculates VAT automatically, and prepares a ROS-ready filing package.</p>
                   <p><strong>Key benefits:</strong> 90% time savings, zero calculation errors, automatic deadline management, and complete audit documentation.</p>
                 </div>
               </details>

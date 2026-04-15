@@ -125,7 +125,7 @@ async function submitVAT(request: NextRequest, user: AuthUser) {
       })
     }
     
-    // Submit to Revenue (mock)
+    // Record guided/offline ROS-compatible submission state
     const revenueResponse = await submitToRevenue(vatReturn, user)
     
     if (!revenueResponse.success) {

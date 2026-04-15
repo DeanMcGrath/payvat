@@ -332,7 +332,7 @@ export default function FreelancerVatIreland() {
                   </li>
                   <li className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                    <span>Direct ROS submission</span>
+                    <span>Guided ROS handoff</span>
                   </li>
                 </ul>
               </div>

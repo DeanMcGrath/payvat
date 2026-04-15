@@ -26,8 +26,8 @@ export default function RevenueIrelandVATFilingPage() {
     },
     {
       method: "PayVAT Automation",
-      description: "AI-powered automated VAT filing with Revenue integration",
-      features: ["Automated data extraction", "Pre-filled VAT3 forms", "One-click submission"],
+      description: "AI-powered VAT preparation workflow with ROS-ready export support",
+      features: ["Automated data extraction", "Pre-filled VAT3 forms", "Guided ROS handoff"],
       difficulty: "Easy",
       timeRequired: "5-10 minutes",
       icon: Calculator
@@ -70,7 +70,7 @@ export default function RevenueIrelandVATFilingPage() {
     {
       error: "Late submission",
       impact: "Interest charges (0.0274% daily), late filing penalties",
-      prevention: "Set up deadline reminders, use automated submission"
+      prevention: "Set up deadline reminders and prepare returns early"
     },
     {
       error: "Wrong filing period selected",
@@ -88,7 +88,7 @@ export default function RevenueIrelandVATFilingPage() {
     {
       icon: Shield,
       title: "Enhanced Security",
-      description: "Encrypted transmission directly to Revenue systems with audit trail"
+      description: "Encrypted workflow with audit trails and export records"
     },
     {
       icon: CheckCircle,
@@ -115,7 +115,7 @@ export default function RevenueIrelandVATFilingPage() {
                 Revenue Ireland VAT Filing: Complete Submission Guide
               </h1>
               <p className="text-xl md:text-2xl text-green-100 mb-8">
-                Everything you need to know about filing VAT returns with Irish Revenue. Step-by-step guide to ROS submissions, deadlines, and compliance requirements for 2025.
+                Everything you need to know about filing VAT returns with Irish Revenue. Step-by-step guidance for ROS filing, deadlines, and compliance requirements for 2025.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="bg-white text-green-700 hover:bg-green-50">
@@ -238,14 +238,14 @@ export default function RevenueIrelandVATFilingPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 mb-4">
-                    Skip the complex ROS setup with PayVAT's automated filing system:
+                    PayVAT helps you prepare and review VAT returns before your external ROS filing step:
                   </p>
                   <ul className="space-y-2">
                     {[
                       "No ROS registration required",
                       "Automated document processing", 
                       "Pre-filled VAT3 forms",
-                      "Direct Revenue submission",
+                      "ROS-ready export package",
                       "Built-in compliance checking"
                     ].map((feature, index) => (
                       <li key={index} className="flex items-center text-sm">
@@ -363,7 +363,7 @@ export default function RevenueIrelandVATFilingPage() {
               Ready to Simplify Your Revenue VAT Filing?
             </h2>
             <p className="text-xl text-green-100 mb-8">
-              Join thousands of Irish businesses using PayVAT for automated, accurate VAT submissions to Revenue Ireland.
+              Join Irish businesses using PayVAT to prepare VAT returns with confidence before external ROS filing.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white text-green-600 hover:bg-green-50">

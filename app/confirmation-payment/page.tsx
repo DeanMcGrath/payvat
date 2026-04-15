@@ -332,19 +332,19 @@ export default function ConfirmationPayment() {
                   <div className="w-7 h-7 lg:w-8 lg:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-xs lg:text-sm font-normal text-primary">1</span>
                   </div>
-                  <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">Return submitted to Revenue instantly</p>
+                  <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">Return recorded in PayVAT with ROS-ready export details</p>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-7 h-7 lg:w-8 lg:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-xs lg:text-sm font-normal text-primary">2</span>
                   </div>
-                  <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">Payment processed automatically</p>
+                  <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">Payment step tracked until you confirm completion</p>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-7 h-7 lg:w-8 lg:h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-xs lg:text-sm font-normal text-primary">3</span>
                   </div>
-                  <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">Confirmation receipt generated</p>
+                  <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">PayVAT tracking reference and record generated</p>
                 </div>
               </CardContent>
             </Card>
@@ -365,7 +365,7 @@ export default function ConfirmationPayment() {
               <div>
                 <h3 className="text-2xl font-normal text-foreground mb-2">Submission Complete</h3>
                 <p className="text-muted-foreground">
-                  Your VAT3 return has been successfully submitted to Revenue.
+                  Your VAT3 return has been recorded in PayVAT. This does not file the return directly with Revenue ROS.
                 </p>
               </div>
 

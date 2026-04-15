@@ -53,7 +53,7 @@ export default function VATPaymentIrelandPage() {
     {
       icon: Calculator,
       title: "Bank Transfer",
-      description: "Transfer VAT payment directly to Revenue's designated accounts",
+      description: "Transfer VAT payment to designated Revenue accounts",
       timeframe: "1-2 business days",
       fees: "Standard bank charges apply"
     }
@@ -252,7 +252,7 @@ export default function VATPaymentIrelandPage() {
                 Automate Your VAT Payments with PayVAT
               </h2>
               <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-                Never miss a VAT deadline again. PayVAT automatically calculates and prepares your VAT returns for seamless Revenue submission.
+                Never miss a VAT deadline again. PayVAT calculates and prepares VAT returns with a clear ROS handoff and payment tracking workflow.
               </p>
             </div>
 
@@ -270,8 +270,8 @@ export default function VATPaymentIrelandPage() {
                 },
                 {
                   icon: FileText,
-                  title: "Direct Revenue Integration",
-                  description: "Submit VAT returns directly to Irish Revenue through secure ROS integration"
+                  title: "ROS-Ready Handoff",
+                  description: "Prepare VAT returns in PayVAT and complete ROS filing externally with clear guidance"
                 }
               ].map((feature, index) => (
                 <Card key={index} className="bg-white/10 border-white/20 text-white">

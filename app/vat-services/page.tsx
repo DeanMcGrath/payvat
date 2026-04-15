@@ -37,12 +37,12 @@ export default function VATServicesPage() {
     },
     {
       id: "submission",
-      title: "VAT Submission",
+      title: "VAT Return Review & Export",
       icon: FileText,
-      description: "Automated VAT return preparation and submission",
+      description: "Prepare VAT returns with checks before external ROS handoff",
       features: [
         "Auto-generate VAT returns",
-        "Direct Revenue submission",
+        "ROS-ready export package",
         "Error checking & validation",
         "Deadline reminders",
         "Amendment support"
@@ -51,13 +51,13 @@ export default function VATServicesPage() {
     },
     {
       id: "payment",
-      title: "VAT Payment Processing",
+      title: "VAT Payment Tracking",
       icon: BanknoteIcon,
-      description: "Secure payment processing for VAT liabilities",
+      description: "Track external VAT payment completion with clear references",
       features: [
-        "Direct debit setup",
+        "Payment checklist support",
         "Payment scheduling",
-        "Multiple payment methods",
+        "Reference capture",
         "Payment confirmations",
         "Late payment protection"
       ],
@@ -88,8 +88,8 @@ export default function VATServicesPage() {
       description: "Perfect for getting started",
       features: [
         "VAT calculations",
-        "VAT submissions via ROS",
-        "Payment processing",
+        "ROS-ready export records",
+        "Payment tracking",
         "Priority support",
         "Unlimited transactions",
         "Basic and custom reporting",
@@ -109,8 +109,8 @@ export default function VATServicesPage() {
       description: "Best value for growing businesses",
       features: [
         "VAT calculations",
-        "VAT submissions via ROS",
-        "Payment processing",
+        "ROS-ready export records",
+        "Payment tracking",
         "Priority support",
         "Unlimited transactions",
         "Basic and custom reporting",

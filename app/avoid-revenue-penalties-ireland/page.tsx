@@ -465,9 +465,9 @@ export default function AvoidRevenuePenaltiesIreland() {
                   <div className="icon-modern bg-petrol-light mb-4 mx-auto">
                     <FileText className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-normal text-foreground mb-2">Auto Filing</h3>
+                  <h3 className="font-normal text-foreground mb-2">Filing-Ready Workflow</h3>
                   <p className="text-sm text-muted-foreground">
-                    Direct ROS integration ensures returns filed correctly and on time, every time
+                    Export-ready filing packages and deadline prompts help you submit to ROS on time
                   </p>
                 </div>
 
@@ -552,7 +552,7 @@ export default function AvoidRevenuePenaltiesIreland() {
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white text-xs flex items-center justify-center font-normal">1</div>
                       <div>
                         <p className="font-normal text-foreground">Automate your compliance</p>
-                        <p className="text-sm text-muted-foreground">Set up PayVat for automatic filing and reminders</p>
+                        <p className="text-sm text-muted-foreground">Set up PayVAT for filing reminders, draft checks, and export-ready records</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">

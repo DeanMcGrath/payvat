@@ -87,7 +87,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px gradient-primary mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed">
-                  PayVAT is an online platform that lets Irish businesses complete their VAT submissions and make payments directly to the Revenue Commissioners—without paying hefty third-party fees.
+                  PayVAT is an online platform that helps Irish businesses prepare VAT documents, review draft returns, record submissions in PayVAT, export ROS-ready filing records, and track payment completion.
                 </p>
               </div>
             )}
@@ -174,7 +174,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px bg-petrol-light/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  After you submit your VAT return through PayVAT, you can initiate your VAT payment via Revenue's Online Service (ROS) with one click—no need to log in separately.
+                  After you record a VAT return in PayVAT, we guide you through the external ROS filing step and external payment confirmation tracking. PayVAT does not submit or process Revenue payments directly in this beta.
                 </p>
                 <div className="flex items-center gap-2 text-success font-normal">
                   <Shield className="h-4 w-4" />
@@ -293,7 +293,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px bg-petrol-light/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  VAT calculations, submissions via ROS, payment processing, unlimited transactions, reporting, and expert support.
+                  VAT calculations, review workflows, PayVAT submission records, export artifacts, payment tracking, reporting, and expert support.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
@@ -302,11 +302,11 @@ export default function FAQPage() {
                   </div>
                   <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
-                    <span>ROS submissions</span>
+                    <span>Guided ROS handoff</span>
                   </div>
                   <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
-                    <span>Payment processing</span>
+                    <span>Payment tracking</span>
                   </div>
                   <div className="flex items-center gap-2 text-blue-500 text-sm font-normal">
                     <CheckCircle className="h-4 w-4" />
@@ -746,7 +746,7 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px bg-destructive/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Revenue Ireland imposes penalties for late VAT returns. PayVAT's automated reminders and submissions help you avoid these costly penalties entirely.
+                  Revenue Ireland imposes penalties for late VAT returns. PayVAT helps you stay organized with reminders, draft checks, and audit-friendly records, but you remain responsible for completing official ROS filing and payment steps.
                 </p>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="p-3 bg-destructive/10 rounded-lg border border-destructive/20">

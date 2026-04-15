@@ -31,7 +31,7 @@ const SEARCHABLE_CONTENT = [
   {
     id: 'dashboard',
     title: 'VAT Dashboard',
-    content: 'Dashboard overview VAT returns submissions payments analytics reports upcoming deadlines business summary financial overview Revenue compliance status',
+    content: 'Dashboard overview VAT returns records payments tracking analytics reports upcoming deadlines business summary financial overview compliance status',
     url: '/dashboard',
     type: 'page' as const,
     category: 'Dashboard'
@@ -39,7 +39,7 @@ const SEARCHABLE_CONTENT = [
   {
     id: 'vat-submission',
     title: 'VAT Return Submission',
-    content: 'Submit VAT returns calculate sales VAT purchase VAT net VAT due upload supporting documents automatic calculations AI processing Revenue submission compliance',
+    content: 'Review VAT returns calculate sales VAT purchase VAT net VAT due upload supporting documents AI processing record guided submission ROS-ready export compliance',
     url: '/vat-submission',
     type: 'page' as const,
     category: 'VAT Returns'
@@ -47,7 +47,7 @@ const SEARCHABLE_CONTENT = [
   {
     id: 'submit-return',
     title: 'Submit VAT Return',
-    content: 'Submit VAT return review calculations confirm submission Revenue declaration supporting documents approval payment process',
+    content: 'Review VAT return calculations confirm PayVAT record prepare ROS handoff supporting documents approval payment tracking process',
     url: '/submit-return',
     type: 'page' as const,
     category: 'VAT Returns'
@@ -55,7 +55,7 @@ const SEARCHABLE_CONTENT = [
   {
     id: 'vat3-return',
     title: 'VAT3 Return Form',
-    content: 'Complete VAT3 return form submission Revenue compliant ROS integration trader name registration number filing frequency period details unusual expenditure EU trade postponed accounting',
+    content: 'Complete VAT3 return form preparation ROS-compatible export workflow trader name registration number filing frequency period details unusual expenditure EU trade postponed accounting',
     url: '/vat3-return',
     type: 'page' as const,
     category: 'VAT Returns'
@@ -63,7 +63,7 @@ const SEARCHABLE_CONTENT = [
   {
     id: 'confirmation-payment',
     title: 'Confirmation & Payment',
-    content: 'Review confirm VAT return submission payment processing secure transaction Revenue compliance business information period summary final confirmation',
+    content: 'Review confirm VAT return record payment tracking secure transaction compliance business information period summary final confirmation',
     url: '/confirmation-payment',
     type: 'page' as const,
     category: 'Payments'
@@ -71,7 +71,7 @@ const SEARCHABLE_CONTENT = [
   {
     id: 'secure-payment',
     title: 'Secure VAT Payment',
-    content: 'Secure payment VAT dues credit card debit card bank transfer Revenue payment processing SSL security PCI compliant payment methods',
+    content: 'Secure payment tracking VAT dues credit card debit card bank transfer payment confirmation SSL security PCI compliant payment methods',
     url: '/secure-payment',
     type: 'page' as const,
     category: 'Payments'
@@ -79,7 +79,7 @@ const SEARCHABLE_CONTENT = [
   {
     id: 'payment-confirmed',
     title: 'Payment Confirmed',
-    content: 'Payment confirmation VAT payment successful Revenue processed receipt download transaction details business information payment method',
+    content: 'Payment confirmation VAT payment recorded in PayVAT tracking reference details business information payment method',
     url: '/payment-confirmed',
     type: 'page' as const,
     category: 'Payments'
@@ -111,7 +111,7 @@ const SEARCHABLE_CONTENT = [
   {
     id: 'pricing',
     title: 'Pricing Plans',
-    content: 'PayVAT pricing plans subscription costs VAT management service fees business plans enterprise solutions monthly annual billing payment processing €35 monthly €350 yearly',
+    content: 'PayVAT pricing plans subscription costs VAT management service fees business plans enterprise solutions monthly annual billing payment tracking €35 monthly €350 yearly',
     url: '/pricing',
     type: 'page' as const,
     category: 'Pricing'
@@ -119,7 +119,7 @@ const SEARCHABLE_CONTENT = [
   {
     id: 'about',
     title: 'About PayVAT',
-    content: 'About PayVAT Irish VAT compliance software automated VAT returns Revenue integration business tax management Irish businesses VAT processing company information',
+    content: 'About PayVAT Irish VAT compliance software VAT preparation review export workflow business tax management Irish businesses VAT processing company information',
     url: '/about',
     type: 'page' as const,
     category: 'Company'
@@ -127,7 +127,7 @@ const SEARCHABLE_CONTENT = [
   {
     id: 'faq',
     title: 'Frequently Asked Questions',
-    content: 'FAQ frequently asked questions VAT help support common issues troubleshooting Revenue integration payment problems return submissions business guidance',
+    content: 'FAQ frequently asked questions VAT help support common issues troubleshooting ROS-ready workflow payment tracking return preparation business guidance',
     url: '/faq',
     type: 'help' as const,
     category: 'Help & Support'
