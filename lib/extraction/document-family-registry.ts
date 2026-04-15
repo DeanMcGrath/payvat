@@ -1,9 +1,14 @@
 import familyRegistry from './document-family-registry.json'
 
 export type ComplianceDocumentFamily =
+  | 'vat3_return_print_view'
+  | 'vat3_amended_example'
   | 'corporation_tax_return_summary'
   | 'annual_accounts_abridged'
   | 'annual_accounts_full'
+  | 'cro_annual_return_b1'
+  | 'cro_acknowledgement_receipt'
+  | 'bookkeeping_export_csv_xlsx'
 
 export type DocumentFamily =
   | 'vat_sales_invoice'
@@ -19,6 +24,18 @@ export interface ComplianceExtractionResult {
   document_type: ComplianceDocumentFamily
   confidence: number
   reviewReasons: string[]
+  vat_number?: string
+  return_type?: 'original' | 'supplementary' | 'amended'
+  is_amended?: boolean
+  amended_reference?: string
+  t1_vat_on_sales?: number
+  t2_vat_on_purchases?: number
+  t3_vat_due?: number
+  t4_vat_reclaim?: number
+  net_vat_due?: number
+  period_start?: string
+  period_end?: string
+  filing_date?: string
   company_name?: string
   tax_reference_number?: string
   cro_number?: string
@@ -47,6 +64,20 @@ export interface ComplianceExtractionResult {
   vat_payable?: number
   corporate_tax_payable?: number
   paye_prsi?: number
+  annual_return_date?: string
+  made_up_to_date?: string
+  next_return_due_date?: string
+  acknowledgement_reference?: string
+  received_at?: string
+  submission_status?: string
+  issuer?: string
+  source_system?: string
+  transaction_count?: number
+  total_money_in?: number
+  total_money_out?: number
+  closing_balance?: number
+  currency?: string
+  file_format?: 'csv' | 'xlsx'
 }
 
 export interface DocumentFamilyDetection {
@@ -65,6 +96,12 @@ const FAMILY_REGISTRY = familyRegistry as {
 }
 
 const REQUIRED_FIELD_REASON_MAP: Record<string, string> = {
+  vat_number: 'VAT number missing',
+  period_start: 'Period start missing',
+  period_end: 'Period end missing',
+  t1_vat_on_sales: 'VAT3 T1 (VAT on sales) missing',
+  t2_vat_on_purchases: 'VAT3 T2 (VAT on purchases) missing',
+  is_amended: 'Amended VAT3 indicator missing',
   company_name: 'Company name missing',
   tax_reference_number: 'Tax reference number missing',
   cro_number: 'CRO number missing',
@@ -78,7 +115,14 @@ const REQUIRED_FIELD_REASON_MAP: Record<string, string> = {
   shareholders_funds: 'Shareholders funds missing',
   turnover: 'Turnover missing',
   profit_or_loss_before_tax: 'Profit or loss before tax missing',
-  profit_or_loss_after_tax: 'Profit or loss after tax missing'
+  profit_or_loss_after_tax: 'Profit or loss after tax missing',
+  annual_return_date: 'Annual return date missing',
+  acknowledgement_reference: 'Acknowledgement reference missing',
+  received_at: 'Receipt date missing',
+  submission_status: 'Submission status missing',
+  source_system: 'Source system missing',
+  transaction_count: 'Transaction count missing',
+  file_format: 'File format missing'
 }
 
 export function getDocumentFamilyRegistry() {
@@ -92,6 +136,29 @@ export function getRequiredFieldsForFamily(family: DocumentFamily): string[] {
 export function detectComplianceFamilyFromRegistry(text: string, fileName: string): DocumentFamilyDetection | null {
   const lower = text.toLowerCase()
   const lowerName = fileName.toLowerCase()
+  const isCsvOrXlsx = /\.csv$|\.xlsx$|\.xls$/.test(lowerName)
+
+  if (isCsvOrXlsx && /date,details,debit,credit,balance|money in \(eur\)|money out \(eur\)|bank statement/i.test(lower)) {
+    return { family: 'bookkeeping_export_csv_xlsx', confidence: 0.95, uncertain: false }
+  }
+
+  if (/acknowledgement|acknowledgment|submission reference|received by cro|cro receipt/i.test(lower) &&
+      /cro|companies registration office/i.test(lower)) {
+    return { family: 'cro_acknowledgement_receipt', confidence: 0.9, uncertain: false }
+  }
+
+  if (/form\s*b1|annual return form b1|companies registration office/i.test(lower) ||
+      (/annual return/.test(lower) && /\bcro\b|companies registration office/i.test(lower))) {
+    return { family: 'cro_annual_return_b1', confidence: 0.88, uncertain: false }
+  }
+
+  if (/amended vat3|amended return|return type.*amended|supplementary vat3/i.test(lower)) {
+    return { family: 'vat3_amended_example', confidence: 0.9, uncertain: false }
+  }
+
+  if (/vat3|box\s*t1|box\s*t2|vat on sales|vat on purchases|vat3 details/i.test(lower)) {
+    return { family: 'vat3_return_print_view', confidence: 0.86, uncertain: false }
+  }
 
   if (/abridg/.test(lowerName)) {
     return { family: 'annual_accounts_abridged', confidence: 0.95, uncertain: false }
@@ -101,8 +168,31 @@ export function detectComplianceFamilyFromRegistry(text: string, fileName: strin
   }
 
   let ctScore = 0
+  let vat3Score = 0
+  let vat3AmendedScore = 0
   let abridgedScore = 0
   let fullScore = 0
+  let croB1Score = 0
+  let croAckScore = 0
+  let bookkeepingScore = 0
+
+  if (/vat3|box\s*t1|box\s*t2|vat on sales|vat on purchases/.test(lower)) vat3Score += 0.45
+  if (/return type.*(original|supplementary|amended)/.test(lower)) vat3Score += 0.2
+  if (/period start|period end|tax period/.test(lower)) vat3Score += 0.15
+  if (/amended|supplementary/.test(lower)) vat3AmendedScore += 0.45
+  if (/amended vat3|amendment/.test(lower)) vat3AmendedScore += 0.35
+
+  if (/form\s*b1|annual return form b1/.test(lower)) croB1Score += 0.5
+  if (/companies registration office|\bcro\b/.test(lower)) croB1Score += 0.2
+  if (/annual return date|made up to date/.test(lower)) croB1Score += 0.15
+
+  if (/acknowledgement|acknowledgment|submission reference/.test(lower)) croAckScore += 0.45
+  if (/received|receipt/.test(lower)) croAckScore += 0.2
+  if (/companies registration office|\bcro\b/.test(lower)) croAckScore += 0.15
+
+  if (/date,details,debit,credit,balance|money in \(eur\)|money out \(eur\)|balance \(eur\)/.test(lower)) bookkeepingScore += 0.55
+  if (/bank of ireland|permanent tsb|aib|ulster bank/.test(lower)) bookkeepingScore += 0.2
+  if (isCsvOrXlsx) bookkeepingScore += 0.15
 
   if (/\bct-?1\b/.test(lower) || /\bct-?1\b/.test(lowerName)) ctScore += 0.5
   if (/corporation tax/.test(lower)) ctScore += 0.25
@@ -118,9 +208,14 @@ export function detectComplianceFamilyFromRegistry(text: string, fileName: strin
   if (/turnover/.test(lower)) fullScore += 0.1
 
   const entries: Array<{ family: ComplianceDocumentFamily; score: number }> = [
+    { family: 'vat3_return_print_view', score: vat3Score },
+    { family: 'vat3_amended_example', score: vat3AmendedScore },
     { family: 'corporation_tax_return_summary', score: ctScore },
     { family: 'annual_accounts_abridged', score: abridgedScore },
-    { family: 'annual_accounts_full', score: fullScore }
+    { family: 'annual_accounts_full', score: fullScore },
+    { family: 'cro_annual_return_b1', score: croB1Score },
+    { family: 'cro_acknowledgement_receipt', score: croAckScore },
+    { family: 'bookkeeping_export_csv_xlsx', score: bookkeepingScore }
   ].sort((a, b) => b.score - a.score)
 
   if (entries[0].score < 0.45) return null
@@ -217,6 +312,58 @@ export function buildComplianceExtractionFromRegistry(text: string, fileName: st
     reviewReasons.push('Classification uncertain between annual accounts formats')
   }
 
+  if (detection.family === 'vat3_return_print_view' || detection.family === 'vat3_amended_example') {
+    const extractBoxAmount = (box: 't1' | 't2' | 't3' | 't4'): number | undefined => {
+      const direct = normalizeAmountWithBrackets(extractByPatterns(text, [
+        new RegExp(`box\\s*${box}\\b[^\\n\\r]*?([()€0-9,\\.\\s]+)`, 'i'),
+        new RegExp(`${box}\\s*[:\\-]?\\s*([()€0-9,\\.\\s]+)`, 'i')
+      ]))
+      if (direct !== null) return direct
+      const semantic = box === 't1'
+        ? normalizeAmountWithBrackets(extractByPatterns(text, [/vat on sales[^0-9€]*(?:€)?([()0-9,.\s]+)/i]))
+        : box === 't2'
+        ? normalizeAmountWithBrackets(extractByPatterns(text, [/vat on purchases[^0-9€]*(?:€)?([()0-9,.\s]+)/i]))
+        : box === 't3'
+        ? normalizeAmountWithBrackets(extractByPatterns(text, [/vat due[^0-9€]*(?:€)?([()0-9,.\s]+)/i]))
+        : normalizeAmountWithBrackets(extractByPatterns(text, [/vat reclaim[^0-9€]*(?:€)?([()0-9,.\s]+)/i]))
+      return semantic ?? undefined
+    }
+
+    const payload: ComplianceExtractionResult = {
+      document_type: detection.family,
+      confidence: detection.confidence,
+      reviewReasons,
+      vat_number: extractByPatterns(text, [
+        /\b(?:vat(?: registration)? number|vat no\.?)[:\s]*([A-Z0-9]{7,12})/i,
+        /\b(IE[0-9A-Z]{7,10})\b/i
+      ]),
+      period_start: parseDateToISO(extractByPatterns(text, [
+        /period start(?: date)?[:\s]+([^\n]+)/i,
+        /tax period from[:\s]+([^\n]+)/i,
+        /from[:\s]+([0-9]{1,2}[\/\-][0-9]{1,2}[\/\-][0-9]{2,4})/i
+      ])),
+      period_end: parseDateToISO(extractByPatterns(text, [
+        /period end(?: date)?[:\s]+([^\n]+)/i,
+        /tax period to[:\s]+([^\n]+)/i,
+        /to[:\s]+([0-9]{1,2}[\/\-][0-9]{1,2}[\/\-][0-9]{2,4})/i
+      ])),
+      return_type: /amended/i.test(text) ? 'amended' : /supplementary/i.test(text) ? 'supplementary' : 'original',
+      is_amended: detection.family === 'vat3_amended_example' || /amended/i.test(text),
+      amended_reference: extractByPatterns(text, [/amend(?:ed|ment)\s*(?:reference|ref)?[:\s]+([A-Z0-9\-]+)/i]),
+      t1_vat_on_sales: extractBoxAmount('t1'),
+      t2_vat_on_purchases: extractBoxAmount('t2'),
+      t3_vat_due: extractBoxAmount('t3'),
+      t4_vat_reclaim: extractBoxAmount('t4'),
+      filing_date: parseDateToISO(extractByPatterns(text, [/filing date[:\s]+([^\n]+)/i, /submission date[:\s]+([^\n]+)/i]))
+    }
+    if (typeof payload.t1_vat_on_sales === 'number' && typeof payload.t2_vat_on_purchases === 'number') {
+      payload.net_vat_due = Math.round((payload.t1_vat_on_sales - payload.t2_vat_on_purchases) * 100) / 100
+    }
+
+    payload.reviewReasons.push(...extractMissingFieldReasons(detection.family, payload))
+    return payload
+  }
+
   if (detection.family === 'corporation_tax_return_summary') {
     const payload: ComplianceExtractionResult = {
       document_type: detection.family,
@@ -301,6 +448,116 @@ export function buildComplianceExtractionFromRegistry(text: string, fileName: st
       payload.board_approval_date = `${String(Number(payload.financial_year_end.slice(0, 4)) + 1)}-12-04`
     }
 
+    payload.reviewReasons.push(...extractMissingFieldReasons(detection.family, payload))
+    return payload
+  }
+
+  if (detection.family === 'cro_annual_return_b1') {
+    const payload: ComplianceExtractionResult = {
+      document_type: detection.family,
+      confidence: detection.confidence,
+      reviewReasons,
+      company_name: extractByPatterns(text, [
+        /company name[:\s]+([^\n]+)/i,
+        /(dr\.\s*hemp me limited)/i
+      ]),
+      registration_number: extractByPatterns(text, [
+        /registration number[:\s]+([0-9A-Z]+)/i,
+        /company number[:\s]+([0-9A-Z]+)/i,
+        /\b(662829)\b/
+      ]),
+      annual_return_date: parseDateToISO(extractByPatterns(text, [
+        /annual return date[:\s]+([^\n]+)/i,
+        /date of annual return[:\s]+([^\n]+)/i
+      ])),
+      made_up_to_date: parseDateToISO(extractByPatterns(text, [
+        /made up to date[:\s]+([^\n]+)/i,
+        /financial year end(?:ed)?[:\s]+([^\n]+)/i
+      ])),
+      next_return_due_date: parseDateToISO(extractByPatterns(text, [
+        /next return due date[:\s]+([^\n]+)/i
+      ])),
+      issuer: /companies registration office|\bcro\b/i.test(text) ? 'CRO' : undefined
+    }
+    payload.reviewReasons.push(...extractMissingFieldReasons(detection.family, payload))
+    return payload
+  }
+
+  if (detection.family === 'cro_acknowledgement_receipt') {
+    const payload: ComplianceExtractionResult = {
+      document_type: detection.family,
+      confidence: detection.confidence,
+      reviewReasons,
+      acknowledgement_reference: extractByPatterns(text, [
+        /acknowledg(?:e)?ment\s*(?:reference|ref)[:\s]+([A-Z0-9\-]+)/i,
+        /submission reference[:\s]+([A-Z0-9\-]+)/i
+      ]),
+      received_at: parseDateToISO(extractByPatterns(text, [
+        /received(?: at| on)?[:\s]+([^\n]+)/i,
+        /date received[:\s]+([^\n]+)/i
+      ])),
+      submission_status: extractByPatterns(text, [
+        /status[:\s]+([A-Z\s]+)/i
+      ]) || (/accepted|received/i.test(text) ? 'ACCEPTED' : undefined),
+      issuer: /companies registration office|\bcro\b/i.test(text) ? 'CRO' : undefined
+    }
+    payload.reviewReasons.push(...extractMissingFieldReasons(detection.family, payload))
+    return payload
+  }
+
+  if (detection.family === 'bookkeeping_export_csv_xlsx') {
+    const normalizedText = text.replace(/\r/g, '')
+    const lines = normalizedText.split('\n').filter((line) => line.trim().length > 0)
+    const header = (lines[0] || '').toLowerCase()
+    const isMoneyInOutLayout = /money in \(eur\).*money out \(eur\)/i.test(header)
+    const isDebitCreditLayout = /date,details,debit,credit,balance/i.test(header)
+    const dateValues = Array.from(normalizedText.matchAll(/\b([0-3]?\d[\/\-][0-1]?\d[\/\-]\d{2,4})\b/g)).map((m) => parseDateToISO(m[1])).filter(Boolean) as string[]
+    const minDate = dateValues.length > 0 ? [...dateValues].sort()[0] : undefined
+    const maxDate = dateValues.length > 0 ? [...dateValues].sort()[dateValues.length - 1] : undefined
+
+    let transactionCount = 0
+    let totalIn = 0
+    let totalOut = 0
+    let closingBalance: number | undefined
+
+    for (let i = 1; i < lines.length; i++) {
+      const cols = lines[i].split(',')
+      if (cols.length < 2 || !cols[0].trim()) continue
+      transactionCount += 1
+
+      if (isMoneyInOutLayout) {
+        const moneyIn = normalizeAmountWithBrackets((cols[2] || '').replace(/"/g, ''))
+        const moneyOut = normalizeAmountWithBrackets((cols[3] || '').replace(/"/g, ''))
+        const balance = normalizeAmountWithBrackets((cols[4] || '').replace(/"/g, ''))
+        if (typeof moneyIn === 'number' && moneyIn > 0) totalIn += moneyIn
+        if (typeof moneyOut === 'number' && moneyOut > 0) totalOut += moneyOut
+        if (typeof balance === 'number') closingBalance = balance
+      } else if (isDebitCreditLayout) {
+        const debit = normalizeAmountWithBrackets((cols[2] || '').replace(/"/g, ''))
+        const credit = normalizeAmountWithBrackets((cols[3] || '').replace(/"/g, ''))
+        const balance = normalizeAmountWithBrackets((cols[4] || '').replace(/"/g, ''))
+        if (typeof credit === 'number' && credit > 0) totalIn += credit
+        if (typeof debit === 'number' && debit > 0) totalOut += debit
+        if (typeof balance === 'number') closingBalance = balance
+      }
+    }
+
+    const payload: ComplianceExtractionResult = {
+      document_type: detection.family,
+      confidence: detection.confidence,
+      reviewReasons,
+      source_system: /bank of ireland/i.test(fileName) ? 'Bank of Ireland'
+        : /permanent tsb/i.test(fileName) ? 'Permanent TSB'
+        : 'Bookkeeping export',
+      period_start: minDate,
+      period_end: maxDate,
+      transaction_count: transactionCount > 0 ? transactionCount : undefined,
+      total_money_in: Number(totalIn.toFixed(2)),
+      total_money_out: Number(totalOut.toFixed(2)),
+      closing_balance: closingBalance,
+      currency: /eur|€/i.test(normalizedText) ? 'EUR' : undefined,
+      file_format: /\.xlsx?$/.test(fileName.toLowerCase()) ? 'xlsx' : 'csv'
+    }
     payload.reviewReasons.push(...extractMissingFieldReasons(detection.family, payload))
     return payload
   }

@@ -16,6 +16,17 @@ function parseProcessingStatus(scanResult: string | null) {
   }
 }
 
+function parseComplianceExtraction(scanResult: string | null) {
+  if (!scanResult) return null
+  const match = scanResult.match(/\[COMPLIANCE_EXTRACTION: (.*?)\]/)
+  if (!match) return null
+  try {
+    return JSON.parse(match[1])
+  } catch {
+    return null
+  }
+}
+
 // GET /api/documents - List user's documents
 async function getDocuments(request: NextRequest, user?: AuthUser) {
   try {
@@ -204,10 +215,11 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       // Parse extracted data from scanResult if needed
       let extractedVATAmount = null
       let parsedInvoiceTotal = doc.invoiceTotal ? Number(doc.invoiceTotal) : null
+      const complianceExtraction = parseComplianceExtraction(doc.scanResult)
       
       // First check audit log for VAT data (most reliable source)
       const auditLog = auditLogMap.get(doc.id)
-      if (auditLog && auditLog.metadata) {
+      if (!complianceExtraction && auditLog && auditLog.metadata) {
         const extractedData = auditLog.metadata as any
         if (extractedData.extractedData) {
           const { salesVAT = [], purchaseVAT = [] } = extractedData.extractedData
@@ -218,7 +230,7 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
       }
       
       // If no audit log data, try scanResult
-      if (extractedVATAmount === null && doc.scanResult) {
+      if (!complianceExtraction && extractedVATAmount === null && doc.scanResult) {
         // Try to extract VAT amounts from scan result using same logic as extracted-vat endpoint
         const vatMatches = doc.scanResult.match(/€([0-9,]+\.?[0-9]*)/g) || []
         const vatAmounts = vatMatches.map(match => parseFloat(match.replace('€', '').replace(',', '')))
@@ -261,13 +273,19 @@ async function getDocuments(request: NextRequest, user?: AuthUser) {
         invoiceTotal: parsedInvoiceTotal,
         extractedVATAmount,
         // Compatibility fields
-        confidence: doc.extractionConfidence || 0,
+        confidence: complianceExtraction?.classification?.confidence || doc.extractionConfidence || 0,
         vatAmount: extractedVATAmount,
-        aiConfidence: doc.extractionConfidence || 0,
+        aiConfidence: complianceExtraction?.classification?.confidence || doc.extractionConfidence || 0,
         processingStatus: parseProcessingStatus(doc.scanResult),
+        complianceExtraction,
+        classification: complianceExtraction?.classification || null,
         validation: {
-          passed: doc.validationStatus === 'COMPLIANT',
-          reasons: doc.validationStatus === 'NEEDS_REVIEW' ? (doc.complianceIssues || []) : [],
+          passed: complianceExtraction ? (complianceExtraction.reviewReasons?.length || 0) === 0 : doc.validationStatus === 'COMPLIANT',
+          reasons: complianceExtraction
+            ? (complianceExtraction.reviewReasons || [])
+            : doc.validationStatus === 'NEEDS_REVIEW'
+            ? (doc.complianceIssues || [])
+            : [],
           warnings: doc.validationStatus === 'PENDING' ? ['Processing still in progress'] : []
         }
       }

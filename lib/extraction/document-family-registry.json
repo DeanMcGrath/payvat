@@ -12,6 +12,27 @@
       "domain": "vat",
       "requiredFields": ["invoice_date", "invoice_total", "vat_amount"]
     },
+    "vat3_return_print_view": {
+      "domain": "compliance",
+      "requiredFields": [
+        "vat_number",
+        "period_start",
+        "period_end",
+        "t1_vat_on_sales",
+        "t2_vat_on_purchases"
+      ]
+    },
+    "vat3_amended_example": {
+      "domain": "compliance",
+      "requiredFields": [
+        "vat_number",
+        "period_start",
+        "period_end",
+        "t1_vat_on_sales",
+        "t2_vat_on_purchases",
+        "is_amended"
+      ]
+    },
     "corporation_tax_return_summary": {
       "domain": "compliance",
       "requiredFields": [
@@ -61,6 +82,14 @@
     "cro_annual_return_b1": {
       "domain": "compliance",
       "requiredFields": ["company_name", "registration_number", "annual_return_date"]
+    },
+    "cro_acknowledgement_receipt": {
+      "domain": "compliance",
+      "requiredFields": ["acknowledgement_reference", "received_at", "submission_status"]
+    },
+    "bookkeeping_export_csv_xlsx": {
+      "domain": "compliance",
+      "requiredFields": ["source_system", "period_start", "period_end", "transaction_count", "file_format"]
     }
   }
 }

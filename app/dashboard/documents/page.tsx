@@ -260,11 +260,39 @@ function DashboardDocumentsContent() {
   const getComplianceSummary = (document: Document): string[] => {
     const payload = document.complianceExtraction
     if (!payload) return []
+    if (payload.document_type === 'vat3_return_print_view' || payload.document_type === 'vat3_amended_example') {
+      return [
+        `VAT no: ${payload.vat_number || '—'}`,
+        `Period: ${payload.period_start && payload.period_end ? `${payload.period_start} to ${payload.period_end}` : '—'}`,
+        `Net VAT due: ${typeof payload.net_vat_due === 'number' ? formatCurrency(payload.net_vat_due) : '—'}`
+      ]
+    }
     if (payload.document_type === 'corporation_tax_return_summary') {
       return [
         `Company: ${payload.company_name || '—'}`,
         `Return date: ${payload.return_date || '—'}`,
         `CT balance payable: ${typeof payload.corporation_tax_balance_payable === 'number' ? formatCurrency(payload.corporation_tax_balance_payable) : '—'}`
+      ]
+    }
+    if (payload.document_type === 'cro_annual_return_b1') {
+      return [
+        `Company: ${payload.company_name || '—'}`,
+        `Annual return date: ${payload.annual_return_date || '—'}`,
+        `Made up to: ${payload.made_up_to_date || '—'}`
+      ]
+    }
+    if (payload.document_type === 'cro_acknowledgement_receipt') {
+      return [
+        `Reference: ${payload.acknowledgement_reference || '—'}`,
+        `Received: ${payload.received_at || '—'}`,
+        `Status: ${payload.submission_status || '—'}`
+      ]
+    }
+    if (payload.document_type === 'bookkeeping_export_csv_xlsx') {
+      return [
+        `Source: ${payload.source_system || '—'}`,
+        `Period: ${payload.period_start && payload.period_end ? `${payload.period_start} to ${payload.period_end}` : '—'}`,
+        `Transactions: ${typeof payload.transaction_count === 'number' ? payload.transaction_count.toString() : '—'}`
       ]
     }
     if (payload.document_type === 'annual_accounts_abridged') {
@@ -283,9 +311,14 @@ function DashboardDocumentsContent() {
 
   const getComplianceFamilyLabel = (document: Document): string => {
     const family = document.complianceExtraction?.document_type || document.classification?.family
+    if (family === 'vat3_return_print_view') return 'VAT3 return print view'
+    if (family === 'vat3_amended_example') return 'VAT3 amended return'
     if (family === 'corporation_tax_return_summary') return 'Corporation tax return summary'
     if (family === 'annual_accounts_abridged') return 'Annual accounts (abridged)'
     if (family === 'annual_accounts_full') return 'Annual accounts (full)'
+    if (family === 'cro_annual_return_b1') return 'CRO annual return (B1)'
+    if (family === 'cro_acknowledgement_receipt') return 'CRO acknowledgement / receipt'
+    if (family === 'bookkeeping_export_csv_xlsx') return 'Bookkeeping export (CSV/XLSX)'
     return 'Compliance document'
   }
 
@@ -311,6 +344,19 @@ function DashboardDocumentsContent() {
     const toMoney = (value?: number) => (typeof value === 'number' ? formatCurrency(value) : '—')
     const toText = (value?: string) => (value ? value : '—')
 
+    if (payload.document_type === 'vat3_return_print_view' || payload.document_type === 'vat3_amended_example') {
+      return [
+        { label: 'VAT no.', value: toText(payload.vat_number) },
+        { label: 'Return type', value: toText(payload.return_type) },
+        { label: 'Period', value: payload.period_start && payload.period_end ? `${payload.period_start} to ${payload.period_end}` : '—' },
+        { label: 'Box T1', value: toMoney(payload.t1_vat_on_sales) },
+        { label: 'Box T2', value: toMoney(payload.t2_vat_on_purchases) },
+        { label: 'Net VAT due', value: toMoney(payload.net_vat_due) },
+        { label: 'Filing date', value: toText(payload.filing_date) },
+        { label: 'Amended', value: payload.is_amended ? 'Yes' : 'No' }
+      ]
+    }
+
     if (payload.document_type === 'corporation_tax_return_summary') {
       return [
         { label: 'Company', value: toText(payload.company_name) },
@@ -330,6 +376,38 @@ function DashboardDocumentsContent() {
         { label: 'Board approval', value: toText(payload.board_approval_date) },
         { label: 'Fixed assets', value: toMoney(payload.fixed_assets) },
         { label: 'Shareholders funds', value: toMoney(payload.shareholders_funds) }
+      ]
+    }
+
+    if (payload.document_type === 'cro_annual_return_b1') {
+      return [
+        { label: 'Company', value: toText(payload.company_name) },
+        { label: 'Reg. no.', value: toText(payload.registration_number) },
+        { label: 'Annual return date', value: toText(payload.annual_return_date) },
+        { label: 'Made up to', value: toText(payload.made_up_to_date) },
+        { label: 'Next due date', value: toText(payload.next_return_due_date) },
+        { label: 'Issuer', value: toText(payload.issuer) }
+      ]
+    }
+
+    if (payload.document_type === 'cro_acknowledgement_receipt') {
+      return [
+        { label: 'Reference', value: toText(payload.acknowledgement_reference) },
+        { label: 'Received at', value: toText(payload.received_at) },
+        { label: 'Submission status', value: toText(payload.submission_status) },
+        { label: 'Issuer', value: toText(payload.issuer) }
+      ]
+    }
+
+    if (payload.document_type === 'bookkeeping_export_csv_xlsx') {
+      return [
+        { label: 'Source system', value: toText(payload.source_system) },
+        { label: 'Period', value: payload.period_start && payload.period_end ? `${payload.period_start} to ${payload.period_end}` : '—' },
+        { label: 'Transactions', value: typeof payload.transaction_count === 'number' ? payload.transaction_count.toString() : '—' },
+        { label: 'Money in', value: toMoney(payload.total_money_in) },
+        { label: 'Money out', value: toMoney(payload.total_money_out) },
+        { label: 'Closing balance', value: toMoney(payload.closing_balance) },
+        { label: 'Format', value: toText(payload.file_format) }
       ]
     }
 

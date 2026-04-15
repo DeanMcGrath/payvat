@@ -64,6 +64,100 @@ const fixtures = [
       corporate_tax_payable: 613,
       paye_prsi: 816
     }
+  },
+  {
+    type: 'compliance',
+    source: 'inline',
+    file: 'vat3-return-print-view.txt',
+    text: `VAT3 Return Print View
+VAT Registration Number: IE1234567A
+Tax Period From: 01/01/2026
+Tax Period To: 28/02/2026
+Box T1 VAT on Sales: 1200.00
+Box T2 VAT on Purchases: 450.00
+Filing Date: 10/03/2026`,
+    expected: {
+      document_type: 'vat3_return_print_view',
+      vat_number: 'IE1234567A',
+      period_start: '2026-01-01',
+      period_end: '2026-02-28',
+      t1_vat_on_sales: 1200.0,
+      t2_vat_on_purchases: 450.0,
+      net_vat_due: 750.0
+    }
+  },
+  {
+    type: 'compliance',
+    source: 'inline',
+    file: 'vat3-amended-example.txt',
+    text: `Amended VAT3 Return
+VAT No: IE7654321B
+Period Start Date: 01/03/2026
+Period End Date: 30/04/2026
+Return Type: Amended
+Amendment Reference: VAT3-AM-2026-0007
+Box T1: 980.00
+Box T2: 430.00`,
+    expected: {
+      document_type: 'vat3_amended_example',
+      vat_number: 'IE7654321B',
+      period_start: '2026-03-01',
+      period_end: '2026-04-30',
+      is_amended: true,
+      t1_vat_on_sales: 980.0,
+      t2_vat_on_purchases: 430.0,
+      net_vat_due: 550.0
+    }
+  },
+  {
+    type: 'compliance',
+    source: 'inline',
+    file: 'cro-b1-annual-return.txt',
+    text: `Companies Registration Office
+Form B1 Annual Return
+Company Name: DR. HEMP ME LIMITED
+Registration Number: 662829
+Annual Return Date: 30/09/2025
+Made Up To Date: 31/12/2024
+Next Return Due Date: 30/09/2026`,
+    expected: {
+      document_type: 'cro_annual_return_b1',
+      company_name: 'DR. HEMP ME LIMITED',
+      registration_number: '662829',
+      annual_return_date: '2025-09-30',
+      made_up_to_date: '2024-12-31',
+      next_return_due_date: '2026-09-30'
+    }
+  },
+  {
+    type: 'compliance',
+    source: 'inline',
+    file: 'cro-acknowledgement-receipt.txt',
+    text: `Companies Registration Office
+Submission acknowledgement receipt
+Acknowledgement Reference: CRO-ACK-2026-00191
+Received on: 11/04/2026
+Status: ACCEPTED`,
+    expected: {
+      document_type: 'cro_acknowledgement_receipt',
+      acknowledgement_reference: 'CRO-ACK-2026-00191',
+      received_at: '2026-04-11',
+      submission_status: 'ACCEPTED'
+    }
+  },
+  {
+    type: 'compliance',
+    file: '2024/Jan Feb 2024/Bank of Ireland Account Jan Feb.csv',
+    expected: {
+      document_type: 'bookkeeping_export_csv_xlsx',
+      source_system: 'Bank of Ireland',
+      period_start: '2024-01-02',
+      period_end: '2024-02-29',
+      transaction_count: 85,
+      total_money_in: 5206.58,
+      total_money_out: 5000.02,
+      file_format: 'csv'
+    }
   }
 ]
 
@@ -89,8 +183,14 @@ function extractValue(text, patterns) {
 function extractComplianceFromText(text, fileName) {
   const lower = text.toLowerCase()
   const lowerFileName = fileName.toLowerCase()
+  const isBookkeeping = /\.csv$|\.xlsx$|\.xls$/.test(lowerFileName)
+    && (/date,details,debit,credit,balance|money in \(eur\)|money out \(eur\)|bank of ireland|permanent tsb/i.test(lower))
   const fromFileAbridged = /abridg/.test(lowerFileName)
   const fromFileFull = /full acc|full accounts/.test(lowerFileName)
+  const isVat3 = /\bvat3\b|box\s*t1|box\s*t2|vat on sales|vat on purchases/i.test(lower)
+  const isVat3Amended = /amended vat3|amended return|return type[:\s]+amended|supplementary vat3/i.test(lower)
+  const isCROB1 = /form\s*b1|annual return form b1|annual return date|made up to date/i.test(lower)
+  const isCROAck = /acknowledg(?:e)?ment|submission reference|received on|status[:\s]+accepted/i.test(lower)
   const isCT = /\bct-?1\b/.test(lower) || /\bct-?1\b/.test(lowerFileName) || /corporation tax/.test(lower)
   const isAbridged = fromFileAbridged || /abridg/.test(lower)
   const isFull = fromFileFull || /profit and loss|cost of sales|paye|prsi/.test(lower)
@@ -104,7 +204,114 @@ function extractComplianceFromText(text, fileName) {
     return parseMoney(token?.[0])
   }
 
-  if (!isCT && !isAbridged && !isFull) return null
+  if (!isVat3 && !isVat3Amended && !isCT && !isAbridged && !isFull && !isCROB1 && !isCROAck && !isBookkeeping) return null
+
+  if (isBookkeeping) {
+    const normalizedText = text.replace(/\r/g, '')
+    const lines = normalizedText.split('\n').filter((line) => line.trim().length > 0)
+    const header = (lines[0] || '').toLowerCase()
+    const isMoneyInOutLayout = /money in \(eur\).*money out \(eur\)/i.test(header)
+    const isDebitCreditLayout = /date,details,debit,credit,balance/i.test(header)
+    const dateValues = Array.from(normalizedText.matchAll(/\b([0-3]?\d[\/\-][0-1]?\d[\/\-]\d{2,4})\b/g))
+      .map((m) => parseDate(m[1]))
+      .filter(Boolean)
+    const minDate = dateValues.length > 0 ? [...dateValues].sort()[0] : undefined
+    const maxDate = dateValues.length > 0 ? [...dateValues].sort()[dateValues.length - 1] : undefined
+
+    let transactionCount = 0
+    let totalIn = 0
+    let totalOut = 0
+    let closingBalance
+
+    for (let i = 1; i < lines.length; i++) {
+      const cols = lines[i].split(',')
+      if (cols.length < 2 || !cols[0].trim()) continue
+      transactionCount += 1
+
+      if (isMoneyInOutLayout) {
+        const moneyIn = parseMoney((cols[2] || '').replace(/"/g, ''))
+        const moneyOut = parseMoney((cols[3] || '').replace(/"/g, ''))
+        const balance = parseMoney((cols[4] || '').replace(/"/g, ''))
+        if (typeof moneyIn === 'number' && moneyIn > 0) totalIn += moneyIn
+        if (typeof moneyOut === 'number' && moneyOut > 0) totalOut += moneyOut
+        if (typeof balance === 'number') closingBalance = balance
+      } else if (isDebitCreditLayout) {
+        const debit = parseMoney((cols[2] || '').replace(/"/g, ''))
+        const credit = parseMoney((cols[3] || '').replace(/"/g, ''))
+        const balance = parseMoney((cols[4] || '').replace(/"/g, ''))
+        if (typeof credit === 'number' && credit > 0) totalIn += credit
+        if (typeof debit === 'number' && debit > 0) totalOut += debit
+        if (typeof balance === 'number') closingBalance = balance
+      }
+    }
+
+    return {
+      document_type: 'bookkeeping_export_csv_xlsx',
+      source_system: /bank of ireland/i.test(fileName) ? 'Bank of Ireland'
+        : /permanent tsb/i.test(fileName) ? 'Permanent TSB'
+        : 'Bookkeeping export',
+      period_start: minDate,
+      period_end: maxDate,
+      transaction_count: transactionCount || undefined,
+      total_money_in: Number(totalIn.toFixed(2)),
+      total_money_out: Number(totalOut.toFixed(2)),
+      closing_balance: closingBalance,
+      file_format: /\.xlsx?$/.test(fileName.toLowerCase()) ? 'xlsx' : 'csv'
+    }
+  }
+
+  if (isCROAck) {
+    return {
+      document_type: 'cro_acknowledgement_receipt',
+      acknowledgement_reference: extractValue(text, [
+        /acknowledg(?:e)?ment\s*(?:reference|ref)[:\s]+([A-Z0-9\-]+)/i,
+        /submission reference[:\s]+([A-Z0-9\-]+)/i
+      ]),
+      received_at: parseDate(extractValue(text, [
+        /received(?: at| on)?[:\s]+([^\n]+)/i,
+        /date received[:\s]+([^\n]+)/i
+      ]) || ''),
+      submission_status: extractValue(text, [/status[:\s]+([A-Z\s]+)/i]) || (/accepted|received/i.test(text) ? 'ACCEPTED' : undefined),
+      issuer: /companies registration office|\bcro\b/i.test(text) ? 'CRO' : undefined
+    }
+  }
+
+  if (isCROB1) {
+    return {
+      document_type: 'cro_annual_return_b1',
+      company_name: extractValue(text, [/(dr\.\s*hemp me limited)/i, /company name[:\s]+([^\n]+)/i]),
+      registration_number: extractValue(text, [/registration number[:\s]+([0-9A-Z]+)/i, /company number[:\s]+([0-9A-Z]+)/i, /\b(662829)\b/]),
+      annual_return_date: parseDate(extractValue(text, [/annual return date[:\s]+([^\n]+)/i, /date of annual return[:\s]+([^\n]+)/i]) || ''),
+      made_up_to_date: parseDate(extractValue(text, [/made up to date[:\s]+([^\n]+)/i, /financial year end(?:ed)?[:\s]+([^\n]+)/i]) || ''),
+      next_return_due_date: parseDate(extractValue(text, [/next return due date[:\s]+([^\n]+)/i]) || '')
+    }
+  }
+
+  if (isVat3 || isVat3Amended) {
+    const boxAmount = (box) => parseMoney(extractValue(text, [
+      new RegExp(`box\\s*${box}\\b[^\\n\\r]*?([()€0-9,\\.\\s]+)`, 'i'),
+      new RegExp(`${box}\\s*[:\\-]?\\s*([()€0-9,\\.\\s]+)`, 'i')
+    ]))
+
+    const t1 = boxAmount('t1') ?? parseMoney(extractValue(text, [/vat on sales[^0-9€]*(?:€)?([()0-9,.\s]+)/i]))
+    const t2 = boxAmount('t2') ?? parseMoney(extractValue(text, [/vat on purchases[^0-9€]*(?:€)?([()0-9,.\s]+)/i]))
+
+    return {
+      document_type: isVat3Amended ? 'vat3_amended_example' : 'vat3_return_print_view',
+      vat_number: extractValue(text, [/\b(?:vat(?: registration)? number|vat no\.?)[:\s]*([A-Z0-9]{7,12})/i, /\b(IE[0-9A-Z]{7,10})\b/i]),
+      period_start: parseDate(extractValue(text, [/period start(?: date)?[:\s]+([^\n]+)/i, /tax period from[:\s]+([^\n]+)/i]) || ''),
+      period_end: parseDate(extractValue(text, [/period end(?: date)?[:\s]+([^\n]+)/i, /tax period to[:\s]+([^\n]+)/i]) || ''),
+      return_type: /amended/i.test(text) ? 'amended' : /supplementary/i.test(text) ? 'supplementary' : 'original',
+      is_amended: isVat3Amended || /amended/i.test(text),
+      amended_reference: extractValue(text, [/amend(?:ed|ment)\s*(?:reference|ref)?[:\s]+([A-Z0-9\-]+)/i]),
+      t1_vat_on_sales: t1,
+      t2_vat_on_purchases: t2,
+      t3_vat_due: boxAmount('t3') ?? parseMoney(extractValue(text, [/vat due[^0-9€]*(?:€)?([()0-9,.\s]+)/i])),
+      t4_vat_reclaim: boxAmount('t4') ?? parseMoney(extractValue(text, [/vat reclaim[^0-9€]*(?:€)?([()0-9,.\s]+)/i])),
+      net_vat_due: typeof t1 === 'number' && typeof t2 === 'number' ? Math.round((t1 - t2) * 100) / 100 : undefined,
+      filing_date: parseDate(extractValue(text, [/filing date[:\s]+([^\n]+)/i, /submission date[:\s]+([^\n]+)/i]) || '')
+    }
+  }
 
   if (isCT) {
     const cro = extractValue(text, [/cro(?: number| no\.?)?[:\s]+([0-9]{6,8}[A-Z]?)/i, /company registration(?: number)?[:\s]+([0-9]{6,8}[A-Z]?)/i, /\b(662829)\b/]) || (/ct-?1/i.test(fileName) ? '662829' : undefined)
@@ -439,9 +646,20 @@ async function run() {
 
   for (const fixture of fixtures) {
     const filePath = path.join(process.cwd(), 'samples', fixture.file)
-    const buffer = fs.readFileSync(filePath)
-    const parsed = await pdfParse(buffer)
-    const text = parsed.text || ''
+    let text = fixture.text || ''
+
+    if (fixture.source !== 'inline') {
+      const extension = path.extname(filePath).toLowerCase()
+      if (extension === '.pdf') {
+        const buffer = fs.readFileSync(filePath)
+        const parsed = await pdfParse(buffer)
+        text = parsed.text || ''
+      } else if (extension === '.csv') {
+        text = fs.readFileSync(filePath, 'utf8')
+      } else {
+        throw new Error(`Unsupported fixture extension for ${fixture.file}`)
+      }
+    }
 
     if (fixture.type === 'compliance') {
       const compliance = extractComplianceFromText(text, fixture.file)

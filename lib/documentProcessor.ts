@@ -56,7 +56,16 @@ export interface ExtractedVATData {
     fallbacksUsed: string[]
   }
   classification?: {
-    family: 'vat_invoice' | 'corporation_tax_return_summary' | 'annual_accounts_abridged' | 'annual_accounts_full'
+    family:
+      | 'vat_invoice'
+      | 'vat3_return_print_view'
+      | 'vat3_amended_example'
+      | 'corporation_tax_return_summary'
+      | 'annual_accounts_abridged'
+      | 'annual_accounts_full'
+      | 'cro_annual_return_b1'
+      | 'cro_acknowledgement_receipt'
+      | 'bookkeeping_export_csv_xlsx'
     confidence: number
     uncertain?: boolean
   }

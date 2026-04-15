@@ -19,6 +19,19 @@ interface UploadValidationResult {
   warnings: string[]
 }
 
+interface ComplianceClassification {
+  family:
+    | 'vat3_return_print_view'
+    | 'vat3_amended_example'
+    | 'corporation_tax_return_summary'
+    | 'annual_accounts_abridged'
+    | 'annual_accounts_full'
+    | 'cro_annual_return_b1'
+    | 'cro_acknowledgement_receipt'
+    | 'bookkeeping_export_csv_xlsx'
+  confidence: number
+}
+
 function createUploadValidation(input: {
   invoiceDate: Date | null
   invoiceTotal: number | null
@@ -560,17 +573,27 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           }
         }
         
+        const complianceExtraction = processingResult.extractedData?.complianceExtraction
+        const complianceClassification = processingResult.extractedData?.classification as ComplianceClassification | undefined
+        const isComplianceDocument = Boolean(complianceExtraction && complianceClassification?.family)
+
         const extractedVATAmount = [
           ...(processingResult.extractedData?.salesVAT || []),
           ...(processingResult.extractedData?.purchaseVAT || [])
         ].reduce((sum: number, amount: number) => sum + amount, 0)
 
-        const validation = createUploadValidation({
-          invoiceDate: extractedDate,
-          invoiceTotal,
-          vatAmount: extractedVATAmount,
-          confidence: processingResult.extractedData?.confidence || 0
-        })
+        const validation = isComplianceDocument
+          ? {
+              passed: (complianceExtraction?.reviewReasons?.length || 0) === 0,
+              reasons: complianceExtraction?.reviewReasons || [],
+              warnings: []
+            }
+          : createUploadValidation({
+              invoiceDate: extractedDate,
+              invoiceTotal,
+              vatAmount: extractedVATAmount,
+              confidence: processingResult.extractedData?.confidence || 0
+            })
 
         const terminalStatus: UploadProcessingStatus = validation.passed ? 'processed' : 'needs_review'
         const adjustedConfidence = validation.passed
@@ -584,20 +607,31 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
           failureReasons: validation.reasons
         }
 
-        const scanResultWithStatus = `${processingResult.scanResult}\n\n[PROCESSING_STATUS: ${JSON.stringify(processingStatus)}]`
+        const complianceMarker = isComplianceDocument
+          ? `\n\n[COMPLIANCE_EXTRACTION: ${JSON.stringify({
+              ...complianceExtraction,
+              classification: complianceClassification
+            })}]`
+          : ''
+        const scanResultWithStatus = `${processingResult.scanResult}${complianceMarker}\n\n[PROCESSING_STATUS: ${JSON.stringify(processingStatus)}]`
 
         // 🔧 CRITICAL FIX: Handle DocumentFolder creation to prevent foreign key constraint violation
         let documentUpdateData: any = {
           isScanned: true,
           scanResult: scanResultWithStatus,
-          ...(invoiceTotal && { invoiceTotal }),
+          ...(!isComplianceDocument && invoiceTotal && { invoiceTotal }),
           extractionConfidence: adjustedConfidence,
           validationStatus: validation.passed ? 'COMPLIANT' : 'NEEDS_REVIEW',
           complianceIssues: validation.reasons
         }
+
+        if (isComplianceDocument && complianceClassification?.family) {
+          documentUpdateData.category = 'COMPLIANCE_YEAR_END'
+          documentUpdateData.documentType = complianceClassification.family.toUpperCase()
+        }
         
         // Only add year/month fields if we have valid date and authenticated user
-        if (extractedDate && extractedYear && extractedMonth && user) {
+        if (!isComplianceDocument && extractedDate && extractedYear && extractedMonth && user) {
           try {
             console.log(`📁 UPLOAD: Creating/updating DocumentFolder for ${extractedYear}/${extractedMonth}`)
             
@@ -1024,7 +1058,7 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
         id: document.id,
         fileName: document.originalName,
         fileSize: document.fileSize,
-        category: document.category,
+        category: updatedDocument?.category || document.category,
         uploadedAt: document.uploadedAt,
         isScanned: updatedDocument?.isScanned || false,
         scanResult: updatedDocument?.scanResult,
@@ -1039,12 +1073,21 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
       },
       processingOutcome: (() => {
         const savedStatus = updatedDocument?.scanResult?.match(/\[PROCESSING_STATUS: (.*?)\]/)
+        const savedCompliance = updatedDocument?.scanResult?.match(/\[COMPLIANCE_EXTRACTION: (.*?)\]/)
         let parsedStatus = null
+        let parsedCompliance = null
         if (savedStatus?.[1]) {
           try {
             parsedStatus = JSON.parse(savedStatus[1])
           } catch {
             parsedStatus = null
+          }
+        }
+        if (savedCompliance?.[1]) {
+          try {
+            parsedCompliance = JSON.parse(savedCompliance[1])
+          } catch {
+            parsedCompliance = null
           }
         }
 
@@ -1069,7 +1112,9 @@ async function uploadFile(request: NextRequest, user?: AuthUser) {
             invoiceTotal,
             vatAmount,
             confidence: updatedDocument?.extractionConfidence || processingResult?.extractedData?.confidence || 0
-          }
+          },
+          classification: parsedCompliance?.classification || processingResult?.extractedData?.classification || null,
+          complianceExtraction: parsedCompliance || processingResult?.extractedData?.complianceExtraction || null
         }
       })()
     })

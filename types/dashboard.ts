@@ -10,7 +10,17 @@ export interface Document {
   fileSize: number
   mimeType?: string
   documentType?: string
-  category: 'SALES' | 'PURCHASE' | 'SALES_INVOICE' | 'SALES_RECEIPT' | 'SALES_REPORT' | 'PURCHASE_INVOICE' | 'PURCHASE_RECEIPT' | 'PURCHASE_REPORT'
+  category:
+    | 'SALES'
+    | 'PURCHASE'
+    | 'SALES_INVOICE'
+    | 'SALES_RECEIPT'
+    | 'SALES_REPORT'
+    | 'PURCHASE_INVOICE'
+    | 'PURCHASE_RECEIPT'
+    | 'PURCHASE_REPORT'
+    | 'COMPLIANCE_YEAR_END'
+    | string
   uploadedAt: string
   extractedDate?: string | null
   extractedYear?: number | null
@@ -37,6 +47,97 @@ export interface Document {
     passed: boolean
     reasons: string[]
     warnings: string[]
+  } | null
+  classification?: {
+    family:
+      | 'vat3_return_print_view'
+      | 'vat3_amended_example'
+      | 'corporation_tax_return_summary'
+      | 'annual_accounts_abridged'
+      | 'annual_accounts_full'
+      | 'cro_annual_return_b1'
+      | 'cro_acknowledgement_receipt'
+      | 'bookkeeping_export_csv_xlsx'
+    confidence: number
+  } | null
+  complianceExtraction?: {
+    document_type:
+      | 'vat3_return_print_view'
+      | 'vat3_amended_example'
+      | 'corporation_tax_return_summary'
+      | 'annual_accounts_abridged'
+      | 'annual_accounts_full'
+      | 'cro_annual_return_b1'
+      | 'cro_acknowledgement_receipt'
+      | 'bookkeeping_export_csv_xlsx'
+    confidence: number
+    reviewReasons: string[]
+    vat_number?: string
+    return_type?: 'original' | 'supplementary' | 'amended'
+    is_amended?: boolean
+    amended_reference?: string
+    t1_vat_on_sales?: number
+    t2_vat_on_purchases?: number
+    t3_vat_due?: number
+    t4_vat_reclaim?: number
+    net_vat_due?: number
+    period_start?: string
+    period_end?: string
+    filing_date?: string
+    company_name?: string
+    tax_reference_number?: string
+    cro_number?: string
+    return_date?: string
+    accounting_period_start?: string
+    accounting_period_end?: string
+    corporation_tax_balance_payable?: number
+    turnover_if_present?: number
+    purchases_if_present?: number
+    profit_before_tax_if_present?: number
+    registration_number?: string
+    financial_year_end?: string
+    board_approval_date?: string
+    fixed_assets?: number
+    stock?: number
+    receivables?: number
+    cash_at_bank_and_in_hand?: number
+    creditors_due_within_one_year?: number
+    net_assets?: number
+    shareholders_funds?: number
+    turnover?: number
+    cost_of_sales?: number
+    gross_profit?: number
+    profit_or_loss_before_tax?: number
+    profit_or_loss_after_tax?: number
+    vat_payable?: number
+    corporate_tax_payable?: number
+    paye_prsi?: number
+    annual_return_date?: string
+    made_up_to_date?: string
+    next_return_due_date?: string
+    acknowledgement_reference?: string
+    received_at?: string
+    submission_status?: string
+    issuer?: string
+    source_system?: string
+    transaction_count?: number
+    total_money_in?: number
+    total_money_out?: number
+    closing_balance?: number
+    currency?: string
+    file_format?: 'csv' | 'xlsx'
+    classification?: {
+      family:
+        | 'vat3_return_print_view'
+        | 'vat3_amended_example'
+        | 'corporation_tax_return_summary'
+        | 'annual_accounts_abridged'
+        | 'annual_accounts_full'
+        | 'cro_annual_return_b1'
+        | 'cro_acknowledgement_receipt'
+        | 'bookkeeping_export_csv_xlsx'
+      confidence: number
+    }
   } | null
   dateExtractionConfidence?: number | null
   totalExtractionConfidence?: number | null
