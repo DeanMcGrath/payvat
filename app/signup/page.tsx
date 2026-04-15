@@ -397,7 +397,7 @@ export default function SignupPage() {
                 onClick={handleRegister}
                 disabled={isLoading || success}
               >
-                {isLoading ? "Creating Account..." : success ? "Account Created!" : "Start Free Trial"}
+                {isLoading ? "Creating Account..." : success ? "Account Created!" : "Create Paid Beta Account"}
               </Button>
             </div>
           </div>

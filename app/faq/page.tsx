@@ -254,7 +254,7 @@ export default function FAQPage() {
                   <Clock className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-normal text-foreground group-hover:text-primary transition-colors">
-                  Is there a free trial?
+                  How do I access the paid beta?
                 </h3>
               </div>
               <div className="text-muted-foreground group-hover:text-primary transition-colors">
@@ -265,11 +265,11 @@ export default function FAQPage() {
               <div className="px-6 pb-6 animate-fade-in">
                 <div className="w-full h-px bg-success/30 mb-4"></div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Yes, 14-day free trial with no setup fees.
+                  PayVAT currently runs as a paid beta with guided onboarding. Contact the team for current access and pricing details.
                 </p>
                 <div className="flex items-center gap-2 text-success font-normal">
                   <CheckCircle className="h-4 w-4" />
-                  <span>No credit card required</span>
+                  <span>Paid beta onboarding supported by the PayVAT team</span>
                 </div>
               </div>
             )}
@@ -839,7 +839,7 @@ export default function FAQPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-success" />
-                    <span>14-day free trial</span>
+                    <span>Invite-only paid beta access</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Shield className="h-4 w-4 text-success" />

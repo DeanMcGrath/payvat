@@ -71,6 +71,8 @@ export function middleware(request: NextRequest) {
     '/',
     '/pricing',
     '/contact',
+    '/faq',
+    '/beta-limitations',
     '/login',
     '/signup'
   ])
@@ -82,7 +84,6 @@ export function middleware(request: NextRequest) {
     if (pathname.startsWith('/vat-submission')) return true
     if (pathname.startsWith('/sitemap')) return true
     if (pathname.startsWith('/blog')) return true
-    if (pathname.startsWith('/beta-limitations')) return true
     return !indexablePublicRoutes.has(pathname)
   })()
   

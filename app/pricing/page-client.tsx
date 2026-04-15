@@ -137,7 +137,7 @@ export default function PricingPage() {
                       className="btn-primary px-8 py-3 text-lg font-normal hover-lift w-full"
                       onClick={() => router.push('/signup')}
                     >
-                      Try Free for 14 Days
+                      Request Paid Beta Access
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                   </div>
@@ -169,7 +169,7 @@ export default function PricingPage() {
                 
                 {/* Trust Message */}
                 <div className="text-center text-muted-foreground">
-                  <p className="text-lg">14-day free trial • No setup fees • Cancel anytime</p>
+                  <p className="text-lg">Invite-only paid beta onboarding • No hidden setup fees</p>
                 </div>
               </div>
             </div>

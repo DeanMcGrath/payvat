@@ -69,21 +69,21 @@ export default function LandingPage() {
   const navigationBoxes = [
     {
       id: 1,
-      title: "Startup?",
-      heading: "Thinking of creating a business?",
-      subtext: "Learn everything you need to know about starting a business in Ireland",
-      buttonText: "Start Your Business Today",
-      link: "/business-setup-guide",
-      features: ["Complete guides", "Step-by-step process", "Expert advice"],
+      title: "New here?",
+      heading: "Explore the paid beta workflow",
+      subtext: "See how PayVAT helps you prepare, review, record, export, and track VAT returns.",
+      buttonText: "View Paid Beta Scope",
+      link: "/beta-limitations",
+      features: ["Trust-first workflow", "Clear ROS boundary", "Audit-ready records"],
     },
     {
       id: 2,
-      title: "Established Business?",
-      heading: "Looking to improve your Business?",
-      subtext: "Discover how PayVAT streamlines your VAT submissions and payments",
-      buttonText: "Start Free Trial - Save €180/Year",
+      title: "Ready to start?",
+      heading: "Request paid beta access",
+      subtext: "Create your account and begin guided VAT document preparation in PayVAT.",
+      buttonText: "Create Paid Beta Account",
       link: "/signup",
-      features: ["VAT automation", "Revenue compliance", "Save time & money"],
+      features: ["Document upload + review", "Guided submission records", "Payment tracking"],
     },
     {
       id: 3,
@@ -115,13 +115,13 @@ export default function LandingPage() {
       <main
         id="main-content"
         role="main"
-        aria-label="Don't Be Like Me! Ireland - VAT services"
+        aria-label="PayVAT paid beta home"
         className={`relative z-10 transition-opacity duration-1000 ${brandAnimationComplete ? "opacity-100" : "opacity-0"}`}
       >
         <section className="relative section-after-header">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             {/* SEO-optimized H1 - Hidden visually but accessible to search engines */}
-            <h1 className="sr-only">PayVAT Ireland - AI-Powered VAT Submission Software for Irish Businesses</h1>
+            <h1 className="sr-only">PayVAT Ireland - Guided VAT Preparation and Review Workflow for Irish Businesses</h1>
             
             <div className="grid gap-8 md:grid-cols-3" data-animate>
               {navigationBoxes.map((box, index) => (

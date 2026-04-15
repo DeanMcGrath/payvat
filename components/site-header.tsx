@@ -77,13 +77,19 @@ export default function SiteHeader({
                 {/* Navigation Links */}
                 {!hideNavLinks && (
                   <>
-                    <button 
+                    <button
                       className="text-white/90 hover:text-white transition-colors font-normal"
-                      onClick={() => window.location.href = '/about'}
+                      onClick={() => window.location.href = '/pricing'}
                     >
-                      About
+                      Pricing
                     </button>
-                    <button 
+                    <button
+                      className="text-white/90 hover:text-white transition-colors font-normal"
+                      onClick={() => window.location.href = '/faq'}
+                    >
+                      FAQ
+                    </button>
+                    <button
                       className="text-white/90 hover:text-white transition-colors font-normal"
                       onClick={() => window.location.href = '/contact'}
                     >
@@ -95,7 +101,7 @@ export default function SiteHeader({
                 {!user && (
                   <>
                     {/* Sign Up Link */}
-                    <button 
+                    <button
                       className="text-white/90 hover:text-white transition-colors font-normal"
                       onClick={() => window.location.href = '/signup'}
                     >
@@ -200,14 +206,23 @@ export default function SiteHeader({
               <nav className="space-y-1">
                 {!hideNavLinks && (
                   <>
-                    <button 
+                    <button
                       className="w-full text-left px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors flex items-center space-x-3 min-h-[44px]"
                       onClick={() => {
-                        window.location.href = '/about'
+                        window.location.href = '/pricing'
                         setIsMobileMenuOpen(false)
                       }}
                     >
-                      <span>About</span>
+                      <span>Pricing</span>
+                    </button>
+                    <button 
+                      className="w-full text-left px-4 py-3 text-white hover:bg-white/10 rounded-lg transition-colors flex items-center space-x-3 min-h-[44px]"
+                      onClick={() => {
+                        window.location.href = '/faq'
+                        setIsMobileMenuOpen(false)
+                      }}
+                    >
+                      <span>FAQ</span>
                     </button>
                     <button 
                       onClick={() => {

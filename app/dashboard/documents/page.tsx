@@ -367,6 +367,15 @@ function DashboardDocumentsContent() {
             Back to Home
           </Button>
         </div>
+
+        <Card className="border-[#B8DDF6] bg-[#F5FAFF]">
+          <CardContent className="p-4">
+            <p className="text-sm text-[#114B5F] font-normal">
+              Need help with document review or corrections? Contact <a href="mailto:support@payvat.ie" className="underline">support@payvat.ie</a> or read <a href="/beta-limitations" className="underline">How PayVAT works today</a>.
+            </p>
+          </CardContent>
+        </Card>
+
         {/* Fallback Mode Warning */}
         {inFallbackMode && (
           <Card className="bg-yellow-50 border-yellow-200">

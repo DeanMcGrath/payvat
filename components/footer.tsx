@@ -32,27 +32,27 @@ export default function Footer() {
         <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-[#81E6D9]/10 rounded-full blur-3xl"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            {/* Column 1 - Company & Services */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+            {/* Column 1 - Core */}
             <div className="animate-fade-in">
-              <h4 className="text-xl font-normal text-white mb-2">Company & Services</h4>
+              <h4 className="text-xl font-normal text-white mb-2">Core Pages</h4>
               <ul className="space-y-4">
                 <li>
-                  <Link 
-                    href="/about" 
+                  <Link
+                    href="/"
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    <span className="payvat-brand">About PayVAT</span>
+                    <span className="payvat-brand">PayVAT Home</span>
                   </Link>
                 </li>
                 <li>
-                  <Link 
-                    href="/contact" 
+                  <Link
+                    href="/pricing"
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Contact Us
+                    Pricing
                   </Link>
                 </li>
                 <li>
@@ -65,146 +65,111 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link 
-                    href="/pricing" 
+                  <Link
+                    href="/contact"
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Pricing
+                    Contact
                   </Link>
                 </li>
                 <li>
-                  <Link 
-                    href="/sitemap" 
+                  <Link
+                    href="/beta-limitations"
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Sitemap
+                    How PayVAT Works Today
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Column 2 - Business Setup */}
+            {/* Column 2 - Workflow */}
             <div className="animate-fade-in" style={{animationDelay: '0.2s'}}>
-              <h4 className="text-xl font-normal text-white mb-2">Business Setup</h4>
+              <h4 className="text-xl font-normal text-white mb-2">Workflow</h4>
               <ul className="space-y-4">
                 <li>
-                  <Link 
-                    href="/complete-business-setup-guide-ireland" 
+                  <Link
+                    href="/dashboard/documents"
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Complete Business Setup Guide
+                    Documents
                   </Link>
                 </li>
                 <li>
-                  <Link 
-                    href="/start-a-business-ireland" 
+                  <Link
+                    href="/dashboard/vat-returns"
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Start a Business Ireland
+                    VAT Returns
                   </Link>
                 </li>
                 <li>
-                  <Link 
-                    href="/company-vs-sole-trader-ireland" 
+                  <Link
+                    href="/vat-submission"
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Company vs Sole Trader
+                    VAT Submission
                   </Link>
                 </li>
                 <li>
-                  <Link 
-                    href="/dublin-business-registration" 
+                  <Link
+                    href="/dashboard/payments"
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Dublin Business Registration
+                    Payments
                   </Link>
                 </li>
               </ul>
             </div>
 
-            {/* Column 3 - VAT & Tax */}
+            {/* Column 3 - Account & Legal */}
             <div className="animate-fade-in" style={{animationDelay: '0.4s'}}>
-              <h4 className="text-xl font-normal text-white mb-2">VAT & Tax</h4>
+              <h4 className="text-xl font-normal text-white mb-2">Account & Legal</h4>
               <ul className="space-y-4">
                 <li>
-                  <Link 
-                    href="/vat-guide" 
+                  <Link
+                    href="/signup"
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Everything About VAT in Ireland
+                    Sign Up
                   </Link>
                 </li>
                 <li>
-                  <Link 
-                    href="/how-to-register-for-vat-ireland" 
+                  <Link
+                    href="/login"
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    How to Register for VAT
+                    Login
                   </Link>
                 </li>
                 <li>
-                  <Link 
-                    href="/vat-calculator-ireland" 
-                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    VAT Calculator Ireland
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    href="/freelancer-vat-ireland" 
-                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    Freelancer VAT Ireland
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 4 - Industry & Tools */}
-            <div className="animate-fade-in" style={{animationDelay: '0.6s'}}>
-              <h4 className="text-xl font-normal text-white mb-2">Industry & Tools</h4>
-              <ul className="space-y-4">
-                <li>
-                  <Link 
-                    href="/ecommerce-vat-ireland" 
-                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    E-commerce VAT Ireland
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    href="/accountant-fees-vs-payvat-savings" 
-                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
-                  >
-                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
-                    <span className="payvat-brand">PayVAT</span> vs Accountant Fees
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    href="/privacy" 
+                  <Link
+                    href="/privacy"
                     className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
                   >
                     <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
                     Privacy Policy
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    href="/terms"
+                    className="text-blue-100 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                  >
+                    <span className="w-1 h-1 bg-blue-300 rounded-full group-hover:scale-150 transition-transform"></span>
+                    Terms of Service
+                  </Link>
+                </li>
               </ul>
             </div>
-
           </div>
           
           {/* Bottom Section */}
