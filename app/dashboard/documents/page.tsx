@@ -21,6 +21,7 @@ import { StatCardGrid, DocumentsStatCard, VATStatCard, NetVATStatCard } from "@/
 import { PageLayout } from "@/components/layout/PageLayout"
 import { Document, VATReturn, UserProfile } from "@/types/dashboard"
 import { userApi, vatApi } from "@/lib/apiClient"
+import familyRegistry from "@/lib/extraction/document-family-registry.json"
 
 // Dynamic imports for better performance
 const DocumentViewer = dynamic(() => import("@/components/document-viewer"), {
@@ -254,6 +255,94 @@ function DashboardDocumentsContent() {
     setSortBy("date")
     setSortOrder("desc")
     setCurrentPage(1)
+  }
+
+  const getComplianceSummary = (document: Document): string[] => {
+    const payload = document.complianceExtraction
+    if (!payload) return []
+    if (payload.document_type === 'corporation_tax_return_summary') {
+      return [
+        `Company: ${payload.company_name || '—'}`,
+        `Return date: ${payload.return_date || '—'}`,
+        `CT balance payable: ${typeof payload.corporation_tax_balance_payable === 'number' ? formatCurrency(payload.corporation_tax_balance_payable) : '—'}`
+      ]
+    }
+    if (payload.document_type === 'annual_accounts_abridged') {
+      return [
+        `Company: ${payload.company_name || '—'}`,
+        `Year end: ${payload.financial_year_end || '—'}`,
+        `Shareholders' funds: ${typeof payload.shareholders_funds === 'number' ? formatCurrency(payload.shareholders_funds) : '—'}`
+      ]
+    }
+    return [
+      `Company: ${payload.company_name || '—'}`,
+      `Year end: ${payload.financial_year_end || '—'}`,
+      `P/L before tax: ${typeof payload.profit_or_loss_before_tax === 'number' ? formatCurrency(payload.profit_or_loss_before_tax) : '—'}`
+    ]
+  }
+
+  const getComplianceFamilyLabel = (document: Document): string => {
+    const family = document.complianceExtraction?.document_type || document.classification?.family
+    if (family === 'corporation_tax_return_summary') return 'Corporation tax return summary'
+    if (family === 'annual_accounts_abridged') return 'Annual accounts (abridged)'
+    if (family === 'annual_accounts_full') return 'Annual accounts (full)'
+    return 'Compliance document'
+  }
+
+  const getComplianceRequiredFields = (document: Document): string[] => {
+    const family = document.complianceExtraction?.document_type || document.classification?.family
+    if (!family) return []
+    return familyRegistry?.families?.[family as keyof typeof familyRegistry.families]?.requiredFields || []
+  }
+
+  const getComplianceMissingFields = (document: Document): string[] => {
+    const payload = document.complianceExtraction
+    if (!payload) return []
+    return getComplianceRequiredFields(document).filter((field) => {
+      const value = (payload as Record<string, unknown>)[field]
+      return value === undefined || value === null || value === ''
+    })
+  }
+
+  const getComplianceFieldPairs = (document: Document): Array<{ label: string; value: string }> => {
+    const payload = document.complianceExtraction
+    if (!payload) return []
+
+    const toMoney = (value?: number) => (typeof value === 'number' ? formatCurrency(value) : '—')
+    const toText = (value?: string) => (value ? value : '—')
+
+    if (payload.document_type === 'corporation_tax_return_summary') {
+      return [
+        { label: 'Company', value: toText(payload.company_name) },
+        { label: 'Tax ref', value: toText(payload.tax_reference_number) },
+        { label: 'CRO no.', value: toText(payload.cro_number) },
+        { label: 'Return date', value: toText(payload.return_date) },
+        { label: 'Period', value: payload.accounting_period_start && payload.accounting_period_end ? `${payload.accounting_period_start} to ${payload.accounting_period_end}` : '—' },
+        { label: 'Balance payable', value: toMoney(payload.corporation_tax_balance_payable) }
+      ]
+    }
+
+    if (payload.document_type === 'annual_accounts_abridged') {
+      return [
+        { label: 'Company', value: toText(payload.company_name) },
+        { label: 'Reg. no.', value: toText(payload.registration_number) },
+        { label: 'Year end', value: toText(payload.financial_year_end) },
+        { label: 'Board approval', value: toText(payload.board_approval_date) },
+        { label: 'Fixed assets', value: toMoney(payload.fixed_assets) },
+        { label: 'Shareholders funds', value: toMoney(payload.shareholders_funds) }
+      ]
+    }
+
+    return [
+      { label: 'Company', value: toText(payload.company_name) },
+      { label: 'Reg. no.', value: toText(payload.registration_number) },
+      { label: 'Year end', value: toText(payload.financial_year_end) },
+      { label: 'Board approval', value: toText(payload.board_approval_date) },
+      { label: 'Turnover', value: toMoney(payload.turnover) },
+      { label: 'P/L before tax', value: toMoney(payload.profit_or_loss_before_tax) },
+      { label: 'P/L after tax', value: toMoney(payload.profit_or_loss_after_tax) },
+      { label: 'VAT payable', value: toMoney(payload.vat_payable) }
+    ]
   }
 
   // Reset pagination when filters change
@@ -805,142 +894,237 @@ function DashboardDocumentsContent() {
               </div>
             ) : allFilteredDocuments.length > 0 ? (
               <div className="w-full">
-                {/* Table Headers */}
-                <div className="grid grid-cols-12 gap-4 items-center px-6 py-3 bg-neutral-50 border-b text-xs font-normal text-neutral-600 uppercase tracking-wide">
-                  <div className="col-span-1 text-center">Type</div>
-                  <div className="col-span-2">Document Name</div>
-                  <div className="col-span-2">Date on Doc</div>
-                  <div className="col-span-2">Total on Doc</div>
-                  <div className="col-span-2">VAT Amount</div>
-                  <div className="col-span-1">Confidence %</div>
-                  <div className="col-span-1">Status</div>
-                  <div className="col-span-1 text-right">Actions</div>
-                </div>
-                
-                {/* Document Rows */}
-                <div className="divide-y divide-neutral-100">
-                  {paginatedDocuments.map((document) => {
-                    const isVATSalesDoc = document.category?.startsWith("SALES")
-                    const isVATPurchaseDoc = document.category?.startsWith("PURCHASE")
-                    const vatDoc = isVATSalesDoc
-                      ? vatData?.salesDocuments?.find(d => d.id === document.id)
-                      : vatData?.purchaseDocuments?.find(d => d.id === document.id)
-                    const totalVAT = vatDoc?.extractedAmounts?.reduce((sum, amount) => sum + amount, 0) || 0
-                    const confidence = vatDoc?.confidence || document.extractionConfidence || 0
-                    const statusFromProcessing = document.processingStatus?.status
-                    const hasCoreGaps = !document.extractedDate || !document.invoiceTotal || totalVAT <= 0
-                    const needsReview = statusFromProcessing === 'needs_review' || document.validationStatus === 'NEEDS_REVIEW' || hasCoreGaps
-                    const isFailed = statusFromProcessing === 'failed'
-                    const isProcessing = !document.isScanned || statusFromProcessing === 'processing' || statusFromProcessing === 'uploaded' || statusFromProcessing === 'uploading'
-                    const statusLabel = isFailed ? 'Failed' : isProcessing ? 'Processing' : needsReview ? 'Needs review' : 'Processed'
-                    const statusClass = isFailed
-                      ? 'bg-red-100 text-red-800'
-                      : isProcessing
-                      ? 'bg-blue-100 text-blue-800'
-                      : needsReview
-                      ? 'bg-amber-100 text-amber-800'
-                      : 'bg-green-100 text-green-800'
-                    const reasonText = document.validation?.reasons?.[0]
-                      || document.complianceIssues?.[0]
-                      || (hasCoreGaps ? 'Missing total or VAT amount' : '')
-                    
-                    return (
-                      <div key={document.id} className={`grid grid-cols-12 gap-4 items-center p-4 hover:bg-neutral-50 transition-colors group`}>
-                        {/* Type Badge */}
-                        <div className="col-span-1 flex justify-center">
-                          <div className={`px-2 py-1 text-xs font-normal rounded-full ${
-                            isVATSalesDoc 
-                              ? 'bg-brand-100 text-brand-900' 
-                              : 'bg-green-100 text-green-900'
-                          }`}>
-                            {isVATSalesDoc ? 'Sales' : 'Purchase'}
+                {(() => {
+                  const complianceDocuments = paginatedDocuments.filter((document) =>
+                    document.category?.startsWith("COMPLIANCE") || Boolean(document.complianceExtraction)
+                  )
+                  const vatDocuments = paginatedDocuments.filter((document) =>
+                    !(document.category?.startsWith("COMPLIANCE") || Boolean(document.complianceExtraction))
+                  )
+
+                  return (
+                    <>
+                      {complianceDocuments.length > 0 && (
+                        <div className="p-4 border-b border-neutral-100 space-y-3 bg-stone-50/60">
+                          <div className="flex items-center justify-between">
+                            <h4 className="text-sm font-normal text-stone-800">
+                              Compliance and year-end documents
+                            </h4>
+                            <span className="text-xs text-stone-600">{complianceDocuments.length} on this page</span>
                           </div>
+                          {complianceDocuments.map((document) => {
+                            const statusFromProcessing = document.processingStatus?.status
+                            const complianceReasons = document.complianceExtraction?.reviewReasons || []
+                            const missingFields = getComplianceMissingFields(document)
+                            const needsReview = statusFromProcessing === 'needs_review' || document.validationStatus === 'NEEDS_REVIEW' || complianceReasons.length > 0 || missingFields.length > 0
+                            const isFailed = statusFromProcessing === 'failed'
+                            const isProcessing = !document.isScanned || statusFromProcessing === 'processing' || statusFromProcessing === 'uploaded' || statusFromProcessing === 'uploading'
+                            const statusLabel = isFailed ? 'Failed' : isProcessing ? 'Processing' : needsReview ? 'Needs review' : 'Processed'
+                            const statusClass = isFailed
+                              ? 'bg-red-100 text-red-800'
+                              : isProcessing
+                              ? 'bg-blue-100 text-blue-800'
+                              : needsReview
+                              ? 'bg-amber-100 text-amber-800'
+                              : 'bg-green-100 text-green-800'
+                            const reasonText = complianceReasons[0]
+                              || document.validation?.reasons?.[0]
+                              || document.complianceIssues?.[0]
+                              || (missingFields.length > 0 ? `Missing required fields: ${missingFields.join(', ')}` : '')
+                            const fieldPairs = getComplianceFieldPairs(document)
+
+                            return (
+                              <div key={document.id} className="rounded-lg border border-stone-200 bg-white p-3">
+                                <div className="flex items-start justify-between gap-3">
+                                  <div>
+                                    <p className="text-sm font-normal text-stone-900" title={document.originalName || document.fileName}>
+                                      {document.originalName || document.fileName}
+                                    </p>
+                                    <p className="text-xs text-stone-600 mt-0.5">
+                                      {getComplianceFamilyLabel(document)} • {Math.round(document.fileSize / 1024)} KB
+                                    </p>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <div className={`inline-flex items-center px-2 py-1 text-xs font-normal rounded-full ${statusClass}`}>
+                                      {isFailed ? <AlertCircle className="h-3 w-3 mr-1" /> : needsReview ? <AlertCircle className="h-3 w-3 mr-1" /> : isProcessing ? <Clock className="h-3 w-3 mr-1" /> : <CheckCircle className="h-3 w-3 mr-1" />}
+                                      {statusLabel}
+                                    </div>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleViewDocument(document)}
+                                      className="h-8 w-8 p-0"
+                                      aria-label="View document"
+                                    >
+                                      <Eye className="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleDocumentRemove(document.id)}
+                                      className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                      aria-label="Remove document"
+                                    >
+                                      <X className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </div>
+
+                                {reasonText ? <p className="mt-2 text-xs text-amber-700">{reasonText}</p> : null}
+
+                                <div className="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                                  {fieldPairs.map((field) => (
+                                    <div key={`${document.id}-${field.label}`} className="rounded-md border border-stone-100 bg-stone-50 px-2 py-1.5">
+                                      <p className="text-[11px] uppercase tracking-wide text-stone-500">{field.label}</p>
+                                      <p className="text-xs text-stone-800">{field.value}</p>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                <details className="mt-3 rounded-md border border-stone-200 bg-stone-50 p-2">
+                                  <summary className="cursor-pointer text-xs text-stone-700">Structured extraction output</summary>
+                                  <pre className="mt-2 overflow-auto text-[11px] leading-tight text-stone-800">
+                                    {JSON.stringify(document.complianceExtraction || {}, null, 2)}
+                                  </pre>
+                                </details>
+                              </div>
+                            )
+                          })}
                         </div>
-                        
-                        {/* Document Name and Size */}
-                        <div className="col-span-2 min-w-0">
-                          <p className="body-sm font-normal truncate" title={document.originalName || document.fileName}>
-                            {document.originalName || document.fileName}
-                          </p>
-                          <p className="text-xs text-neutral-500 mt-0.5">
-                            {Math.round(document.fileSize / 1024)} KB
-                          </p>
-                        </div>
-                        
-                        {/* Date */}
-                        <div className="col-span-2">
-                          <p className="body-sm text-neutral-700">
-                            {document.extractedDate 
-                              ? new Date(document.extractedDate).toLocaleDateString('en-IE', {
-                                  day: '2-digit',
-                                  month: '2-digit', 
-                                  year: 'numeric'
-                                })
-                              : '—'
-                            }
-                          </p>
-                        </div>
-                        
-                        {/* Total Amount */}
-                        <div className="col-span-2">
-                          <p className="body-sm font-normal text-neutral-800">
-                            {document.invoiceTotal 
-                              ? formatCurrency(Number(document.invoiceTotal))
-                              : '—'
-                            }
-                          </p>
-                        </div>
-                        
-                        {/* VAT Amount */}
-                        <div className="col-span-2">
-                          <p className={`body-sm font-normal ${
-                            isVATSalesDoc ? 'text-petrol-dark' : 'text-green-700'
-                          }`}>
-                            {totalVAT > 0 ? formatCurrency(totalVAT) : '—'}
-                          </p>
-                        </div>
-                        
-                        {/* Confidence % */}
-                        <div className="col-span-1">
-                          <p className="body-sm font-normal text-neutral-700">
-                            {confidence > 0 ? `${Math.round(confidence * 100)}%` : '—'}
-                          </p>
-                        </div>
-                        
-                        {/* Status */}
-                        <div className="col-span-1">
-                          <div className={`inline-flex items-center px-2 py-1 text-xs font-normal rounded-full ${statusClass}`}>
-                            {isFailed ? <AlertCircle className="h-3 w-3 mr-1" /> : needsReview ? <AlertCircle className="h-3 w-3 mr-1" /> : isProcessing ? <Clock className="h-3 w-3 mr-1" /> : <CheckCircle className="h-3 w-3 mr-1" />}
-                            {statusLabel}
+                      )}
+
+                      {vatDocuments.length > 0 && (
+                        <>
+                          <div className="grid grid-cols-12 gap-4 items-center px-6 py-3 bg-neutral-50 border-b text-xs font-normal text-neutral-600 uppercase tracking-wide">
+                            <div className="col-span-1 text-center">Type</div>
+                            <div className="col-span-2">Document Name</div>
+                            <div className="col-span-2">Date on Doc</div>
+                            <div className="col-span-2">Total on Doc</div>
+                            <div className="col-span-2">VAT Amount</div>
+                            <div className="col-span-1">Confidence %</div>
+                            <div className="col-span-1">Status</div>
+                            <div className="col-span-1 text-right">Actions</div>
                           </div>
-                          {reasonText ? <p className="mt-1 text-[11px] text-amber-700 leading-tight">{reasonText}</p> : null}
-                        </div>
-                        
-                        {/* Actions */}
-                        <div className="col-span-1 flex justify-end space-x-1">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleViewDocument(document)}
-                            className="h-8 w-8 p-0 opacity-100 transition-opacity"
-                            aria-label="View document"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDocumentRemove(document.id)}
-                            className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 opacity-100 transition-opacity"
-                            aria-label="Remove document"
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
+
+                          <div className="divide-y divide-neutral-100">
+                            {vatDocuments.map((document) => {
+                              const isVATSalesDoc = document.category?.startsWith("SALES")
+                              const vatDoc = isVATSalesDoc
+                                ? vatData?.salesDocuments?.find(d => d.id === document.id)
+                                : vatData?.purchaseDocuments?.find(d => d.id === document.id)
+                              const totalVAT = vatDoc?.extractedAmounts?.reduce((sum, amount) => sum + amount, 0) || 0
+                              const confidence = vatDoc?.confidence || document.extractionConfidence || 0
+                              const statusFromProcessing = document.processingStatus?.status
+                              const hasCoreGaps = !document.extractedDate || !document.invoiceTotal || totalVAT <= 0
+                              const needsReview = statusFromProcessing === 'needs_review' || document.validationStatus === 'NEEDS_REVIEW' || hasCoreGaps
+                              const isFailed = statusFromProcessing === 'failed'
+                              const isProcessing = !document.isScanned || statusFromProcessing === 'processing' || statusFromProcessing === 'uploaded' || statusFromProcessing === 'uploading'
+                              const statusLabel = isFailed ? 'Failed' : isProcessing ? 'Processing' : needsReview ? 'Needs review' : 'Processed'
+                              const statusClass = isFailed
+                                ? 'bg-red-100 text-red-800'
+                                : isProcessing
+                                ? 'bg-blue-100 text-blue-800'
+                                : needsReview
+                                ? 'bg-amber-100 text-amber-800'
+                                : 'bg-green-100 text-green-800'
+                              const reasonText = document.validation?.reasons?.[0]
+                                || document.complianceIssues?.[0]
+                                || (hasCoreGaps ? 'Missing total or VAT amount' : '')
+
+                              return (
+                                <div key={document.id} className={`grid grid-cols-12 gap-4 items-center p-4 hover:bg-neutral-50 transition-colors group`}>
+                                  <div className="col-span-1 flex justify-center">
+                                    <div className={`px-2 py-1 text-xs font-normal rounded-full ${
+                                      isVATSalesDoc
+                                        ? 'bg-brand-100 text-brand-900'
+                                        : 'bg-green-100 text-green-900'
+                                    }`}>
+                                      {isVATSalesDoc ? 'Sales' : 'Purchase'}
+                                    </div>
+                                  </div>
+
+                                  <div className="col-span-2 min-w-0">
+                                    <p className="body-sm font-normal truncate" title={document.originalName || document.fileName}>
+                                      {document.originalName || document.fileName}
+                                    </p>
+                                    <p className="text-xs text-neutral-500 mt-0.5">
+                                      {Math.round(document.fileSize / 1024)} KB
+                                    </p>
+                                  </div>
+
+                                  <div className="col-span-2">
+                                    <p className="body-sm text-neutral-700">
+                                      {document.extractedDate
+                                        ? new Date(document.extractedDate).toLocaleDateString('en-IE', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric'
+                                          })
+                                        : '—'
+                                      }
+                                    </p>
+                                  </div>
+
+                                  <div className="col-span-2">
+                                    <p className="body-sm font-normal text-neutral-800">
+                                      {document.invoiceTotal
+                                        ? formatCurrency(Number(document.invoiceTotal))
+                                        : '—'
+                                      }
+                                    </p>
+                                  </div>
+
+                                  <div className="col-span-2">
+                                    <p className={`body-sm font-normal ${
+                                      isVATSalesDoc ? 'text-petrol-dark' : 'text-green-700'
+                                    }`}>
+                                      {totalVAT > 0 ? formatCurrency(totalVAT) : '—'}
+                                    </p>
+                                  </div>
+
+                                  <div className="col-span-1">
+                                    <p className="body-sm font-normal text-neutral-700">
+                                      {confidence > 0 ? `${Math.round(confidence * 100)}%` : '—'}
+                                    </p>
+                                  </div>
+
+                                  <div className="col-span-1">
+                                    <div className={`inline-flex items-center px-2 py-1 text-xs font-normal rounded-full ${statusClass}`}>
+                                      {isFailed ? <AlertCircle className="h-3 w-3 mr-1" /> : needsReview ? <AlertCircle className="h-3 w-3 mr-1" /> : isProcessing ? <Clock className="h-3 w-3 mr-1" /> : <CheckCircle className="h-3 w-3 mr-1" />}
+                                      {statusLabel}
+                                    </div>
+                                    {reasonText ? <p className="mt-1 text-[11px] text-amber-700 leading-tight">{reasonText}</p> : null}
+                                  </div>
+
+                                  <div className="col-span-1 flex justify-end space-x-1">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleViewDocument(document)}
+                                      className="h-8 w-8 p-0 opacity-100 transition-opacity"
+                                      aria-label="View document"
+                                    >
+                                      <Eye className="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleDocumentRemove(document.id)}
+                                      className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 opacity-100 transition-opacity"
+                                      aria-label="Remove document"
+                                    >
+                                      <X className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </>
+                      )}
+                    </>
+                  )
+                })()}
               </div>
             ) : (
               <div className="p-8 text-center">
